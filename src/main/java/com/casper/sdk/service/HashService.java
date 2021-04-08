@@ -20,21 +20,21 @@ public class HashService {
     /**
      * Get the blake2b hash
      *
-     * @param key string key used to generate
+     * @param accountKey string key used to generate
      *            the hash
      * @return 32 bit blake2b hash
      * @throws NoSuchAlgorithmException library error
      * @throws DecoderException digest error
      */
-    public static String getAccountHash(final String key) throws NoSuchAlgorithmException, DecoderException {
+    public static String getAccountHash(final String accountKey) throws NoSuchAlgorithmException, DecoderException {
 
         Security.addProvider(new Blake2bProvider());
 
         final MessageDigest digest = MessageDigest.getInstance(Blake2b.BLAKE2_B_256);
 
-        digest.update(getAlgo(key).getBytes(StandardCharsets.UTF_8));
+        digest.update(getAlgo(accountKey).getBytes(StandardCharsets.UTF_8));
         digest.update(new byte[1]);
-        digest.update(Hex.decodeHex(key.substring(2).toCharArray()));
+        digest.update(Hex.decodeHex(accountKey.substring(2).toCharArray()));
 
         return Hex.encodeHexString(digest.digest());
     }

@@ -1,0 +1,25 @@
+{
+  "jsonrpc": "2.0",
+  "id": "1",
+  "result": {
+    "api_version": "1.0.0",
+    "stored_value": {
+      "Account": {
+        "account_hash": "account-hash-ef5b5e0720614aeb59b0283513379b61af9e429b94e9904ea64a60ed599173ae",
+        "named_keys": [],
+        "main_purse": "uref-ebda3f171068107470bce0d74eb9a302fcb8914471fe8900c66fae258a0f46ef-007",
+        "associated_keys": [
+          {
+            "account_hash": "account-hash-ef5b5e0720614aeb59b0283513379b61af9e429b94e9904ea64a60ed599173ae",
+            "weight": 1
+          }
+        ],
+        "action_thresholds": {
+          "deployment": 1,
+          "key_management": 1
+        }
+      }
+    },
+    "merkle_proof": ""
+  }
+}
