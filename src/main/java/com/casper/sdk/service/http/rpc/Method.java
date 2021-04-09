@@ -20,4 +20,19 @@ public class Method {
         this.params = params;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public String getJsonrpc() {
+        return jsonrpc;
+    }
+
+    public String getMethod() {
+        return method;
+    }
+
+    public HashMap<String, Object> getParams() {
+        return params;
+    }
 }

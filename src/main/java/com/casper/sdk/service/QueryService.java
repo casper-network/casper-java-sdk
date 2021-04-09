@@ -48,7 +48,7 @@ public class QueryService {
                 new HashMap<>() {
                     {
                         put("state_root_hash", getStateRootHash());
-                        put("purse_uref", getAccountInfo(accountKey));
+                        put("purse_uref", getAccountMainPurseURef(accountKey));
                     }
                 }));
 

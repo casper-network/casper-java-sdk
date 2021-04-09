@@ -22,7 +22,6 @@ import okhttp3.mockwebserver.RecordedRequest;
 public class TestQueryService {
 
     private static MockWebServer mockBackEnd;
-    private final ObjectMapper mapper = new ObjectMapper();
     private final QueryService query = new QueryService();
 
     @BeforeAll
