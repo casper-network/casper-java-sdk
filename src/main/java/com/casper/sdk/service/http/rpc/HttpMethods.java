@@ -11,6 +11,9 @@ import java.net.http.HttpResponse;
 import java.util.Optional;
 
 @SuppressWarnings("ALL")
+/**
+ * All used HTTP methods
+ */
 public class HttpMethods {
 
     private final ObjectMapper mapper;

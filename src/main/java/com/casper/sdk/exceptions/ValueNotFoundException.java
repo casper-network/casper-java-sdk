@@ -1,5 +1,8 @@
 package com.casper.sdk.exceptions;
 
+/**
+ * Custom exception to throw when json key not found
+ */
 public class ValueNotFoundException extends Exception {
 
     public ValueNotFoundException(final String message) {

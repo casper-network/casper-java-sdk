@@ -2,6 +2,10 @@ package com.casper.sdk.service.http.rpc;
 
 import java.util.HashMap;
 
+/**
+ * Simple class to build up the rpc json call
+ * The class is instantiated and it's json conversion used as the rpc payload
+ */
 public class Method {
 
     private final int id = 1;

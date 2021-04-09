@@ -8,6 +8,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * ENUM that provides the methods to extract the requested key from the returned json
+ */
 public enum MethodEnums {
 
     STATE_ROOT_HASH{

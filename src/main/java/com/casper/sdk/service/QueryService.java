@@ -1,5 +1,7 @@
 package com.casper.sdk.service;
 
+import static com.casper.sdk.Properties.*;
+
 import com.casper.sdk.service.http.rpc.HttpMethods;
 import com.casper.sdk.service.http.rpc.Method;
 
@@ -7,11 +9,11 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Optional;
 
+/**
+ * Service to query the chain
+ * Methods call the HTTP methods with an instantiated method object
+ */
 public class QueryService {
-
-    private final String CHAIN_GET_STATE_ROOT_HASH = "chain_get_state_root_hash";
-    private final String STATE_GET_ITEM = "state_get_item";
-    private final String STATE_GET_BALANCE = "state_get_balance";
 
     private final HttpMethods httpMethods;
 

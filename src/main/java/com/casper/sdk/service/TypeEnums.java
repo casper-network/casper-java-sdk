@@ -3,6 +3,9 @@ package com.casper.sdk.service;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Account Key prefixes
+ */
 class TypeEnums {
 
     public enum KeyAlgorithm {

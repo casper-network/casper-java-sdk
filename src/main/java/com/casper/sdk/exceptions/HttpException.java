@@ -1,5 +1,8 @@
 package com.casper.sdk.exceptions;
 
+/**
+ * Custom HTTP Exception
+ */
 public class HttpException extends Exception {
 
     public HttpException(final String message) {

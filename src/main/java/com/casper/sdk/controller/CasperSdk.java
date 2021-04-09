@@ -7,6 +7,10 @@ import com.casper.sdk.service.QueryService;
 
 import java.security.NoSuchAlgorithmException;
 
+/**
+ * Entry point into the SDK
+ * Exposes all permissible methods
+ */
 public class CasperSdk {
 
     private final QueryService queryService;
