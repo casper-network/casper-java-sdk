@@ -50,7 +50,7 @@ Chain access methods will then be exposed:
 final CasperSdk casperSdk = new CasperSdk("http://localhost", "40101");
         
 final String accountBalance = casperSdk
-   		 				.getAccountBalance("01a34328d2111a92d9e3c52c5c20b584cee96bb425adbdbf5df12b1ad36fff967f");       
+   		.getAccountBalance("01a34328d2111a92d9e3c52c5c20b584cee96bb425adbdbf5df12b1ad36fff967f");       
 
 assert accountBalance.equals("1000000000000000000000000000000000");
 
