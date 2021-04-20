@@ -57,14 +57,12 @@ public class QueryService {
         return (result.isEmpty()) ? null
                 : MethodEnums.STATE_GET_BALANCE.getValue(result.get());
 
-
     }
 
     public String getAccountMainPurseURef(final String accountKey) throws Throwable {
 
-        final Optional<String> result = httpMethods.rpcCallMethod(new Method(STATE_GET_ITEM,
-                new HashMap<>() {
-                    {
+        final Optional<String> result = httpMethods.rpcCallMethod(new Method(STATE_GET_AUCTION_INFO,
+                new HashMap<>() {            {
                         put("state_root_hash", getStateRootHash());
                         put("key", "account-hash-" + HashService.getAccountHash(accountKey));
                         put("path", Collections.emptyList());
@@ -76,6 +74,35 @@ public class QueryService {
 
     }
 
+    public String getAuctionInfo() throws Throwable {
+
+        final Optional<String> result = httpMethods.rpcCallMethod(new Method(STATE_GET_AUCTION_INFO,
+                new HashMap<>()));
+
+        return (result.isEmpty()) ? null
+                : MethodEnums.STATE_GET_AUCTION_INFO.getValue(result.get());
+
+    }
+
+    public String getNodePeers() throws Throwable {
+
+        final Optional<String> result = httpMethods.rpcCallMethod(new Method(INFO_GET_PEERS,
+                new HashMap<>()));
+
+        return (result.isEmpty()) ? null
+                : MethodEnums.INFO_GET_PEERS.getValue(result.get());
+
+    }
+
+    public String getNodeStatus() throws Throwable {
+
+        final Optional<String> result = httpMethods.rpcCallMethod(new Method(INFO_GET_STATUS,
+                new HashMap<>()));
+
+        return (result.isEmpty()) ? null
+                : MethodEnums.INFO_GET_STATUS.getValue(result.get());
+
+    }
 
 
 }

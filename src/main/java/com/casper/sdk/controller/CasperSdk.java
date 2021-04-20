@@ -41,4 +41,16 @@ public class CasperSdk {
         return HashService.getAccountHash(accountKey);
     }
 
+    public String getAuctionInfo() throws Throwable {
+        return queryService.getAuctionInfo();
+    }
+
+    public String getNodeStatus() throws Throwable {
+        return queryService.getNodeStatus();
+    }
+
+    public String getNodePeers() throws Throwable {
+        return queryService.getNodePeers();
+    }
+
 }

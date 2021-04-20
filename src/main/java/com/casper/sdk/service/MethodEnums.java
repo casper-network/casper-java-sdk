@@ -45,8 +45,40 @@ public enum MethodEnums {
                 throw new ValueNotFoundException("balance_value not found");
             }
         }
+    },
+    STATE_GET_AUCTION_INFO{
+        @Override
+        public String getValue(final String result) throws ValueNotFoundException {
+            try{
+                final JsonNode node = new ObjectMapper().readTree(result);
+                return node.get("result").toPrettyString();
+            } catch (Exception e){
+                throw new ValueNotFoundException("auction_state not found");
+            }
+        }
+    },
+    INFO_GET_PEERS{
+        @Override
+        public String getValue(final String result) throws ValueNotFoundException {
+            try{
+                final JsonNode node = new ObjectMapper().readTree(result);
+                return node.get("result").toPrettyString();
+            } catch (Exception e){
+                throw new ValueNotFoundException("peers not found");
+            }
+        }
+    },
+    INFO_GET_STATUS{
+        @Override
+        public String getValue(final String result) throws ValueNotFoundException {
+            try{
+                final JsonNode node = new ObjectMapper().readTree(result);
+                return node.get("result").toPrettyString();
+            } catch (Exception e){
+                throw new ValueNotFoundException("result not found");
+            }
+        }
     };
-
 
     private static final List<String> MAP = new ArrayList<>();
     public abstract String getValue(final String result) throws JsonProcessingException, ValueNotFoundException;
