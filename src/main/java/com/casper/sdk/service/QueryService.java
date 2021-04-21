@@ -61,7 +61,7 @@ public class QueryService {
 
     public String getAccountMainPurseURef(final String accountKey) throws Throwable {
 
-        final Optional<String> result = httpMethods.rpcCallMethod(new Method(STATE_GET_AUCTION_INFO,
+        final Optional<String> result = httpMethods.rpcCallMethod(new Method(STATE_GET_ITEM,
                 new HashMap<>() {            {
                         put("state_root_hash", getStateRootHash());
                         put("key", "account-hash-" + HashService.getAccountHash(accountKey));

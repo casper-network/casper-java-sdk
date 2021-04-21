@@ -21,6 +21,8 @@ import okhttp3.mockwebserver.RecordedRequest;
 
 public class TestQueryService {
 
+    private final static String url = "http://localhost";
+
     private static MockWebServer mockBackEnd;
     private final QueryService query = new QueryService();
 
@@ -33,7 +35,7 @@ public class TestQueryService {
     @Test
     public void testStateRootOk() throws Throwable {
 
-        Properties.properties.put("node-url", "http://localhost");
+        Properties.properties.put("node-url", url);
         Properties.properties.put("node-port", String.valueOf(mockBackEnd.getPort()));
 
         mockBackEnd.setDispatcher(
@@ -50,7 +52,7 @@ public class TestQueryService {
     @Test
     public void testGetAccountInfo() throws Throwable {
 
-        Properties.properties.put("node-url", "http://localhost");
+        Properties.properties.put("node-url", url);
         Properties.properties.put("node-port", String.valueOf(mockBackEnd.getPort()));
 
         mockBackEnd.setDispatcher(
@@ -65,7 +67,7 @@ public class TestQueryService {
     @Test
     public void testGetPurse() throws Throwable {
 
-        Properties.properties.put("node-url", "http://localhost");
+        Properties.properties.put("node-url", url);
         Properties.properties.put("node-port", String.valueOf(mockBackEnd.getPort()));
 
         mockBackEnd.setDispatcher(
@@ -79,7 +81,7 @@ public class TestQueryService {
     @Test
     public void testGetAccountBalance() throws Throwable {
 
-        Properties.properties.put("node-url", "http://localhost");
+        Properties.properties.put("node-url", url);
         Properties.properties.put("node-port", String.valueOf(mockBackEnd.getPort()));
 
         mockBackEnd.setDispatcher(
@@ -94,7 +96,7 @@ public class TestQueryService {
     @Test
     public void testGetAuctionInfo() throws Throwable {
 
-        Properties.properties.put("node-url", "http://localhost");
+        Properties.properties.put("node-url", url);
         Properties.properties.put("node-port", String.valueOf(mockBackEnd.getPort()));
 
         mockBackEnd.setDispatcher(
@@ -109,7 +111,7 @@ public class TestQueryService {
     @Test
     public void testGetNodePeers() throws Throwable {
 
-        Properties.properties.put("node-url", "http://localhost");
+        Properties.properties.put("node-url", url);
         Properties.properties.put("node-port", String.valueOf(mockBackEnd.getPort()));
 
         mockBackEnd.setDispatcher(
@@ -123,7 +125,7 @@ public class TestQueryService {
     @Test
     public void testGetNodeStatus() throws Throwable {
 
-        Properties.properties.put("node-url", "http://localhost");
+        Properties.properties.put("node-url", url);
         Properties.properties.put("node-port", String.valueOf(mockBackEnd.getPort()));
 
         mockBackEnd.setDispatcher(
@@ -139,6 +141,7 @@ public class TestQueryService {
 
         private final ClassLoader classLoader = getClass().getClassLoader();
         private String responseBodyFile;
+
         public MethodDispatcher() {}
 
         @Override

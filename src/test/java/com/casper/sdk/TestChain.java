@@ -11,9 +11,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class TestChain {
 
+    private final static String url = "http://3.140.179.157";
+    private final static String port = "7777";
+
 //    @Test
     public void testAgainstChain() throws Throwable {
-        CasperSdk casperSdk = new CasperSdk("http://localhost", "40101");
+        CasperSdk casperSdk = new CasperSdk(url, port);
 
         String accountBalance = casperSdk.getAccountBalance("019d9bc24944a08204c09d222405127c8ca7dc7dcc267ccc6b392deab8148d111d");
         assertEquals("1000000000000000000000000000000000", accountBalance);
@@ -23,7 +26,7 @@ public class TestChain {
     @Test
     public void testChainSimpleQueries_v_0_2_0() throws Throwable {
 
-        CasperSdk casperSdk = new CasperSdk("http://3.140.179.157", "7777");
+        CasperSdk casperSdk = new CasperSdk(url, port);
 
         JsonNode node = new ObjectMapper().readTree(casperSdk.getAuctionInfo());
         assertNotNull(node.get("api_version").textValue());
