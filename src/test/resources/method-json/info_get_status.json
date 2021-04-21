@@ -1,0 +1,39 @@
+{
+  "jsonrpc": "2.0",
+  "id": "1",
+  "result": {
+    "api_version": "1.0.0",
+    "chainspec_name": "casper-net-1",
+    "starting_state_root_hash": "836a..39a1",
+    "peers": [
+      {
+        "node_id": "NodeId::Tls(1dbb..996f)",
+        "address": "127.0.0.1:34557"
+      },
+      {
+        "node_id": "NodeId::Tls(506d..9768)",
+        "address": "127.0.0.1:34554"
+      },
+      {
+        "node_id": "NodeId::Tls(5685..5e52)",
+        "address": "127.0.0.1:34555"
+      },
+      {
+        "node_id": "NodeId::Tls(b37c..8cf9)",
+        "address": "127.0.0.1:34556"
+      }
+    ],
+    "last_added_block_info": {
+      "hash": "d368f1a11363ec1d2e7c0bc3e800bb15cdbb5193eed6912fa52a091ac15229f7",
+      "timestamp": "2021-04-19T14:35:59.872Z",
+      "era_id": 314,
+      "height": 3464,
+      "state_root_hash": "6b004970795dc479295c10b721d16f2befccab2fd33cd3ed1ed2f7b5789bc76a",
+      "creator": "014d72251ea5c26c48ac9ee0862a18e90c3cb206c2c7fa710f6262a887bb169cfd"
+    },
+    "our_public_signing_key": "01adfb7b5246f846bf964220bae2bd355f219c70b23380ed83f2adeef8aff11412",
+    "round_length": "4s 96ms",
+    "next_upgrade": null,
+    "build_version": "0.9.3-de1fb514"
+  }
+}

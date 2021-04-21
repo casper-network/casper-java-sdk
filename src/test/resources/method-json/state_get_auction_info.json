@@ -1,0 +1,200 @@
+{
+  "jsonrpc": "2.0",
+  "id": "1",
+  "result": {
+    "api_version": "1.0.0",
+    "auction_state": {
+      "state_root_hash": "a01cf2e4258a4f9398d90a8dad070d0404ba57dded0d2cf6431d0923d6165a74",
+      "block_height": 3086,
+      "era_validators": [
+        {
+          "era_id": 280,
+          "validator_weights": [
+            {
+              "public_key": "010cdba059aaa66e1da7b2ba99cd455a0a67edec3745393e74cc7ce29663d7a74d",
+              "weight": "29923112659041325213163553284"
+            },
+            {
+              "public_key": "014d72251ea5c26c48ac9ee0862a18e90c3cb206c2c7fa710f6262a887bb169cfd",
+              "weight": "29923112659041325213163553286"
+            },
+            {
+              "public_key": "016e0900d91b1da0a7807dedd9fbf11f4b42ebc624dc1625a42644447c2b95d0bc",
+              "weight": "29923112659041325213163553288"
+            },
+            {
+              "public_key": "01adfb7b5246f846bf964220bae2bd355f219c70b23380ed83f2adeef8aff11412",
+              "weight": "29923112658891709649868356511"
+            },
+            {
+              "public_key": "01d6c4e7a14fc728d19cf04b0d5086317cfc62175b5c72757b49480d41e95553b3",
+              "weight": "29923112658891709649868356513"
+            }
+          ]
+        },
+        {
+          "era_id": 281,
+          "validator_weights": [
+            {
+              "public_key": "010cdba059aaa66e1da7b2ba99cd455a0a67edec3745393e74cc7ce29663d7a74d",
+              "weight": "30031138722716303580165780994"
+            },
+            {
+              "public_key": "014d72251ea5c26c48ac9ee0862a18e90c3cb206c2c7fa710f6262a887bb169cfd",
+              "weight": "30031138722716303580165780996"
+            },
+            {
+              "public_key": "016e0900d91b1da0a7807dedd9fbf11f4b42ebc624dc1625a42644447c2b95d0bc",
+              "weight": "30031138722716303580165780998"
+            },
+            {
+              "public_key": "01adfb7b5246f846bf964220bae2bd355f219c70b23380ed83f2adeef8aff11412",
+              "weight": "30031138722566147886552209329"
+            },
+            {
+              "public_key": "01d6c4e7a14fc728d19cf04b0d5086317cfc62175b5c72757b49480d41e95553b3",
+              "weight": "30031138722566147886552209331"
+            }
+          ]
+        },
+        {
+          "era_id": 282,
+          "validator_weights": [
+            {
+              "public_key": "010cdba059aaa66e1da7b2ba99cd455a0a67edec3745393e74cc7ce29663d7a74d",
+              "weight": "30139164789169745588312434548"
+            },
+            {
+              "public_key": "014d72251ea5c26c48ac9ee0862a18e90c3cb206c2c7fa710f6262a887bb169cfd",
+              "weight": "30139164789169745588312434550"
+            },
+            {
+              "public_key": "016e0900d91b1da0a7807dedd9fbf11f4b42ebc624dc1625a42644447c2b95d0bc",
+              "weight": "30139164789169745588312434552"
+            },
+            {
+              "public_key": "01adfb7b5246f846bf964220bae2bd355f219c70b23380ed83f2adeef8aff11412",
+              "weight": "30139164789019049764366595672"
+            },
+            {
+              "public_key": "01d6c4e7a14fc728d19cf04b0d5086317cfc62175b5c72757b49480d41e95553b3",
+              "weight": "30139164789019049764366595674"
+            }
+          ]
+        },
+        {
+          "era_id": 283,
+          "validator_weights": [
+            {
+              "public_key": "010cdba059aaa66e1da7b2ba99cd455a0a67edec3745393e74cc7ce29663d7a74d",
+              "weight": "30247190858401651309066454854"
+            },
+            {
+              "public_key": "014d72251ea5c26c48ac9ee0862a18e90c3cb206c2c7fa710f6262a887bb169cfd",
+              "weight": "30247190858401651309066454856"
+            },
+            {
+              "public_key": "016e0900d91b1da0a7807dedd9fbf11f4b42ebc624dc1625a42644447c2b95d0bc",
+              "weight": "30247190858401651309066454858"
+            },
+            {
+              "public_key": "01adfb7b5246f846bf964220bae2bd355f219c70b23380ed83f2adeef8aff11412",
+              "weight": "30247190858250415354774456449"
+            },
+            {
+              "public_key": "01d6c4e7a14fc728d19cf04b0d5086317cfc62175b5c72757b49480d41e95553b3",
+              "weight": "30247190858250415354774456451"
+            }
+          ]
+        }
+      ],
+      "bids": [
+        {
+          "public_key": "010cdba059aaa66e1da7b2ba99cd455a0a67edec3745393e74cc7ce29663d7a74d",
+          "bid": {
+            "bonding_purse": "uref-19fe62eb5ad372c1b79116920efbafcad141ccb0fa07a1aab37d7e70cc8d65d7-007",
+            "staked_amount": "17115860234446338870198237997",
+            "delegation_rate": 3,
+            "delegators": [
+              {
+                "public_key": "015336cfc8501cd2a8d3a079d79c19634a65a5f68b31d0ceb35a3f79082af30ef7",
+                "staked_amount": "13131330623955312438868216857",
+                "bonding_purse": "uref-7765d7f12a89ba5a4de3eb9451c088ce40886fd788ba2d39d3bafb75a17d9c58-007",
+                "delegatee": "010cdba059aaa66e1da7b2ba99cd455a0a67edec3745393e74cc7ce29663d7a74d"
+              }
+            ],
+            "inactive": false
+          }
+        },
+        {
+          "public_key": "014d72251ea5c26c48ac9ee0862a18e90c3cb206c2c7fa710f6262a887bb169cfd",
+          "bid": {
+            "bonding_purse": "uref-4a2bd6561f8f0455cae0d965655350d121bc5adaa80a3df8f542623573d34856-007",
+            "staked_amount": "17724466390170449171372682143",
+            "delegation_rate": 4,
+            "delegators": [
+              {
+                "public_key": "01d24db1eeb81422c3bcccc98f88b24a9c90b29d47e79eae530618761bf9c81bbd",
+                "staked_amount": "12522724468231202137693772713",
+                "bonding_purse": "uref-6a881055b85883c7a487c797445fc87724c4986db6cf7e0679e451ff35fe4bec-007",
+                "delegatee": "014d72251ea5c26c48ac9ee0862a18e90c3cb206c2c7fa710f6262a887bb169cfd"
+              }
+            ],
+            "inactive": false
+          }
+        },
+        {
+          "public_key": "016e0900d91b1da0a7807dedd9fbf11f4b42ebc624dc1625a42644447c2b95d0bc",
+          "bid": {
+            "bonding_purse": "uref-6bd00ddb710e986ea814f30a3650ddf4c3bd16a867a2c0f58bb08fe3bcd703e2-007",
+            "staked_amount": "18307136899881987758214064575",
+            "delegation_rate": 5,
+            "delegators": [
+              {
+                "public_key": "018e0c99e1ca0fbcfca66a44f410d1ba322639d4ddfd1360e38e9d8483016d4c2c",
+                "staked_amount": "11940053958519663550852390283",
+                "bonding_purse": "uref-ed4dbd90856797d5b70b3c9cca53e353d1f4dabe8cdafec328a8ddbf013035ac-007",
+                "delegatee": "016e0900d91b1da0a7807dedd9fbf11f4b42ebc624dc1625a42644447c2b95d0bc"
+              }
+            ],
+            "inactive": false
+          }
+        },
+        {
+          "public_key": "01adfb7b5246f846bf964220bae2bd355f219c70b23380ed83f2adeef8aff11412",
+          "bid": {
+            "bonding_purse": "uref-92cf580122360ec493f32a84fb02d1e992e6911ea3008014c11753ca9fe2570d-007",
+            "staked_amount": "15816548965730655773056990767",
+            "delegation_rate": 1,
+            "delegators": [
+              {
+                "public_key": "01d82db17b12fb8e4c3444547e09a3cb765143c9e3751457e3113817897f4dc80b",
+                "staked_amount": "14430641892519759581717465682",
+                "bonding_purse": "uref-4b6992359e6b48d6eea37f23295fd42e5b776fcbd2ddad1443393cef43498d03-007",
+                "delegatee": "01adfb7b5246f846bf964220bae2bd355f219c70b23380ed83f2adeef8aff11412"
+              }
+            ],
+            "inactive": false
+          }
+        },
+        {
+          "public_key": "01d6c4e7a14fc728d19cf04b0d5086317cfc62175b5c72757b49480d41e95553b3",
+          "bid": {
+            "bonding_purse": "uref-da3c5012f5f4c4848f862e948daa27649a67e5ad70483e5eed27a6885c0066a2-007",
+            "staked_amount": "16480255526123600257209974259",
+            "delegation_rate": 2,
+            "delegators": [
+              {
+                "public_key": "018eb15f584ed5727dca9b2b6ad0814a678f8135e08646fa7026ea6a2cbe2231f0",
+                "staked_amount": "13766935332126815097564482192",
+                "bonding_purse": "uref-520d52240c0dc50216d0e25192e02c1d5143c89084c8238fb96dd0cce8cc8fff-007",
+                "delegatee": "01d6c4e7a14fc728d19cf04b0d5086317cfc62175b5c72757b49480d41e95553b3"
+              }
+            ],
+            "inactive": false
+          }
+        }
+      ]
+    }
+  }
+}

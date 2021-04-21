@@ -76,7 +76,6 @@ public class TestQueryService {
         assertEquals(purse, "uref-ebda3f171068107470bce0d74eb9a302fcb8914471fe8900c66fae258a0f46ef-007");
     }
 
-
     @Test
     public void testGetAccountBalance() throws Throwable {
 
@@ -89,6 +88,49 @@ public class TestQueryService {
         String balance = query.getAccountBalance("01048c1858b7a6ff56a20d7574fd31025ead4af9cb8a854f919d24f886a4ebb741");
         assertNotNull(balance);
         assertEquals(balance, "1000000000000000000000000000000000");
+
+    }
+
+    @Test
+    public void testGetAuctionInfo() throws Throwable {
+
+        Properties.properties.put("node-url", "http://localhost");
+        Properties.properties.put("node-port", String.valueOf(mockBackEnd.getPort()));
+
+        mockBackEnd.setDispatcher(
+                new MethodDispatcher());
+
+        String info = query.getAuctionInfo();
+        assertNotNull(info);
+
+
+    }
+
+    @Test
+    public void testGetNodePeers() throws Throwable {
+
+        Properties.properties.put("node-url", "http://localhost");
+        Properties.properties.put("node-port", String.valueOf(mockBackEnd.getPort()));
+
+        mockBackEnd.setDispatcher(
+                new MethodDispatcher());
+
+        String peers = query.getNodePeers();
+        assertNotNull(peers);
+
+    }
+
+    @Test
+    public void testGetNodeStatus() throws Throwable {
+
+        Properties.properties.put("node-url", "http://localhost");
+        Properties.properties.put("node-port", String.valueOf(mockBackEnd.getPort()));
+
+        mockBackEnd.setDispatcher(
+                new MethodDispatcher());
+
+        String status = query.getNodeStatus();
+        assertNotNull(status);
 
     }
 
@@ -108,6 +150,12 @@ public class TestQueryService {
                 responseBodyFile = "method-json/state_get_item.json";
             } else if  (request.getBody().toString().contains("state_get_balance")){
                 responseBodyFile = "method-json/state_get_balance.json";
+            } else if  (request.getBody().toString().contains("state_get_auction_info")){
+                responseBodyFile = "method-json/state_get_auction_info.json";
+            } else if  (request.getBody().toString().contains("info_get_peers")){
+                responseBodyFile = "method-json/info_get_peers.json";
+            } else if  (request.getBody().toString().contains("info_get_status")){
+                responseBodyFile = "method-json/info_get_status.json";
             }
 
             return new MockResponse().setResponseCode(200)
