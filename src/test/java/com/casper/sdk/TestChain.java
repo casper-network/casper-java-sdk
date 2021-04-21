@@ -23,7 +23,7 @@ public class TestChain {
     @Test
     public void testChainSimpleQueries_v_0_2_0() throws Throwable {
 
-        CasperSdk casperSdk = new CasperSdk("http://localhost", "40101");
+        CasperSdk casperSdk = new CasperSdk("http://3.140.179.157", "7777");
 
         JsonNode node = new ObjectMapper().readTree(casperSdk.getAuctionInfo());
         assertNotNull(node.get("api_version").textValue());
