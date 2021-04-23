@@ -5,7 +5,9 @@ plugins {
 
 apply plugin: 'java'
 
-
+group = 'com.casper.sdk'
+version = '0.3.0'
+sourceCompatibility = '13'
 
 repositories {
     mavenCentral()
