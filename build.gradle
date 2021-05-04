@@ -4,8 +4,6 @@ plugins {
 
 apply plugin: 'java'
 
-
-
 repositories {
     mavenCentral()
 }

@@ -1,0 +1,67 @@
+{
+  "deploy": {
+    "approvals": [{
+      "signature": "",
+      "signer": ""
+    }],
+    "hash": "",
+    "header": {
+      "account": "",
+      "body_hash": "",
+      "chain_name": "",
+      "dependencies": [],
+      "gas_price": 0,
+      "timestamp": "",
+      "ttl": ""
+    },
+    "payment": {
+      "ModuleBytes": {
+        "args": [
+          [
+            "amount",
+            {
+              "bytes": "",
+              "cl_type": "",
+              "parsed": ""
+            }
+          ]
+        ],
+        "module_bytes": ""
+      }
+    },
+    "session": {
+      "Transfer": {
+        "args": [
+          [
+            "amount",
+            {
+              "bytes": "",
+              "cl_type": "",
+              "parsed": ""
+            }
+          ],
+          [
+            "target",
+            {
+              "bytes": "",
+              "cl_type": {
+                "ByteArray": 0
+              },
+              "parsed": ""
+            }
+          ],
+          [
+            "id",
+            {
+              "bytes": "",
+              "cl_type": {
+                "Option": ""
+              },
+              "parsed": null
+            }
+          ]
+        ]
+      }
+    }
+  }
+}
