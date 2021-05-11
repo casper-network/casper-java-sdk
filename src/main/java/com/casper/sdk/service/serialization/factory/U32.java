@@ -7,8 +7,8 @@ import java.math.BigInteger;
 import java.nio.ByteBuffer;
 
 public class U32 implements TypesInterface {
-    @Override public String serialize(final String toSerialize) {
-        final BigInteger bigInt = new BigInteger(toSerialize);
+    @Override public String serialize(final Object toSerialize) {
+        final BigInteger bigInt = new BigInteger(String.valueOf(toSerialize));
         int intValue = bigInt.intValue();
 
         ByteBuffer buffer = ByteBuffer.allocate(Integer.BYTES);
@@ -18,5 +18,9 @@ public class U32 implements TypesInterface {
         ArrayUtils.reverse(bytes);
 
         return Hex.encodeHexString(bytes);
+    }
+
+    @Override public String serialize(final String toSerialize, final TypesFactory typesFactory) {
+        return null;
     }
 }
