@@ -16,13 +16,44 @@ public class ArgsService {
 
     private final TypesFactory factory = new TypesFactory();
 
-    public JsonNode buildTransfer(final String amount, final String target, final Object id, final String additionalInfo){
 
-        Map<String, Object> transfer = new HashMap(){
+    public JsonNode buildPayment(final String moduleBytes, final String amount){
+
+        Map<String, Object> transfer = new HashMap(){{
+            put("payment", new HashMap<>(){{
+                put("ModuleBytes", buildPaymentArgs(moduleBytes, amount));
+            }});
+        }};
+
+        //intermediate bytes
+        //add to transfer/module bytes
+        //concat args session and payment hash for body hash
+
+        return new ObjectMapper().convertValue(transfer, JsonNode.class);
+
+    }
+
+    private Map<String, Object> buildPaymentArgs(final String moduleBytes, final String amount) {
+
+        final List<List<Object>> lists = Arrays.asList(List.of("amount", new ArgsStandard(factory.getInstance(TypesEnum.U512.name()).serialize(amount), amount, "U512")));
+
+        return new HashMap<>() {
             {
-                put("Transfer", buildArgs(amount, target, id, additionalInfo));
+                put("args", lists);
+                put("module_bytes", moduleBytes);
             }
         };
+
+    }
+
+
+    public JsonNode buildSession(final String amount, final String target, final Object id, final String additionalInfo){
+
+        Map<String, Object> transfer = new HashMap(){{
+                put("session", new HashMap<>(){{
+                    put("Transfer", buildSessionArgs(amount, target, id, additionalInfo));
+                }});
+            }};
 
         //intermediate bytes
         //add to transfer/module bytes
@@ -41,14 +72,12 @@ public class ArgsService {
      * @param additionalInfo additionInfo
      * @return hashmap representation of teh args json
      */
-    private Map<String, Object> buildArgs(final String amount, final String target, final Object id, final String additionalInfo){
+    private Map<String, Object> buildSessionArgs(final String amount, final String target, final Object id, final String additionalInfo){
 
         final List<List<Object>> lists = Arrays.asList(List.of("amount", new ArgsStandard(factory.getInstance(TypesEnum.U512.name()).serialize(amount), amount, "U512")),
-                List.of("target", new ArgsOption(target, target, new HashMap<>(){
-                    {
+                List.of("target", new ArgsOption(target, target, new HashMap<>(){{
                         put("ByteArray", 32);
-                    }
-                })),
+                    }})),
                 List.of("id", new ArgsStandard(factory.getInstance(TypesEnum.U64.name()).serialize(id), id, "U64")),
                 List.of("additional_info", new ArgsStandard(factory.getInstance(TypesEnum.String.name()).serialize(additionalInfo, factory), additionalInfo, "String")));
 

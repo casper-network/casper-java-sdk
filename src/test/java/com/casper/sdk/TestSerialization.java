@@ -17,52 +17,77 @@ public class TestSerialization {
     private final ArgsService argsService = new ArgsService();
 
     @Test
-    public void testTransferArgs() throws IOException {
-        ClassLoader classLoader = TestSerialization.class.getClassLoader();
-        JsonNode testTransfer = new ObjectMapper().readTree(new File(classLoader.getResource("serialization/transfer-args.json").getFile()));
+    public void testPayment() throws IOException {
 
-        JsonNode transfer = argsService.buildTransfer("24500000000", "0101010101010101010101010101010101010101010101010101010101010101", 999, "this is transfer");
+        ClassLoader classLoader = TestSerialization.class.getClassLoader();
+        JsonNode testTransfer = new ObjectMapper().readTree(new File(classLoader.getResource("serialization/payment-args.json").getFile()));
+
+        JsonNode transfer = argsService.buildPayment("", "1000000000");
 
         System.out.println(transfer.toPrettyString());
 
-        assert testTransfer.get("Transfer").get("args").get(0).get(1).get("cl_type").equals(
-                transfer.get("Transfer").get("args").get(0).get(1).get("cl_type")
+        assert testTransfer.get("payment").get("ModuleBytes").get("args").get(0).get(1).get("cl_type").equals(
+                transfer.get("payment").get("ModuleBytes").get("args").get(0).get(1).get("cl_type")
         );
-        assert testTransfer.get("Transfer").get("args").get(0).get(1).get("bytes").equals(
-                transfer.get("Transfer").get("args").get(0).get(1).get("bytes")
+        assert testTransfer.get("payment").get("ModuleBytes").get("args").get(0).get(1).get("bytes").equals(
+                transfer.get("payment").get("ModuleBytes").get("args").get(0).get(1).get("bytes")
         );
-        assert testTransfer.get("Transfer").get("args").get(0).get(1).get("parsed").equals(
-                transfer.get("Transfer").get("args").get(0).get(1).get("parsed")
+        assert testTransfer.get("payment").get("ModuleBytes").get("args").get(0).get(1).get("parsed").equals(
+                transfer.get("payment").get("ModuleBytes").get("args").get(0).get(1).get("parsed")
         );
-
-        assert testTransfer.get("Transfer").get("args").get(1).get(1).get("cl_type").get("ByteArray").equals(
-                transfer.get("Transfer").get("args").get(1).get(1).get("cl_type").get("ByteArray")
-        );
-        assert testTransfer.get("Transfer").get("args").get(1).get(1).get("bytes").equals(
-                transfer.get("Transfer").get("args").get(1).get(1).get("bytes")
-        );
-        assert testTransfer.get("Transfer").get("args").get(1).get(1).get("parsed").equals(
-                transfer.get("Transfer").get("args").get(1).get(1).get("parsed")
+        assert testTransfer.get("payment").get("ModuleBytes").get("module_bytes").equals(
+                transfer.get("payment").get("ModuleBytes").get("module_bytes")
         );
 
-        assert testTransfer.get("Transfer").get("args").get(2).get(1).get("cl_type").equals(
-                transfer.get("Transfer").get("args").get(2).get(1).get("cl_type")
+    }
+
+    @Test
+    public void testSession() throws IOException {
+        ClassLoader classLoader = TestSerialization.class.getClassLoader();
+        JsonNode testTransfer = new ObjectMapper().readTree(new File(classLoader.getResource("serialization/session-args.json").getFile()));
+
+        JsonNode transfer = argsService.buildSession("24500000000", "0101010101010101010101010101010101010101010101010101010101010101", 999, "this is transfer");
+
+        System.out.println(transfer.toPrettyString());
+
+        assert testTransfer.get("session").get("Transfer").get("args").get(0).get(1).get("cl_type").equals(
+                transfer.get("session").get("Transfer").get("args").get(0).get(1).get("cl_type")
         );
-        assert testTransfer.get("Transfer").get("args").get(2).get(1).get("bytes").equals(
-                transfer.get("Transfer").get("args").get(2).get(1).get("bytes")
+        assert testTransfer.get("session").get("Transfer").get("args").get(0).get(1).get("bytes").equals(
+                transfer.get("session").get("Transfer").get("args").get(0).get(1).get("bytes")
         );
-        assert testTransfer.get("Transfer").get("args").get(2).get(1).get("parsed").equals(
-                transfer.get("Transfer").get("args").get(2).get(1).get("parsed")
+        assert testTransfer.get("session").get("Transfer").get("args").get(0).get(1).get("parsed").equals(
+                transfer.get("session").get("Transfer").get("args").get(0).get(1).get("parsed")
         );
 
-        assert testTransfer.get("Transfer").get("args").get(3).get(1).get("cl_type").equals(
-                transfer.get("Transfer").get("args").get(3).get(1).get("cl_type")
+        assert testTransfer.get("session").get("Transfer").get("args").get(1).get(1).get("cl_type").get("ByteArray").equals(
+                transfer.get("session").get("Transfer").get("args").get(1).get(1).get("cl_type").get("ByteArray")
         );
-        assert testTransfer.get("Transfer").get("args").get(3).get(1).get("bytes").equals(
-                transfer.get("Transfer").get("args").get(3).get(1).get("bytes")
+        assert testTransfer.get("session").get("Transfer").get("args").get(1).get(1).get("bytes").equals(
+                transfer.get("session").get("Transfer").get("args").get(1).get(1).get("bytes")
         );
-        assert testTransfer.get("Transfer").get("args").get(3).get(1).get("parsed").equals(
-                transfer.get("Transfer").get("args").get(3).get(1).get("parsed")
+        assert testTransfer.get("session").get("Transfer").get("args").get(1).get(1).get("parsed").equals(
+                transfer.get("session").get("Transfer").get("args").get(1).get(1).get("parsed")
+        );
+
+        assert testTransfer.get("session").get("Transfer").get("args").get(2).get(1).get("cl_type").equals(
+                transfer.get("session").get("Transfer").get("args").get(2).get(1).get("cl_type")
+        );
+        assert testTransfer.get("session").get("Transfer").get("args").get(2).get(1).get("bytes").equals(
+                transfer.get("session").get("Transfer").get("args").get(2).get(1).get("bytes")
+        );
+        assert testTransfer.get("session").get("Transfer").get("args").get(2).get(1).get("parsed").equals(
+                transfer.get("session").get("Transfer").get("args").get(2).get(1).get("parsed")
+        );
+
+        assert testTransfer.get("session").get("Transfer").get("args").get(3).get(1).get("cl_type").equals(
+                transfer.get("session").get("Transfer").get("args").get(3).get(1).get("cl_type")
+        );
+        assert testTransfer.get("session").get("Transfer").get("args").get(3).get(1).get("bytes").equals(
+                transfer.get("session").get("Transfer").get("args").get(3).get(1).get("bytes")
+        );
+        assert testTransfer.get("session").get("Transfer").get("args").get(3).get(1).get("parsed").equals(
+                transfer.get("session").get("Transfer").get("args").get(3).get(1).get("parsed")
         );
 
     }
