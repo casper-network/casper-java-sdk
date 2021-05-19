@@ -5,7 +5,7 @@ import org.apache.commons.codec.binary.Hex;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 
-public class StringType implements TypesInterface{
+public class StringType implements TypesInterface {
 
     @Override
     public String serialize(final Object toSerialize) {
@@ -13,10 +13,10 @@ public class StringType implements TypesInterface{
     }
 
     @Override
-    public String serialize(final String toSerialize, final TypesFactory typesFactory){
+    public String serialize(final String toSerialize, final TypesFactory typesFactory) {
 
         final ByteBuffer buffer = ByteBuffer.allocate(toSerialize.length())
-            .put(toSerialize.getBytes(StandardCharsets.UTF_8));
+                .put(toSerialize.getBytes(StandardCharsets.UTF_8));
 
         byte[] bytes = buffer.array();
 

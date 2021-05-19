@@ -1,6 +1,6 @@
 package com.casper.sdk.service.serialization.factory;
 
-public class I64 implements TypesInterface{
+public class I64 implements TypesInterface {
     @Override public String serialize(final Object toSerialize) {
         return null;
     }
