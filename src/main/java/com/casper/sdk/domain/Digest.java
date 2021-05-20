@@ -1,7 +1,5 @@
 package com.casper.sdk.domain;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-
 import java.util.Objects;
 
 /**

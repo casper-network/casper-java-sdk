@@ -53,13 +53,11 @@ class DeployTest {
         assertThat(deploy.getHash().getHash(), is("hash"));
     }
 
-
     @Test
     void getHeader() {
         assertThat(deploy.getHeader(), is(notNullValue(DeployHeader.class)));
         assertThat(deploy.getHeader().getChainName(), is("mainnet"));
     }
-
 
     @Test
     void getPayment() {

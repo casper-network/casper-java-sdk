@@ -1,7 +1,6 @@
 package com.casper.sdk.domain;
 
 import com.casper.sdk.json.DeployExecutableJsonDeserializer;
-import com.casper.sdk.json.PublicKeyJsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import java.util.List;

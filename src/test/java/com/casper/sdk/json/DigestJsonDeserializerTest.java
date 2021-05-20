@@ -15,15 +15,20 @@ import static org.hamcrest.core.Is.is;
  */
 class DigestJsonDeserializerTest {
 
+    private static final String JSON = "\"017f747b67bd3fe63c2a736739dfe40156d622347346e70f68f51c178a75ce5537\"";
+
+    /**
+     * Tests that a Digest can be deserialized from JSON
+     */
     @Test
     void testDigestFromJson() throws IOException {
 
-        SimpleModule module = new SimpleModule();
+        final SimpleModule module = new SimpleModule();
         module.addDeserializer(Digest.class, new DigestJsonDeserializer());
         final ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(module);
 
-        Digest digest = mapper.reader().readValue("\"017f747b67bd3fe63c2a736739dfe40156d622347346e70f68f51c178a75ce5537\"", Digest.class);
+        final Digest digest = mapper.reader().readValue(JSON, Digest.class);
         assertThat(digest, is(new Digest("017f747b67bd3fe63c2a736739dfe40156d622347346e70f68f51c178a75ce5537")));
     }
 }

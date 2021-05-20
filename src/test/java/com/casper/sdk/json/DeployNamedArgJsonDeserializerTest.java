@@ -12,22 +12,29 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
 
+/**
+ * Unit tests for the DeployNamedArgJsonDeserializer
+ */
 class DeployNamedArgJsonDeserializerTest {
 
     // Yuck this is horrible JSON
-    private static final String JSON = "[\n" +
-            "   \"amount\",\n" +
-            "   {\n" +
-            "      \"cl_type\": \"U512\",\n" +
-            "      \"bytes\": \"05005550b405\",\n" +
-            "      \"parsed\": \"24500000000\"\n" +
-            "   }\n" +
-            "]";
+    private static final String JSON = """
+            [
+               "amount",
+               {
+                  "cl_type": "U512",
+                  "bytes": "05005550b405",
+                  "parsed": "24500000000"
+               }
+            ]""";
 
+    /**
+     * Tests that a single DeployNamedArg can be deserialized from JSON
+     */
     @Test
     void deserializeDeployNamedArg() throws IOException {
         final ObjectMapper mapper = new ObjectMapper();
-        DeployNamedArg deployNamedArg = mapper.reader().readValue(JSON, DeployNamedArg.class);
+        final DeployNamedArg deployNamedArg = mapper.reader().readValue(JSON, DeployNamedArg.class);
 
         assertThat(deployNamedArg, is(notNullValue()));
         assertThat(deployNamedArg.getName(), is("amount"));

@@ -4,7 +4,6 @@ import com.casper.sdk.domain.CLType;
 import com.casper.sdk.domain.CLValue;
 import com.casper.sdk.domain.DeployNamedArg;
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.ObjectCodec;
 import com.fasterxml.jackson.core.TreeNode;
 import com.fasterxml.jackson.databind.DeserializationContext;
@@ -30,15 +29,15 @@ import java.io.IOException;
 public class DeployNamedArgJsonDeserializer extends JsonDeserializer<DeployNamedArg> {
 
     @Override
-    public DeployNamedArg deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+    public DeployNamedArg deserialize(final JsonParser p, final DeserializationContext context) throws IOException {
 
-        ObjectCodec codec = p.getCodec();
-        TreeNode treeNode = codec.readTree(p);
+        final ObjectCodec codec = p.getCodec();
+        final TreeNode treeNode = codec.readTree(p);
 
         return new DeployNamedArg(getName(treeNode), getClValue(treeNode));
     }
 
-    private CLValue getClValue(TreeNode treeNode) {
+    private CLValue getClValue(final TreeNode treeNode) {
 
         final TreeNode valueNode = treeNode.get(1);
         final TextNode typeNode = (TextNode) valueNode.get("cl_type");
@@ -47,10 +46,10 @@ public class DeployNamedArgJsonDeserializer extends JsonDeserializer<DeployNamed
         return new CLValue(bytesNode.asText(), CLType.fromString(typeNode.asText()));
     }
 
-    private String getName(TreeNode treeNode) {
-        TreeNode arg = treeNode.get(0);
+    private String getName(final TreeNode treeNode) {
+        final TreeNode arg = treeNode.get(0);
         if (arg instanceof TextNode) {
-            return  ((TextNode) arg).asText();
+            return ((TextNode) arg).asText();
         }
         // TODO Do we throw? Add validation later
         return "unknown";

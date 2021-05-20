@@ -14,7 +14,7 @@ import java.io.IOException;
 public class DigestJsonDeserializer extends JsonDeserializer<Digest> {
 
     @Override
-    public Digest deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+    public Digest deserialize(final JsonParser p, final DeserializationContext context) throws IOException {
         return new Digest(p.getText());
     }
 }

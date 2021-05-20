@@ -1,6 +1,6 @@
 package com.casper.sdk.domain;
 
-import com.casper.sdk.json.PublicKeyJsonDeserialize;
+import com.casper.sdk.json.PublicKeyJsonDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import java.util.Objects;
@@ -8,7 +8,7 @@ import java.util.Objects;
 /**
  * Domain type: representing a public key derived from an ECC key pair.
  */
-@JsonDeserialize(using = PublicKeyJsonDeserialize.class)
+@JsonDeserialize(using = PublicKeyJsonDeserializer.class)
 public class PublicKey extends AbstractCLType {
 
     /** Either 32 or 33 bytes (compressed) depending upon ECC type */

@@ -1,5 +1,7 @@
 package com.casper.sdk.domain;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 import java.util.Set;
 
 /**
@@ -18,10 +20,12 @@ public class Deploy {
     /** Set of signatures approving this deploy for execution. */
     private final Set<DeployApproval> approvals;
 
-    // TODO REMOVE
+    // TODO REMOVE once JSON parsing working
     public Deploy() {
         this(null,null, null, null, null);
     }
+
+    //@JsonCreator
     public Deploy(final Digest hash,
                   final DeployHeader header,
                   final DeployExecutable payment,

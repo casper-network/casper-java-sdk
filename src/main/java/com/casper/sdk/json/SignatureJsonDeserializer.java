@@ -12,7 +12,7 @@ import java.io.IOException;
  */
 public class SignatureJsonDeserializer extends JsonDeserializer<Signature> {
     @Override
-    public Signature deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+    public Signature deserialize(final JsonParser p, final DeserializationContext context) throws IOException {
         return new Signature(p.getText());
     }
 }
