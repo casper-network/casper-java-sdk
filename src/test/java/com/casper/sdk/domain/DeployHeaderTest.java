@@ -20,6 +20,7 @@ class DeployHeaderTest {
                 new PublicKey("017f747b67bd3fe63c2a736739dfe40156d622347346e70f68f51c178a75ce5537"),
                 "2021-05-04T14:20:35.104Z",
                 "30m",
+                20,
                 new Digest("f2e0782bba4a0a9663cafc7d707fd4a74421bc5bfef4e368b7e8f38dfab87db8"),
                 Arrays.asList(
                         new Digest("0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f"),
@@ -42,6 +43,11 @@ class DeployHeaderTest {
     @Test
     void getTtl() {
         assertThat(deployHeader.getTtl(), is("30m"));
+    }
+
+    @Test
+    void getGasPrice() {
+        assertThat(deployHeader.getGasPrice(), is(20));
     }
 
     @Test

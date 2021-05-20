@@ -1,6 +1,7 @@
 package com.casper.sdk.domain;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Set;
 
@@ -20,17 +21,12 @@ public class Deploy {
     /** Set of signatures approving this deploy for execution. */
     private final Set<DeployApproval> approvals;
 
-    // TODO REMOVE once JSON parsing working
-    public Deploy() {
-        this(null,null, null, null, null);
-    }
-
-    //@JsonCreator
-    public Deploy(final Digest hash,
-                  final DeployHeader header,
-                  final DeployExecutable payment,
-                  final DeployExecutable session,
-                  final Set<DeployApproval> approvals) {
+    @JsonCreator
+    public Deploy(@JsonProperty("hash") final Digest hash,
+                  @JsonProperty("header") final DeployHeader header,
+                  @JsonProperty("payment") final DeployExecutable payment,
+                  @JsonProperty("session") final DeployExecutable session,
+                  @JsonProperty("approvals") final Set<DeployApproval> approvals) {
         this.hash = hash;
         this.header = header;
         this.payment = payment;
@@ -46,8 +42,10 @@ public class Deploy {
         return header;
     }
 
-    public DeployExecutable getPayment() {
-        return payment;
+    // TODO sort out types
+    public <P extends DeployExecutable> P getPayment() {
+        //noinspection unchecked
+        return (P)payment;
     }
 
     public DeployExecutable getSession() {
@@ -57,5 +55,4 @@ public class Deploy {
     public Set<DeployApproval> getApprovals() {
         return approvals;
     }
-
 }

@@ -6,66 +6,79 @@ package com.casper.sdk.domain;
 public enum CLType {
 
     /** boolean primitive */
-    BOOL(0, "Bool"),
+    @CLName("Bool")
+    BOOL(0),
     /** signed 32-bit integer primitive */
-    I32(1, "I32"),
+    I32(1),
     /** signed 64-bit integer primitive */
-    I64(2, "I64"),
+    I64(2),
     /** unsigned 8-bit integer primitive */
-    U8(3, "U8"),
+    U8(3),
     /** unsigned 32-bit integer primitive */
-    U32(4, "U32"),
+    U32(4),
     /** unsigned 64-bit integer primitive */
-    U64(5, "U64"),
+    U64(5),
     /** unsigned 128-bit integer primitive */
-    U128(6, "U128"),
+    U128(6),
     /** unsigned 256-bit integer primitive */
-    U256(7, "U256"),
+    U256(7),
     /** unsigned 512-bit integer primitive */
-    U512(8, "U512"),
+    U512(8),
     /** singleton value without additional semantics */
-    UNIT(9, "Unit"),
+    @CLName("Unit")
+    UNIT(9),
     /** e.g. "Hello, World!" */
-    STRING(10, "String"),
+    @CLName("String")
+    STRING(10),
     /** global state key */
-    KEY(11, "Key"),
+    @CLName("Key")
+    KEY(11),
     /** unforgeable reference */
-    UREF(12, "URef"),
+    @CLName("URef")
+    UREF(12),
     /** optional value of the given type Option(CLType) */
-    OPTION(13, "Option"),
+    @CLName("Option")
+    OPTION(13),
     /** List of values of the given type (e.g. Vec in rust). List(CLType) */
-    LIST(14, "List"),
+    @CLName("List")
+    LIST(14),
     /** FIXME NO DEF IN SPEC https://docs.casperlabs.io/en/latest/implementation/serialization-standard.html */
-    BYTE_ARRAY(15, "ByteArray"),
+    @CLName("ByteArray")
+    BYTE_ARRAY(15),
     /** co-product of the the given types; one variant meaning success, the other failure */
-    RESULT(16, "Result"),
+    @CLName("Result")
+    RESULT(16),
     /** Map(CLType, CLType), // key-value association where keys and values have the given types */
-    MAP(17, "Map"),
+    @CLName("Map")
+    MAP(17),
     /** Tuple1(CLType) single value of the given type */
-    TUPLE_1(18, "Tuple1"),
+    @CLName("Tuple1")
+    TUPLE_1(18),
     /** Tuple2(CLType, CLType), // pair consisting of elements of the given types */
-    TUPLE_2(19, "Tuple2"),
+    @CLName("Tuple2")
+    TUPLE_2(19),
     /** Tuple3(CLType, CLType, CLType), // triple consisting of elements of the given types */
-    TUPLE_3(20, "Tuple3"),
+    @CLName("Tuple3")
+    TUPLE_3(20),
     /** Indicates the type is not known */
-    ANY(21, "Any"),
+    @CLName("Any")
+    ANY(21),
     /** FIXME NO DEF IN SPEC https://docs.casperlabs.io/en/latest/implementation/serialization-standard.html */
-    PUBLIC_KEY(22, "PublicKey");
+    @CLName("PublicKey")
+    PUBLIC_KEY(22);
 
     /** The numeric value for the CL type */
     private final int clType;
-    /** The name of the type when written to JSON */
-    private final String jsonName;
 
-    CLType(final int clType, final String jsonName) {
+    CLType(final int clType) {
         this.clType = clType;
-        this.jsonName = jsonName;
+
     }
 
     public static CLType fromString(String jsonName) {
 
         for (CLType clType : values()) {
-            if (clType.jsonName.equals(jsonName)) {
+            if (clType.getJsonName().equals(jsonName)) {
                 return clType;
             }
         }
@@ -83,7 +96,25 @@ public enum CLType {
         return clType;
     }
 
+    /**
+     * Obtains the JSON name of the field. If a {@link CLName} annotation exists on the CLType returns its value
+     * otherwise the name.
+     *
+     * @return the JSON name of the CLType
+     */
     public String getJsonName() {
-        return jsonName;
+        try {
+            final CLName annotation = this.getClass()
+                    .getField(this.name())
+                    .getAnnotation(CLName.class);
+            if (annotation != null) {
+                return annotation.value();
+            } else {
+                return name();
+            }
+        } catch (NoSuchFieldException e) {
+            // Ignore will never happen
+            throw new RuntimeException(e);
+        }
     }
 }

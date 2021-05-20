@@ -1,11 +1,11 @@
 package com.casper.sdk.json;
 
-import com.casper.sdk.domain.DeployExecutable;
-import com.casper.sdk.domain.DeployNamedArg;
-import com.casper.sdk.domain.Transfer;
+import com.casper.sdk.domain.*;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.ObjectCodec;
 import com.fasterxml.jackson.core.TreeNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.databind.node.TextNode;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -55,7 +55,7 @@ class DeployExecutableFactory {
          * @return a list of DeployNamedArg converted from JSON
          * @throws IOException if there is either an underlying I/O problem or decoding issue at format layer
          */
-        private List<DeployNamedArg> convertArgs(final TreeNode argsNode, ObjectCodec codec) throws IOException {
+        protected List<DeployNamedArg> convertArgs(final TreeNode argsNode, ObjectCodec codec) throws IOException {
 
             final List<DeployNamedArg> args = new ArrayList<>();
 
@@ -107,10 +107,49 @@ class DeployExecutableFactory {
         }
     }
 
+    /**
+     * Converts JSON into a Payment
+     */
+    private static class PaymentJsonFactory extends AbstractDeployExecutableJsonFactory<Payment> {
+
+        @Override
+        Payment create(final String fieldName, final TreeNode treeNode, final ObjectCodec codec) {
+            try {
+                final List<DeployNamedArg> args = convertArgs(getArgsNode(fieldName, treeNode), codec);
+                return new Payment(convertModuleBytes(treeNode), args);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        private byte[] convertModuleBytes(final TreeNode treeNode) {
+            TreeNode moduleBytes = treeNode.get("ModuleBytes");
+            if (moduleBytes instanceof ObjectNode) {
+                final TreeNode textNode = moduleBytes.get("module_bytes");
+                if (textNode instanceof TextNode) {
+                    return CLValue.fromString(((TextNode) textNode).textValue());
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected TreeNode getArgsNode(final String fieldName, final TreeNode treeNode) {
+            return treeNode.get(fieldName);
+        }
+
+        @Override
+        protected Class<Payment> getType() {
+            return Payment.class;
+        }
+    }
+
+
     /** The map of field names to DeployExecutable Factories */
     private static final Map<String, AbstractDeployExecutableJsonFactory<?>> argsProviderMap = new HashMap<>();
 
     static {
+        argsProviderMap.put("ModuleBytes", new PaymentJsonFactory());
         argsProviderMap.put("Transfer", new TransferJsonFactory());
         argsProviderMap.put("args", new DefaultDeployExecutableJsonFactory());
     }
@@ -124,7 +163,7 @@ class DeployExecutableFactory {
      * @param codec     the codec so we can call other JsonDeserializer classes
      * @return the DeployExecutable for the specified fieldName and tree node value
      */
-    <T extends DeployExecutable> T create(final String fieldName, final TreeNode treeNode, ObjectCodec codec) {
+    <T extends DeployExecutable> T create(final String fieldName, final TreeNode treeNode, final ObjectCodec codec) {
         final AbstractDeployExecutableJsonFactory<?> jsonDeserializer = argsProviderMap.get(fieldName);
         if (jsonDeserializer != null) {
             //noinspection unchecked

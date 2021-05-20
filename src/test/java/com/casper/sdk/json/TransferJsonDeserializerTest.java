@@ -15,9 +15,9 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
 
 /**
- * Tests a DeployExecutable can be parsed from a JSON string
+ * Tests a Transfer DeployExecutable can be parsed from a JSON string
  */
-class DeployExecutableJsonDeserializerTest {
+class TransferJsonDeserializerTest {
 
     // Transfer is used to indicate the type
     private static final String TRANSFER_JSON = /* "session": */ """

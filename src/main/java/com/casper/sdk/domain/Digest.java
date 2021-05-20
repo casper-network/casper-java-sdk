@@ -20,13 +20,6 @@ public class Digest {
     }
 
     @Override
-    public String toString() {
-        return "Digest{" +
-                "hash='" + hash + '\'' +
-                '}';
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

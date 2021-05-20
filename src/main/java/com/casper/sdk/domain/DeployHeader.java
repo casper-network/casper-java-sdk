@@ -15,7 +15,10 @@ public class DeployHeader {
     private final String timestamp;
     /** Time interval after which the deploy will no longer be considered for processing by a node. eg 3m */
     private final String ttl;
+    @CLName("gas_price")
+    private final Integer gasPrice;
     /** Hash of deploy payload. */
+    @CLName("body_hash")
     private final Digest bodyHash;
     /** Set of deploys that must be executed prior to this one. */
     private final List<Digest> dependencies;
@@ -26,12 +29,14 @@ public class DeployHeader {
     public DeployHeader(@JsonProperty("account") final PublicKey account,
                         @JsonProperty("timestamp") final String timestamp,
                         @JsonProperty("ttl") final String ttl,
+                        @JsonProperty(value = "gas_price", defaultValue = "null") final Integer gasPrice,
                         @JsonProperty("body_hash") final Digest bodyHash,
                         @JsonProperty("dependencies") final List<Digest> dependencies,
                         @JsonProperty("chain_name") final String chainName) {
         this.account = account;
         this.timestamp = timestamp;
         this.ttl = ttl;
+        this.gasPrice = gasPrice;
         this.bodyHash = bodyHash;
         this.dependencies = dependencies;
         this.chainName = chainName;
@@ -47,6 +52,10 @@ public class DeployHeader {
 
     public String getTtl() {
         return ttl;
+    }
+
+    public Integer getGasPrice() {
+        return gasPrice;
     }
 
     public Digest getBodyHash() {

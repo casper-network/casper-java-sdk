@@ -41,7 +41,7 @@ public class DeployNamedArgJsonDeserializer extends JsonDeserializer<DeployNamed
 
             final JsonParser p = valueNode.traverse();
 
-            // If the code is not set use root codec
+            // If the codec is not set use root codec
             if (p.getCodec() == null) {
                 p.setCodec(codec);
             }

@@ -28,7 +28,7 @@ public class DeployExecutableJsonDeserializer extends JsonDeserializer<DeployExe
         if (iterator.hasNext()) {
             return factory.create(iterator.next(), treeNode, codec);
         }
-        // TODO We should we throw here
+        // TODO should we throw here?
         return new DeployExecutable(new ArrayList<>());
     }
 }

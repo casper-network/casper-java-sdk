@@ -8,26 +8,15 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
  */
 @JsonDeserialize(using = CLValueJsonDeserializer.class)
 public class CLValue extends AbstractCLType {
+
     /** Byte array representation of underlying data. */
     private final byte[] bytes;
-    /** The optional parsed string value of the bytes used when testing */
+    /** The optional parsed value of the bytes used when testing */
     private Object parsed;
 
     public CLValue(final String hexBytes, final CLTypeInfo clType, final Object parsed) {
         this(fromString(hexBytes), clType);
         this.parsed = parsed;
-    }
-
-    public CLValue(final String hexBytes, final CLType clType, final String parsed) {
-        this(hexBytes, new CLTypeInfo(clType), parsed);
-    }
-
-    public CLValue(final String hexBytes, final CLTypeInfo clType) {
-        this(hexBytes, clType, null);
-    }
-
-    public CLValue(final String hexBytes, final CLType clType) {
-        this(hexBytes, new CLTypeInfo(clType), null);
     }
 
     public CLValue(final byte[] bytes, final CLTypeInfo clType) {

@@ -11,9 +11,12 @@ abstract class AbstractCLType {
         this.typeInfo = typeInfo;
     }
 
-
     public CLTypeInfo getCLTypeInfo() {
         return typeInfo;
+    }
+
+    public String toHex() {
+        return toHex(getBytes());
     }
 
     public abstract byte[] getBytes();
@@ -37,5 +40,4 @@ abstract class AbstractCLType {
 
         return hexBuilder.toString();
     }
-
 }
