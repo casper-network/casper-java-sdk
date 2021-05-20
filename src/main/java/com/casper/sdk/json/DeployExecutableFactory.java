@@ -3,6 +3,8 @@ package com.casper.sdk.json;
 import com.casper.sdk.domain.DeployExecutable;
 import com.casper.sdk.domain.DeployNamedArg;
 import com.casper.sdk.domain.Transfer;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.ObjectCodec;
 import com.fasterxml.jackson.core.TreeNode;
 
 import java.io.IOException;
@@ -23,9 +25,9 @@ class DeployExecutableFactory {
      */
     private static abstract class AbstractDeployExecutableJsonFactory<T extends DeployExecutable> {
 
-        T create(final String fieldName, final TreeNode treeNode) {
+        T create(final String fieldName, final TreeNode treeNode, final ObjectCodec codec) {
             try {
-                final List<DeployNamedArg> args = convertArgs(getArgsNode(fieldName, treeNode));
+                final List<DeployNamedArg> args = convertArgs(getArgsNode(fieldName, treeNode), codec);
                 return getType().getConstructor(List.class).newInstance(args);
             } catch (Exception e) {
                 throw new RuntimeException(e);
@@ -53,13 +55,21 @@ class DeployExecutableFactory {
          * @return a list of DeployNamedArg converted from JSON
          * @throws IOException if there is either an underlying I/O problem or decoding issue at format layer
          */
-        private List<DeployNamedArg> convertArgs(final TreeNode argsNode) throws IOException {
+        private List<DeployNamedArg> convertArgs(final TreeNode argsNode, ObjectCodec codec) throws IOException {
 
             final List<DeployNamedArg> args = new ArrayList<>();
 
             if (argsNode.isArray()) {
                 for (int i = 0; i < argsNode.size(); i++) {
-                    args.add(argsNode.get(i).traverse().readValueAs(DeployNamedArg.class));
+
+                    final JsonParser p = argsNode.get(i).traverse();
+
+                    // If the code is not set use root codec
+                    if (p.getCodec() == null) {
+                        p.setCodec(codec);
+                    }
+                    final DeployNamedArg deployNamedArg = p.readValueAs(DeployNamedArg.class);
+                    args.add(deployNamedArg);
                 }
             }
             return args;
@@ -108,16 +118,17 @@ class DeployExecutableFactory {
     /**
      * Creates a DeployExecutable for a named field
      *
+     * @param <T>       the type of the DeployExecutable to create
      * @param fieldName the name of the field
      * @param treeNode  the tree node containing the value of the field
-     * @param <T>       the type of the DeployExecutable to create
+     * @param codec     the codec so we can call other JsonDeserializer classes
      * @return the DeployExecutable for the specified fieldName and tree node value
      */
-    <T extends DeployExecutable> T create(final String fieldName, final TreeNode treeNode) {
+    <T extends DeployExecutable> T create(final String fieldName, final TreeNode treeNode, ObjectCodec codec) {
         final AbstractDeployExecutableJsonFactory<?> jsonDeserializer = argsProviderMap.get(fieldName);
         if (jsonDeserializer != null) {
             //noinspection unchecked
-            return (T) jsonDeserializer.create(fieldName, treeNode);
+            return (T) jsonDeserializer.create(fieldName, treeNode, codec);
         } else {
             throw new IllegalArgumentException(fieldName + " is not a valid DeployExecutable field");
         }

@@ -26,7 +26,7 @@ public class DeployExecutableJsonDeserializer extends JsonDeserializer<DeployExe
         final TreeNode treeNode = codec.readTree(p);
         final Iterator<String> iterator = treeNode.fieldNames();
         if (iterator.hasNext()) {
-            return factory.create(iterator.next(), treeNode);
+            return factory.create(iterator.next(), treeNode, codec);
         }
         // TODO We should we throw here
         return new DeployExecutable(new ArrayList<>());

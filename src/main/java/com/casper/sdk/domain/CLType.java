@@ -72,6 +72,13 @@ public enum CLType {
         throw new IllegalArgumentException("Not a valid CLType json name " + jsonName);
     }
 
+    public static boolean isNumeric(final CLType clType) {
+        return switch (clType) {
+            case I32, I64, U8, U32, U64, U128, U256, U512 -> true;
+            default -> false;
+        };
+    }
+
     public int getClType() {
         return clType;
     }

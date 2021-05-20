@@ -4,19 +4,19 @@ import java.util.Objects;
 
 abstract class AbstractCLType {
 
-    private final CLType type;
+    private final CLTypeInfo typeInfo;
 
-    protected AbstractCLType(final CLType type) {
-        Objects.requireNonNull(type, "type cannot be null");
-        this.type = type;
+    protected AbstractCLType(final CLTypeInfo typeInfo) {
+        Objects.requireNonNull(typeInfo, "type cannot be null");
+        this.typeInfo = typeInfo;
     }
 
-    public CLType getCLType() {
-        return type;
+
+    public CLTypeInfo getCLTypeInfo() {
+        return typeInfo;
     }
 
     public abstract byte[] getBytes();
-
 
     public static byte[] fromString(final String hex) {
         int len = hex.length();

@@ -29,17 +29,19 @@ class DeployNamedArgJsonDeserializerTest {
             ]""";
 
     /**
+     *
      * Tests that a single DeployNamedArg can be deserialized from JSON
      */
     @Test
-    void deserializeDeployNamedArg() throws IOException {
+    void deserializeDeployU512NamedArg() throws IOException {
         final ObjectMapper mapper = new ObjectMapper();
         final DeployNamedArg deployNamedArg = mapper.reader().readValue(JSON, DeployNamedArg.class);
 
         assertThat(deployNamedArg, is(notNullValue()));
         assertThat(deployNamedArg.getName(), is("amount"));
         assertThat(deployNamedArg.getValue(), is(notNullValue()));
-        assertThat(deployNamedArg.getValue().getCLType(), is(CLType.U512));
+        assertThat(deployNamedArg.getValue().getCLTypeInfo().getType(), is(CLType.U512));
         assertThat(deployNamedArg.getValue().getBytes(), is(CLValue.fromString("05005550b405")));
+        assertThat(deployNamedArg.getValue().getParsed(), is("24500000000"));
     }
 }

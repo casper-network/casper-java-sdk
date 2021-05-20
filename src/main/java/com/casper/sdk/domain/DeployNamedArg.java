@@ -1,6 +1,7 @@
 package com.casper.sdk.domain;
 
 import com.casper.sdk.json.DeployNamedArgJsonDeserializer;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 /**
@@ -14,6 +15,7 @@ public class DeployNamedArg {
     /** Argument value. */
     private final CLValue value;
 
+    @JsonCreator
     public DeployNamedArg(final String name, final CLValue value) {
         this.name = name;
         this.value = value;

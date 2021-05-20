@@ -15,7 +15,7 @@ public class PublicKey extends AbstractCLType {
     private final byte[] bytes;
 
     public PublicKey(final byte[] bytes) {
-        super(CLType.PUBLIC_KEY);
+        super(new CLTypeInfo(CLType.PUBLIC_KEY));
         Objects.requireNonNull(bytes, "bytes cannot be null");
         this.bytes = bytes;
     }

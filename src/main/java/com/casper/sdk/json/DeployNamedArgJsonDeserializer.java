@@ -1,6 +1,5 @@
 package com.casper.sdk.json;
 
-import com.casper.sdk.domain.CLType;
 import com.casper.sdk.domain.CLValue;
 import com.casper.sdk.domain.DeployNamedArg;
 import com.fasterxml.jackson.core.JsonParser;
@@ -34,24 +33,34 @@ public class DeployNamedArgJsonDeserializer extends JsonDeserializer<DeployNamed
         final ObjectCodec codec = p.getCodec();
         final TreeNode treeNode = codec.readTree(p);
 
-        return new DeployNamedArg(getName(treeNode), getClValue(treeNode));
+        return new DeployNamedArg(getName(treeNode.get(0)), getClValue(treeNode.get(1), codec));
     }
 
-    private CLValue getClValue(final TreeNode treeNode) {
+    private CLValue getClValue(final TreeNode valueNode, final ObjectCodec codec) throws IOException {
+        if (valueNode != null) {
 
-        final TreeNode valueNode = treeNode.get(1);
-        final TextNode typeNode = (TextNode) valueNode.get("cl_type");
-        final TextNode bytesNode = (TextNode) valueNode.get("bytes");
+            final JsonParser p = valueNode.traverse();
 
-        return new CLValue(bytesNode.asText(), CLType.fromString(typeNode.asText()));
+            // If the code is not set use root codec
+            if (p.getCodec() == null) {
+                p.setCodec(codec);
+            }
+
+            return p.readValueAs(CLValue.class);
+        } else {
+            return null;
+        }
     }
 
-    private String getName(final TreeNode treeNode) {
-        final TreeNode arg = treeNode.get(0);
-        if (arg instanceof TextNode) {
-            return ((TextNode) arg).asText();
+
+    private String getName(final TreeNode nameMode) {
+
+        if (nameMode instanceof TextNode) {
+            return ((TextNode) nameMode).asText();
         }
         // TODO Do we throw? Add validation later
         return "unknown";
     }
+
+
 }

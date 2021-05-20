@@ -15,7 +15,7 @@ class AbstractCLTypeTest {
 
     @BeforeEach
     void setUp() {
-        clType = new AbstractCLType(CLType.I32) {
+        clType = new AbstractCLType(new CLTypeInfo(CLType.I32)) {
             @Override
             public byte[] getBytes() {
                 return "0f0f0f0f".getBytes();
@@ -24,8 +24,8 @@ class AbstractCLTypeTest {
     }
 
     @Test
-    void getCLType() {
-        assertThat(clType.getCLType(), is(CLType.I32));
+    void getCLTypeInfo() {
+        assertThat(clType.getCLTypeInfo().getType(), is(CLType.I32));
     }
 
     @Test

@@ -11,7 +11,7 @@ public class Signature extends AbstractCLType {
     private final byte[] bytes;
 
     public Signature(final byte[] bytes) {
-        super(CLType.BYTE_ARRAY);
+        super(new CLTypeInfo(CLType.PUBLIC_KEY));
         Objects.requireNonNull(bytes, "bytes cannot be null");
         this.bytes = bytes;
     }
