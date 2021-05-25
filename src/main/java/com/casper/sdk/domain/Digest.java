@@ -1,10 +1,14 @@
 package com.casper.sdk.domain;
 
+import com.casper.sdk.json.DigestJsonJSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import java.util.Objects;
 
 /**
  * Domain type: output of a hashing function.
  */
+@JsonSerialize(using = DigestJsonJSerializer.class)
 public class Digest {
 
     /** 32 byte array emitted by a hashing algorithm */

@@ -18,6 +18,7 @@ import java.io.IOException;
  * Deserializer for {@link com.casper.sdk.domain.CLValue} domain object
  */
 public class CLValueJsonDeserializer extends JsonDeserializer<CLValue> {
+
     @Override
     public CLValue deserialize(JsonParser p, DeserializationContext context) throws IOException {
         final ObjectCodec codec = p.getCodec();

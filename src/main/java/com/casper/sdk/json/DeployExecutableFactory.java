@@ -59,7 +59,7 @@ class DeployExecutableFactory {
 
             final List<DeployNamedArg> args = new ArrayList<>();
 
-            if (argsNode.isArray()) {
+            if (argsNode != null && argsNode.isArray()) {
                 for (int i = 0; i < argsNode.size(); i++) {
 
                     final JsonParser p = argsNode.get(i).traverse();
@@ -135,7 +135,12 @@ class DeployExecutableFactory {
 
         @Override
         protected TreeNode getArgsNode(final String fieldName, final TreeNode treeNode) {
-            return treeNode.get(fieldName);
+            TreeNode moduleBytes = treeNode.get(fieldName);
+            if (moduleBytes != null) {
+                return moduleBytes.get("args");
+            } else {
+                return null;
+            }
         }
 
         @Override
@@ -146,12 +151,12 @@ class DeployExecutableFactory {
 
 
     /** The map of field names to DeployExecutable Factories */
-    private static final Map<String, AbstractDeployExecutableJsonFactory<?>> argsProviderMap = new HashMap<>();
+    private static final Map<String, AbstractDeployExecutableJsonFactory<?>> argsFactoryMap = new HashMap<>();
 
     static {
-        argsProviderMap.put("ModuleBytes", new PaymentJsonFactory());
-        argsProviderMap.put("Transfer", new TransferJsonFactory());
-        argsProviderMap.put("args", new DefaultDeployExecutableJsonFactory());
+        argsFactoryMap.put("ModuleBytes", new PaymentJsonFactory());
+        argsFactoryMap.put("Transfer", new TransferJsonFactory());
+        argsFactoryMap.put("args", new DefaultDeployExecutableJsonFactory());
     }
 
     /**
@@ -164,7 +169,7 @@ class DeployExecutableFactory {
      * @return the DeployExecutable for the specified fieldName and tree node value
      */
     <T extends DeployExecutable> T create(final String fieldName, final TreeNode treeNode, final ObjectCodec codec) {
-        final AbstractDeployExecutableJsonFactory<?> jsonDeserializer = argsProviderMap.get(fieldName);
+        final AbstractDeployExecutableJsonFactory<?> jsonDeserializer = argsFactoryMap.get(fieldName);
         if (jsonDeserializer != null) {
             //noinspection unchecked
             return (T) jsonDeserializer.create(fieldName, treeNode, codec);

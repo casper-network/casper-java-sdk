@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
- * Converts all DeployExecutable types from JSON.
+ * Custom JSON Converts classes that extent {@link DeployExecutable} types from JSON.
  */
 public class DeployExecutableJsonDeserializer extends JsonDeserializer<DeployExecutable> {
 

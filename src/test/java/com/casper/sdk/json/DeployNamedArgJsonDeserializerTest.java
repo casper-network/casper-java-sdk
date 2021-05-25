@@ -17,7 +17,7 @@ import static org.hamcrest.core.IsNull.notNullValue;
  */
 class DeployNamedArgJsonDeserializerTest {
 
-    // Yuck this is horrible JSON
+    // This is funky JSON!
     private static final String JSON = """
             [
                "amount",

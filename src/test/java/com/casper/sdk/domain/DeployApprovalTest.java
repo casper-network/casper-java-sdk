@@ -19,7 +19,7 @@ class DeployApprovalTest {
 
         deployApproval = new DeployApproval(
                 new PublicKey("I'm a key".getBytes()),
-                new Signature("0102030405")
+                new Signature("0195a68b1a05731b7014e580b4c67a506e0339a7fffeaded9f24eb2e7f78b96bdd900b9be8ca33e4552a9a619dc4fc5e4e3a9f74a4b0537c14a5a8007d62a5dc06")
         );
     }
 
@@ -32,6 +32,6 @@ class DeployApprovalTest {
     @Test
     void getSignature() {
         assertThat(deployApproval.getSignature(), is(notNullValue(Signature.class)));
-        // TODO with some real data
+        assertThat(deployApproval.getSignature().getBytes(), is(CLValue.fromString("0195a68b1a05731b7014e580b4c67a506e0339a7fffeaded9f24eb2e7f78b96bdd900b9be8ca33e4552a9a619dc4fc5e4e3a9f74a4b0537c14a5a8007d62a5dc06")));
     }
 }

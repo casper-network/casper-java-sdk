@@ -72,7 +72,6 @@ public enum CLType {
 
     CLType(final int clType) {
         this.clType = clType;
-
     }
 
     public static CLType fromString(String jsonName) {

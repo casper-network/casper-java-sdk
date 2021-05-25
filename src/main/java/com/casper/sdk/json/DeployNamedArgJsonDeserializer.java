@@ -14,7 +14,6 @@ import java.io.IOException;
 /**
  * Converts a DeployNamedArg from JSON
  * <p/>
- * Strangely the arg is held within a single array element eg:
  * <pre>
  * [
  *  "amount",
@@ -52,7 +51,6 @@ public class DeployNamedArgJsonDeserializer extends JsonDeserializer<DeployNamed
         }
     }
 
-
     private String getName(final TreeNode nameMode) {
 
         if (nameMode instanceof TextNode) {
@@ -61,6 +59,4 @@ public class DeployNamedArgJsonDeserializer extends JsonDeserializer<DeployNamed
         // TODO Do we throw? Add validation later
         return "unknown";
     }
-
-
 }

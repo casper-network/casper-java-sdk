@@ -2,7 +2,6 @@ package com.casper.sdk.json;
 
 import com.casper.sdk.domain.Digest;
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 

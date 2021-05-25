@@ -1,27 +1,22 @@
 package com.casper.sdk.domain;
 
+import com.casper.sdk.json.PublicKeyJsonSerializer;
 import com.casper.sdk.json.SignatureJsonDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-import java.util.Objects;
-
+/**
+ * Signature domain type used in deployment approvals.
+ */
 @JsonDeserialize(using = SignatureJsonDeserializer.class)
-public class Signature extends AbstractCLType {
-    /** Either 32 or 33 bytes (compressed) depending upon ECC type */
-    private final byte[] bytes;
+@JsonSerialize(using = PublicKeyJsonSerializer.class)
+public class Signature extends PublicKey {
 
     public Signature(final byte[] bytes) {
-        super(new CLTypeInfo(CLType.PUBLIC_KEY));
-        Objects.requireNonNull(bytes, "bytes cannot be null");
-        this.bytes = bytes;
+        super(bytes);
     }
 
     public Signature(final String hex) {
         this(fromString(hex));
-    }
-
-    @Override
-    public byte[] getBytes() {
-        return bytes;
     }
 }

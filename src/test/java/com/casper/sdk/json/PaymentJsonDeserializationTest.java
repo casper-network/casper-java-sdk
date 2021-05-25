@@ -1,8 +1,6 @@
 package com.casper.sdk.json;
 
-import com.casper.sdk.domain.DeployExecutable;
-import com.casper.sdk.domain.DeployNamedArg;
-import com.casper.sdk.domain.Payment;
+import com.casper.sdk.domain.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
+import static com.jayway.jsonassert.impl.matcher.IsCollectionWithSize.hasSize;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
@@ -53,6 +52,12 @@ public class PaymentJsonDeserializationTest {
     void testParseTransferDeployExecutableFromJson() {
         assertThat(deployExecutable, is(instanceOf(Payment.class)));
 
-        assertThat(((Payment) deployExecutable).getModuleBytes(), is(new byte[0]));
+        final Payment payment = (Payment) deployExecutable;
+        assertThat(payment.getModuleBytes(), is(new byte[0]));
+        assertThat(payment.getArgs(), hasSize(1));
+        assertThat(payment.getArgs().get(0).getName(), is("amount"));
+        assertThat(payment.getArgs().get(0).getValue().getCLTypeInfo().getType(), is(CLType.U512));
+        assertThat(payment.getArgs().get(0).getValue().getBytes(), is(CLValue.fromString("0400ca9a3b")));
+        assertThat(payment.getArgs().get(0).getValue().getParsed(), is("1000000000"));
     }
 }

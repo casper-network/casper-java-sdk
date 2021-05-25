@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigInteger;
 import java.util.List;
 
@@ -20,47 +21,7 @@ import static org.hamcrest.core.IsInstanceOf.instanceOf;
 class TransferJsonDeserializerTest {
 
     // Transfer is used to indicate the type
-    private static final String TRANSFER_JSON = /* "session": */ """
-            {
-              "Transfer": {
-                "args": [
-                  [
-                    "amount",
-                    {
-                      "cl_type": "U512",
-                      "bytes": "05005550b405",
-                      "parsed": "24500000000"
-                    }
-                  ],
-                  [
-                    "target",
-                    {
-                      "cl_type": {
-                        "ByteArray": 32
-                      },
-                      "bytes": "0101010101010101010101010101010101010101010101010101010101010101",
-                      "parsed": "0101010101010101010101010101010101010101010101010101010101010101"
-                    }
-                  ],
-                  [
-                    "id",
-                    {
-                      "cl_type": "U64",
-                      "bytes": "01e703000000000000",
-                      "parsed": 999
-                    }
-                  ],
-                  [
-                    "additional_info",
-                    {
-                      "cl_type": "String",
-                      "bytes": "1000000074686973206973207472616e73666572",
-                      "parsed": "this is transfer"
-                    }
-                  ]
-                ]
-              }
-            }""";
+    private static final String TRANSFER_JSON = "/com/casper/sdk/json/transfer-snippet.json";
 
     private DeployExecutable deployExecutable;
 
@@ -72,7 +33,8 @@ class TransferJsonDeserializerTest {
         final ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(module);
 
-        deployExecutable = mapper.reader().readValue(TRANSFER_JSON, DeployExecutable.class);
+        final InputStream in = getClass().getResourceAsStream(TRANSFER_JSON);
+        deployExecutable = mapper.reader().readValue(in, DeployExecutable.class);
     }
 
     @Test

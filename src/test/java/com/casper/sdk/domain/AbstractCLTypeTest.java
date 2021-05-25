@@ -7,7 +7,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
 /**
- * Unit tests for AbstractCLType
+ * Unit tests for {@link AbstractCLType}.
  */
 class AbstractCLTypeTest {
 

@@ -1,25 +1,22 @@
 package com.casper.sdk.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.Objects;
 
+/**
+ * Abstract base class for a CL type object that is stored/transferred as a byte array.
+ */
 abstract class AbstractCLType {
 
+    /** The type of the value */
+    @JsonProperty("cl_type")
     private final CLTypeInfo typeInfo;
 
     protected AbstractCLType(final CLTypeInfo typeInfo) {
         Objects.requireNonNull(typeInfo, "type cannot be null");
         this.typeInfo = typeInfo;
     }
-
-    public CLTypeInfo getCLTypeInfo() {
-        return typeInfo;
-    }
-
-    public String toHex() {
-        return toHex(getBytes());
-    }
-
-    public abstract byte[] getBytes();
 
     public static byte[] fromString(final String hex) {
         int len = hex.length();
@@ -40,4 +37,15 @@ abstract class AbstractCLType {
 
         return hexBuilder.toString();
     }
+
+    @JsonProperty("cl_type")
+    public CLTypeInfo getCLTypeInfo() {
+        return typeInfo;
+    }
+
+    public String toHex() {
+        return toHex(getBytes());
+    }
+
+    public abstract byte[] getBytes();
 }

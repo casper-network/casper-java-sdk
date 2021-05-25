@@ -1,12 +1,15 @@
 package com.casper.sdk.domain;
 
 import com.casper.sdk.json.CLValueJsonDeserializer;
+import com.casper.sdk.json.CLValueJsonSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
  * Domain type: a value to be interpreted by node software.
  */
 @JsonDeserialize(using = CLValueJsonDeserializer.class)
+@JsonSerialize(using = CLValueJsonSerializer.class)
 public class CLValue extends AbstractCLType {
 
     /** Byte array representation of underlying data. */
@@ -19,9 +22,14 @@ public class CLValue extends AbstractCLType {
         this.parsed = parsed;
     }
 
-    public CLValue(final byte[] bytes, final CLTypeInfo clType) {
+    public CLValue(final byte[] bytes, final CLTypeInfo clType, final Object parsed) {
         super(clType);
         this.bytes = bytes;
+        this.parsed = parsed;
+    }
+
+    public CLValue(final byte[] bytes, final CLTypeInfo clType) {
+        this(bytes, clType, null);
     }
 
     public CLValue(final byte[] bytes, final CLType clType) {
