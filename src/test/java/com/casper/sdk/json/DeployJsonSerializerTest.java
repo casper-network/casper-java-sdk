@@ -1,7 +1,8 @@
 package com.casper.sdk.json;
 
-
 import com.casper.sdk.domain.Deploy;
+import com.fasterxml.jackson.core.util.DefaultIndenter;
+import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,7 +41,9 @@ public class DeployJsonSerializerTest {
         // Write it back to JSON
         final File deployFile = File.createTempFile("deploy", ".json");
         final FileOutputStream out = new FileOutputStream(deployFile);
-        mapper.writerWithDefaultPrettyPrinter().writeValue(out, deploy);
+        DefaultPrettyPrinter prettyPrinter = new DefaultPrettyPrinter();
+        prettyPrinter.indentArraysWith(DefaultIndenter.SYSTEM_LINEFEED_INSTANCE);
+        mapper.writer(prettyPrinter).writeValue(out, deploy);
         out.close();
 
         // Load the file we just created and test is valid
@@ -76,10 +79,10 @@ public class DeployJsonSerializerTest {
         assertThat(jsonFile, hasJsonPath("$.payment.ModuleBytes"));
         assertThat(jsonFile, hasJsonPath("$.payment.ModuleBytes.module_bytes", is("")));
         assertThat(jsonFile, hasJsonPath("$.payment.ModuleBytes.args[*]", hasSize(1)));
-        assertThat(jsonFile, hasJsonPath("$.payment.ModuleBytes.args[0].amount"));
-        assertThat(jsonFile, hasJsonPath("$.payment.ModuleBytes.args[0].amount.cl_type", is("U512")));
-        assertThat(jsonFile, hasJsonPath("$.payment.ModuleBytes.args[0].amount.bytes", is("0400ca9a3b")));
-        assertThat(jsonFile, hasJsonPath("$.payment.ModuleBytes.args[0].amount.parsed", is("1000000000")));
+        assertThat(jsonFile, hasJsonPath("$.payment.ModuleBytes.args[0][0]", is("amount")));
+        assertThat(jsonFile, hasJsonPath("$.payment.ModuleBytes.args[0][1].cl_type", is("U512")));
+        assertThat(jsonFile, hasJsonPath("$.payment.ModuleBytes.args[0][1].bytes", is("0400ca9a3b")));
+        assertThat(jsonFile, hasJsonPath("$.payment.ModuleBytes.args[0][1].parsed", is("1000000000")));
     }
 
     @Test
@@ -88,26 +91,26 @@ public class DeployJsonSerializerTest {
         assertThat(jsonFile, hasJsonPath("$.session.Transfer"));
         assertThat(jsonFile, hasJsonPath("$.session.Transfer.args[*]", hasSize(4)));
 
-        assertThat(jsonFile, hasJsonPath("$.session.Transfer.args[0].amount"));
-        assertThat(jsonFile, hasJsonPath("$.session.Transfer.args[0].amount.cl_type", is("U512")));
-        assertThat(jsonFile, hasJsonPath("$.session.Transfer.args[0].amount.bytes", is("05005550b405")));
-        assertThat(jsonFile, hasJsonPath("$.session.Transfer.args[0].amount.parsed", is("24500000000")));
+        assertThat(jsonFile, hasJsonPath("$.session.Transfer.args[0][0]", is("amount")));
+        assertThat(jsonFile, hasJsonPath("$.session.Transfer.args[0][1].cl_type", is("U512")));
+        assertThat(jsonFile, hasJsonPath("$.session.Transfer.args[0][1].bytes", is("05005550b405")));
+        assertThat(jsonFile, hasJsonPath("$.session.Transfer.args[0][1].parsed", is("24500000000")));
 
-        assertThat(jsonFile, hasJsonPath("$.session.Transfer.args[1].target"));
-        assertThat(jsonFile, hasJsonPath("$.session.Transfer.args[1].target.cl_type"));
-        assertThat(jsonFile, hasJsonPath("$.session.Transfer.args[1].target.cl_type.ByteArray", is(32)));
-        assertThat(jsonFile, hasJsonPath("$.session.Transfer.args[1].target.bytes", is("0101010101010101010101010101010101010101010101010101010101010101")));
-        assertThat(jsonFile, hasJsonPath("$.session.Transfer.args[1].target.parsed", is("0101010101010101010101010101010101010101010101010101010101010101")));
+        assertThat(jsonFile, hasJsonPath("$.session.Transfer.args[1][0]", is("target")));
+        assertThat(jsonFile, hasJsonPath("$.session.Transfer.args[1][1].cl_type"));
+        assertThat(jsonFile, hasJsonPath("$.session.Transfer.args[1][1].cl_type.ByteArray", is(32)));
+        assertThat(jsonFile, hasJsonPath("$.session.Transfer.args[1][1].bytes", is("0101010101010101010101010101010101010101010101010101010101010101")));
+        assertThat(jsonFile, hasJsonPath("$.session.Transfer.args[1][1].parsed", is("0101010101010101010101010101010101010101010101010101010101010101")));
 
-        assertThat(jsonFile, hasJsonPath("$.session.Transfer.args[2].id"));
-        assertThat(jsonFile, hasJsonPath("$.session.Transfer.args[2].id.cl_type", is("U64")));
-        assertThat(jsonFile, hasJsonPath("$.session.Transfer.args[2].id.bytes", is("01e703000000000000")));
-        assertThat(jsonFile, hasJsonPath("$.session.Transfer.args[2].id.parsed", is(999)));
+        assertThat(jsonFile, hasJsonPath("$.session.Transfer.args[2][0]", is("id")));
+        assertThat(jsonFile, hasJsonPath("$.session.Transfer.args[2][1].cl_type", is("U64")));
+        assertThat(jsonFile, hasJsonPath("$.session.Transfer.args[2][1].bytes", is("01e703000000000000")));
+        assertThat(jsonFile, hasJsonPath("$.session.Transfer.args[2][1].parsed", is(999)));
 
-        assertThat(jsonFile, hasJsonPath("$.session.Transfer.args[3].additional_info"));
-        assertThat(jsonFile, hasJsonPath("$.session.Transfer.args[3].additional_info.cl_type", is("String")));
-        assertThat(jsonFile, hasJsonPath("$.session.Transfer.args[3].additional_info.bytes", is("1000000074686973206973207472616e73666572")));
-        assertThat(jsonFile, hasJsonPath("$.session.Transfer.args[3].additional_info.parsed", is("this is transfer")));
+        assertThat(jsonFile, hasJsonPath("$.session.Transfer.args[3][0]", is("additional_info")));
+        assertThat(jsonFile, hasJsonPath("$.session.Transfer.args[3][1].cl_type", is("String")));
+        assertThat(jsonFile, hasJsonPath("$.session.Transfer.args[3][1].bytes", is("1000000074686973206973207472616e73666572")));
+        assertThat(jsonFile, hasJsonPath("$.session.Transfer.args[3][1].parsed", is("this is transfer")));
     }
 
     @Test
