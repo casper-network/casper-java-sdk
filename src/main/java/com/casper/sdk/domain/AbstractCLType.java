@@ -1,6 +1,10 @@
 package com.casper.sdk.domain;
 
+import com.casper.sdk.exceptions.ConversionException;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.apache.commons.codec.DecoderException;
+import org.apache.commons.codec.binary.Hex;
 
 import java.util.Objects;
 
@@ -19,28 +23,25 @@ abstract class AbstractCLType {
     }
 
     public static byte[] fromString(final String hex) {
-        int len = hex.length();
-        byte[] data = new byte[len / 2];
-        for (int i = 0; i < len; i += 2) {
-            data[i / 2] = (byte) ((Character.digit(hex.charAt(i), 16) << 4)
-                    + Character.digit(hex.charAt(i + 1), 16));
+        try {
+            return Hex.decodeHex(hex.toCharArray());
+        } catch (DecoderException e) {
+            throw new ConversionException("Invalid hex string " + hex, e);
         }
-        return data;
     }
 
     public static String toHex(final byte[] bytes) {
-
-        final StringBuilder hexBuilder = new StringBuilder();
-        for (byte b : bytes) {
-            hexBuilder.append(String.format("%02x", b));
-        }
-
-        return hexBuilder.toString();
+        return Hex.encodeHexString(bytes);
     }
 
     @JsonProperty("cl_type")
     public CLTypeInfo getCLTypeInfo() {
         return typeInfo;
+    }
+
+    @JsonIgnore
+    public CLType getCLType() {
+       return typeInfo != null ? typeInfo.getType() : null;
     }
 
     public String toHex() {

@@ -5,10 +5,12 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import java.math.BigInteger;
 
-public class U512 implements TypesInterface {
-    @Override public String serialize(final Object toSerialize) {
+class U512 implements TypesSerializer {
+
+    @Override
+    public String serialize(final Object toSerialize) {
         //Convert string to a bigint
-        final BigInteger bigInt = new BigInteger((String) toSerialize);
+        final BigInteger bigInt = toBigInteger(toSerialize);
         //Get the byte array
         byte[] bytes = bigInt.toByteArray();
         //Now reverse it
@@ -20,9 +22,5 @@ public class U512 implements TypesInterface {
                 .append(Hex.encodeHexString(new byte[]{(byte) bytes.length}))
                 .append(Hex.encodeHexString(bytes))
                 .toString();
-    }
-
-    @Override public String serialize(final String toSerialize, final TypesFactory typesFactory) {
-        return null;
     }
 }

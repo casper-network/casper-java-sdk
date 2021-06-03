@@ -19,5 +19,10 @@ public class Payment extends DeployExecutable {
     public byte[] getModuleBytes() {
         return moduleBytes;
     }
+
+    @Override
+    public int getTag() {
+        return 0;
+    }
 }
 

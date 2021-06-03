@@ -10,7 +10,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
- * Service used to convert between CL data to JSON
+ * Service used to convert between CL domain objects to JSON
  */
 public class JsonConversionService {
 

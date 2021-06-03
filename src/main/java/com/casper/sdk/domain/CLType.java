@@ -1,5 +1,7 @@
 package com.casper.sdk.domain;
 
+import com.casper.sdk.exceptions.ConversionException;
+
 /**
  * Domain type: enumeration over set of low level CL types.
  */
@@ -112,8 +114,8 @@ public enum CLType {
                 return name();
             }
         } catch (NoSuchFieldException e) {
-            // Ignore will never happen
-            throw new RuntimeException(e);
+            // Ignore should never happen
+            throw new ConversionException(e);
         }
     }
 }

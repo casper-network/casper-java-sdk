@@ -1,8 +1,10 @@
 package com.casper.sdk.domain;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
@@ -31,7 +33,7 @@ public class Deploy {
         this.header = header;
         this.payment = payment;
         this.session = session;
-        this.approvals = approvals;
+        this.approvals = approvals != null ? approvals : new LinkedHashSet<>();
     }
 
     public Digest getHash() {
@@ -42,17 +44,26 @@ public class Deploy {
         return header;
     }
 
-    // TODO sort out types
     public <P extends DeployExecutable> P getPayment() {
         //noinspection unchecked
-        return (P)payment;
+        return (P) payment;
     }
 
-    public DeployExecutable getSession() {
-        return session;
+    public <T extends DeployExecutable> T getSession() {
+        return (T) session;
     }
 
     public Set<DeployApproval> getApprovals() {
         return approvals;
+    }
+
+    /**
+     * Indicates if the is deploy is for a transfer
+     *
+     * @return true if this deploy is for a transfer otherwise false
+     */
+    @JsonIgnore
+    public boolean isTransfer() {
+        return this.getSession() instanceof Transfer;
     }
 }

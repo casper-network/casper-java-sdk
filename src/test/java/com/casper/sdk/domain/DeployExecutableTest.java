@@ -19,7 +19,7 @@ class DeployExecutableTest {
 
     @BeforeEach
     void setUp() {
-        deployExecutable = new DeployExecutable(
+        deployExecutable = new ModuleBytes(
                 Arrays.asList(
                         new DeployNamedArg("foo", new CLValue("bar".getBytes(StandardCharsets.UTF_8), new CLTypeInfo(CLType.STRING), "bar")),
                         new DeployNamedArg("amount", new CLValue("05005550b405", new CLTypeInfo(CLType.U64), "24500000000"))

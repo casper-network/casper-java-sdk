@@ -11,11 +11,16 @@ import java.util.Objects;
 @JsonSerialize(using = DigestJsonJSerializer.class)
 public class Digest {
 
+    /** The number of characters needed for a 32 byte hash */
+    private static final int BYTES_32_HEX = 64;
     /** 32 byte array emitted by a hashing algorithm */
     private final String hash;
 
     public Digest(final String hash) {
-        Objects.requireNonNull(hash, "hash must not be null");
+        Objects.requireNonNull(hash, "Hash must not be null");
+        if (hash.length() != BYTES_32_HEX) {
+            throw new IllegalArgumentException("Hash must be 32 bytes long: " + hash);
+        }
         this.hash = hash;
     }
 

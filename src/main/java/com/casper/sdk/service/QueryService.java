@@ -16,9 +16,11 @@ import java.util.Optional;
 public class QueryService {
 
     private final HttpMethods httpMethods;
+    private final HashService hashService;
 
     public QueryService() {
-        httpMethods = new HttpMethods();
+        this.httpMethods = new HttpMethods();
+        this.hashService = HashService.getInstance();
     }
 
     public String getStateRootHash() throws Throwable {
@@ -35,7 +37,7 @@ public class QueryService {
                 new HashMap<>() {
                     {
                         put("state_root_hash", getStateRootHash());
-                        put("key", "account-hash-" + HashService.getAccountHash(accountKey));
+                        put("key", "account-hash-" + hashService.getAccountHash(accountKey));
                         put("path", Collections.emptyList());
                     }
                 }));
@@ -64,7 +66,7 @@ public class QueryService {
         final Optional<String> result = httpMethods.rpcCallMethod(new Method(STATE_GET_ITEM,
                 new HashMap<>() {            {
                         put("state_root_hash", getStateRootHash());
-                        put("key", "account-hash-" + HashService.getAccountHash(accountKey));
+                        put("key", "account-hash-" + hashService.getAccountHash(accountKey));
                         put("path", Collections.emptyList());
                     }
                 }));

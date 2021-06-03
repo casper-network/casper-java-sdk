@@ -31,4 +31,9 @@ public class PublicKey extends AbstractCLType {
     public byte[] getBytes() {
         return bytes;
     }
+
+    @Override
+    public String toString() {
+        return toHex(bytes);
+    }
 }

@@ -1,6 +1,7 @@
 package com.casper.sdk.domain;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
@@ -12,8 +13,10 @@ public class DeployHeader {
 
     /** Public key of account dispatching deploy to a node. */
     private final PublicKey account;
+    // TODO convert to date
     /** Timestamp at point of deploy creation as an ISO8601 date time with timezone */
     private final String timestamp;
+    // TODO convert to long in milliseconds?
     /** Time interval after which the deploy will no longer be considered for processing by a node. eg 3m */
     private final String ttl;
     @JsonProperty("gas_price")
@@ -54,6 +57,25 @@ public class DeployHeader {
 
     public String getTtl() {
         return ttl;
+    }
+
+    @JsonIgnore
+    public long getTtlLong() {
+        if (ttl != null) {
+
+            final String unit = ttl.substring(ttl.length() - 1);
+            final long value = Long.parseLong(ttl.substring(0, ttl.length() - 1));
+
+            final long multiplier = switch (unit) {
+                case "m" -> 60L * 1000L;
+                case "s" -> 1000L;
+                default -> 1L;
+            };
+
+            return value * multiplier;
+
+        }
+        return 0L;
     }
 
     public Integer getGasPrice() {

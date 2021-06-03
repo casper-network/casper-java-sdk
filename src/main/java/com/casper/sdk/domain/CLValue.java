@@ -28,6 +28,10 @@ public class CLValue extends AbstractCLType {
         this.parsed = parsed;
     }
 
+    public CLValue(byte[] bytes, final CLType clType, final Object parsed) {
+        this(bytes, new CLTypeInfo(clType), parsed);
+    }
+
     public CLValue(final byte[] bytes, final CLTypeInfo clType) {
         this(bytes, clType, null);
     }
@@ -41,7 +45,11 @@ public class CLValue extends AbstractCLType {
         return bytes;
     }
 
+
     public Object getParsed() {
         return parsed;
     }
+
+
+
 }

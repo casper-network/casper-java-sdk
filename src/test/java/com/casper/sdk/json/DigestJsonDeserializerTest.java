@@ -15,7 +15,7 @@ import static org.hamcrest.core.Is.is;
  */
 class DigestJsonDeserializerTest {
 
-    private static final String JSON = "\"017f747b67bd3fe63c2a736739dfe40156d622347346e70f68f51c178a75ce5537\"";
+    private static final String JSON = "\"017f747b67bd3fe63c2a736739dfe40156d622347346e70f68f51c178a75ce55\"";
 
     /**
      * Tests that a Digest can be deserialized from JSON
@@ -29,6 +29,6 @@ class DigestJsonDeserializerTest {
         mapper.registerModule(module);
 
         final Digest digest = mapper.reader().readValue(JSON, Digest.class);
-        assertThat(digest, is(new Digest("017f747b67bd3fe63c2a736739dfe40156d622347346e70f68f51c178a75ce5537")));
+        assertThat(digest, is(new Digest("017f747b67bd3fe63c2a736739dfe40156d622347346e70f68f51c178a75ce55")));
     }
 }

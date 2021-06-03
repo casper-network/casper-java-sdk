@@ -1,6 +1,7 @@
 package com.casper.sdk.json;
 
 import com.casper.sdk.domain.*;
+import com.casper.sdk.exceptions.ConversionException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.ObjectCodec;
 import com.fasterxml.jackson.core.TreeNode;
@@ -30,7 +31,7 @@ class DeployExecutableFactory {
                 final List<DeployNamedArg> args = convertArgs(getArgsNode(fieldName, treeNode), codec);
                 return getType().getConstructor(List.class).newInstance(args);
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                throw new ConversionException(e);
             }
         }
 
@@ -118,7 +119,7 @@ class DeployExecutableFactory {
                 final List<DeployNamedArg> args = convertArgs(getArgsNode(fieldName, treeNode), codec);
                 return new Payment(convertModuleBytes(treeNode), args);
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                throw new ConversionException(e);
             }
         }
 

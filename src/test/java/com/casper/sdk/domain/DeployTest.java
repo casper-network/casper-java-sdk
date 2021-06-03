@@ -24,7 +24,7 @@ class DeployTest {
     @BeforeEach
     void setUp() {
         deploy = new Deploy(
-                new Digest("hash"),
+                new Digest("d7a68bbe656a883d04bba9f26aa340dbe3f8ec99b2adb63b628f2bc920431998"),
                 new DeployHeader(
                         new PublicKey("017f747b67bd3fe63c2a736739dfe40156d622347346e70f68f51c178a75ce5537")
                         , "2021-05-04T14:20:35.104Z",
@@ -35,12 +35,12 @@ class DeployTest {
                         "mainnet"
                 ),
                 // Payment
-                new DeployExecutable(Arrays.asList(
+                new ModuleBytes(Arrays.asList(
                         new DeployNamedArg("foo", new CLValue(new byte[]{1}, CLType.BOOL)),
                         new DeployNamedArg("bar", new CLValue("Bar".getBytes(), CLType.STRING))
                 )),
                 // Session
-                new DeployExecutable((Arrays.asList(
+                new ModuleBytes((Arrays.asList(
                         new DeployNamedArg("oh", new CLValue(toBytes(Long.MAX_VALUE), CLType.I64)),
                         new DeployNamedArg("no", new CLValue(toBytes(Integer.MAX_VALUE), CLType.I32)))
                 )),
@@ -51,7 +51,7 @@ class DeployTest {
     @Test
     void getHash() {
         assertThat(deploy.getHash(), is(notNullValue(Digest.class)));
-        assertThat(deploy.getHash().getHash(), is("hash"));
+        assertThat(deploy.getHash().getHash(), is("d7a68bbe656a883d04bba9f26aa340dbe3f8ec99b2adb63b628f2bc920431998"));
     }
 
     @Test

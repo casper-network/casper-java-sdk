@@ -1,6 +1,7 @@
 package com.casper.sdk.json;
 
 import com.casper.sdk.domain.DeployExecutable;
+import com.casper.sdk.domain.ModuleBytes;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.ObjectCodec;
 import com.fasterxml.jackson.core.TreeNode;
@@ -29,6 +30,6 @@ public class DeployExecutableJsonDeserializer extends JsonDeserializer<DeployExe
             return factory.create(iterator.next(), treeNode, codec);
         }
         // TODO should we throw here?
-        return new DeployExecutable(new ArrayList<>());
+        return new ModuleBytes(new ArrayList<>());
     }
 }

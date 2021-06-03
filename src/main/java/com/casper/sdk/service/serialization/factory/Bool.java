@@ -1,11 +1,8 @@
 package com.casper.sdk.service.serialization.factory;
 
-public class Bool implements TypesInterface {
-    @Override public String serialize(final Object toSerialize) {
-        return null;
-    }
+ class Bool implements TypesSerializer {
 
-    @Override public String serialize(final String toSerialize, final TypesFactory typesFactory) {
+    @Override public String serialize(final Object toSerialize) {
         return null;
     }
 }

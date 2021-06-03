@@ -14,11 +14,11 @@ import static org.hamcrest.core.Is.is;
  */
 class DigestJsonSerializerTest {
 
-    private static final String JSON = "\"017f747b67bd3fe63c2a736739dfe40156d622347346e70f68f51c178a75ce5537\"";
+    private static final String JSON = "\"017f747b67bd3fe63c2a736739dfe40156d622347346e70f68f51c178a75ce55\"";
 
     @Test
     void serializeDigest() throws IOException {
-        final String json = writeToJsonString(new Digest("017f747b67bd3fe63c2a736739dfe40156d622347346e70f68f51c178a75ce5537"));
+        final String json = writeToJsonString(new Digest("017f747b67bd3fe63c2a736739dfe40156d622347346e70f68f51c178a75ce55"));
         assertThat(json, is(JSON));
     }
 }

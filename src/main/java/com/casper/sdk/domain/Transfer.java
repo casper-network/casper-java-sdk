@@ -10,4 +10,9 @@ public class Transfer extends DeployExecutable {
     public Transfer(final List<DeployNamedArg> args) {
         super(args);
     }
+
+    @Override
+    public int getTag() {
+        return 5;
+    }
 }

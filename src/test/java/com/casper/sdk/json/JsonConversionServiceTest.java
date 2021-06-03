@@ -29,7 +29,7 @@ class JsonConversionServiceTest {
      * contents of both streams are identical ignoring minor whitespace difference
      */
     @Test
-    void fromJsonSteamToJSonSteam() throws IOException {
+    void fromJsonStreamToJSonSteam() throws IOException {
 
         // Load the deploy from JSON
         final Deploy deploy = jsonConversionService.fromJson(
