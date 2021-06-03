@@ -1,14 +1,13 @@
 package com.casper.sdk.domain;
 
-import org.apache.commons.codec.DecoderException;
-import org.apache.commons.codec.binary.Hex;
+import com.casper.sdk.service.serialization.ByteUtils;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigInteger;
 import java.time.Instant;
 import java.util.List;
 
-import static com.casper.sdk.domain.ByteUtils.concat;
+import static com.casper.sdk.service.serialization.ByteUtils.concat;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
@@ -22,12 +21,12 @@ class DeployUtilTest {
      * Unit tests the makeTransfer method of the DeployUtil.
      */
     @Test
-    void makeTransfer() throws DecoderException {
+    void makeTransfer() {
 
         final PublicKey targetKey = new PublicKey("0101010101010101010101010101010101010101010101010101010101010101");
-        final byte[] expectedIdBytes = Hex.decodeHex("01e703000000000000".toCharArray());
-        final byte[] expectedTargetBytes = Hex.decodeHex("0101010101010101010101010101010101010101010101010101010101010101".toCharArray());
-        final byte[] expectedAmountBytes = Hex.decodeHex("05005550b405".toCharArray());
+        final byte[] expectedIdBytes = ByteUtils.decodeHex("01e703000000000000");
+        final byte[] expectedTargetBytes = ByteUtils.decodeHex("0101010101010101010101010101010101010101010101010101010101010101");
+        final byte[] expectedAmountBytes = ByteUtils.decodeHex("05005550b405");
 
         final Transfer transfer = DeployUtil.makeTransfer(
                 new BigInteger("24500000000"),
@@ -89,9 +88,9 @@ class DeployUtilTest {
      * Array is made of: U32 LE length of name, CL type byte, and byte value
      */
     @Test
-    void namedArgU512ToBytes() throws DecoderException {
+    void namedArgU512ToBytes() {
 
-        final byte[] value = Hex.decodeHex("05005550b405".toCharArray());
+        final byte[] value = ByteUtils.decodeHex("05005550b405");
 
         final byte[] expected = concat(
                 concat(
@@ -114,9 +113,9 @@ class DeployUtilTest {
      * Array is made of: U32 LE length of name, CL type byte, and byte value
      */
     @Test
-    void namedArgU64ToBytes() throws DecoderException {
+    void namedArgU64ToBytes() {
 
-        final byte[] value = Hex.decodeHex("01e703000000000000".toCharArray());
+        final byte[] value = ByteUtils.decodeHex("01e703000000000000");
 
         final byte[] expected = concat(
                 concat(
@@ -131,6 +130,8 @@ class DeployUtilTest {
         final DeployNamedArg id = new DeployNamedArg("id", new CLValue(value, CLType.U64, "999"));
         final byte[] actual = DeployUtil.toBytes(id);
         assertThat(actual, is(expected));
+
+        // TODO test hash etc
     }
 
     /**
@@ -139,8 +140,8 @@ class DeployUtilTest {
      * Array is made of: U32 LE length of name, CL type byte, array length, and byte array value
      */
     @Test
-    void namedArgByteArrayToBytes() throws DecoderException {
-        final byte[] value = Hex.decodeHex("0101010101010101010101010101010101010101010101010101010101010101".toCharArray());
+    void namedArgByteArrayToBytes() {
+        final byte[] value = ByteUtils.decodeHex("0101010101010101010101010101010101010101010101010101010101010101");
 
         final byte[] expected = concat(
                 concat(
@@ -154,7 +155,7 @@ class DeployUtilTest {
 
         final DeployNamedArg target = new DeployNamedArg("target",
                 new CLValue(
-                        Hex.decodeHex("0101010101010101010101010101010101010101010101010101010101010101".toCharArray()),
+                        ByteUtils.decodeHex("0101010101010101010101010101010101010101010101010101010101010101"),
                         new CLByteArrayInfo(32),
                         "0101010101010101010101010101010101010101010101010101010101010101"
                 )
@@ -167,26 +168,26 @@ class DeployUtilTest {
      * Tests that a list of DeployNamedArg can be converted to a byte array
      */
     @Test
-    void namedArgsToBytes() throws DecoderException {
+    void namedArgsToBytes() {
 
         final List<DeployNamedArg> args = List.of(
                 new DeployNamedArg("amount",
                         new CLValue(
-                                Hex.decodeHex("05005550b405".toCharArray()),
+                                ByteUtils.decodeHex("05005550b405"),
                                 CLType.U512,
                                 "24500000000"
                         )
                 ),
                 new DeployNamedArg("target",
                         new CLValue(
-                                Hex.decodeHex("0101010101010101010101010101010101010101010101010101010101010101".toCharArray()),
+                                ByteUtils.decodeHex("0101010101010101010101010101010101010101010101010101010101010101"),
                                 new CLByteArrayInfo(32),
                                 "0101010101010101010101010101010101010101010101010101010101010101"
                         )
                 ),
                 new DeployNamedArg("id",
                         new CLValue(
-                                Hex.decodeHex("01e703000000000000".toCharArray()),
+                                ByteUtils.decodeHex("01e703000000000000"),
                                 CLType.U64,
                                 "999"
                         )

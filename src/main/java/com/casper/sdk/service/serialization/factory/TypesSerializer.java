@@ -5,7 +5,7 @@ import java.math.BigInteger;
 
 public interface TypesSerializer {
 
-    String serialize(final Object toSerialize);
+    byte[] serialize(final Object toSerialize);
 
     /**
      * Converts a source object to ta {@link BigInteger}.

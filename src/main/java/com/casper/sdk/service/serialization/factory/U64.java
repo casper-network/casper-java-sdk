@@ -1,6 +1,6 @@
 package com.casper.sdk.service.serialization.factory;
 
-import org.apache.commons.codec.binary.Hex;
+import com.casper.sdk.service.serialization.ByteUtils;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.math.BigInteger;
@@ -9,13 +9,13 @@ import java.nio.ByteBuffer;
 class U64 implements TypesSerializer {
 
     @Override
-    public String serialize(final Object toSerialize) {
+    public byte[] serialize(final Object toSerialize) {
 
         final BigInteger bigInt = toBigInteger(toSerialize);
 
         if (bigInt.longValueExact() == 0L) {
             //00 no value
-            return "00";
+            return new byte[]{0};
         }
 
         final long longValue = bigInt.longValue();
@@ -29,6 +29,6 @@ class U64 implements TypesSerializer {
         //append optional 01/00 to returned vale
         //01 has value
         //00 no value
-        return "01" + Hex.encodeHexString(bytes);
+        return ByteUtils.concat(new byte[]{1}, bytes);
     }
 }

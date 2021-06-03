@@ -1,10 +1,9 @@
 package com.casper.sdk.service;
 
 import com.casper.sdk.exceptions.HashException;
+import com.casper.sdk.service.serialization.ByteUtils;
 import com.rfksystems.blake2b.Blake2b;
 import com.rfksystems.blake2b.security.Blake2bProvider;
-import org.apache.commons.codec.DecoderException;
-import org.apache.commons.codec.binary.Hex;
 
 import java.nio.charset.StandardCharsets;
 import java.security.DigestException;
@@ -69,16 +68,15 @@ public class HashService {
      * @param accountKey string key used to generate the hash
      * @return 32 bit blake2b hash
      * @throws NoSuchAlgorithmException library error
-     * @throws DecoderException         digest error
      */
-    public String getAccountHash(final String accountKey) throws NoSuchAlgorithmException, DecoderException {
+    public String getAccountHash(final String accountKey) throws NoSuchAlgorithmException {
 
         final MessageDigest digest = MessageDigest.getInstance(Blake2b.BLAKE2_B_256);
 
         digest.update(getAlgo(accountKey).getBytes(StandardCharsets.UTF_8));
         digest.update(new byte[1]);
-        digest.update(Hex.decodeHex(accountKey.substring(2).toCharArray()));
-        return Hex.encodeHexString(digest.digest());
+        digest.update(ByteUtils.decodeHex(accountKey.substring(2)));
+        return ByteUtils.encodeHexString(digest.digest());
     }
 
     /**
@@ -96,7 +94,7 @@ public class HashService {
             // Only use 32 bytes
             final byte[] out = new byte[32];
             digest.digest(out, 0, 32);
-            return Hex.encodeHexString(out);
+            return ByteUtils.encodeHexString(out);
         } catch (NoSuchAlgorithmException | DigestException e) {
             throw new HashException("Error get32ByteHash", e);
         }

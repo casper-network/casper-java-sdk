@@ -1,6 +1,5 @@
 package com.casper.sdk.service.serialization.factory;
 
-import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.math.BigInteger;
@@ -9,7 +8,7 @@ import java.nio.ByteBuffer;
 class U32 implements TypesSerializer {
 
     @Override
-    public String serialize(final Object toSerialize) {
+    public byte[] serialize(final Object toSerialize) {
 
         final BigInteger bigInt = toBigInteger(toSerialize);
         int intValue = bigInt.intValue();
@@ -20,6 +19,6 @@ class U32 implements TypesSerializer {
 
         ArrayUtils.reverse(bytes);
 
-        return Hex.encodeHexString(bytes);
+        return bytes;
     }
 }

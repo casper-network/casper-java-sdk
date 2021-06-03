@@ -1,4 +1,4 @@
-package com.casper.sdk.domain;
+package com.casper.sdk.service.serialization;
 
 import com.casper.sdk.exceptions.ConversionException;
 import org.apache.commons.codec.DecoderException;
@@ -22,22 +22,22 @@ public class ByteArrayBuilder {
         }
     }
 
-    void append(final byte[] bytes) {
+    public ByteArrayBuilder append(final byte[] bytes) {
         try {
             if (bytes != null && bytes.length > 0) {
                 out.write(bytes);
             }
+            return this;
         } catch (IOException e) {
             throw new ConversionException(e);
         }
-
     }
 
-    byte[] toByteArray() {
+    public ByteArrayBuilder append(final String hexString) {
+        return append(decodeHex(hexString));
+    }
+
+    public byte[] toByteArray() {
         return out.toByteArray();
-    }
-
-    void append(final String hexString) {
-        append(decodeHex(hexString));
     }
 }

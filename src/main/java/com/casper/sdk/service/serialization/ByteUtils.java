@@ -1,5 +1,6 @@
-package com.casper.sdk.domain;
+package com.casper.sdk.service.serialization;
 
+import com.casper.sdk.domain.CLType;
 import com.casper.sdk.exceptions.ConversionException;
 import com.casper.sdk.service.serialization.factory.TypesFactory;
 import org.apache.commons.codec.DecoderException;
@@ -9,16 +10,16 @@ public class ByteUtils {
 
     public static final TypesFactory typesFactory = new TypesFactory();
 
-    static byte[] toU32(Number number) {
-        return decodeHex(typesFactory.getInstance(CLType.U32).serialize(number.intValue()));
+    public static byte[] toU32(Number number) {
+        return typesFactory.getInstance(CLType.U32).serialize(number.intValue());
     }
 
-    static byte[] toU64(final Number number) {
-        return decodeHex(typesFactory.getInstance(CLType.U64).serialize(number));
+    public static byte[] toU64(final Number number) {
+        return typesFactory.getInstance(CLType.U64).serialize(number);
     }
 
-    static byte[] toU512(final Number number) {
-        return decodeHex(typesFactory.getInstance(CLType.U512).serialize(number));
+    public static byte[] toU512(final Number number) {
+        return typesFactory.getInstance(CLType.U512).serialize(number);
     }
 
     /**
@@ -27,7 +28,7 @@ public class ByteUtils {
      * @param arrays the array of arrays
      * @return new concatenated array
      */
-    static byte[] concat(byte[]... arrays) {
+    public static byte[] concat(byte[]... arrays) {
 
         int len = 0;
         for (byte[] array : arrays) {
@@ -43,7 +44,7 @@ public class ByteUtils {
         return c;
     }
 
-    static byte[] decodeHex(final String hex) {
+    public static byte[] decodeHex(final String hex) {
         try {
             return Hex.decodeHex(hex.toCharArray());
         } catch (DecoderException e) {
@@ -51,7 +52,11 @@ public class ByteUtils {
         }
     }
 
-    static byte[] toByteString(final String source) {
-        return decodeHex(typesFactory.getInstance(CLType.STRING).serialize(source));
+    public static byte[] toBytes(final String source) {
+        return typesFactory.getInstance(CLType.STRING).serialize(source);
+    }
+
+    public static String encodeHexString(byte[] bytes) {
+        return Hex.encodeHexString(bytes);
     }
 }

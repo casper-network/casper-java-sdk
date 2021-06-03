@@ -2,6 +2,8 @@ package com.casper.sdk.domain;
 
 import com.casper.sdk.exceptions.ConversionException;
 import com.casper.sdk.service.HashService;
+import com.casper.sdk.service.serialization.ByteArrayBuilder;
+import com.casper.sdk.service.serialization.ByteUtils;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
 
@@ -9,7 +11,7 @@ import java.math.BigInteger;
 import java.util.LinkedHashSet;
 import java.util.List;
 
-import static com.casper.sdk.domain.ByteUtils.toU32;
+import static com.casper.sdk.service.serialization.ByteUtils.toU32;
 
 /**
  * Util methods for making Deploy message
@@ -82,7 +84,7 @@ public class DeployUtil {
         builder.append(ByteUtils.toU64(header.getGasPrice()));
         builder.append(toBytesDeployHash(header.getBodyHash()));
         builder.append(toBytesDigests(header.getDependencies()));
-        builder.append(ByteUtils.toByteString(header.getChainName()));
+        builder.append(ByteUtils.toBytes(header.getChainName()));
 
         return builder.toByteArray();
     }
@@ -141,9 +143,7 @@ public class DeployUtil {
         builder.append(toU32(args.size()));
 
         // Append each argument
-        args.forEach(deployNamedArg -> {
-            builder.append(toBytes(deployNamedArg));
-        });
+        args.forEach(deployNamedArg -> builder.append(toBytes(deployNamedArg)));
         return builder.toByteArray();
     }
 

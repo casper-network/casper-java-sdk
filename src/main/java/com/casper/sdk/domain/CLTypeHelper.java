@@ -1,5 +1,6 @@
 package com.casper.sdk.domain;
 
+import com.casper.sdk.service.serialization.ByteArrayBuilder;
 import com.casper.sdk.service.serialization.factory.TypesFactory;
 
 /**
@@ -7,7 +8,7 @@ import com.casper.sdk.service.serialization.factory.TypesFactory;
  */
 public class CLTypeHelper {
 
-    public static TypesFactory typesFactory = new TypesFactory();
+    public static final TypesFactory typesFactory = new TypesFactory();
 
     public static byte[] toBytesHelper(final CLTypeInfo typeInfo) {
         return switch (typeInfo.getType()) {
