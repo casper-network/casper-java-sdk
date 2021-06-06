@@ -5,9 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigInteger;
 import java.time.Instant;
-import java.util.List;
 
-import static com.casper.sdk.service.serialization.util.ByteUtils.concat;
 import static com.casper.sdk.service.serialization.util.ByteUtils.decodeHex;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -105,10 +103,6 @@ class DeployUtilTest {
         assertThat(deploy, is(notNullValue()));
 
     }
-
-
-
-
 
 
 }

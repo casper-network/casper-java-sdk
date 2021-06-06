@@ -1,5 +1,6 @@
 package com.casper.sdk.service.serialization.domain;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,12 +14,13 @@ public class ByteSerializerFactory {
 
     public ByteSerializerFactory() {
         register(new CLValueByteSerializer());
+        register(new DeployApprovalByteSerializer());
         register(new DeployByteSerializer(this));
         register(new DeployExecutableByteSerializer(this));
         register(new DeployHeaderByteSerializer(this));
         register(new DeployNamedArgByteSerializer());
         register(new DigestByteSerializer());
-        register(new ListByteSerializer(this));
+        register(new CollectionByteSerializer(this));
     }
 
     /**
@@ -45,10 +47,15 @@ public class ByteSerializerFactory {
         ByteSerializer<T> byteSerializer = (ByteSerializer<T>) serializerMap.get(type);
         if (byteSerializer == null) {
             final Class<?> superclass = type.getSuperclass();
-            if (!superclass.equals(Object.class)) {
+            if (superclass != null && !superclass.equals(Object.class)) {
                 //noinspection unchecked
                 byteSerializer = (ByteSerializer<T>) getByteSerializerByType(superclass);
             }
+        }
+
+        if (byteSerializer == null && Collection.class.isAssignableFrom(type)) {
+            //noinspection unchecked
+            byteSerializer = (ByteSerializer<T>) getByteSerializerByType(Collection.class);
         }
         return byteSerializer;
     }

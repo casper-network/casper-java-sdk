@@ -15,6 +15,6 @@ public class Properties {
     public static final String INFO_GET_PEERS = "info_get_peers";
     public static final String INFO_GET_STATUS = "info_get_status";
 
-    public static Map<String, String> properties = new HashMap<>();
+    public static final Map<String, String> properties = new HashMap<>();
 
 }

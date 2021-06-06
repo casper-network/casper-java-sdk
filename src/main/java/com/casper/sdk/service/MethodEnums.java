@@ -88,7 +88,7 @@ public enum MethodEnums {
         }
     }
 
-    public abstract String getValue(final String result) throws JsonProcessingException, ValueNotFoundException;
+    public abstract String getValue(final String result) throws ValueNotFoundException;
 
 
 }

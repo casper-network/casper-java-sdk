@@ -85,7 +85,7 @@ public class CasperSdk {
     /**
      * Construct the deploy for transfer purpose
      *
-     * @param deployParams the deployment parameteres
+     * @param deployParams the deployment parameters
      * @param session      the  session/transfer
      * @param payment      the payment
      */

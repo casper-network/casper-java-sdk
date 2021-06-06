@@ -2,7 +2,6 @@ package com.casper.sdk.domain;
 
 import com.casper.sdk.json.DeployExecutableJsonDeserializer;
 import com.casper.sdk.json.DeployExecutableJsonSerializer;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
@@ -47,7 +46,6 @@ public abstract class DeployExecutable {
     }
 
     public abstract int getTag();
-
 
 
 }

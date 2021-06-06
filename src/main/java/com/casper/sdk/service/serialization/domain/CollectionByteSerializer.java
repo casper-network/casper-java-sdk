@@ -2,23 +2,23 @@ package com.casper.sdk.service.serialization.domain;
 
 import com.casper.sdk.service.serialization.util.ByteArrayBuilder;
 
-import java.util.List;
+import java.util.Collection;
 
 import static com.casper.sdk.service.serialization.util.ByteUtils.toU32;
 
 /**
  * The byte serializer for Lists of casper domain objects.
  */
-public class ListByteSerializer implements ByteSerializer<List<?>> {
+public class CollectionByteSerializer implements ByteSerializer<Collection<?>> {
 
     private final ByteSerializerFactory factory;
 
-    public ListByteSerializer(final ByteSerializerFactory factory) {
+    public CollectionByteSerializer(final ByteSerializerFactory factory) {
         this.factory = factory;
     }
 
     @Override
-    public byte[] toBytes(List<?> source) {
+    public byte[] toBytes(Collection<?> source) {
 
         final ByteArrayBuilder builder = new ByteArrayBuilder();
 
@@ -26,14 +26,18 @@ public class ListByteSerializer implements ByteSerializer<List<?>> {
         builder.append(toU32(source.size()));
 
         // Write the list contents
-        source.forEach(item -> builder.append(factory.getByteSerializer(item).toBytes(item)));
+        source.forEach(item ->
+                builder.append(
+                        factory.getByteSerializer(item).toBytes(item)
+                )
+        );
 
         return builder.toByteArray();
     }
 
     @Override
-    public Class<List<?>> getType() {
+    public Class<Collection<?>> getType() {
         //noinspection unchecked,rawtypes
-        return (Class) List.class;
+        return (Class) Collection.class;
     }
 }
