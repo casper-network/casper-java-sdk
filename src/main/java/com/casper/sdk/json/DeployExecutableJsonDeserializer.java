@@ -3,6 +3,7 @@ package com.casper.sdk.json;
 import com.casper.sdk.domain.DeployExecutable;
 import com.casper.sdk.domain.ModuleBytes;
 import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonStreamContext;
 import com.fasterxml.jackson.core.ObjectCodec;
 import com.fasterxml.jackson.core.TreeNode;
 import com.fasterxml.jackson.databind.DeserializationContext;
@@ -23,11 +24,14 @@ public class DeployExecutableJsonDeserializer extends JsonDeserializer<DeployExe
     @Override
     public DeployExecutable deserialize(final JsonParser p, final DeserializationContext context) throws IOException {
 
+        JsonStreamContext parsingContext = p.getParsingContext();
+
+        final String fieldName = parsingContext.getParent().getCurrentName();
         final ObjectCodec codec = p.getCodec();
         final TreeNode treeNode = codec.readTree(p);
         final Iterator<String> iterator = treeNode.fieldNames();
         if (iterator.hasNext()) {
-            return factory.create(iterator.next(), treeNode, codec);
+            return factory.create(fieldName, iterator.next(), treeNode, codec);
         }
         // TODO should we throw here?
         return new ModuleBytes(new ArrayList<>());

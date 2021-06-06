@@ -1,17 +1,13 @@
 package com.casper.sdk.domain;
 
-import com.casper.sdk.exceptions.ConversionException;
 import com.casper.sdk.service.HashService;
-import com.casper.sdk.service.serialization.ByteArrayBuilder;
-import com.casper.sdk.service.serialization.ByteUtils;
-import org.apache.commons.codec.DecoderException;
-import org.apache.commons.codec.binary.Hex;
+import com.casper.sdk.service.serialization.domain.ByteSerializerFactory;
+import com.casper.sdk.service.serialization.util.ByteUtils;
+import com.casper.sdk.service.serialization.util.NumberUtils;
 
 import java.math.BigInteger;
 import java.util.LinkedHashSet;
 import java.util.List;
-
-import static com.casper.sdk.service.serialization.ByteUtils.toU32;
 
 /**
  * Util methods for making Deploy message
@@ -19,6 +15,8 @@ import static com.casper.sdk.service.serialization.ByteUtils.toU32;
 public class DeployUtil {
 
     private static final HashService hashService = HashService.getInstance();
+    private static final ByteSerializerFactory serializerFactory = new ByteSerializerFactory();
+
 
     public static Deploy makeDeploy(final DeployParams deployParams,
                                     final DeployExecutable session,
@@ -37,7 +35,7 @@ public class DeployUtil {
                 deployParams.getChainName()
         );
 
-        final byte[] serializedHeader = serializeHeader(header);
+        final byte[] serializedHeader = serializedHeader(header);
         final Digest deployHash = new Digest(hashService.get32ByteHash(serializedHeader));
         return new Deploy(deployHash, header, payment, session, new LinkedHashSet<>());
     }
@@ -59,111 +57,31 @@ public class DeployUtil {
      *
      * @param paymentAmount the number of notes paying to execution engine
      */
-    public static Payment standardPayment(final BigInteger paymentAmount) {
+    public static StoredContractByName standardPayment(final Number paymentAmount) {
+
+        final BigInteger biAmount = NumberUtils.toBigInteger(paymentAmount);
 
         final DeployNamedArg paymentArg = new DeployNamedArg(
                 "amount",
-                new CLValue(paymentAmount.toByteArray(), CLType.U512, paymentAmount)
+                new CLValue(biAmount.toByteArray(), CLType.U512, paymentAmount)
         );
 
-        return new Payment(new byte[0], List.of(paymentArg));
+        return new StoredContractByName("payment", null, List.of(paymentArg));
     }
-
 
     private static String toTtlStr(long ttl) {
         return (ttl / 60000) + "m";
     }
 
-
-    private static byte[] serializeHeader(final DeployHeader header) {
-
-        final ByteArrayBuilder builder = new ByteArrayBuilder();
-
-        builder.append(header.getAccount().getBytes());
-        builder.append(ByteUtils.toU64(header.getTtlLong()));
-        builder.append(ByteUtils.toU64(header.getGasPrice()));
-        builder.append(toBytesDeployHash(header.getBodyHash()));
-        builder.append(toBytesDigests(header.getDependencies()));
-        builder.append(ByteUtils.toBytes(header.getChainName()));
-
-        return builder.toByteArray();
-    }
-
-    private static byte[] toBytesDigests(final List<Digest> source) {
-        if (source.isEmpty()) {
-            return new byte[0];
-        } else {
-            final ByteArrayBuilder builder = new ByteArrayBuilder();
-            builder.append(toU32(source.size()));
-            for (Digest digest : source) {
-                builder.append(digest.getHash());
-            }
-
-            return builder.toByteArray();
-        }
-    }
-
-    private static byte[] toBytesDeployHash(final Digest bodyHash) {
-        return toBytesBytesArray(bodyHash.getHash());
-    }
-
-    private static byte[] toBytesBytesArray(String hash) {
-        try {
-            return Hex.decodeHex(hash.toCharArray());
-        } catch (DecoderException e) {
-            throw new ConversionException(e);
-        }
+    private static byte[] serializedHeader(final DeployHeader header) {
+        return serializerFactory.getByteSerializerByType(DeployHeader.class).toBytes(header);
     }
 
     private static byte[] serializeBody(final DeployExecutable payment, final DeployExecutable session) {
         return ByteUtils.concat(toBytes(payment), toBytes(session));
     }
 
-    private static byte[] toBytes(final DeployExecutable deployExecutable) {
-
-        final ByteArrayBuilder builder = new ByteArrayBuilder();
-
-        // Append the type of the Deploy Executable in a single byte
-        builder.append(new byte[]{(byte) deployExecutable.getTag()});
-
-        if (deployExecutable.isPayment()) {
-            builder.append(((Payment) deployExecutable).getModuleBytes());
-        }
-
-        builder.append(toBytes(deployExecutable.getArgs()));
-
-        return builder.toByteArray();
-    }
-
-    static byte[] toBytes(final List<DeployNamedArg> args) {
-
-        final ByteArrayBuilder builder = new ByteArrayBuilder();
-
-        // append the number of arguments as LE U32 array
-        builder.append(toU32(args.size()));
-
-        // Append each argument
-        args.forEach(deployNamedArg -> builder.append(toBytes(deployNamedArg)));
-        return builder.toByteArray();
-    }
-
-
-    static byte[] toBytes(final DeployNamedArg deployNamedArg) {
-
-        byte[] name = deployNamedArg.getName().getBytes();
-
-        return ByteUtils.concat(
-                ByteUtils.concat(toU32(name.length), name),
-                toBytes(deployNamedArg.getValue())
-        );
-    }
-
-
-    static byte[] toBytes(final CLValue value) {
-        return ByteUtils.concat(toBytes(value.getCLTypeInfo()), value.getBytes());
-    }
-
-    private static byte[] toBytes(final CLTypeInfo clTypeInfo) {
-        return CLTypeHelper.toBytesHelper(clTypeInfo);
+    static byte[] toBytes(final DeployExecutable deployExecutable) {
+        return serializerFactory.getByteSerializer(deployExecutable).toBytes(deployExecutable);
     }
 }

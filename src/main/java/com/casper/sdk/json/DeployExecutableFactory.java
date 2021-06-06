@@ -26,9 +26,9 @@ class DeployExecutableFactory {
      */
     private static abstract class AbstractDeployExecutableJsonFactory<T extends DeployExecutable> {
 
-        T create(final String fieldName, final TreeNode treeNode, final ObjectCodec codec) {
+        T create(final String fieldName, String entryPoint, final TreeNode treeNode, final ObjectCodec codec) {
             try {
-                final List<DeployNamedArg> args = convertArgs(getArgsNode(fieldName, treeNode), codec);
+                final List<DeployNamedArg> args = convertArgs(getArgsNode(entryPoint, treeNode), codec);
                 return getType().getConstructor(List.class).newInstance(args);
             } catch (Exception e) {
                 throw new ConversionException(e);
@@ -111,13 +111,13 @@ class DeployExecutableFactory {
     /**
      * Converts JSON into a Payment
      */
-    private static class PaymentJsonFactory extends AbstractDeployExecutableJsonFactory<Payment> {
+    private static class PaymentJsonFactory extends AbstractDeployExecutableJsonFactory<StoredContractByName> {
 
         @Override
-        Payment create(final String fieldName, final TreeNode treeNode, final ObjectCodec codec) {
+        StoredContractByName create(final String fieldName, String entryPoint, final TreeNode treeNode, final ObjectCodec codec) {
             try {
-                final List<DeployNamedArg> args = convertArgs(getArgsNode(fieldName, treeNode), codec);
-                return new Payment(convertModuleBytes(treeNode), args);
+                final List<DeployNamedArg> args = convertArgs(getArgsNode(entryPoint, treeNode), codec);
+                return new StoredContractByName(fieldName, entryPoint, convertModuleBytes(treeNode), args);
             } catch (Exception e) {
                 throw new ConversionException(e);
             }
@@ -145,8 +145,8 @@ class DeployExecutableFactory {
         }
 
         @Override
-        protected Class<Payment> getType() {
-            return Payment.class;
+        protected Class<StoredContractByName> getType() {
+            return StoredContractByName.class;
         }
     }
 
@@ -169,11 +169,14 @@ class DeployExecutableFactory {
      * @param codec     the codec so we can call other JsonDeserializer classes
      * @return the DeployExecutable for the specified fieldName and tree node value
      */
-    <T extends DeployExecutable> T create(final String fieldName, final TreeNode treeNode, final ObjectCodec codec) {
-        final AbstractDeployExecutableJsonFactory<?> jsonDeserializer = argsFactoryMap.get(fieldName);
+    <T extends DeployExecutable> T create(final String fieldName,
+                                          final String entryPoint,
+                                          final TreeNode treeNode,
+                                          final ObjectCodec codec) {
+        final AbstractDeployExecutableJsonFactory<?> jsonDeserializer = argsFactoryMap.get(entryPoint);
         if (jsonDeserializer != null) {
             //noinspection unchecked
-            return (T) jsonDeserializer.create(fieldName, treeNode, codec);
+            return (T) jsonDeserializer.create(fieldName, entryPoint, treeNode, codec);
         } else {
             throw new IllegalArgumentException(fieldName + " is not a valid DeployExecutable field");
         }

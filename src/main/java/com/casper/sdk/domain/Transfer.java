@@ -7,8 +7,12 @@ import java.util.List;
  */
 public class Transfer extends DeployExecutable {
 
-    public Transfer(final List<DeployNamedArg> args) {
-        super(args);
+    public Transfer(final byte[] moduleBytes, final List<DeployNamedArg> args) {
+        super(moduleBytes, args);
+    }
+
+    public Transfer(final List<DeployNamedArg> amountArg) {
+        this(new byte[0], amountArg);
     }
 
     @Override

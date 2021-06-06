@@ -15,7 +15,7 @@ class CasperSdkTest {
     private final static String URL = "http://3.140.179.157";
     private final static String PORT = "7777";
 
-    private CasperSdk casperSdk = new CasperSdk(URL, PORT);
+    private final CasperSdk casperSdk = new CasperSdk(URL, PORT);
 
     /**
      * Tests the SDK can create a transfer domain object

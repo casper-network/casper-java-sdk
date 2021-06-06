@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.io.InputStream;
 
+import static com.casper.sdk.domain.StoredContractNames.PAYMENT;
 import static com.jayway.jsonassert.impl.matcher.IsCollectionWithSize.hasSize;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -52,8 +53,9 @@ public class DeployJsonDeserializerTest {
 
     @Test
     void testDeployPaymentFromJson() {
-        assertThat(deploy.getPayment(), is(instanceOf(Payment.class)));
-        Payment payment = deploy.getPayment();
+        assertThat(deploy.getPayment(), is(instanceOf(StoredContractByName.class)));
+        StoredContractByName payment = deploy.getPayment();
+        assertThat(payment.getName(), is(PAYMENT));
         assertThat(payment.getModuleBytes(), is(new byte[0]));
         assertThat(payment.getArgs(), hasSize(1));
         assertThat(payment.getArgs().get(0).getName(), is("amount"));

@@ -1,14 +1,12 @@
 package com.casper.sdk;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
-import org.apache.commons.codec.DecoderException;
+import com.casper.sdk.service.HashService;
 import org.junit.jupiter.api.Test;
 
-import com.casper.sdk.service.HashService;
-
 import java.security.NoSuchAlgorithmException;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class TestHashService {
 
@@ -18,16 +16,16 @@ public class TestHashService {
     private static final String SECP256K1publicKey = "0203b2f8c0613d2d866948c46e296f09faed9b029110d424d19d488a0c39a811ebbc";
     private static final String SECP256K1hash = "aebf6cf44f8d7a633b4e2084ce3be3bbe3db2cec62e49afe103dca79f7818d43";
 
-    private HashService hashService = HashService.getInstance();
+    private final HashService hashService = HashService.getInstance();
 
     @Test
-    public void testValidBlakeEd25519() throws NoSuchAlgorithmException, DecoderException {
+    public void testValidBlakeEd25519() throws NoSuchAlgorithmException {
         String hash = hashService.getAccountHash(ED25519publicKey);
         assertEquals(hash, ED25519hash);
     }
 
     @Test
-    public void testValidBlakeSecp256k1() throws NoSuchAlgorithmException, DecoderException {
+    public void testValidBlakeSecp256k1() throws NoSuchAlgorithmException {
         String hash = hashService.getAccountHash(SECP256K1publicKey);
         assertEquals(hash, SECP256K1hash);
     }
@@ -59,7 +57,6 @@ public class TestHashService {
                 hashService.getAccountHash("0203b2f8c0613d2d866948c46e296f09faed9b029110d424d19d488a0c39a811ebbc1234")
         );
     }
-
 
 
 }

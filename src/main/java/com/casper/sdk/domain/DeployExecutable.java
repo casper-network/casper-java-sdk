@@ -15,11 +15,20 @@ import java.util.List;
 @JsonSerialize(using = DeployExecutableJsonSerializer.class)
 public abstract class DeployExecutable {
 
+    /** Raw WASM payload. */
+    @CLName("module_bytes")
+    private final byte[] moduleBytes;
+
     /** Set of arguments mapped to endpoint parameters. */
     private final List<DeployNamedArg> args;
 
-    public DeployExecutable(final List<DeployNamedArg> args) {
+    public DeployExecutable(final byte[] moduleBytes, final List<DeployNamedArg> args) {
+        this.moduleBytes = moduleBytes;
         this.args = args;
+    }
+
+    public byte[] getModuleBytes() {
+        return moduleBytes;
     }
 
     public List<DeployNamedArg> getArgs() {
@@ -37,15 +46,8 @@ public abstract class DeployExecutable {
         return null;
     }
 
-    @JsonIgnore
-    public boolean isTransfer() {
-        return this instanceof Transfer;
-    }
-
-    @JsonIgnore
-    public boolean isPayment() {
-        return this instanceof Payment;
-    }
-
     public abstract int getTag();
+
+
+
 }

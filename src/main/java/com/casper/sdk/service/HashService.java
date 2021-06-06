@@ -1,7 +1,7 @@
 package com.casper.sdk.service;
 
 import com.casper.sdk.exceptions.HashException;
-import com.casper.sdk.service.serialization.ByteUtils;
+import com.casper.sdk.service.serialization.util.ByteUtils;
 import com.rfksystems.blake2b.Blake2b;
 import com.rfksystems.blake2b.security.Blake2bProvider;
 

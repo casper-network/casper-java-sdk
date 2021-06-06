@@ -10,20 +10,21 @@ class TypeEnums {
 
     public enum KeyAlgorithm {
 
-        ED25519(01),
-        SECP256K1(02);
+        ED25519(1),
+        SECP256K1(2);
 
-        private final int value;
-        private static final Map map = new HashMap<>();
-
-        KeyAlgorithm(int value) {
-            this.value = value;
-        }
+        private static final Map<Integer, KeyAlgorithm> map = new HashMap<>();
 
         static {
             for (KeyAlgorithm key : KeyAlgorithm.values()) {
                 map.put(key.value, key);
             }
+        }
+
+        private final int value;
+
+        KeyAlgorithm(int value) {
+            this.value = value;
         }
 
         public static KeyAlgorithm valueOf(int pageType) {

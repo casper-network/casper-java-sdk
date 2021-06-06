@@ -2,7 +2,7 @@ package com.casper.sdk.json;
 
 import com.casper.sdk.domain.CLValue;
 import com.casper.sdk.domain.DeployExecutable;
-import com.casper.sdk.domain.Payment;
+import com.casper.sdk.domain.StoredContractByName;
 import com.casper.sdk.domain.Transfer;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
@@ -22,14 +22,14 @@ public class DeployExecutableJsonSerializer extends JsonSerializer<DeployExecuta
 
         if (value instanceof Transfer) {
             writeTransfer((Transfer) value, gen);
-        } else if (value instanceof Payment) {
-            writePayment((Payment) value, gen);
+        } else if (value instanceof StoredContractByName) {
+            writePayment((StoredContractByName) value, gen);
         } else {
             writeArgs(value, gen);
         }
     }
 
-    private void writePayment(final Payment payment, final JsonGenerator gen) throws IOException {
+    private void writePayment(final StoredContractByName payment, final JsonGenerator gen) throws IOException {
         gen.writeStartObject();
         gen.writeFieldName("ModuleBytes");
         gen.writeStartObject();

@@ -50,6 +50,7 @@ public class Deploy {
     }
 
     public <T extends DeployExecutable> T getSession() {
+        //noinspection unchecked
         return (T) session;
     }
 

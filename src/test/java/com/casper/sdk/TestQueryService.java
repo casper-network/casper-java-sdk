@@ -145,7 +145,7 @@ public class TestQueryService {
         public MethodDispatcher() {}
 
         @Override
-        public MockResponse dispatch(RecordedRequest request) {
+        public MockResponse dispatch(final RecordedRequest request) {
 
             if (request.getBody().toString().contains("chain_get_state_root")){
                 responseBodyFile = "method-json/chain_get_state_root_hash-ok.json";

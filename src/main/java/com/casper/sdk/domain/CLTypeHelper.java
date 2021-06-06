@@ -1,7 +1,7 @@
 package com.casper.sdk.domain;
 
-import com.casper.sdk.service.serialization.ByteArrayBuilder;
-import com.casper.sdk.service.serialization.factory.TypesFactory;
+import com.casper.sdk.service.serialization.util.ByteArrayBuilder;
+import com.casper.sdk.service.serialization.cltypes.TypesFactory;
 
 /**
  * Helper class for converting CLTypes to bytes
@@ -21,6 +21,7 @@ public class CLTypeHelper {
     private static byte[] getArrayTypeBytes(CLTypeInfo typeInfo) {
         final ByteArrayBuilder builder = new ByteArrayBuilder();
         builder.append(getTypeByte(typeInfo));
+        // Write the size of the array as U32 LE bytes
         builder.append(typesFactory.getInstance(CLType.U32).serialize(((CLByteArrayInfo) typeInfo).getSize()));
         return builder.toByteArray();
     }

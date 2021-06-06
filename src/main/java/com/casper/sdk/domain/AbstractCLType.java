@@ -1,9 +1,8 @@
 package com.casper.sdk.domain;
 
-import com.casper.sdk.service.serialization.ByteUtils;
+import com.casper.sdk.service.serialization.util.ByteUtils;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.apache.commons.codec.binary.Hex;
 
 import java.util.Objects;
 
@@ -26,7 +25,7 @@ abstract class AbstractCLType {
     }
 
     public static String toHex(final byte[] bytes) {
-        return Hex.encodeHexString(bytes);
+        return ByteUtils.encodeHexString(bytes);
     }
 
     @JsonProperty("cl_type")

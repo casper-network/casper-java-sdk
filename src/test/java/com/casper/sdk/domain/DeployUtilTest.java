@@ -1,13 +1,14 @@
 package com.casper.sdk.domain;
 
-import com.casper.sdk.service.serialization.ByteUtils;
+import com.casper.sdk.service.serialization.util.ByteUtils;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigInteger;
 import java.time.Instant;
 import java.util.List;
 
-import static com.casper.sdk.service.serialization.ByteUtils.concat;
+import static com.casper.sdk.service.serialization.util.ByteUtils.concat;
+import static com.casper.sdk.service.serialization.util.ByteUtils.decodeHex;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
@@ -35,6 +36,7 @@ class DeployUtilTest {
         );
 
         assertThat(transfer, is(notNullValue()));
+        assertThat(transfer.getTag(), is(5));
 
         final DeployNamedArg amount = transfer.getNamedArg("amount");
         assertThat(amount.getValue().getCLType(), is(CLType.U512));
@@ -53,6 +55,32 @@ class DeployUtilTest {
         assertThat(target.getValue().getParsed(), is("0101010101010101010101010101010101010101010101010101010101010101"));
     }
 
+    @Test
+    void standardPayment() {
+
+        final StoredContractByName payment = DeployUtil.standardPayment(1000000L);
+        assertThat(payment.getTag(), is(2));
+        assertThat(payment.getName(), is("payment"));
+
+        final CLValue amount = payment.getNamedArg("amount").getValue();
+        assertThat(amount.getCLType(), is(CLType.U512));
+        assertThat(amount.getParsed(), is(1000000L));
+        assertThat(amount.getBytes(), is(decodeHex("0F4240")));
+    }
+
+    @Test
+    void standardPaymentToBytes() {
+
+        final String expectedHex = "02070000007061796d656e74000000000100000006000000616d6f756e74080f4240";
+        byte[] expectedBytes = ByteUtils.decodeHex(expectedHex);
+
+        final StoredContractByName payment = DeployUtil.standardPayment(1000000L);
+        byte[] bytes = DeployUtil.toBytes(payment);
+
+        // TODO calculate what this should really be
+
+//        assertThat(bytes, is(expectedBytes));
+    }
 
     @Test
     void makeDeploy() {
@@ -78,141 +106,9 @@ class DeployUtilTest {
 
     }
 
-    @Test
-    void standardPayment() {
-    }
 
-    /**
-     * Tests a U512 named arg can be converted to a byte array.
-     * <p>
-     * Array is made of: U32 LE length of name, CL type byte, and byte value
-     */
-    @Test
-    void namedArgU512ToBytes() {
 
-        final byte[] value = ByteUtils.decodeHex("05005550b405");
 
-        final byte[] expected = concat(
-                concat(
-                        new byte[]{6, 0, 0, 0}, // Length of name as U32 little endian
-                        "amount".getBytes()),// Name
-                concat(
-                        new byte[]{8},// CLType U512(08)
-                        value // byte value
-                )
-        );
 
-        final DeployNamedArg amount = new DeployNamedArg("amount", new CLValue(value, CLType.U512, "24500000000"));
-        final byte[] actual = DeployUtil.toBytes(amount);
-        assertThat(actual, is(expected));
-    }
 
-    /**
-     * Tests a U512 named arg can be converted to a byte array.
-     * <p>
-     * Array is made of: U32 LE length of name, CL type byte, and byte value
-     */
-    @Test
-    void namedArgU64ToBytes() {
-
-        final byte[] value = ByteUtils.decodeHex("01e703000000000000");
-
-        final byte[] expected = concat(
-                concat(
-                        new byte[]{2, 0, 0, 0}, // Length of name as U32 little endian
-                        "id".getBytes()),// Name
-                concat(
-                        new byte[]{5},// CLType U64(5)
-                        value // byte value
-                )
-        );
-
-        final DeployNamedArg id = new DeployNamedArg("id", new CLValue(value, CLType.U64, "999"));
-        final byte[] actual = DeployUtil.toBytes(id);
-        assertThat(actual, is(expected));
-
-        // TODO test hash etc
-    }
-
-    /**
-     * Tests a BYTE_ARRAY named arg can be converted to a byte array.
-     * <p>
-     * Array is made of: U32 LE length of name, CL type byte, array length, and byte array value
-     */
-    @Test
-    void namedArgByteArrayToBytes() {
-        final byte[] value = ByteUtils.decodeHex("0101010101010101010101010101010101010101010101010101010101010101");
-
-        final byte[] expected = concat(
-                concat(
-                        new byte[]{6, 0, 0, 0}, // Length of name as U32 little endian
-                        "target".getBytes()),// Name
-                concat(
-                        new byte[]{15, 32, 0, 0, 0},// CLType BYTE_ARRAY(15) followed by array length as LE U32
-                        value // byte value
-                )
-        );
-
-        final DeployNamedArg target = new DeployNamedArg("target",
-                new CLValue(
-                        ByteUtils.decodeHex("0101010101010101010101010101010101010101010101010101010101010101"),
-                        new CLByteArrayInfo(32),
-                        "0101010101010101010101010101010101010101010101010101010101010101"
-                )
-        );
-        final byte[] actual = DeployUtil.toBytes(target);
-        assertThat(actual, is(expected));
-    }
-
-    /**
-     * Tests that a list of DeployNamedArg can be converted to a byte array
-     */
-    @Test
-    void namedArgsToBytes() {
-
-        final List<DeployNamedArg> args = List.of(
-                new DeployNamedArg("amount",
-                        new CLValue(
-                                ByteUtils.decodeHex("05005550b405"),
-                                CLType.U512,
-                                "24500000000"
-                        )
-                ),
-                new DeployNamedArg("target",
-                        new CLValue(
-                                ByteUtils.decodeHex("0101010101010101010101010101010101010101010101010101010101010101"),
-                                new CLByteArrayInfo(32),
-                                "0101010101010101010101010101010101010101010101010101010101010101"
-                        )
-                ),
-                new DeployNamedArg("id",
-                        new CLValue(
-                                ByteUtils.decodeHex("01e703000000000000"),
-                                CLType.U64,
-                                "999"
-                        )
-                )
-        );
-
-        final byte[] expected = new byte[]{
-                3, 0, 0, 0,
-                6, 0, 0, 0, 97, 109, 111, 117, 110, 116, 8, 5, 0, 85, 80, -76, 5, 6, 0, 0, 0, 116, 97, 114,
-                103, 101, 116,
-                15, 32, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-                1, 1, 1, 1, 1, 1, 1, 1,
-                2, 0, 0, 0, 105, 100, 5, 1, -25, 3, 0, 0, 0, 0, 0, 0
-        };
-
-        final byte[] bytes = DeployUtil.toBytes(args);
-
-        assertThat(bytes, is(notNullValue()));
-
-        final byte[] len = new byte[4];
-        System.arraycopy(bytes, 0, len, 0, len.length);
-
-        // assert the 1st four bytes are the length in LE U32
-        assertThat(len, is(new byte[]{3, 0, 0, 0}));
-
-        assertThat(bytes, is(expected));
-    }
 }

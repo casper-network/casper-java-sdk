@@ -5,7 +5,6 @@ import com.casper.sdk.domain.*;
 import com.casper.sdk.json.JsonConversionService;
 import com.casper.sdk.service.HashService;
 import com.casper.sdk.service.QueryService;
-import org.apache.commons.codec.DecoderException;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -44,7 +43,7 @@ public class CasperSdk {
         return queryService.getStateRootHash();
     }
 
-    public String getAccountHash(final String accountKey) throws DecoderException, NoSuchAlgorithmException {
+    public String getAccountHash(final String accountKey) throws NoSuchAlgorithmException {
         return hashService.getAccountHash(accountKey);
     }
 
@@ -86,9 +85,9 @@ public class CasperSdk {
     /**
      * Construct the deploy for transfer purpose
      *
-     * @param deployParams
-     * @param session
-     * @param payment
+     * @param deployParams the deployment parameteres
+     * @param session      the  session/transfer
+     * @param payment      the payment
      */
     public Deploy makeTransferDeploy(final DeployParams deployParams,
                                      final DeployExecutable session,
@@ -103,7 +102,7 @@ public class CasperSdk {
     public Deploy makeDeploy(final DeployParams deployParams,
                              final DeployExecutable session,
                              final DeployExecutable payment) {
-       return DeployUtil.makeDeploy(deployParams, session, payment);
+        return DeployUtil.makeDeploy(deployParams, session, payment);
     }
 
 }

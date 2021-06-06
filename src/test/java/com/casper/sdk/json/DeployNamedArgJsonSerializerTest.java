@@ -12,14 +12,13 @@ import java.io.IOException;
 import static com.jayway.jsonpath.matchers.JsonPathMatchers.hasJsonPath;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
  */
 class DeployNamedArgJsonSerializerTest {
 
-    private String JSON = """
+    private final String JSON = """
             "args": [
               [
                 "amount",
