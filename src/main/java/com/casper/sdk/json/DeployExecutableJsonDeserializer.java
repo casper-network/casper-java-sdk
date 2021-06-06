@@ -24,16 +24,21 @@ public class DeployExecutableJsonDeserializer extends JsonDeserializer<DeployExe
     @Override
     public DeployExecutable deserialize(final JsonParser p, final DeserializationContext context) throws IOException {
 
-        JsonStreamContext parsingContext = p.getParsingContext();
-
-        final String fieldName = parsingContext.getParent().getCurrentName();
+        final JsonStreamContext parsingContext = p.getParsingContext();
+        final String fieldName = getFieldName(parsingContext);
         final ObjectCodec codec = p.getCodec();
         final TreeNode treeNode = codec.readTree(p);
+
         final Iterator<String> iterator = treeNode.fieldNames();
         if (iterator.hasNext()) {
             return factory.create(fieldName, iterator.next(), treeNode, codec);
         }
+
         // TODO should we throw here?
         return new ModuleBytes(new ArrayList<>());
+    }
+
+    private String getFieldName(JsonStreamContext parsingContext) {
+        return parsingContext.getParent() != null ? parsingContext.getParent().getCurrentName() : null;
     }
 }

@@ -20,7 +20,7 @@ import java.util.Map;
 class DeployExecutableFactory {
 
     /**
-     * The abstract factory class for all DeployExecutable
+     *  The abstract factory class for all DeployExecutable
      *
      * @param <T> the type of DeployExecutable
      */
@@ -109,9 +109,9 @@ class DeployExecutableFactory {
     }
 
     /**
-     * Converts JSON into a Payment
+     * Converts JSON into a StoredContractByName such as a payment.
      */
-    private static class PaymentJsonFactory extends AbstractDeployExecutableJsonFactory<StoredContractByName> {
+    private static class StoredContractByNameFactory extends AbstractDeployExecutableJsonFactory<StoredContractByName> {
 
         @Override
         StoredContractByName create(final String fieldName, String entryPoint, final TreeNode treeNode, final ObjectCodec codec) {
@@ -150,12 +150,11 @@ class DeployExecutableFactory {
         }
     }
 
-
     /** The map of field names to DeployExecutable Factories */
     private static final Map<String, AbstractDeployExecutableJsonFactory<?>> argsFactoryMap = new HashMap<>();
 
     static {
-        argsFactoryMap.put("ModuleBytes", new PaymentJsonFactory());
+        argsFactoryMap.put("ModuleBytes", new StoredContractByNameFactory());
         argsFactoryMap.put("Transfer", new TransferJsonFactory());
         argsFactoryMap.put("args", new DefaultDeployExecutableJsonFactory());
     }
@@ -173,6 +172,7 @@ class DeployExecutableFactory {
                                           final String entryPoint,
                                           final TreeNode treeNode,
                                           final ObjectCodec codec) {
+        // TODO this will need more work when we add new types we'll need to use the fieldName too
         final AbstractDeployExecutableJsonFactory<?> jsonDeserializer = argsFactoryMap.get(entryPoint);
         if (jsonDeserializer != null) {
             //noinspection unchecked
