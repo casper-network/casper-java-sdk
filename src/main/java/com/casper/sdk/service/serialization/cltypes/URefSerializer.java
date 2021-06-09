@@ -1,6 +1,9 @@
 package com.casper.sdk.service.serialization.cltypes;
 
-class U256 implements TypesSerializer {
+/**
+ * @author carl
+ */
+class URefSerializer implements TypesSerializer {
     @Override public byte[] serialize(final Object toSerialize) {
         return null;
     }

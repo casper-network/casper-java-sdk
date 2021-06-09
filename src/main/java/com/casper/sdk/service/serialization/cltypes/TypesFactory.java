@@ -10,10 +10,15 @@ public class TypesFactory {
     private final Map<CLType, TypesSerializer> instances = new HashMap<>();
 
     public TypesFactory() {
-        instances.put(CLType.U512, new U512());
-        instances.put(CLType.U64, new U64());
-        instances.put(CLType.U32, new U32());
-        instances.put(CLType.STRING, new StringType(this));
+        instances.put(CLType.BOOL, new BoolSerializer());
+        instances.put(CLType.I32, new I32Serializer());
+        instances.put(CLType.I64, new I64Serializer());
+        instances.put(CLType.STRING, new StringSerializer(this));
+        instances.put(CLType.U32, new U32Serializer());
+        instances.put(CLType.U64, new U64Serializer());
+        instances.put(CLType.U128, new U128Serializer());
+        instances.put(CLType.U256, new U256Serializer());
+        instances.put(CLType.U512, new U512Serializer());
     }
 
     public TypesSerializer getInstance(final CLType inputType) {

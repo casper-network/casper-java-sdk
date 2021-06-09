@@ -6,15 +6,16 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.fail;
 
-class U8Test {
+class U8SerializerTest {
 
-    private final U8 u8Serializer = new U8();
+    private final U8Serializer u8Serializer = new U8Serializer();
 
     @Test
     void serializeU8() {
 
-        assertThat(u8Serializer.serialize((byte) 8), is(new byte[]{8}));
+        assertThat(u8Serializer.serialize(0x08), is(new byte[]{8}));
         assertThat(u8Serializer.serialize(0xff), is(new byte[]{(byte) 255}));
+        assertThat(u8Serializer.serialize(0x0a), is(new byte[]{(byte) 10}));
         assertThat(u8Serializer.serialize("ff"), is(new byte[]{(byte) 255}));
     }
 

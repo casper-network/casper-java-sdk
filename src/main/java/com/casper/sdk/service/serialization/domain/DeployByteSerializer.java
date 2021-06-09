@@ -10,6 +10,7 @@ import com.casper.sdk.service.serialization.util.ByteUtils;
  */
 class DeployByteSerializer implements ByteSerializer<Deploy> {
 
+    /** The factory to delegate conversion of fields to */
     private final ByteSerializerFactory factory;
 
     DeployByteSerializer(final ByteSerializerFactory factory) {
@@ -28,17 +29,17 @@ class DeployByteSerializer implements ByteSerializer<Deploy> {
         return builder.toByteArray();
     }
 
+    @Override
+    public Class<Deploy> getType() {
+        return Deploy.class;
+    }
+
     byte[] serializeBody(final DeployExecutable payment, final DeployExecutable session) {
         return ByteUtils.concat(_toBytes(payment), _toBytes(session));
     }
 
     private byte[] _toBytes(final Object source) {
         return factory.getByteSerializer(source).toBytes(source);
-    }
-
-    @Override
-    public Class<Deploy> getType() {
-        return Deploy.class;
     }
 
 

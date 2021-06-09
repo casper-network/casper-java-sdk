@@ -2,7 +2,7 @@ package com.casper.sdk.service.serialization.cltypes;
 
 import com.casper.sdk.service.serialization.util.ByteUtils;
 
-class U8 implements TypesSerializer {
+class U8Serializer implements TypesSerializer {
     @Override
     public byte[] serialize(final Object toSerialize) {
 

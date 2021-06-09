@@ -6,11 +6,11 @@ import com.casper.sdk.domain.CLType;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 
-class StringType implements TypesSerializer {
+class StringSerializer implements TypesSerializer {
 
     private final TypesFactory typesFactory;
 
-    public StringType(final TypesFactory typesFactory) {
+    public StringSerializer(final TypesFactory typesFactory) {
         this.typesFactory = typesFactory;
     }
 

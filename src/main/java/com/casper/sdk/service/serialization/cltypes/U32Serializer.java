@@ -10,7 +10,7 @@ import static com.casper.sdk.service.serialization.util.NumberUtils.toBigInteger
 /**
  * Converts a value to a little endian 32 bit array
  */
-class U32 implements TypesSerializer {
+class U32Serializer implements TypesSerializer {
 
     @Override
     public byte[] serialize(final Object toSerialize) {

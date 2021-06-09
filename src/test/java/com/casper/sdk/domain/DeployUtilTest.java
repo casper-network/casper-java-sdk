@@ -23,7 +23,7 @@ class DeployUtilTest {
     void makeTransfer() {
 
         final PublicKey targetKey = new PublicKey("0101010101010101010101010101010101010101010101010101010101010101");
-        final byte[] expectedIdBytes = ByteUtils.decodeHex("01e703000000000000");
+        final byte[] expectedIdBytes = ByteUtils.decodeHex("e703000000000000");
         final byte[] expectedTargetBytes = ByteUtils.decodeHex("0101010101010101010101010101010101010101010101010101010101010101");
         final byte[] expectedAmountBytes = ByteUtils.decodeHex("05005550b405");
 

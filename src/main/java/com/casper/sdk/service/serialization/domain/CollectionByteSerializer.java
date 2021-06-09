@@ -9,7 +9,7 @@ import static com.casper.sdk.service.serialization.util.ByteUtils.toU32;
 /**
  * The byte serializer for Lists of casper domain objects.
  */
-public class CollectionByteSerializer implements ByteSerializer<Collection<?>> {
+class CollectionByteSerializer implements ByteSerializer<Collection<?>> {
 
     private final ByteSerializerFactory factory;
 

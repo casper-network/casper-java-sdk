@@ -35,13 +35,13 @@ public class TestSerialization {
     public void testU64() {
 
         byte [] value = factory.getInstance(CLType.U64).serialize("999");
-        assertThat(value, is(decodeHex("01e703000000000000")));
+        assertThat(value, is(decodeHex("e703000000000000")));
 
         value = factory.getInstance(CLType.U64).serialize("0");
-        assertThat(value, is(decodeHex("00")));
+        assertThat(value, is(decodeHex("0000000000000000")));
 
         value = factory.getInstance(CLType.U64).serialize("");
-        assertThat(value, is(decodeHex("00")));
+        assertThat(value, is(decodeHex("0000000000000000")));
     }
 
     @Test
