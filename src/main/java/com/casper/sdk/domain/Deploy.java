@@ -10,6 +10,7 @@ import java.util.Set;
 /**
  * Top level container encapsulating information required to interact with chain.
  */
+//@JsonDeserialize(using = DeployJsonDeserializer.class)
 public class Deploy {
 
     /** # Unique identifier. */

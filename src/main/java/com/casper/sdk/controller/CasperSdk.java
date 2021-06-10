@@ -105,4 +105,14 @@ public class CasperSdk {
         return DeployUtil.makeDeploy(deployParams, session, payment);
     }
 
+
+    /**
+     * Sign the deploy with the specified signKeyPair
+     * @param deploy unsigned Deploy object
+     * @param signKeyPair the keypair to sign the Deploy object
+     */
+    public Deploy signDeploy(final  Deploy deploy, AsymmetricKey signKeyPair) {
+        return DeployUtil.signDeploy(deploy, signKeyPair);
+    }
+
 }

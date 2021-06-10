@@ -1,9 +1,6 @@
 package com.casper.sdk.json;
 
-import com.casper.sdk.domain.CLByteArrayInfo;
-import com.casper.sdk.domain.CLType;
-import com.casper.sdk.domain.CLTypeInfo;
-import com.casper.sdk.domain.CLValue;
+import com.casper.sdk.domain.*;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.ObjectCodec;
 import com.fasterxml.jackson.core.TreeNode;
@@ -36,7 +33,6 @@ public class CLValueJsonDeserializer extends JsonDeserializer<CLValue> {
     private CLTypeInfo getCLTypeInfo(final TreeNode typeNode) {
 
         // FIXME this is a bit smelly refactor one more types added
-
         final CLType clType;
 
         if (typeNode instanceof TextNode) {
@@ -54,6 +50,10 @@ public class CLValueJsonDeserializer extends JsonDeserializer<CLValue> {
                 size = ((NumericNode) sizeNode).asInt();
             }
             return new CLByteArrayInfo(size);
+        } else if (CLType.OPTION == clType) {
+            final TreeNode optionNode = typeNode.get(CLType.OPTION.getJsonName());
+            final CLTypeInfo interType = getCLTypeInfo(optionNode);
+            return new CLOptionTypeInfo(interType);
         } else {
             return new CLTypeInfo(clType);
         }
@@ -65,7 +65,6 @@ public class CLValueJsonDeserializer extends JsonDeserializer<CLValue> {
         } else if (treeNode instanceof NumericNode && CLType.isNumeric(clTypeInfo.getType())) {
             return ((NumericNode) treeNode).bigIntegerValue();
         }
-
         return null;
     }
 }

@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * The factory of all the {@link ByteSerializer} classes.
+ * The factory of all the {@link ByteSerializer} classes for domain objects.
  */
 public class ByteSerializerFactory {
 

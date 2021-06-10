@@ -11,12 +11,12 @@ import static com.casper.sdk.service.serialization.util.NumberUtils.toBigInteger
 /**
  * For u128, u256, u512, we have to and append extra byte for length
  */
-abstract class LargeNumberSerializer implements TypesSerializer {
+abstract class VariableLengthNumberSerializer implements TypesSerializer {
 
     /** The maximum number of bytes allowed for the number */
     private final int maxBytes;
 
-    LargeNumberSerializer(int maxBytes) {
+    VariableLengthNumberSerializer(int maxBytes) {
         this.maxBytes = maxBytes;
     }
 
@@ -36,7 +36,7 @@ abstract class LargeNumberSerializer implements TypesSerializer {
             bytes = removeLeadingZeros(bytes);
         }
 
-        //Now reverse it
+        // Switch from BE to LE byte order
         ArrayUtils.reverse(bytes);
 
         //Build and return the hex of the length byte

@@ -3,6 +3,8 @@ package com.casper.sdk.domain;
 import com.casper.sdk.service.serialization.util.ByteUtils;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigInteger;
 import java.time.Instant;
 
@@ -15,6 +17,8 @@ import static org.hamcrest.core.IsNull.notNullValue;
  * Unit tests for the {@link DeployUtil} class
  */
 class DeployUtilTest {
+
+    public static final String DEPLOY_JSON_PATH = "/com/casper/sdk/domain/deploy-util-test.json";
 
     /**
      * Unit tests the makeTransfer method of the DeployUtil.
@@ -105,4 +109,30 @@ class DeployUtilTest {
     }
 
 
+    @Test
+    void testDeployBodyHash() throws IOException {
+
+        final InputStream in = getClass().getResource(DEPLOY_JSON_PATH).openStream();
+        final Deploy deploy = DeployUtil.fromJson(in);
+        final Digest expected = deploy.getHeader().getBodyHash();
+
+        final Digest bodyHash = DeployUtil.makeBodyHash(deploy.getPayment(), deploy.getSession());
+
+        assertThat(bodyHash, is(expected));
+
+    }
+
+    @Test
+    void testDeployToBytes() throws IOException {
+
+        final InputStream in = getClass().getResource(DEPLOY_JSON_PATH).openStream();
+        final Deploy deploy = DeployUtil.fromJson(in);
+
+        final String strExpected = "017f747b67bd3fe63c2a736739dfe40156d622347346e70f68f51c178a75ce5537a087c0377901000040771b00000000000200000000000000f2e0782bba4a0a9663cafc7d707fd4a74421bc5bfef4e368b7e8f38dfab87db8020000000f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f1010101010101010101010101010101010101010101010101010101010101010070000006d61696e6e6574d7a68bbe656a883d04bba9f26aa340dbe3f8ec99b2adb63b628f2bc92043199800000000000100000006000000616d6f756e74050000000400ca9a3b08050400000006000000616d6f756e740600000005005550b40508060000007461726765742000000001010101010101010101010101010101010101010101010101010101010101010f200000000200000069640900000001e7030000000000000d050f0000006164646974696f6e616c5f696e666f140000001000000074686973206973207472616e736665720a01000000017f747b67bd3fe63c2a736739dfe40156d622347346e70f68f51c178a75ce55370195a68b1a05731b7014e580b4c67a506e0339a7fffeaded9f24eb2e7f78b96bdd900b9be8ca33e4552a9a619dc4fc5e4e3a9f74a4b0537c14a5a8007d62a5dc06";
+        byte[] expected = decodeHex(strExpected);
+
+        final byte[] actual = DeployUtil.toBytes(deploy);
+
+        assertThat(actual, is(expected));
+    }
 }
