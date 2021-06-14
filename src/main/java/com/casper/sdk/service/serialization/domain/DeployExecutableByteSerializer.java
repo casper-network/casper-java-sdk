@@ -2,11 +2,11 @@ package com.casper.sdk.service.serialization.domain;
 
 import com.casper.sdk.domain.*;
 import com.casper.sdk.service.serialization.util.ByteArrayBuilder;
+import com.casper.sdk.service.serialization.util.ByteUtils;
 
 import java.util.List;
 
-import static com.casper.sdk.service.serialization.util.ByteUtils.toCLStringBytes;
-import static com.casper.sdk.service.serialization.util.ByteUtils.toU32;
+import static com.casper.sdk.service.serialization.util.ByteUtils.*;
 
 /**
  * The byte serializer for a {@link DeployExecutable} and it's extending classes.
@@ -22,20 +22,19 @@ class DeployExecutableByteSerializer implements ByteSerializer<DeployExecutable>
     @Override
     public byte[] toBytes(final DeployExecutable deployExecutable) {
 
-        final ByteArrayBuilder builder = new ByteArrayBuilder();
-
         // Append the type of the Deploy Executable in a single byte
-        builder.append((byte) deployExecutable.getTag());
+        final ByteArrayBuilder builder = new ByteArrayBuilder()
+                .append((byte)deployExecutable.getTag());
 
         if (deployExecutable instanceof ModuleBytes) {
-            builder.append(deployExecutable.getModuleBytes());
+            builder.append(toBytesArrayU8(deployExecutable.getModuleBytes()));
         } else if (deployExecutable instanceof StoredContractByName) {
             builder.append(toCLStringBytes(((StoredContractByName) deployExecutable).getName()))
-                    .append(toCLStringBytes(((StoredContractByName) deployExecutable).getEntryPoint()))
-                    .append(toBytes(deployExecutable.getArgs()));
-        } else if (deployExecutable instanceof Transfer) {
-            builder.append(toBytes(deployExecutable.getArgs()));
+                    .append(toCLStringBytes(((StoredContractByName) deployExecutable).getEntryPoint()));
         }
+
+        // Append any args if present
+        builder.append(toBytes(deployExecutable.getArgs()));
 
         return builder.toByteArray();
     }
@@ -55,7 +54,7 @@ class DeployExecutableByteSerializer implements ByteSerializer<DeployExecutable>
 
         // Append each argument
         args.forEach(deployNamedArg ->
-                factory.getByteSerializer(deployNamedArg).toBytes(deployNamedArg)
+                builder.append(factory.getByteSerializer(deployNamedArg).toBytes(deployNamedArg))
         );
         return builder.toByteArray();
     }

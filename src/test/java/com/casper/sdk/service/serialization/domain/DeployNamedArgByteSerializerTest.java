@@ -1,12 +1,16 @@
 package com.casper.sdk.service.serialization.domain;
 
-import com.casper.sdk.domain.*;
+import com.casper.sdk.domain.CLByteArrayInfo;
+import com.casper.sdk.domain.CLType;
+import com.casper.sdk.domain.CLValue;
+import com.casper.sdk.domain.DeployNamedArg;
 import com.casper.sdk.service.serialization.util.ByteUtils;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
 import static com.casper.sdk.service.serialization.util.ByteUtils.concat;
+import static com.casper.sdk.service.serialization.util.ByteUtils.toU32;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
@@ -14,7 +18,7 @@ import static org.hamcrest.core.IsNull.notNullValue;
 class DeployNamedArgByteSerializerTest {
 
     private final ByteSerializerFactory factory = new ByteSerializerFactory();
-    private final ByteSerializer<DeployNamedArg> deployNamedArgByteSerializer =factory.getByteSerializerByType(DeployNamedArg.class);
+    private final ByteSerializer<DeployNamedArg> deployNamedArgByteSerializer = factory.getByteSerializerByType(DeployNamedArg.class);
     @SuppressWarnings("rawtypes")
     private final ByteSerializer<List> listByteSerializer = factory.getByteSerializerByType(List.class);
 
@@ -33,8 +37,9 @@ class DeployNamedArgByteSerializerTest {
                         new byte[]{2, 0, 0, 0}, // Length of name as U32 little endian
                         "id".getBytes()),// Name
                 concat(
-                        new byte[]{5},// CLType U64(5)
-                        value // byte value
+                        ByteUtils.toU32(value.length),  // length of value
+                        value,                          // byte value
+                        new byte[]{5}                   // CLType U64(5)
                 )
         );
 
@@ -58,8 +63,9 @@ class DeployNamedArgByteSerializerTest {
                         new byte[]{6, 0, 0, 0}, // Length of name as U32 little endian
                         "amount".getBytes()),// Name
                 concat(
-                        new byte[]{8},// CLType U512(08)
-                        value // byte value
+                        toU32(value.length),
+                        value, // byte value
+                        new byte[]{8}// CLType U512(08)
                 )
         );
 
@@ -79,11 +85,13 @@ class DeployNamedArgByteSerializerTest {
 
         final byte[] expected = concat(
                 concat(
-                        new byte[]{6, 0, 0, 0}, // Length of name as U32 little endian
+                        ByteUtils.toU32(6), // Length of name as U32 little endian
                         "target".getBytes()),// Name
                 concat(
-                        new byte[]{15, 32, 0, 0, 0},// CLType BYTE_ARRAY(15) followed by array length as LE U32
-                        value // byte value
+                        ByteUtils.toU32(value.length), // length of array
+                        value, // byte value of array
+                        new byte[]{CLType.BYTE_ARRAY.getClType()},
+                        ByteUtils.toU32(value.length)
                 )
         );
 
@@ -130,11 +138,18 @@ class DeployNamedArgByteSerializerTest {
 
         final byte[] expected = new byte[]{
                 3, 0, 0, 0,
-                6, 0, 0, 0, 97, 109, 111, 117, 110, 116, 8, 5, 0, 85, 80, -76, 5, 6, 0, 0, 0, 116, 97, 114,
-                103, 101, 116,
-                15, 32, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-                1, 1, 1, 1, 1, 1, 1, 1,
-                2, 0, 0, 0, 105, 100, 5, 1, -25, 3, 0, 0, 0, 0, 0, 0
+                6, 0, 0, 0,
+                97, 109, 111, 117, 110, 116,
+                6, 0, 0, 0,
+                5, 0, 85, 80, -76, 5, 8,
+                6, 0, 0, 0,
+                116, 97, 114, 103, 101, 116,
+                32, 0, 0, 0,
+                1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 15,
+                32, 0, 0, 0,
+                2, 0, 0, 0,
+                105, 100,
+                9, 0, 0, 0, 1, -25, 3, 0, 0, 0, 0, 0, 0, 5
         };
 
         final byte[] bytes = listByteSerializer.toBytes(args);

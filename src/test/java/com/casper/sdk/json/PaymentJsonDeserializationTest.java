@@ -50,9 +50,9 @@ public class PaymentJsonDeserializationTest {
 
     @Test
     void testParseTransferDeployExecutableFromJson() {
-        assertThat(deployExecutable, is(instanceOf(StoredContractByName.class)));
+        assertThat(deployExecutable, is(instanceOf(ModuleBytes.class)));
 
-        final StoredContractByName payment = (StoredContractByName) deployExecutable;
+        final ModuleBytes payment = (ModuleBytes) deployExecutable;
         assertThat(payment.getModuleBytes(), is(new byte[0]));
         assertThat(payment.getArgs(), hasSize(1));
         assertThat(payment.getArgs().get(0).getName(), is("amount"));

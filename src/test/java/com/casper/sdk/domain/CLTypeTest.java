@@ -131,7 +131,7 @@ class CLTypeTest {
     }
 
     private void assertClType(final CLType type, final int expectedType, final String expectedJson, final boolean expectedNumeric) {
-        assertThat(type.getClType(), is(expectedType));
+        assertThat(type.getClType(), is((byte)expectedType));
         assertThat(type.getJsonName(), is(expectedJson));
         assertThat(CLType.isNumeric(type), is(expectedNumeric));
     }

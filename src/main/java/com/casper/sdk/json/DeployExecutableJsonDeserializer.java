@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import static com.casper.sdk.json.DeserializerContext.peekFieldName;
+
 /**
  * Custom JSON Converts classes that extent {@link DeployExecutable} types from JSON.
  */
@@ -39,6 +41,6 @@ public class DeployExecutableJsonDeserializer extends JsonDeserializer<DeployExe
     }
 
     private String getFieldName(JsonStreamContext parsingContext) {
-        return parsingContext.getParent() != null ? parsingContext.getParent().getCurrentName() : null;
+        return peekFieldName();
     }
 }

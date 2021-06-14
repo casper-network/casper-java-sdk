@@ -20,7 +20,7 @@ import java.util.Map;
 class DeployExecutableFactory {
 
     /**
-     *  The abstract factory class for all DeployExecutable
+     * The abstract factory class for all DeployExecutable
      *
      * @param <T> the type of DeployExecutable
      */
@@ -75,6 +75,18 @@ class DeployExecutableFactory {
             }
             return args;
         }
+
+        protected byte[] convertModuleBytes(final TreeNode treeNode) {
+            TreeNode moduleBytes = treeNode.get("ModuleBytes");
+            if (moduleBytes instanceof ObjectNode) {
+                final TreeNode textNode = moduleBytes.get("module_bytes");
+                if (textNode instanceof TextNode) {
+                    return CLValue.fromString(((TextNode) textNode).textValue());
+                }
+            }
+            return null;
+        }
+
     }
 
     /**
@@ -111,6 +123,37 @@ class DeployExecutableFactory {
     /**
      * Converts JSON into a StoredContractByName such as a payment.
      */
+    private static class ModuleBytesFactory extends AbstractDeployExecutableJsonFactory<ModuleBytes> {
+
+        @Override
+        ModuleBytes create(final String fieldName, String entryPoint, final TreeNode treeNode, final ObjectCodec codec) {
+            try {
+                final List<DeployNamedArg> args = convertArgs(getArgsNode(entryPoint, treeNode), codec);
+                return new ModuleBytes(convertModuleBytes(treeNode), args);
+            } catch (Exception e) {
+                throw new ConversionException(e);
+            }
+        }
+
+        @Override
+        protected TreeNode getArgsNode(final String fieldName, final TreeNode treeNode) {
+            TreeNode moduleBytes = treeNode.get(fieldName);
+            if (moduleBytes != null) {
+                return moduleBytes.get("args");
+            } else {
+                return null;
+            }
+        }
+
+        @Override
+        protected Class<ModuleBytes> getType() {
+            return ModuleBytes.class;
+        }
+    }
+
+    /**
+     * Converts JSON into a StoredContractByName such as a payment.
+     */
     private static class StoredContractByNameFactory extends AbstractDeployExecutableJsonFactory<StoredContractByName> {
 
         @Override
@@ -121,17 +164,6 @@ class DeployExecutableFactory {
             } catch (Exception e) {
                 throw new ConversionException(e);
             }
-        }
-
-        private byte[] convertModuleBytes(final TreeNode treeNode) {
-            TreeNode moduleBytes = treeNode.get("ModuleBytes");
-            if (moduleBytes instanceof ObjectNode) {
-                final TreeNode textNode = moduleBytes.get("module_bytes");
-                if (textNode instanceof TextNode) {
-                    return CLValue.fromString(((TextNode) textNode).textValue());
-                }
-            }
-            return null;
         }
 
         @Override
@@ -154,7 +186,8 @@ class DeployExecutableFactory {
     private static final Map<String, AbstractDeployExecutableJsonFactory<?>> argsFactoryMap = new HashMap<>();
 
     static {
-        argsFactoryMap.put("ModuleBytes", new StoredContractByNameFactory());
+        argsFactoryMap.put("ModuleBytes", new ModuleBytesFactory());
+        argsFactoryMap.put("StoredContractByName", new StoredContractByNameFactory());
         argsFactoryMap.put("Transfer", new TransferJsonFactory());
         argsFactoryMap.put("args", new DefaultDeployExecutableJsonFactory());
     }

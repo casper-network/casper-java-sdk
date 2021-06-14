@@ -4,6 +4,8 @@ import com.casper.sdk.exceptions.ConversionException;
 
 /**
  * Domain type: enumeration over set of low level CL types.
+ * {@see https://docs.casperlabs.io/en/latest/implementation/serialization-standard.html#values}
+ *
  */
 public enum CLType {
 
@@ -44,7 +46,7 @@ public enum CLType {
     /** List of values of the given type (e.g. Vec in rust). List(CLType) */
     @CLName("List")
     LIST(14),
-    /** FIXME NO DEF IN SPEC https://docs.casperlabs.io/en/latest/implementation/serialization-standard.html */
+    /** Byte array prefixed with U32 length (FixedList) */
     @CLName("ByteArray")
     BYTE_ARRAY(15),
     /** co-product of the the given types; one variant meaning success, the other failure */
@@ -93,8 +95,8 @@ public enum CLType {
         };
     }
 
-    public int getClType() {
-        return clType;
+    public byte getClType() {
+        return (byte) clType;
     }
 
     /**

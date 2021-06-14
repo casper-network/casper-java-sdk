@@ -6,9 +6,12 @@ import com.casper.sdk.domain.DeployNamedArg;
 import com.casper.sdk.service.serialization.util.ByteUtils;
 import org.junit.jupiter.api.Test;
 
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.casper.sdk.service.serialization.util.ByteUtils.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
@@ -21,7 +24,7 @@ class CollectionByteSerializerTest {
 
     @Test
     void emptyListToBytes() {
-        assertThat(serializer.toBytes(new ArrayList<>()), is(ByteUtils.toU32(0)));
+        assertThat(serializer.toBytes(new ArrayList<>()), is(toU32(0)));
     }
 
     @Test
@@ -45,9 +48,26 @@ class CollectionByteSerializerTest {
                 )
         );
 
-        final String expectedHex = "0200000006000000616d6f756e740805005550b4050200000069640501e703000000000000";
+
+
+        final byte [] expected = concat(
+                toU32(2), // Number of arguments
+
+                toU32(6), // length of 'amount;
+                "amount".getBytes(StandardCharsets.UTF_8),
+                toU32(6), // length of value
+                ByteUtils.decodeHex("05005550b405"),
+                new byte [] {CLType.U512.getClType()},
+
+                toU32(2), // length of 'id;
+                "id".getBytes(StandardCharsets.UTF_8),
+                toU32(9),
+                decodeHex("01e703000000000000"),
+                new byte[] { CLType.U64.getClType()}
+        );
+
         byte[] bytes = serializer.toBytes(args);
 
-        assertThat(bytes, is(ByteUtils.decodeHex(expectedHex)));
+        assertThat(bytes, is(expected));
     }
 }

@@ -53,9 +53,8 @@ public class DeployJsonDeserializerTest {
 
     @Test
     void testDeployPaymentFromJson() {
-        assertThat(deploy.getPayment(), is(instanceOf(StoredContractByName.class)));
-        StoredContractByName payment = deploy.getPayment();
-        assertThat(payment.getName(), is(PAYMENT));
+        assertThat(deploy.getPayment(), is(instanceOf(ModuleBytes.class)));
+        ModuleBytes payment = deploy.getPayment();
         assertThat(payment.getModuleBytes(), is(new byte[0]));
         assertThat(payment.getArgs(), hasSize(1));
         assertThat(payment.getArgs().get(0).getName(), is("amount"));

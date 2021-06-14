@@ -4,22 +4,27 @@ import com.casper.sdk.domain.Deploy;
 import com.casper.sdk.domain.DeployExecutable;
 import com.casper.sdk.domain.DeployHeader;
 import com.casper.sdk.domain.Digest;
-import com.fasterxml.jackson.core.*;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonStreamContext;
+import com.fasterxml.jackson.core.ObjectCodec;
+import com.fasterxml.jackson.core.TreeNode;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.util.LinkedHashSet;
 
+import static com.casper.sdk.json.DeserializerContext.pushFieldName;
+
 /**
- * FIXME DO NOT USE YES
+ * The JSON Desrializer for a {@link Deploy}.
  */
 public class DeployJsonDeserializer extends JsonDeserializer<Deploy> {
-    @Override
-    public Deploy deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
 
-        final JsonStreamContext parsingContext = p.getParsingContext();
+
+    @Override
+    public Deploy deserialize(final JsonParser p, final DeserializationContext ctxt) throws IOException {
+
         final ObjectCodec codec = p.getCodec();
         TreeNode treeNode = codec.readTree(p);
 
@@ -27,14 +32,13 @@ public class DeployJsonDeserializer extends JsonDeserializer<Deploy> {
 
         // If there is a deploy field deserialize its value
         if (deployNode != null) {
-            p = deployNode.traverse();
+            treeNode = codec.readTree(deployNode.traverse());
         }
-        return deserializeDeploy(p, codec, ctxt);
+        return deserializeDeploy(treeNode, codec);
     }
 
-    private Deploy deserializeDeploy(JsonParser p, final ObjectCodec codec, final DeserializationContext ctxt) throws IOException {
-
-        final TreeNode treeNode = codec.readTree(p);
+    private Deploy deserializeDeploy(final TreeNode treeNode,
+                                     final ObjectCodec codec) throws IOException {
 
         return new Deploy(
                 readChildNode(treeNode, codec, "hash", Digest.class),
@@ -49,14 +53,22 @@ public class DeployJsonDeserializer extends JsonDeserializer<Deploy> {
                                 final ObjectCodec codec,
                                 final String name,
                                 final Class<T> type) throws IOException {
-        final TreeNode child = digestNode.get(name);
-        if (child != null) {
-            String s = child.toString();
-            return new ObjectMapper().readValue(s, type);
-            //return  codec.readValue(child.traverse(), type);
+
+        try {
+            pushFieldName(name);
+            final TreeNode child = digestNode.get(name);
+            if (child != null) {
+                final JsonParser childParser = child.traverse();
+                // Ensure the code is passed on the child parser
+                if (childParser.getCodec() == null) {
+                    childParser.setCodec(codec);
+                }
+
+                return codec.readValue(childParser, type);
+            }
+        } finally {
+            DeserializerContext.popFieldName();
         }
         return null;
     }
-
-
 }

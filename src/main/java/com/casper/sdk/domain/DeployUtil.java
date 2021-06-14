@@ -55,7 +55,7 @@ public class DeployUtil {
 
         final DeployNamedArg amountArg = new DeployNamedArg("amount", new CLValue(amountBytes, CLType.U512, amount.toString()));
         final DeployNamedArg targetArg = new DeployNamedArg("target", new CLValue(target.getBytes(), new CLByteArrayInfo(32), target.toString()));
-        final DeployNamedArg idArg = new DeployNamedArg("id", new CLValue(idBytes, CLType.U64, id.toString()));
+        final DeployNamedArg idArg = new DeployNamedArg("id", new CLValue(idBytes, new CLOptionTypeInfo(new CLTypeInfo(CLType.U64)), id.toString()));
 
         return new Transfer(List.of(amountArg, targetArg, idArg));
     }
@@ -68,10 +68,10 @@ public class DeployUtil {
     public static StoredContractByName standardPayment(final Number paymentAmount) {
 
         final BigInteger biAmount = NumberUtils.toBigInteger(paymentAmount);
-
+        byte[] amountBytes = ByteUtils.toU512(biAmount);
         final DeployNamedArg paymentArg = new DeployNamedArg(
                 "amount",
-                new CLValue(biAmount.toByteArray(), CLType.U512, paymentAmount)
+                new CLValue(amountBytes, CLType.U512, paymentAmount)
         );
 
         return new StoredContractByName("payment", null, List.of(paymentArg));
@@ -105,7 +105,7 @@ public class DeployUtil {
         return serializerFactory.getByteSerializerByType(DeployHeader.class).toBytes(header);
     }
 
-    private static byte[] serializeBody(final DeployExecutable payment, final DeployExecutable session) {
+    static byte[] serializeBody(final DeployExecutable payment, final DeployExecutable session) {
         return ByteUtils.concat(toBytes(payment), toBytes(session));
     }
 

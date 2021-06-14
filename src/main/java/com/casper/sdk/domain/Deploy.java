@@ -1,8 +1,10 @@
 package com.casper.sdk.domain;
 
+import com.casper.sdk.json.DeployJsonDeserializer;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -10,7 +12,7 @@ import java.util.Set;
 /**
  * Top level container encapsulating information required to interact with chain.
  */
-//@JsonDeserialize(using = DeployJsonDeserializer.class)
+@JsonDeserialize(using = DeployJsonDeserializer.class)
 public class Deploy {
 
     /** # Unique identifier. */

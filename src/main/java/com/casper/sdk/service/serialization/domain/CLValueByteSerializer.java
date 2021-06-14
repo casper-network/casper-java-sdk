@@ -10,17 +10,23 @@ import com.casper.sdk.service.serialization.util.ByteUtils;
  */
 class CLValueByteSerializer implements ByteSerializer<CLValue> {
 
+    private static byte[] toBytes(final CLTypeInfo clTypeInfo) {
+        return CLTypeHelper.toBytesHelper(clTypeInfo);
+    }
+
     @Override
     public byte[] toBytes(final CLValue source) {
-        return ByteUtils.concat(toBytes(source.getCLTypeInfo()), source.getBytes());
+
+        return ByteUtils.concat(
+                ByteUtils.toU32(source.getBytes().length),
+                source.getBytes(),
+                toBytes(source.getCLTypeInfo())
+        );
+
     }
 
     @Override
     public Class<CLValue> getType() {
         return CLValue.class;
-    }
-
-    private static byte[] toBytes(final CLTypeInfo clTypeInfo) {
-        return CLTypeHelper.toBytesHelper(clTypeInfo);
     }
 }

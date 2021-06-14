@@ -11,6 +11,7 @@ public class TypesFactory {
 
     public TypesFactory() {
         instances.put(CLType.BOOL, new BoolSerializer());
+        instances.put(CLType.BYTE_ARRAY, new ByteArraySerializer());
         instances.put(CLType.KEY, new KeySerializer());
         instances.put(CLType.I32, new I32Serializer());
         instances.put(CLType.I64, new I64Serializer());

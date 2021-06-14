@@ -22,6 +22,10 @@ public class ByteUtils {
         return typesFactory.getInstance(CLType.U512).serialize(number);
     }
 
+    public static byte [] toBytesArrayU8(final byte [] source) {
+        return typesFactory.getInstance(CLType.BYTE_ARRAY).serialize(source);
+    }
+
     /**
      * Joins multiple arrays into a new concatenated array
      *

@@ -44,5 +44,7 @@ class CasperSdkTest {
         final Transfer transfer =  deploy.getSession();
         assertThat(transfer.getNamedArg("amount").getValue().getParsed(), is("24500000000"));
         assertThat(transfer.getNamedArg("amount").getValue().getCLType(), is(CLType.U512));
+        assertThat(transfer.getNamedArg("id").getValue().getCLType(), is(CLType.OPTION));
+        assertThat(((CLOptionTypeInfo)transfer.getNamedArg("id").getValue().getCLTypeInfo()).getInnerType().getType(), is(CLType.U64));
     }
 }

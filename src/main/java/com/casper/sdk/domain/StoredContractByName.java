@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Encapsulates information required to execute an on-chain smart contract referenced by name.
  */
-public class StoredContractByName extends DeployExecutable implements StoredContractNames {
+public class StoredContractByName extends ModuleBytes implements StoredContractNames {
 
     /** On-chain smart contract name - only in scope when dispatch account = contract owner account. */
     private final String name;

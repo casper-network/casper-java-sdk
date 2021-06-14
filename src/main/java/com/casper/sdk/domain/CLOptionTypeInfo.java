@@ -7,7 +7,7 @@ public class CLOptionTypeInfo extends CLTypeInfo {
 
     private final CLTypeInfo innerType;
 
-    public CLOptionTypeInfo(CLTypeInfo innerType) {
+    public CLOptionTypeInfo(final CLTypeInfo innerType) {
         super(CLType.OPTION);
         this.innerType = innerType;
     }

@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import static com.casper.sdk.json.DeserializerContext.clear;
+
 /**
  * Service used to convert between CL domain objects to JSON
  */
@@ -50,6 +52,7 @@ public class JsonConversionService {
      * @throws IOException - on a read error
      */
     public <T> T fromJson(final String json, final Class<T> type) throws IOException {
+        clear();
         final ObjectMapper mapper = new ObjectMapper();
         return mapper.reader().readValue(json, type);
     }
@@ -62,6 +65,7 @@ public class JsonConversionService {
      * @throws IOException - on a read error
      */
     public <T> T fromJson(final InputStream in, final Class<T> type) throws IOException {
+        clear();
         final ObjectMapper mapper = new ObjectMapper();
         return mapper.reader().readValue(in, type);
     }

@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.math.BigInteger;
 import java.time.Instant;
 
+import static com.casper.sdk.service.serialization.util.ByteUtils.concat;
 import static com.casper.sdk.service.serialization.util.ByteUtils.decodeHex;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -19,6 +20,7 @@ import static org.hamcrest.core.IsNull.notNullValue;
 class DeployUtilTest {
 
     public static final String DEPLOY_JSON_PATH = "/com/casper/sdk/domain/deploy-util-test.json";
+    public static final String DEPLOY_TS_JSON_PATH ="/com/casper/sdk/domain/deploy-from-ts-client.js";
 
     /**
      * Unit tests the makeTransfer method of the DeployUtil.
@@ -80,8 +82,7 @@ class DeployUtilTest {
         byte[] bytes = DeployUtil.toBytes(payment);
 
         // TODO calculate what this should really be
-
-//        assertThat(bytes, is(expectedBytes));
+        assertThat(bytes, is(expectedBytes));
     }
 
     @Test
@@ -110,15 +111,77 @@ class DeployUtilTest {
 
 
     @Test
+    void testDeployUtilSerializeBody() throws IOException {
+
+        final InputStream in = getClass().getResource(DEPLOY_TS_JSON_PATH).openStream();
+        final Deploy deploy = DeployUtil.fromJson(in);
+
+        // Expected payment bytes
+        final byte[] paymentBytes = new byte[]{
+                0,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                6,
+                0,
+                0,
+                0,
+                97,
+                109,
+                111,
+                117,
+                110,
+                116,
+                6,
+                0,
+                0,
+                0,
+                5,
+                0,
+                (byte) 228,
+                11,
+                84,
+                2,
+                8,
+        };
+
+        final byte[] session = new byte[]{
+                5, 3, 0, 0, 0, 6, 0, 0, 0, 97, 109, 111, 117, 110, 116, 6, 0, 0, 0, 5, 0, 116, 59, (byte) 164, 11, 8, 6,
+                0, 0, 0, 116, 97, 114, 103, 101, 116, 32, 0, 0, 0, 21, 65, 86, 107, (byte) 218, (byte) 211, (byte) 163,
+                (byte) 207, (byte) 169, (byte) 235, 76, (byte) 186, 61, (byte) 207, 51, (byte) 238, 101, (byte) 131,
+                (byte) 224, 115, 58, (byte) 228, (byte) 178, (byte) 204, (byte) 223, (byte) 233, (byte) 44, (byte) 209,
+                (byte)189, (byte)146, (byte)238, 22, 15, 32, 0, 0, 0, 2, 0, 0, 0, 105, 100, 9, 0, 0, 0, 1, (byte)160,
+                (byte)134, 1, 0, 0, 0, 0, 0, 13, 5
+        };
+
+        final byte[] bytes = DeployUtil.serializeBody(deploy.getPayment(), deploy.getSession());
+
+        final byte[] expected = concat(
+                paymentBytes,
+                session
+        );
+
+        assertThat(bytes, is(expected));
+
+    }
+
+
+    @Test
     void testDeployBodyHash() throws IOException {
 
         final InputStream in = getClass().getResource(DEPLOY_JSON_PATH).openStream();
         final Deploy deploy = DeployUtil.fromJson(in);
         final Digest expected = deploy.getHeader().getBodyHash();
 
+
         final Digest bodyHash = DeployUtil.makeBodyHash(deploy.getPayment(), deploy.getSession());
 
-        assertThat(bodyHash, is(expected));
+        assertThat(bodyHash.getHash(), is(expected.getHash()));
 
     }
 
