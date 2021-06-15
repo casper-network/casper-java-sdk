@@ -174,9 +174,7 @@ class DeployExecutableByteSerializerTest {
                 5       // U64 type
         };
 
-        assertThat(expected.length, is(98));
-
-        final Transfer transfer = DeployUtil.makeTransfer(new BigInteger("50000000000"),
+       final Transfer transfer = DeployUtil.makeTransfer(new BigInteger("50000000000"),
                 new PublicKey("1541566bdad3a3cfa9eb4cba3dcf33ee6583e0733ae4b2ccdfe92cd1bd92ee16"),
                 100000L);
 

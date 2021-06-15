@@ -27,7 +27,11 @@ public class CLValueJsonDeserializer extends JsonDeserializer<CLValue> {
         final TextNode bytesNode = (TextNode) treeNode.get("bytes");
         final CLTypeInfo clTypeInfo = getCLTypeInfo(typeNode);
         final Object parsed = getParsed(treeNode.get("parsed"), clTypeInfo);
-        return new CLValue(bytesNode.asText(), clTypeInfo, parsed);
+        if (clTypeInfo instanceof CLOptionTypeInfo) {
+            return new CLOptionValue(bytesNode.asText(), ((CLOptionTypeInfo) clTypeInfo), parsed);
+        } else {
+            return new CLValue(bytesNode.asText(), clTypeInfo, parsed);
+        }
     }
 
     private CLTypeInfo getCLTypeInfo(final TreeNode typeNode) {

@@ -14,20 +14,6 @@ class CLValueByteSerializer implements ByteSerializer<CLValue> {
 
     @Override
     public byte[] toBytes(final CLValue source) {
-
-        if (source.getCLType() == CLType.OPTION) {
-            return toOptionBytes(source);
-        } else {
-            return toValueBytes(source);
-        }
-    }
-
-    @Override
-    public Class<CLValue> getType() {
-        return CLValue.class;
-    }
-
-    private byte[] toValueBytes(CLValue source) {
         return ByteUtils.concat(
                 ByteUtils.toU32(source.getBytes().length),
                 source.getBytes(),
@@ -35,22 +21,9 @@ class CLValueByteSerializer implements ByteSerializer<CLValue> {
         );
     }
 
-    private byte[] toOptionBytes(final CLValue source) {
-        return ByteUtils.concat(
-                ByteUtils.toU32(source.getBytes().length + 1),
-                getOptionByte(source.getBytes()),
-                source.getBytes(),
-                toBytes(source.getCLTypeInfo())
-        );
+    @Override
+    public Class<CLValue> getType() {
+        return CLValue.class;
     }
-
-    private byte[] getOptionByte(final byte[] bytes) {
-        if (bytes == null || bytes.length == 0) {
-            return CLOptionTypeInfo.OPTION_NONE;
-        } else {
-            return CLOptionTypeInfo.OPTION_SOME;
-        }
-    }
-
 
 }

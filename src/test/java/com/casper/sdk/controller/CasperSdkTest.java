@@ -8,6 +8,7 @@ import java.time.Instant;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.hamcrest.core.IsNull.notNullValue;
 
 class CasperSdkTest {
@@ -41,10 +42,11 @@ class CasperSdkTest {
 
         assertThat(deploy.isTransfer(), is(true));
 
-        final Transfer transfer =  deploy.getSession();
+        final Transfer transfer = deploy.getSession();
         assertThat(transfer.getNamedArg("amount").getValue().getParsed(), is("24500000000"));
         assertThat(transfer.getNamedArg("amount").getValue().getCLType(), is(CLType.U512));
         assertThat(transfer.getNamedArg("id").getValue().getCLType(), is(CLType.OPTION));
-        assertThat(((CLOptionTypeInfo)transfer.getNamedArg("id").getValue().getCLTypeInfo()).getInnerType().getType(), is(CLType.U64));
+        assertThat(transfer.getNamedArg("id").getValue(), is(instanceOf(CLOptionValue.class)));
+        assertThat(((CLOptionTypeInfo) transfer.getNamedArg("id").getValue().getCLTypeInfo()).getInnerType().getType(), is(CLType.U64));
     }
 }

@@ -72,7 +72,7 @@ class CLValueByteSerializerTest {
                 5               // U64 type
         };
 
-        final CLValue optionValue = new CLValue("a086010000000000", new CLOptionTypeInfo(new CLTypeInfo(CLType.U64)), 100000);
+        final CLValue optionValue = new CLValue("01a086010000000000", new CLOptionTypeInfo(new CLTypeInfo(CLType.U64)), 100000);
 
         assertThat(byteSerializer.toBytes(optionValue), is(expected));
     }
@@ -80,7 +80,7 @@ class CLValueByteSerializerTest {
     @Test
     void byteArrayKeyValue() {
 
-        final CLValue optionValue = new CLValue("7b7708f6ac895b6748b65fb183cad8c4c62d7bbf6f505455d662b5f691c0f9b2", new CLOptionTypeInfo(new CLByteArrayInfo(32)), "7b7708f6ac895b6748b65fb183cad8c4c62d7bbf6f505455d662b5f691c0f9b2");
+        final CLValue optionValue = new CLValue("017b7708f6ac895b6748b65fb183cad8c4c62d7bbf6f505455d662b5f691c0f9b2", new CLOptionTypeInfo(new CLByteArrayInfo(32)), "7b7708f6ac895b6748b65fb183cad8c4c62d7bbf6f505455d662b5f691c0f9b2");
 
         final byte[] expected = {
                 32, 0, 0, 0, 123, 119, 8, -10, -84, -119, 91, 103, 72, -74, 95, -79, -125, -54, -40, -60, -58, 45, 123,

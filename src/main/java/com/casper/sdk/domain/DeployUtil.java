@@ -51,11 +51,13 @@ public class DeployUtil {
     public static Transfer makeTransfer(final Number amount, final PublicKey target, final Number id) {
 
         final byte[] amountBytes = ByteUtils.toU512(amount);
-        final byte[] idBytes = ByteUtils.toU64(id);
+
+        // Prefix the option bytes with OPTION_NONE or OPTION_SOME
+        final byte[] idBytes = CLOptionValue.prefixOption(ByteUtils.toU64(id));
 
         final DeployNamedArg amountArg = new DeployNamedArg("amount", new CLValue(amountBytes, CLType.U512, amount.toString()));
         final DeployNamedArg targetArg = new DeployNamedArg("target", new CLValue(target.getBytes(), new CLByteArrayInfo(32), target.toString()));
-        final DeployNamedArg idArg = new DeployNamedArg("id", new CLValue(idBytes, new CLOptionTypeInfo(new CLTypeInfo(CLType.U64)), id.toString()));
+        final DeployNamedArg idArg = new DeployNamedArg("id", new CLOptionValue(idBytes, new CLOptionTypeInfo(new CLTypeInfo(CLType.U64)), id.toString()));
 
         return new Transfer(List.of(amountArg, targetArg, idArg));
     }
