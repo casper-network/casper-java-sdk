@@ -46,7 +46,7 @@ class DigestTest {
     @Test
     void testNullHash() {
         try {
-            new Digest(null);
+            new Digest((String)null);
             fail("Should have thrown NullPointerException");
         } catch (NullPointerException e) {
             assertThat(e.getMessage(), is("Hash must not be null"));

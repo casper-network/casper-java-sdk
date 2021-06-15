@@ -60,23 +60,22 @@ class DeployUtilTest {
     @Test
     void standardPayment() {
 
-        final StoredContractByName payment = DeployUtil.standardPayment(1000000L);
-        assertThat(payment.getTag(), is(2));
-        assertThat(payment.getName(), is("payment"));
+        final ModuleBytes payment = DeployUtil.standardPayment(1000000L);
+        assertThat(payment.getTag(), is(0));
 
         final CLValue amount = payment.getNamedArg("amount").getValue();
         assertThat(amount.getCLType(), is(CLType.U512));
         assertThat(amount.getParsed(), is(1000000L));
-        assertThat(amount.getBytes(), is(decodeHex("0F4240")));
+        assertThat(amount.getBytes(), is(decodeHex("0340420F")));
     }
 
     @Test
     void standardPaymentToBytes() {
 
-        final String expectedHex = "02070000007061796d656e74000000000100000006000000616d6f756e74080f4240";
+        final String expectedHex = "00070000007061796d656e74000000000100000006000000616d6f756e74080f4240";
         byte[] expectedBytes = ByteUtils.decodeHex(expectedHex);
 
-        final StoredContractByName payment = DeployUtil.standardPayment(1000000L);
+        final ModuleBytes payment = DeployUtil.standardPayment(1000000L);
         byte[] bytes = DeployUtil.toBytes(payment);
 
         // TODO calculate what this should really be

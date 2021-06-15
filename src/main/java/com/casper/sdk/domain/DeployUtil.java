@@ -67,7 +67,7 @@ public class DeployUtil {
      *
      * @param paymentAmount the number of notes paying to execution engine
      */
-    public static StoredContractByName standardPayment(final Number paymentAmount) {
+    public static ModuleBytes standardPayment(final Number paymentAmount) {
 
         final BigInteger biAmount = NumberUtils.toBigInteger(paymentAmount);
         byte[] amountBytes = ByteUtils.toU512(biAmount);
@@ -76,7 +76,7 @@ public class DeployUtil {
                 new CLValue(amountBytes, CLType.U512, paymentAmount)
         );
 
-        return new StoredContractByName("payment", null, List.of(paymentArg));
+        return new ModuleBytes(new byte[0], List.of(paymentArg));
     }
 
     public static Deploy fromJson(final String json) throws IOException {

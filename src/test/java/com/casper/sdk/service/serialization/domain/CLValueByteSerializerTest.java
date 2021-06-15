@@ -78,12 +78,12 @@ class CLValueByteSerializerTest {
     }
 
     @Test
-    void byteArrayKeyValue() {
+    void byteOptionArrayKeyValue() {
 
         final CLValue optionValue = new CLValue("017b7708f6ac895b6748b65fb183cad8c4c62d7bbf6f505455d662b5f691c0f9b2", new CLOptionTypeInfo(new CLByteArrayInfo(32)), "7b7708f6ac895b6748b65fb183cad8c4c62d7bbf6f505455d662b5f691c0f9b2");
 
         final byte[] expected = {
-                32, 0, 0, 0, 123, 119, 8, -10, -84, -119, 91, 103, 72, -74, 95, -79, -125, -54, -40, -60, -58, 45, 123,
+                33, 0, 0, 0, 1,  123, 119, 8, -10, -84, -119, 91, 103, 72, -74, 95, -79, -125, -54, -40, -60, -58, 45, 123,
                 -65, 111, 80, 84, 85, -42, 98, -75, -10, -111, -64, -7, -78, 13, 15, 32, 0, 0, 0
         };
 
