@@ -12,7 +12,7 @@ import java.util.Objects;
  */
 @JsonDeserialize(using = PublicKeyJsonDeserializer.class)
 @JsonSerialize(using = PublicKeyJsonSerializer.class)
-public class PublicKey extends AbstractCLType {
+public class PublicKey extends AbstractCLType implements HasTag {
 
     /** Either 32 or 33 bytes (compressed) depending upon ECC type */
     private final byte[] bytes;
@@ -35,5 +35,10 @@ public class PublicKey extends AbstractCLType {
     @Override
     public String toString() {
         return toHex(bytes);
+    }
+
+    @Override
+    public int getTag() {
+        return 1;
     }
 }

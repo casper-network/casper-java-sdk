@@ -2,12 +2,11 @@ package com.casper.sdk.service.serialization.domain;
 
 import com.casper.sdk.domain.DeployHeader;
 import com.casper.sdk.domain.Digest;
-import com.casper.sdk.service.serialization.util.ByteArrayBuilder;
-import com.casper.sdk.service.serialization.util.ByteUtils;
+import com.casper.sdk.domain.PublicKey;
 
 import java.util.List;
 
-import static com.casper.sdk.service.serialization.util.ByteUtils.toCLStringBytes;
+import static com.casper.sdk.service.serialization.util.ByteUtils.*;
 
 /**
  * The byte serializer for {@link DeployHeader} domain objects.
@@ -23,16 +22,15 @@ class DeployHeaderByteSerializer implements ByteSerializer<DeployHeader> {
     @Override
     public byte[] toBytes(final DeployHeader source) {
 
-        final ByteArrayBuilder builder = new ByteArrayBuilder();
-
-        builder.append(source.getAccount().getBytes());
-        builder.append(ByteUtils.toU64(source.getTtlLong()));
-        builder.append(ByteUtils.toU64(source.getGasPrice()));
-        builder.append(factory.getByteSerializerByType(Digest.class).toBytes(source.getBodyHash()));
-        builder.append(factory.getByteSerializerByType(List.class).toBytes(source.getDependencies()));
-        builder.append(toCLStringBytes(source.getChainName()));
-
-        return builder.toByteArray();
+        return concat(
+                factory.getByteSerializerByType(PublicKey.class).toBytes(source.getAccount()),
+                toU64(source.getTimestamp()),
+                toU64(source.getTtl()),
+                toU64(source.getGasPrice()),
+                factory.getByteSerializerByType(Digest.class).toBytes(source.getBodyHash()),
+                factory.getByteSerializerByType(List.class).toBytes(source.getDependencies()),
+                toCLStringBytes(source.getChainName())
+        );
     }
 
     @Override

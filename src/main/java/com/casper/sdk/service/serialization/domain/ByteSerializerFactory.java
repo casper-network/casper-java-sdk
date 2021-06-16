@@ -14,13 +14,14 @@ public class ByteSerializerFactory {
 
     public ByteSerializerFactory() {
         register(new CLValueByteSerializer());
+        register(new CollectionByteSerializer(this));
         register(new DeployApprovalByteSerializer());
         register(new DeployByteSerializer(this));
         register(new DeployExecutableByteSerializer(this));
         register(new DeployHeaderByteSerializer(this));
         register(new DeployNamedArgByteSerializer());
         register(new DigestByteSerializer());
-        register(new CollectionByteSerializer(this));
+        register(new PublicKeyByteSerializer());
     }
 
     /**

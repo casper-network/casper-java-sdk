@@ -8,6 +8,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -50,14 +54,14 @@ class DeployHeaderJsonDeserializerTest {
 
     @Test
     void testParseDeployHeaderTimestampFromJson() {
-        assertThat(deployHeader.getTimestamp(), is(notNullValue(String.class)));
-        assertThat(deployHeader.getTimestamp(), is("2021-05-04T14:20:35.104Z"));
+        final OffsetDateTime offsetDateTime = OffsetDateTime.parse("2021-05-04T14:20:35.104Z");
+        final long epochMilli = offsetDateTime.toInstant().toEpochMilli();
+        assertThat(deployHeader.getTimestamp(), is(epochMilli));
     }
 
     @Test
     void testParseDeployHeaderTtlFromJson() {
-        assertThat(deployHeader.getTtl(), is(notNullValue(String.class)));
-        assertThat(deployHeader.getTtl(), is("30m"));
+        assertThat(deployHeader.getTtl(), is(1800000L));
     }
 
     @Test

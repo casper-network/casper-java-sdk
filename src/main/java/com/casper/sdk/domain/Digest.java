@@ -1,6 +1,7 @@
 package com.casper.sdk.domain;
 
 import com.casper.sdk.json.DigestJsonJSerializer;
+import com.casper.sdk.service.serialization.util.ByteUtils;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.util.Objects;
@@ -22,6 +23,10 @@ public class Digest {
             throw new IllegalArgumentException("Hash must be 32 bytes long: " + hash);
         }
         this.hash = hash;
+    }
+
+    public Digest(final byte[] hash) {
+        this(ByteUtils.encodeHexString(hash));
     }
 
     public String getHash() {

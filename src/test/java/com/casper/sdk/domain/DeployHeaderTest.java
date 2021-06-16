@@ -37,12 +37,12 @@ class DeployHeaderTest {
 
     @Test
     void getTimestamp() {
-        assertThat(deployHeader.getTimestamp(), is("2021-05-04T14:20:35.104Z"));
+        assertThat(deployHeader.getTimestamp(), is(1620138035104L));
     }
 
     @Test
     void getTtl() {
-        assertThat(deployHeader.getTtl(), is("30m"));
+        assertThat(deployHeader.getTtl(), is(1800000L));
     }
 
     @Test

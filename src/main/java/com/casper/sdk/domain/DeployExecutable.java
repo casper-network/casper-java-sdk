@@ -12,7 +12,7 @@ import java.util.List;
  */
 @JsonDeserialize(using = DeployExecutableJsonDeserializer.class)
 @JsonSerialize(using = DeployExecutableJsonSerializer.class)
-public abstract class DeployExecutable {
+public abstract class DeployExecutable implements HasTag {
 
     /** Raw WASM payload. */
     @CLName("module_bytes")
@@ -44,8 +44,5 @@ public abstract class DeployExecutable {
         }
         return null;
     }
-
-    public abstract int getTag();
-
 
 }

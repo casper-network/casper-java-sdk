@@ -42,7 +42,7 @@ public class DeployJsonDeserializerTest {
         assertThat(deploy.getHeader(), is(notNullValue(DeployHeader.class)));
 
         assertThat(deploy.getHeader().getAccount().toHex(), is("017f747b67bd3fe63c2a736739dfe40156d622347346e70f68f51c178a75ce5537"));
-        assertThat(deploy.getHeader().getTimestamp(), is("2021-05-04T14:20:35.104Z"));
+        assertThat(deploy.getHeader().getTimestamp(), is(1620138035104L));
         assertThat(deploy.getHeader().getBodyHash().getHash(), is("f2e0782bba4a0a9663cafc7d707fd4a74421bc5bfef4e368b7e8f38dfab87db8"));
         assertThat(deploy.getHeader().getGasPrice(), is(2));
         assertThat(deploy.getHeader().getDependencies().size(), is(2));
