@@ -72,10 +72,14 @@ public class DeployHeader {
             } else {
                 unitIndex = strTtl.length() - 1;
             }
+
             final String unit = strTtl.substring(unitIndex);
+
             final long value = Long.parseLong(strTtl.substring(0, unitIndex));
 
             final long multiplier = switch (unit) {
+                case "d" -> 24 * 60L * 60L * 1000L;
+                case "h" -> 60L * 60L * 1000L;
                 case "m" -> 60L * 1000L;
                 case "s" -> 1000L;
                 default -> 1L;
