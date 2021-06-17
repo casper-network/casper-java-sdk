@@ -1,17 +1,18 @@
 package com.casper.sdk.domain;
 
-import org.junit.jupiter.api.Test;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.math.BigInteger;
-import java.time.Instant;
-
 import static com.casper.sdk.service.serialization.util.ByteUtils.concat;
 import static com.casper.sdk.service.serialization.util.ByteUtils.decodeHex;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
+
+import org.junit.jupiter.api.Test;
+import com.casper.sdk.service.HashService;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.math.BigInteger;
+import java.time.Instant;
 
 /**
  * Unit tests for the {@link DeployUtil} class
@@ -159,17 +160,37 @@ class DeployUtilTest {
         assertThat(bytes, is(expected));
     }
 
+    @Test
+    void testBlakeBodyHash(){
+
+        final byte[] serialisedBody = new byte[]{
+             0, 0, 0, 0, 0,1, 0, 0, 0, 6, 0,0, 0, 97, 109, 111, 117, 110, 116, 7, 0, 0, 0, 6, 0, (byte) 160, 114, 78, 24, 9, 8, 5, 3, 0, 0, 0, 6, 0, 0, 0,97, 109,
+             111, 117,110, 116, 2, 0,0, 0, 1, 10,8, 6, 0, 0, 0, 116, 97, 114, 103, 101,116,32, 0, 0, 0, 104, 72, 61, (byte) 232, 75, 88, (byte)
+             152, (byte) 144, (byte) 245, 116, 27, (byte) 164, (byte) 179, 74, 119, 56, 71, 108, (byte) 218, 70, 56, 91, 58, (byte) 209, 28, (byte) 197, 32,
+             76, (byte) 241, 92, (byte) 163, (byte) 143, 15, 32, 0, 0, 0, 2, 0,
+             0, 0, 105, 100, 9, 0, 0, 0, 1, 34, 0, 0, 0, 0, 0, 0, 0, 13,5
+        };
+
+        final byte[] expected = new byte[]{
+             0, 58, (byte) 203, (byte) 148, 42, 0, (byte) 131, 111, (byte) 223, 18, 26, 72, 59, (byte) 253, (byte) 158,
+                (byte) 137, 83, 58, (byte) 211, 62, 63, 47,87, 49, 6, 74, (byte) 232, (byte) 177, 101, (byte) 177, (byte) 155, (byte) 173
+        };
+
+        final byte[] result = decodeHex(HashService.getInstance().get32ByteHash((serialisedBody)));
+
+        assertThat(result, is(expected));
+
+    }
+
 
     @Test
     void testDeployBodyHash() throws IOException {
-
 
         final InputStream in = getClass().getResource(DEPLOY_JSON_PATH).openStream();
         final Deploy deploy = DeployUtil.fromJson(in);
         final Digest expected = deploy.getHeader().getBodyHash();
 
         final Digest bodyHash = DeployUtil.makeBodyHash(deploy.getPayment(), deploy.getSession());
-
 
         assertThat(bodyHash.getHash(), is(expected.getHash()));
     }
