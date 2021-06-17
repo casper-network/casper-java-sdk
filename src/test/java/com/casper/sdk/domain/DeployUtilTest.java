@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
 import java.time.Instant;
+import java.util.Set;
 
 /**
  * Unit tests for the {@link DeployUtil} class
@@ -31,7 +32,6 @@ class DeployUtilTest {
         final byte[] expectedIdBytes = decodeHex("01e703000000000000");
         final byte[] expectedTargetBytes = decodeHex("0101010101010101010101010101010101010101010101010101010101010101");
         final byte[] expectedAmountBytes = decodeHex("05005550b405");
-
 
         final Transfer transfer = DeployUtil.makeTransfer(new BigInteger("24500000000"),
                 new PublicKey("0101010101010101010101010101010101010101010101010101010101010101"),
@@ -102,7 +102,7 @@ class DeployUtilTest {
     }
 
     @Test
-    void testSerializeBody() throws IOException {
+    void serializeBody() throws IOException {
 
         final InputStream in = getClass().getResource(DEPLOY_TS_JSON_PATH).openStream();
         final Deploy deploy = DeployUtil.fromJson(in);
@@ -184,7 +184,39 @@ class DeployUtilTest {
 
 
     @Test
-    void testDeployBodyHash() throws IOException {
+    void serializeApprovals() {
+
+        final Set<DeployApproval> approvals = Set.of(
+                new DeployApproval(
+                        new PublicKey("017f747b67bd3fe63c2a736739dfe40156d622347346e70f68f51c178a75ce5537"),
+                        new Signature("0195a68b1a05731b7014e580b4c67a506e0339a7fffeaded9f24eb2e7f78b96bdd900b9be8ca33e4552a9a619dc4fc5e4e3a9f74a4b0537c14a5a8007d62a5dc06")
+                )
+        );
+
+        final byte[] expected = {1, (byte) 0, (byte) 0, (byte) 0, (byte) 1, (byte) 127, (byte) 116, (byte) 123,
+                (byte) 103, (byte) 189, (byte) 63, (byte) 230, (byte) 60, (byte) 42, (byte) 115, (byte) 103,
+                (byte) 57, (byte) 223, (byte) 228, (byte) 1, (byte) 86, (byte) 214, (byte) 34, (byte) 52,
+                (byte) 115, (byte) 70, (byte) 231, (byte) 15, (byte) 104, (byte) 245, (byte) 28, (byte) 23,
+                (byte) 138, (byte) 117, (byte) 206, (byte) 85, (byte) 55, (byte) 1, (byte) 149, (byte) 166,
+                (byte) 139, (byte) 26, (byte) 5, (byte) 115, (byte) 27, (byte) 112, (byte) 20, (byte) 229,
+                (byte) 128, (byte) 180, (byte) 198, (byte) 122, (byte) 80, (byte) 110, (byte) 3, (byte) 57,
+                (byte) 167, (byte) 255, (byte) 254, (byte) 173, (byte) 237, (byte) 159, (byte) 36, (byte) 235,
+                (byte) 46, (byte) 127, (byte) 120, (byte) 185, (byte) 107, (byte) 221, (byte) 144, (byte) 11,
+                (byte) 155, (byte) 232, (byte) 202, (byte) 51, (byte) 228, (byte) 85, (byte) 42, (byte) 154,
+                (byte) 97, (byte) 157, (byte) 196, (byte) 252, (byte) 94, (byte) 78, (byte) 58, (byte) 159,
+                (byte) 116, (byte) 164, (byte) 176, (byte) 83, (byte) 124, (byte) 20, (byte) 165, (byte) 168,
+                (byte) 0, (byte) 125, (byte) 98, (byte) 165, (byte) 220, (byte) 6};
+
+        assertThat(expected.length, is(102));
+
+        final byte[] bytes = DeployUtil.serializeApprovals(approvals);
+        assertThat(bytes, is(expected));
+
+
+    }
+
+    @Test
+    void deployBodyHash() throws IOException {
 
         final InputStream in = getClass().getResource(DEPLOY_JSON_PATH).openStream();
         final Deploy deploy = DeployUtil.fromJson(in);
@@ -196,7 +228,7 @@ class DeployUtilTest {
     }
 
     @Test
-    void testDeployToBytes() throws IOException {
+    void deployToBytes() throws IOException {
 
         final InputStream in = getClass().getResource(DEPLOY_JSON_PATH).openStream();
         final Deploy deploy = DeployUtil.fromJson(in);

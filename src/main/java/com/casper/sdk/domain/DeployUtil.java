@@ -6,12 +6,16 @@ import com.casper.sdk.service.serialization.domain.ByteSerializerFactory;
 import com.casper.sdk.service.serialization.util.ByteUtils;
 import com.casper.sdk.service.serialization.util.NumberUtils;
 import org.apache.commons.lang3.NotImplementedException;
+import org.apache.commons.lang3.time.DurationFormatUtils;
+import org.apache.commons.lang3.time.DurationUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
+import java.time.Duration;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Util methods for making Deploy message
@@ -22,6 +26,14 @@ public class DeployUtil {
     private static final ByteSerializerFactory serializerFactory = new ByteSerializerFactory();
     private static final JsonConversionService jsonService = new JsonConversionService();
 
+    /**
+     * Creates a new unsigned Deploy message
+     *
+     * @param deployParams the deploy parameters
+     * @param session      the session
+     * @param payment      the payment
+     * @return a new deploy
+     */
     public static Deploy makeDeploy(final DeployParams deployParams,
                                     final DeployExecutable session,
                                     final DeployExecutable payment) {
@@ -100,7 +112,11 @@ public class DeployUtil {
     }
 
     private static String toTtlStr(long ttl) {
-        return (ttl / 60000) + "m";
+        return  Duration.ofMillis(ttl)
+                .toString()
+                .substring(2)
+                .replaceAll("(\\d[HMS])(?!$)", "$1 ")
+                .toLowerCase();
     }
 
     private static byte[] serializedHeader(final DeployHeader header) {
@@ -111,5 +127,7 @@ public class DeployUtil {
         return ByteUtils.concat(toBytes(payment), toBytes(session));
     }
 
-
+     static byte[] serializeApprovals(final Set<DeployApproval> approvals) {
+        return serializerFactory.getByteSerializerByType(Set.class).toBytes(approvals);
+    }
 }

@@ -60,7 +60,7 @@ public class CasperSdk {
     }
 
     /**
-     * Converts a JSON object to a {@link Deploy}
+     * Converts a JSON object to a {@link Deploy}.
      *
      * @param jsonStream the input stream to read the JSON object from
      * @return a new {@link Deploy}
@@ -71,7 +71,7 @@ public class CasperSdk {
     }
 
     /**
-     * Converts a JSON object to a {@link Deploy}
+     * Converts a JSON object to a {@link Deploy}.
      *
      * @param json the input JSON to read t
      * @return a new {@link Deploy}
@@ -83,7 +83,7 @@ public class CasperSdk {
 
 
     /**
-     * Construct the deploy for transfer purpose
+     * Construct new unsigned deploy for transfer purpose.
      *
      * @param deployParams the deployment parameters
      * @param session      the  session/transfer
@@ -99,19 +99,27 @@ public class CasperSdk {
         }
     }
 
+    /**
+     * Construct new unsigned deploy.
+     *
+     * @param deployParams the deployment parameters
+     * @param session      the  session/transfer
+     * @param payment      the payment
+     */
     public Deploy makeDeploy(final DeployParams deployParams,
                              final DeployExecutable session,
                              final DeployExecutable payment) {
         return DeployUtil.makeDeploy(deployParams, session, payment);
     }
 
-
     /**
-     * Sign the deploy with the specified signKeyPair
-     * @param deploy unsigned Deploy object
+     * Sign the deploy with the specified signKeyPair.
+     *
+     * @param deploy      unsigned Deploy object
      * @param signKeyPair the keypair to sign the Deploy object
+     * @return the signed deploy
      */
-    public Deploy signDeploy(final  Deploy deploy, AsymmetricKey signKeyPair) {
+    public Deploy signDeploy(final Deploy deploy, final AsymmetricKey signKeyPair) {
         return DeployUtil.signDeploy(deploy, signKeyPair);
     }
 
