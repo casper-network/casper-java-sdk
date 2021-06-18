@@ -90,8 +90,8 @@ public class HashService {
 
         try {
             final MessageDigest digest = MessageDigest.getInstance(Blake2b.BLAKE2_B_256);
-            digest.update(new byte[1]);
-            digest.update(in);
+
+            digest.update(in, 0, in.length);
             // Only use 32 bytes
             final byte[] out = new byte[32];
             digest.digest(out, 0, 32);
