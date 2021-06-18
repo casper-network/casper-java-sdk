@@ -25,4 +25,8 @@ public class AsymmetricKey {
     public KeyAlgorithm getSignatureAlgorithm() {
         return keyAlgorithm;
     }
+
+    public byte [] sign(Digest hash) {
+        return null;
+    }
 }

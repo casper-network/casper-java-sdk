@@ -1,17 +1,17 @@
 package com.casper.sdk.domain;
 
+import com.casper.sdk.exceptions.HashException;
 import com.casper.sdk.json.JsonConversionService;
 import com.casper.sdk.service.HashService;
 import com.casper.sdk.service.serialization.domain.ByteSerializerFactory;
 import com.casper.sdk.service.serialization.util.ByteUtils;
 import com.casper.sdk.service.serialization.util.NumberUtils;
-import org.apache.commons.lang3.NotImplementedException;
-import org.apache.commons.lang3.time.DurationFormatUtils;
-import org.apache.commons.lang3.time.DurationUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
+import java.security.KeyPairGenerator;
+import java.security.NoSuchAlgorithmException;
 import java.time.Duration;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -103,16 +103,58 @@ public class DeployUtil {
         return serializerFactory.getByteSerializer(deployExecutable).toBytes(deployExecutable);
     }
 
+
     public static Deploy signDeploy(final Deploy deploy, final AsymmetricKey signKeyPair) {
-        throw new NotImplementedException("signDeploy not yet implemented");
+        //   throw new NotImplementedException("signDeploy not yet implemented");
+
+
+
+        /*
+
+        const approval = new Approval();
+  const signature = signingKey.sign(deploy.hash);
+  approval.signer = signingKey.accountHex();
+  switch (signingKey.signatureAlgorithm) {
+    case SignatureAlgorithm.Ed25519:
+      approval.signature = Keys.Ed25519.accountHex(signature);
+      break;
+    case SignatureAlgorithm.Secp256K1:
+      approval.signature = Keys.Secp256K1.accountHex(signature);
+      break;
+  }
+  deploy.approvals.push(approval);
+
+         */
+
+        final byte[] signature = signKeyPair.sign(deploy.getHash());
+         byte[] signBytes = new byte[0];
+
+        if (signKeyPair.getSignatureAlgorithm() == KeyAlgorithm.SECP256K1) {
+            // 01 + encodeBase16
+            signBytes = ByteUtils.concat(
+                    new byte[]{1},
+                    signature
+            );
+        } else if (signKeyPair.getSignatureAlgorithm() == KeyAlgorithm.ED25519) {
+            // 02 + encodeBase16
+            signBytes = ByteUtils.concat(
+                    new byte[]{2},
+                    signature
+            );
+        }
+
+        deploy.getApprovals().add(new DeployApproval(signKeyPair.getPublicKey(), new Signature(signBytes)));
+        return deploy;
+
     }
+
 
     public static byte[] toBytes(final Deploy deploy) {
         return serializerFactory.getByteSerializer(deploy).toBytes(deploy);
     }
 
     private static String toTtlStr(long ttl) {
-        return  Duration.ofMillis(ttl)
+        return Duration.ofMillis(ttl)
                 .toString()
                 .substring(2)
                 .replaceAll("(\\d[HMS])(?!$)", "$1 ")
@@ -127,7 +169,7 @@ public class DeployUtil {
         return ByteUtils.concat(toBytes(payment), toBytes(session));
     }
 
-     static byte[] serializeApprovals(final Set<DeployApproval> approvals) {
+    static byte[] serializeApprovals(final Set<DeployApproval> approvals) {
         return serializerFactory.getByteSerializerByType(Set.class).toBytes(approvals);
     }
 }

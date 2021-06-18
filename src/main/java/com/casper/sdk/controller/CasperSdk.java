@@ -122,5 +122,4 @@ public class CasperSdk {
     public Deploy signDeploy(final Deploy deploy, final AsymmetricKey signKeyPair) {
         return DeployUtil.signDeploy(deploy, signKeyPair);
     }
-
 }

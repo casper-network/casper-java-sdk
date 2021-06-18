@@ -2,6 +2,7 @@ package com.casper.sdk.domain;
 
 import org.junit.jupiter.api.Test;
 
+import javax.xml.crypto.dsig.keyinfo.KeyValue;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
@@ -187,8 +188,6 @@ class DeployUtilTest {
 
         final byte[] bytes = DeployUtil.serializeApprovals(approvals);
         assertThat(bytes, is(expected));
-
-
     }
 
     @Test
@@ -216,5 +215,32 @@ class DeployUtilTest {
 
         // TODO complete byte serialization
         //  assertThat(actual, is(expected));
+    }
+
+    @Test
+    void signDeploy() {
+
+        final Deploy deploy = DeployUtil.makeDeploy(
+
+                new DeployParams(
+                        new PublicKey("017f747b67bd3fe63c2a736739dfe40156d622347346e70f68f51c178a75ce5537"),
+                        "mainnet",
+                        1,
+                        Instant.now().toEpochMilli(),
+                        DeployParams.DEFAULT_TTL,
+                        null),
+
+                DeployUtil.makeTransfer(new BigInteger("24500000000"),
+                        new PublicKey("0101010101010101010101010101010101010101010101010101010101010101"),
+                        new BigInteger("999")),
+
+                DeployUtil.standardPayment(new BigInteger("1000000000"))
+        );
+
+        assertThat(deploy.getApprovals().size(), is(0));
+
+        final Deploy signedDeploy = DeployUtil.signDeploy(deploy, new AsymmetricKey(deploy.getHeader().getAccount(), null , KeyAlgorithm.ED25519));
+
+        assertThat(signedDeploy.getApprovals().size(), is(1));
     }
 }

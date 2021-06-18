@@ -16,11 +16,15 @@ public class DeployHeader {
 
     /** Public key of account dispatching deploy to a node. */
     private final PublicKey account;
-    // TODO convert to date
-    /** Timestamp at point of deploy creation as an ISO8601 date time with timezone */
+    /**
+     * Timestamp at point of deploy creation as an ISO8601 date time  converted to  milliseconds since the UNIX
+     * epoch.with UTC timezone
+     */
     private final long timestamp;
-    // TODO convert to long in milliseconds?
-    /** Time interval after which the deploy will no longer be considered for processing by a node. eg 3m */
+    /**
+     * The Time to live is defined as the amount of time for which deploy is considered valid. The ttl serializes in the
+     * same manner as the timestamp.
+     */
     private final long ttl;
     @JsonProperty("gas_price")
     private final Integer gasPrice;
