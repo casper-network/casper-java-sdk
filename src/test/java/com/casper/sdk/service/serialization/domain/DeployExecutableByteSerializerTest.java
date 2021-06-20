@@ -73,114 +73,31 @@ class DeployExecutableByteSerializerTest {
     @Test
     void sessionToBytes() {
 
-        byte[] expected = {
-                5, // Transfer Type 5
-                3, // Number of parameters
-                0,
-                0,
-                0,
-                6, // 'amount' length
-                0,
-                0,
-                0,
-                97,     // a
-                109,    // m
-                111,    // o
-                117,    // u
-                110,    // n
-                116,    // t
-                6,      // length of value
-                0,
-                0,
-                0,
-                5,      // value
-                0,
-                116,
-                59,
-                (byte) 164,
-                11,
-                8,
-                6,
-                0,
-                0,
-                0,
-                116,
-                97,
-                114,
-                103,
-                101,
-                116,
-                32,
-                0,
-                0,
-                0,
-                21,
-                65,
-                86,
-                107,
-                (byte) 218,
-                (byte) 211,
-                (byte) 163,
-                (byte) 207,
-                (byte) 169,
-                (byte) 235,
-                76,
-                (byte) 186,
-                61,
-                (byte) 207,
-                51,
-                (byte) 238,
-                101,
-                (byte) 131,
-                (byte) 224,
-                115,
-                58,
-                (byte) 228,
-                (byte) 178,
-                (byte) 204,
-                (byte) 223,
-                (byte) 233,
-                44,
-                (byte) 209,
-                (byte) 189,
-                (byte) 146,
-                (byte) 238,
-                22,
-                15,
-                32,  // Length of byte array
-                0,
-                0,
-                0,
-                2,   // Length of ID ?
-                0,
-                0,
-                0,
-                105,  // 'i'
-                100,  // 'd'
-                9,
-                0,
-                0,
-                0,
-                1,    // OPTION_SOME
-                (byte) 160,
-                (byte) 134,
-                1,
-                0,
-                0,
-                0,
-                0,
-                0,
-                13,     // Option type
-                5       // U64 type
+        final byte[] recipientPublicKey = {
+                (byte) 125, (byte) 92, (byte) 32, (byte) 204, (byte) 192, (byte) 151, (byte) 192, (byte) 180,
+                (byte) 177, (byte) 137, (byte) 29, (byte) 12, (byte) 249, (byte) 243, (byte) 120, (byte) 157,
+                (byte) 169, (byte) 117, (byte) 243, (byte) 50, (byte) 243, (byte) 216, (byte) 211, (byte) 229,
+                (byte) 42, (byte) 32, (byte) 235, (byte) 210, (byte) 78, (byte) 4, (byte) 71, (byte) 203
         };
 
+        byte[] expected = {
+                (byte) 5, (byte) 3, (byte) 0, (byte) 0, (byte) 0, (byte) 6, (byte) 0, (byte) 0, (byte) 0, (byte) 97,
+                (byte) 109, (byte) 111, (byte) 117, (byte) 110, (byte) 116, (byte) 2, (byte) 0, (byte) 0, (byte) 0,
+                (byte) 1, (byte) 10, (byte) 8, (byte) 6, (byte) 0, (byte) 0, (byte) 0, (byte) 116, (byte) 97,
+                (byte) 114, (byte) 103, (byte) 101, (byte) 116, (byte) 32, (byte) 0, (byte) 0, (byte) 0, (byte) 79,
+                (byte) 45, (byte) 171, (byte) 75, (byte) 22, (byte) 4, (byte) 42, (byte) 147, (byte) 125, (byte) 141,
+                (byte) 62, (byte) 29, (byte) 219, (byte) 28, (byte) 25, (byte) 6, (byte) 242, (byte) 133, (byte) 95,
+                (byte) 152, (byte) 198, (byte) 69, (byte) 91, (byte) 217, (byte) 178, (byte) 254, (byte) 49, (byte) 128,
+                (byte) 218, (byte) 84, (byte) 153, (byte) 250, (byte) 15, (byte) 32, (byte) 0, (byte) 0, (byte) 0,
+                (byte) 2, (byte) 0, (byte) 0, (byte) 0, (byte) 105, (byte) 100, (byte) 9, (byte) 0, (byte) 0, (byte) 0,
+                (byte) 1, (byte) 34, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 13,
+                (byte) 5
 
+        };
 
-        // target bytes 'e6454d6bc07d32a178298286e589029b083da8cd718ab3d8dbdab1cfd018fb79'
-
-       final Transfer transfer = DeployUtil.newTransfer(new BigInteger("50000000000"),
-                new PublicKey("01541566bdad3a3cfa9eb4cba3dcf33ee6583e0733ae4b2ccdfe92cd1bd92ee160"),
-                100000L);
+        final Transfer transfer = DeployUtil.newTransfer(10,
+                new PublicKey(recipientPublicKey, KeyAlgorithm.ED25519),
+                34);
 
         final byte[] actual = serializer.toBytes(transfer);
 
