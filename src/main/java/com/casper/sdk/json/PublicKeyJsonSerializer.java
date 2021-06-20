@@ -17,7 +17,7 @@ public class PublicKeyJsonSerializer extends JsonSerializer<PublicKey> {
                           final JsonGenerator gen,
                           final SerializerProvider serializers) throws IOException {
         if (value != null && value.getBytes() != null) {
-            gen.writeString(value.toHex());
+            gen.writeString(value.toAccountHex());
         }
     }
 }

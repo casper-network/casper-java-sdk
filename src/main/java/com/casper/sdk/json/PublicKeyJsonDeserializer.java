@@ -13,7 +13,7 @@ import java.io.IOException;
 public class PublicKeyJsonDeserializer extends JsonDeserializer<PublicKey> {
 
     @Override
-    public PublicKey deserialize(final JsonParser p, final DeserializationContext context) throws IOException {
+    public PublicKey deserialize(final JsonParser p, final DeserializationContext context) throws IOException {//
         return new PublicKey(p.getText());
     }
 }

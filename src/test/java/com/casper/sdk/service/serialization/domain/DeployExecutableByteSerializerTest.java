@@ -174,8 +174,12 @@ class DeployExecutableByteSerializerTest {
                 5       // U64 type
         };
 
-       final Transfer transfer = DeployUtil.makeTransfer(new BigInteger("50000000000"),
-                new PublicKey("1541566bdad3a3cfa9eb4cba3dcf33ee6583e0733ae4b2ccdfe92cd1bd92ee16"),
+
+
+        // target bytes 'e6454d6bc07d32a178298286e589029b083da8cd718ab3d8dbdab1cfd018fb79'
+
+       final Transfer transfer = DeployUtil.newTransfer(new BigInteger("50000000000"),
+                new PublicKey("01541566bdad3a3cfa9eb4cba3dcf33ee6583e0733ae4b2ccdfe92cd1bd92ee160"),
                 100000L);
 
         final byte[] actual = serializer.toBytes(transfer);

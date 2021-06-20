@@ -52,7 +52,7 @@ public class ByteUtils {
         try {
             return Hex.decodeHex(hex.toCharArray());
         } catch (DecoderException e) {
-            throw new ConversionException("Unable to decode: \"" + hex + "\"", e);
+            throw new ConversionException("Unable to decode: \"" + hex + "\" length " + hex.length(), e);
         }
     }
 

@@ -1,5 +1,6 @@
 package com.casper.sdk.service.serialization.domain;
 
+import com.casper.sdk.domain.KeyAlgorithm;
 import com.casper.sdk.domain.PublicKey;
 import com.casper.sdk.service.serialization.util.ByteUtils;
 import org.hamcrest.core.Is;
@@ -27,7 +28,7 @@ class PublicKeyByteSerializerTest {
 
         final byte[] expected = ByteUtils.concat(new byte[]{1}, key);
 
-        final byte[] bytes = serializer.toBytes(new PublicKey(key));
+        final byte[] bytes = serializer.toBytes(new PublicKey(key, KeyAlgorithm.ED25519));
         assertThat(bytes, Is.is(expected));
 
     }

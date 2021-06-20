@@ -27,6 +27,15 @@ public enum KeyAlgorithm {
         return map.get(pageType);
     }
 
+    public static KeyAlgorithm fromId(char id) {
+        if (id == 1 || id == '1') {
+            return ED25519;
+        } else if (id == 2 || id == '2') {
+            return SECP256K1;
+        }
+        throw new IllegalArgumentException("Unknown algorithm ID " + id);
+    }
+
     public int getValue() {
         return value;
     }

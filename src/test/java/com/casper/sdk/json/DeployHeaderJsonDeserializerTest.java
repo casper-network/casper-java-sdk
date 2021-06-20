@@ -2,16 +2,14 @@ package com.casper.sdk.json;
 
 import com.casper.sdk.domain.DeployHeader;
 import com.casper.sdk.domain.Digest;
+import com.casper.sdk.domain.KeyAlgorithm;
 import com.casper.sdk.domain.PublicKey;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -49,7 +47,8 @@ class DeployHeaderJsonDeserializerTest {
     void testParseDeployHeaderAccountFromJson() {
         assertThat(deployHeader, is(notNullValue()));
         assertThat(deployHeader.getAccount(), is(notNullValue(PublicKey.class)));
-        assertThat(PublicKey.toHex(deployHeader.getAccount().getBytes()), is("017f747b67bd3fe63c2a736739dfe40156d622347346e70f68f51c178a75ce5537"));
+        assertThat(PublicKey.toHex(deployHeader.getAccount().getBytes()), is("7f747b67bd3fe63c2a736739dfe40156d622347346e70f68f51c178a75ce5537"));
+        assertThat(deployHeader.getAccount().getKeyAlgorithm(), is(KeyAlgorithm.ED25519));
     }
 
     @Test

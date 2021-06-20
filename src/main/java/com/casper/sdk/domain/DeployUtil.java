@@ -10,7 +10,6 @@ import com.casper.sdk.service.serialization.util.NumberUtils;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
-import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.time.Duration;
 import java.util.LinkedHashSet;
@@ -60,15 +59,23 @@ public class DeployUtil {
         return new Digest(hashService.get32ByteHash(serializedBody));
     }
 
-    public static Transfer makeTransfer(final Number amount, final PublicKey target, final Number id) {
+    public static Transfer newTransfer(final Number amount, final PublicKey target, final Number id) {
 
         final byte[] amountBytes = ByteUtils.toU512(amount);
 
         // Prefix the option bytes with OPTION_NONE or OPTION_SOME
         final byte[] idBytes = CLOptionValue.prefixOption(ByteUtils.toU64(id));
 
+        final String accountHash;
+        try {
+            final String accountKey = target.toAccountHex();
+            accountHash = hashService.getAccountHash(accountKey);
+        } catch (NoSuchAlgorithmException e) {
+            throw new HashException("error creating account hash for " + target, e);
+        }
+
         final DeployNamedArg amountArg = new DeployNamedArg("amount", new CLValue(amountBytes, CLType.U512, amount.toString()));
-        final DeployNamedArg targetArg = new DeployNamedArg("target", new CLValue(target.getBytes(), new CLByteArrayInfo(32), target.toString()));
+        final DeployNamedArg targetArg = new DeployNamedArg("target", new CLValue(accountHash, new CLByteArrayInfo(32), target.toAccountHex()));
         final DeployNamedArg idArg = new DeployNamedArg("id", new CLOptionValue(idBytes, new CLOptionTypeInfo(new CLTypeInfo(CLType.U64)), id.toString()));
 
         return new Transfer(List.of(amountArg, targetArg, idArg));
@@ -108,7 +115,6 @@ public class DeployUtil {
         //   throw new NotImplementedException("signDeploy not yet implemented");
 
 
-
         /*
 
         const approval = new Approval();
@@ -127,7 +133,7 @@ public class DeployUtil {
          */
 
         final byte[] signature = signKeyPair.sign(deploy.getHash());
-         byte[] signBytes = new byte[0];
+        byte[] signBytes = new byte[0];
 
         if (signKeyPair.getSignatureAlgorithm() == KeyAlgorithm.SECP256K1) {
             // 01 + encodeBase16
@@ -143,7 +149,7 @@ public class DeployUtil {
             );
         }
 
-        deploy.getApprovals().add(new DeployApproval(signKeyPair.getPublicKey(), new Signature(signBytes)));
+        deploy.getApprovals().add(new DeployApproval(signKeyPair.getPublicKey(), new Signature(signBytes, signKeyPair.getSignatureAlgorithm())));
         return deploy;
 
     }
