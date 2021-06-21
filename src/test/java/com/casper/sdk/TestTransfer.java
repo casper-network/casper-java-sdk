@@ -1,7 +1,7 @@
 package com.casper.sdk;
 
-import org.junit.Test;
 import com.casper.sdk.service.TransferService;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
@@ -17,7 +17,6 @@ public class TestTransfer {
 
 
     }
-
 
 
 }

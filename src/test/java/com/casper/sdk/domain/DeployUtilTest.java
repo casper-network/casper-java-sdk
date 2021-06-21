@@ -9,6 +9,8 @@ import java.math.BigInteger;
 import java.time.Instant;
 import java.util.Set;
 
+import static com.casper.sdk.domain.DeployUtil.makeBodyHash;
+import static com.casper.sdk.domain.DeployUtil.toTtlStr;
 import static com.casper.sdk.service.serialization.util.ByteUtils.decodeHex;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -93,7 +95,7 @@ class DeployUtilTest {
                         null),
 
                 DeployUtil.newTransfer(new BigInteger("24500000000"),
-                        new PublicKey("0101010101010101010101010101010101010101010101010101010101010101"),
+                        new PublicKey("010101010101010101010101010101010101010101010101010101010101010101", KeyAlgorithm.ED25519),
                         new BigInteger("999")),
 
                 DeployUtil.standardPayment(new BigInteger("1000000000"))
@@ -101,6 +103,8 @@ class DeployUtilTest {
 
         assertThat(deploy, is(notNullValue()));
     }
+
+    ;
 
     @Test
     void serializeBody() {
@@ -149,12 +153,10 @@ class DeployUtilTest {
                 (byte) 137, 83, 58, (byte) 211, 62, 63, 47, 87, 49, 6, 74, (byte) 232, (byte) 177, 101, (byte) 177, (byte) 155, (byte) 173
         };
 
-        final byte[] result = decodeHex(HashService.getInstance().get32ByteHash((serialisedBody)));
+        final byte[] result = HashService.getInstance().getHash((serialisedBody));
 
         assertThat(result, is(expected));
-
     }
-
 
     @Test
     void serializeApprovals() {
@@ -187,15 +189,31 @@ class DeployUtilTest {
     }
 
     @Test
-    void deployBodyHash() throws IOException {
+    void deployBodyHash() {
 
-        final InputStream in = getClass().getResource(DEPLOY_JSON_PATH).openStream();
-        final Deploy deploy = DeployUtil.fromJson(in);
-        final Digest expected = deploy.getHeader().getBodyHash();
+        byte[] recipientPublicKey = {
+                (byte) 235, (byte) 159, (byte) 193, (byte) 214, (byte) 147, (byte) 156, (byte) 230, (byte) 108, (byte) 231, (byte) 154, (byte) 91, (byte) 254, (byte) 196, (byte) 74, (byte) 129, (byte) 111, (byte) 56, (byte) 4, (byte) 210, (byte) 93, (byte) 83, (byte) 131, (byte) 105, (byte) 100, (byte) 246, (byte) 156, (byte) 136, (byte) 124, (byte) 42, (byte) 221, (byte) 33, (byte) 170,
+        };
 
-        final Digest bodyHash = DeployUtil.makeBodyHash(deploy.getPayment(), deploy.getSession());
+        // Serialized body
+        byte[] expectedBody = {
+                (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 1, (byte) 0, (byte) 0, (byte) 0, (byte) 6, (byte) 0, (byte) 0, (byte) 0, (byte) 97, (byte) 109, (byte) 111, (byte) 117, (byte) 110, (byte) 116, (byte) 7, (byte) 0, (byte) 0, (byte) 0, (byte) 6, (byte) 0, (byte) 160, (byte) 114, (byte) 78, (byte) 24, (byte) 9, (byte) 8, (byte) 5, (byte) 3, (byte) 0, (byte) 0, (byte) 0, (byte) 6, (byte) 0, (byte) 0, (byte) 0, (byte) 97, (byte) 109, (byte) 111, (byte) 117, (byte) 110, (byte) 116, (byte) 2, (byte) 0, (byte) 0, (byte) 0, (byte) 1, (byte) 10, (byte) 8, (byte) 6, (byte) 0, (byte) 0, (byte) 0, (byte) 116, (byte) 97, (byte) 114, (byte) 103, (byte) 101, (byte) 116, (byte) 32, (byte) 0, (byte) 0, (byte) 0, (byte) 99, (byte) 41, (byte) 251, (byte) 253, (byte) 212, (byte) 118, (byte) 159, (byte) 210, (byte) 7, (byte) 128, (byte) 63, (byte) 248, (byte) 225, (byte) 69, (byte) 147, (byte) 87, (byte) 252, (byte) 128, (byte) 237, (byte) 14, (byte) 65, (byte) 213, (byte) 17, (byte) 201, (byte) 35, (byte) 199, (byte) 13, (byte) 119, (byte) 245, (byte) 231, (byte) 99, (byte) 188, (byte) 15, (byte) 32, (byte) 0, (byte) 0, (byte) 0, (byte) 2, (byte) 0, (byte) 0, (byte) 0, (byte) 105, (byte) 100, (byte) 9, (byte) 0, (byte) 0, (byte) 0, (byte) 1, (byte) 34, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 13, (byte) 5,
+        };
 
-        assertThat(bodyHash.getHash(), is(expected.getHash()));
+        byte[] expectedHash = {
+                (byte) 135, (byte) 253, (byte) 178, (byte) 236, (byte) 71, (byte) 44, (byte) 78, (byte) 151, (byte) 136, (byte) 23, (byte) 159, (byte) 163, (byte) 28, (byte) 2, (byte) 90, (byte) 219, (byte) 44, (byte) 59, (byte) 218, (byte) 234, (byte) 197, (byte) 121, (byte) 219, (byte) 106, (byte) 118, (byte) 51, (byte) 252, (byte) 67, (byte) 229, (byte) 37, (byte) 160, (byte) 30
+        };
+
+        final ModuleBytes payment = DeployUtil.standardPayment(10000000000000L);
+        final Transfer transfer = DeployUtil.newTransfer(10, new PublicKey(recipientPublicKey, KeyAlgorithm.ED25519), 34);
+
+        byte[] body = DeployUtil.serializeBody(payment, transfer);
+
+        assertThat(body.length, is(expectedBody.length));
+        assertThat(body, is(expectedBody));
+
+        final Digest bodyHash = makeBodyHash(payment, transfer);
+        assertThat(bodyHash.getHash(), is(expectedHash));
     }
 
     @Test
@@ -210,7 +228,7 @@ class DeployUtilTest {
         final byte[] actual = DeployUtil.toBytes(deploy);
 
         // TODO complete byte serialization
-        //  assertThat(actual, is(expected));
+         assertThat(actual, is(expected));
     }
 
     @Test
@@ -238,5 +256,64 @@ class DeployUtilTest {
         final Deploy signedDeploy = DeployUtil.signDeploy(deploy, new AsymmetricKey(deploy.getHeader().getAccount(), null, KeyAlgorithm.ED25519));
 
         assertThat(signedDeploy.getApprovals().size(), is(1));
+    }
+
+    @Test
+    void serializedHeader() {
+
+        final byte[] recipientPublicKey = {
+                (byte) 38, (byte) 196, (byte) 123, (byte) 104, (byte) 234, (byte) 59, (byte) 216, (byte) 126,
+                (byte) 248, (byte) 48, (byte) 36, (byte) 109, (byte) 206, (byte) 174, (byte) 56, (byte) 122, (byte) 168,
+                (byte) 72, (byte) 9, (byte) 205, (byte) 92, (byte) 185, (byte) 153, (byte) 244, (byte) 14, (byte) 34,
+                (byte) 153, (byte) 237, (byte) 11, (byte) 178, (byte) 97, (byte) 27
+        };
+
+        final byte[] senderPublicKey = {
+                (byte) 207, (byte) 86, (byte) 252, (byte) 149, (byte) 20, (byte) 26, (byte) 76, (byte) 239, (byte) 118,
+                (byte) 242, (byte) 95, (byte) 25, (byte) 119, (byte) 198, (byte) 33, (byte) 97, (byte) 83, (byte) 247,
+                (byte) 251, (byte) 46, (byte) 43, (byte) 45, (byte) 237, (byte) 249, (byte) 117, (byte) 149, (byte) 84,
+                (byte) 212, (byte) 142, (byte) 223, (byte) 74, (byte) 248
+        };
+
+        final byte[] expectedHeaderBytes = {
+                (byte) 1, (byte) 207, (byte) 86, (byte) 252, (byte) 149, (byte) 20, (byte) 26, (byte) 76, (byte) 239,
+                (byte) 118, (byte) 242, (byte) 95, (byte) 25, (byte) 119, (byte) 198, (byte) 33, (byte) 97, (byte) 83,
+                (byte) 247, (byte) 251, (byte) 46, (byte) 43, (byte) 45, (byte) 237, (byte) 249, (byte) 117, (byte) 149,
+                (byte) 84, (byte) 212, (byte) 142, (byte) 223, (byte) 74, (byte) 248, (byte) 247, (byte) 57, (byte) 245,
+                (byte) 47, (byte) 122, (byte) 1, (byte) 0, (byte) 0, (byte) 64, (byte) 119, (byte) 27, (byte) 0,
+                (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 1, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0,
+                (byte) 0, (byte) 0, (byte) 125, (byte) 14, (byte) 3, (byte) 25, (byte) 160, (byte) 12, (byte) 27,
+                (byte) 147, (byte) 69, (byte) 246, (byte) 217, (byte) 172, (byte) 102, (byte) 79, (byte) 201, (byte) 49,
+                (byte) 237, (byte) 234, (byte) 170, (byte) 3, (byte) 213, (byte) 239, (byte) 216, (byte) 13, (byte) 241,
+                (byte) 44, (byte) 234, (byte) 129, (byte) 112, (byte) 219, (byte) 177, (byte) 28, (byte) 0, (byte) 0,
+                (byte) 0, (byte) 0, (byte) 12, (byte) 0, (byte) 0, (byte) 0, (byte) 116, (byte) 101, (byte) 115,
+                (byte) 116, (byte) 45, (byte) 110, (byte) 101, (byte) 116, (byte) 119, (byte) 111, (byte) 114,
+                (byte) 107
+        };
+
+        final DeployParams deployParams = new DeployParams(
+                new PublicKey(senderPublicKey, KeyAlgorithm.ED25519),
+                "test-network",
+                null,
+                1624302238199L,
+                null,
+                null
+        );
+
+        final ModuleBytes payment = DeployUtil.standardPayment(10000000000000L);
+        final Transfer session = DeployUtil.newTransfer(10, new PublicKey(recipientPublicKey, KeyAlgorithm.ED25519), 34);
+        final Digest bodyHash = makeBodyHash(payment, session);
+        final DeployHeader header = new DeployHeader(
+                deployParams.getAccountPublicKey(),
+                deployParams.getTimestamp(),
+                toTtlStr(deployParams.getTtl()),
+                deployParams.getGasPrice(),
+                bodyHash,
+                deployParams.getDependencies(),
+                deployParams.getChainName()
+        );
+        final byte[] serializedHeader = DeployUtil.serializedHeader(header);
+
+        assertThat(serializedHeader, is(expectedHeaderBytes));
     }
 }

@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.io.InputStream;
 
+import static com.casper.sdk.service.serialization.util.ByteUtils.decodeHex;
 import static com.jayway.jsonassert.impl.matcher.IsCollectionWithSize.hasSize;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -43,11 +44,11 @@ public class DeployJsonDeserializerTest {
         assertThat(deploy.getHeader().getAccount().toHex(), is("7f747b67bd3fe63c2a736739dfe40156d622347346e70f68f51c178a75ce5537"));
         assertThat(deploy.getHeader().getAccount().getKeyAlgorithm(), is(KeyAlgorithm.ED25519));
         assertThat(deploy.getHeader().getTimestamp(), is(1620138035104L));
-        assertThat(deploy.getHeader().getBodyHash().getHash(), is("f2e0782bba4a0a9663cafc7d707fd4a74421bc5bfef4e368b7e8f38dfab87db8"));
+        assertThat(deploy.getHeader().getBodyHash().getHash(), is(decodeHex("f2e0782bba4a0a9663cafc7d707fd4a74421bc5bfef4e368b7e8f38dfab87db8")));
         assertThat(deploy.getHeader().getGasPrice(), is(2));
         assertThat(deploy.getHeader().getDependencies().size(), is(2));
-        assertThat(deploy.getHeader().getDependencies().get(0).getHash(), is("0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f"));
-        assertThat(deploy.getHeader().getDependencies().get(1).getHash(), is("1010101010101010101010101010101010101010101010101010101010101010"));
+        assertThat(deploy.getHeader().getDependencies().get(0).getHash(), is(decodeHex("0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f")));
+        assertThat(deploy.getHeader().getDependencies().get(1).getHash(), is((decodeHex("1010101010101010101010101010101010101010101010101010101010101010"))));
         assertThat(deploy.getHeader().getChainName(), is("mainnet"));
     }
 

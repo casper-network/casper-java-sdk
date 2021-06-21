@@ -18,7 +18,7 @@ public class DigestJsonJSerializer extends JsonSerializer<Digest> {
                           final SerializerProvider serializers) throws IOException {
 
         if (value != null && value.getHash() != null) {
-            gen.writeString(value.getHash());
+            gen.writeString(value.toString());
         }
     }
 }

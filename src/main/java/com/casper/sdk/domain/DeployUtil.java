@@ -3,6 +3,7 @@ package com.casper.sdk.domain;
 import com.casper.sdk.exceptions.HashException;
 import com.casper.sdk.json.JsonConversionService;
 import com.casper.sdk.service.HashService;
+import com.casper.sdk.service.SigningService;
 import com.casper.sdk.service.serialization.domain.ByteSerializerFactory;
 import com.casper.sdk.service.serialization.util.ByteUtils;
 import com.casper.sdk.service.serialization.util.NumberUtils;
@@ -24,6 +25,7 @@ public class DeployUtil {
     private static final HashService hashService = HashService.getInstance();
     private static final ByteSerializerFactory serializerFactory = new ByteSerializerFactory();
     private static final JsonConversionService jsonService = new JsonConversionService();
+    private static final SigningService signingService = new SigningService();
 
     /**
      * Creates a new unsigned Deploy message
@@ -50,13 +52,14 @@ public class DeployUtil {
         );
 
         final byte[] serializedHeader = serializedHeader(header);
-        final Digest deployHash = new Digest(hashService.get32ByteHash(serializedHeader));
+        final Digest deployHash = new Digest(hashService.getHash(serializedHeader));
         return new Deploy(deployHash, header, payment, session, new LinkedHashSet<>());
     }
 
-    static Digest makeBodyHash(final DeployExecutable session, final DeployExecutable payment) {
+    static Digest makeBodyHash(final DeployExecutable payment, final DeployExecutable session) {
         final byte[] serializedBody = serializeBody(payment, session);
-        return new Digest(hashService.get32ByteHash(serializedBody));
+        final byte[] hash = hashService.getHash(serializedBody);
+        return new Digest(hash);
     }
 
     public static Transfer newTransfer(final Number amount, final PublicKey target, final Number id) {
@@ -112,46 +115,44 @@ public class DeployUtil {
 
 
     public static Deploy signDeploy(final Deploy deploy, final AsymmetricKey signKeyPair) {
-        //   throw new NotImplementedException("signDeploy not yet implemented");
-
 
         /*
+            export const signDeploy = (
+              deploy: Deploy,
+              signingKey: AsymmetricKey
+            ): Deploy => {
+              const approval = new Approval();
+              // TODO haw to we do this sign???? SEE SigningService
+              const signature = signingKey.sign(deploy.hash);
+              approval.signer = signingKey.accountHex();
+              switch (signingKey.signatureAlgorithm) {
+                case SignatureAlgorithm.Ed25519:
+                  approval.signature = Keys.Ed25519.accountHex(signature);
+                  break;
+                case SignatureAlgorithm.Secp256K1:
+                  approval.signature = Keys.Secp256K1.accountHex(signature);
+                  break;
+              }
+              deploy.approvals.push(approval);
 
-        const approval = new Approval();
-  const signature = signingKey.sign(deploy.hash);
-  approval.signer = signingKey.accountHex();
-  switch (signingKey.signatureAlgorithm) {
-    case SignatureAlgorithm.Ed25519:
-      approval.signature = Keys.Ed25519.accountHex(signature);
-      break;
-    case SignatureAlgorithm.Secp256K1:
-      approval.signature = Keys.Secp256K1.accountHex(signature);
-      break;
-  }
-  deploy.approvals.push(approval);
-
+              return deploy;
+            };
          */
 
-        final byte[] signature = signKeyPair.sign(deploy.getHash());
-        byte[] signBytes = new byte[0];
+        // TODO we need to sign the deploy hash
+       //  signingService.signWithKey(signKeyPair.deploy.getHash().getHash(), )
 
-        if (signKeyPair.getSignatureAlgorithm() == KeyAlgorithm.SECP256K1) {
-            // 01 + encodeBase16
-            signBytes = ByteUtils.concat(
-                    new byte[]{1},
-                    signature
-            );
-        } else if (signKeyPair.getSignatureAlgorithm() == KeyAlgorithm.ED25519) {
-            // 02 + encodeBase16
-            signBytes = ByteUtils.concat(
-                    new byte[]{2},
-                    signature
-            );
-        }
+        final Signature signature = new Signature(signKeyPair.getPublicKey().getBytes(), signKeyPair.getSignatureAlgorithm());
 
-        deploy.getApprovals().add(new DeployApproval(signKeyPair.getPublicKey(), new Signature(signBytes, signKeyPair.getSignatureAlgorithm())));
+        // Create the deploy with hashed key an signer
+        final DeployApproval approval = new DeployApproval(
+                new PublicKey(hashService.getAccountHash(signature.toAccount()), signKeyPair.getSignatureAlgorithm()),
+                new Signature(hashService.getAccountHash(signature.toAccount()), signKeyPair.getSignatureAlgorithm())
+        );
+
+        deploy.getApprovals().add(approval);
+
         return deploy;
-
     }
 
 
@@ -159,7 +160,7 @@ public class DeployUtil {
         return serializerFactory.getByteSerializer(deploy).toBytes(deploy);
     }
 
-    private static String toTtlStr(long ttl) {
+    static String toTtlStr(long ttl) {
         return Duration.ofMillis(ttl)
                 .toString()
                 .substring(2)
@@ -167,7 +168,7 @@ public class DeployUtil {
                 .toLowerCase();
     }
 
-    private static byte[] serializedHeader(final DeployHeader header) {
+    static byte[] serializedHeader(final DeployHeader header) {
         return serializerFactory.getByteSerializerByType(DeployHeader.class).toBytes(header);
     }
 

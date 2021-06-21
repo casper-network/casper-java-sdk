@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 
 public class SigningService {
 
-    public static String signWithKey(byte[] key, byte[] data) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {
+    public  byte [] signWithKey(byte[] key, byte[] data) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {
 
         final PrivateKey privateKey = KeyPairGenerator.getInstance("Ed25519").generateKeyPair().getPrivate();
         final Signature signature = Signature.getInstance("Ed25519");
@@ -21,15 +21,15 @@ public class SigningService {
 
         byte[] signed = signature.sign();
 
-        return null;
+        return signed;
 
     }
 
-    public static String signWithKey(final String privateKey)  {
+    public  String signWithKey(final String privateKey)  {
         return generateEdDSAKey(privateKey);
     }
 
-    public static String signWithPath(final String path)  {
+    public  String signWithPath(final String path)  {
 
         final File file;
         final String key;
@@ -52,8 +52,7 @@ public class SigningService {
                 .replace("\n", "").replace("\r", ""));
     }
 
-
-    private static String generateEdDSAKey(final String key) {
+    private  String generateEdDSAKey(final String key) {
 
         try{
             final PrivateKey privateKey = KeyPairGenerator.getInstance("Ed25519").generateKeyPair().getPrivate();

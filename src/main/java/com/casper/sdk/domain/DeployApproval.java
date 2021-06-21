@@ -20,6 +20,7 @@ public class DeployApproval {
         this.signature = signature;
     }
 
+
     public PublicKey getSigner() {
         return signer;
     }

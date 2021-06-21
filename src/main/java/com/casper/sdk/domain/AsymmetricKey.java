@@ -26,7 +26,4 @@ public class AsymmetricKey {
         return keyAlgorithm;
     }
 
-    public byte [] sign(Digest hash) {
-        return null;
-    }
 }

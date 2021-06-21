@@ -22,7 +22,7 @@ public class ByteUtils {
         return typesFactory.getInstance(CLType.U512).serialize(number);
     }
 
-    public static byte [] toBytesArrayU8(final byte [] source) {
+    public static byte[] toBytesArrayU8(final byte[] source) {
         return typesFactory.getInstance(CLType.BYTE_ARRAY).serialize(source);
     }
 
@@ -36,14 +36,16 @@ public class ByteUtils {
 
         int len = 0;
         for (byte[] array : arrays) {
-            len += array.length;
+            len += array != null ? array.length : 0;
         }
 
         final byte[] c = new byte[len];
         int pos = 0;
         for (byte[] array : arrays) {
-            System.arraycopy(array, 0, c, pos, array.length);
-            pos += array.length;
+            if (array != null) {
+                System.arraycopy(array, 0, c, pos, array.length);
+                pos += array.length;
+            }
         }
         return c;
     }

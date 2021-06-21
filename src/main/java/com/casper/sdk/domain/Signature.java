@@ -22,7 +22,7 @@ public class Signature extends PublicKey {
         this(hex.getBytes(StandardCharsets.UTF_8), keyAlgorithm);
     }
 
-    public Signature(String signature) {
+    public Signature(final String signature) {
         super(signature);
     }
 

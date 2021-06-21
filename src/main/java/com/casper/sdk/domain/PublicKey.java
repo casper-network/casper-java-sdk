@@ -6,6 +6,7 @@ import com.casper.sdk.service.serialization.util.ByteUtils;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 /**
@@ -38,7 +39,7 @@ public class PublicKey extends AbstractCLType implements HasTag {
             this.keyAlgorithm = KeyAlgorithm.fromId((char) bytes[1]);
             this.bytes = ByteUtils.decodeHex(new String(bytes).substring(2));
         } else {
-            throw new IllegalArgumentException("Invalid key " + bytes + " length " + bytes.length);
+            throw new IllegalArgumentException("Invalid key " + Arrays.toString(bytes) + " length " + bytes.length);
         }
     }
 
@@ -82,11 +83,13 @@ public class PublicKey extends AbstractCLType implements HasTag {
     }
 
     public String toAccountHex() {
-        return ByteUtils.encodeHexString(
-                ByteUtils.concat(
-                        new byte[]{(byte) keyAlgorithm.getValue()},
-                        bytes
-                )
+        return ByteUtils.encodeHexString(toAccount());
+    }
+
+    public byte[] toAccount() {
+        return ByteUtils.concat(
+                new byte[]{(byte) keyAlgorithm.getValue()},
+                bytes
         );
     }
 

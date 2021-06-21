@@ -1,5 +1,6 @@
 package com.casper.sdk.domain;
 
+import com.casper.sdk.service.serialization.util.ByteUtils;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -17,7 +18,7 @@ class DigestTest {
 
     @Test
     void getHash() {
-        assertThat(new Digest(HASH_ONE).getHash(), is(HASH_ONE));
+        assertThat(new Digest(HASH_ONE).getHash(), is(ByteUtils.decodeHex(HASH_ONE)));
     }
 
     @Test

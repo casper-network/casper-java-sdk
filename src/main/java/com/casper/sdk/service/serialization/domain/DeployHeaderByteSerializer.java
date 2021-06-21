@@ -27,8 +27,11 @@ class DeployHeaderByteSerializer implements ByteSerializer<DeployHeader> {
                 toU64(source.getTimestamp()),
                 toU64(source.getTtl()),
                 toU64(source.getGasPrice()),
+                // toBytesDeployHash
                 factory.getByteSerializerByType(Digest.class).toBytes(source.getBodyHash()),
+                // toBytesVecT
                 factory.getByteSerializerByType(List.class).toBytes(source.getDependencies()),
+                // toBytesString
                 toCLStringBytes(source.getChainName())
         );
     }

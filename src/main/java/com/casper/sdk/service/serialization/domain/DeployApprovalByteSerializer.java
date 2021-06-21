@@ -12,8 +12,8 @@ public class DeployApprovalByteSerializer implements ByteSerializer<DeployApprov
     public byte[] toBytes(final DeployApproval source) {
 
         return ByteUtils.concat(
-                source.getSigner().getBytes(),
-                source.getSignature().getBytes()
+                source.getSigner().toAccount(),
+                source.getSignature().toAccount()
         );
     }
 

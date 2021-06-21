@@ -26,13 +26,13 @@ public class DeployParams {
      */
     public DeployParams(final PublicKey accountPublicKey,
                         final String chainName,
-                        final int gasPrice,
+                        final Number gasPrice,
                         final Long timestamp,
                         final Long ttl,
                         final List<Digest> dependencies) {
         this.accountPublicKey = accountPublicKey;
         this.chainName = chainName;
-        this.gasPrice = gasPrice;
+        this.gasPrice = gasPrice != null ? gasPrice.intValue() : 1;
         if (timestamp == null) {
             this.timestamp = Instant.now().toString();
         } else {

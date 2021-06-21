@@ -1,5 +1,6 @@
 package com.casper.sdk.domain;
 
+import com.casper.sdk.service.serialization.util.ByteUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -51,7 +52,7 @@ class DeployTest {
     @Test
     void getHash() {
         assertThat(deploy.getHash(), is(notNullValue(Digest.class)));
-        assertThat(deploy.getHash().getHash(), is("d7a68bbe656a883d04bba9f26aa340dbe3f8ec99b2adb63b628f2bc920431998"));
+        assertThat(deploy.getHash().getHash(), is(ByteUtils.decodeHex("d7a68bbe656a883d04bba9f26aa340dbe3f8ec99b2adb63b628f2bc920431998")));
     }
 
     @Test

@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.time.OffsetDateTime;
 import java.util.List;
 
+import static com.casper.sdk.service.serialization.util.ByteUtils.decodeHex;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -66,7 +67,7 @@ class DeployHeaderJsonDeserializerTest {
     @Test
     void testParseDeployHeaderBodyHashFromJson() {
         assertThat(deployHeader.getBodyHash(), is(notNullValue(Digest.class)));
-        assertThat(deployHeader.getBodyHash().getHash(), is("f2e0782bba4a0a9663cafc7d707fd4a74421bc5bfef4e368b7e8f38dfab87db8"));
+        assertThat(deployHeader.getBodyHash().getHash(), is(decodeHex("f2e0782bba4a0a9663cafc7d707fd4a74421bc5bfef4e368b7e8f38dfab87db8")));
     }
 
     @Test

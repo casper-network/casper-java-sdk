@@ -1,14 +1,16 @@
-package com.casper.sdk;
+package com.casper.sdk.service;
 
-import com.casper.sdk.service.HashService;
+import org.hamcrest.core.Is;
 import org.junit.jupiter.api.Test;
 
 import java.security.NoSuchAlgorithmException;
 
+import static com.casper.sdk.service.serialization.util.ByteUtils.decodeHex;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class TestHashService {
+public class HashServiceTest {
 
     private static final String ED25519publicKey = "01381b36cd07ad85348607ffe0fa3a2d033ea941d14763358ebeace9c8ad3cb771";
     private static final String ED25519hash = "07b30fdd279f21d29ab1922313b56ad3905e7dd6a654344b8012e0be9fefa51b";
@@ -58,5 +60,15 @@ public class TestHashService {
         );
     }
 
+    @Test
+    void testFromBytesED25519() {
+        final byte[] hash = hashService.getAccountHash(decodeHex(ED25519publicKey));
+        assertThat(hash, Is.is(decodeHex(ED25519hash)));
+    }
 
+    @Test
+    void testFromBytesECP256K1() {
+        final byte[] hash = hashService.getAccountHash(decodeHex(SECP256K1publicKey));
+        assertThat(hash, Is.is(decodeHex(SECP256K1hash)));
+    }
 }
