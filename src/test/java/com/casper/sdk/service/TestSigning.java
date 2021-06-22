@@ -1,4 +1,4 @@
-package com.casper.sdk;
+package com.casper.sdk.service;
 
 import java.nio.charset.StandardCharsets;
 

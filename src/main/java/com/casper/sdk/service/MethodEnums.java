@@ -78,6 +78,17 @@ public enum MethodEnums {
                 throw new ValueNotFoundException("result not found");
             }
         }
+    },
+    ACCOUNT_PUT_DEPLOY {
+        @Override
+        public String getValue(final String result) throws ValueNotFoundException {
+            try {
+                final JsonNode node = new ObjectMapper().readTree(result);
+                return node.get("result").get("deploy_hash").textValue();
+            } catch (Exception e) {
+                throw new ValueNotFoundException("result not found");
+            }
+        }
     };
 
     private static final List<String> MAP = new ArrayList<>();
@@ -89,6 +100,4 @@ public enum MethodEnums {
     }
 
     public abstract String getValue(final String result) throws ValueNotFoundException;
-
-
 }

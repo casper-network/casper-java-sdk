@@ -11,6 +11,7 @@ import com.casper.sdk.service.serialization.util.NumberUtils;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
+import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
 import java.time.Duration;
 import java.util.LinkedHashSet;
@@ -109,12 +110,34 @@ public class DeployUtil {
         return jsonService.fromJson(in, Deploy.class);
     }
 
+    /**
+     * Obtains the size of the deploy in bytes
+     *
+     * @param deploy the deploy whose size is to be obtained
+     * @return the deploy byte size
+     */
+    public static int deploySizeInBytes(Deploy deploy) {
+        final int hashSize = deploy.getHash().getHash().length;
+        final int bodySize = serializeBody(deploy.getPayment(), deploy.getSession()).length;
+        final int headerSize = serializeHeader(deploy.getHeader()).length;
+        final int approvalsSize = deploy.getApprovals().stream().mapToInt(approval ->
+                (approval.getSignature().getBytes().length + approval.getSigner().getBytes().length) / 2
+        ).sum();
+
+        return hashSize + headerSize + bodySize + approvalsSize;
+    }
+
+    static byte[] serializeHeader(final DeployHeader deployHeader) {
+        return serializerFactory.getByteSerializerByType(DeployHeader.class).toBytes(deployHeader);
+    }
+
+
     static byte[] toBytes(final DeployExecutable deployExecutable) {
         return serializerFactory.getByteSerializer(deployExecutable).toBytes(deployExecutable);
     }
 
 
-    public static Deploy signDeploy(final Deploy deploy, final AsymmetricKey signKeyPair) {
+    public static Deploy signDeploy(final Deploy deploy, final KeyPair keyPair) {
 
         /*
             export const signDeploy = (
@@ -122,7 +145,6 @@ public class DeployUtil {
               signingKey: AsymmetricKey
             ): Deploy => {
               const approval = new Approval();
-              // TODO haw to we do this sign???? SEE SigningService
               const signature = signingKey.sign(deploy.hash);
               approval.signer = signingKey.accountHex();
               switch (signingKey.signatureAlgorithm) {
@@ -139,18 +161,24 @@ public class DeployUtil {
             };
          */
 
-        // TODO we need to sign the deploy hash
-       //  signingService.signWithKey(signKeyPair.deploy.getHash().getHash(), )
+        final byte[] signed = signingService.signWithKey(keyPair.getPrivate(), deploy.getHash().getHash());
 
-        final Signature signature = new Signature(signKeyPair.getPublicKey().getBytes(), signKeyPair.getSignatureAlgorithm());
+        // TODO only ED25519 is currently supported
+        final KeyAlgorithm keyAlgorithm = switch (keyPair.getPublic().getAlgorithm()) {
+            case "Ed25519", "EdDSA" -> KeyAlgorithm.ED25519;
+            case "Secp256K1" -> KeyAlgorithm.SECP256K1;
+            default -> throw new IllegalArgumentException("Unsupported Algorithm " + keyPair.getPublic().getAlgorithm());
+        };
 
-        // Create the deploy with hashed key an signer
-        final DeployApproval approval = new DeployApproval(
-                new PublicKey(hashService.getAccountHash(signature.toAccount()), signKeyPair.getSignatureAlgorithm()),
-                new Signature(hashService.getAccountHash(signature.toAccount()), signKeyPair.getSignatureAlgorithm())
+        final PublicKey publicKey = new PublicKey(keyPair.getPublic().getEncoded(), keyAlgorithm);
+
+        // Update the deploy  approvals with signed
+        deploy.getApprovals().add(
+                new DeployApproval(
+                        new PublicKey(publicKey.toAccount(), keyAlgorithm),
+                        new Signature(signed, keyAlgorithm)
+                )
         );
-
-        deploy.getApprovals().add(approval);
 
         return deploy;
     }

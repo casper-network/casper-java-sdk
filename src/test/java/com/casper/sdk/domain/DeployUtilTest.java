@@ -1,11 +1,18 @@
 package com.casper.sdk.domain;
 
 import com.casper.sdk.service.HashService;
+import com.casper.sdk.service.SigningService;
+import com.casper.sdk.service.serialization.util.ByteUtils;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.spec.NamedParameterSpec;
 import java.time.Instant;
 import java.util.Set;
 
@@ -23,6 +30,8 @@ class DeployUtilTest {
 
     public static final String DEPLOY_JSON_PATH = "/com/casper/sdk/domain/deploy-util-test.json";
     public static final String DEPLOY_TS_JSON_PATH = "/com/casper/sdk/domain/deploy-from-ts-client.json";
+
+    private final SigningService signingService = new SigningService();
 
     /**
      * Unit tests the makeTransfer method of the DeployUtil.
@@ -103,8 +112,6 @@ class DeployUtilTest {
 
         assertThat(deploy, is(notNullValue()));
     }
-
-    ;
 
     @Test
     void serializeBody() {
@@ -228,11 +235,36 @@ class DeployUtilTest {
         final byte[] actual = DeployUtil.toBytes(deploy);
 
         // TODO complete byte serialization
-         assertThat(actual, is(expected));
+        assertThat(actual, is(expected));
     }
 
     @Test
-    void signDeploy() {
+    void signDeploy() throws NoSuchAlgorithmException {
+
+        final byte[] privateKeyBytes = {
+                (byte) 239, (byte) 239, (byte) 126, (byte) 80, (byte) 139, (byte) 163, (byte) 76, (byte) 205, (byte) 21,
+                (byte) 144, (byte) 177, (byte) 126, (byte) 19, (byte) 67, (byte) 59, (byte) 27, (byte) 139, (byte) 186,
+                (byte) 172, (byte) 191, (byte) 195, (byte) 81, (byte) 196, (byte) 111, (byte) 213, (byte) 199,
+                (byte) 93, (byte) 37, (byte) 50, (byte) 228, (byte) 225, (byte) 199, (byte) 22, (byte) 117, (byte) 181,
+                (byte) 87, (byte) 53, (byte) 175, (byte) 221, (byte) 34, (byte) 18, (byte) 147, (byte) 236, (byte) 64,
+                (byte) 57, (byte) 231, (byte) 187, (byte) 253, (byte) 206, (byte) 131, (byte) 79, (byte) 31, (byte) 131,
+                (byte) 134, (byte) 220, (byte) 43, (byte) 235, (byte) 197, (byte) 108, (byte) 77, (byte) 35, (byte) 110,
+                (byte) 71, (byte) 76
+        };
+
+
+        final byte[] publicKeyBytes = {
+                38, (byte) 196, (byte) 123, (byte) 104, (byte) 234, (byte) 59, (byte) 216, (byte) 126, (byte) 248,
+                (byte) 48, (byte) 36, (byte) 109, (byte) 206, (byte) 174, (byte) 56, (byte) 122, (byte) 168, (byte) 72,
+                (byte) 9, (byte) 205, (byte) 92, (byte) 185, (byte) 153, (byte) 244, (byte) 14, (byte) 34, (byte) 153,
+                (byte) 237, (byte) 11, (byte) 178, (byte) 97, (byte) 27
+        };
+
+        byte[] approvalSignature = ByteUtils.decodeHex(
+                "01c5534d6965c6e528b7437ab0c1d6ccc48005ce58e37dba017d15db6e5569311dada09ea2c5b6c162790856dc2c35596318c9d4e8e6b39f33d150d0fdb2ca7201"
+        );
+
+        byte[] signer = ByteUtils.decodeHex("01cf56fc95141a4cef76f25f1977c6216153f7fb2e2b2dedf9759554d48edf4af8");
 
         final Deploy deploy = DeployUtil.makeDeploy(
 
@@ -253,9 +285,15 @@ class DeployUtilTest {
 
         assertThat(deploy.getApprovals().size(), is(0));
 
-        final Deploy signedDeploy = DeployUtil.signDeploy(deploy, new AsymmetricKey(deploy.getHeader().getAccount(), null, KeyAlgorithm.ED25519));
+        final KeyPair keyPair = KeyPairGenerator.getInstance(NamedParameterSpec.ED25519.getName()).generateKeyPair();
+
+        final Deploy signedDeploy = DeployUtil.signDeploy(deploy, keyPair);
 
         assertThat(signedDeploy.getApprovals().size(), is(1));
+
+        final DeployApproval approval = signedDeploy.getApprovals().iterator().next();
+        assertThat(approval.getSignature().toAccount(), is(approvalSignature));
+        assertThat(approval.getSigner().toAccount(), is(signer));
     }
 
     @Test

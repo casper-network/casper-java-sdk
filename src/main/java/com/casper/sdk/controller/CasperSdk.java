@@ -8,6 +8,7 @@ import com.casper.sdk.service.QueryService;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
 
 /**
@@ -119,7 +120,18 @@ public class CasperSdk {
      * @param signKeyPair the keypair to sign the Deploy object
      * @return the signed deploy
      */
-    public Deploy signDeploy(final Deploy deploy, final AsymmetricKey signKeyPair) {
+    public Deploy signDeploy(final Deploy deploy, final KeyPair signKeyPair) {
         return DeployUtil.signDeploy(deploy, signKeyPair);
+    }
+
+    /**
+     * Send deploy to network
+     *
+     * @param signedDeploy Signed deploy object
+     * @return the deploy hash, ech deploy gets a unique hash. This is part of the cryptographic security of blockchain
+     * technology. No two deploys will ever return the same hash.
+     */
+    public Digest putDeploy(final Deploy signedDeploy) throws Throwable {
+        return new Digest(queryService.putDeploy(signedDeploy));
     }
 }
