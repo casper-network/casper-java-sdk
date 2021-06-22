@@ -14,7 +14,7 @@ import java.util.Set;
 import static com.casper.sdk.json.DeserializerContext.pushFieldName;
 
 /**
- * The JSON Desrializer for a {@link Deploy}.
+ * The JSON Deserializer for a {@link Deploy}.
  */
 public class DeployJsonDeserializer extends JsonDeserializer<Deploy> {
 
@@ -37,6 +37,7 @@ public class DeployJsonDeserializer extends JsonDeserializer<Deploy> {
     private Deploy deserializeDeploy(final TreeNode treeNode,
                                      final ObjectCodec codec) throws IOException {
 
+        //noinspection Convert2Diamond
         return new Deploy(
                 readChildNode(treeNode, codec, "hash", Digest.class),
                 readChildNode(treeNode, codec, "header", DeployHeader.class),

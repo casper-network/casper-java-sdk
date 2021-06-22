@@ -11,7 +11,6 @@ import java.math.BigInteger;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
-import java.security.PrivateKey;
 import java.security.spec.NamedParameterSpec;
 import java.time.Instant;
 import java.util.Set;
@@ -234,7 +233,6 @@ class DeployUtilTest {
 
         final byte[] actual = DeployUtil.toBytes(deploy);
 
-        // TODO complete byte serialization
         assertThat(actual, is(expected));
     }
 

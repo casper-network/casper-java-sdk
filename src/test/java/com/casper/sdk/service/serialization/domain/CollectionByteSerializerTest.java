@@ -6,7 +6,6 @@ import com.casper.sdk.domain.DeployNamedArg;
 import com.casper.sdk.service.serialization.util.ByteUtils;
 import org.junit.jupiter.api.Test;
 
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,21 +48,20 @@ class CollectionByteSerializerTest {
         );
 
 
-
-        final byte [] expected = concat(
+        final byte[] expected = concat(
                 toU32(2), // Number of arguments
 
                 toU32(6), // length of 'amount;
                 "amount".getBytes(StandardCharsets.UTF_8),
                 toU32(6), // length of value
                 ByteUtils.decodeHex("05005550b405"),
-                new byte [] {CLType.U512.getClType()},
+                new byte[]{CLType.U512.getClType()},
 
                 toU32(2), // length of 'id;
                 "id".getBytes(StandardCharsets.UTF_8),
                 toU32(9),
                 decodeHex("01e703000000000000"),
-                new byte[] { CLType.U64.getClType()}
+                new byte[]{CLType.U64.getClType()}
         );
 
         byte[] bytes = serializer.toBytes(args);

@@ -1,8 +1,10 @@
 package com.casper.sdk.service.serialization.domain;
 
-import com.casper.sdk.domain.*;
+import com.casper.sdk.domain.DeployExecutable;
+import com.casper.sdk.domain.DeployNamedArg;
+import com.casper.sdk.domain.ModuleBytes;
+import com.casper.sdk.domain.StoredContractByName;
 import com.casper.sdk.service.serialization.util.ByteArrayBuilder;
-import com.casper.sdk.service.serialization.util.ByteUtils;
 
 import java.util.List;
 
@@ -24,7 +26,7 @@ class DeployExecutableByteSerializer implements ByteSerializer<DeployExecutable>
 
         // Append the type of the Deploy Executable in a single byte
         final ByteArrayBuilder builder = new ByteArrayBuilder()
-                .append((byte)deployExecutable.getTag());
+                .append((byte) deployExecutable.getTag());
 
         if (deployExecutable instanceof ModuleBytes) {
             builder.append(toBytesArrayU8(deployExecutable.getModuleBytes()));

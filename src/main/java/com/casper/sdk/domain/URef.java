@@ -2,8 +2,6 @@ package com.casper.sdk.domain;
 
 import com.casper.sdk.service.serialization.util.ByteUtils;
 
-import java.nio.charset.StandardCharsets;
-
 public class URef {
 
     private final byte[] bytes;

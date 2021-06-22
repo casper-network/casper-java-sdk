@@ -14,7 +14,7 @@ public class CLOptionValue extends CLValue {
 
     /**
      * @param hexBytes the option bytes with the 1st byte being OPTION_NONE or OPTION_SOME
-     * @param typeInfo the type infp
+     * @param typeInfo the type information
      * @param parsed   the parsed value
      */
     public CLOptionValue(final String hexBytes, final CLOptionTypeInfo typeInfo, final Object parsed) {
@@ -23,7 +23,7 @@ public class CLOptionValue extends CLValue {
 
     /**
      * @param bytes    the option bytes with the 1st byte being OPTION_NONE or OPTION_SOME
-     * @param typeInfo the type infp
+     * @param typeInfo the type information
      * @param parsed   the parsed value
      */
     public CLOptionValue(final byte[] bytes, final CLOptionTypeInfo typeInfo, final Object parsed) {
