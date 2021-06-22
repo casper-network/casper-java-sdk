@@ -1,4 +1,4 @@
-package com.casper.sdk.service;
+package com.casper.sdk.service.http.rpc;
 
 import com.casper.sdk.Properties;
 import com.casper.sdk.domain.Deploy;
@@ -14,16 +14,16 @@ import java.io.InputStream;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 
-public class QueryServiceTest {
+public class NodeClientTest {
 
     public static final String DEPLOY_JSON_PATH = "/com/casper/sdk/domain/deploy-util-test.json";
     private final static String url = "http://localhost";
     private static MockWebServer mockBackEnd;
-    private final QueryService query = new QueryService();
+    private final NodeClient query = new NodeClient();
 
     @BeforeEach
     void setUp() throws IOException {
@@ -39,11 +39,10 @@ public class QueryServiceTest {
     @Test
     public void testStateRootOk() throws Throwable {
 
-       final String stateRootHash = query.getStateRootHash();
+        final String stateRootHash = query.getStateRootHash();
 
         assertNotNull(stateRootHash);
         assertEquals("1be88786b127b212336d3c817816e5149334c86db156d34b59a78a0e0108b0db", stateRootHash);
-
     }
 
     @Test
@@ -69,7 +68,6 @@ public class QueryServiceTest {
         String balance = query.getAccountBalance("01048c1858b7a6ff56a20d7574fd31025ead4af9cb8a854f919d24f886a4ebb741");
         assertNotNull(balance);
         assertEquals(balance, "1000000000000000000000000000000000");
-
     }
 
     @Test
@@ -77,8 +75,6 @@ public class QueryServiceTest {
 
         String info = query.getAuctionInfo();
         assertNotNull(info);
-
-
     }
 
     @Test
@@ -86,7 +82,6 @@ public class QueryServiceTest {
 
         String peers = query.getNodePeers();
         assertNotNull(peers);
-
     }
 
     @Test

@@ -1,4 +1,4 @@
-package com.casper.sdk.service;
+package com.casper.sdk.service.http.rpc;
 
 import okhttp3.mockwebserver.Dispatcher;
 import okhttp3.mockwebserver.MockResponse;

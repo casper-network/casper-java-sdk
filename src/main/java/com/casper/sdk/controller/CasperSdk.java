@@ -4,7 +4,7 @@ import com.casper.sdk.Properties;
 import com.casper.sdk.domain.*;
 import com.casper.sdk.json.JsonConversionService;
 import com.casper.sdk.service.HashService;
-import com.casper.sdk.service.QueryService;
+import com.casper.sdk.service.http.rpc.NodeClient;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,32 +16,32 @@ import java.security.NoSuchAlgorithmException;
  */
 public class CasperSdk {
 
-    private final QueryService queryService;
+    private final NodeClient nodeClient;
     private final JsonConversionService jsonConversionService;
     private final HashService hashService;
 
     public CasperSdk(final String url, final String port) {
         Properties.properties.put("node-url", url);
         Properties.properties.put("node-port", port);
-        this.queryService = new QueryService();
+        this.nodeClient = new NodeClient();
         this.jsonConversionService = new JsonConversionService();
         this.hashService = HashService.getInstance();
     }
 
     public String getAccountInfo(final String accountKey) throws Throwable {
-        return queryService.getAccountInfo(accountKey);
+        return nodeClient.getAccountInfo(accountKey);
     }
 
     public String getAccountBalance(final String accountKey) throws Throwable {
-        return queryService.getAccountBalance(accountKey);
+        return nodeClient.getAccountBalance(accountKey);
     }
 
     public String getAccountMainPurseURef(final String accountKey) throws Throwable {
-        return queryService.getAccountMainPurseURef(accountKey);
+        return nodeClient.getAccountMainPurseURef(accountKey);
     }
 
     public String getStateRootHash() throws Throwable {
-        return queryService.getStateRootHash();
+        return nodeClient.getStateRootHash();
     }
 
     public String getAccountHash(final String accountKey) throws NoSuchAlgorithmException {
@@ -49,15 +49,15 @@ public class CasperSdk {
     }
 
     public String getAuctionInfo() throws Throwable {
-        return queryService.getAuctionInfo();
+        return nodeClient.getAuctionInfo();
     }
 
     public String getNodeStatus() throws Throwable {
-        return queryService.getNodeStatus();
+        return nodeClient.getNodeStatus();
     }
 
     public String getNodePeers() throws Throwable {
-        return queryService.getNodePeers();
+        return nodeClient.getNodePeers();
     }
 
     /**
@@ -132,6 +132,6 @@ public class CasperSdk {
      * technology. No two deploys will ever return the same hash.
      */
     public Digest putDeploy(final Deploy signedDeploy) throws Throwable {
-        return new Digest(queryService.putDeploy(signedDeploy));
+        return new Digest(nodeClient.putDeploy(signedDeploy));
     }
 }
