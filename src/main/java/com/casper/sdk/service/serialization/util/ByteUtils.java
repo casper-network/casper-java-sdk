@@ -65,4 +65,19 @@ public class ByteUtils {
     public static String encodeHexString(byte[] bytes) {
         return Hex.encodeHexString(bytes);
     }
+
+    public static byte[] reverseBytes(byte[] array) {
+
+        int i = 0;
+        int j = array.length - 1;
+        byte tmp;
+        while (j > i) {
+            tmp = array[j];
+            array[j] = array[i];
+            array[i] = tmp;
+            j--;
+            i++;
+        }
+        return array;
+    }
 }

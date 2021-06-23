@@ -7,6 +7,7 @@ import com.casper.sdk.service.SigningService;
 import com.casper.sdk.service.serialization.domain.ByteSerializerFactory;
 import com.casper.sdk.service.serialization.util.ByteUtils;
 import com.casper.sdk.service.serialization.util.NumberUtils;
+import org.bouncycastle.util.encoders.Base64;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -132,13 +133,18 @@ public class DeployUtil {
 
     public static Deploy signDeploy(final Deploy deploy, final KeyPair keyPair) {
 
+
+        // "01cf56fc95141a4cef76f25f1977c6216153f7fb2e2b2dedf9759554d48edf4af8"
+
         /*
             export const signDeploy = (
               deploy: Deploy,
               signingKey: AsymmetricKey
             ): Deploy => {
               const approval = new Approval();
+              // 64 bytes
               const signature = signingKey.sign(deploy.hash);
+              // Public key =   '01' + encodeBase16(this.rawPublicKey);
               approval.signer = signingKey.accountHex();
               switch (signingKey.signatureAlgorithm) {
                 case SignatureAlgorithm.Ed25519:
@@ -163,12 +169,13 @@ public class DeployUtil {
             default -> throw new IllegalArgumentException("Unsupported Algorithm " + keyPair.getPublic().getAlgorithm());
         };
 
-        final PublicKey publicKey = new PublicKey(keyPair.getPublic().getEncoded(), keyAlgorithm);
+        byte[] encoded = keyPair.getPublic().getEncoded();
+        final PublicKey publicKey = new PublicKey(encoded, keyAlgorithm, true);
 
         // Update the deploy  approvals with signed
         deploy.getApprovals().add(
                 new DeployApproval(
-                        new PublicKey(publicKey.toAccount(), keyAlgorithm),
+                        new PublicKey(publicKey.toAccount(), keyAlgorithm, true),
                         new Signature(signed, keyAlgorithm)
                 )
         );

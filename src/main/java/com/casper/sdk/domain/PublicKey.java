@@ -21,12 +21,17 @@ public class PublicKey extends AbstractCLType implements HasTag {
     private final byte[] bytes;
 
     public PublicKey(final byte[] bytes, final KeyAlgorithm keyAlgorithm) {
+        this(bytes, keyAlgorithm, false);
+    }
+
+    public PublicKey(final byte[] bytes, final KeyAlgorithm keyAlgorithm, final boolean notStandardLength) {
         super(new CLTypeInfo(CLType.PUBLIC_KEY));
         Objects.requireNonNull(bytes, "bytes cannot be null");
 
         int keyLen = bytes.length % 8;
 
-        if (keyLen == 0) {
+        if (keyLen == 0 || notStandardLength) {
+            //Objects.requireNonNull(keyAlgorithm, "keyAlgorithm cannot be null");
             this.bytes = bytes;
             this.keyAlgorithm = keyAlgorithm;
         } else if (keyLen == 1) {
@@ -72,6 +77,8 @@ public class PublicKey extends AbstractCLType implements HasTag {
     public PublicKey(final byte[] key) {
         this(key, null);
     }
+
+
 
     @Override
     public byte[] getBytes() {
