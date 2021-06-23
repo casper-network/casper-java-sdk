@@ -117,14 +117,7 @@ public class DeployUtil {
      * @return the deploy byte size
      */
     public static int deploySizeInBytes(Deploy deploy) {
-        final int hashSize = deploy.getHash().getHash().length;
-        final int bodySize = serializeBody(deploy.getPayment(), deploy.getSession()).length;
-        final int headerSize = serializeHeader(deploy.getHeader()).length;
-        final int approvalsSize = deploy.getApprovals().stream().mapToInt(approval ->
-                (approval.getSignature().getBytes().length + approval.getSigner().getBytes().length) / 2
-        ).sum();
-
-        return hashSize + headerSize + bodySize + approvalsSize;
+        return toBytes(deploy).length;
     }
 
     static byte[] serializeHeader(final DeployHeader deployHeader) {

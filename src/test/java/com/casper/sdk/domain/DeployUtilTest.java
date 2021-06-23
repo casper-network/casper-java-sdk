@@ -234,6 +234,8 @@ class DeployUtilTest {
         final byte[] actual = DeployUtil.toBytes(deploy);
 
         assertThat(actual, is(expected));
+
+
     }
 
     @Test
@@ -351,5 +353,14 @@ class DeployUtilTest {
         final byte[] serializedHeader = DeployUtil.serializedHeader(header);
 
         assertThat(serializedHeader, is(expectedHeaderBytes));
+    }
+
+    @Test
+    void testDeploySize() throws IOException {
+
+        final InputStream in = getClass().getResource(DEPLOY_JSON_PATH).openStream();
+        final Deploy deploy = DeployUtil.fromJson(in);
+        int sizeInBytes = DeployUtil.deploySizeInBytes(deploy);
+        assertThat(sizeInBytes, is(473));
     }
 }
