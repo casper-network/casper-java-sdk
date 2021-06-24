@@ -2,6 +2,7 @@ package com.casper.sdk.service;
 
 import org.bouncycastle.crypto.Signer;
 import org.bouncycastle.crypto.params.Ed25519PrivateKeyParameters;
+import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
 import org.bouncycastle.crypto.signers.Ed25519Signer;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
@@ -38,30 +39,7 @@ public class SigningService {
 
     public byte[] signWithPath(final String keyPath, final byte[] toSign) {
 
-        final File file;
-        final String key;
-
-
-        try {
-            file = new File(keyPath);
-            if (!file.isFile() || !file.exists()) {
-                throw new FileNotFoundException(String.format("Path [%s] invalid", keyPath));
-            }
-
-            key = Files.readString(file.toPath(), Charset.forName("ISO_8859_1"));
-
-        } catch (Exception ex) {
-            throw new InvalidPathException(String.format("Path [%s] invalid", keyPath), ex.getMessage());
-        }
-
-        final Pattern parse = Pattern.compile("(?m)(?s)^---*BEGIN.*---*$(.*)^---*END.*---*$.*");
-        byte[] privateKeyBytes = Base64.getDecoder().decode(
-                parse.matcher(key)
-                        .replaceFirst("$1")
-                        .replace("\n", "")
-                        .replace("\r", "")
-                        .getBytes(StandardCharsets.UTF_8)
-        );
+        final byte[] privateKeyBytes = loadKeyBytes(keyPath);
 
         return signWithPrivateKey(privateKeyBytes, toSign);
     }
@@ -91,8 +69,43 @@ public class SigningService {
     private Signer generateEdDSAKey(byte[] privateKeyBytes) {
 
         final Ed25519PrivateKeyParameters privateKeyParameters = new Ed25519PrivateKeyParameters(privateKeyBytes, 0);
-        Ed25519Signer ed25519Signer = new Ed25519Signer();
+        final Ed25519Signer ed25519Signer = new Ed25519Signer();
         ed25519Signer.init(true, privateKeyParameters);
         return ed25519Signer;
+    }
+
+    public boolean verifySignature(final String publicKeyPath, final byte[] toSign, final byte[] signature) {
+
+        byte[] publicKeyBytes = loadKeyBytes(publicKeyPath);
+        final Ed25519PublicKeyParameters publicKeyParameters = new Ed25519PublicKeyParameters(publicKeyBytes, 0);
+        final Signer verifier = new Ed25519Signer();
+        verifier.init(false, publicKeyParameters);
+        verifier.update(toSign, 0, toSign.length);
+        return verifier.verifySignature(signature);
+    }
+
+    private byte[] loadKeyBytes(final String keyPath) {
+        final File file;
+        final String key;
+        try {
+            file = new File(keyPath);
+            if (!file.isFile() || !file.exists()) {
+                throw new FileNotFoundException(String.format("Path [%s] invalid", keyPath));
+            }
+
+            key = Files.readString(file.toPath(), Charset.forName("ISO_8859_1"));
+
+        } catch (Exception ex) {
+            throw new InvalidPathException(String.format("Path [%s] invalid", keyPath), ex.getMessage());
+        }
+
+        final Pattern parse = Pattern.compile("(?m)(?s)^---*BEGIN.*---*$(.*)^---*END.*---*$.*");
+        return Base64.getDecoder().decode(
+                parse.matcher(key)
+                        .replaceFirst("$1")
+                        .replace("\n", "")
+                        .replace("\r", "")
+                        .getBytes(StandardCharsets.UTF_8)
+        );
     }
 }
