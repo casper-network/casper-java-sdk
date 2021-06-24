@@ -1,14 +1,15 @@
 package com.casper.sdk.service;
 
-import com.casper.sdk.service.serialization.util.ByteUtils;
-import org.junit.jupiter.api.Test;
-
-import java.net.URL;
-import java.security.PrivateKey;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
+
+import org.junit.jupiter.api.Test;
+import com.casper.sdk.service.serialization.util.ByteUtils;
+
+import java.net.URL;
+import java.security.PrivateKey;
+import java.security.interfaces.RSAPublicKey;
 
 class SigningServiceTest {
 
@@ -19,12 +20,18 @@ class SigningServiceTest {
 
 
     @Test
-    void loadKey() {
+    void loadKey() throws Exception {
 
         byte [] expectedKeyBytes = ByteUtils.decodeHex("01d30f6a241199e68217cb05abcefc7c8267c5226b8e644f1f8d0a79b87ed04f07");
-        byte[] keyBytes = signingService.loadKeyBytes(SigningServiceTest.class.getResource(PUBLIC_KEY).getFile());
+
+        //byte[] keyBytes = signingService.loadKeyBytes(SigningServiceTest.class.getResource(PUBLIC_KEY).getFile());
+//      RSAPublicKey keyBytes = signingService.readPublicKey(SigningServiceTest.class.getResource(PUBLIC_KEY).getFile());
+        RSAPublicKey keyBytes = signingService.readPublicKeyBC(SigningServiceTest.class.getResource(PUBLIC_KEY).getFile());
+
         assertThat(keyBytes, is(expectedKeyBytes));
     }
+
+
 
     @Test
     void testSignWithPrivateKeyPemFile() {
