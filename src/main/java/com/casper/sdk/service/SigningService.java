@@ -53,7 +53,6 @@ public class SigningService {
         }
     }
 
-
     public byte[] signWithPrivateKey(final byte[] privateKeyBytes, final byte[] toSign) {
 
         try {
@@ -76,7 +75,7 @@ public class SigningService {
 
     public boolean verifySignature(final String publicKeyPath, final byte[] toSign, final byte[] signature) {
 
-        byte[] publicKeyBytes = loadKeyBytes(publicKeyPath);
+        final byte[] publicKeyBytes = loadKeyBytes(publicKeyPath);
         final Ed25519PublicKeyParameters publicKeyParameters = new Ed25519PublicKeyParameters(publicKeyBytes, 0);
         final Signer verifier = new Ed25519Signer();
         verifier.init(false, publicKeyParameters);
@@ -84,28 +83,28 @@ public class SigningService {
         return verifier.verifySignature(signature);
     }
 
-     byte[] loadKeyBytes(final String keyPath) {
-        final File file;
-        final String key;
+    byte[] loadKeyBytes(final String keyPath) {
+
         try {
-            file = new File(keyPath);
+            final File file =new File(keyPath);
+
             if (!file.isFile() || !file.exists()) {
                 throw new FileNotFoundException(String.format("Path [%s] invalid", keyPath));
             }
 
-            key = Files.readString(file.toPath(), Charset.forName("ISO_8859_1"));
+            final String key = Files.readString(file.toPath(), Charset.forName("ISO_8859_1"));
+
+            final Pattern parse = Pattern.compile("(?m)(?s)^---*BEGIN.*---*$(.*)^---*END.*---*$.*");
+            return Base64.getDecoder().decode(
+                    parse.matcher(key)
+                            .replaceFirst("$1")
+                            .replace("\n", "")
+                            .replace("\r", "")
+                            .getBytes(StandardCharsets.UTF_8)
+            );
 
         } catch (Exception ex) {
             throw new InvalidPathException(String.format("Path [%s] invalid", keyPath), ex.getMessage());
         }
-
-        final Pattern parse = Pattern.compile("(?m)(?s)^---*BEGIN.*---*$(.*)^---*END.*---*$.*");
-        return Base64.getDecoder().decode(
-                parse.matcher(key)
-                        .replaceFirst("$1")
-                        .replace("\n", "")
-                        .replace("\r", "")
-                        .getBytes(StandardCharsets.UTF_8)
-        );
     }
 }
