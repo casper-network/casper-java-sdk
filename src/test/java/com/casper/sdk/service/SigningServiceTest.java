@@ -1,5 +1,6 @@
 package com.casper.sdk.service;
 
+import com.casper.sdk.service.serialization.util.ByteUtils;
 import org.junit.jupiter.api.Test;
 
 import java.net.URL;
@@ -18,6 +19,14 @@ class SigningServiceTest {
 
 
     @Test
+    void loadKey() {
+
+        byte [] expectedKeyBytes = ByteUtils.decodeHex("01d30f6a241199e68217cb05abcefc7c8267c5226b8e644f1f8d0a79b87ed04f07");
+        byte[] keyBytes = signingService.loadKeyBytes(SigningServiceTest.class.getResource(PUBLIC_KEY).getFile());
+        assertThat(keyBytes, is(expectedKeyBytes));
+    }
+
+    @Test
     void testSignWithPrivateKeyPemFile() {
 
         final byte[] toSign = {
@@ -34,7 +43,7 @@ class SigningServiceTest {
         assertThat(signed.length, is(64));
 
         // Verify signature
-        final URL publicKeyUrl = SigningServiceTest.class.getResource(PRIVATE_KEY);
+        final URL publicKeyUrl = SigningServiceTest.class.getResource(PUBLIC_KEY);
         assertThat(signingService.verifySignature(publicKeyUrl.getFile(), toSign, signed), is(true));
     }
 

@@ -84,7 +84,7 @@ public class SigningService {
         return verifier.verifySignature(signature);
     }
 
-    private byte[] loadKeyBytes(final String keyPath) {
+     byte[] loadKeyBytes(final String keyPath) {
         final File file;
         final String key;
         try {
