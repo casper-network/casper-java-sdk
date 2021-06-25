@@ -20,6 +20,7 @@ dependencies {
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.12.2'
     compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-yaml', version: '2.12.2'
     compile group: 'org.bouncycastle', name: 'bcprov-jdk15on', version: '1.69'
+    compile group: 'com.sshtools', name: 'maverick-synergy', version: '3.0.0-RC8'
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
 
     testImplementation 'com.squareup.okhttp3:mockwebserver:4.0.1'
