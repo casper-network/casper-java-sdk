@@ -172,7 +172,6 @@ public class DeployService {
 
     public Deploy signDeploy(final Deploy deploy, final AsymmetricCipherKeyPair keyPair) {
 
-
         final byte[] signed = signingService.signWithPrivateKey(keyPair.getPrivate(), deploy.getHash().getHash());
 
         byte[] publicKeyBytes = ((Ed25519PublicKeyParameters) keyPair.getPublic()).getEncoded();

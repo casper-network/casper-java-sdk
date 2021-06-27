@@ -30,7 +30,6 @@ public class CLOptionValue extends CLValue {
         super(bytes, typeInfo, parsed);
     }
 
-
     public static byte[] prefixOption(final byte[] bytes) {
 
         final byte[] optionPrefix;
@@ -40,10 +39,5 @@ public class CLOptionValue extends CLValue {
             optionPrefix = OPTION_SOME;
         }
         return ByteUtils.concat(optionPrefix, bytes);
-    }
-
-    public CLType getInnerType() {
-        final CLOptionTypeInfo typeInfo = (CLOptionTypeInfo) getCLTypeInfo();
-        return typeInfo.getInnerType().getType();
     }
 }
