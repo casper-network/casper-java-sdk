@@ -80,4 +80,11 @@ public class ByteUtils {
         }
         return array;
     }
+
+    public static byte[] truncateBytes(byte[] content, final int length) {
+        byte[] secretBytes = new byte[length];
+        int pstart = content.length - length;
+        System.arraycopy(content, pstart, secretBytes, 0, length);
+        return secretBytes;
+    }
 }

@@ -5,10 +5,10 @@ import com.casper.sdk.domain.*;
 import com.casper.sdk.json.JsonConversionService;
 import com.casper.sdk.service.HashService;
 import com.casper.sdk.service.http.rpc.NodeClient;
+import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
 
 /**
@@ -120,7 +120,7 @@ public class CasperSdk {
      * @param signKeyPair the keypair to sign the Deploy object
      * @return the signed deploy
      */
-    public Deploy signDeploy(final Deploy deploy, final KeyPair signKeyPair) {
+    public Deploy signDeploy(final Deploy deploy, final AsymmetricCipherKeyPair signKeyPair) {
         return DeployUtil.signDeploy(deploy, signKeyPair);
     }
 

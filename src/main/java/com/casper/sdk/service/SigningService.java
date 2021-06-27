@@ -1,8 +1,12 @@
 package com.casper.sdk.service;
 
+import com.casper.sdk.service.serialization.util.ByteUtils;
 import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
+import org.bouncycastle.crypto.CryptoException;
+import org.bouncycastle.crypto.DataLengthException;
 import org.bouncycastle.crypto.Signer;
 import org.bouncycastle.crypto.generators.Ed25519KeyPairGenerator;
+import org.bouncycastle.crypto.params.AsymmetricKeyParameter;
 import org.bouncycastle.crypto.params.Ed25519KeyGenerationParameters;
 import org.bouncycastle.crypto.params.Ed25519PrivateKeyParameters;
 import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
@@ -11,12 +15,11 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.util.io.pem.PemObject;
 import org.bouncycastle.util.io.pem.PemReader;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.nio.file.InvalidPathException;
-import java.security.*;
+import java.io.*;
+import java.security.KeyPairGenerator;
+import java.security.PrivateKey;
+import java.security.SecureRandom;
+import java.security.Security;
 import java.security.spec.NamedParameterSpec;
 
 public class SigningService {
@@ -25,10 +28,30 @@ public class SigningService {
         Security.addProvider(new BouncyCastleProvider());
     }
 
-    public AsymmetricCipherKeyPair loadKeyPair(final String publicKeyPath, final String privateKeyPath) throws IOException {
+    /**
+     * Loads the key pairs from the provide file
+     *
+     * @param publicKeyFile  the public key .pem file
+     * @param privateKeyFile the private key .pem file
+     * @return the files loaded into a AsymmetricCipherKeyPair
+     * @throws IOException if the is a problem loading the files
+     */
+    public AsymmetricCipherKeyPair loadKeyPair(final File publicKeyFile, final File privateKeyFile) throws IOException {
+        return loadKeyPair(new FileInputStream(publicKeyFile), new FileInputStream(privateKeyFile));
+    }
 
-        final byte[] publicBytes = this.truncateTo32Bytes(this.readPemFile(publicKeyPath));
-        final byte[] secretBytes = this.truncateTo32Bytes(this.readPemFile(privateKeyPath));
+    /**
+     * Loads the key pairs from the provide streams
+     *
+     * @param publicKeyIn  the public key .pem file input stream
+     * @param privateKeyIn the private key .pem file input stream
+     * @return the files loaded into a AsymmetricCipherKeyPair
+     * @throws IOException if the is a problem loading the files
+     */
+    public AsymmetricCipherKeyPair loadKeyPair(final InputStream publicKeyIn, final InputStream privateKeyIn) throws IOException {
+
+        final byte[] publicBytes = ByteUtils.truncateBytes(this.readPemFile(publicKeyIn), 32);
+        final byte[] secretBytes = ByteUtils.truncateBytes(this.readPemFile(privateKeyIn), 32);
 
         return new AsymmetricCipherKeyPair(
                 new Ed25519PublicKeyParameters(publicBytes),
@@ -36,50 +59,24 @@ public class SigningService {
         );
     }
 
-    private byte[] truncateTo32Bytes(byte[] content) {
-        byte[] secretBytes = new byte[32];
-        int pstart = content.length - 32;
-        System.arraycopy(content, pstart, secretBytes, 0, 32);
-        return secretBytes;
+
+    public AsymmetricCipherKeyPair generateEdDSAKey() {
+
+        SecureRandom RANDOM = new SecureRandom();
+        Ed25519KeyPairGenerator keyPairGenerator = new Ed25519KeyPairGenerator();
+        keyPairGenerator.init(new Ed25519KeyGenerationParameters(RANDOM));
+        return keyPairGenerator.generateKeyPair();
     }
 
-    public byte[] signWithKey(final PrivateKey privateKey, byte[] data) {
+    public byte[] signWithPrivateKey(final AsymmetricKeyParameter privateKey, final byte[] toSign) {
 
         try {
-            signWithPrivateKey(privateKey.getEncoded(), data);
-            final Signature signature = Signature.getInstance("Ed25519");
-            signature.initSign(privateKey);
-            signature.update(data);
-            return signature.sign();
-        } catch (NoSuchAlgorithmException | InvalidKeyException | SignatureException e) {
-            throw new com.casper.sdk.exceptions.SignatureException("Error signing data", e);
-        }
-    }
+            Signer signer = new Ed25519Signer();
+            signer.init(true, privateKey);
+            signer.update(toSign, 0, toSign.length);
+            return signer.generateSignature();
 
-    public byte[] signWithPath(final String keyPath, final byte[] toSign) {
-
-        final byte[] privateKeyBytes = readPemFile(keyPath);
-
-        return signWithPrivateKey(privateKeyBytes, toSign);
-    }
-
-    public PrivateKey generateEdDSAKey() {
-
-        try {
-            return KeyPairGenerator.getInstance(NamedParameterSpec.ED25519.getName(), BouncyCastleProvider.PROVIDER_NAME).generateKeyPair().getPrivate();
-        } catch (Exception e) {
-            throw new IllegalArgumentException("Failed to generate signature :", e.getCause());
-        }
-    }
-
-    public byte[] signWithPrivateKey(final byte[] privateKeyBytes, final byte[] toSign) {
-
-        try {
-            final Signer privateKey = generateEdDSAKey(privateKeyBytes);
-            privateKey.update(toSign, 0, toSign.length);
-            return privateKey.generateSignature();
-
-        } catch (Exception e) {
+        } catch (CryptoException | DataLengthException e) {
             throw new IllegalArgumentException("Failed to generate signature :", e.getCause());
         }
     }
@@ -92,10 +89,8 @@ public class SigningService {
         return ed25519Signer;
     }
 
-    public boolean verifySignature(final String publicKeyPath, final byte[] toSign, final byte[] signature) {
+    public boolean verifySignature(final AsymmetricKeyParameter publicKeyParameters, final byte[] toSign, final byte[] signature) {
 
-        final byte[] publicKeyBytes = readPemFile(publicKeyPath);
-        final Ed25519PublicKeyParameters publicKeyParameters = new Ed25519PublicKeyParameters(publicKeyBytes, 0);
         final Signer verifier = new Ed25519Signer();
         verifier.init(false, publicKeyParameters);
         verifier.update(toSign, 0, toSign.length);
@@ -103,24 +98,9 @@ public class SigningService {
     }
 
 
-
-
-    byte[] readPemFile(final String keyPath) {
-
-        try {
-            final File file = new File(keyPath);
-
-            if (!file.isFile() || !file.exists()) {
-                throw new FileNotFoundException(String.format("Path [%s] invalid", keyPath));
-            }
-
-            final FileReader keyReader = new FileReader(keyPath);
-            final PemReader pemReader = new PemReader(keyReader);
-            final PemObject pemObject = pemReader.readPemObject();
-            return pemObject.getContent();
-
-        } catch (IOException ex) {
-            throw new InvalidPathException(String.format("Path [%s] invalid", keyPath), ex.getMessage());
-        }
+    byte[] readPemFile(final InputStream keyStream) throws IOException {
+        final PemReader pemReader = new PemReader(new InputStreamReader(keyStream));
+        final PemObject pemObject = pemReader.readPemObject();
+        return pemObject.getContent();
     }
 }

@@ -1,20 +1,21 @@
 package com.casper.sdk.domain;
 
 import com.casper.sdk.service.HashService;
+import com.casper.sdk.service.SigningService;
+import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
+import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.NamedParameterSpec;
 import java.time.Instant;
 import java.util.Set;
 
 import static com.casper.sdk.domain.DeployUtil.makeBodyHash;
 import static com.casper.sdk.domain.DeployUtil.toTtlStr;
+import static com.casper.sdk.service.serialization.util.ByteUtils.concat;
 import static com.casper.sdk.service.serialization.util.ByteUtils.decodeHex;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -26,6 +27,10 @@ import static org.hamcrest.core.IsNull.notNullValue;
 class DeployUtilTest {
 
     public static final String DEPLOY_JSON_PATH = "/com/casper/sdk/domain/deploy-util-test.json";
+    private static final String PUBLIC_KEY = "/account/user-1/public_key.pem";
+    private static final String PRIVATE_KEY = "/account/user-1/secret_key.pem";
+
+    private final SigningService signingService = new SigningService();
 
     /**
      * Unit tests the makeTransfer method of the DeployUtil.
@@ -230,27 +235,7 @@ class DeployUtilTest {
     }
 
     @Test
-    void signDeploy() throws NoSuchAlgorithmException {
-
-        final byte[] privateKeyBytes = {
-                (byte) 239, (byte) 239, (byte) 126, (byte) 80, (byte) 139, (byte) 163, (byte) 76, (byte) 205, (byte) 21,
-                (byte) 144, (byte) 177, (byte) 126, (byte) 19, (byte) 67, (byte) 59, (byte) 27, (byte) 139, (byte) 186,
-                (byte) 172, (byte) 191, (byte) 195, (byte) 81, (byte) 196, (byte) 111, (byte) 213, (byte) 199,
-                (byte) 93, (byte) 37, (byte) 50, (byte) 228, (byte) 225, (byte) 199, (byte) 22, (byte) 117, (byte) 181,
-                (byte) 87, (byte) 53, (byte) 175, (byte) 221, (byte) 34, (byte) 18, (byte) 147, (byte) 236, (byte) 64,
-                (byte) 57, (byte) 231, (byte) 187, (byte) 253, (byte) 206, (byte) 131, (byte) 79, (byte) 31, (byte) 131,
-                (byte) 134, (byte) 220, (byte) 43, (byte) 235, (byte) 197, (byte) 108, (byte) 77, (byte) 35, (byte) 110,
-                (byte) 71, (byte) 76
-        };
-
-
-        final byte[] publicKeyBytes = {
-                38, (byte) 196, (byte) 123, (byte) 104, (byte) 234, (byte) 59, (byte) 216, (byte) 126, (byte) 248,
-                (byte) 48, (byte) 36, (byte) 109, (byte) 206, (byte) 174, (byte) 56, (byte) 122, (byte) 168, (byte) 72,
-                (byte) 9, (byte) 205, (byte) 92, (byte) 185, (byte) 153, (byte) 244, (byte) 14, (byte) 34, (byte) 153,
-                (byte) 237, (byte) 11, (byte) 178, (byte) 97, (byte) 27
-        };
-
+    void signDeploy() throws IOException {
 
         final Deploy deploy = DeployUtil.makeDeploy(
 
@@ -271,7 +256,10 @@ class DeployUtilTest {
 
         assertThat(deploy.getApprovals().size(), is(0));
 
-        final KeyPair keyPair = KeyPairGenerator.getInstance(NamedParameterSpec.ED25519.getName()).generateKeyPair();
+        final AsymmetricCipherKeyPair keyPair = signingService.loadKeyPair(
+                new File(DeployUtilTest.class.getResource(PUBLIC_KEY).getFile()),
+                new File(DeployUtilTest.class.getResource(PRIVATE_KEY).getFile())
+        );
 
         final Deploy signedDeploy = DeployUtil.signDeploy(deploy, keyPair);
 
@@ -279,7 +267,15 @@ class DeployUtilTest {
 
         final DeployApproval approval = signedDeploy.getApprovals().iterator().next();
         assertThat(approval.getSignature().toAccount(), is(notNullValue()));
-        assertThat(approval.getSigner().toAccount(), is(notNullValue()));
+        assertThat(approval.getSignature().toAccount()[0], is((byte)KeyAlgorithm.ED25519.getValue()));
+        assertThat(approval.getSignature().toAccount().length, is(65));
+        assertThat(approval.getSignature().getBytes().length, is(64));
+
+        final Ed25519PublicKeyParameters publicKeyParameters = (Ed25519PublicKeyParameters) keyPair.getPublic();
+        assertThat(
+                approval.getSigner().toAccount(),
+                is(concat(new byte[]{(byte) KeyAlgorithm.ED25519.getValue()}, publicKeyParameters.getEncoded()))
+        );
     }
 
     @Test

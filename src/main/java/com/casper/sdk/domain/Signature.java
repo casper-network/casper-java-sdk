@@ -5,8 +5,6 @@ import com.casper.sdk.json.SignatureJsonDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-import java.nio.charset.StandardCharsets;
-
 /**
  * Signature domain type used in deployment approvals.
  */
@@ -16,10 +14,6 @@ public class Signature extends PublicKey {
 
     public Signature(final byte[] bytes, final KeyAlgorithm keyAlgorithm) {
         super(bytes, keyAlgorithm);
-    }
-
-    public Signature(final String hex, final KeyAlgorithm keyAlgorithm) {
-        this(hex.getBytes(StandardCharsets.UTF_8), keyAlgorithm);
     }
 
     public Signature(final String signature) {

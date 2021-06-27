@@ -7,12 +7,12 @@ import com.casper.sdk.service.SigningService;
 import com.casper.sdk.service.serialization.domain.ByteSerializerFactory;
 import com.casper.sdk.service.serialization.util.ByteUtils;
 import com.casper.sdk.service.serialization.util.NumberUtils;
-import org.bouncycastle.util.encoders.Base64;
+import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
+import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
-import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
 import java.time.Duration;
 import java.util.LinkedHashSet;
@@ -131,52 +131,19 @@ public class DeployUtil {
     }
 
 
-    public static Deploy signDeploy(final Deploy deploy, final KeyPair keyPair) {
+    public static Deploy signDeploy(final Deploy deploy, final AsymmetricCipherKeyPair keyPair) {
 
 
-        // "01cf56fc95141a4cef76f25f1977c6216153f7fb2e2b2dedf9759554d48edf4af8"
+        final byte[] signed = signingService.signWithPrivateKey(keyPair.getPrivate(), deploy.getHash().getHash());
 
-        /*
-            export const signDeploy = (
-              deploy: Deploy,
-              signingKey: AsymmetricKey
-            ): Deploy => {
-              const approval = new Approval();
-              // 64 bytes
-              const signature = signingKey.sign(deploy.hash);
-              // Public key =   '01' + encodeBase16(this.rawPublicKey);
-              approval.signer = signingKey.accountHex();
-              switch (signingKey.signatureAlgorithm) {
-                case SignatureAlgorithm.Ed25519:
-                  approval.signature = Keys.Ed25519.accountHex(signature);
-                  break;
-                case SignatureAlgorithm.Secp256K1:
-                  approval.signature = Keys.Secp256K1.accountHex(signature);
-                  break;
-              }
-              deploy.approvals.push(approval);
-
-              return deploy;
-            };
-         */
-
-        final byte[] signed = signingService.signWithKey(keyPair.getPrivate(), deploy.getHash().getHash());
-
-        // TODO only ED25519 is currently supported
-        final KeyAlgorithm keyAlgorithm = switch (keyPair.getPublic().getAlgorithm()) {
-            case "Ed25519", "EdDSA" -> KeyAlgorithm.ED25519;
-            case "Secp256K1" -> KeyAlgorithm.SECP256K1;
-            default -> throw new IllegalArgumentException("Unsupported Algorithm " + keyPair.getPublic().getAlgorithm());
-        };
-
-        byte[] encoded = keyPair.getPublic().getEncoded();
-        final PublicKey publicKey = new PublicKey(encoded, keyAlgorithm, true);
+        byte[] publicKeyBytes = ((Ed25519PublicKeyParameters) keyPair.getPublic()).getEncoded();
+        final PublicKey publicKey = new PublicKey(publicKeyBytes, KeyAlgorithm.ED25519);
 
         // Update the deploy  approvals with signed
         deploy.getApprovals().add(
                 new DeployApproval(
-                        new PublicKey(publicKey.toAccount(), keyAlgorithm, true),
-                        new Signature(signed, keyAlgorithm)
+                        new PublicKey(publicKey.toAccount(), KeyAlgorithm.ED25519),
+                        new Signature(signed, KeyAlgorithm.ED25519)
                 )
         );
 
