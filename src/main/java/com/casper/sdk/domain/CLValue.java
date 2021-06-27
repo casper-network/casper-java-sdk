@@ -45,11 +45,7 @@ public class CLValue extends AbstractCLType {
         return bytes;
     }
 
-
     public Object getParsed() {
         return parsed;
     }
-
-
-
 }

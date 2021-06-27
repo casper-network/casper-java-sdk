@@ -16,7 +16,6 @@ abstract class AbstractByteSerializer<T> implements ByteSerializer<T> {
         u32Serializer = typesFactory.getInstance(CLType.U32);
     }
 
-
     byte[] toBytesForCLTypeInfo(final CLTypeInfo typeInfo) {
         return switch (typeInfo.getType()) {
             case BOOL, I32, I64, U8, U32, U64, U128, U256, U512, UNIT, STRING, KEY, UREF, PUBLIC_KEY -> getTypeBytes(typeInfo);

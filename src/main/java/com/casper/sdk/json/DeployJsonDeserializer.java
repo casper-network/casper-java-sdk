@@ -18,7 +18,6 @@ import static com.casper.sdk.json.DeserializerContext.pushFieldName;
  */
 public class DeployJsonDeserializer extends JsonDeserializer<Deploy> {
 
-
     @Override
     public Deploy deserialize(final JsonParser p, final DeserializationContext ctxt) throws IOException {
 

@@ -34,7 +34,6 @@ public class NodeClient {
 
         final Optional<String> result = httpMethods.rpcCallMethod(new Method(CHAIN_GET_STATE_ROOT_HASH));
         return (result.isEmpty()) ? null : MethodEnums.STATE_ROOT_HASH.getValue(result.get());
-
     }
 
     public String getAccountInfo(final String accountKey) throws Throwable {
@@ -76,7 +75,6 @@ public class NodeClient {
         );
 
         return (result.isEmpty()) ? null : MethodEnums.STATE_GET_ITEM.getValue(result.get());
-
     }
 
     public String getAuctionInfo() throws Throwable {

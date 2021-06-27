@@ -19,6 +19,4 @@ public class Signature extends PublicKey {
     public Signature(final String signature) {
         super(signature);
     }
-
-
 }

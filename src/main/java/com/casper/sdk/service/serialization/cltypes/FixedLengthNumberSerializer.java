@@ -20,7 +20,6 @@ abstract class FixedLengthNumberSerializer implements TypesSerializer {
         this.signed = signed;
     }
 
-
     @Override
     public byte[] serialize(final Object toSerialize) {
 

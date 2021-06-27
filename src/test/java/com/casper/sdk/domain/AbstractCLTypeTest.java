@@ -39,5 +39,4 @@ class AbstractCLTypeTest {
         final byte[] bytes = {15, 31, 47};
         assertThat(AbstractCLType.toHex(bytes),is("0f1f2f"));
     }
-
 }

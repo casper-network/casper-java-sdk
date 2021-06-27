@@ -41,6 +41,4 @@ class DeployByteSerializer implements ByteSerializer<Deploy> {
     private byte[] _toBytes(final Object source) {
         return factory.getByteSerializer(source).toBytes(source);
     }
-
-
 }

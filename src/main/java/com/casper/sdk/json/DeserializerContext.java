@@ -2,7 +2,6 @@ package com.casper.sdk.json;
 
 import java.util.Stack;
 
-
 public class DeserializerContext {
 
     private static final ThreadLocal<Stack<String>> fieldNameStack = new ThreadLocal<>();
@@ -14,7 +13,6 @@ public class DeserializerContext {
     public static void pushFieldName(final String name) {
         getFieldNameStack().push(name);
     }
-
 
     public static String peekFieldName() {
         final Stack<String> fieldNameStack = getFieldNameStack();

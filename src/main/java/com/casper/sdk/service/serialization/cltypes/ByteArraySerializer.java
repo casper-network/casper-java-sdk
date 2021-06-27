@@ -33,6 +33,4 @@ public class ByteArraySerializer extends AbstractTypesSerializer {
             return new byte[0];
         }
     }
-
-
 }

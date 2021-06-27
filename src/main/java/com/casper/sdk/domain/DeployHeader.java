@@ -95,7 +95,6 @@ public class DeployHeader {
         return 0L;
     }
 
-
     public static long toEpocMs(final String isoDateTime) {
         final ZonedDateTime zonedDateTime = OffsetDateTime.parse(isoDateTime).toZonedDateTime();
         return zonedDateTime.toInstant().toEpochMilli();

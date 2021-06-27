@@ -6,5 +6,4 @@ package com.casper.sdk.domain;
 public interface StoredContractNames {
 
     String PAYMENT = "payment";
-
 }

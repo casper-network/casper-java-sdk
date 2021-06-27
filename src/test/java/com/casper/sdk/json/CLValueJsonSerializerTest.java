@@ -33,5 +33,4 @@ class CLValueJsonSerializerTest {
         assertThat(json, hasJsonPath("$.bytes", is("0101010101010101010101010101010101010101010101010101010101010101")));
         assertThat(json, hasJsonPath("$.parsed", is("0101010101010101010101010101010101010101010101010101010101010101")));
     }
-
 }

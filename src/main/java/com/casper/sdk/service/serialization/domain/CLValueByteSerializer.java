@@ -26,5 +26,4 @@ class CLValueByteSerializer extends AbstractByteSerializer<CLValue> {
     public Class<CLValue> getType() {
         return CLValue.class;
     }
-
 }

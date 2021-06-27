@@ -42,7 +42,6 @@ class DeployExecutableByteSerializer implements ByteSerializer<DeployExecutable>
         return builder.toByteArray();
     }
 
-
     @Override
     public Class<DeployExecutable> getType() {
         return DeployExecutable.class;
@@ -61,5 +60,4 @@ class DeployExecutableByteSerializer implements ByteSerializer<DeployExecutable>
         );
         return builder.toByteArray();
     }
-
 }

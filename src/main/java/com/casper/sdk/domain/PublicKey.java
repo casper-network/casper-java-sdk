@@ -78,8 +78,6 @@ public class PublicKey extends AbstractCLType implements HasTag {
         this(key, null);
     }
 
-
-
     @Override
     public byte[] getBytes() {
         return bytes;
@@ -104,6 +102,4 @@ public class PublicKey extends AbstractCLType implements HasTag {
     public int getTag() {
         return 1;
     }
-
-
 }

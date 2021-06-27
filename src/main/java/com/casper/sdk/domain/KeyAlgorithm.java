@@ -5,7 +5,6 @@ import java.util.Map;
 
 public enum KeyAlgorithm {
 
-
     ED25519(1),
     SECP256K1(2);
 
@@ -39,6 +38,5 @@ public enum KeyAlgorithm {
     public int getValue() {
         return value;
     }
-
 }
 

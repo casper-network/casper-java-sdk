@@ -71,7 +71,6 @@ class DeployTest {
         assertThat(deploy.getSession(), is(notNullValue(DeployExecutable.class)));
     }
 
-
     @Test
     void getApprovals() {
         assertThat(deploy.getApprovals(), is(notNullValue(Set.class)));
@@ -88,5 +87,4 @@ class DeployTest {
         buffer.putInt(number);
         return buffer.array();
     }
-
 }
