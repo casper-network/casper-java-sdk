@@ -35,7 +35,7 @@ public class CasperSdk {
         Properties.properties.put("node-url", url);
         Properties.properties.put("node-port", port);
 
-        this.nodeClient = new NodeClient(deployService, hashService);
+        this.nodeClient = new NodeClient(deployService, hashService, jsonConversionService);
     }
 
     public String getAccountInfo(final String accountKey) throws Throwable {

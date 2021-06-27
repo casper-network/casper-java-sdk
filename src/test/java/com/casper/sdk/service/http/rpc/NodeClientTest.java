@@ -38,7 +38,7 @@ public class NodeClientTest {
             new SigningService(),
             new TypesFactory()
     );
-    private final NodeClient query = new NodeClient(deployService, hashService);
+    private final NodeClient query = new NodeClient(deployService, hashService, new JsonConversionService());
 
     @BeforeEach
     void setUp() throws IOException {

@@ -1,5 +1,6 @@
 package com.casper.sdk.json;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.util.DefaultIndenter;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,6 +17,15 @@ import static com.casper.sdk.json.DeserializerContext.clear;
  */
 public class JsonConversionService {
 
+    private ObjectMapper mapper;
+
+    public JsonConversionService() {
+        this.mapper =  new ObjectMapper();;
+        final DefaultPrettyPrinter prettyPrinter = new DefaultPrettyPrinter();
+        prettyPrinter.indentArraysWith(DefaultIndenter.SYSTEM_LINEFEED_INSTANCE);
+        mapper.writer(prettyPrinter);
+    }
+
     /**
      * Converts a Casper domain object ot a JSON string
      *
@@ -29,6 +39,10 @@ public class JsonConversionService {
         return out.toString();
     }
 
+    public String writeValueAsString(final Object value) throws JsonProcessingException {
+        return mapper.writeValueAsString(value);
+    }
+
     /**
      * Writes a Casper domain object ot a JSON string to an {@link OutputStream}
      *
@@ -37,7 +51,7 @@ public class JsonConversionService {
      * @throws IOException - on write error
      */
     public void toJson(final Object clObject, final OutputStream out) throws IOException {
-        final ObjectMapper mapper = new ObjectMapper();
+
         final DefaultPrettyPrinter prettyPrinter = new DefaultPrettyPrinter();
         prettyPrinter.indentArraysWith(DefaultIndenter.SYSTEM_LINEFEED_INSTANCE);
         mapper.writer(prettyPrinter).writeValue(out, clObject);
@@ -53,7 +67,6 @@ public class JsonConversionService {
      */
     public <T> T fromJson(final String json, final Class<T> type) throws IOException {
         clear();
-        final ObjectMapper mapper = new ObjectMapper();
         return mapper.reader().readValue(json, type);
     }
 
@@ -66,7 +79,6 @@ public class JsonConversionService {
      */
     public <T> T fromJson(final InputStream in, final Class<T> type) throws IOException {
         clear();
-        final ObjectMapper mapper = new ObjectMapper();
         return mapper.reader().readValue(in, type);
     }
 }

@@ -2,6 +2,7 @@ package com.casper.sdk.service.http.rpc;
 
 import com.casper.sdk.domain.Deploy;
 import com.casper.sdk.domain.DeployService;
+import com.casper.sdk.json.JsonConversionService;
 import com.casper.sdk.service.HashService;
 import com.casper.sdk.service.MethodEnums;
 
@@ -24,10 +25,12 @@ public class NodeClient {
     private final HashService hashService;
     private final DeployService deployService;
 
-    public NodeClient(final DeployService deployService, final HashService hashService) {
+    public NodeClient(final DeployService deployService,
+                      final HashService hashService,
+                      final JsonConversionService jsonConversionService) {
         this.deployService = deployService;
         this.hashService = hashService;
-        this.httpMethods = new HttpMethods();
+        this.httpMethods = new HttpMethods(jsonConversionService);
     }
 
     public String getStateRootHash() throws Throwable {
