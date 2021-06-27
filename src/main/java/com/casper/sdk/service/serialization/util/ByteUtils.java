@@ -1,30 +1,10 @@
 package com.casper.sdk.service.serialization.util;
 
-import com.casper.sdk.domain.CLType;
 import com.casper.sdk.exceptions.ConversionException;
-import com.casper.sdk.service.serialization.cltypes.TypesFactory;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
 
 public class ByteUtils {
-
-    public static final TypesFactory typesFactory = new TypesFactory();
-
-    public static byte[] toU32(Number number) {
-        return typesFactory.getInstance(CLType.U32).serialize(number.intValue());
-    }
-
-    public static byte[] toU64(final Number number) {
-        return typesFactory.getInstance(CLType.U64).serialize(number);
-    }
-
-    public static byte[] toU512(final Number number) {
-        return typesFactory.getInstance(CLType.U512).serialize(number);
-    }
-
-    public static byte[] toBytesArrayU8(final byte[] source) {
-        return typesFactory.getInstance(CLType.BYTE_ARRAY).serialize(source);
-    }
 
     /**
      * Joins multiple arrays into a new concatenated array
@@ -58,10 +38,6 @@ public class ByteUtils {
         }
     }
 
-    public static byte[] toCLStringBytes(final String source) {
-        return typesFactory.getInstance(CLType.STRING).serialize(source);
-    }
-
     public static String encodeHexString(byte[] bytes) {
         return Hex.encodeHexString(bytes);
     }
@@ -81,10 +57,17 @@ public class ByteUtils {
         return array;
     }
 
-    public static byte[] truncateBytes(byte[] content, final int length) {
+    /**
+     * Obtains the last 'length' bytes from a byte array
+     *
+     * @param toTruncate the byte array to obtain the bytes from
+     * @param length     the number of bytes to obtain
+     * @return the last 'length' bytes from a byte array
+     */
+    public static byte[] lastNBytes(byte[] toTruncate, final int length) {
         byte[] secretBytes = new byte[length];
-        int pstart = content.length - length;
-        System.arraycopy(content, pstart, secretBytes, 0, length);
+        int start = toTruncate.length - length;
+        System.arraycopy(toTruncate, start, secretBytes, 0, length);
         return secretBytes;
     }
 }

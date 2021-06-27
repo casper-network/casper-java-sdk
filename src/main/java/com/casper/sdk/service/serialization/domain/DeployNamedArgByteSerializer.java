@@ -1,20 +1,27 @@
 package com.casper.sdk.service.serialization.domain;
 
+import com.casper.sdk.domain.CLType;
 import com.casper.sdk.domain.DeployNamedArg;
+import com.casper.sdk.service.serialization.cltypes.TypesFactory;
+import com.casper.sdk.service.serialization.cltypes.TypesSerializer;
 import com.casper.sdk.service.serialization.util.ByteUtils;
-
-import static com.casper.sdk.service.serialization.util.ByteUtils.toU32;
 
 public class DeployNamedArgByteSerializer implements ByteSerializer<DeployNamedArg> {
 
-    private final CLValueByteSerializer valueSerializer = new CLValueByteSerializer();
+    private final CLValueByteSerializer valueSerializer;
+    private final TypesSerializer u32Serializer;
+
+    public DeployNamedArgByteSerializer(final TypesFactory typesFactory) {
+        u32Serializer = typesFactory.getInstance(CLType.U32);
+        valueSerializer = new CLValueByteSerializer(typesFactory);
+    }
 
     @Override
     public byte[] toBytes(DeployNamedArg source) {
         byte[] name = source.getName().getBytes();
 
         return ByteUtils.concat(
-                ByteUtils.concat(toU32(name.length), name),
+                ByteUtils.concat(u32Serializer.serialize(name.length), name),
                 valueSerializer.toBytes(source.getValue())
         );
     }

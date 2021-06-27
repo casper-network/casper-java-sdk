@@ -4,6 +4,8 @@ import com.casper.sdk.exceptions.HashException;
 import com.casper.sdk.json.JsonConversionService;
 import com.casper.sdk.service.HashService;
 import com.casper.sdk.service.SigningService;
+import com.casper.sdk.service.serialization.cltypes.TypesFactory;
+import com.casper.sdk.service.serialization.cltypes.TypesSerializer;
 import com.casper.sdk.service.serialization.domain.ByteSerializerFactory;
 import com.casper.sdk.service.serialization.util.ByteUtils;
 import com.casper.sdk.service.serialization.util.NumberUtils;
@@ -22,12 +24,51 @@ import java.util.Set;
 /**
  * Util methods for making Deploy message
  */
-public class DeployUtil {
+public class DeployService {
 
-    private static final HashService hashService = HashService.getInstance();
-    private static final ByteSerializerFactory serializerFactory = new ByteSerializerFactory();
-    private static final JsonConversionService jsonService = new JsonConversionService();
-    private static final SigningService signingService = new SigningService();
+    private final ByteSerializerFactory serializerFactory;
+    private final HashService hashService;
+    private final JsonConversionService jsonService;
+    private final SigningService signingService;
+    private final TypesSerializer u64Serializer;
+    private final TypesSerializer u512Serializer;
+
+    public DeployService(final ByteSerializerFactory serializerFactory,
+                         final HashService hashService,
+                         final JsonConversionService jsonService,
+                         final SigningService signingService,
+                         final TypesFactory typesFactory) {
+        this.serializerFactory = serializerFactory;
+        this.hashService = hashService;
+        this.jsonService = jsonService;
+        this.signingService = signingService;
+        u64Serializer = typesFactory.getInstance(CLType.U64);
+        u512Serializer = typesFactory.getInstance(CLType.U512);
+    }
+
+    String toTtlStr(long ttl) {
+        return Duration.ofMillis(ttl)
+                .toString()
+                .substring(2)
+                .replaceAll("(\\d[HMS])(?!$)", "$1 ")
+                .toLowerCase();
+    }
+
+    public byte[] toBytes(final Deploy deploy) {
+        return serializerFactory.getByteSerializer(deploy).toBytes(deploy);
+    }
+
+    byte[] serializedHeader(final DeployHeader header) {
+        return serializerFactory.getByteSerializerByType(DeployHeader.class).toBytes(header);
+    }
+
+    byte[] serializeBody(final DeployExecutable payment, final DeployExecutable session) {
+        return ByteUtils.concat(toBytes(payment), toBytes(session));
+    }
+
+    byte[] serializeApprovals(final Set<DeployApproval> approvals) {
+        return serializerFactory.getByteSerializerByType(Set.class).toBytes(approvals);
+    }
 
     /**
      * Creates a new unsigned Deploy message
@@ -37,9 +78,9 @@ public class DeployUtil {
      * @param payment      the payment
      * @return a new deploy
      */
-    public static Deploy makeDeploy(final DeployParams deployParams,
-                                    final DeployExecutable session,
-                                    final DeployExecutable payment) {
+    public Deploy makeDeploy(final DeployParams deployParams,
+                             final DeployExecutable session,
+                             final DeployExecutable payment) {
 
         final Digest bodyHash = makeBodyHash(session, payment);
 
@@ -58,18 +99,18 @@ public class DeployUtil {
         return new Deploy(deployHash, header, payment, session, new LinkedHashSet<>());
     }
 
-    static Digest makeBodyHash(final DeployExecutable payment, final DeployExecutable session) {
+    Digest makeBodyHash(final DeployExecutable payment, final DeployExecutable session) {
         final byte[] serializedBody = serializeBody(payment, session);
         final byte[] hash = hashService.getHash(serializedBody);
         return new Digest(hash);
     }
 
-    public static Transfer newTransfer(final Number amount, final PublicKey target, final Number id) {
+    public Transfer newTransfer(final Number amount, final PublicKey target, final Number id) {
 
-        final byte[] amountBytes = ByteUtils.toU512(amount);
+        final byte[] amountBytes = u512Serializer.serialize(amount);
 
         // Prefix the option bytes with OPTION_NONE or OPTION_SOME
-        final byte[] idBytes = CLOptionValue.prefixOption(ByteUtils.toU64(id));
+        final byte[] idBytes = CLOptionValue.prefixOption(u64Serializer.serialize(id));
 
         final String accountHash;
         try {
@@ -91,10 +132,10 @@ public class DeployUtil {
      *
      * @param paymentAmount the number of notes paying to execution engine
      */
-    public static ModuleBytes standardPayment(final Number paymentAmount) {
+    public ModuleBytes standardPayment(final Number paymentAmount) {
 
         final BigInteger biAmount = NumberUtils.toBigInteger(paymentAmount);
-        byte[] amountBytes = ByteUtils.toU512(biAmount);
+        byte[] amountBytes = u512Serializer.serialize(biAmount);
         final DeployNamedArg paymentArg = new DeployNamedArg(
                 "amount",
                 new CLValue(amountBytes, CLType.U512, paymentAmount)
@@ -103,11 +144,11 @@ public class DeployUtil {
         return new ModuleBytes(new byte[0], List.of(paymentArg));
     }
 
-    public static Deploy fromJson(final String json) throws IOException {
+    public Deploy fromJson(final String json) throws IOException {
         return jsonService.fromJson(json, Deploy.class);
     }
 
-    public static Deploy fromJson(final InputStream in) throws IOException {
+    public Deploy fromJson(final InputStream in) throws IOException {
         return jsonService.fromJson(in, Deploy.class);
     }
 
@@ -117,21 +158,19 @@ public class DeployUtil {
      * @param deploy the deploy whose size is to be obtained
      * @return the deploy byte size
      */
-    public static int deploySizeInBytes(Deploy deploy) {
+    public int deploySizeInBytes(Deploy deploy) {
         return toBytes(deploy).length;
     }
 
-    static byte[] serializeHeader(final DeployHeader deployHeader) {
+    byte[] serializeHeader(final DeployHeader deployHeader) {
         return serializerFactory.getByteSerializerByType(DeployHeader.class).toBytes(deployHeader);
     }
 
-
-    static byte[] toBytes(final DeployExecutable deployExecutable) {
+    byte[] toBytes(final DeployExecutable deployExecutable) {
         return serializerFactory.getByteSerializer(deployExecutable).toBytes(deployExecutable);
     }
 
-
-    public static Deploy signDeploy(final Deploy deploy, final AsymmetricCipherKeyPair keyPair) {
+    public Deploy signDeploy(final Deploy deploy, final AsymmetricCipherKeyPair keyPair) {
 
 
         final byte[] signed = signingService.signWithPrivateKey(keyPair.getPrivate(), deploy.getHash().getHash());
@@ -148,30 +187,5 @@ public class DeployUtil {
         );
 
         return deploy;
-    }
-
-
-    public static byte[] toBytes(final Deploy deploy) {
-        return serializerFactory.getByteSerializer(deploy).toBytes(deploy);
-    }
-
-    static String toTtlStr(long ttl) {
-        return Duration.ofMillis(ttl)
-                .toString()
-                .substring(2)
-                .replaceAll("(\\d[HMS])(?!$)", "$1 ")
-                .toLowerCase();
-    }
-
-    static byte[] serializedHeader(final DeployHeader header) {
-        return serializerFactory.getByteSerializerByType(DeployHeader.class).toBytes(header);
-    }
-
-    static byte[] serializeBody(final DeployExecutable payment, final DeployExecutable session) {
-        return ByteUtils.concat(toBytes(payment), toBytes(session));
-    }
-
-    static byte[] serializeApprovals(final Set<DeployApproval> approvals) {
-        return serializerFactory.getByteSerializerByType(Set.class).toBytes(approvals);
     }
 }

@@ -25,7 +25,7 @@ public class Digest {
     public Digest(final byte[] hash) {
         Objects.requireNonNull(hash, "Hash must not be null");
         if (hash.length != BYTES_32_HEX) {
-            throw new IllegalArgumentException("Hash must be 32 bytes long: " + hash);
+            throw new IllegalArgumentException("Hash must be 32 bytes long: " + Arrays.toString(hash));
         }
         this.hash = hash;
     }

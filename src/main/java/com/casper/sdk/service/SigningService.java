@@ -16,11 +16,8 @@ import org.bouncycastle.util.io.pem.PemObject;
 import org.bouncycastle.util.io.pem.PemReader;
 
 import java.io.*;
-import java.security.KeyPairGenerator;
-import java.security.PrivateKey;
 import java.security.SecureRandom;
 import java.security.Security;
-import java.security.spec.NamedParameterSpec;
 
 public class SigningService {
 
@@ -50,8 +47,8 @@ public class SigningService {
      */
     public AsymmetricCipherKeyPair loadKeyPair(final InputStream publicKeyIn, final InputStream privateKeyIn) throws IOException {
 
-        final byte[] publicBytes = ByteUtils.truncateBytes(this.readPemFile(publicKeyIn), 32);
-        final byte[] secretBytes = ByteUtils.truncateBytes(this.readPemFile(privateKeyIn), 32);
+        final byte[] publicBytes = ByteUtils.lastNBytes(this.readPemFile(publicKeyIn), 32);
+        final byte[] secretBytes = ByteUtils.lastNBytes(this.readPemFile(privateKeyIn), 32);
 
         return new AsymmetricCipherKeyPair(
                 new Ed25519PublicKeyParameters(publicBytes),

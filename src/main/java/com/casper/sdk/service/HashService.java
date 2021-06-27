@@ -17,21 +17,10 @@ import java.security.Security;
  */
 public class HashService {
 
-    /** The singleton instance */
-    private static HashService instance;
-
-    private HashService() {
+    static {
         Security.addProvider(new Blake2bProvider());
     }
-
-    public static HashService getInstance() {
-        if (instance == null) {
-            instance = new HashService();
-        }
-        return instance;
-    }
-
-    private static String getAlgo(final String key) {
+    private  String getAlgo(final String key) {
 
         final String algo;
 

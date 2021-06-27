@@ -1,16 +1,13 @@
 package com.casper.sdk.service.serialization.cltypes;
 
-import com.casper.sdk.domain.CLType;
 import com.casper.sdk.service.serialization.util.ByteUtils;
 
 import java.nio.charset.StandardCharsets;
 
-class StringSerializer implements TypesSerializer {
-
-    private final TypesFactory typesFactory;
+class StringSerializer extends AbstractTypesSerializer {
 
     public StringSerializer(final TypesFactory typesFactory) {
-        this.typesFactory = typesFactory;
+        super(typesFactory);
     }
 
     @Override
@@ -21,7 +18,7 @@ class StringSerializer implements TypesSerializer {
 
         //return the length of the string in U32 type plus the hex byte value of the string
         return ByteUtils.concat(
-                typesFactory.getInstance(CLType.U32).serialize(bytes.length),
+                getU32Serializer().serialize(bytes.length),
                 bytes
         );
     }

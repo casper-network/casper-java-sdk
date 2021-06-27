@@ -1,12 +1,15 @@
 package com.casper.sdk.service.serialization.domain;
 
+import com.casper.sdk.domain.CLType;
 import com.casper.sdk.domain.DeployHeader;
 import com.casper.sdk.domain.Digest;
 import com.casper.sdk.domain.PublicKey;
+import com.casper.sdk.service.serialization.cltypes.TypesFactory;
+import com.casper.sdk.service.serialization.cltypes.TypesSerializer;
 
 import java.util.List;
 
-import static com.casper.sdk.service.serialization.util.ByteUtils.*;
+import static com.casper.sdk.service.serialization.util.ByteUtils.concat;
 
 /**
  * The byte serializer for {@link DeployHeader} domain objects.
@@ -14,9 +17,13 @@ import static com.casper.sdk.service.serialization.util.ByteUtils.*;
 class DeployHeaderByteSerializer implements ByteSerializer<DeployHeader> {
 
     private final ByteSerializerFactory factory;
+    private final TypesSerializer u64Serializer;
+    private final TypesSerializer stringSerializer;
 
-    public DeployHeaderByteSerializer(final ByteSerializerFactory factory) {
+    public DeployHeaderByteSerializer(final ByteSerializerFactory factory, final TypesFactory typesFactory) {
         this.factory = factory;
+        u64Serializer = typesFactory.getInstance(CLType.U64);
+        stringSerializer = typesFactory.getInstance(CLType.STRING);
     }
 
     @Override
@@ -24,15 +31,15 @@ class DeployHeaderByteSerializer implements ByteSerializer<DeployHeader> {
 
         return concat(
                 factory.getByteSerializerByType(PublicKey.class).toBytes(source.getAccount()),
-                toU64(source.getTimestamp()),
-                toU64(source.getTtl()),
-                toU64(source.getGasPrice()),
+                u64Serializer.serialize(source.getTimestamp()),
+                u64Serializer.serialize(source.getTtl()),
+                u64Serializer.serialize(source.getGasPrice()),
                 // toBytesDeployHash
                 factory.getByteSerializerByType(Digest.class).toBytes(source.getBodyHash()),
                 // toBytesVecT
                 factory.getByteSerializerByType(List.class).toBytes(source.getDependencies()),
                 // toBytesString
-                toCLStringBytes(source.getChainName())
+                stringSerializer.serialize(source.getChainName())
         );
     }
 

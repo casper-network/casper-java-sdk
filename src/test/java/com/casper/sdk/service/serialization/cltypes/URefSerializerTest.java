@@ -5,9 +5,6 @@ import com.casper.sdk.domain.URef;
 import com.casper.sdk.service.serialization.util.ByteUtils;
 import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
-
 /**
  * Unit tests the URef serialization
  */
@@ -21,7 +18,7 @@ class URefSerializerTest {
 
         final String urefAddr = "2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a";
 
-        final byte [] expected  = ByteUtils.decodeHex("022a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a07");
+        final byte[] expected = ByteUtils.decodeHex("022a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a07");
 
         final URef uref = new URef(urefAddr, AccessRights.READ_ADD_WRITE);
 

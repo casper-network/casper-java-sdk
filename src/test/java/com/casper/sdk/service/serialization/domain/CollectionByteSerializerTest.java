@@ -3,6 +3,7 @@ package com.casper.sdk.service.serialization.domain;
 import com.casper.sdk.domain.CLType;
 import com.casper.sdk.domain.CLValue;
 import com.casper.sdk.domain.DeployNamedArg;
+import com.casper.sdk.service.serialization.cltypes.TypesFactory;
 import com.casper.sdk.service.serialization.util.ByteUtils;
 import org.junit.jupiter.api.Test;
 
@@ -18,6 +19,7 @@ class CollectionByteSerializerTest {
 
     /** The factory to delegate conversion of fields to */
     private final ByteSerializerFactory factory = new ByteSerializerFactory();
+    private final TypesFactory typesFactory = new TypesFactory();
     @SuppressWarnings("rawtypes")
     private final ByteSerializer<List> serializer = factory.getByteSerializerByType(List.class);
 
@@ -67,5 +69,9 @@ class CollectionByteSerializerTest {
         byte[] bytes = serializer.toBytes(args);
 
         assertThat(bytes, is(expected));
+    }
+
+    private byte[] toU32(int value) {
+        return typesFactory.getInstance(CLType.U32).serialize(value);
     }
 }

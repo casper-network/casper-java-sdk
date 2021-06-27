@@ -90,13 +90,5 @@ public enum MethodEnums {
         }
     };
 
-    private static final List<String> MAP = new ArrayList<>();
-
-    static {
-        for (final MethodEnums value : values()) {
-            MAP.add(value.name());
-        }
-    }
-
     public abstract String getValue(final String result) throws ValueNotFoundException;
 }

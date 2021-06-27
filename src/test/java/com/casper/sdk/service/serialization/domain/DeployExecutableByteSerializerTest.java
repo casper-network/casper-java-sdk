@@ -1,7 +1,10 @@
 package com.casper.sdk.service.serialization.domain;
 
 import com.casper.sdk.domain.*;
-import com.casper.sdk.service.serialization.util.ByteUtils;
+import com.casper.sdk.json.JsonConversionService;
+import com.casper.sdk.service.HashService;
+import com.casper.sdk.service.SigningService;
+import com.casper.sdk.service.serialization.cltypes.TypesFactory;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigInteger;
@@ -17,6 +20,15 @@ class DeployExecutableByteSerializerTest {
 
     private final ByteSerializerFactory byteSerializerFactory = new ByteSerializerFactory();
     private final DeployExecutableByteSerializer serializer = (DeployExecutableByteSerializer) byteSerializerFactory.getByteSerializerByType(DeployExecutable.class);
+    private final TypesFactory typesFactory = new TypesFactory();
+    private final DeployService deployService = new DeployService(
+            new ByteSerializerFactory(),
+            new HashService(),
+            new JsonConversionService(),
+            new SigningService(),
+            typesFactory
+    );
+
 
     /**
      * Tests module bytes can be converted to a casper serialised  byte array
@@ -25,7 +37,7 @@ class DeployExecutableByteSerializerTest {
     void moduleBytesToBytes() {
 
         final BigInteger paymentAmount = new BigInteger("1000000000");
-        final byte[] amountBytes = ByteUtils.toU512(paymentAmount);
+        final byte[] amountBytes = typesFactory.getInstance(CLType.U512).serialize(paymentAmount);
         final DeployNamedArg paymentArg = new DeployNamedArg(
                 "amount",
                 new CLValue(amountBytes, CLType.U512, paymentAmount)
@@ -95,7 +107,7 @@ class DeployExecutableByteSerializerTest {
 
         };
 
-        final Transfer transfer = DeployUtil.newTransfer(10,
+        final Transfer transfer = deployService.newTransfer(10,
                 new PublicKey(recipientPublicKey, KeyAlgorithm.ED25519),
                 34);
 

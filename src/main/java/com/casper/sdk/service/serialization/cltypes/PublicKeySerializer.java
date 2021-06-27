@@ -4,7 +4,7 @@ import org.apache.commons.lang3.NotImplementedException;
 
 public class PublicKeySerializer implements TypesSerializer {
 
-    public PublicKeySerializer(TypesFactory typesFactory) {
+    public PublicKeySerializer() {
     }
 
     @Override

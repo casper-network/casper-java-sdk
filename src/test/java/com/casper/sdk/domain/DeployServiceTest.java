@@ -1,7 +1,10 @@
 package com.casper.sdk.domain;
 
+import com.casper.sdk.json.JsonConversionService;
 import com.casper.sdk.service.HashService;
 import com.casper.sdk.service.SigningService;
+import com.casper.sdk.service.serialization.cltypes.TypesFactory;
+import com.casper.sdk.service.serialization.domain.ByteSerializerFactory;
 import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
 import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
 import org.junit.jupiter.api.Test;
@@ -13,8 +16,6 @@ import java.math.BigInteger;
 import java.time.Instant;
 import java.util.Set;
 
-import static com.casper.sdk.domain.DeployUtil.makeBodyHash;
-import static com.casper.sdk.domain.DeployUtil.toTtlStr;
 import static com.casper.sdk.service.serialization.util.ByteUtils.concat;
 import static com.casper.sdk.service.serialization.util.ByteUtils.decodeHex;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -22,15 +23,24 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
 
 /**
- * Unit tests for the {@link DeployUtil} class
+ * Unit tests for the {@link DeployService} class
  */
-class DeployUtilTest {
+class DeployServiceTest {
 
     public static final String DEPLOY_JSON_PATH = "/com/casper/sdk/domain/deploy-util-test.json";
     private static final String PUBLIC_KEY = "/account/user-1/public_key.pem";
     private static final String PRIVATE_KEY = "/account/user-1/secret_key.pem";
 
     private final SigningService signingService = new SigningService();
+
+    private final HashService hashService = new HashService();
+    private final DeployService deployService = new DeployService(
+            new ByteSerializerFactory(),
+            hashService,
+            new JsonConversionService(),
+            signingService,
+            new TypesFactory()
+    );
 
     /**
      * Unit tests the makeTransfer method of the DeployUtil.
@@ -45,7 +55,7 @@ class DeployUtilTest {
         final byte[] expectedTargetBytes = decodeHex("e6454d6bc07d32a178298286e589029b083da8cd718ab3d8dbdab1cfd018fb79");
         final byte[] expectedAmountBytes = decodeHex("010A");
 
-        final Transfer transfer = DeployUtil.newTransfer(10, new PublicKey(keyBytes, KeyAlgorithm.ED25519), 34);
+        final Transfer transfer = deployService.newTransfer(10, new PublicKey(keyBytes, KeyAlgorithm.ED25519), 34);
 
         assertThat(transfer, is(notNullValue()));
         assertThat(transfer.getTag(), is(5));
@@ -69,7 +79,7 @@ class DeployUtilTest {
     @Test
     void standardPayment() {
 
-        final ModuleBytes payment = DeployUtil.standardPayment(1000000L);
+        final ModuleBytes payment = deployService.standardPayment(1000000L);
         assertThat(payment.getTag(), is(0));
 
         final CLValue amount = payment.getNamedArg("amount").getValue();
@@ -82,15 +92,15 @@ class DeployUtilTest {
     void standardPaymentToBytes() {
 
         byte[] expectedBytes = decodeHex("00000000000100000006000000616d6f756e74040000000340420f08");
-        final ModuleBytes payment = DeployUtil.standardPayment(1000000L);
+        final ModuleBytes payment = deployService.standardPayment(1000000L);
 
-        assertThat(DeployUtil.toBytes(payment), is(expectedBytes));
+        assertThat(deployService.toBytes(payment), is(expectedBytes));
     }
 
     @Test
     void makeDeploy() {
 
-        final Deploy deploy = DeployUtil.makeDeploy(
+        final Deploy deploy = deployService.makeDeploy(
 
                 new DeployParams(
                         new PublicKey("017f747b67bd3fe63c2a736739dfe40156d622347346e70f68f51c178a75ce5537"),
@@ -100,11 +110,11 @@ class DeployUtilTest {
                         DeployParams.DEFAULT_TTL,
                         null),
 
-                DeployUtil.newTransfer(new BigInteger("24500000000"),
+                deployService.newTransfer(new BigInteger("24500000000"),
                         new PublicKey("010101010101010101010101010101010101010101010101010101010101010101", KeyAlgorithm.ED25519),
                         new BigInteger("999")),
 
-                DeployUtil.standardPayment(new BigInteger("1000000000"))
+                deployService.standardPayment(new BigInteger("1000000000"))
         );
 
         assertThat(deploy, is(notNullValue()));
@@ -134,10 +144,10 @@ class DeployUtilTest {
                 (byte) 0, (byte) 0, (byte) 0, (byte) 13, (byte) 5
         };
 
-        final ModuleBytes payment = DeployUtil.standardPayment(10000000000000L);
-        final Transfer transfer = DeployUtil.newTransfer(10, new PublicKey(recipientPublicKey, KeyAlgorithm.ED25519), 34);
+        final ModuleBytes payment = deployService.standardPayment(10000000000000L);
+        final Transfer transfer = deployService.newTransfer(10, new PublicKey(recipientPublicKey, KeyAlgorithm.ED25519), 34);
 
-        final byte[] bytes = DeployUtil.serializeBody(payment, transfer);
+        final byte[] bytes = deployService.serializeBody(payment, transfer);
         assertThat(bytes, is(expectedBody));
     }
 
@@ -157,7 +167,7 @@ class DeployUtilTest {
                 (byte) 137, 83, 58, (byte) 211, 62, 63, 47, 87, 49, 6, 74, (byte) 232, (byte) 177, 101, (byte) 177, (byte) 155, (byte) 173
         };
 
-        final byte[] result = HashService.getInstance().getHash((serialisedBody));
+        final byte[] result = hashService.getHash((serialisedBody));
 
         assertThat(result, is(expected));
     }
@@ -188,7 +198,7 @@ class DeployUtilTest {
 
         assertThat(expected.length, is(102));
 
-        final byte[] bytes = DeployUtil.serializeApprovals(approvals);
+        final byte[] bytes = deployService.serializeApprovals(approvals);
         assertThat(bytes, is(expected));
     }
 
@@ -208,15 +218,15 @@ class DeployUtilTest {
                 (byte) 135, (byte) 253, (byte) 178, (byte) 236, (byte) 71, (byte) 44, (byte) 78, (byte) 151, (byte) 136, (byte) 23, (byte) 159, (byte) 163, (byte) 28, (byte) 2, (byte) 90, (byte) 219, (byte) 44, (byte) 59, (byte) 218, (byte) 234, (byte) 197, (byte) 121, (byte) 219, (byte) 106, (byte) 118, (byte) 51, (byte) 252, (byte) 67, (byte) 229, (byte) 37, (byte) 160, (byte) 30
         };
 
-        final ModuleBytes payment = DeployUtil.standardPayment(10000000000000L);
-        final Transfer transfer = DeployUtil.newTransfer(10, new PublicKey(recipientPublicKey, KeyAlgorithm.ED25519), 34);
+        final ModuleBytes payment = deployService.standardPayment(10000000000000L);
+        final Transfer transfer = deployService.newTransfer(10, new PublicKey(recipientPublicKey, KeyAlgorithm.ED25519), 34);
 
-        byte[] body = DeployUtil.serializeBody(payment, transfer);
+        byte[] body = deployService.serializeBody(payment, transfer);
 
         assertThat(body.length, is(expectedBody.length));
         assertThat(body, is(expectedBody));
 
-        final Digest bodyHash = makeBodyHash(payment, transfer);
+        final Digest bodyHash = deployService.makeBodyHash(payment, transfer);
         assertThat(bodyHash.getHash(), is(expectedHash));
     }
 
@@ -224,12 +234,12 @@ class DeployUtilTest {
     void deployToBytes() throws IOException {
 
         final InputStream in = getClass().getResource(DEPLOY_JSON_PATH).openStream();
-        final Deploy deploy = DeployUtil.fromJson(in);
+        final Deploy deploy = deployService.fromJson(in);
 
         final String strExpected = "017f747b67bd3fe63c2a736739dfe40156d622347346e70f68f51c178a75ce5537a087c0377901000040771b00000000000200000000000000f2e0782bba4a0a9663cafc7d707fd4a74421bc5bfef4e368b7e8f38dfab87db8020000000f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f1010101010101010101010101010101010101010101010101010101010101010070000006d61696e6e6574d7a68bbe656a883d04bba9f26aa340dbe3f8ec99b2adb63b628f2bc92043199800000000000100000006000000616d6f756e74050000000400ca9a3b08050400000006000000616d6f756e740600000005005550b40508060000007461726765742000000001010101010101010101010101010101010101010101010101010101010101010f200000000200000069640900000001e7030000000000000d050f0000006164646974696f6e616c5f696e666f140000001000000074686973206973207472616e736665720a01000000017f747b67bd3fe63c2a736739dfe40156d622347346e70f68f51c178a75ce55370195a68b1a05731b7014e580b4c67a506e0339a7fffeaded9f24eb2e7f78b96bdd900b9be8ca33e4552a9a619dc4fc5e4e3a9f74a4b0537c14a5a8007d62a5dc06";
         byte[] expected = decodeHex(strExpected);
 
-        final byte[] actual = DeployUtil.toBytes(deploy);
+        final byte[] actual = deployService.toBytes(deploy);
 
         assertThat(actual, is(expected));
     }
@@ -237,7 +247,7 @@ class DeployUtilTest {
     @Test
     void signDeploy() throws IOException {
 
-        final Deploy deploy = DeployUtil.makeDeploy(
+        final Deploy deploy = deployService.makeDeploy(
 
                 new DeployParams(
                         new PublicKey("017f747b67bd3fe63c2a736739dfe40156d622347346e70f68f51c178a75ce5537"),
@@ -247,21 +257,21 @@ class DeployUtilTest {
                         DeployParams.DEFAULT_TTL,
                         null),
 
-                DeployUtil.newTransfer(new BigInteger("24500000000"),
+                deployService.newTransfer(new BigInteger("24500000000"),
                         new PublicKey("0101010101010101010101010101010101010101010101010101010101010101", KeyAlgorithm.ED25519),
                         new BigInteger("999")),
 
-                DeployUtil.standardPayment(new BigInteger("1000000000"))
+                deployService.standardPayment(new BigInteger("1000000000"))
         );
 
         assertThat(deploy.getApprovals().size(), is(0));
 
         final AsymmetricCipherKeyPair keyPair = signingService.loadKeyPair(
-                new File(DeployUtilTest.class.getResource(PUBLIC_KEY).getFile()),
-                new File(DeployUtilTest.class.getResource(PRIVATE_KEY).getFile())
+                new File(DeployServiceTest.class.getResource(PUBLIC_KEY).getFile()),
+                new File(DeployServiceTest.class.getResource(PRIVATE_KEY).getFile())
         );
 
-        final Deploy signedDeploy = DeployUtil.signDeploy(deploy, keyPair);
+        final Deploy signedDeploy = deployService.signDeploy(deploy, keyPair);
 
         assertThat(signedDeploy.getApprovals().size(), is(1));
 
@@ -320,19 +330,19 @@ class DeployUtilTest {
                 null
         );
 
-        final ModuleBytes payment = DeployUtil.standardPayment(10000000000000L);
-        final Transfer session = DeployUtil.newTransfer(10, new PublicKey(recipientPublicKey, KeyAlgorithm.ED25519), 34);
-        final Digest bodyHash = makeBodyHash(payment, session);
+        final ModuleBytes payment = deployService.standardPayment(10000000000000L);
+        final Transfer session = deployService.newTransfer(10, new PublicKey(recipientPublicKey, KeyAlgorithm.ED25519), 34);
+        final Digest bodyHash = deployService.makeBodyHash(payment, session);
         final DeployHeader header = new DeployHeader(
                 deployParams.getAccountPublicKey(),
                 deployParams.getTimestamp(),
-                toTtlStr(deployParams.getTtl()),
+                deployService.toTtlStr(deployParams.getTtl()),
                 deployParams.getGasPrice(),
                 bodyHash,
                 deployParams.getDependencies(),
                 deployParams.getChainName()
         );
-        final byte[] serializedHeader = DeployUtil.serializedHeader(header);
+        final byte[] serializedHeader = deployService.serializedHeader(header);
 
         assertThat(serializedHeader, is(expectedHeaderBytes));
     }
@@ -341,8 +351,8 @@ class DeployUtilTest {
     void testDeploySize() throws IOException {
 
         final InputStream in = getClass().getResource(DEPLOY_JSON_PATH).openStream();
-        final Deploy deploy = DeployUtil.fromJson(in);
-        int sizeInBytes = DeployUtil.deploySizeInBytes(deploy);
+        final Deploy deploy = deployService.fromJson(in);
+        int sizeInBytes = deployService.deploySizeInBytes(deploy);
         assertThat(sizeInBytes, is(473));
     }
 }

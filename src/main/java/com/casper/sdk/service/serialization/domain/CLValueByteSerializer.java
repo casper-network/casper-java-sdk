@@ -1,23 +1,24 @@
 package com.casper.sdk.service.serialization.domain;
 
-import com.casper.sdk.domain.*;
+import com.casper.sdk.domain.CLValue;
+import com.casper.sdk.service.serialization.cltypes.TypesFactory;
 import com.casper.sdk.service.serialization.util.ByteUtils;
 
 /**
  * Converts a CLValue to a byte array
  */
-class CLValueByteSerializer implements ByteSerializer<CLValue> {
+class CLValueByteSerializer extends AbstractByteSerializer<CLValue> {
 
-    private static byte[] toBytes(final CLTypeInfo clTypeInfo) {
-        return CLTypeHelper.toBytesHelper(clTypeInfo);
+    public CLValueByteSerializer(final TypesFactory typesFactory) {
+        super(typesFactory);
     }
 
     @Override
     public byte[] toBytes(final CLValue source) {
         return ByteUtils.concat(
-                ByteUtils.toU32(source.getBytes().length),
+                getU32Serializer().serialize(source.getBytes().length),
                 source.getBytes(),
-                toBytes(source.getCLTypeInfo())
+                toBytesForCLTypeInfo(source.getCLTypeInfo())
         );
     }
 

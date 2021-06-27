@@ -2,10 +2,16 @@ package com.casper.sdk.service.http.rpc;
 
 import com.casper.sdk.Properties;
 import com.casper.sdk.domain.Deploy;
-import com.casper.sdk.domain.DeployUtil;
+import com.casper.sdk.domain.DeployService;
+import com.casper.sdk.json.JsonConversionService;
+import com.casper.sdk.service.HashService;
+import com.casper.sdk.service.SigningService;
+import com.casper.sdk.service.serialization.cltypes.TypesFactory;
+import com.casper.sdk.service.serialization.domain.ByteSerializerFactory;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.mockwebserver.MockWebServer;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,7 +20,7 @@ import java.io.InputStream;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 
@@ -23,7 +29,16 @@ public class NodeClientTest {
     public static final String DEPLOY_JSON_PATH = "/com/casper/sdk/domain/deploy-util-test.json";
     private final static String url = "http://localhost";
     private static MockWebServer mockBackEnd;
-    private final NodeClient query = new NodeClient();
+
+    private final HashService hashService = new HashService();
+    private final DeployService deployService = new DeployService(
+            new ByteSerializerFactory(),
+            hashService,
+            new JsonConversionService(),
+            new SigningService(),
+            new TypesFactory()
+    );
+    private final NodeClient query = new NodeClient(deployService, hashService);
 
     @BeforeEach
     void setUp() throws IOException {
@@ -34,6 +49,11 @@ public class NodeClientTest {
 
         Properties.properties.put("node-url", url);
         Properties.properties.put("node-port", String.valueOf(mockBackEnd.getPort()));
+    }
+
+    @AfterEach
+    void tearDown() throws IOException {
+        mockBackEnd.close();
     }
 
     @Test
@@ -95,7 +115,7 @@ public class NodeClientTest {
     void testPutDeploy() throws Throwable {
 
         final InputStream in = getClass().getResource(DEPLOY_JSON_PATH).openStream();
-        final Deploy deploy = DeployUtil.fromJson(in);
+        final Deploy deploy = deployService.fromJson(in);
 
         assertThat(query.putDeploy(deploy), is("01da3c604f71e0e7df83ff1ab4ef15bb04de64ca02e3d2b78de6950e8b5ee187"));
     }

@@ -1,6 +1,11 @@
 package com.casper.sdk.controller;
 
 import com.casper.sdk.domain.*;
+import com.casper.sdk.json.JsonConversionService;
+import com.casper.sdk.service.HashService;
+import com.casper.sdk.service.SigningService;
+import com.casper.sdk.service.serialization.cltypes.TypesFactory;
+import com.casper.sdk.service.serialization.domain.ByteSerializerFactory;
 import com.casper.sdk.service.serialization.util.ByteUtils;
 import org.junit.jupiter.api.Test;
 
@@ -14,6 +19,14 @@ class CasperSdkTest {
     private final static String PORT = "7777";
 
     private final CasperSdk casperSdk = new CasperSdk(URL, PORT);
+
+    private final DeployService deployService = new DeployService(
+            new ByteSerializerFactory(),
+            new HashService(),
+            new JsonConversionService(),
+            new SigningService(),
+            new TypesFactory()
+    );
 
     /**
      * Tests the SDK can create a transfer object
@@ -29,7 +42,7 @@ class CasperSdkTest {
         // The recipientPublicKey hashed to 32 bytes using ED25519
         final String targetBytes = "473535565ff7b4fdd7aa3f7a083c7f9d05b82fcba57c22339fbf50e3c5474dcb";
 
-        final Transfer transfer = DeployUtil.newTransfer(
+        final Transfer transfer = deployService.newTransfer(
                 10,
                 new PublicKey(recipientPublicKey, KeyAlgorithm.ED25519),
                 34

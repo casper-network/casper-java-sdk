@@ -1,14 +1,11 @@
 package com.casper.sdk.service.serialization.domain;
 
-import com.casper.sdk.domain.DeployExecutable;
-import com.casper.sdk.domain.DeployNamedArg;
-import com.casper.sdk.domain.ModuleBytes;
-import com.casper.sdk.domain.StoredContractByName;
+import com.casper.sdk.domain.*;
+import com.casper.sdk.service.serialization.cltypes.TypesFactory;
+import com.casper.sdk.service.serialization.cltypes.TypesSerializer;
 import com.casper.sdk.service.serialization.util.ByteArrayBuilder;
 
 import java.util.List;
-
-import static com.casper.sdk.service.serialization.util.ByteUtils.*;
 
 /**
  * The byte serializer for a {@link DeployExecutable} and it's extending classes.
@@ -16,9 +13,13 @@ import static com.casper.sdk.service.serialization.util.ByteUtils.*;
 class DeployExecutableByteSerializer implements ByteSerializer<DeployExecutable> {
 
     private final ByteSerializerFactory factory;
+    private final TypesSerializer u32Serializer;
+    private final TypesSerializer stringSerializer;
 
-    public DeployExecutableByteSerializer(final ByteSerializerFactory factory) {
+    public DeployExecutableByteSerializer(final ByteSerializerFactory factory, final TypesFactory typesFactory) {
         this.factory = factory;
+        u32Serializer = typesFactory.getInstance(CLType.U32);
+        stringSerializer = typesFactory.getInstance(CLType.STRING);
     }
 
     @Override
@@ -28,11 +29,11 @@ class DeployExecutableByteSerializer implements ByteSerializer<DeployExecutable>
         final ByteArrayBuilder builder = new ByteArrayBuilder()
                 .append((byte) deployExecutable.getTag());
 
-        if (deployExecutable instanceof ModuleBytes) {
-            builder.append(toBytesArrayU8(deployExecutable.getModuleBytes()));
-        } else if (deployExecutable instanceof StoredContractByName) {
-            builder.append(toCLStringBytes(((StoredContractByName) deployExecutable).getName()))
-                    .append(toCLStringBytes(((StoredContractByName) deployExecutable).getEntryPoint()));
+        if (deployExecutable instanceof StoredContractByName) {
+            builder.append(stringSerializer.serialize(((StoredContractByName) deployExecutable).getName()))
+                    .append(stringSerializer.serialize(((StoredContractByName) deployExecutable).getEntryPoint()));
+        } else if (deployExecutable instanceof ModuleBytes) {
+            builder.append(u32Serializer.serialize(deployExecutable.getModuleBytes()));
         }
 
         // Append any args if present
@@ -52,7 +53,7 @@ class DeployExecutableByteSerializer implements ByteSerializer<DeployExecutable>
         final ByteArrayBuilder builder = new ByteArrayBuilder();
 
         // append the number of arguments as LE U32 array
-        builder.append(toU32(args.size()));
+        builder.append(u32Serializer.serialize(args.size()));
 
         // Append each argument
         args.forEach(deployNamedArg ->

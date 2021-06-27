@@ -4,13 +4,13 @@ import com.casper.sdk.domain.CLByteArrayInfo;
 import com.casper.sdk.domain.CLType;
 import com.casper.sdk.domain.CLValue;
 import com.casper.sdk.domain.DeployNamedArg;
+import com.casper.sdk.service.serialization.cltypes.TypesFactory;
 import com.casper.sdk.service.serialization.util.ByteUtils;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
 import static com.casper.sdk.service.serialization.util.ByteUtils.concat;
-import static com.casper.sdk.service.serialization.util.ByteUtils.toU32;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
@@ -21,6 +21,7 @@ class DeployNamedArgByteSerializerTest {
     private final ByteSerializer<DeployNamedArg> deployNamedArgByteSerializer = factory.getByteSerializerByType(DeployNamedArg.class);
     @SuppressWarnings("rawtypes")
     private final ByteSerializer<List> listByteSerializer = factory.getByteSerializerByType(List.class);
+    private final TypesFactory typesFactory = new TypesFactory();
 
     /**
      * Tests a U512 named arg can be converted to a byte array.
@@ -37,7 +38,7 @@ class DeployNamedArgByteSerializerTest {
                         new byte[]{2, 0, 0, 0}, // Length of name as U32 little endian
                         "id".getBytes()),// Name
                 concat(
-                        ByteUtils.toU32(value.length),  // length of value
+                        toU32(value.length),  // length of value
                         value,                          // byte value
                         new byte[]{5}                   // CLType U64(5)
                 )
@@ -47,6 +48,7 @@ class DeployNamedArgByteSerializerTest {
         final byte[] actual = deployNamedArgByteSerializer.toBytes(id);
         assertThat(actual, is(expected));
     }
+
 
     /**
      * Tests a U512 named arg can be converted to a byte array.
@@ -85,13 +87,13 @@ class DeployNamedArgByteSerializerTest {
 
         final byte[] expected = concat(
                 concat(
-                        ByteUtils.toU32(6), // Length of name as U32 little endian
+                        toU32(6), // Length of name as U32 little endian
                         "target".getBytes()),// Name
                 concat(
-                        ByteUtils.toU32(value.length), // length of array
+                        toU32(value.length), // length of array
                         value, // byte value of array
                         new byte[]{CLType.BYTE_ARRAY.getClType()},
-                        ByteUtils.toU32(value.length)
+                        toU32(value.length)
                 )
         );
 
@@ -163,5 +165,9 @@ class DeployNamedArgByteSerializerTest {
         assertThat(len, is(new byte[]{3, 0, 0, 0}));
 
         assertThat(bytes, is(expected));
+    }
+
+    private byte[] toU32(int value) {
+        return typesFactory.getInstance(CLType.U32).serialize(value);
     }
 }

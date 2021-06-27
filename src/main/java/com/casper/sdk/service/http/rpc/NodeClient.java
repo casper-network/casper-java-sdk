@@ -1,7 +1,7 @@
 package com.casper.sdk.service.http.rpc;
 
 import com.casper.sdk.domain.Deploy;
-import com.casper.sdk.domain.DeployUtil;
+import com.casper.sdk.domain.DeployService;
 import com.casper.sdk.service.HashService;
 import com.casper.sdk.service.MethodEnums;
 
@@ -22,10 +22,12 @@ public class NodeClient {
     private static final int ONE_MEGABYTE = 1048576;
     private final HttpMethods httpMethods;
     private final HashService hashService;
+    private final DeployService deployService;
 
-    public NodeClient() {
+    public NodeClient(final DeployService deployService, final HashService hashService) {
+        this.deployService = deployService;
+        this.hashService = hashService;
         this.httpMethods = new HttpMethods();
-        this.hashService = HashService.getInstance();
     }
 
     public String getStateRootHash() throws Throwable {
@@ -100,7 +102,7 @@ public class NodeClient {
 
     public String putDeploy(final Deploy signedDeploy) throws Throwable {
 
-        final int size = DeployUtil.deploySizeInBytes(signedDeploy);
+        final int size = deployService.deploySizeInBytes(signedDeploy);
 
         if (size > ONE_MEGABYTE) {
             throw new IllegalArgumentException(String.format(DEPLOY_TOO_LARGE_MSG, size));

@@ -18,7 +18,7 @@ public class HashServiceTest {
     private static final String SECP256K1publicKey = "0203b2f8c0613d2d866948c46e296f09faed9b029110d424d19d488a0c39a811ebbc";
     private static final String SECP256K1hash = "aebf6cf44f8d7a633b4e2084ce3be3bbe3db2cec62e49afe103dca79f7818d43";
 
-    private final HashService hashService = HashService.getInstance();
+    private final HashService hashService = new HashService();
 
     @Test
     public void testValidBlakeEd25519() throws NoSuchAlgorithmException {

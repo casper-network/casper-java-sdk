@@ -1,10 +1,11 @@
 package com.casper.sdk.service.serialization.domain;
 
+import com.casper.sdk.domain.CLType;
+import com.casper.sdk.service.serialization.cltypes.TypesFactory;
+import com.casper.sdk.service.serialization.cltypes.TypesSerializer;
 import com.casper.sdk.service.serialization.util.ByteArrayBuilder;
 
 import java.util.Collection;
-
-import static com.casper.sdk.service.serialization.util.ByteUtils.toU32;
 
 /**
  * The byte serializer for Lists of casper domain objects.
@@ -12,9 +13,11 @@ import static com.casper.sdk.service.serialization.util.ByteUtils.toU32;
 class CollectionByteSerializer implements ByteSerializer<Collection<?>> {
 
     private final ByteSerializerFactory factory;
+    private final TypesSerializer u32Serializer;
 
-    public CollectionByteSerializer(final ByteSerializerFactory factory) {
+    public CollectionByteSerializer(final ByteSerializerFactory factory, final TypesFactory typesFactory) {
         this.factory = factory;
+        u32Serializer = typesFactory.getInstance(CLType.U32);
     }
 
     @Override
@@ -23,7 +26,7 @@ class CollectionByteSerializer implements ByteSerializer<Collection<?>> {
         final ByteArrayBuilder builder = new ByteArrayBuilder();
 
         // Write the size of the list as the 1st 4 bytes
-        builder.append(toU32(source.size()));
+        builder.append(u32Serializer.serialize(source.size()));
 
         // Write the list contents
         source.forEach(item ->

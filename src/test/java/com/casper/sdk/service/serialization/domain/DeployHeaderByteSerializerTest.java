@@ -3,6 +3,7 @@ package com.casper.sdk.service.serialization.domain;
 import com.casper.sdk.domain.DeployHeader;
 import com.casper.sdk.domain.Digest;
 import com.casper.sdk.domain.PublicKey;
+import com.casper.sdk.service.serialization.cltypes.TypesFactory;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -12,7 +13,10 @@ import static org.hamcrest.core.Is.is;
 
 class DeployHeaderByteSerializerTest {
 
-    private final DeployHeaderByteSerializer serializer = new DeployHeaderByteSerializer(new ByteSerializerFactory());
+    private final DeployHeaderByteSerializer serializer = new DeployHeaderByteSerializer(
+            new ByteSerializerFactory(),
+            new TypesFactory()
+    );
 
     /**
      * Unit tests that a deploy header can be converted to bytes

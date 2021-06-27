@@ -1,5 +1,7 @@
 package com.casper.sdk.service.serialization.domain;
 
+import com.casper.sdk.service.serialization.cltypes.TypesFactory;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -13,13 +15,14 @@ public class ByteSerializerFactory {
     private final Map<Class<?>, ByteSerializer<?>> serializerMap = new HashMap<>();
 
     public ByteSerializerFactory() {
-        register(new CLValueByteSerializer());
-        register(new CollectionByteSerializer(this));
+        final TypesFactory typesFactory = new TypesFactory();
+        register(new CLValueByteSerializer(typesFactory));
+        register(new CollectionByteSerializer(this, typesFactory));
         register(new DeployApprovalByteSerializer());
         register(new DeployByteSerializer(this));
-        register(new DeployExecutableByteSerializer(this));
-        register(new DeployHeaderByteSerializer(this));
-        register(new DeployNamedArgByteSerializer());
+        register(new DeployExecutableByteSerializer(this, typesFactory));
+        register(new DeployHeaderByteSerializer(this, typesFactory));
+        register(new DeployNamedArgByteSerializer(typesFactory));
         register(new DigestByteSerializer());
         register(new PublicKeyByteSerializer());
     }

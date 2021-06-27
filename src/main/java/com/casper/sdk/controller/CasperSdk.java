@@ -4,7 +4,10 @@ import com.casper.sdk.Properties;
 import com.casper.sdk.domain.*;
 import com.casper.sdk.json.JsonConversionService;
 import com.casper.sdk.service.HashService;
+import com.casper.sdk.service.SigningService;
 import com.casper.sdk.service.http.rpc.NodeClient;
+import com.casper.sdk.service.serialization.cltypes.TypesFactory;
+import com.casper.sdk.service.serialization.domain.ByteSerializerFactory;
 import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
 
 import java.io.IOException;
@@ -16,16 +19,23 @@ import java.security.NoSuchAlgorithmException;
  */
 public class CasperSdk {
 
+    private final JsonConversionService jsonConversionService = new JsonConversionService();
+    private final HashService hashService = new HashService();
+    private final DeployService deployService = new DeployService(
+            new ByteSerializerFactory(),
+            hashService,
+            jsonConversionService,
+            new SigningService(),
+            new TypesFactory()
+    );
     private final NodeClient nodeClient;
-    private final JsonConversionService jsonConversionService;
-    private final HashService hashService;
 
     public CasperSdk(final String url, final String port) {
+
         Properties.properties.put("node-url", url);
         Properties.properties.put("node-port", port);
-        this.nodeClient = new NodeClient();
-        this.jsonConversionService = new JsonConversionService();
-        this.hashService = HashService.getInstance();
+
+        this.nodeClient = new NodeClient(deployService, hashService);
     }
 
     public String getAccountInfo(final String accountKey) throws Throwable {
@@ -110,7 +120,7 @@ public class CasperSdk {
     public Deploy makeDeploy(final DeployParams deployParams,
                              final DeployExecutable session,
                              final DeployExecutable payment) {
-        return DeployUtil.makeDeploy(deployParams, session, payment);
+        return deployService.makeDeploy(deployParams, session, payment);
     }
 
     /**
@@ -121,7 +131,7 @@ public class CasperSdk {
      * @return the signed deploy
      */
     public Deploy signDeploy(final Deploy deploy, final AsymmetricCipherKeyPair signKeyPair) {
-        return DeployUtil.signDeploy(deploy, signKeyPair);
+        return deployService.signDeploy(deploy, signKeyPair);
     }
 
     /**
