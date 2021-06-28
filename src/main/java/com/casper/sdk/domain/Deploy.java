@@ -1,6 +1,6 @@
 package com.casper.sdk.domain;
 
-import com.casper.sdk.json.DeployJsonDeserializer;
+import com.casper.sdk.json.deserialize.DeployJsonDeserializer;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;

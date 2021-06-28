@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import static com.casper.sdk.json.DeserializerContext.clear;
+import static com.casper.sdk.json.deserialize.DeserializerContext.clear;
 
 /**
  * Service used to convert between CL domain objects to JSON
@@ -20,7 +20,7 @@ public class JsonConversionService {
     private ObjectMapper mapper;
 
     public JsonConversionService() {
-        this.mapper =  new ObjectMapper();;
+        this.mapper =  new ObjectMapper();
         final DefaultPrettyPrinter prettyPrinter = new DefaultPrettyPrinter();
         prettyPrinter.indentArraysWith(DefaultIndenter.SYSTEM_LINEFEED_INSTANCE);
         mapper.writer(prettyPrinter);

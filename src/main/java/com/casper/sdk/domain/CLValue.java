@@ -1,7 +1,7 @@
 package com.casper.sdk.domain;
 
-import com.casper.sdk.json.CLValueJsonDeserializer;
-import com.casper.sdk.json.CLValueJsonSerializer;
+import com.casper.sdk.json.deserialize.CLValueJsonDeserializer;
+import com.casper.sdk.json.serialize.CLValueJsonSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 

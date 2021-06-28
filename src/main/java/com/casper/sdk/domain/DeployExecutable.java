@@ -1,7 +1,7 @@
 package com.casper.sdk.domain;
 
-import com.casper.sdk.json.DeployExecutableJsonDeserializer;
-import com.casper.sdk.json.DeployExecutableJsonSerializer;
+import com.casper.sdk.json.deserialize.DeployExecutableJsonDeserializer;
+import com.casper.sdk.json.serialize.DeployExecutableJsonSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 

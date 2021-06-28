@@ -1,6 +1,6 @@
 package com.casper.sdk.domain;
 
-import com.casper.sdk.json.CLTypeInfoSerializer;
+import com.casper.sdk.json.serialize.CLTypeInfoSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.util.Objects;

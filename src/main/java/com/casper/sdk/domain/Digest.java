@@ -1,6 +1,6 @@
 package com.casper.sdk.domain;
 
-import com.casper.sdk.json.DigestJsonJSerializer;
+import com.casper.sdk.json.serialize.DigestJsonJSerializer;
 import com.casper.sdk.service.serialization.util.ByteUtils;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 

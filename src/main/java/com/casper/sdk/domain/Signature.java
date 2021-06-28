@@ -1,7 +1,7 @@
 package com.casper.sdk.domain;
 
-import com.casper.sdk.json.PublicKeyJsonSerializer;
-import com.casper.sdk.json.SignatureJsonDeserializer;
+import com.casper.sdk.json.serialize.PublicKeyJsonSerializer;
+import com.casper.sdk.json.deserialize.SignatureJsonDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 

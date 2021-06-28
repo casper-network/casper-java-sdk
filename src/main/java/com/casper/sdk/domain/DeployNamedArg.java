@@ -1,7 +1,7 @@
 package com.casper.sdk.domain;
 
-import com.casper.sdk.json.DeployNamedArgJsonDeserializer;
-import com.casper.sdk.json.DeployNamedArgJsonSerializer;
+import com.casper.sdk.json.deserialize.DeployNamedArgJsonDeserializer;
+import com.casper.sdk.json.serialize.DeployNamedArgJsonSerializer;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
