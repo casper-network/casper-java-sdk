@@ -3,7 +3,6 @@ package com.casper.sdk.service.http.rpc;
 import com.casper.sdk.Properties;
 import com.casper.sdk.exceptions.HttpException;
 import com.casper.sdk.json.JsonConversionService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -20,12 +19,12 @@ public class HttpMethods {
     private final JsonConversionService jsonConversionService;
 
     public HttpMethods(JsonConversionService jsonConversionService) {
-       this.jsonConversionService = jsonConversionService;
+        this.jsonConversionService = jsonConversionService;
     }
 
     public Optional<String> rpcCallMethod(final Method method) throws HttpException {
 
-        try{
+        try {
             final HttpRequest request = HttpRequest.newBuilder()
                     .uri(new URI(
                             new StringBuilder().append(Properties.properties.get("node-url")).append(":")

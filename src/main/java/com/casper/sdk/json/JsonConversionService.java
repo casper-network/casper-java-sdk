@@ -17,7 +17,7 @@ import static com.casper.sdk.json.deserialize.DeserializerContext.clear;
  */
 public class JsonConversionService {
 
-    private ObjectMapper mapper;
+    private final ObjectMapper mapper;
 
     public JsonConversionService() {
         this.mapper =  new ObjectMapper();
