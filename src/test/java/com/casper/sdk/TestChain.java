@@ -1,20 +1,22 @@
 package com.casper.sdk;
 
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
-import org.junit.Test;
 import com.casper.sdk.controller.CasperSdk;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class TestChain {
 
     private final static String url = "http://3.140.179.157";
     private final static String port = "7777";
 
-//    @Test
+    @Test
+    @Disabled
     public void testAgainstChain() throws Throwable {
         CasperSdk casperSdk = new CasperSdk(url, port);
 
