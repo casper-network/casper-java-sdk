@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 public class TestChain {
 
     private final static String url = "http://3.140.179.157";
-    private final static String port = "7777";
+    private final static int port = 7777;
 
     @Test
     @Disabled

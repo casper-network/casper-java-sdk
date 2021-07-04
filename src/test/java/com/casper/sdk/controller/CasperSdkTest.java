@@ -16,7 +16,7 @@ import static org.hamcrest.core.IsInstanceOf.instanceOf;
 class CasperSdkTest {
 
     private final static String URL = "http://3.140.179.157";
-    private final static String PORT = "7777";
+    private final static int PORT = 7777;
 
     private final CasperSdk casperSdk = new CasperSdk(URL, PORT);
 

@@ -43,7 +43,5 @@ public class HttpMethods {
         } catch (Exception e) {
             throw new HttpException(e.getMessage());
         }
-
     }
-
 }

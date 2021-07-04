@@ -16,7 +16,7 @@ public class TransferService {
     private String generateJson() throws IOException {
 
         final StringWriter writer = new StringWriter();
-        final JsonGenerator generator =  new ObjectMapper().createGenerator(writer);
+        final JsonGenerator generator = new ObjectMapper().createGenerator(writer);
 
         generator.writeStartObject();
         generator.writeFieldName("deploy");
@@ -113,8 +113,8 @@ public class TransferService {
         generator.writeEndObject();
         generator.flush();
 
-        JsonNode pretty = new ObjectMapper().readTree(writer.toString());
-        System.out.println(pretty.toPrettyString());
+        // JsonNode pretty = new ObjectMapper().readTree(writer.toString());
+        //  System.out.println(pretty.toPrettyString());
 
         return new ObjectMapper().readTree(writer.toString()).toPrettyString();
 
