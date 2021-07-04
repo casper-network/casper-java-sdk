@@ -33,25 +33,25 @@ class CasperSdkIntegrationTest {
 
     @Test
     void getAccountInfo() throws Throwable {
-        final String accountInfo = casperSdk.getAccountInfo(getPublicKey(geUserKeyPair(1)));
+        final String accountInfo = casperSdk.getAccountInfo(getPublicKeyAccountHex(geUserKeyPair(1)));
         assertThat(accountInfo, is(notNullValue()));
     }
 
     @Test
     void getAccountHash() throws Throwable {
-        final String accountHash = casperSdk.getAccountHash(getPublicKey(geUserKeyPair(1)));
+        final String accountHash = casperSdk.getAccountHash(getPublicKeyAccountHex(geUserKeyPair(1)));
         assertThat(accountHash, is(notNullValue()));
     }
 
     @Test
     void getAccountBalance() throws Throwable {
-        final String accountBalance = casperSdk.getAccountBalance(getPublicKey(geUserKeyPair(1)));
+        final String accountBalance = casperSdk.getAccountBalance(getPublicKeyAccountHex(geUserKeyPair(1)));
         assertThat(accountBalance, is(notNullValue()));
     }
 
     @Test
     void getAccountMainPurseURef() throws Throwable {
-        final String accountMainPurseURef = casperSdk.getAccountMainPurseURef(getPublicKey(geUserKeyPair(1)));
+        final String accountMainPurseURef = casperSdk.getAccountMainPurseURef(getPublicKeyAccountHex(geUserKeyPair(1)));
         assertThat(accountMainPurseURef, is(notNullValue()));
     }
 
@@ -116,7 +116,7 @@ class CasperSdkIntegrationTest {
         assertThat(digest, is(notNullValue()));
     }
 
-    private String getPublicKey(final AsymmetricCipherKeyPair keyPair) {
+    private String getPublicKeyAccountHex(final AsymmetricCipherKeyPair keyPair) {
         final PublicKey publicKey = new PublicKey(((Ed25519PublicKeyParameters) keyPair.getPublic()).getEncoded(), KeyAlgorithm.ED25519);
         return publicKey.toAccountHex();
     }
