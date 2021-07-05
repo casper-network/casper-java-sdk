@@ -20,7 +20,8 @@ public class HashService {
     static {
         Security.addProvider(new Blake2bProvider());
     }
-    private  String getAlgo(final String key) {
+
+    private String getAlgo(final String key) {
 
         final String algo;
 
@@ -72,7 +73,7 @@ public class HashService {
      * @param in the input bytes
      * @return a hashed 32 byte array as a hex string
      */
-    public byte [] getAccountHash(final byte[] in) {
+    public byte[] getAccountHash(final byte[] in) {
 
         try {
             final MessageDigest digest = MessageDigest.getInstance(Blake2b.BLAKE2_B_256);
@@ -81,7 +82,7 @@ public class HashService {
             digest.update(in, 1, in.length - 1);
             return digest.digest();
         } catch (NoSuchAlgorithmException e) {
-            throw new HashException("Error get32ByteHash", e);
+            throw new HashException("Error getAccountHash", e);
         }
     }
 
@@ -91,13 +92,13 @@ public class HashService {
      * @param in the input bytes
      * @return a hashed 32 byte array as a hex string
      */
-    public byte [] getHash(final byte[] in) {
+    public byte[] getHash(final byte[] in) {
         try {
             final MessageDigest digest = MessageDigest.getInstance(Blake2b.BLAKE2_B_256);
             digest.update(in);
             return digest.digest();
         } catch (NoSuchAlgorithmException e) {
-            throw new HashException("Error get32ByteHash", e);
+            throw new HashException("Error getHash", e);
         }
     }
 

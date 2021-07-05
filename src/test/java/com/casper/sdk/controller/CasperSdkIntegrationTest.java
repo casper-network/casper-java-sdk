@@ -5,6 +5,8 @@ import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
 import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -20,6 +22,8 @@ import static org.hamcrest.core.Is.is;
  * Casper SDK integration tests. The NCTL test nodes must be running for these tests to execute.
  */
 class CasperSdkIntegrationTest {
+
+    private final Logger logger = LoggerFactory.getLogger(CasperSdkIntegrationTest.class);
 
     /** Path the nctl folder can be overridden with -Dnctl.home=some-path */
     private final String NCTL_HOME = "~/Documents/casper/casper-node/utils/nctl";
@@ -85,23 +89,25 @@ class CasperSdkIntegrationTest {
         final AsymmetricCipherKeyPair userOneKeyPair = geUserKeyPair(1);
         final AsymmetricCipherKeyPair userTwoKeyPair = geUserKeyPair(2);
 
-        final PublicKey userOnePublicKey = new PublicKey(((Ed25519PublicKeyParameters) userOneKeyPair.getPublic()).getEncoded(), KeyAlgorithm.ED25519);
-        final PublicKey userTwoPublicKey = new PublicKey(((Ed25519PublicKeyParameters) userTwoKeyPair.getPublic()).getEncoded(), KeyAlgorithm.ED25519);
+        final AsymmetricCipherKeyPair nodeOneKeyPair = getNodeKeyPair(1);
+
+        final PublicKey fromPublicKey = new PublicKey(((Ed25519PublicKeyParameters) nodeOneKeyPair.getPublic()).getEncoded(), KeyAlgorithm.ED25519);
+        final PublicKey toPublicKey = new PublicKey(((Ed25519PublicKeyParameters) userTwoKeyPair.getPublic()).getEncoded(), KeyAlgorithm.ED25519);
 
         // Make the session, a transfer from user one to user two
-        final Transfer transfer = casperSdk.newTransfer(new BigInteger("100"),
-                userTwoPublicKey,
-                new BigInteger("999"));
+        final Transfer transfer = casperSdk.newTransfer(new BigInteger("2500000000"),
+                toPublicKey,
+                1);
 
         // Make a payment
-        final ModuleBytes payment = casperSdk.standardPayment(new BigInteger("1"));
+        final ModuleBytes payment = casperSdk.standardPayment(new BigInteger("10000000000"));
 
         // Create the transfer
         final Deploy deploy = casperSdk.makeTransferDeploy(
                 new DeployParams(
-                        userOnePublicKey,
+                        fromPublicKey,
                         "casper-net-1",
-                        1,
+                        10,
                         Instant.now().toEpochMilli(),
                         DeployParams.DEFAULT_TTL,
                         null),
@@ -109,7 +115,11 @@ class CasperSdkIntegrationTest {
                 payment
         );
 
-        final Deploy signedDeploy = casperSdk.signDeploy(deploy, userOneKeyPair);
+        final Deploy signedDeploy = casperSdk.signDeploy(deploy, nodeOneKeyPair);
+        String json = casperSdk.deployToJson(signedDeploy);
+
+        System.out.println(json);
+        logger.info(json);
 
         final Digest digest = casperSdk.putDeploy(signedDeploy);
 
@@ -125,6 +135,16 @@ class CasperSdkIntegrationTest {
     private AsymmetricCipherKeyPair geUserKeyPair(int userNumber) throws IOException {
 
         final String userNPath = String.format("%s/assets/net-1/users/user-%d", getNctlHome(), userNumber);
+        final FileInputStream publicKeyIn = new FileInputStream(new File(userNPath, "public_key.pem"));
+        final FileInputStream privateKeyIn = new FileInputStream(new File(userNPath, "secret_key.pem"));
+
+        return casperSdk.loadKeyPair(publicKeyIn, privateKeyIn);
+    }
+
+
+    private AsymmetricCipherKeyPair getNodeKeyPair(int nodeNumber) throws IOException {
+
+        final String userNPath = String.format("%s/assets/net-1/nodes/node-%d/keys", getNctlHome(), nodeNumber);
         final FileInputStream publicKeyIn = new FileInputStream(new File(userNPath, "public_key.pem"));
         final FileInputStream privateKeyIn = new FileInputStream(new File(userNPath, "secret_key.pem"));
 

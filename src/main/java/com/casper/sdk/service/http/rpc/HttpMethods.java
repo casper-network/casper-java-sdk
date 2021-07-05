@@ -25,13 +25,18 @@ public class HttpMethods {
     public Optional<String> rpcCallMethod(final Method method) throws HttpException {
 
         try {
+
+            final String body = jsonConversionService.writeValueAsString(method);
+
+            System.out.println(body);
+
             final HttpRequest request = HttpRequest.newBuilder()
                     .uri(new URI(
                             new StringBuilder().append(Properties.properties.get("node-url")).append(":")
                                     .append(Properties.properties.get("node-port")).append("/rpc").toString()))
                     .header("Accept", "application/json")
                     .header("Content-type", "application/json")
-                    .POST(HttpRequest.BodyPublishers.ofString(jsonConversionService.writeValueAsString(method)))
+                    .POST(HttpRequest.BodyPublishers.ofString(body))
                     .build();
 
             final HttpResponse<String> response = HttpClient.newBuilder()

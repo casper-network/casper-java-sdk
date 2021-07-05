@@ -1,6 +1,7 @@
 package com.casper.sdk.json.serialize;
 
 import com.casper.sdk.domain.CLByteArrayInfo;
+import com.casper.sdk.domain.CLOptionTypeInfo;
 import com.casper.sdk.domain.CLTypeInfo;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
@@ -23,6 +24,11 @@ public class CLTypeInfoSerializer extends JsonSerializer<CLTypeInfo> {
                 gen.writeStartObject();
                 gen.writeFieldName(value.getType().getJsonName());
                 gen.writeNumber(((CLByteArrayInfo) value).getSize());
+                gen.writeEndObject();
+            } else if (value instanceof CLOptionTypeInfo) {
+                gen.writeStartObject();
+                gen.writeFieldName(value.getType().getJsonName());
+                gen.writeString(((CLOptionTypeInfo) value).getInnerType().getType().getJsonName());
                 gen.writeEndObject();
             } else {
                 gen.writeString(value.getType().getJsonName());

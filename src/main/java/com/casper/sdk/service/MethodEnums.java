@@ -85,13 +85,12 @@ public enum MethodEnums {
                 node = new ObjectMapper().readTree(result);
                 return node.get("result").get("deploy_hash").textValue();
             } catch (Exception e) {
-                throw new ValueNotFoundException("result not found " + buildErrorMessage(node));
+                throw new ValueNotFoundException("deploy_hash not found " + buildErrorMessage(node));
             }
         }
     };
 
     public abstract String getValue(final String result) throws ValueNotFoundException;
-
 
     public String buildErrorMessage(final JsonNode node) {
         JsonNode error = node != null ? node.get("error") : null;

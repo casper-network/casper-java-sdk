@@ -179,4 +179,15 @@ public class CasperSdk {
     public Transfer newTransfer(final Number amount, final PublicKey target, final Number id) {
         return deployService.newTransfer(amount, target, id);
     }
+
+    /**
+     * Converts a Casper domain object ot a JSON string
+     *
+     * @param deploy the domain object to write
+     * @return the JSON representation of the clObject
+     * @throws IOException - on write error
+     */
+    public String deployToJson(final Deploy deploy) throws IOException {
+        return jsonConversionService.toJson(deploy);
+    }
 }
