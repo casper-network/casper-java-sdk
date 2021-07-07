@@ -99,7 +99,7 @@ public class DeployService {
         return new Deploy(deployHash, header, payment, session, new LinkedHashSet<>());
     }
 
-    Digest makeBodyHash(final DeployExecutable payment, final DeployExecutable session) {
+    Digest makeBodyHash(final DeployExecutable session, final DeployExecutable payment) {
         final byte[] serializedBody = serializeBody(payment, session);
         final byte[] hash = hashService.getHash(serializedBody);
         return new Digest(hash);
