@@ -1,0 +1,17 @@
+{
+  "payment": {
+    "ModuleBytes": {
+      "module_bytes": "",
+      "args": [
+        [
+          "amount",
+          {
+            "cl_type": "U512",
+            "bytes": "0400ca9a3b",
+            "parsed": "1000000000"
+          }
+        ]
+      ]
+    }
+  }
+}
