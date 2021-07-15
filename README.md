@@ -36,7 +36,7 @@ dependencies {
 }
 ```
 
-If you're not using gradle you can import the JAR into the project using your IDE
+If you're not using gradle, you can import the JAR into the project using your IDE
 
 
 

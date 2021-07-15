@@ -1,74 +1,103 @@
 package com.casper.sdk.service;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.InvalidPathException;
-import java.security.*;
-import java.util.Base64;
-import java.util.regex.Pattern;
+import com.casper.sdk.service.serialization.util.ByteUtils;
+import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
+import org.bouncycastle.crypto.CryptoException;
+import org.bouncycastle.crypto.DataLengthException;
+import org.bouncycastle.crypto.Signer;
+import org.bouncycastle.crypto.generators.Ed25519KeyPairGenerator;
+import org.bouncycastle.crypto.params.AsymmetricKeyParameter;
+import org.bouncycastle.crypto.params.Ed25519KeyGenerationParameters;
+import org.bouncycastle.crypto.params.Ed25519PrivateKeyParameters;
+import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
+import org.bouncycastle.crypto.signers.Ed25519Signer;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.bouncycastle.util.io.pem.PemObject;
+import org.bouncycastle.util.io.pem.PemReader;
+
+import java.io.*;
+import java.security.SecureRandom;
+import java.security.Security;
 
 public class SigningService {
 
-    public static String signWithKey(byte[] key, byte[] data) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {
-
-        final PrivateKey privateKey = KeyPairGenerator.getInstance("Ed25519").generateKeyPair().getPrivate();
-        final Signature signature = Signature.getInstance("Ed25519");
-
-        signature.initSign(privateKey);
-        signature.update(key);
-
-        byte[] signed = signature.sign();
-
-        return null;
-
+    static {
+        Security.addProvider(new BouncyCastleProvider());
     }
 
-    public static String signWithKey(final String privateKey)  {
-        return generateEdDSAKey(privateKey);
+    /**
+     * Loads the key pairs from the provide file
+     *
+     * @param publicKeyFile  the public key .pem file
+     * @param privateKeyFile the private key .pem file
+     * @return the files loaded into a AsymmetricCipherKeyPair
+     * @throws IOException if the is a problem loading the files
+     */
+    public AsymmetricCipherKeyPair loadKeyPair(final File publicKeyFile, final File privateKeyFile) throws IOException {
+        return loadKeyPair(new FileInputStream(publicKeyFile), new FileInputStream(privateKeyFile));
     }
 
-    public static String signWithPath(final String path)  {
+    /**
+     * Loads the key pairs from the provide streams
+     *
+     * @param publicKeyIn  the public key .pem file input stream
+     * @param privateKeyIn the private key .pem file input stream
+     * @return the files loaded into a AsymmetricCipherKeyPair
+     * @throws IOException if the is a problem loading the files
+     */
+    public AsymmetricCipherKeyPair loadKeyPair(final InputStream publicKeyIn, final InputStream privateKeyIn) throws IOException {
 
-        final File file;
-        final String key;
+        final byte[] publicBytes = ByteUtils.lastNBytes(this.readPemFile(publicKeyIn), 32);
+        final byte[] secretBytes = ByteUtils.lastNBytes(this.readPemFile(privateKeyIn), 32);
 
-        try{
-            file = new File(path);
-            if (!file.isFile() || !file.exists()){
-                throw new FileNotFoundException(String.format("Path [%s] invalid", path));
-            }
-
-           key = Files.readString(file.toPath(), Charset.forName("ISO_8859_1"));
-
-        }catch (Exception ex){
-            throw new InvalidPathException(String.format("Path [%s] invalid", path), ex.getMessage());
-        }
-
-        final Pattern parse = Pattern.compile("(?m)(?s)^---*BEGIN.*---*$(.*)^---*END.*---*$.*");
-
-        return generateEdDSAKey(parse.matcher(key).replaceFirst("$1")
-                .replace("\n", "").replace("\r", ""));
+        return new AsymmetricCipherKeyPair(
+                new Ed25519PublicKeyParameters(publicBytes),
+                new Ed25519PrivateKeyParameters(secretBytes)
+        );
     }
 
 
-    private static String generateEdDSAKey(final String key) {
+    public AsymmetricCipherKeyPair generateEdDSAKey() {
 
-        try{
-            final PrivateKey privateKey = KeyPairGenerator.getInstance("Ed25519").generateKeyPair().getPrivate();
-            final Signature signature = Signature.getInstance("Ed25519");
+        SecureRandom RANDOM = new SecureRandom();
+        Ed25519KeyPairGenerator keyPairGenerator = new Ed25519KeyPairGenerator();
+        keyPairGenerator.init(new Ed25519KeyGenerationParameters(RANDOM));
+        return keyPairGenerator.generateKeyPair();
+    }
 
-            signature.initSign(privateKey);
-            signature.update(Base64.getDecoder().decode(key));
+    public byte[] signWithPrivateKey(final AsymmetricKeyParameter privateKey, final byte[] toSign) {
 
-            return Base64.getEncoder().encodeToString(signature.sign());
+        try {
+            Signer signer = new Ed25519Signer();
+            signer.init(true, privateKey);
+            signer.update(toSign, 0, toSign.length);
+            return signer.generateSignature();
 
-        } catch (Exception e){
+        } catch (CryptoException | DataLengthException e) {
             throw new IllegalArgumentException("Failed to generate signature :", e.getCause());
         }
+    }
 
+    private Signer generateEdDSAKey(byte[] privateKeyBytes) {
+
+        final Ed25519PrivateKeyParameters privateKeyParameters = new Ed25519PrivateKeyParameters(privateKeyBytes, 0);
+        final Ed25519Signer ed25519Signer = new Ed25519Signer();
+        ed25519Signer.init(true, privateKeyParameters);
+        return ed25519Signer;
+    }
+
+    public boolean verifySignature(final AsymmetricKeyParameter publicKeyParameters, final byte[] toSign, final byte[] signature) {
+
+        final Signer verifier = new Ed25519Signer();
+        verifier.init(false, publicKeyParameters);
+        verifier.update(toSign, 0, toSign.length);
+        return verifier.verifySignature(signature);
     }
 
 
+    byte[] readPemFile(final InputStream keyStream) throws IOException {
+        final PemReader pemReader = new PemReader(new InputStreamReader(keyStream));
+        final PemObject pemObject = pemReader.readPemObject();
+        return pemObject.getContent();
+    }
 }
