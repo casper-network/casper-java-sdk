@@ -39,11 +39,8 @@ public class HttpMethods {
                     .send(request, HttpResponse.BodyHandlers.ofString());
 
             return Optional.ofNullable(response.body());
-
         } catch (Exception e) {
             throw new HttpException(e.getMessage());
         }
-
     }
-
 }

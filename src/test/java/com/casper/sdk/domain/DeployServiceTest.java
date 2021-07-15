@@ -215,7 +215,7 @@ class DeployServiceTest {
         };
 
         byte[] expectedHash = {
-                (byte) 135, (byte) 253, (byte) 178, (byte) 236, (byte) 71, (byte) 44, (byte) 78, (byte) 151, (byte) 136, (byte) 23, (byte) 159, (byte) 163, (byte) 28, (byte) 2, (byte) 90, (byte) 219, (byte) 44, (byte) 59, (byte) 218, (byte) 234, (byte) 197, (byte) 121, (byte) 219, (byte) 106, (byte) 118, (byte) 51, (byte) 252, (byte) 67, (byte) 229, (byte) 37, (byte) 160, (byte) 30
+                -67, 15, -100, 100, 49, -16, -60, -5, -123, -94, -98, 24, 98, 14, 67, 89, -78, 115, -117, -119, -14, -126, 102, -122, -84, 126, -62, 98, -40, -32, -22, -23
         };
 
         final ModuleBytes payment = deployService.standardPayment(10000000000000L);
@@ -277,7 +277,7 @@ class DeployServiceTest {
 
         final DeployApproval approval = signedDeploy.getApprovals().iterator().next();
         assertThat(approval.getSignature().toAccount(), is(notNullValue()));
-        assertThat(approval.getSignature().toAccount()[0], is((byte)KeyAlgorithm.ED25519.getValue()));
+        assertThat(approval.getSignature().toAccount()[0], is((byte) KeyAlgorithm.ED25519.getValue()));
         assertThat(approval.getSignature().toAccount().length, is(65));
         assertThat(approval.getSignature().getBytes().length, is(64));
 
@@ -306,19 +306,11 @@ class DeployServiceTest {
         };
 
         final byte[] expectedHeaderBytes = {
-                (byte) 1, (byte) 207, (byte) 86, (byte) 252, (byte) 149, (byte) 20, (byte) 26, (byte) 76, (byte) 239,
-                (byte) 118, (byte) 242, (byte) 95, (byte) 25, (byte) 119, (byte) 198, (byte) 33, (byte) 97, (byte) 83,
-                (byte) 247, (byte) 251, (byte) 46, (byte) 43, (byte) 45, (byte) 237, (byte) 249, (byte) 117, (byte) 149,
-                (byte) 84, (byte) 212, (byte) 142, (byte) 223, (byte) 74, (byte) 248, (byte) 247, (byte) 57, (byte) 245,
-                (byte) 47, (byte) 122, (byte) 1, (byte) 0, (byte) 0, (byte) 64, (byte) 119, (byte) 27, (byte) 0,
-                (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 1, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0,
-                (byte) 0, (byte) 0, (byte) 125, (byte) 14, (byte) 3, (byte) 25, (byte) 160, (byte) 12, (byte) 27,
-                (byte) 147, (byte) 69, (byte) 246, (byte) 217, (byte) 172, (byte) 102, (byte) 79, (byte) 201, (byte) 49,
-                (byte) 237, (byte) 234, (byte) 170, (byte) 3, (byte) 213, (byte) 239, (byte) 216, (byte) 13, (byte) 241,
-                (byte) 44, (byte) 234, (byte) 129, (byte) 112, (byte) 219, (byte) 177, (byte) 28, (byte) 0, (byte) 0,
-                (byte) 0, (byte) 0, (byte) 12, (byte) 0, (byte) 0, (byte) 0, (byte) 116, (byte) 101, (byte) 115,
-                (byte) 116, (byte) 45, (byte) 110, (byte) 101, (byte) 116, (byte) 119, (byte) 111, (byte) 114,
-                (byte) 107
+                1, -49, 86, -4, -107, 20, 26, 76, -17, 118, -14, 95, 25, 119, -58, 33, 97, 83, -9, -5, 46, 43, 45, -19,
+                -7, 117, -107, 84, -44, -114, -33, 74, -8, -9, 57, -11, 47, 122, 1, 0, 0, 64, 119, 27, 0, 0, 0, 0, 0, 1,
+                0, 0, 0, 0, 0, 0, 0, 30, 115, 8, -62, -96, -103, -125, -39, -4, -88, 108, -21, 40, -15, -82, -88, -29, 6,
+                -58, 47, -29, -122, -64, 105, -24, 109, -128, -81, 43, 11, 127, 5, 0, 0, 0, 0, 12, 0, 0, 0, 116, 101,
+                115, 116, 45, 110, 101, 116, 119, 111, 114, 107
         };
 
         final DeployParams deployParams = new DeployParams(

@@ -21,19 +21,20 @@ public class CasperSdk {
 
     private final JsonConversionService jsonConversionService = new JsonConversionService();
     private final HashService hashService = new HashService();
+    private final SigningService signingService = new SigningService();
     private final DeployService deployService = new DeployService(
             new ByteSerializerFactory(),
             hashService,
             jsonConversionService,
-            new SigningService(),
+            signingService,
             new TypesFactory()
     );
     private final NodeClient nodeClient;
 
-    public CasperSdk(final String url, final String port) {
+    public CasperSdk(final String url, final int port) {
 
         Properties.properties.put("node-url", url);
-        Properties.properties.put("node-port", port);
+        Properties.properties.put("node-port", Integer.toString(port));
 
         this.nodeClient = new NodeClient(deployService, hashService, jsonConversionService);
     }
@@ -143,5 +144,50 @@ public class CasperSdk {
      */
     public Digest putDeploy(final Deploy signedDeploy) throws Throwable {
         return new Digest(nodeClient.putDeploy(signedDeploy));
+    }
+
+    /**
+     * Loads the key pair from the provide streams
+     *
+     * @param publicKeyIn  the public key .pem file input stream
+     * @param privateKeyIn the private key .pem file input stream
+     * @return the files loaded into a AsymmetricCipherKeyPair
+     * @throws IOException if the is a problem loading the files
+     */
+    public AsymmetricCipherKeyPair loadKeyPair(final InputStream publicKeyIn,
+                                               final InputStream privateKeyIn) throws IOException {
+        return signingService.loadKeyPair(publicKeyIn, privateKeyIn);
+    }
+
+    /**
+     * Creates a new standard payment
+     *
+     * @param paymentAmount the number of notes paying to execution engine
+     */
+    public ModuleBytes standardPayment(final Number paymentAmount) {
+        return deployService.standardPayment(paymentAmount);
+    }
+
+    /**
+     * Creates a new Transfer to the target account of the specified ammount
+     *
+     * @param amount the amount to transfer
+     * @param target the public key of the target account
+     * @param id     the optional ID name argument value
+     * @return the newly created transfer
+     */
+    public Transfer newTransfer(final Number amount, final PublicKey target, final Number id) {
+        return deployService.newTransfer(amount, target, id);
+    }
+
+    /**
+     * Converts a Casper domain object ot a JSON string
+     *
+     * @param deploy the domain object to write
+     * @return the JSON representation of the clObject
+     * @throws IOException - on write error
+     */
+    public String deployToJson(final Deploy deploy) throws IOException {
+        return jsonConversionService.toJson(deploy);
     }
 }

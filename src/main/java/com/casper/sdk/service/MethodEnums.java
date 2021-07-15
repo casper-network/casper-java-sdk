@@ -23,11 +23,13 @@ public enum MethodEnums {
     STATE_GET_ITEM {
         @Override
         public String getValue(final String result) throws ValueNotFoundException {
+            JsonNode node = null;
             try {
-                final JsonNode node = new ObjectMapper().readTree(result);
+                node = new ObjectMapper().readTree(result);
                 return node.get("result").get("stored_value").get("Account").get("main_purse").textValue();
             } catch (Exception e) {
-                throw new ValueNotFoundException("main_purse not found");
+
+                throw new ValueNotFoundException("main_purse not found " + buildErrorMessage(node));
             }
         }
     },
@@ -78,14 +80,24 @@ public enum MethodEnums {
     ACCOUNT_PUT_DEPLOY {
         @Override
         public String getValue(final String result) throws ValueNotFoundException {
+             JsonNode node = null;
             try {
-                final JsonNode node = new ObjectMapper().readTree(result);
+                node = new ObjectMapper().readTree(result);
                 return node.get("result").get("deploy_hash").textValue();
             } catch (Exception e) {
-                throw new ValueNotFoundException("result not found");
+                throw new ValueNotFoundException("deploy_hash not found " + buildErrorMessage(node));
             }
         }
     };
 
     public abstract String getValue(final String result) throws ValueNotFoundException;
+
+    public String buildErrorMessage(final JsonNode node) {
+        JsonNode error = node != null ? node.get("error") : null;
+        if (error != null) {
+            return error.toString();
+        } else {
+            return "";
+        }
+    }
 }

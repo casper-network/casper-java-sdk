@@ -39,8 +39,6 @@ public class DeployParams {
             this.timestamp = Instant.ofEpochMilli(timestamp).toString();
         }
         this.ttl = ttl != null ? ttl : DEFAULT_TTL;
-
-        // TODO encode dependencies as Base16
         this.dependencies = dependencies != null ? dependencies : new ArrayList<>();
     }
 

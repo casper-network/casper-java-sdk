@@ -29,7 +29,7 @@ public class CLValueJsonSerializer extends JsonSerializer<CLValue> {
         if (value.getParsed() != null) {
             gen.writeFieldName("parsed");
             if (value.getParsed() instanceof Number) {
-                gen.writeNumber(((Number) value.getParsed()).intValue());
+                gen.writeNumber(value.getParsed().toString());
             } else {
                 gen.writeString(value.getParsed().toString());
             }
