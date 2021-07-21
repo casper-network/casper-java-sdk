@@ -1,13 +1,13 @@
 package com.casper.sdk.service.http.rpc;
 
 import com.casper.sdk.Properties;
-import com.casper.sdk.domain.Deploy;
-import com.casper.sdk.domain.DeployService;
-import com.casper.sdk.json.JsonConversionService;
+import com.casper.sdk.types.Deploy;
+import com.casper.sdk.types.DeployService;
+import com.casper.sdk.service.json.JsonConversionService;
 import com.casper.sdk.service.HashService;
 import com.casper.sdk.service.SigningService;
 import com.casper.sdk.service.serialization.cltypes.TypesFactory;
-import com.casper.sdk.service.serialization.domain.ByteSerializerFactory;
+import com.casper.sdk.service.serialization.types.ByteSerializerFactory;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.mockwebserver.MockWebServer;
@@ -23,10 +23,9 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-
 public class NodeClientTest {
 
-    public static final String DEPLOY_JSON_PATH = "/com/casper/sdk/domain/deploy-util-test.json";
+    public static final String DEPLOY_JSON_PATH = "/com/casper/sdk/types/deploy-util-test.json";
     private final static String url = "http://localhost";
     private static MockWebServer mockBackEnd;
 

@@ -1,6 +1,6 @@
 package com.casper.sdk.service.serialization.cltypes;
 
-import com.casper.sdk.domain.CLType;
+import com.casper.sdk.types.CLType;
 
 import java.util.HashMap;
 import java.util.Map;

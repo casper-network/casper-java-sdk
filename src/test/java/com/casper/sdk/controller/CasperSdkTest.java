@@ -1,11 +1,12 @@
 package com.casper.sdk.controller;
 
-import com.casper.sdk.domain.*;
-import com.casper.sdk.json.JsonConversionService;
+import com.casper.sdk.CasperSdk;
+import com.casper.sdk.types.*;
+import com.casper.sdk.service.json.JsonConversionService;
 import com.casper.sdk.service.HashService;
 import com.casper.sdk.service.SigningService;
 import com.casper.sdk.service.serialization.cltypes.TypesFactory;
-import com.casper.sdk.service.serialization.domain.ByteSerializerFactory;
+import com.casper.sdk.service.serialization.types.ByteSerializerFactory;
 import com.casper.sdk.service.serialization.util.ByteUtils;
 import org.junit.jupiter.api.Test;
 
