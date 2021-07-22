@@ -1,7 +1,6 @@
 package com.casper.sdk;
 
 
-import com.casper.sdk.controller.CasperSdk;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Disabled;

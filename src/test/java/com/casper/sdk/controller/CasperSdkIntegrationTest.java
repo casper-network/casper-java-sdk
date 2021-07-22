@@ -1,6 +1,7 @@
 package com.casper.sdk.controller;
 
-import com.casper.sdk.domain.*;
+import com.casper.sdk.CasperSdk;
+import com.casper.sdk.types.*;
 import com.casper.sdk.service.HashService;
 import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
 import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;

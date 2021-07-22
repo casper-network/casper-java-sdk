@@ -1,10 +1,9 @@
 package com.casper.sdk.service.http.rpc;
 
+import com.casper.sdk.types.Deploy;
+import com.casper.sdk.types.DeployService;
+import com.casper.sdk.service.json.JsonConversionService;
 import static com.casper.sdk.Properties.*;
-
-import com.casper.sdk.domain.Deploy;
-import com.casper.sdk.domain.DeployService;
-import com.casper.sdk.json.JsonConversionService;
 import com.casper.sdk.service.HashService;
 import com.casper.sdk.service.MethodEnums;
 

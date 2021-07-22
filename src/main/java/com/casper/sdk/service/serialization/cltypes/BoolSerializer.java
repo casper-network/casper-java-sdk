@@ -2,6 +2,8 @@ package com.casper.sdk.service.serialization.cltypes;
 
 import org.apache.commons.lang3.BooleanUtils;
 
+import java.util.Objects;
+
 /**
  * Converts a boolean value or string representation of a boolean to a byte array where 1 represents  true and 0 false.
  */
@@ -9,6 +11,8 @@ class BoolSerializer implements TypesSerializer {
 
     @Override
     public byte[] serialize(final Object toSerialize) {
+
+        Objects.requireNonNull(toSerialize, "toSerialize must not be null");
 
         final boolean value;
 

@@ -1,6 +1,6 @@
 package com.casper.sdk.service;
 
-import com.casper.sdk.domain.KeyAlgorithm;
+import com.casper.sdk.types.KeyAlgorithm;
 import com.casper.sdk.exceptions.HashException;
 import com.casper.sdk.service.serialization.util.ByteUtils;
 import com.rfksystems.blake2b.Blake2b;
