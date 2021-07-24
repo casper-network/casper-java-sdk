@@ -9,7 +9,7 @@ import java.util.Map;
 public class Method {
 
     private static final String jsonrpc = "2.0";
-    private final int id = 1;
+    private static final int id = 1;
     private String method;
     private Map<String, Object> params;
 

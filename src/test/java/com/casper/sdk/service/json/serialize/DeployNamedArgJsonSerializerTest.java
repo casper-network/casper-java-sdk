@@ -19,17 +19,6 @@ import static org.hamcrest.core.Is.is;
  */
 class DeployNamedArgJsonSerializerTest {
 
-    private final String JSON = """
-            "args": [
-              [
-                "amount",
-                {
-                  "cl_type": "U512",
-                  "bytes": "0400ca9a3b",
-                  "parsed": "1000000000"
-                }
-              ]
-            ]""";
     private String json;
 
     @BeforeEach
