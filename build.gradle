@@ -17,13 +17,13 @@ dependencies {
     testImplementation group: 'com.jayway.jsonpath', name: 'json-path-assert', version: '2.6.0'
     testImplementation 'com.squareup.okhttp3:mockwebserver:4.0.1'
 
-    compile group: 'com.rfksystems', name: 'blake2b', version: '1.0.0'
-    compile group: 'commons-codec', name: 'commons-codec', version: '1.5'
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.12.2'
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.12.2'
-    compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-yaml', version: '2.12.2'
-    compile group: 'org.bouncycastle', name: 'bcprov-jdk15on', version: '1.69'
-    compile group: 'com.sshtools', name: 'maverick-synergy', version: '3.0.0-RC8'
+    implementation group: 'com.rfksystems', name: 'blake2b', version: '1.0.0'
+    implementation group: 'commons-codec', name: 'commons-codec', version: '1.5'
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.12.2'
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.12.2'
+    implementation group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-yaml', version: '2.12.2'
+    implementation group: 'org.bouncycastle', name: 'bcprov-jdk15on', version: '1.69'
+    implementation group: 'com.sshtools', name: 'maverick-synergy', version: '3.0.0-RC8'
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
 }
 
