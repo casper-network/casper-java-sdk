@@ -8,7 +8,7 @@ import com.casper.sdk.service.serialization.util.ByteArrayBuilder;
  */
 class URefSerializer implements TypesSerializer {
 
-    private static final byte[] TAG = {2};
+    private static final byte TAG = 2;
 
     @Override
     public byte[] serialize(final Object toSerialize) {

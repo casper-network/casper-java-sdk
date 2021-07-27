@@ -38,10 +38,6 @@ public class ByteArrayBuilder {
         return this;
     }
 
-    public ByteArrayBuilder append(final String hexString) {
-        return append(decodeHex(hexString));
-    }
-
     public byte[] toByteArray() {
         return out.toByteArray();
     }

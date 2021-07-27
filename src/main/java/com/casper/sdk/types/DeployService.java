@@ -162,10 +162,6 @@ public class DeployService {
         return toBytes(deploy).length;
     }
 
-    byte[] serializeHeader(final DeployHeader deployHeader) {
-        return serializerFactory.getByteSerializerByType(DeployHeader.class).toBytes(deployHeader);
-    }
-
     byte[] toBytes(final DeployExecutable deployExecutable) {
         return serializerFactory.getByteSerializer(deployExecutable).toBytes(deployExecutable);
     }

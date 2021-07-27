@@ -47,9 +47,9 @@ class CasperSdkIntegrationTest {
     };
 
     /** Path the nctl folder can be overridden with -Dnctl.home=some-path */
-    private final String NCTL_HOME = "~/Documents/casper/casper-node/utils/nctl";
+    private static final String NCTL_HOME = "~/Documents/casper/casper-node/utils/nctl";
 
-    private byte[] expectedHash = new byte[]{
+    private final byte[] expectedHash = new byte[]{
             (byte) 10, (byte) 56, (byte) 192, (byte) 58, (byte) 52, (byte) 29, (byte) 185, (byte) 218, (byte) 206,
             (byte) 17, (byte) 135, (byte) 227, (byte) 27, (byte) 127, (byte) 172, (byte) 32, (byte) 150, (byte) 155,
             (byte) 135, (byte) 250, (byte) 107, (byte) 113, (byte) 237, (byte) 101, (byte) 127, (byte) 51,
@@ -181,7 +181,7 @@ class CasperSdkIntegrationTest {
     }
 
 
-    private AsymmetricCipherKeyPair getNodeKeyPair(int nodeNumber) throws IOException {
+    private AsymmetricCipherKeyPair getNodeKeyPair(final int nodeNumber) throws IOException {
 
         final String userNPath = String.format("%s/assets/net-1/nodes/node-%d/keys", getNctlHome(), nodeNumber);
         final FileInputStream publicKeyIn = new FileInputStream(new File(userNPath, "public_key.pem"));

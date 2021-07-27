@@ -1,13 +1,14 @@
 package com.casper.sdk.types;
 
+import com.casper.sdk.service.serialization.util.TtlUtils;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.*;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
+import static com.casper.sdk.service.serialization.util.TtlUtils.toTtlStr;
 
 /**
  * Type: header information associated with a deploy.
@@ -45,7 +46,7 @@ public class DeployHeader {
                         @JsonProperty("body_hash") final Digest bodyHash,
                         @JsonProperty("dependencies") final List<Digest> dependencies,
                         @JsonProperty("chain_name") final String chainName) {
-        this(account, toEpocMs(timestamp), getTtlLong(ttl), gasPrice, bodyHash, dependencies, chainName);
+        this(account, toEpocMs(timestamp), TtlUtils.getTtlLong(ttl), gasPrice, bodyHash, dependencies, chainName);
     }
 
     public DeployHeader(final PublicKey account,
@@ -62,37 +63,6 @@ public class DeployHeader {
         this.bodyHash = bodyHash;
         this.dependencies = dependencies;
         this.chainName = chainName;
-    }
-
-    @JsonIgnore
-    public static long getTtlLong(final String strTtl) {
-        if (strTtl != null) {
-
-            final Pattern p = Pattern.compile("\\p{Alpha}");
-            final Matcher m = p.matcher(strTtl);
-            final int unitIndex;
-            if (m.find()) {
-                unitIndex = m.start();
-            } else {
-                unitIndex = strTtl.length() - 1;
-            }
-
-            final String unit = strTtl.substring(unitIndex);
-
-            final long value = Long.parseLong(strTtl.substring(0, unitIndex));
-
-            final long multiplier = switch (unit) {
-                case "d" -> 24 * 60L * 60L * 1000L;
-                case "h" -> 60L * 60L * 1000L;
-                case "m" -> 60L * 1000L;
-                case "s" -> 1000L;
-                default -> 1L;
-            };
-
-            return value * multiplier;
-
-        }
-        return 0L;
     }
 
     public static long toEpocMs(final String isoDateTime) {
@@ -132,8 +102,7 @@ public class DeployHeader {
      */
     @JsonProperty("ttl")
     public String getTtlStr() {
-        // TODO allow for other time units depending on value
-        return (ttl / 60000) + "m";
+        return toTtlStr(ttl);
     }
 
     public Integer getGasPrice() {
