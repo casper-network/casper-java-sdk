@@ -4,6 +4,7 @@ plugins {
 }
 
 apply plugin: 'java'
+group = 'com.casper'
 
 repositories {
     mavenCentral()
