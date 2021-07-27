@@ -10,7 +10,7 @@ repositories {
 }
 
 dependencies {
-    compile 'com.jayway.jsonpath:json-path-assert:2.4.0'
+    testImplementation group: 'com.jayway.jsonpath', name: 'json-path-assert', version: '2.6.0'
     testCompile 'commons-io:commons-io:2.8.0'
     testCompile 'org.junit.jupiter:junit-jupiter-api:5.3.1'
     testCompile 'org.junit.jupiter:junit-jupiter-params:5.3.1'
