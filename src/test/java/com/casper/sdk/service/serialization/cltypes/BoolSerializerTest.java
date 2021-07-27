@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Tests the CLType.BOOL serializer
@@ -22,7 +23,12 @@ class BoolSerializerTest {
         assertThat(boolSerializer.serialize(false), is(expectedFalseBytes));
         assertThat(boolSerializer.serialize("true"), is(expectedTrueBytes));
         assertThat(boolSerializer.serialize(true), is(expectedTrueBytes));
-        // TODO test if we should treat null as false?
-        assertThat(boolSerializer.serialize(null), is(expectedFalseBytes));
+        // We treat null as false
+        try {
+            assertThat(boolSerializer.serialize(null), is(expectedFalseBytes));
+            fail("Should have thrown NullPointerException");
+        } catch (NullPointerException e) {
+            // passed
+        }
     }
 }

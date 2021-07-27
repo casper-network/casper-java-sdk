@@ -1,6 +1,6 @@
 package com.casper.sdk.service.serialization.cltypes;
 
-import com.casper.sdk.domain.CLType;
+import com.casper.sdk.types.CLType;
 import org.hamcrest.core.Is;
 import org.junit.jupiter.api.Test;
 

@@ -1,8 +1,9 @@
 package com.casper.sdk.service.http.rpc;
 
-import com.casper.sdk.domain.Deploy;
-import com.casper.sdk.domain.DeployService;
-import com.casper.sdk.json.JsonConversionService;
+import com.casper.sdk.types.Deploy;
+import com.casper.sdk.types.DeployService;
+import com.casper.sdk.service.json.JsonConversionService;
+import static com.casper.sdk.Properties.*;
 import com.casper.sdk.service.HashService;
 import com.casper.sdk.service.MethodEnums;
 
@@ -10,8 +11,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-
-import static com.casper.sdk.Properties.*;
 
 /**
  * Service to query the chain Methods call the HTTP methods with an instantiated method object
@@ -72,6 +71,7 @@ public class NodeClient {
         final Optional<String> result = httpMethods.rpcCallMethod(new Method(STATE_GET_ITEM,
                         Map.of(
                                 "key", "account-hash-" + hashService.getAccountHash(accountKey),
+                                "state_root_hash", getStateRootHash(),
                                 "path", Collections.emptyList()
                         )
                 )
