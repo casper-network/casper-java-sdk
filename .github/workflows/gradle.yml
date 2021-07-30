@@ -26,7 +26,7 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew build
     - name: Build Artifacts
-      run: mkdir staging && cp target/*.jar staging     
+      run: mkdir staging && cp ./target/*.jar staging     
     - name: Upload Artifacts
       uses: actions/upload-artifact@v2
       with:
