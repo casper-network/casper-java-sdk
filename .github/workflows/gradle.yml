@@ -28,5 +28,5 @@ jobs:
     - name: Upload Artifacts
       uses: actions/upload-artifact@v2
       with:
-        name: Package
+        name: casper-java-sdk
         path: build/libs
