@@ -29,7 +29,6 @@ jobs:
       run: mkdir staging && cp target/*.jar staging     
     - name: Upload Artifacts
       uses: actions/upload-artifact@v2
-      run: ./gradlew build
       with:
         name: github-actions-artifact
         path: staging
