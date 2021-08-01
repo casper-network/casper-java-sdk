@@ -10,11 +10,12 @@ SDK  to streamline the 3rd party Java client integration processes. Such 3rd par
 
 This version requires a JAR build using gradle
 
-To build, first clone the main branch, then run the following gradle command in the root to build the jar:
+To build, first clone the main branch, then run the gradle command as shown below to build the jar:
 
 ```bash
 git clone https://github.com/casper-network/casper-java-sdk.git
 cd casper-java-sdk
+
 gradle casperJar
 ```
 
@@ -42,11 +43,11 @@ If you're not using gradle, you can import the JAR into the project using your I
 
 ## How To: Query a node ?
 
-See [here](https://github.com/casper-network/casper-java-sdk/tree/main/src/test/java/com/casper/sdk/how_to/how_to_query_a_node/QueryANode.class).
+See [here](https://github.com/casper-network/casper-java-sdk/blob/how-tos/src/test/java/com/casper/sdk/how_to/how_to_query_a_node/QueryANode.java).
 
 ## How To: Transfer funds between 2 accounts ?
 
-See [here](https://github.com/casper-network/casper-java-sdk/tree/main/src/test/java/com/casper/sdk/how_to/how_to_transfer_between_accounts/TransferBetweenAccounts.class).
+See [here](https://github.com/casper-network/casper-java-sdk/blob/how-tos/src/test/java/com/casper/sdk/how_to/how_to_transfer_between_accounts/TransferBetweenAccounts.java).
 
 ## How To: Delegate funds to a validator ?
 
