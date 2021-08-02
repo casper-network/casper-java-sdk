@@ -14,20 +14,27 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
+/**
+ * Uses Local Network Testing network/node control to demonstrate
+ * transferring between accounts
+ * @see <a href="https://docs.casperlabs.io/en/latest/dapp-dev-guide/setup-nctl.html"></a>
+ */
 public class TransferBetweenAccounts extends Methods {
 
+    //Create new instance of the SDK with default NCTL url and port
     final CasperSdk casperSdk = new CasperSdk("http://localhost", 40101);
 
+    //Path to the NCTL utilities, change to mach your implementation
     private final static String NCTL_HOME = "~/casper-node/utils/nctl";
 
     @Test
     public void testDeploy() throws Throwable {
 
         final AsymmetricCipherKeyPair nodeOneKeyPair = super.getNodeKeyPair(1, NCTL_HOME, casperSdk);
-        final AsymmetricCipherKeyPair userTwoKeyPair = super.getUserKeyPair(2, NCTL_HOME, casperSdk);
+        final AsymmetricCipherKeyPair nodeTwoKeyPair = super.getUserKeyPair(2, NCTL_HOME, casperSdk);
 
         final PublicKey fromPublicKey = new PublicKey(((Ed25519PublicKeyParameters) nodeOneKeyPair.getPublic()).getEncoded(), KeyAlgorithm.ED25519);
-        final PublicKey toPublicKey = new PublicKey(((Ed25519PublicKeyParameters) userTwoKeyPair.getPublic()).getEncoded(), KeyAlgorithm.ED25519);
+        final PublicKey toPublicKey = new PublicKey(((Ed25519PublicKeyParameters) nodeTwoKeyPair.getPublic()).getEncoded(), KeyAlgorithm.ED25519);
 
         // Make the session, a transfer from user one to user two
         final com.casper.sdk.types.Transfer transfer = casperSdk.newTransfer(new BigInteger("2500000000"),
@@ -52,7 +59,7 @@ public class TransferBetweenAccounts extends Methods {
 
 
         casperSdk.signDeploy(deploy, nodeOneKeyPair);
-        casperSdk.signDeploy(deploy, userTwoKeyPair);
+        casperSdk.signDeploy(deploy, nodeTwoKeyPair);
 
         final String json = casperSdk.deployToJson(deploy);
         assertThat(json, is(notNullValue()));

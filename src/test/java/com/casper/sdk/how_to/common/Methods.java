@@ -10,6 +10,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
+/**
+ * Shared methods for the How Tos
+ */
 public abstract class Methods {
 
     protected String getPublicKeyAccountHex(final AsymmetricCipherKeyPair keyPair) {
