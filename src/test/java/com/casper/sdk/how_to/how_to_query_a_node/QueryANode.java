@@ -5,10 +5,17 @@ import com.casper.sdk.how_to.common.Methods;
 
 import org.junit.jupiter.api.Test;
 
+/**
+ * Uses Local Network Testing network/node control to demonstrate
+ * querying a node
+ * @see <a href="https://docs.casperlabs.io/en/latest/dapp-dev-guide/setup-nctl.html"></a>
+ */
 public class QueryANode extends Methods {
 
+    //Create new instance of the SDK with default NCTL url and port
     final CasperSdk casperSdk = new CasperSdk("http://localhost", 40101);
 
+    //Path to the NCTL utilities, change to mach your implementation
     private final static String NCTL_HOME = "~/casper-node/utils/nctl";
 
     @Test
