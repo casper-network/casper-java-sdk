@@ -47,7 +47,7 @@ class CasperSdkIntegrationTest {
     };
 
     /** Path the nctl folder can be overridden with -Dnctl.home=some-path */
-    private static final String NCTL_HOME = "~/Documents/casper/casper-node/utils/nctl";
+    private static final String NCTL_HOME = "~/casper-node/utils/nctl";
 
     private final byte[] expectedHash = new byte[]{
             (byte) 10, (byte) 56, (byte) 192, (byte) 58, (byte) 52, (byte) 29, (byte) 185, (byte) 218, (byte) 206,
@@ -60,7 +60,7 @@ class CasperSdkIntegrationTest {
 
     @BeforeEach
     void setUp() {
-        casperSdk = new CasperSdk("http://localhost", 11101);
+        casperSdk = new CasperSdk("http://localhost", 40101);
     }
 
     @Test

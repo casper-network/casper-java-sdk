@@ -57,7 +57,7 @@ jar {
 
 task casperJar(type: Jar) {
     archiveBaseName = 'casper-java-sdk'
-    archiveVersion =  '0.1.0'
+    archiveVersion =  '0.5.0'
     manifest {
         attributes 'Main-Class': 'com.casper.sdk.controller.CasperSdk'
     }
