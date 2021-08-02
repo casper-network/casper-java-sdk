@@ -5,6 +5,7 @@ import com.casper.sdk.how_to.common.Methods;
 import com.casper.sdk.types.*;
 import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
 import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigInteger;
@@ -19,6 +20,7 @@ import static org.hamcrest.core.Is.is;
  * transferring between accounts
  * @see <a href="https://docs.casperlabs.io/en/latest/dapp-dev-guide/setup-nctl.html"></a>
  */
+@Disabled // Remove this to run locally
 public class TransferBetweenAccounts extends Methods {
 
     //Create new instance of the SDK with default NCTL url and port
