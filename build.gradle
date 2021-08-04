@@ -34,6 +34,17 @@ ext {
    isReleaseVersion = false
 }
 
+def getUserName(){
+    def Properties props = new Properties()
+    props.load(new FileInputStream(new File('secrets.properties')))
+    return props['OSSRH_USERNAME']
+}
+def getPassword(){
+    def Properties props = new Properties()
+    props.load(new FileInputStream(new File('secrets.properties')))
+    return props['OSSRH_PASSWORD']
+}
+
 publishing {
 
     repositories {
@@ -45,8 +56,8 @@ publishing {
             credentials {
 //                username = project.hasProperty('OSSRH_USERNAME') ? ossrhUsername : "Unknown user"
 //                password = project.hasProperty('OSSRH_PASSWORD') ? ossrhPassword : "Unknown password"
-                username = System.getenv("MAVEN_USERNAME")
-                password = System.getenv("MAVEN_PASSWORD")
+                username = getUserName()
+                password = getPassword()
             }
         }
     }
