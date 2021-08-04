@@ -45,8 +45,8 @@ publishing {
             credentials {
 //                username = project.hasProperty('OSSRH_USERNAME') ? ossrhUsername : "Unknown user"
 //                password = project.hasProperty('OSSRH_PASSWORD') ? ossrhPassword : "Unknown password"
-                username = System.getenv("OSSRH_USERNAME")
-                password = System.getenv("OSSRH_PASSWORD")
+                username = System.getenv("MAVEN_USERNAME")
+                password = System.getenv("MAVEN_PASSWORD")
             }
         }
     }
