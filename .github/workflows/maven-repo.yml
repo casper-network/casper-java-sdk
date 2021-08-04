@@ -16,21 +16,12 @@ jobs:
         with:
           java-version: 15
           server-id: ossrh
-          server-username: OSSRH_USERNAME
-          server-password: OSSRH_PASSWORD
-      - id: install-secret-key
-        name: Install gpg secret key
-        run: |
-         cat <(echo -e "$") | gpg --batch --import
-         gpg --list-secret-keys --keyid-format LONG
-      - id: publish-to-central
-        name: Publish to Central Repository
+          server-username: MAVEN_USERNAME
+          server-password: MAVEN_PASSWORD
+          gpg-private-key: ${{ secrets.OSSRH_PRIVATE_KEY }}
+          gpg-passphrase: OSSRH_GPG_PASSPHRASE
+      - name: Deploy with Maven
+        run: mvn -B clean deploy -Pci-cd
         env:
-          MAVEN_USERNAME: $
-          MAVEN_PASSWORD: $
-        run: |
-          mvn \
-            --no-transfer-progress \
-            --batch-mode \
-            -Dgpg.passphrase=$ \
-            clean deploy
+          MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
