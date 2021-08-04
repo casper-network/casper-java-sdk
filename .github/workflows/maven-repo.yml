@@ -20,6 +20,11 @@ jobs:
           server-password: MAVEN_PASSWORD
           gpg-private-key: ${{ secrets.OSSRH_GPG_SECRET_KEY }}
           gpg-passphrase: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}
+      - id: install-secret-key
+        name: Install gpg secret key
+        run: |
+          cat <(echo -e "$") | gpg --batch --import
+          gpg --list-secret-keys --keyid-format LONG
       - name: Deploy with Maven
         run: gradle clean publish
         env:
