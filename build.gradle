@@ -4,7 +4,7 @@ plugins {
 }
 
 apply plugin: 'java'
-group = 'com.casper'
+group = 'network.casper'
 
 repositories {
     mavenCentral()
@@ -29,22 +29,57 @@ dependencies {
 }
 
 publishing {
+
     repositories {
         maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/casper-network/casper-java-sdk")
-            version = "0.0.1"
+            def releaseRepo = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+            def snapshotRepo = "https://oss.sonatype.org/content/repositories/snapshots/"
+            url = isReleaseVersion ? releaseRepo : snapshotRepo
             credentials {
-                username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
-                password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
+                username = project.hasProperty('OSSRH_USERNAME') ? ossrhUsername : "Unknown user"
+                password = project.hasProperty('OSSRH_PASSWORD') ? ossrhPassword : "Unknown password"
             }
         }
     }
+
     publications {
-        gpr(MavenPublication) {
-            from(components.java)
+        mavenJava(MavenPublication) {
+            pom {
+                groupId = 'network.casper'
+                name = 'casper-java-sdk'
+                description = 'Casper Java SDK'
+                from components.java
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                scm {
+                    connection = 'scm:git:git@github.com:casper-network/java-sdk.git'
+                    developerConnection = 'scm:git:git@github.com:casper-network/java-sdk.git'
+                    url = 'https://github.com/casper-network/java-sdk'
+                }
+            }
         }
     }
+
+//    repositories {
+//        maven {
+//            name = "GitHubPackages"
+//            url = uri("https://maven.pkg.github.com/casper-network/casper-java-sdk")
+//            version = "0.0.1"
+//            credentials {
+//                username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
+//                password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
+//            }
+//        }
+//    }
+//    publications {
+//        gpr(MavenPublication) {
+//            from(components.java)
+//        }
+//    }
 }
 
 jar {
