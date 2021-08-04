@@ -21,7 +21,7 @@ jobs:
           gpg-private-key: ${{ secrets.OSSRH_PRIVATE_KEY }}
           gpg-passphrase: OSSRH_GPG_PASSPHRASE
       - name: Deploy with Maven
-        run: mvn -B clean deploy -Pci-cd
+        run: gradle clean publish
         env:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
