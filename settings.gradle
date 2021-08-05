@@ -1,2 +1,4 @@
 rootProject.name = 'casper-java-sdk'
+signing.secretKeyRingFile = '/home/runner/.gnupg'
+
 
