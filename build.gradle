@@ -52,8 +52,8 @@ publishing {
 //                password = System.getenv("MAVEN_PASSWORD")
 //                username = project.hasProperty('ossrhUsername') ? ossrhUsername : "Unknown user"
 //                password = project.hasProperty('ossrhPassword') ? ossrhPassword : "Unknown password"
-                username = project.findProperty("gpr.user")
-                password = project.findProperty("gpr.password")
+                username = System.getenv("OSSRH_USER")
+                password = System.getenv("OSSRH_PASSWORD")
 
             }
         }
