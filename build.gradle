@@ -32,7 +32,7 @@ dependencies {
 
 ext {
 //   isReleaseVersion = !version.endsWith("SNAPSHOT")
-   isReleaseVersion = false
+   isReleaseVersion = true
 }
 
 publishing {
@@ -41,7 +41,7 @@ publishing {
             def releaseRepo = "https://s01.oss.sonatype.org/content/groups/staging/"
             def snapshotRepo = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
             url = isReleaseVersion ? releaseRepo : snapshotRepo
-            version = "0.0.1-SNAPSHOT"
+            version = "0.0.1"
             name = 'casperSecureRepo'
             credentials(PasswordCredentials)
         }
