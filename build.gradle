@@ -71,11 +71,10 @@ publishing {
 }
 
 signing {
-
     def signingKey = System.getenv('ORG_GRADLE_PROJECT_signingKey')
     def signingPassword = System.getenv('ORG_GRADLE_PROJECT_signingPassword')
     useInMemoryPgpKeys(signingKey, signingPassword)
-    sign publishing.publications.casperJava
+    sign stuffZip
 }
 tasks.withType(Sign) {
     onlyIf { isReleaseVersion }
