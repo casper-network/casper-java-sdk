@@ -35,4 +35,4 @@ jobs:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
         run: |
-          ./gradlew clean publish -Dgpg.passphrase=${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }} --stacktrace --debug --info -PmySecureRepositoryUsername=${{ secrets.OSSRH_USERNAME }} -PmySecureRepositoryPassword=${{ secrets.OSSRH_PASSWORD }}
+          ./gradlew clean publish -Dgpg.passphrase=${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }} --stacktrace --debug --info -Dgpg.user=${{ secrets.OSSRH_USERNAME }} -Dgpg.password=${{ secrets.OSSRH_PASSWORD }}
