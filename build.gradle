@@ -42,22 +42,22 @@ publishing {
             def snapshotRepo = "https://oss.sonatype.org/content/repositories/snapshots/"
             url = isReleaseVersion ? releaseRepo : snapshotRepo
             version = "0.0.1-SNAPSHOT"
-//            name = 'mySecureRepository'
-//            credentials(PasswordCredentials)
+            name = 'mySecureRepository'
+            credentials(PasswordCredentials)
 
-            credentials {
-//                username = project.hasProperty('OSSRH_USERNAME') ? ossrhUsername : "Unknown user"
-//                password = project.hasProperty('OSSRH_PASSWORD') ? ossrhPassword : "Unknown password"
-//                username = System.getenv("MAVEN_USERNAME")
-//                password = System.getenv("MAVEN_PASSWORD")
-//                username = project.hasProperty('ossrhUsername') ? ossrhUsername : "Unknown user"
-//                password = project.hasProperty('ossrhPassword') ? ossrhPassword : "Unknown password"
-//                username = System.getenv("OSSRH_USER")
-//                password = System.getenv("OSSRH_PASSWORD")
-                username = project.findProperty("gpr.user")
-                password = project.findProperty("gpr.password")
-
-            }
+//            credentials {
+////                username = project.hasProperty('OSSRH_USERNAME') ? ossrhUsername : "Unknown user"
+////                password = project.hasProperty('OSSRH_PASSWORD') ? ossrhPassword : "Unknown password"
+////                username = System.getenv("MAVEN_USERNAME")
+////                password = System.getenv("MAVEN_PASSWORD")
+////                username = project.hasProperty('ossrhUsername') ? ossrhUsername : "Unknown user"
+////                password = project.hasProperty('ossrhPassword') ? ossrhPassword : "Unknown password"
+////                username = System.getenv("OSSRH_USER")
+////                password = System.getenv("OSSRH_PASSWORD")
+//                username = project.findProperty("gpr.user")
+//                password = project.findProperty("gpr.password")
+//
+//            }
         }
     }
 
