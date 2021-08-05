@@ -36,7 +36,7 @@ ext {
 }
 
 signing {
-    sign publishing.publications.archives
+    sign publishing.publications.casperJava
 }
 tasks.withType(Sign) {
     onlyIf { isReleaseVersion }
@@ -70,7 +70,7 @@ publishing {
     }
 
     publications {
-        mavenJava(MavenPublication) {
+        casperJava(MavenPublication) {
             pom {
                 groupId = 'network.casper'
                 name = 'casper-java-sdk'
