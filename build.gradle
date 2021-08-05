@@ -35,15 +35,7 @@ ext {
    isReleaseVersion = false
 }
 
-signing {
-    sign publishing.publications.casperJava
-}
-tasks.withType(Sign) {
-    onlyIf { isReleaseVersion }
-}
-
 publishing {
-
     repositories {
         maven {
             def releaseRepo = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
@@ -90,24 +82,16 @@ publishing {
             }
         }
     }
-
-//    repositories {
-//        maven {
-//            name = "GitHubPackages"
-//            url = uri("https://maven.pkg.github.com/casper-network/casper-java-sdk")
-//            version = "0.0.1"
-//            credentials {
-//                username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
-//                password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
-//            }
-//        }
-//    }
-//    publications {
-//        gpr(MavenPublication) {
-//            from(components.java)
-//        }
-//    }
 }
+
+
+signing {
+    sign publishing.publications.casperJava
+}
+tasks.withType(Sign) {
+    onlyIf { isReleaseVersion }
+}
+
 
 jar {
     manifest {
