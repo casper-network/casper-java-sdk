@@ -36,7 +36,7 @@ ext {
 }
 
 signing {
-    sign publishing.publications.mavenJava
+    sign publishing.publications.archives
 }
 tasks.withType(Sign) {
     onlyIf { isReleaseVersion }
