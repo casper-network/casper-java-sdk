@@ -72,8 +72,8 @@ publishing {
 
 signing {
 
-    def signingKey = System.getenv('MAVEN_SECRET_KEY')
-    def signingPassword = System.getenv('MAVEN_SECRET_KEY_PASSWORD')
+    def signingKey = System.getenv('ORG_GRADLE_PROJECT_signingKey')
+    def signingPassword = System.getenv('ORG_GRADLE_PROJECT_signingPassword')
     useInMemoryPgpKeys(signingKey, signingPassword)
     sign publishing.publications.casperJava
 }
