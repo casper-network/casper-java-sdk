@@ -31,7 +31,7 @@ dependencies {
 
 ext {
 //   isReleaseVersion = !version.endsWith("SNAPSHOT")
-   isReleaseVersion = false
+   isReleaseVersion = true
 }
 
 publishing {
@@ -41,7 +41,7 @@ publishing {
             def releaseRepo = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
             def snapshotRepo = "https://oss.sonatype.org/content/repositories/snapshots/"
             url = isReleaseVersion ? releaseRepo : snapshotRepo
-            version = "0.0.1-SNAPSHOT"
+            version = "0.0.1"
             credentials {
 //                username = project.hasProperty('OSSRH_USERNAME') ? ossrhUsername : "Unknown user"
 //                password = project.hasProperty('OSSRH_PASSWORD') ? ossrhPassword : "Unknown password"
