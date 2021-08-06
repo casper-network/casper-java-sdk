@@ -61,9 +61,9 @@ publishing {
                     }
                 }
                 scm {
-                    connection = 'scm:git:git@github.com:casper-network/java-sdk.git'
-                    developerConnection = 'scm:git:git@github.com:casper-network/java-sdk.git'
-                    url = 'https://github.com/casper-network/java-sdk'
+                    connection = 'scm:git:git@github.com:casper-network/casper-java-sdk.git'
+                    developerConnection = 'scm:git:git@github.com:casper-network/casper-java-sdk.git'
+                    url = 'https://github.com/casper-network/casper-java-sdk'
                 }
             }
         }
