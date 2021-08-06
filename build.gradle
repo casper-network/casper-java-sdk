@@ -76,9 +76,9 @@ signing {
     useInMemoryPgpKeys(signingKey, signingPassword)
     sign publishing.publications.casperJava
 }
-//tasks.withType(Sign) {
-//    onlyIf { isReleaseVersion }
-//}
+tasks.withType(Sign) {
+    onlyIf { isReleaseVersion }
+}
 
 
 jar {
