@@ -1,0 +1,39 @@
+plugins {
+	id 'java'
+}
+
+group = 'com.syntifi.casper'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {	
+	implementation 'com.github.briandilley.jsonrpc4j:jsonrpc4j:1.6'
+    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.12.4'
+
+    implementation 'org.apache.logging.log4j:log4j-api:2.13.3'
+    implementation 'org.apache.logging.log4j:log4j-core:2.13.3'
+    implementation 'org.apache.logging.log4j:log4j-slf4j-impl:2.13.3'
+    implementation 'org.slf4j:slf4j-api:1.7.30'
+
+    // lombok compile
+	compileOnly 'org.projectlombok:lombok:1.18.20'
+	annotationProcessor 'org.projectlombok:lombok:1.18.20'
+
+    // lombok testing
+	testCompileOnly 'org.projectlombok:lombok:1.18.20'
+	testAnnotationProcessor 'org.projectlombok:lombok:1.18.20'
+    
+    // Use JUnit Jupiter for testing.
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.7.1'	
+}
+
+test {
+	useJUnitPlatform()
+    testLogging {
+        showStandardStreams true
+    }
+}
