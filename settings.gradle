@@ -1,1 +1,14 @@
-rootProject.name = 'casper-sdk'
+pluginManagement {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+    plugins {
+        id "${quarkusPluginId}" version "${quarkusPluginVersion}"
+    }
+}
+
+include 'casper-java-sdk'
+include 'demo-springboot-api'
+include 'demo-quarkus-api'
