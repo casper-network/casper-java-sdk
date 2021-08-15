@@ -3,6 +3,7 @@ package com.syntifi.casper.sdk.service;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.List;
 
 import com.googlecode.jsonrpc4j.JsonRpcHttpClient;
 import com.googlecode.jsonrpc4j.JsonRpcMethod;
@@ -12,6 +13,7 @@ import com.syntifi.casper.sdk.filter.block.CasperBlockByHashFilter;
 import com.syntifi.casper.sdk.filter.block.CasperBlockByHeightFilter;
 import com.syntifi.casper.sdk.model.block.CasperBlockData;
 import com.syntifi.casper.sdk.model.peer.CasperPeerData;
+import com.syntifi.casper.sdk.model.storedvalue.CasperStoredValueData;
 
 /**
  * Interface to be used as Dynamic Proxy for RPC method operation
@@ -54,6 +56,16 @@ public interface CasperService {
      */
     @JsonRpcMethod("chain_get_block")
     public CasperBlockData getBlock(@JsonRpcParam("block_identifier") CasperBlockByHeightFilter heightFilter);
+
+    /**
+     * Retrieve block info by its height
+     * 
+     * @param storedValueFilter Block's storedValue params
+     * @return Object holding the api version and block
+     */
+    @JsonRpcMethod("state_get_item")
+    public CasperStoredValueData getStateItem(@JsonRpcParam("state_root_hash") String stateRootHash,
+            @JsonRpcParam("key") String key, @JsonRpcParam("path") List<String> path);
 
     // @JsonRpcMethod("info_get_deploy")
     // public CasperDeploy getDeploy(@JsonRpcParam("deploy_hash") String
