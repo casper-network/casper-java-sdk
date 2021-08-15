@@ -9,6 +9,13 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.syntifi.casper.sdk.model.storedvalue.CasperStoredValue;
 
+/**
+ * Customize the mapping of Casper's CLValue
+ * 
+ * @author Alexandre Carvalho
+ * @author Andre Bertolace
+ * @since 0.0.1
+ */
 public class CasperStoredValueDeserializer extends StdDeserializer<CasperStoredValue<? extends Object>> {
 
     public CasperStoredValueDeserializer() {
