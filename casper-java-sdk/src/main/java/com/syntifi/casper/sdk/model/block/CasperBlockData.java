@@ -13,10 +13,9 @@ import lombok.Data;
  */
 @Data
 public class CasperBlockData {
-    
+
     @JsonProperty("api_version")
     private String apiVersion;
 
-    @JsonProperty("CLValue")
     private CasperBlock block;
 }
