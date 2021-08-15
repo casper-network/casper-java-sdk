@@ -2,14 +2,6 @@ plugins {
 	id 'java'
 }
 
-ext {
-    set("jacksonVersion", "2.12.4")
-    set("slf4jVersion", "2.13.3")
-    set("lombokVersion", "1.18.20")
-    set("jsonrpc4jVersion", "1.6")
-    set("jupiterVersion", "5.7.1")
-}
-
 group = 'com.syntifi.casper'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
@@ -36,7 +28,7 @@ dependencies {
     testImplementation "org.apache.logging.log4j:log4j-api:${slf4jVersion}"
     testImplementation "org.apache.logging.log4j:log4j-core:${slf4jVersion}"
     testImplementation "org.apache.logging.log4j:log4j-slf4j-impl:${slf4jVersion}"
-    testImplementation "org.slf4j:slf4j-api:1.7.30"
+    testImplementation "org.slf4j:slf4j-api:${slf4jApiVersion}"
     
     // Use JUnit Jupiter for testing.
     testImplementation "org.junit.jupiter:junit-jupiter:${jupiterVersion}"	

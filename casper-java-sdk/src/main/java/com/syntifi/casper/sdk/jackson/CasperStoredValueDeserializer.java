@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
+import com.syntifi.casper.sdk.exception.NotImplementedException;
 import com.syntifi.casper.sdk.model.storedvalue.CasperStoredValue;
 
 /**
@@ -49,10 +50,37 @@ public class CasperStoredValueDeserializer extends StdDeserializer<CasperStoredV
             case "U64":
                 return new CasperStoredValue<>(clType, bytes, toBeParsed.asLong());
             case "U128":
+                throw new NotImplementedException();
             case "U256":
+                throw new NotImplementedException();
             case "U512":
+                throw new NotImplementedException();
+            case "Unit":
+                throw new NotImplementedException();
             case "String":
                 return new CasperStoredValue<>(clType, bytes, toBeParsed.asText());
+            case "Key":
+                throw new NotImplementedException();
+            case "URef":
+                throw new NotImplementedException();
+            case "Optional":
+                throw new NotImplementedException();
+            case "List":
+                throw new NotImplementedException();
+            case "ByteArray":
+                throw new NotImplementedException();
+            case "Result":
+                throw new NotImplementedException();
+            case "Map":
+                throw new NotImplementedException();
+            case "Tuple1":
+                throw new NotImplementedException();
+            case "Tuple2":
+                throw new NotImplementedException();
+            case "Tuple3":
+                throw new NotImplementedException();
+            case "PublicKey":
+                throw new NotImplementedException();
             default: // Any
                 return new CasperStoredValue<>(clType, bytes, (Object) toBeParsed.asText());
         }
