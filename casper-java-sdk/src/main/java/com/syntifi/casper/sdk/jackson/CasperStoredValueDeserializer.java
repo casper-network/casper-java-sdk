@@ -3,7 +3,6 @@ package com.syntifi.casper.sdk.jackson;
 import java.io.IOException;
 
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
@@ -28,7 +27,7 @@ public class CasperStoredValueDeserializer extends StdDeserializer<CasperStoredV
 
     @Override
     public CasperStoredValue<? extends Object> deserialize(JsonParser p, DeserializationContext ctxt)
-            throws IOException, JsonProcessingException {
+            throws IOException {
 
         JsonNode node = p.getCodec().readTree(p);
         var clValueNode = node.get("CLValue");
