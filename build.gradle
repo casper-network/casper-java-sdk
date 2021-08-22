@@ -41,7 +41,7 @@ publishing {
             def releaseRepo = "https://s01.oss.sonatype.org/content/groups/staging/"
             def snapshotRepo = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
             url = isReleaseVersion ? releaseRepo : snapshotRepo
-            version = "0.0.1"
+            version = "0.0.2"
             name = 'casperSecureRepo'
             credentials(PasswordCredentials)
         }
