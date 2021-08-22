@@ -10,18 +10,18 @@ repositories {
 }
 
 dependencies {
-    testCompile 'com.jayway.jsonpath:json-path-assert:2.4.0'
-    testCompile 'commons-io:commons-io:2.8.0'
-    testCompile 'org.junit.jupiter:junit-jupiter-api:5.3.1'
-    testCompile 'org.junit.jupiter:junit-jupiter-params:5.3.1'
-    testRuntime 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
-    compile group: 'com.rfksystems', name: 'blake2b', version: '1.0.0'
-    compile group: 'commons-codec', name: 'commons-codec', version: '1.5'
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.12.2'
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.12.2'
-    compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-yaml', version: '2.12.2'
-    compile group: 'org.bouncycastle', name: 'bcprov-jdk15on', version: '1.69'
-    compile group: 'com.sshtools', name: 'maverick-synergy', version: '3.0.0-RC8'
+    testImplementation 'com.jayway.jsonpath:json-path-assert:2.4.0'
+    testImplementation 'commons-io:commons-io:2.8.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter-params:5.3.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
+    implementation group: 'com.rfksystems', name: 'blake2b', version: '1.0.0'
+    implementation group: 'commons-codec', name: 'commons-codec', version: '1.5'
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.12.2'
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.12.2'
+    implementation group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-yaml', version: '2.12.2'
+    implementation group: 'org.bouncycastle', name: 'bcprov-jdk15on', version: '1.69'
+    implementation group: 'com.sshtools', name: 'maverick-synergy', version: '3.0.0-RC8'
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
 
     testImplementation 'com.squareup.okhttp3:mockwebserver:4.0.1'
@@ -60,8 +60,6 @@ task casperJar(type: Jar) {
     manifest {
         attributes 'Main-Class': 'com.casper.sdk.controller.CasperSdk'
     }
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-    with jar
 }
 
 test {
