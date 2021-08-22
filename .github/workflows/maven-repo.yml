@@ -22,11 +22,8 @@ jobs:
       - id: install-secret-key
         name: Install gpg secret key
         run: |
-#          cat <(echo -e "${{ secrets.OSSRH_GPG_SECRET_KEY }}") | gpg --batch --import
-#          gpg --list-secret-keys --keyid-format LONG
-          echo -n "OSSRH_GPG_SECRET_KEY" | base64 --decode | gpg --import
-        env:
-          GPG_SIGNING_KEY: ${{ secrets.GPG_SIGNING_KEY }}
+          cat <(echo -e "${{ secrets.OSSRH_GPG_SECRET_KEY }}") | gpg --batch --import
+          gpg --list-secret-keys --keyid-format LONG
       - id: publish-to-central
         name: Publish to Central Repository
         env:
