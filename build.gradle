@@ -73,7 +73,9 @@ publishing {
 signing {
     def signingKey = findProperty("ORG_GRADLE_PROJECT_signingKey")
     def signingPassword = findProperty("ORG_GRADLE_PROJECT_signingPassword")
-    useInMemoryPgpKeys(signingKey, signingPassword, "")
+    println "signingKey: ${signingKey}"
+    println "signingPassword: ${signingPassword}"
+    useInMemoryPgpKeys(signingKey, signingPassword)
     sign publishing.publications.casperJava
 }
 tasks.withType(Sign) {
