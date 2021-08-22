@@ -75,6 +75,10 @@ signing {
     def signingPassword = findProperty("ORG_GRADLE_PROJECT_signingPassword")
     println "signingKey: ${signingKey}"
     println "signingPassword: ${signingPassword}"
+    println "MAVEN_USERNAME: ${System.getenv("MAVEN_USERNAME")}"
+    println "MAVEN_PASSWORD: ${System.getenv("MAVEN_PASSWORD")}"
+    println "MAVEN_SECRET_KEY: ${System.getenv("MAVEN_SECRET_KEY")}"
+    println "MAVEN_SECRET_KEY_PASSWORD: ${System.getenv("MAVEN_SECRET_KEY_PASSWORD")}"
     useInMemoryPgpKeys(signingKey, signingPassword)
     sign publishing.publications.casperJava
 }
