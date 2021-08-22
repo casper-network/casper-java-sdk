@@ -22,8 +22,12 @@ jobs:
       - id: install-secret-key
         name: Install gpg secret key
         run: |
-          cat <(echo -e "${{ secrets.OSSRH_GPG_SECRET_KEY }}") | gpg --batch --import
-          gpg --list-secret-keys --keyid-format LONG
+          gpg --export-secret-keys --armor "${{ secrets.OSSRH_GPG_SECRET_KEY }}" > private-ci.key
+#          cat <(echo -e "${{ secrets.OSSRH_GPG_SECRET_KEY }}") | gpg --batch --import
+#          gpg --list-secret-keys --keyid-format LONG
+#          echo -n "OSSRH_GPG_SECRET_KEY" | base64 --decode | gpg --import
+        env:
+          GPG_SIGNING_KEY: ${{ secrets.GPG_SIGNING_KEY }}
       - id: publish-to-central
         name: Publish to Central Repository
         env:
@@ -32,4 +36,4 @@ jobs:
           MAVEN_SECRET_KEY: ${{ secrets.OSSRH_GPG_SECRET_KEY }}
           MAVEN_SECRET_KEY_PASSWORD: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}
         run: |
-          ORG_GRADLE_PROJECT_signingKey="$(gpg -a --export-secret-key ${{ secrets.OSSRH_GPG_SECRET_KEY }})" ORG_GRADLE_PROJECT_signingPassword=${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }} ./gradlew  publish -Dgpg.passphrase=${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }} -PcasperSecureRepoUsername=${{ secrets.OSSRH_USERNAME }} -PcasperSecureRepoPassword=${{ secrets.OSSRH_PASSWORD }} --stacktrace --debug --info --scan
+          ORG_GRADLE_PROJECT_signingKey="$(gpg -a --export-secret-key ${{ secrets.OSSRH_GPG_SECRET_KEY }}\!)" ORG_GRADLE_PROJECT_signingPassword=${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }} ./gradlew  publish -Dgpg.passphrase=${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }} -PcasperSecureRepoUsername=${{ secrets.OSSRH_USERNAME }} -PcasperSecureRepoPassword=${{ secrets.OSSRH_PASSWORD }} --stacktrace --debug --info --scan
