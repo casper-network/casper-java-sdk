@@ -60,6 +60,8 @@ task casperJar(type: Jar) {
     manifest {
         attributes 'Main-Class': 'com.casper.sdk.controller.CasperSdk'
     }
+    from { configurations.compileClasspath.findAll { it.isDirectory() ? it : zipTree(it) } }
+    with jar
 }
 
 test {
