@@ -38,7 +38,8 @@ ext {
 publishing {
     repositories {
         maven {
-            def releaseRepo = "https://s01.oss.sonatype.org/content/groups/staging/"
+//            def releaseRepo = "https://s01.oss.sonatype.org/content/groups/staging/"
+            def releaseRepo = "https://oss.sonatype.org/service/local/staging/deploy/maven2"
             def snapshotRepo = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
             url = isReleaseVersion ? releaseRepo : snapshotRepo
             version = "0.0.2"
