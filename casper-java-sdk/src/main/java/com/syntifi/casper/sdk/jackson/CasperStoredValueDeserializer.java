@@ -1,6 +1,7 @@
 package com.syntifi.casper.sdk.jackson;
 
 import java.io.IOException;
+import java.math.BigInteger;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
@@ -44,17 +45,14 @@ public class CasperStoredValueDeserializer extends StdDeserializer<CasperStoredV
             case "I64":
                 return new CasperStoredValue<>(clType, bytes, toBeParsed.asLong());
             case "U8":
-                return new CasperStoredValue<>(clType, bytes, toBeParsed.asText().getBytes());
             case "U32":
                 return new CasperStoredValue<>(clType, bytes, toBeParsed.asInt());
             case "U64":
                 return new CasperStoredValue<>(clType, bytes, toBeParsed.asLong());
             case "U128":
-                throw new NotImplementedException();
             case "U256":
-                throw new NotImplementedException();
             case "U512":
-                throw new NotImplementedException();
+                return new CasperStoredValue<>(clType, bytes, new BigInteger(toBeParsed.asText()));
             case "Unit":
                 throw new NotImplementedException();
             case "String":
@@ -68,7 +66,7 @@ public class CasperStoredValueDeserializer extends StdDeserializer<CasperStoredV
             case "List":
                 throw new NotImplementedException();
             case "ByteArray":
-                throw new NotImplementedException();
+                return new CasperStoredValue<>(clType, bytes, toBeParsed.asText().getBytes());
             case "Result":
                 throw new NotImplementedException();
             case "Map":
