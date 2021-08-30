@@ -17,5 +17,6 @@ public class CasperBlockData {
     @JsonProperty("api_version")
     private String apiVersion;
 
+    @JsonProperty("block")
     private CasperBlock block;
 }
