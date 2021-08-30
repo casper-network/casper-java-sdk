@@ -12,7 +12,7 @@ import com.syntifi.casper.sdk.service.CasperService;
 
 @Path("/block")
 public class BlockResource {
-    private static String testIP = "144.91.79.58";
+    private static String testIP = "195.201.142.76";
     private static int testPort = 7777;
 
     @GET
