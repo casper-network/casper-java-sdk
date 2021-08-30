@@ -13,7 +13,9 @@ import com.syntifi.casper.sdk.filter.block.CasperBlockByHashFilter;
 import com.syntifi.casper.sdk.filter.block.CasperBlockByHeightFilter;
 import com.syntifi.casper.sdk.model.block.CasperBlockData;
 import com.syntifi.casper.sdk.model.peer.CasperPeerData;
+import com.syntifi.casper.sdk.model.stateroothash.CasperStateRootHashData;
 import com.syntifi.casper.sdk.model.storedvalue.CasperStoredValueData;
+import com.syntifi.casper.sdk.model.transfer.CasperTransferData;
 
 /**
  * Interface to be used as Dynamic Proxy for RPC method operation
@@ -55,7 +57,65 @@ public interface CasperService {
      * @return Object holding the api version and block
      */
     @JsonRpcMethod("chain_get_block")
-    public CasperBlockData getBlock(@JsonRpcParam("block_identifier") CasperBlockByHeightFilter heightFilter);
+    public CasperBlockData getBlock(@JsonRpcParam("block_identifier") CasperBlockByHeightFilter height);
+
+    /**
+     * Retrieve last block's transfers 
+     * 
+     * @param heightFilter Block's height
+     * @return Object holding the api version and block
+     */
+    @JsonRpcMethod("chain_get_block_transfers")
+    public CasperTransferData getBlockTransfers();
+
+    /**
+     * Retrieve block transfers by its height
+     * 
+     * @param heightFilter Block's height
+     * @return Object holding the api version and block
+     */
+    @JsonRpcMethod("chain_get_block_transfers")
+    public CasperTransferData getBlockTransfers(@JsonRpcParam("block_identifier") CasperBlockByHeightFilter height);
+
+    /**
+     * Retrieve block transfers by its hash
+     * 
+     * @param hash Block's hash
+     * @return Object holding the api version and block
+     */
+    @JsonRpcMethod("chain_get_block_transfers")
+    public CasperTransferData getBlockTransfers(@JsonRpcParam("block_identifier") CasperBlockByHashFilter hash);
+
+
+    /**
+     * Retrieve last block's transfers 
+     * 
+     * @param heightFilter Block's height
+     * @return Object holding the api version and block
+     */
+    @JsonRpcMethod("chain_get_state_root_hash")
+    public CasperStateRootHashData getStateRootHash();
+
+    /**
+     * Retrieve block transfers by its height
+     * 
+     * @param heightFilter Block's height
+     * @return Object holding the api version and block
+     */
+    @JsonRpcMethod("chain_get_state_root_hash")
+    public CasperStateRootHashData getStateRootHash(@JsonRpcParam("block_identifier") CasperBlockByHeightFilter height);
+
+    /**
+     * Retrieve block transfers by its hash
+     * 
+     * @param hash Block's hash
+     * @return Object holding the api version and block
+     */
+    @JsonRpcMethod("chain_get_state_root_hash")
+    public CasperStateRootHashData getStateRootHash(@JsonRpcParam("block_identifier") CasperBlockByHashFilter hash);
+
+
+
 
     /**
      * Retrieve block info by its height

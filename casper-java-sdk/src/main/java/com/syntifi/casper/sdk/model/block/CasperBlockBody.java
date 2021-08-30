@@ -16,7 +16,8 @@ import lombok.Data;
  */
 @Data
 public class CasperBlockBody {
-    
+
+    @JsonProperty("proposer")
     private String proposer;
 
     @JsonProperty("deploy_hashes")
