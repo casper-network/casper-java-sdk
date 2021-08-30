@@ -77,6 +77,13 @@ class CasperSdkApplicationTests {
 	}
 
 	@Test
+	void retrieveLastBlockTransfers() {
+		var blockData = casperService.getBlockTransfers();
+
+		assertNotNull(blockData);
+	}
+
+	@Test
 	void getTransferByHeight() {
 		var transferData = casperService.getBlockTransfers(new CasperBlockByHeightFilter(198148));
 
@@ -88,6 +95,7 @@ class CasperSdkApplicationTests {
 		assertEquals("account-hash-288797af5b4eeb5d4f36bd228b2e6479a77a27e808597ced1a7d6afe4c29febc", transaction.getTo());
 		assertEquals(597335999990000., transaction.getAmount() , 1E-5);
 	}
+
 	@Test
 	void getTransferByHash() {
 		var transferData = casperService.getBlockTransfers(
@@ -100,6 +108,29 @@ class CasperSdkApplicationTests {
 		assertEquals("account-hash-2363d9065b1ecc26f50f108c22c8f3bbe6a891c81e37e0e454c68370708a6937", transaction.getFrom());
 		assertEquals("account-hash-288797af5b4eeb5d4f36bd228b2e6479a77a27e808597ced1a7d6afe4c29febc", transaction.getTo());
 		assertEquals(597335999990000., transaction.getAmount(), 1E-5);
+	}
+
+	@Test
+	void retrieveLastBlockStateRootHash() {
+		var blockData = casperService.getStateRootHash();
+
+		assertNotNull(blockData);
+	}
+
+	@Test
+	void getStateRootHashByHeight() {
+		var stateRootHashData = casperService.getStateRootHash(new CasperBlockByHeightFilter(0));
+		assertNotNull(stateRootHashData);
+		assertEquals("8e22e3983d5ca9bcf9804bd3a6724b8c24effdf317a1d9c05175125a1bf8b679", stateRootHashData.getStateRootHash());
+	}
+
+	@Test
+	void getStateRootHashByHash() {
+		var stateRootHashData = casperService.getStateRootHash(
+				new CasperBlockByHashFilter("2fe9630b7790852e4409d815b04ca98f37effcdf9097d317b9b9b8ad658f47c8"));
+
+		assertNotNull(stateRootHashData);
+		assertEquals("8e22e3983d5ca9bcf9804bd3a6724b8c24effdf317a1d9c05175125a1bf8b679", stateRootHashData.getStateRootHash());
 	}
 	/*
 	@Test
