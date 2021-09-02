@@ -42,11 +42,11 @@ publishing {
             def snapshotRepo = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
             url = isReleaseVersion ? releaseRepo : snapshotRepo
             name = 'casperSecureRepo'
-            //credentials(PasswordCredentials)
-            credentials { 
-                username = ${System.getenv("MAVEN_USERNAME")}
-                password = ${System.getenv("MAVEN_PASSWORD")}
-            }
+            credentials(PasswordCredentials)
+            //credentials { 
+            //    username = ${System.getenv("MAVEN_USERNAME")}
+            //    password = ${System.getenv("MAVEN_PASSWORD")}
+            //}
         }
     }
 
