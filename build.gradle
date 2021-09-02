@@ -49,10 +49,9 @@ publishing {
     publications {
         casperJava(MavenPublication) {
             pom {
-
                 groupId = 'network.casper'
                 artifactId = 'casper-java-sdk'
-                version = '0.3'
+                version = '0.0.3'
                 description = 'Casper Java SDK'
                 from components.java
                 licenses {
