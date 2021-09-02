@@ -32,7 +32,7 @@ dependencies {
 
 ext {
 //   isReleaseVersion = !version.endsWith("SNAPSHOT")
-   isReleaseVersion = true
+   isReleaseVersion = false
 }
 
 publishing {
@@ -42,7 +42,7 @@ publishing {
             def snapshotRepo = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
             url = isReleaseVersion ? releaseRepo : snapshotRepo
             name = 'casperSecureRepo'
-            credentials(PasswordCredentials)
+            //credentials(PasswordCredentials)
             //credentials { 
             //    username = ${System.getenv("MAVEN_USERNAME")}
             //    password = ${System.getenv("MAVEN_PASSWORD")}
@@ -55,7 +55,7 @@ publishing {
             pom {
                 groupId = 'network.casper'
                 artifactId = 'casper-java-sdk'
-                version = '0.0.3'
+                version = '0.0.4-SNAPSHOT'
                 description = 'Casper Java SDK'
                 from components.java
                 licenses {
