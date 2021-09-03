@@ -1,14 +1,14 @@
 package com.casper.sdk.service.serialization.types;
 
-import com.casper.sdk.types.*;
-import com.casper.sdk.service.json.JsonConversionService;
 import com.casper.sdk.service.HashService;
 import com.casper.sdk.service.SigningService;
+import com.casper.sdk.service.json.JsonConversionService;
 import com.casper.sdk.service.serialization.cltypes.TypesFactory;
+import com.casper.sdk.service.serialization.util.CollectionUtils;
+import com.casper.sdk.types.*;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigInteger;
-import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -43,7 +43,7 @@ class DeployExecutableByteSerializerTest {
                 new CLValue(amountBytes, CLType.U512, paymentAmount)
         );
 
-        final ModuleBytes moduleBytes = new ModuleBytes(new byte[0], List.of(paymentArg));
+        final ModuleBytes moduleBytes = new ModuleBytes(new byte[0], CollectionUtils.List.of(paymentArg));
 
         final byte[] expected = new byte[]{
                 0, // Type 0 module bytes

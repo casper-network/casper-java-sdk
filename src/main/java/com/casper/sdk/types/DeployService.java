@@ -17,9 +17,7 @@ import java.io.InputStream;
 import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
 import java.time.Duration;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Util methods for making Deploy message
@@ -124,7 +122,7 @@ public class DeployService {
         final DeployNamedArg targetArg = new DeployNamedArg("target", new CLValue(accountHash, new CLByteArrayInfo(32), target.toAccountHex()));
         final DeployNamedArg idArg = new DeployNamedArg("id", new CLOptionValue(idBytes, new CLOptionTypeInfo(new CLTypeInfo(CLType.U64)), id.toString()));
 
-        return new Transfer(List.of(amountArg, targetArg, idArg));
+        return new Transfer(Arrays.asList(amountArg, targetArg, idArg));
     }
 
     /**
@@ -141,7 +139,7 @@ public class DeployService {
                 new CLValue(amountBytes, CLType.U512, paymentAmount)
         );
 
-        return new ModuleBytes(new byte[0], List.of(paymentArg));
+        return new ModuleBytes(new byte[0], Collections.singletonList(paymentArg));
     }
 
     public Deploy fromJson(final String json) throws IOException {

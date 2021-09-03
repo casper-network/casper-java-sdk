@@ -17,28 +17,25 @@ import static org.hamcrest.core.Is.is;
  */
 class CLValueJsonDeserializerTest {
 
-    private static final String U512_JSON = """
-            {
-               "cl_type": "U512",
-               "bytes": "05005550b405",
-               "parsed": "24500000000"
-            }""";
+    private static final String U512_JSON = "{\n" +
+                                            "   \"cl_type\": \"U512\",\n" +
+                                            "   \"bytes\": \"05005550b405\",\n" +
+                                            "   \"parsed\": \"24500000000\"\n" +
+                                            "}";
 
-    private static final String U64_JSON = """
-            {
-              "cl_type": "U64",
-              "bytes": "01e703000000000000",
-              "parsed": 999
-            }""";
+    private static final String U64_JSON = "{\n" +
+                                           "  \"cl_type\": \"U64\",\n" +
+                                           "  \"bytes\": \"01e703000000000000\",\n" +
+                                           "  \"parsed\": 999\n" +
+                                           "}";
 
-    private static final String BYTE_ARRAY_32_JSON = """
-            {
-              "cl_type": {
-                "ByteArray": 32
-              },
-              "bytes": "0101010101010101010101010101010101010101010101010101010101010101",
-              "parsed": "0101010101010101010101010101010101010101010101010101010101010101"
-            }""";
+    private static final String BYTE_ARRAY_32_JSON = "{\n" +
+                                                     "  \"cl_type\": {\n" +
+                                                     "    \"ByteArray\": 32\n" +
+                                                     "  },\n" +
+                                                     "  \"bytes\": \"0101010101010101010101010101010101010101010101010101010101010101\",\n" +
+                                                     "  \"parsed\": \"0101010101010101010101010101010101010101010101010101010101010101\"\n" +
+                                                     "}";
 
     @Test
     void deserializeU512CLValue() throws IOException {
