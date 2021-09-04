@@ -4,7 +4,6 @@ import com.casper.sdk.exceptions.ConversionException;
 
 /**
  * Type: enumeration over set of low level CL types.
- * {@see https://docs.casperlabs.io/en/latest/implementation/serialization-standard.html#values}
  *
  */
 public enum CLType {

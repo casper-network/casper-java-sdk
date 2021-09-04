@@ -13,7 +13,6 @@ import java.io.IOException;
 
 /**
  * Converts a DeployNamedArg from JSON
- * <p/>
  * <pre>
  * [
  *  "amount",
