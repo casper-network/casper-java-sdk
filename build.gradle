@@ -103,7 +103,7 @@ signing {
     def signingPassword = findProperty("signingPassword")
     println "#######################################signingKey: ${signingKey}"
     println "#######################################signingPassword: ${signingPassword}"
-    useInMemoryPgpKeys(signingKey, signingPassword)
+    useInMemoryPgpKeys(${System.getenv("MAVEN_SECRET_KEY")}, signingPassword)
     sign publishing.publications.casperJava
 }
 
