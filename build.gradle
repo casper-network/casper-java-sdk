@@ -11,6 +11,9 @@ repositories {
     mavenCentral()
 }
 
+
+
+
 println "#######################################signingKey: ${findProperty("signingKey")}"
 println "#######################################signingPassword: ${findProperty("signingPassword")}"
 println "#######################################signingKey: ${System.getenv("MAVEN_SECRET_KEY")}"
