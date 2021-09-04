@@ -10,14 +10,10 @@ group = 'network.casper'
 repositories {
     mavenCentral()
 }
-
-
-
-
-println "#######################################signingKey: ${findProperty("signingKey")}"
-println "#######################################signingPassword: ${findProperty("signingPassword")}"
-println "#######################################signingKey: ${System.getenv("MAVEN_SECRET_KEY")}"
-println "#######################################signingKey: ${System.getenv("ORG_GRADLE_PROJECT_signingKey")}"
+//println "#######################################signingKey: ${findProperty("signingKey")}"
+//println "#######################################signingPassword: ${findProperty("signingPassword")}"
+//println "#######################################signingKey: ${System.getenv("MAVEN_SECRET_KEY")}"
+//println "#######################################signingKey: ${System.getenv("ORG_GRADLE_PROJECT_signingKey")}"
 
 dependencies {
     testImplementation 'commons-io:commons-io:2.8.0'
@@ -102,11 +98,13 @@ publishing {
 signing {
 //    useGpgCmd()
 //    sign configurations.archives
-    def signingKey = findProperty("signingKey")
+    def signingKey = System.getenv("MAVEN_SECRET_KEY")
     def signingPassword = findProperty("signingPassword")
+
     println "#######################################signingKey: ${signingKey}"
-    println "#######################################signingPassword: ${signingPassword}"
-    useInMemoryPgpKeys(${System.getenv("MAVEN_SECRET_KEY")}, signingPassword)
+    println "#######################################signingKey: ${System.getenv("ORG_GRADLE_PROJECT_signingKey")}"
+
+    useInMemoryPgpKeys(System.getenv("MAVEN_SECRET_KEY"), signingPassword)
     sign publishing.publications.casperJava
 }
 
