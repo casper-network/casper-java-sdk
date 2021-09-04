@@ -13,6 +13,8 @@ repositories {
 
 println "#######################################signingKey: ${findProperty("signingKey")}"
 println "#######################################signingPassword: ${findProperty("signingPassword")}"
+println "#######################################signingKey: ${System.getenv("MAVEN_SECRET_KEY")}"
+println "#######################################signingKey: ${System.getenv("ORG_GRADLE_PROJECT_signingKey")}"
 
 dependencies {
     testImplementation 'commons-io:commons-io:2.8.0'
