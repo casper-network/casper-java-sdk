@@ -104,7 +104,7 @@ signing {
     println "#######################################signingKey: ${signingKey}"
     println "#######################################signingKey: ${System.getenv("ORG_GRADLE_PROJECT_signingKey")}"
 
-    useInMemoryPgpKeys(System.getenv("MAVEN_SECRET_KEY"), signingPassword)
+    useInMemoryPgpKeys(signingKey, signingPassword)
     sign publishing.publications.casperJava
 }
 
