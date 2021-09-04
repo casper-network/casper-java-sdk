@@ -22,9 +22,9 @@ jobs:
       - id: install-secret-key
         name: Install gpg secret key
         run: |
-          export GPG_TTY=$(tty) \
-          cat <(echo -e "${{ secrets.OSSRH_GPG_SECRET_KEY }}") | gpg --batch --import \
-          gpg --list-secret-keys --keyid-format LONG \
+          export GPG_TTY=$(tty)
+          cat <(echo -e "${{ secrets.OSSRH_GPG_SECRET_KEY }}") | gpg --batch --import
+          gpg --list-secret-keys --keyid-format LONG
 #          echo -n "OSSRH_GPG_SECRET_KEY" | base64 --decode | gpg --import
         env:
           GPG_SIGNING_KEY: ${{ secrets.GPG_SIGNING_KEY }}
