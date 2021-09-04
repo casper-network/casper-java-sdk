@@ -11,6 +11,8 @@ repositories {
     mavenCentral()
 }
 
+println "#######################################signingKey: ${findProperty("signingKey")}"
+println "#######################################signingPassword: ${findProperty("signingPassword")}"
 
 dependencies {
     testImplementation 'commons-io:commons-io:2.8.0'
@@ -47,6 +49,7 @@ task javadocJar(type: Jar) {
 
 publishing {
     repositories {
+//        mavenLocal()
         maven {
             def releaseRepo = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
             def snapshotRepo = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
@@ -92,8 +95,14 @@ publishing {
 }
 
 signing {
-    useGpgCmd()
-    sign configurations.archives
+//    useGpgCmd()
+//    sign configurations.archives
+    def signingKey = findProperty("signingKey")
+    def signingPassword = findProperty("signingPassword")
+    println "#######################################signingKey: ${signingKey}"
+    println "#######################################signingPassword: ${signingPassword}"
+    useInMemoryPgpKeys(signingKey, signingPassword)
+    sign publishing.publications.casperJava
 }
 
 tasks.withType(Sign) {
@@ -108,6 +117,16 @@ jar {
                 'Main-Class': 'com.casper.sdk.controller.CasperSdk'
         )
     }
+}
+
+task casperJar(type: Jar) {
+    archiveBaseName = 'casper-java-sdk'
+    archiveVersion =  '0.5.0'
+    manifest {
+        attributes 'Main-Class': 'com.casper.sdk.controller.CasperSdk'
+    }
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
 }
 
 
