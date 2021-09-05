@@ -5,6 +5,7 @@ import com.casper.sdk.exceptions.HttpException;
 import com.casper.sdk.service.json.JsonConversionService;
 import okhttp3.*;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
 @SuppressWarnings("ALL")
@@ -13,7 +14,7 @@ import java.util.Optional;
  */
 public class HttpMethods {
 
-    private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
+    private static final MediaType JSON = MediaType.get("application/json");
     public final OkHttpClient client = new OkHttpClient();
     private final JsonConversionService jsonConversionService;
 
@@ -24,16 +25,21 @@ public class HttpMethods {
     public Optional<String> rpcCallMethod(final Method method) throws HttpException {
 
         try {
-            final RequestBody body = RequestBody.create(JSON, jsonConversionService.writeValueAsString(method));
+            final String content = jsonConversionService.writeValueAsString(method);
+            final byte[] bytes = content.getBytes(StandardCharsets.UTF_8);
+            final RequestBody body = RequestBody.create(JSON, bytes);
 
             final Request request = new Request.Builder()
+                    //.url(new HttpUrl())
                     .url(buildUrl())
+                    .header("Accept", "application/json")
+                    .header("Content-type", "application/json")
                     .post(body)
-                    .addHeader("Accept", "application/json")
-                    .addHeader("Content-type", JSON.toString())
                     .build();
 
-            return Optional.ofNullable(client.newCall(request).execute().body().string());
+            Response response = client.newCall(request).execute();
+            String string = response.body().string();
+            return Optional.ofNullable(string);
 
         } catch (Exception e) {
             throw new HttpException(e.getMessage());
@@ -47,4 +53,6 @@ public class HttpMethods {
                 .append("/rpc")
                 .toString();
     }
+
+
 }
