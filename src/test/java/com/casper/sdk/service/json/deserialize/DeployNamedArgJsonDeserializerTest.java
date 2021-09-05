@@ -18,17 +18,17 @@ import static org.hamcrest.core.IsNull.notNullValue;
 class DeployNamedArgJsonDeserializerTest {
 
     // This is funky JSON!
-    private static final String JSON = "[\n" +
-                                       "   \"amount\",\n" +
-                                       "   {\n" +
-                                       "      \"cl_type\": \"U512\",\n" +
-                                       "      \"bytes\": \"05005550b405\",\n" +
-                                       "      \"parsed\": \"24500000000\"\n" +
-                                       "   }\n" +
-                                       "]";
+    private static final String JSON =
+            "[\n" +
+            "   \"amount\",\n" +
+            "   {\n" +
+            "      \"cl_type\": \"U512\",\n" +
+            "      \"bytes\": \"05005550b405\",\n" +
+            "      \"parsed\": \"24500000000\"\n" +
+            "   }\n" +
+            "]";
 
     /**
-     *
      * Tests that a single DeployNamedArg can be deserialized from JSON
      */
     @Test

@@ -30,7 +30,6 @@ public class HttpMethods {
             final RequestBody body = RequestBody.create(JSON, bytes);
 
             final Request request = new Request.Builder()
-                    //.url(new HttpUrl())
                     .url(buildUrl())
                     .header("Accept", "application/json")
                     .header("Content-type", "application/json")
