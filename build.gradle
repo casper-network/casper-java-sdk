@@ -100,8 +100,7 @@ signing {
     println "#######################################signingKey: ${signingKey}"
     println "#######################################signingPassword: ${signingPassword}"
 
-//    useInMemoryPgpKeys(signingKey, signingPassword)
-    useInMemoryPgpKeys("lIYEYTOLURYJKwYBBAHaRw8BAQdAbw+X9omX82X5WyT/GKYyghCjHTCh7mAG0gTzpv4kkhj+BwMCkopoBugw0Cz0tVL9d84mm3ihksSK2ZFTX23Cji1/6nvJvIbcsliP4rlKuH3t7P4+7u4ehsTM7z7bBwMd4LnRskB71NNeg/0bSqn7BfGZgbQZdGVzdDAy\\nIDx0ZXN0MDJAZ21haWwuY29tPoiaBBMWCgBCFiEEQ2oI97WR9mTgZsJ5HL/d9LGog+cFAmEzi1ECGwMFCQPCZwAFCwkIBwIDIgIBBhUKCQgLAgQWAgMBAh4HAheAAAoJEBy/3fSxqIPnnxwA/AvQD6x26i/Jo+z/96GP3il2fgiTemrdyS2yGUsjJKM4AP9OfMhv+k4KSmzJ8AlDv8mVSkRDn6jCz+mXeXRQCeoVBZyLBGEzi1ESCisGAQQBl1UBBQEBB0BOcQF0kXw+DxRkW0lzMvpTo7U3+vt0m4cf67GH7mMzWgMBCAf+BwMC4LG8\\nUXtoOYD0TeBZQjudRSQ7Du4HzEDQzcNFYRm39Qp8pBfJrFjqBU4TZgxMVISKISopZhpxWQWfSyBXEL2XVwNbD2JfcnXUz8l2eW/3Soh+BBgWCgAmFiEEQ2oI97WR9mTgZsJ5HL/d9LGog+cFAmEzi1ECGwwFCQPCZwAACgkQHL/d9LGog+cfnQD9H6KbFNDIKrTj0DPRgYW3mjtJGCeablRY8mLhJIiPRl0BAMShTHdGHD/jUUJoK600pg5TJ2K2VazmmVCZbD8v0iUM=D5Wj", signingPassword)
+    useInMemoryPgpKeys(signingKey, signingPassword)
     sign publishing.publications.casperJava
 }
 
