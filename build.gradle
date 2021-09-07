@@ -1,135 +1,64 @@
-plugins {
-    id 'java-library'
-    id 'maven-publish'
-    id 'signing'
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.bmuschko:gradle-nexus-plugin:2.3.1'
+    }
 }
 
-apply plugin: 'java'
-group = 'network.casper'
+apply plugin: 'com.bmuschko.nexus'
 
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-    testImplementation 'commons-io:commons-io:2.8.0'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
-    testImplementation 'org.junit.jupiter:junit-jupiter-params:5.3.1'
-    testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
-    testImplementation group: 'com.jayway.jsonpath', name: 'json-path-assert', version: '2.6.0'
-    testImplementation 'com.squareup.okhttp3:mockwebserver:4.0.1'
-
-    implementation group: 'com.rfksystems', name: 'blake2b', version: '1.0.0'
-    implementation group: 'commons-codec', name: 'commons-codec', version: '1.5'
-    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.12.2'
-    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.12.2'
-    implementation group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-yaml', version: '2.12.2'
-    implementation group: 'org.bouncycastle', name: 'bcprov-jdk15on', version: '1.69'
-    implementation group: 'com.sshtools', name: 'maverick-synergy', version: '3.0.0-RC8'
-    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
-}
+archivesBaseName = 'teachUpload-jvm'
+group = "com.yourCompany.package"
+version = "0.1"
 
 ext {
-//   isReleaseVersion = !version.endsWith("SNAPSHOT")
-   isReleaseVersion = true
+    nexusUsername=System.getenv("MAVEN_USERNAME");
+    nexusPassword=System.getenv("MAVEN_PASSWORD");
 }
 
-task sourcesJar(type: Jar) {
-    from sourceSets.main.allJava
-    archiveClassifier.set("sources")
-}
+println"#######################################nexusUsername: ${nexusUsername}"
+println"#######################################nexusPassword: ${nexusPassword}"
 
-task javadocJar(type: Jar) {
-    from javadoc
-    archiveClassifier.set("javadoc")
-}
-
-publishing {
-    repositories {
-//        mavenLocal()
-        maven {
-            def releaseRepo = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
-            def snapshotRepo = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
-            url = isReleaseVersion ? releaseRepo : snapshotRepo
-            name = 'casperSecureRepo'
-            credentials(PasswordCredentials)
+modifyPom {
+    project {
+        name 'teachUpload'
+        description 'Teaching how to use gradle.'
+        url 'https://bitbucket.org/objdict/objjson'
+        inceptionYear '2018'
+        scm {
+            url 'https://bitbucket.org/objdict/objjson'
+            connection 'scm:https://bitbucket.org/objdict/objjson.git'
+            developerConnection 'scm:git://bitbucket.org/objdict/objjson.git'
         }
-    }
 
-    publications {
-        casperJava(MavenPublication) {
-            pom {
-                name = "Casper Java SDK"
-                groupId = 'network.casper'
-                artifactId = 'casper-java-sdk'
-                version = '0.0.5'
-                description = 'Casper Java SDK'
-                url = "https://casperlabs.io/"
-                from components.java
-                artifact sourcesJar
-                artifact javadocJar
-                licenses {
-                    license {
-                        name = 'The Apache License, Version 2.0'
-                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                    }
-                }
-                developers {
-                    developer {
-                        id = 'casper'
-                        name = 'Casper Labs'
-                        email = 'info@casperlabs.io'
-                    }
-                }
-                scm {
-                    connection = 'scm:git:git@github.com:casper-network/casper-java-sdk.git'
-                    developerConnection = 'scm:git:git@github.com:casper-network/casper-java-sdk.git'
-                    url = 'https://github.com/casper-network/casper-java-sdk'
-                }
+        licenses {
+            license {
+                name 'The Apache Software License, Version 2.0'
+                url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                distribution 'repo'
+            }
+        }
+
+        developers {
+            developer {
+                id 'albertgao'
+                name 'Albert Gao'
+                email 'albert.gao@salect.co.nz'
             }
         }
     }
 }
 
-signing {
-//    useGpgCmd()
-//    sign configurations.archives
-    def signingKey = System.getenv("MAVEN_SECRET_KEY")
-    def signingPassword = findProperty("signingPassword")
-
-    println "#######################################signingKey: ${signingKey}"
-    println "#######################################signingPassword: ${signingPassword}"
-    println "#######################################ORG_GRADLE_PROJECT_signingKey: ${System.getenv("ORG_GRADLE_PROJECT_signingKey")}"
-
-    useInMemoryPgpKeys(signingKey, signingPassword)
-    sign publishing.publications.casperJava
+extraArchive {
+    sources = true
+    tests = true
+    javadoc = true
 }
 
-tasks.withType(Sign) {
-    onlyIf { isReleaseVersion }
-}
-
-
-
-jar {
-    manifest {
-        attributes(
-                'Main-Class': 'com.casper.sdk.controller.CasperSdk'
-        )
-    }
-}
-
-task casperJar(type: Jar) {
-    archiveBaseName = 'casper-java-sdk'
-    archiveVersion =  '0.5.0'
-    manifest {
-        attributes 'Main-Class': 'com.casper.sdk.controller.CasperSdk'
-    }
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-    with jar
-}
-
-
-test {
-    useJUnitPlatform()
+nexus {
+    sign = true
+    repositoryUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+    snapshotRepositoryUrl = 'https://oss.sonatype.org/content/repositories/snapshots/'
 }

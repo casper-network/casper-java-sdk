@@ -24,6 +24,7 @@ jobs:
         run: |
           cat <(echo -e "${{ secrets.OSSRH_GPG_SECRET_KEY }}") | gpg --batch --import
           gpg --list-secret-keys --keyid-format SHORT
+          gpg --no-default-keyring --keyring capser.gpg --fingerprint
         env:
           GPG_SIGNING_KEY: ${{ secrets.GPG_SIGNING_KEY }}
       - id: publish-to-central
@@ -34,4 +35,4 @@ jobs:
           MAVEN_SECRET_KEY: ${{ secrets.OSSRH_GPG_SECRET_KEY }}
           MAVEN_SECRET_KEY_PASSWORD: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}
         run: |
-          ORG_GRADLE_PROJECT_signingKey="$(gpg --armor --export-secret-keys EDC99639\! | base64 -w0 )"  ORG_GRADLE_PROJECT_signingPassword=${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }} ./gradlew clean publish -Dgpg.passphrase=${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }} -PcasperSecureRepoUsername=${{ secrets.OSSRH_USERNAME }} -PcasperSecureRepoPassword=${{ secrets.OSSRH_PASSWORD }} --stacktrace --debug --info --scan
+          ./gradlew clean uploadArchives
