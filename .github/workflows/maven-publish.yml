@@ -22,8 +22,10 @@ jobs:
           java-version: 8
           distribution: 'adopt'
           server-id: ossrh
-          server-username: OSSRH_USERNAME
-          server-password: OSSRH_PASSWORD
+#          server-username: OSSRH_USERNAME
+#          server-password: OSSRH_PASSWORD
+          username: OSSRH_USERNAME
+          password: OSSRH_PASSWORD
           gpg-private-key: ${{ secrets.MAVEN_GPG_SECRET_KEY }}
           gpg-passphrase: MAVEN_GPG_SECRET_KEY_PASSWORD
       - name: Build with Maven
