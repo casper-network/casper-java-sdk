@@ -150,7 +150,7 @@
                 <extensions>true</extensions>
                 <configuration>
                     <serverId>nexus-releases</serverId>
-                    <nexusUrl>https://oss.sonatype.org/service/local/staging/deploy/maven2</nexusUrl>
+                    <nexusUrl>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</nexusUrl>
                     <!-- update this to the correct id! -->
 <!--                    <stagingProfileId>1296f79efe04a4d0</stagingProfileId>-->
                 </configuration>
