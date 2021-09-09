@@ -22,10 +22,10 @@ jobs:
           java-version: 8
           distribution: 'adopt'
           server-id: ossrh
-#          server-username: OSSRH_USERNAME
-#          server-password: OSSRH_PASSWORD
-          username: OSSRH_USERNAME
-          password: OSSRH_PASSWORD
+          server-username: OSSRH_USERNAME
+          server-password: OSSRH_PASSWORD
+#          username: OSSRH_USERNAME
+#          password: OSSRH_PASSWORD
           gpg-private-key: ${{ secrets.MAVEN_GPG_SECRET_KEY }}
           gpg-passphrase: MAVEN_GPG_SECRET_KEY_PASSWORD
       - name: Import GPG Owner Trust
@@ -40,7 +40,7 @@ jobs:
       - name: Create settings.xml
         uses: s4u/maven-settings-action@v1
         with:
-          servers: '[{"id": "ossrh", "username": "${{secrets.SONATYPE_USERNAME}}", "password": "${{secrets.SONATYPE_PASSWORD}}"}]'
+          servers: '[{"id": "ossrh", "server-username": "${{secrets.SONATYPE_USERNAME}}", "server-password": "${{secrets.SONATYPE_PASSWORD}}"}]'
 
       - name: Deploy a new version to central
         run: ./mvnw clean deploy -B -DskipTests -DskipExamples -Prelease -Dgpg.keyname=${{secrets.MAVEN_GPG_SECRET_KEY}} -Dgpg.passphrase=${{secrets.MAVEN_GPG_SECRET_KEY_PASSWORD}}
