@@ -18,22 +18,22 @@ import static org.hamcrest.core.IsInstanceOf.instanceOf;
  */
 public class PaymentJsonDeserializationTest {
 
-    private static final String PAYMENT_JSON = /* "payment": */ """
-            {
-                "ModuleBytes": {
-                  "module_bytes": "",
-                  "args": [
-                    [
-                      "amount",
-                      {
-                        "cl_type": "U512",
-                        "bytes": "0400ca9a3b",
-                        "parsed": "1000000000"
-                      }
-                    ]
-                  ]
-                }
-            },""";
+    private static final String PAYMENT_JSON = /* "payment": */
+            "{\n" +
+            "    \"ModuleBytes\": {\n" +
+            "      \"module_bytes\": \"\",\n" +
+            "      \"args\": [\n" +
+            "        [\n" +
+            "          \"amount\",\n" +
+            "          {\n" +
+            "            \"cl_type\": \"U512\",\n" +
+            "            \"bytes\": \"0400ca9a3b\",\n" +
+            "            \"parsed\": \"1000000000\"\n" +
+            "          }\n" +
+            "        ]\n" +
+            "      ]\n" +
+            "    }\n" +
+            "},";
 
     private DeployExecutable deployExecutable;
 

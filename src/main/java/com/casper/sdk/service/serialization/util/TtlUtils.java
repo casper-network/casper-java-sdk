@@ -28,15 +28,7 @@ public class TtlUtils {
 
             final long value = Long.parseLong(strTtl.substring(0, unitIndex));
 
-            final long multiplier = switch (unit) {
-                case "d" -> 24 * 60L * 60L * 1000L;
-                case "h" -> 60L * 60L * 1000L;
-                case "m" -> 60L * 1000L;
-                case "s" -> 1000L;
-                default -> 1L;
-            };
-
-            return value * multiplier;
+            return value * getMultiplier(unit);
         }
         return 0L;
     }
@@ -54,5 +46,20 @@ public class TtlUtils {
                 .substring(2)
                 .replaceAll("(\\d[HMS])(?!$)", "$1 ")
                 .toLowerCase();
+    }
+
+    private static long getMultiplier(final String unit) {
+        switch (unit) {
+            case "d":
+                return 24 * 60L * 60L * 1000L;
+            case "h":
+                return 60L * 60L * 1000L;
+            case "m":
+                return 60L * 1000L;
+            case "s":
+                return 1000L;
+            default:
+                return 1L;
+        }
     }
 }

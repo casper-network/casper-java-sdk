@@ -3,11 +3,9 @@ package com.casper.sdk.service.http.rpc;
 import com.casper.sdk.Properties;
 import com.casper.sdk.exceptions.HttpException;
 import com.casper.sdk.service.json.JsonConversionService;
+import okhttp3.*;
 
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
 @SuppressWarnings("ALL")
@@ -16,31 +14,44 @@ import java.util.Optional;
  */
 public class HttpMethods {
 
+    private static final MediaType JSON = MediaType.get("application/json");
+    public final OkHttpClient client = new OkHttpClient();
     private final JsonConversionService jsonConversionService;
 
-    public HttpMethods(JsonConversionService jsonConversionService) {
+    public HttpMethods(final JsonConversionService jsonConversionService) {
         this.jsonConversionService = jsonConversionService;
     }
 
     public Optional<String> rpcCallMethod(final Method method) throws HttpException {
 
         try {
-            final HttpRequest request = HttpRequest.newBuilder()
-                    .uri(new URI(
-                            new StringBuilder().append(Properties.properties.get("node-url")).append(":")
-                                    .append(Properties.properties.get("node-port")).append("/rpc").toString()))
+            final String content = jsonConversionService.writeValueAsString(method);
+            final byte[] bytes = content.getBytes(StandardCharsets.UTF_8);
+            final RequestBody body = RequestBody.create(JSON, bytes);
+
+            final Request request = new Request.Builder()
+                    .url(buildUrl())
                     .header("Accept", "application/json")
                     .header("Content-type", "application/json")
-                    .POST(HttpRequest.BodyPublishers.ofString(jsonConversionService.writeValueAsString(method)))
+                    .post(body)
                     .build();
 
-            final HttpResponse<String> response = HttpClient.newBuilder()
-                    .build()
-                    .send(request, HttpResponse.BodyHandlers.ofString());
+            Response response = client.newCall(request).execute();
+            String string = response.body().string();
+            return Optional.ofNullable(string);
 
-            return Optional.ofNullable(response.body());
         } catch (Exception e) {
             throw new HttpException(e.getMessage());
         }
     }
+
+    private String buildUrl() {
+        return new StringBuilder(Properties.properties.get("node-url"))
+                .append(":")
+                .append(Properties.properties.get("node-port"))
+                .append("/rpc")
+                .toString();
+    }
+
+
 }
