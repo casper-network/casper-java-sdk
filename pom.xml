@@ -138,7 +138,7 @@
     <distributionManagement>
         <snapshotRepository>
             <id>nexus-snapshots</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
     </distributionManagement>
     <build>
@@ -150,9 +150,9 @@
                 <extensions>true</extensions>
                 <configuration>
                     <serverId>nexus-releases</serverId>
-                    <nexusUrl>https://oss.sonatype.org/service/local/staging/deploy/maven2/</nexusUrl>
+                    <nexusUrl>https://oss.sonatype.org/service/local/staging/deploy/maven2</nexusUrl>
                     <!-- update this to the correct id! -->
-                    <stagingProfileId>1296f79efe04a4d0</stagingProfileId>
+<!--                    <stagingProfileId>1296f79efe04a4d0</stagingProfileId>-->
                 </configuration>
             </plugin>
         </plugins>
