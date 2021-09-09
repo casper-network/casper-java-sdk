@@ -9,6 +9,8 @@ import com.casper.sdk.types.*;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigInteger;
+import java.util.Arrays;
+import java.util.Collections;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -114,5 +116,31 @@ class DeployExecutableByteSerializerTest {
         final byte[] actual = serializer.toBytes(transfer);
 
         assertThat(actual, is(expected));
+    }
+
+    @Test
+    void storedContractByHashToBytes() {
+
+        final BigInteger paymentAmount = new BigInteger("1000000000");
+        final byte[] amountBytes = typesFactory.getInstance(CLType.U512).serialize(paymentAmount);
+        final DeployNamedArg paymentArg = new DeployNamedArg(
+                "amount",
+                new CLValue(amountBytes, CLType.U512, paymentAmount)
+        );
+
+        final StoredContractByHash storedContractByHash = new StoredContractByHash(
+                new Digest("c4c411864f7b717c27839e56f6f1ebe5da3f35ec0043f437324325d65a22afa4"),
+                "pclphXwfYmCmdITj8hnh",
+                Collections.singletonList(paymentArg)
+        );
+
+        final byte[] expected = {1, -60, -60, 17, -122, 79, 123, 113, 124, 39, -125, -98, 86, -10, -15, -21, -27, -38,
+                63, 53, -20, 0, 67, -12, 55, 50, 67, 37, -42, 90, 34, -81, -92, 20, 0, 0, 0, 112, 99, 108, 112, 104, 88,
+                119, 102, 89, 109, 67, 109, 100, 73, 84, 106, 56, 104, 110, 104, 1, 0, 0, 0, 6, 0, 0, 0, 97, 109, 111,
+                117, 110, 116, 5, 0, 0, 0, 4, 0, -54, -102, 59, 8};
+        final byte[] actual = serializer.toBytes(storedContractByHash);
+
+        assertThat(actual, is(expected));
+
     }
 }
