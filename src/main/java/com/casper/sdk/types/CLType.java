@@ -3,9 +3,7 @@ package com.casper.sdk.types;
 import com.casper.sdk.exceptions.ConversionException;
 
 /**
- * Type: enumeration over set of low level CL types.
- * {@see https://docs.casperlabs.io/en/latest/implementation/serialization-standard.html#values}
- *
+ * Type: enumeration over set of low level CL types. {@see https://docs.casperlabs.io/en/latest/implementation/serialization-standard.html#values}
  */
 public enum CLType {
 
@@ -89,10 +87,20 @@ public enum CLType {
     }
 
     public static boolean isNumeric(final CLType clType) {
-        return switch (clType) {
-            case I32, I64, U8, U32, U64, U128, U256, U512 -> true;
-            default -> false;
-        };
+        switch (clType) {
+            case I32:
+            case I64:
+            case U8:
+            case U32:
+            case U64:
+            case U128:
+            case U256:
+            case U512:
+                return true;
+
+            default:
+                return false;
+        }
     }
 
     public byte getClType() {

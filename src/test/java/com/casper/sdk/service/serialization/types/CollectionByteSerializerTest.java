@@ -1,5 +1,6 @@
 package com.casper.sdk.service.serialization.types;
 
+import com.casper.sdk.service.serialization.util.CollectionUtils;
 import com.casper.sdk.types.CLType;
 import com.casper.sdk.types.CLValue;
 import com.casper.sdk.types.DeployNamedArg;
@@ -31,7 +32,7 @@ class CollectionByteSerializerTest {
     @Test
     void populatedListToBytes() {
 
-        final List<DeployNamedArg> args = List.of(
+        final List<DeployNamedArg> args = CollectionUtils.List.of(
                 new DeployNamedArg("amount",
                         new CLValue(
                                 ByteUtils.decodeHex("05005550b405"),

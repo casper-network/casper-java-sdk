@@ -8,6 +8,7 @@ import com.casper.sdk.service.serialization.cltypes.TypesFactory;
 import com.casper.sdk.service.serialization.cltypes.TypesSerializer;
 import com.casper.sdk.service.serialization.types.ByteSerializerFactory;
 import com.casper.sdk.service.serialization.util.ByteUtils;
+import com.casper.sdk.service.serialization.util.CollectionUtils;
 import com.casper.sdk.service.serialization.util.NumberUtils;
 import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
 import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
@@ -17,9 +18,7 @@ import java.io.InputStream;
 import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
 import java.time.Duration;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Util methods for making Deploy message
@@ -124,7 +123,7 @@ public class DeployService {
         final DeployNamedArg targetArg = new DeployNamedArg("target", new CLValue(accountHash, new CLByteArrayInfo(32), target.toAccountHex()));
         final DeployNamedArg idArg = new DeployNamedArg("id", new CLOptionValue(idBytes, new CLOptionTypeInfo(new CLTypeInfo(CLType.U64)), id.toString()));
 
-        return new Transfer(List.of(amountArg, targetArg, idArg));
+        return new Transfer(CollectionUtils.List.of(amountArg, targetArg, idArg));
     }
 
     /**
@@ -141,7 +140,7 @@ public class DeployService {
                 new CLValue(amountBytes, CLType.U512, paymentAmount)
         );
 
-        return new ModuleBytes(new byte[0], List.of(paymentArg));
+        return new ModuleBytes(new byte[0], CollectionUtils.List.of(paymentArg));
     }
 
     public Deploy fromJson(final String json) throws IOException {

@@ -23,18 +23,18 @@ import static org.hamcrest.core.IsCollectionContaining.hasItems;
  */
 class DeployHeaderJsonDeserializerTest {
 
-    private static final String JSON = """
-            {
-                "account": "017f747b67bd3fe63c2a736739dfe40156d622347346e70f68f51c178a75ce5537",
-                "timestamp": "2021-05-04T14:20:35.104Z",
-                "ttl": "30m",
-                "body_hash": "f2e0782bba4a0a9663cafc7d707fd4a74421bc5bfef4e368b7e8f38dfab87db8",
-                "dependencies": [
-                  "0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f",
-                  "1010101010101010101010101010101010101010101010101010101010101010"
-                ],
-                "chain_name": "mainnet"
-            }""";
+    private static final String JSON =
+            "{\n" +
+            "    \"account\": \"017f747b67bd3fe63c2a736739dfe40156d622347346e70f68f51c178a75ce5537\",\n" +
+            "    \"timestamp\": \"2021-05-04T14:20:35.104Z\",\n" +
+            "    \"ttl\": \"30m\",\n" +
+            "    \"body_hash\": \"f2e0782bba4a0a9663cafc7d707fd4a74421bc5bfef4e368b7e8f38dfab87db8\",\n" +
+            "    \"dependencies\": [\n" +
+            "      \"0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f\",\n" +
+            "      \"1010101010101010101010101010101010101010101010101010101010101010\"\n" +
+            "    ],\n" +
+            "    \"chain_name\": \"mainnet\"\n" +
+            "}";
 
     private DeployHeader deployHeader;
 
