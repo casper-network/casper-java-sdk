@@ -4,20 +4,17 @@ plugins {
 }
 
 apply plugin: 'java'
-group = 'com.casper'
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
+    testImplementation 'com.jayway.jsonpath:json-path-assert:2.4.0'
     testImplementation 'commons-io:commons-io:2.8.0'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
     testImplementation 'org.junit.jupiter:junit-jupiter-params:5.3.1'
-    testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
-    testImplementation group: 'com.jayway.jsonpath', name: 'json-path-assert', version: '2.6.0'
-    testImplementation 'com.squareup.okhttp3:mockwebserver:4.0.1'
-
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
     implementation group: 'com.rfksystems', name: 'blake2b', version: '1.0.0'
     implementation group: 'commons-codec', name: 'commons-codec', version: '1.5'
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.12.2'
@@ -26,6 +23,9 @@ dependencies {
     implementation group: 'org.bouncycastle', name: 'bcprov-jdk15on', version: '1.69'
     implementation group: 'com.sshtools', name: 'maverick-synergy', version: '3.0.0-RC8'
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
+
+    testImplementation 'com.squareup.okhttp3:mockwebserver:4.0.1'
+
 }
 
 publishing {
@@ -33,7 +33,6 @@ publishing {
         maven {
             name = "GitHubPackages"
             url = uri("https://maven.pkg.github.com/casper-network/casper-java-sdk")
-            version = "0.0.1"
             credentials {
                 username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
                 password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
@@ -57,11 +56,11 @@ jar {
 
 task casperJar(type: Jar) {
     archiveBaseName = 'casper-java-sdk'
-    archiveVersion =  '0.5.0'
+    archiveVersion =  '0.1.0'
     manifest {
         attributes 'Main-Class': 'com.casper.sdk.controller.CasperSdk'
     }
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    from { configurations.compileClasspath.findAll { it.isDirectory() ? it : zipTree(it) } }
     with jar
 }
 
