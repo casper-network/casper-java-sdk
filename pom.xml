@@ -128,7 +128,6 @@
         </dependency>
     </dependencies>
 
-
     <distributionManagement>
         <snapshotRepository>
             <id>ossrh</id>
@@ -210,6 +209,63 @@
                 </plugins>
             </build>
         </profile>
+
+        <profile>
+            <id>local-deploy</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <distributionManagement>
+                <snapshotRepository>
+                    <id>local-snapshot</id>
+                    <url>file://${local.repository.path}/snapshot</url>
+                </snapshotRepository>
+                <repository>
+                    <id>local-release</id>
+                    <url>file://${local.repository.path}/release</url>
+                </repository>
+            </distributionManagement>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-clean-plugin</artifactId>
+                        <inherited>false</inherited>
+                        <configuration>
+                            <filesets>
+                                <fileset>
+                                    <directory>${local.repository.path}</directory>
+                                </fileset>
+                            </filesets>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>3.0.0</version>
+                        <inherited>false</inherited>
+                        <executions>
+                            <execution>
+                                <id>generate-repository-directories</id>
+                                <phase>generate-sources</phase>
+                                <configuration>
+                                    <target>
+                                        <mkdir dir="${local.repository.path}/snapshot" />
+                                        <mkdir dir="${local.repository.path}/release" />
+                                    </target>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
     </profiles>
+
+
 
 </project>

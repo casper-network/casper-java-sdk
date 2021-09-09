@@ -28,15 +28,19 @@ jobs:
           password: OSSRH_PASSWORD
           gpg-private-key: ${{ secrets.MAVEN_GPG_SECRET_KEY }}
           gpg-passphrase: MAVEN_GPG_SECRET_KEY_PASSWORD
-      - name: Build with Maven
-        run: mvn -B compile --file pom.xml
+      - name: Import GPG Owner Trust
+        run: echo ${{secrets.MAVEN_GPG_SECRET_KEY_PASSWORD}} | base64 --decode | gpg --import-ownertrust
 
-      - name: Test with Maven
-        run: mvn -B test --file pom.xml
+      - name: Import GPG key
+        run: echo ${{secrets.MAVEN_GPG_SECRET_KEY}} | base64 --decode | gpg --import --no-tty --batch --yes
 
-      - name: Publish to Apache Maven Central
-        run: mvn -DskipTests deploy -Dgpg.passphrase=${{ secrets.MAVEN_GPG_SECRET_KEY_PASSWORD }}
-        env:
-          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-          OSSRH_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
-          MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_SECRET_KEY_PASSWORD }}
+      - name: Clean settings.xml
+        run: rm -rf ~/.m2/settings.xml
+
+      - name: Create settings.xml
+        uses: s4u/maven-settings-action@v1
+        with:
+          servers: '[{"id": "ossrh", "username": "${{secrets.SONATYPE_USERNAME}}", "password": "${{secrets.SONATYPE_PASSWORD}}"}]'
+
+      - name: Deploy a new version to central
+        run: ./mvnw clean deploy -B -DskipTests -DskipExamples -Prelease -Dgpg.keyname=${{secrets.MAVEN_GPG_SECRET_KEY}} -Dgpg.passphrase=${{secrets.MAVEN_GPG_SECRET_KEY_PASSWORD}}
