@@ -19,12 +19,16 @@ public class DeployExecutableJsonSerializer extends JsonSerializer<DeployExecuta
 
         if (value instanceof Transfer) {
             writeTransfer((Transfer) value, gen);
-        } else if (value instanceof ModuleBytes) {
+        } else if (value instanceof StoredContractByHash) {
+            writeStoredContractByHash((StoredContractByHash) value, gen);
+        }
+        else if (value instanceof ModuleBytes) {
             writePayment((ModuleBytes) value, gen);
         } else {
             writeArgs(value, gen);
         }
     }
+
 
     private void writePayment(final ModuleBytes payment, final JsonGenerator gen) throws IOException {
         gen.writeStartObject();
@@ -33,6 +37,20 @@ public class DeployExecutableJsonSerializer extends JsonSerializer<DeployExecuta
         gen.writeFieldName("module_bytes");
         gen.writeString(CLValue.toHex(payment.getModuleBytes()));
         writeArgs(payment, gen);
+        gen.writeEndObject();
+        gen.writeEndObject();
+    }
+
+    private void writeStoredContractByHash(final StoredContractByHash storedContractByHash,
+                                           final JsonGenerator gen) throws IOException {
+        gen.writeStartObject();
+        gen.writeFieldName("StoredContractByHash");
+        gen.writeStartObject();
+        gen.writeFieldName("hash");
+        gen.writeString(storedContractByHash.getHash().toString());
+        gen.writeFieldName("entry_point");
+        gen.writeString(storedContractByHash.getEntryPoint());
+        writeArgs(storedContractByHash, gen);
         gen.writeEndObject();
         gen.writeEndObject();
     }
