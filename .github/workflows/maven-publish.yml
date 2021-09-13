@@ -35,7 +35,7 @@ jobs:
       - name: Create settings.xml
         uses: s4u/maven-settings-action@v2.4.1
         with:
-          servers: '[{"id": "ossrh", "username": "${{secrets.OSSRH_USERNAME}}", "password": "${{secrets.OSSRH_PASSWORD}}", "passphrase", "${{secrets.OSSRH_GPG_SECRET_KEY_PASSWORD}}"}]'
+          servers: '[{"id": "ossrh", "username": "${{secrets.OSSRH_USERNAME}}", "password": "${{secrets.OSSRH_PASSWORD}}", "passphrase": "${{secrets.OSSRH_GPG_SECRET_KEY_PASSWORD}}"}]'
 
       - id: publish-to-central
         name: Publish to Central Repository
