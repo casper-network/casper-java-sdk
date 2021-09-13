@@ -24,6 +24,7 @@ jobs:
           server-username: OSSRH_USERNAME
           server-password: OSSRH_PASSWORD
           gpg-passphrase: OSSRH_GPG_SECRET_KEY_PASSWORD
+          passphrase: OSSRH_GPG_SECRET_KEY_PASSWORD
       - id: install-secret-key
         name: Install gpg secret key
         run: |
