@@ -1,7 +1,7 @@
 package com.casper.sdk.service.json.deserialize;
 
-import com.casper.sdk.types.*;
 import com.casper.sdk.exceptions.ConversionException;
+import com.casper.sdk.types.*;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.ObjectCodec;
 import com.fasterxml.jackson.core.TreeNode;
@@ -9,10 +9,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.TextNode;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Factory class for converting all DeployExecutable from JSON
@@ -26,7 +23,7 @@ class DeployExecutableFactory {
      */
     private static abstract class AbstractDeployExecutableJsonFactory<T extends DeployExecutable> {
 
-        T create(final String fieldName, String entryPoint, final TreeNode treeNode, final ObjectCodec codec) {
+        T create(final String fieldName, final String entryPoint, final TreeNode treeNode, final ObjectCodec codec) {
             try {
                 final List<DeployNamedArg> args = convertArgs(getArgsNode(entryPoint, treeNode), codec);
                 return getType().getConstructor(List.class).newInstance(args);
@@ -76,8 +73,28 @@ class DeployExecutableFactory {
             return args;
         }
 
+        protected TreeNode getFieldNode(final String entryPoint, final TreeNode treeNode, final String fieldName) {
+            TreeNode childNode = treeNode.get(entryPoint);
+            if (childNode == null) {
+                childNode = treeNode;
+            }
+            return childNode.get(fieldName);
+        }
+
+
+        protected Optional<String> getFieldValue(final String entryPoint, final TreeNode treeNode, final String fieldName) {
+
+            final TreeNode fieldNode = getFieldNode(entryPoint, treeNode, fieldName);
+            if (fieldNode instanceof TextNode) {
+                return Optional.of(((TextNode) fieldNode).textValue());
+            } else {
+                return Optional.empty();
+            }
+        }
+
+
         protected byte[] convertModuleBytes(final TreeNode treeNode) {
-            TreeNode moduleBytes = treeNode.get("ModuleBytes");
+            final TreeNode moduleBytes = treeNode.get("ModuleBytes");
             if (moduleBytes instanceof ObjectNode) {
                 final TreeNode textNode = moduleBytes.get("module_bytes");
                 if (textNode instanceof TextNode) {
@@ -135,13 +152,8 @@ class DeployExecutableFactory {
         }
 
         @Override
-        protected TreeNode getArgsNode(final String fieldName, final TreeNode treeNode) {
-            TreeNode moduleBytes = treeNode.get(fieldName);
-            if (moduleBytes != null) {
-                return moduleBytes.get("args");
-            } else {
-                return null;
-            }
+        protected TreeNode getArgsNode(final String entryPoint, final TreeNode treeNode) {
+            return getFieldNode(entryPoint, treeNode, "args");
         }
 
         @Override
@@ -166,18 +178,46 @@ class DeployExecutableFactory {
         }
 
         @Override
-        protected TreeNode getArgsNode(final String fieldName, final TreeNode treeNode) {
-            TreeNode moduleBytes = treeNode.get(fieldName);
-            if (moduleBytes != null) {
-                return moduleBytes.get("args");
-            } else {
-                return null;
-            }
+        protected TreeNode getArgsNode(final String entryPoint, final TreeNode treeNode) {
+            return getFieldNode(entryPoint, treeNode, "args");
         }
 
         @Override
         protected Class<StoredContractByName> getType() {
             return StoredContractByName.class;
+        }
+    }
+
+    /**
+     * Converts JSON into a StoredContractByName such as a payment.
+     */
+    private static class StoredContractByHashFactory extends AbstractDeployExecutableJsonFactory<StoredContractByHash> {
+
+        @Override
+        StoredContractByHash create(final String fieldName, String entryPoint, final TreeNode treeNode, final ObjectCodec codec) {
+            try {
+                final List<DeployNamedArg> args = convertArgs(getArgsNode(entryPoint, treeNode), codec);
+                final Optional<String> hashOptional = getFieldValue(entryPoint, treeNode, "hash");
+                final Optional<String> entryPointOptional = getFieldValue(entryPoint, treeNode, "entry_point");
+                return new StoredContractByHash(
+                        hashOptional.map(Digest::new).orElse(null),
+                        entryPointOptional.orElse(null),
+                        args
+                );
+            } catch (Exception e) {
+                throw new ConversionException(e);
+            }
+        }
+
+
+        @Override
+        protected TreeNode getArgsNode(final String entryPoint, final TreeNode treeNode) {
+            return getFieldNode(entryPoint, treeNode, "args");
+        }
+
+        @Override
+        protected Class<StoredContractByHash> getType() {
+            return StoredContractByHash.class;
         }
     }
 
@@ -187,6 +227,7 @@ class DeployExecutableFactory {
     static {
         argsFactoryMap.put("ModuleBytes", new ModuleBytesFactory());
         argsFactoryMap.put("StoredContractByName", new StoredContractByNameFactory());
+        argsFactoryMap.put("StoredContractByHash", new StoredContractByHashFactory());
         argsFactoryMap.put("Transfer", new TransferJsonFactory());
         argsFactoryMap.put("args", new DefaultDeployExecutableJsonFactory());
     }
