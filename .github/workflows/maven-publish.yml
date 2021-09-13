@@ -23,7 +23,7 @@ jobs:
           server-id: ossrh
           server-username: OSSRH_USERNAME
           server-password: OSSRH_PASSWORD
-          gpg-passphrase: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}
+#          gpg-passphrase: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}
       - id: install-secret-key
         name: Install gpg secret key
         run: |
@@ -42,11 +42,10 @@ jobs:
         env:
           MAVEN_USERNAME: "${{ secrets.OSSRH_USERNAME }}"
           MAVEN_PASSWORD: "${{ secrets.OSSRH_PASSWORD }}"
-          MAVEN_GPG_PASSPHRASE: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}
+#          MAVEN_GPG_PASSPHRASE: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}
         run: |
           cat ~/.m2/settings.xml
           mvn \
             --no-transfer-progress \
             --batch-mode \
-            -Dgpg.passphrase=${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }} \
             clean deploy -e
