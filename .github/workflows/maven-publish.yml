@@ -17,13 +17,16 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Set up Maven Central Repository
-        uses: actions/setup-java@v1
-#        uses: actions/setup-java@v2
+#        uses: actions/setup-java@v1
+        uses: actions/setup-java@v2
         with:
+          distribution: 'zulu' # see https://github.com/actions/setup-java/blob/main/docs/switching-to-v2.md
           java-version: 8
           server-id: ossrh
           server-username: MAVEN_USERNAME
           server-password: MAVEN_PASSWORD
+          gpg-private-key: ${{ secrets.OSSRH_GPG_SECRET_KEY }}
+          gpg-passphrase: PGP_PASSPHRASE
 #          server-username: OSSRH_USERNAME
 #          server-password: OSSRH_PASSWORD
 #          gpg-passphrase: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}
@@ -45,9 +48,9 @@ jobs:
         env:
           MAVEN_USERNAME: "${{ secrets.OSSRH_USERNAME }}"
           MAVEN_PASSWORD: "${{ secrets.OSSRH_PASSWORD }}"
+          PGP_PASSPHRASE: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}
 #          MAVEN_GPG_PASSPHRASE: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}
         run: |
-          cat ~/.m2/settings.xml
           mvn \
             --no-transfer-progress \
             --batch-mode \
