@@ -25,15 +25,15 @@ jobs:
           server-id: ossrh
           server-username: MAVEN_USERNAME
           server-password: MAVEN_PASSWORD
-          gpg-private-key: ${{ secrets.OSSRH_GPG_SECRET_KEY }}
-          gpg-passphrase: PGP_PASSPHRASE
+          gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
+          gpg-passphrase: MAVEN_GPG_PASSPHRASE 
 #          server-username: OSSRH_USERNAME
 #          server-password: OSSRH_PASSWORD
 #          gpg-passphrase: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}
-      - id: install-secret-key
-        name: Install gpg secret key
-        run: |
-          cat <(echo -e "${{ secrets.OSSRH_GPG_SECRET_KEY }}") | gpg --batch --import
+#      - id: install-secret-key
+#        name: Install gpg secret key
+#        run: |
+#          cat <(echo -e "${{ secrets.OSSRH_GPG_SECRET_KEY }}") | gpg --batch --import
 #          gpg --list-secret-keys --keyid-format LONG
 #      - name: Clean settings.xml
 #        run: rm -rf ~/.m2/settings.xml
@@ -48,12 +48,13 @@ jobs:
         env:
           MAVEN_USERNAME: "${{ secrets.OSSRH_USERNAME }}"
           MAVEN_PASSWORD: "${{ secrets.OSSRH_PASSWORD }}"
-          PGP_PASSPHRASE: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}
+          MAVEN_GPG_PASSPHRASE : ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}
+        run: mvn clean deploy
 #          MAVEN_GPG_PASSPHRASE: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}
-        run: |
-          mvn \
-            --no-transfer-progress \
-            --batch-mode \
-            -Darguments=-Dgpg.passphrase=${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }} \
-            clean deploy
+#        run: |
+#          mvn \
+#            --no-transfer-progress \
+#            --batch-mode \
+#            -Darguments=-Dgpg.passphrase=${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }} \
+#            clean deploy
 #          clean deploy -e -X
