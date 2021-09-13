@@ -27,10 +27,10 @@ jobs:
           gpg-private-key: ${{ secrets.MAVEN_GPG_SECRET_KEY }}
           gpg-passphrase: MAVEN_GPG_SECRET_KEY_PASSWORD
       - name: Import GPG Owner Trust
-        run: echo "${{ secrets.MAVEN_GPG_SECRET_KEY_PASSWORD }}" | base64 --decode | gpg --import-ownertrust
+        run: cat <(echo -e "${{ secrets.OSSRH_GPG_SECRET_KEY }}") | base64 --decode | gpg --import-ownertrust
 
       - name: Import GPG key
-        run: echo "${{ secrets.MAVEN_GPG_SECRET_KEY }}" | base64 --decode | gpg --import --no-tty --batch --yes
+        run: cat <(echo -e "${{ secrets.MAVEN_GPG_SECRET_KEY_PASSWORD }}") | base64 --decode | gpg --import --no-tty --batch --yes
 
       - name: Clean settings.xml
         run: rm -rf ~/.m2/settings.xml
