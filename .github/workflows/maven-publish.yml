@@ -48,4 +48,5 @@ jobs:
           mvn \
             --no-transfer-progress \
             --batch-mode \
-            clean deploy -e
+            -Darguments=-Dgpg.passphrase=${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }} \
+          clean deploy -e -X
