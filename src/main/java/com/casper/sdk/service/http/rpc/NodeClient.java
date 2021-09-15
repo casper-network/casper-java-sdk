@@ -33,13 +33,12 @@ public class NodeClient {
         this.httpMethods = new HttpMethods(jsonConversionService);
     }
 
-    public String getStateRootHash() throws Throwable {
-
+    public String getStateRootHash() throws Exception {
         final Optional<String> result = httpMethods.rpcCallMethod(new Method(CHAIN_GET_STATE_ROOT_HASH));
         return result.isPresent() ? MethodEnums.STATE_ROOT_HASH.getValue(result.get()) : null;
     }
 
-    public String getAccountInfo(final String accountKey) throws Throwable {
+    public String getAccountInfo(final String accountKey) throws Exception {
 
         final Optional<String> result = httpMethods.rpcCallMethod(new Method(STATE_GET_ITEM,
                         CollectionUtils.Map.of(
@@ -50,10 +49,10 @@ public class NodeClient {
                 )
         );
 
-        return result.orElse(null);
+        return result.isPresent() ? MethodEnums.ACCOUNT_INFO.getValue(result.get()) : null;
     }
 
-    public String getAccountBalance(final String accountKey) throws Throwable {
+    public String getAccountBalance(final String accountKey) throws Exception {
 
         final Optional<String> result = httpMethods.rpcCallMethod(
                 new Method(STATE_GET_BALANCE,
@@ -67,7 +66,7 @@ public class NodeClient {
         return result.isPresent() ? MethodEnums.STATE_GET_BALANCE.getValue(result.get()) : null;
     }
 
-    public String getAccountMainPurseURef(final String accountKey) throws Throwable {
+    public String getAccountMainPurseURef(final String accountKey) throws Exception {
 
         final Optional<String> result = httpMethods.rpcCallMethod(new Method(STATE_GET_ITEM,
                         CollectionUtils.Map.of(
@@ -81,28 +80,28 @@ public class NodeClient {
         return result.isPresent() ? MethodEnums.STATE_GET_ITEM.getValue(result.get()) : null;
     }
 
-    public String getAuctionInfo() throws Throwable {
+    public String getAuctionInfo() throws Exception {
 
         final Optional<String> result = httpMethods.rpcCallMethod(new Method(STATE_GET_AUCTION_INFO, new HashMap<>()));
 
         return result.isPresent() ? MethodEnums.STATE_GET_AUCTION_INFO.getValue(result.get()) : null;
     }
 
-    public String getNodePeers() throws Throwable {
+    public String getNodePeers() throws Exception {
 
         final Optional<String> result = httpMethods.rpcCallMethod(new Method(INFO_GET_PEERS, new HashMap<>()));
 
         return result.isPresent() ? MethodEnums.INFO_GET_PEERS.getValue(result.get()) : null;
     }
 
-    public String getNodeStatus() throws Throwable {
+    public String getNodeStatus() throws Exception {
 
         final Optional<String> result = httpMethods.rpcCallMethod(new Method(INFO_GET_STATUS, new HashMap<>()));
 
         return result.isPresent() ? MethodEnums.INFO_GET_STATUS.getValue(result.get()) : null;
     }
 
-    public String putDeploy(final Deploy signedDeploy) throws Throwable {
+    public String putDeploy(final Deploy signedDeploy) throws Exception {
 
         final int size = deployService.deploySizeInBytes(signedDeploy);
 

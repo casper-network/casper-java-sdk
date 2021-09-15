@@ -200,7 +200,7 @@ class DeployExecutableFactory {
                 final Optional<String> hashOptional = getFieldValue(entryPoint, treeNode, "hash");
                 final Optional<String> entryPointOptional = getFieldValue(entryPoint, treeNode, "entry_point");
                 return new StoredContractByHash(
-                        hashOptional.map(Digest::new).orElse(null),
+                        hashOptional.map(ContractHash::new).orElse(null),
                         entryPointOptional.orElse(null),
                         args
                 );

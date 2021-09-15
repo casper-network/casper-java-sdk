@@ -9,7 +9,6 @@ import com.casper.sdk.types.*;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigInteger;
-import java.util.Arrays;
 import java.util.Collections;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -129,7 +128,7 @@ class DeployExecutableByteSerializerTest {
         );
 
         final StoredContractByHash storedContractByHash = new StoredContractByHash(
-                new Digest("c4c411864f7b717c27839e56f6f1ebe5da3f35ec0043f437324325d65a22afa4"),
+                new ContractHash("c4c411864f7b717c27839e56f6f1ebe5da3f35ec0043f437324325d65a22afa4"),
                 "pclphXwfYmCmdITj8hnh",
                 Collections.singletonList(paymentArg)
         );

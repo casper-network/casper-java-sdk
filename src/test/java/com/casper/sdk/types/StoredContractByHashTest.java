@@ -18,7 +18,7 @@ class StoredContractByHashTest {
     @BeforeEach
     void setUp() {
         storedContractByHash = new StoredContractByHash(
-                new Digest("0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f"),
+                new ContractHash("0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f"),
                 "pclphXwfYmCmdITj8hnh",
                 Arrays.asList(
                         new DeployNamedArg("foo", new CLValue("bar".getBytes(StandardCharsets.UTF_8), new CLTypeInfo(CLType.STRING), "bar")),

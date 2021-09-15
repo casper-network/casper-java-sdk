@@ -1,17 +1,20 @@
 package com.casper.sdk;
 
-import com.casper.sdk.types.*;
-import com.casper.sdk.service.json.JsonConversionService;
+import com.casper.sdk.exceptions.ValueNotFoundException;
 import com.casper.sdk.service.HashService;
 import com.casper.sdk.service.SigningService;
 import com.casper.sdk.service.http.rpc.NodeClient;
+import com.casper.sdk.service.json.JsonConversionService;
 import com.casper.sdk.service.serialization.cltypes.TypesFactory;
 import com.casper.sdk.service.serialization.types.ByteSerializerFactory;
+import com.casper.sdk.service.serialization.util.ByteUtils;
+import com.casper.sdk.types.*;
 import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.NoSuchAlgorithmException;
+import java.util.Map;
 
 /**
  * Entry point into the SDK Exposes all permissible methods
@@ -38,19 +41,36 @@ public class CasperSdk {
         this.nodeClient = new NodeClient(deployService, hashService, jsonConversionService);
     }
 
-    public String getAccountInfo(final String accountKey) throws Throwable {
+    public String getAccountInfo(final String accountKey) throws Exception {
         return nodeClient.getAccountInfo(accountKey);
     }
 
-    public String getAccountBalance(final String accountKey) throws Throwable {
+    public byte[] getContractHash(final String accountKey) throws Exception {
+
+        final String accountInfo = getAccountInfo(accountKey);
+        //noinspection rawtypes
+        final Map map = jsonConversionService.fromJson(accountInfo, Map.class);
+        final Object namedKeys = map.get("named_keys");
+        if (namedKeys instanceof Map) {
+            //noinspection rawtypes
+            final String erc20 = (String) ((Map) namedKeys).get("ERC20");
+            if (erc20 != null && erc20.length() > 5) {
+                return ByteUtils.decodeHex(erc20.substring(5));
+            }
+        }
+        throw new ValueNotFoundException("'ERC20' not found in account info 'named_keys'");
+    }
+
+
+    public String getAccountBalance(final String accountKey) throws Exception {
         return nodeClient.getAccountBalance(accountKey);
     }
 
-    public String getAccountMainPurseURef(final String accountKey) throws Throwable {
+    public String getAccountMainPurseURef(final String accountKey) throws Exception {
         return nodeClient.getAccountMainPurseURef(accountKey);
     }
 
-    public String getStateRootHash() throws Throwable {
+    public String getStateRootHash() throws Exception {
         return nodeClient.getStateRootHash();
     }
 
@@ -58,15 +78,15 @@ public class CasperSdk {
         return hashService.getAccountHash(accountKey);
     }
 
-    public String getAuctionInfo() throws Throwable {
+    public String getAuctionInfo() throws Exception {
         return nodeClient.getAuctionInfo();
     }
 
-    public String getNodeStatus() throws Throwable {
+    public String getNodeStatus() throws Exception {
         return nodeClient.getNodeStatus();
     }
 
-    public String getNodePeers() throws Throwable {
+    public String getNodePeers() throws Exception {
         return nodeClient.getNodePeers();
     }
 
@@ -110,6 +130,7 @@ public class CasperSdk {
         }
     }
 
+
     /**
      * Construct new unsigned deploy.
      *
@@ -141,17 +162,17 @@ public class CasperSdk {
      * @return the deploy hash, ech deploy gets a unique hash. This is part of the cryptographic security of blockchain
      * technology. No two deploys will ever return the same hash.
      */
-    public Digest putDeploy(final Deploy signedDeploy) throws Throwable {
+    public Digest putDeploy(final Deploy signedDeploy) throws Exception {
         return new Digest(nodeClient.putDeploy(signedDeploy));
     }
 
     /**
-     * Loads the key pair from the provide streams
+     * Loads the key pair from the provided streams
      *
      * @param publicKeyIn  the public key .pem file input stream
      * @param privateKeyIn the private key .pem file input stream
      * @return the files loaded into a AsymmetricCipherKeyPair
-     * @throws IOException if the is a problem loading the files
+     * @throws IOException if there is a problem loading the files
      */
     public AsymmetricCipherKeyPair loadKeyPair(final InputStream publicKeyIn,
                                                final InputStream privateKeyIn) throws IOException {
@@ -168,7 +189,7 @@ public class CasperSdk {
     }
 
     /**
-     * Creates a new Transfer to the target account of the specified ammount
+     * Creates a new Transfer to the target account of the specified amount
      *
      * @param amount the amount to transfer
      * @param target the public key of the target account
