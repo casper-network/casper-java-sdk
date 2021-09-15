@@ -10,6 +10,12 @@ import java.util.List;
 
 import com.syntifi.casper.sdk.filter.block.CasperBlockByHashFilter;
 import com.syntifi.casper.sdk.filter.block.CasperBlockByHeightFilter;
+import com.syntifi.casper.sdk.model.block.CasperBlock;
+import com.syntifi.casper.sdk.model.block.CasperBlockData;
+import com.syntifi.casper.sdk.model.peer.CasperPeerData;
+import com.syntifi.casper.sdk.model.stateroothash.CasperStateRootHashData;
+import com.syntifi.casper.sdk.model.transfer.CasperTransfer;
+import com.syntifi.casper.sdk.model.transfer.CasperTransferData;
 import com.syntifi.casper.sdk.service.CasperService;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -41,7 +47,7 @@ class CasperSdkApplicationTests {
 	 */
 	@Test
 	void retrieveNonEmptyListOfPeers() {
-		var peerData = casperService.getPeerData();
+		CasperPeerData peerData = casperService.getPeerData();
 
 		assertNotNull(peerData);
 		assertFalse(peerData.getPeers().isEmpty());
@@ -49,7 +55,7 @@ class CasperSdkApplicationTests {
 
 	@Test
 	void retrieveLastBlock() {
-		var blockData = casperService.getBlock();
+		CasperBlockData blockData = casperService.getBlock();
 
 		assertNotNull(blockData);
 	}
@@ -58,19 +64,19 @@ class CasperSdkApplicationTests {
 	// "d8f921f792064202749cbd286379acb6c0fdb3d3d0526c2c7e92c03ff2c26c1d"
 	@Test
 	void getBlockByHash() {
-		var blockData = casperService.getBlock(
+		CasperBlockData blockData = casperService.getBlock(
 				new CasperBlockByHashFilter("2fe9630b7790852e4409d815b04ca98f37effcdf9097d317b9b9b8ad658f47c8"));
 
 		assertNotNull(blockData);
-		var block = blockData.getBlock();
+		CasperBlock block = blockData.getBlock();
 		assertEquals("0000000000000000000000000000000000000000000000000000000000000000", block.getHeader().getParentHash());
 		assertEquals(0, block.getHeader().getHeight());
 	}
 
 	@Test
 	void getBlockByHeight() {
-		var blockData = casperService.getBlock(new CasperBlockByHeightFilter(0));
-		var block = blockData.getBlock();
+		CasperBlockData blockData = casperService.getBlock(new CasperBlockByHeightFilter(0));
+		CasperBlock block = blockData.getBlock();
 		assertEquals("0000000000000000000000000000000000000000000000000000000000000000", block.getHeader().getParentHash());
 		assertEquals("2fe9630b7790852e4409d815b04ca98f37effcdf9097d317b9b9b8ad658f47c8", block.getHash());
 		assertNotNull(blockData);
@@ -78,18 +84,18 @@ class CasperSdkApplicationTests {
 
 	@Test
 	void retrieveLastBlockTransfers() {
-		var blockData = casperService.getBlockTransfers();
+		CasperTransferData transferData = casperService.getBlockTransfers();
 
-		assertNotNull(blockData);
+		assertNotNull(transferData);
 	}
 
 	@Test
 	void getTransferByHeight() {
-		var transferData = casperService.getBlockTransfers(new CasperBlockByHeightFilter(198148));
+		CasperTransferData transferData = casperService.getBlockTransfers(new CasperBlockByHeightFilter(198148));
 
 		assertNotNull(transferData);
 		assertEquals(1, transferData.getTransfers().size());
-		var transaction = transferData.getTransfers().get(0);
+		CasperTransfer transaction = transferData.getTransfers().get(0);
 		assertEquals("c22fab5364c793bb859fd259b808ea4c101be8421b7d638dc8f52490ab3c3539", transaction.getDeployHash());
 		assertEquals("account-hash-2363d9065b1ecc26f50f108c22c8f3bbe6a891c81e37e0e454c68370708a6937", transaction.getFrom());
 		assertEquals("account-hash-288797af5b4eeb5d4f36bd228b2e6479a77a27e808597ced1a7d6afe4c29febc", transaction.getTo());
@@ -98,12 +104,12 @@ class CasperSdkApplicationTests {
 
 	@Test
 	void getTransferByHash() {
-		var transferData = casperService.getBlockTransfers(
+		CasperTransferData transferData = casperService.getBlockTransfers(
 				new CasperBlockByHashFilter("db9820938ee64c7037f13ea05ab8fe7576215c3a62b02ed35c2564c2138eeb57"));
 
 		assertNotNull(transferData);
 		assertEquals(1, transferData.getTransfers().size());
-		var transaction = transferData.getTransfers().get(0);
+		CasperTransfer transaction = transferData.getTransfers().get(0);
 		assertEquals("c22fab5364c793bb859fd259b808ea4c101be8421b7d638dc8f52490ab3c3539", transaction.getDeployHash());
 		assertEquals("account-hash-2363d9065b1ecc26f50f108c22c8f3bbe6a891c81e37e0e454c68370708a6937", transaction.getFrom());
 		assertEquals("account-hash-288797af5b4eeb5d4f36bd228b2e6479a77a27e808597ced1a7d6afe4c29febc", transaction.getTo());
@@ -112,21 +118,21 @@ class CasperSdkApplicationTests {
 
 	@Test
 	void retrieveLastBlockStateRootHash() {
-		var blockData = casperService.getStateRootHash();
+		CasperStateRootHashData stateRootData = casperService.getStateRootHash();
 
-		assertNotNull(blockData);
+		assertNotNull(stateRootData);
 	}
 
 	@Test
 	void getStateRootHashByHeight() {
-		var stateRootHashData = casperService.getStateRootHash(new CasperBlockByHeightFilter(0));
+		CasperStateRootHashData stateRootHashData = casperService.getStateRootHash(new CasperBlockByHeightFilter(0));
 		assertNotNull(stateRootHashData);
 		assertEquals("8e22e3983d5ca9bcf9804bd3a6724b8c24effdf317a1d9c05175125a1bf8b679", stateRootHashData.getStateRootHash());
 	}
 
 	@Test
 	void getStateRootHashByHash() {
-		var stateRootHashData = casperService.getStateRootHash(
+		CasperStateRootHashData stateRootHashData = casperService.getStateRootHash(
 				new CasperBlockByHashFilter("2fe9630b7790852e4409d815b04ca98f37effcdf9097d317b9b9b8ad658f47c8"));
 
 		assertNotNull(stateRootHashData);

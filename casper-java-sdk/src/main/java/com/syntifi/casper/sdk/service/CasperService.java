@@ -4,6 +4,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.googlecode.jsonrpc4j.JsonRpcHttpClient;
 import com.googlecode.jsonrpc4j.JsonRpcMethod;
@@ -146,9 +147,9 @@ public interface CasperService {
      * @throws MalformedURLException is thrown if ip/port are not compliant
      */
     public static CasperService usingPeer(String ip, int port) throws MalformedURLException {
-        var client = new JsonRpcHttpClient(new URL("http", ip, port, "/rpc"));
+        JsonRpcHttpClient client = new JsonRpcHttpClient(new URL("http", ip, port, "/rpc"));
 
-        var newHeaders = new HashMap<String, String>();
+        Map<String, String> newHeaders = new HashMap<>();
         newHeaders.put("Content-Type", "application/json");
         client.setHeaders(newHeaders);
 

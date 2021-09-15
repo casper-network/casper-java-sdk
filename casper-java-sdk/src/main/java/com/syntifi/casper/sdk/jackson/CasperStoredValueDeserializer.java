@@ -32,7 +32,7 @@ public class CasperStoredValueDeserializer extends StdDeserializer<CasperStoredV
             throws IOException {
 
         JsonNode node = p.getCodec().readTree(p);
-        var clValueNode = node.get("CLValue");
+        JsonNode clValueNode = node.get("CLValue");
         String clType = clValueNode.get("cl_type").asText();
         byte[] bytes = clValueNode.get("bytes").asText().getBytes();
         JsonNode toBeParsed = clValueNode.get("parsed");
