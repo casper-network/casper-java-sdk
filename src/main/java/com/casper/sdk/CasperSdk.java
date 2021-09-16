@@ -45,7 +45,7 @@ public class CasperSdk {
         return nodeClient.getAccountInfo(accountKey);
     }
 
-    public byte[] getContractHash(final String accountKey) throws Exception {
+    public ContractHash getContractHash(final String accountKey) throws Exception {
 
         final String accountInfo = getAccountInfo(accountKey);
         //noinspection rawtypes
@@ -55,7 +55,7 @@ public class CasperSdk {
             //noinspection rawtypes
             final String erc20 = (String) ((Map) namedKeys).get("ERC20");
             if (erc20 != null && erc20.length() > 5) {
-                return ByteUtils.decodeHex(erc20.substring(5));
+                return new ContractHash(ByteUtils.decodeHex(erc20.substring(5)));
             }
         }
         throw new ValueNotFoundException("'ERC20' not found in account info 'named_keys'");

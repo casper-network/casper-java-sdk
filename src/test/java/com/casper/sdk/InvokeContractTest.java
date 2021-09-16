@@ -42,7 +42,7 @@ public class InvokeContractTest {
 
         // Step 4: Query node for contract hash.
         final String accountHex = getPublicKeyAccountHex(userTwoKeyPair);
-        final byte[] contractHash = casperSdk.getContractHash(accountHex);
+        final ContractHash contractHash = casperSdk.getContractHash(accountHex);
 
         // Make a payment
         final ModuleBytes payment = casperSdk.standardPayment(new BigInteger("10000000000"));
@@ -57,7 +57,7 @@ public class InvokeContractTest {
                         DeployParams.DEFAULT_TTL,
                         null),
                 new StoredContractByHash(
-                        new ContractHash(contractHash),
+                        contractHash,
                         "transfer",
                         new DeployNamedArgBuilder()
                                 .add("amount", CLValueBuilder.u256(AMOUNT_TO_TRANSFER))

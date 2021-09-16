@@ -2,6 +2,7 @@ package com.casper.sdk.service.serialization.cltypes;
 
 import com.casper.sdk.service.serialization.util.ByteArrayBuilder;
 import com.casper.sdk.service.serialization.util.ByteUtils;
+import com.casper.sdk.types.Digest;
 
 /**
  * Converts a Java Byte array to a casper byte array
@@ -29,7 +30,10 @@ public class ByteArraySerializer extends AbstractTypesSerializer {
         }
         if (toSerialize instanceof byte[]) {
             return (byte[]) toSerialize;
-        } else {
+        } if (toSerialize instanceof Digest) {
+           return  ((Digest) toSerialize).getHash();
+        }
+        else {
             return new byte[0];
         }
     }
