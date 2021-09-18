@@ -1,6 +1,6 @@
 # casper-java-sdk
 
-Java 15 sdk library for interacting with a CSPR node.
+Java 8 sdk library for interacting with a CSPR node.
 
 ## What is casper-java-sdk ?
 
@@ -8,38 +8,29 @@ SDK  to streamline the 3rd party Java client integration processes. Such 3rd par
 
 ## How To: Install ?
 
-This version requires a JAR build using gradle
+The SDK is a dependency on the Sonatype maven repository:
 
-To build, first clone the main branch, then run the gradle command as shown below to build the jar:
+https://search.maven.org/artifact/network.casper/casper-java-sdk
 
-```bash
-git clone https://github.com/casper-network/casper-java-sdk.git
-cd casper-java-sdk
+To include as a gradle dependency:
 
-gradle casperJar
+```groovy
+implementation 'network.casper:casper-java-sdk:M.m.i'
 ```
 
-This will create a JAR with all dependencies in:
+To include as a maven dependency:
 
-```bash
-casper-java-sdk/build/libs/casper-java-sdk-0.5.0.jar
+```xml
+<dependency>
+  <groupId>network.casper</groupId>
+  <artifactId>casper-java-sdk</artifactId>
+  <version>M.m.i</version>
+</dependency>
 ```
 
- Now copy this JAR to a subfolder of your client application
+Where M.m.i is the version number eg 0.1.0
 
-```
-[client_project]/lib/casper-java-sdk-0.5.0.jar
-```
 
-If you're using gradle for your project you can now include this in your build file:
-
-```bash
-dependencies {
-    compile files('lib/casper-java-sdk-0.5.0.jar')
-}
-```
-
-If you're not using gradle, you can import the JAR into the project using your IDE
 
 ## How To: Query a node ?
 
