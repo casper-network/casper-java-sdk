@@ -1,12 +1,12 @@
 package com.casper.sdk.service.serialization.types;
 
+import com.casper.sdk.service.serialization.cltypes.TypesFactory;
+import com.casper.sdk.service.serialization.cltypes.TypesSerializer;
+import com.casper.sdk.service.serialization.util.ByteArrayBuilder;
 import com.casper.sdk.types.CLByteArrayInfo;
 import com.casper.sdk.types.CLOptionTypeInfo;
 import com.casper.sdk.types.CLType;
 import com.casper.sdk.types.CLTypeInfo;
-import com.casper.sdk.service.serialization.cltypes.TypesFactory;
-import com.casper.sdk.service.serialization.cltypes.TypesSerializer;
-import com.casper.sdk.service.serialization.util.ByteArrayBuilder;
 
 abstract class AbstractByteSerializer<T> implements ByteSerializer<T> {
 
@@ -17,33 +17,53 @@ abstract class AbstractByteSerializer<T> implements ByteSerializer<T> {
     }
 
     byte[] toBytesForCLTypeInfo(final CLTypeInfo typeInfo) {
-        return switch (typeInfo.getType()) {
-            case BOOL, I32, I64, U8, U32, U64, U128, U256, U512, UNIT, STRING, KEY, UREF, PUBLIC_KEY -> getTypeBytes(typeInfo);
-            case BYTE_ARRAY -> getByteArrayType((CLByteArrayInfo) typeInfo);
-            case OPTION -> getOptionType(typeInfo);
-            default -> throw new IllegalArgumentException("Wrong type " + typeInfo.getType());
-        };
+        switch (typeInfo.getType()) {
+            case BOOL:
+            case I32:
+            case I64:
+            case U8:
+            case U32:
+            case U64:
+            case U128:
+            case U256:
+            case U512:
+            case UNIT:
+            case STRING:
+            case KEY:
+            case UREF:
+            case PUBLIC_KEY:
+                return getTypeBytes(typeInfo);
+
+            case BYTE_ARRAY:
+                return getByteArrayType((CLByteArrayInfo) typeInfo);
+
+            case OPTION:
+                return getOptionType(typeInfo);
+
+            default:
+                throw new IllegalArgumentException("Wrong type " + typeInfo.getType());
+        }
     }
 
     public TypesSerializer getU32Serializer() {
         return u32Serializer;
     }
 
-    private  byte[] getByteArrayType(CLByteArrayInfo typeInfo) {
+    private byte[] getByteArrayType(CLByteArrayInfo typeInfo) {
         return new ByteArrayBuilder()
                 .append(getTypeBytes(typeInfo))
                 .append(u32Serializer.serialize(typeInfo.getSize()))
                 .toByteArray();
     }
 
-    private  byte[] getOptionType(final CLTypeInfo typeInfo) {
+    private byte[] getOptionType(final CLTypeInfo typeInfo) {
         return new ByteArrayBuilder()
                 .append(getTypeBytes(typeInfo))
                 .append(toBytesForCLTypeInfo(((CLOptionTypeInfo) typeInfo).getInnerType()))
                 .toByteArray();
     }
 
-    private  byte[] getTypeBytes(final CLTypeInfo typeInfo) {
+    private byte[] getTypeBytes(final CLTypeInfo typeInfo) {
         return new byte[]{typeInfo.getType().getClType()};
     }
 }

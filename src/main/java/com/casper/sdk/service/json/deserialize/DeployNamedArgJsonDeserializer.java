@@ -13,8 +13,6 @@ import java.io.IOException;
 
 /**
  * Converts a DeployNamedArg from JSON
- * <p/>
- * <pre>
  * [
  *  "amount",
  *     {
@@ -22,7 +20,7 @@ import java.io.IOException;
  *       "bytes": "05005550b405",
  *       "parsed": "24500000000"
  *      }
- *  ]</pre>
+ *  ]
  */
 public class DeployNamedArgJsonDeserializer extends JsonDeserializer<DeployNamedArg> {
 

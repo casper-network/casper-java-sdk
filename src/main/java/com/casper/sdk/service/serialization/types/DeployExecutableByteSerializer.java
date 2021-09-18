@@ -25,13 +25,16 @@ class DeployExecutableByteSerializer implements ByteSerializer<DeployExecutable>
     @Override
     public byte[] toBytes(final DeployExecutable deployExecutable) {
 
-        // Append the type of the Deploy Executable in a single byte
+        // Append the type of the 'Deploy Executable' in a single byte
         final ByteArrayBuilder builder = new ByteArrayBuilder()
                 .append((byte) deployExecutable.getTag());
 
         if (deployExecutable instanceof StoredContractByName) {
             builder.append(stringSerializer.serialize(((StoredContractByName) deployExecutable).getName()))
                     .append(stringSerializer.serialize(((StoredContractByName) deployExecutable).getEntryPoint()));
+        } else if (deployExecutable instanceof StoredContractByHash) {
+            builder.append(((StoredContractByHash) deployExecutable).getHash().getHash());
+            builder.append(stringSerializer.serialize(((StoredContractByHash) deployExecutable).getEntryPoint()));
         } else if (deployExecutable instanceof ModuleBytes) {
             builder.append(u32Serializer.serialize(deployExecutable.getModuleBytes()));
         }

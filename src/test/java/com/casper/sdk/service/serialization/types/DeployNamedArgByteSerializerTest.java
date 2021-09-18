@@ -1,11 +1,12 @@
 package com.casper.sdk.service.serialization.types;
 
+import com.casper.sdk.service.serialization.cltypes.TypesFactory;
+import com.casper.sdk.service.serialization.util.ByteUtils;
+import com.casper.sdk.service.serialization.util.CollectionUtils;
 import com.casper.sdk.types.CLByteArrayInfo;
 import com.casper.sdk.types.CLType;
 import com.casper.sdk.types.CLValue;
 import com.casper.sdk.types.DeployNamedArg;
-import com.casper.sdk.service.serialization.cltypes.TypesFactory;
-import com.casper.sdk.service.serialization.util.ByteUtils;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -114,7 +115,7 @@ class DeployNamedArgByteSerializerTest {
     @Test
     void namedArgsToBytes() {
 
-        final List<DeployNamedArg> args = List.of(
+        final List<DeployNamedArg> args = CollectionUtils.List.of(
                 new DeployNamedArg("amount",
                         new CLValue(
                                 ByteUtils.decodeHex("05005550b405"),

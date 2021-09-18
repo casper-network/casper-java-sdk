@@ -1,8 +1,8 @@
 package com.casper.sdk.controller;
 
 import com.casper.sdk.CasperSdk;
-import com.casper.sdk.types.*;
 import com.casper.sdk.service.HashService;
+import com.casper.sdk.types.*;
 import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
 import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,8 +27,9 @@ import static org.hamcrest.core.Is.is;
 @Disabled // TODO Remove this comment to tests against a network
 class CasperSdkIntegrationTest {
 
+    /** Path the nctl folder can be overridden with -Dnctl.home=some-path */
+    private static final String NCTL_HOME = "~/Documents/casper/casper-node/utils/nctl";
     private final Logger logger = LoggerFactory.getLogger(CasperSdkIntegrationTest.class);
-
     private final byte[] expectedSerializedBody = {
             (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 1, (byte) 0, (byte) 0, (byte) 0, (byte) 6,
             (byte) 0, (byte) 0, (byte) 0, (byte) 97, (byte) 109, (byte) 111, (byte) 117, (byte) 110, (byte) 116,
@@ -45,10 +46,6 @@ class CasperSdkIntegrationTest {
             (byte) 9, (byte) 0, (byte) 0, (byte) 0, (byte) 1, (byte) 1, (byte) 0, (byte) 0, (byte) 0, (byte) 0,
             (byte) 0, (byte) 0, (byte) 0, (byte) 13, (byte) 5
     };
-
-    /** Path the nctl folder can be overridden with -Dnctl.home=some-path */
-    private static final String NCTL_HOME = "~/casper-node/utils/nctl";
-
     private final byte[] expectedHash = new byte[]{
             (byte) 10, (byte) 56, (byte) 192, (byte) 58, (byte) 52, (byte) 29, (byte) 185, (byte) 218, (byte) 206,
             (byte) 17, (byte) 135, (byte) 227, (byte) 27, (byte) 127, (byte) 172, (byte) 32, (byte) 150, (byte) 155,
@@ -60,7 +57,7 @@ class CasperSdkIntegrationTest {
 
     @BeforeEach
     void setUp() {
-        casperSdk = new CasperSdk("http://localhost", 40101);
+        casperSdk = new CasperSdk("http://localhost", 11101);
     }
 
     @Test
