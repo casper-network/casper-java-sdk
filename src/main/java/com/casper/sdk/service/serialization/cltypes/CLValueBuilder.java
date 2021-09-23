@@ -1,8 +1,6 @@
 package com.casper.sdk.service.serialization.cltypes;
 
-import com.casper.sdk.types.CLByteArrayInfo;
-import com.casper.sdk.types.CLType;
-import com.casper.sdk.types.CLValue;
+import com.casper.sdk.types.*;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.math.BigInteger;
@@ -50,6 +48,22 @@ public class CLValueBuilder {
 
     public static CLValue u512(final Object value) {
         return buildCLValue(CLType.U512, value);
+    }
+
+    public static CLValue accountKey(final byte[] value) {
+        return createKey(value, CLKeyInfo.KeyType.ACCOUNT_ID);
+    }
+
+    public static CLKeyValue hashKey(final byte[] value) {
+        return createKey(value, CLKeyInfo.KeyType.HASH_ID);
+    }
+
+    public static CLKeyValue uRefKey(final byte[] value) {
+        return createKey(value, CLKeyInfo.KeyType.UREF_ID);
+    }
+
+    private static CLKeyValue createKey(byte[] value, CLKeyInfo.KeyType keyType) {
+        return new CLKeyValue(value, keyType, null);
     }
 
     private static CLValue buildCLValue(final CLType type, final Object value) {

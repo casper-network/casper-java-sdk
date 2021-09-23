@@ -18,7 +18,7 @@ import static org.hamcrest.core.Is.is;
 /**
  * Integration tests for invoking a contract
  */
-public class InvokeContractTest {
+public class InvokeContractIntTest {
 
     private static final long AMOUNT_TO_TRANSFER = 2000000000L;
 
