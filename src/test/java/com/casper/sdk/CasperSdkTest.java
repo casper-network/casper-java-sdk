@@ -1,13 +1,12 @@
-package com.casper.sdk.controller;
+package com.casper.sdk;
 
-import com.casper.sdk.CasperSdk;
-import com.casper.sdk.types.*;
-import com.casper.sdk.service.json.JsonConversionService;
 import com.casper.sdk.service.HashService;
 import com.casper.sdk.service.SigningService;
+import com.casper.sdk.service.json.JsonConversionService;
 import com.casper.sdk.service.serialization.cltypes.TypesFactory;
 import com.casper.sdk.service.serialization.types.ByteSerializerFactory;
 import com.casper.sdk.service.serialization.util.ByteUtils;
+import com.casper.sdk.types.*;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -15,11 +14,6 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
 
 class CasperSdkTest {
-
-    private final static String URL = "http://3.140.179.157";
-    private final static int PORT = 7777;
-
-    private final CasperSdk casperSdk = new CasperSdk(URL, PORT);
 
     private final DeployService deployService = new DeployService(
             new ByteSerializerFactory(),
