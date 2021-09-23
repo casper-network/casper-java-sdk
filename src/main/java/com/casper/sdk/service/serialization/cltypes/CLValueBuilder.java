@@ -50,7 +50,7 @@ public class CLValueBuilder {
         return buildCLValue(CLType.U512, value);
     }
 
-    public static CLValue accountKey(final byte[] value) {
+    public static CLKeyValue accountKey(final byte[] value) {
         return createKey(value, CLKeyInfo.KeyType.ACCOUNT_ID);
     }
 
