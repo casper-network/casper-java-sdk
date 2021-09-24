@@ -4,6 +4,7 @@ import com.casper.sdk.service.serialization.cltypes.CLValueBuilder;
 import com.casper.sdk.types.*;
 import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
 import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -18,6 +19,7 @@ import static org.hamcrest.core.Is.is;
 /**
  * Integration tests for invoking a contract
  */
+@Disabled
 public class InvokeContractIntTest {
 
     private static final long AMOUNT_TO_TRANSFER = 2000000000L;

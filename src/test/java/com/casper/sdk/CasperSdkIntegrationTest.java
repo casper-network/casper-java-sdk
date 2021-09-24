@@ -5,6 +5,7 @@ import com.casper.sdk.types.*;
 import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
 import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +22,7 @@ import static org.hamcrest.core.Is.is;
 /**
  * Casper SDK integration tests. The NCTL test nodes must be running for these tests to execute.
  */
-//@Disabled // TODO Remove this comment to tests against a network
+@Disabled // TODO Remove this comment to tests against a network
 class CasperSdkIntegrationTest {
 
     /** Path the nctl folder can be overridden with -Dnctl.home=some-path */
