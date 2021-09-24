@@ -1,6 +1,7 @@
 package com.casper.sdk.service;
 
 import com.casper.sdk.exceptions.ValueNotFoundException;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -8,6 +9,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * ENUM that provides the methods to extract the requested key from the returned json
  */
 public enum MethodEnums {
+
+    ACCOUNT_INFO {
+        @Override
+        public String getValue(final String result) throws ValueNotFoundException {
+            try {
+                JsonNode node = new ObjectMapper().readTree(result);
+                return node.get("result").toString();
+            } catch (JsonProcessingException e) {
+                throw new ValueNotFoundException("state root hash not found");
+            }
+        }
+    },
 
     STATE_ROOT_HASH {
         @Override
@@ -80,7 +93,7 @@ public enum MethodEnums {
     ACCOUNT_PUT_DEPLOY {
         @Override
         public String getValue(final String result) throws ValueNotFoundException {
-             JsonNode node = null;
+            JsonNode node = null;
             try {
                 node = new ObjectMapper().readTree(result);
                 return node.get("result").get("deploy_hash").textValue();

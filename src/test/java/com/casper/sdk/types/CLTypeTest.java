@@ -71,7 +71,7 @@ class CLTypeTest {
     }
 
     @Test
-    void testClTypeKet() {
+    void testClTypeKey() {
         assertClType(CLType.KEY, 11, "Key", false);
     }
 

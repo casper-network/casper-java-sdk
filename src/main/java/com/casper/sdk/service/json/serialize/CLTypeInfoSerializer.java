@@ -21,7 +21,7 @@ public class CLTypeInfoSerializer extends JsonSerializer<CLTypeInfo> {
         if (value != null) {
 
             if (value instanceof CLByteArrayInfo) {
-                gen.writeStartObject();
+                      gen.writeStartObject();
                 gen.writeFieldName(value.getType().getJsonName());
                 gen.writeNumber(((CLByteArrayInfo) value).getSize());
                 gen.writeEndObject();

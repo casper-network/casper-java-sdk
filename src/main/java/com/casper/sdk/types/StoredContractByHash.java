@@ -7,12 +7,12 @@ import java.util.List;
 public class StoredContractByHash extends DeployExecutable {
 
     /** # Unique identifier. */
-    private final Digest hash;
+    private final ContractHash hash;
     /** the entry point */
     @JsonProperty("entry_point")
     private final String entryPoint;
 
-    public StoredContractByHash(final Digest hash, final String entryPoint, final List<DeployNamedArg> args) {
+    public StoredContractByHash(final ContractHash hash, final String entryPoint, final List<DeployNamedArg> args) {
         super(new byte[0], args);
         this.hash = hash;
         this.entryPoint = entryPoint;

@@ -1,22 +1,19 @@
-package com.casper.sdk.controller;
+package com.casper.sdk;
 
-import com.casper.sdk.CasperSdk;
 import com.casper.sdk.service.HashService;
 import com.casper.sdk.types.*;
 import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
 import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.time.Instant;
 
+import static com.casper.sdk.IntegrationTestUtils.*;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -24,11 +21,11 @@ import static org.hamcrest.core.Is.is;
 /**
  * Casper SDK integration tests. The NCTL test nodes must be running for these tests to execute.
  */
-@Disabled // TODO Remove this comment to tests against a network
+//@Disabled // TODO Remove this comment to tests against a network
 class CasperSdkIntegrationTest {
 
     /** Path the nctl folder can be overridden with -Dnctl.home=some-path */
-    private static final String NCTL_HOME = "~/Documents/casper/casper-node/utils/nctl";
+
     private final Logger logger = LoggerFactory.getLogger(CasperSdkIntegrationTest.class);
     private final byte[] expectedSerializedBody = {
             (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 1, (byte) 0, (byte) 0, (byte) 0, (byte) 6,
@@ -140,8 +137,6 @@ class CasperSdkIntegrationTest {
                 payment
         );
 
-        //   assertThat(deploy.getHash().getHash(), is(expectedHash));
-
         casperSdk.signDeploy(deploy, nodeOneKeyPair);
         casperSdk.signDeploy(deploy, userTwoKeyPair);
 
@@ -162,40 +157,15 @@ class CasperSdkIntegrationTest {
     }
 
 
-    private String getPublicKeyAccountHex(final AsymmetricCipherKeyPair keyPair) {
-        final PublicKey publicKey = new PublicKey(((Ed25519PublicKeyParameters) keyPair.getPublic()).getEncoded(), KeyAlgorithm.ED25519);
-        return publicKey.toAccountHex();
-    }
-
-
     private AsymmetricCipherKeyPair geUserKeyPair(int userNumber) throws IOException {
-
-        final String userNPath = String.format("%s/assets/net-1/users/user-%d", getNctlHome(), userNumber);
-        final FileInputStream publicKeyIn = new FileInputStream(new File(userNPath, "public_key.pem"));
-        final FileInputStream privateKeyIn = new FileInputStream(new File(userNPath, "secret_key.pem"));
-
-        return casperSdk.loadKeyPair(publicKeyIn, privateKeyIn);
+        final KeyPairStreams streams = geUserKeyPairStreams(userNumber);
+        return casperSdk.loadKeyPair(streams.getPublicKeyIn(), streams.getPrivateKeyIn());
     }
-
 
     private AsymmetricCipherKeyPair getNodeKeyPair(final int nodeNumber) throws IOException {
-
-        final String userNPath = String.format("%s/assets/net-1/nodes/node-%d/keys", getNctlHome(), nodeNumber);
-        final FileInputStream publicKeyIn = new FileInputStream(new File(userNPath, "public_key.pem"));
-        final FileInputStream privateKeyIn = new FileInputStream(new File(userNPath, "secret_key.pem"));
-
-        return casperSdk.loadKeyPair(publicKeyIn, privateKeyIn);
+        final KeyPairStreams streams = getNodeKeyPairSteams(nodeNumber);
+        return casperSdk.loadKeyPair(streams.getPublicKeyIn(), streams.getPrivateKeyIn());
     }
 
-    private String getNctlHome() {
-        String nctlHome = System.getProperty("nctl.home");
-        if (nctlHome == null) {
-            nctlHome = NCTL_HOME;
-        }
 
-        // Replace user home '~' tilda with full path to user home directory
-        nctlHome = nctlHome.replaceFirst("^~", System.getProperty("user.home"));
-
-        return nctlHome;
-    }
 }

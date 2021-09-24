@@ -70,7 +70,7 @@ public class NodeClientTest {
         final String info = query.getAccountInfo("01048c1858b7a6ff56a20d7574fd31025ead4af9cb8a854f919d24f886a4ebb741");
         assertNotNull(info);
         final JsonNode node = new ObjectMapper().readTree(info);
-        assertEquals(node.get("result").get("stored_value").get("Account").get("account_hash").textValue(), "account-hash-ef5b5e0720614aeb59b0283513379b61af9e429b94e9904ea64a60ed599173ae");
+        assertEquals(node.get("stored_value").get("Account").get("account_hash").textValue(), "account-hash-ef5b5e0720614aeb59b0283513379b61af9e429b94e9904ea64a60ed599173ae");
     }
 
     @Test
