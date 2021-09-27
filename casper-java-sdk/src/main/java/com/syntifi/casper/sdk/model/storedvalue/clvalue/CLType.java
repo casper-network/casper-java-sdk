@@ -6,11 +6,19 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * All CLTypes must be listed and consumed here
+ * 
+ * @author Alexandre Carvalho
+ * @author Andre Bertolace
+ * @see CLType
+ * @see CLTypeData
+ * @since 0.0.1
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class CLType {
-    // TODO: Register and check if all types are present
     public static final String BOOL = "Bool";
     public static final String I32 = "I32";
     public static final String I64 = "I64";

@@ -2,7 +2,7 @@ package com.syntifi.casper.sdk.model.storedvalue.clvalue;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -55,7 +55,7 @@ public class CLValueMap extends AbstractCLValue<Map<? extends AbstractCLValue<?>
         CLType keyType = getClType().getChildTypes().get(0);
         CLType valType = getClType().getChildTypes().get(1);
 
-        Map<AbstractCLValue<?>, AbstractCLValue<?>> map = new HashMap<>();
+        Map<AbstractCLValue<?>, AbstractCLValue<?>> map = new LinkedHashMap<>();
         CLValueI32 mapLength = new CLValueI32(0);
         clvd.readI32(mapLength);
 

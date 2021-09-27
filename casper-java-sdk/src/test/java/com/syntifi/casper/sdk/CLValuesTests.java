@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -291,7 +291,7 @@ public class CLValuesTests {
         StoredValueData sv = OBJECT_MAPPER.readValue(inputJson, StoredValueData.class);
         // Should be CLValueMap
         assertTrue(sv.getCasperStoredValue().getClValue() instanceof CLValueMap);
-        Map<CLValueString, CLValueI32> map = new HashMap<>();
+        Map<CLValueString, CLValueI32> map = new LinkedHashMap<>();
         map.put(new CLValueString("ABC"), new CLValueI32(10));
         CLValueMap expected = new CLValueMap(map);
         try (CLValueEncoder clve = new CLValueEncoder()) {
