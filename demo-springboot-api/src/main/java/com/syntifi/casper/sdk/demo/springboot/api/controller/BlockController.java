@@ -2,7 +2,7 @@ package com.syntifi.casper.sdk.demo.springboot.api.controller;
 
 import java.net.MalformedURLException;
 
-import com.syntifi.casper.sdk.model.block.CasperBlockData;
+import com.syntifi.casper.sdk.model.block.JsonBlockData;
 import com.syntifi.casper.sdk.service.CasperService;
 
 import org.springframework.stereotype.Controller;
@@ -24,7 +24,7 @@ public class BlockController {
 
     @GetMapping("")
     @ResponseBody
-    public CasperBlockData getLastBlock() throws MalformedURLException {
+    public JsonBlockData getLastBlock() throws MalformedURLException {
         CasperService service = CasperService.usingPeer(testIP, testPort);
 
         return service.getBlock();

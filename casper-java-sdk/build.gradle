@@ -3,6 +3,7 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent
 
 plugins {
 	id 'java'
+    id 'jacoco'
 }
 
 group = 'com.syntifi.casper'
@@ -18,6 +19,8 @@ dependencies {
     implementation "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
     implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
     implementation "com.fasterxml.jackson.core:jackson-annotations:${jacksonVersion}"
+    implementation "org.javatuples:javatuples:${tupleVersion}"
+    implementation "commons-codec:commons-codec:1.15" //using it only for Hex. change to bouncycastle later? 
 
     // lombok compile
 	compileOnly "org.projectlombok:lombok:${lombokVersion}"
@@ -31,7 +34,7 @@ dependencies {
     testImplementation "org.apache.logging.log4j:log4j-api:${log4jVersion}"
     testImplementation "org.apache.logging.log4j:log4j-core:${log4jVersion}"
     testImplementation "org.apache.logging.log4j:log4j-slf4j-impl:${log4jVersion}"
-    testImplementation "org.slf4j:slf4j-api:${slf4jApiVersion}"
+    compileOnly "org.slf4j:slf4j-api:${slf4jApiVersion}"
     
     // Use JUnit Jupiter for testing.
     testImplementation "org.junit.jupiter:junit-jupiter:${jupiterVersion}"	
@@ -40,16 +43,16 @@ dependencies {
 test {
     useJUnitPlatform()
     testLogging {
-        showStandardStreams true
+        //showStandardStreams true
         // set options for log level LIFECYCLE
         events TestLogEvent.FAILED,
                TestLogEvent.PASSED,
-               TestLogEvent.SKIPPED,
-               TestLogEvent.STANDARD_OUT
+               TestLogEvent.SKIPPED
+               //TestLogEvent.STANDARD_OUT
         exceptionFormat TestExceptionFormat.FULL
         showExceptions true
         showCauses true
-        showStackTraces true
+        //showStackTraces true
 
         // set options for log level DEBUG and INFO
         debug {
@@ -57,12 +60,12 @@ test {
                    TestLogEvent.FAILED,
                    TestLogEvent.PASSED,
                    TestLogEvent.SKIPPED,
-                   TestLogEvent.STANDARD_ERROR,
+                   TestLogEvent.STANDARD_ERROR
                    TestLogEvent.STANDARD_OUT
             exceptionFormat TestExceptionFormat.FULL
         }
-        info.events = debug.events
-        info.exceptionFormat = debug.exceptionFormat
+        //info.events = debug.events
+        //info.exceptionFormat = debug.exceptionFormat
 
         afterSuite { desc, result ->
             if (!desc.parent) { // will match the outermost suite

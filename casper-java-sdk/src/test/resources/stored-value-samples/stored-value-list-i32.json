@@ -1,0 +1,13 @@
+{
+    "api_version" : "1.3.2",
+    "stored_value" : {
+      "CLValue" : {
+        "cl_type" : {
+          "List" : "I32"
+        },
+        "bytes" : "03000000010000000200000003000000"
+      }
+    },
+    "merkle_proof" : "-- erased --"
+  }
+  
