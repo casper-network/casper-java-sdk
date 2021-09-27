@@ -1,18 +1,14 @@
 package com.syntifi.casper.sdk.model.storedvalue.clvalue;
 
-import java.lang.reflect.InvocationTargetException;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonTypeResolver;
-import com.syntifi.casper.sdk.exception.DynamicInstanceException;
 import com.syntifi.casper.sdk.jackson.CLTypeResolver;
 import com.syntifi.casper.sdk.model.interfaces.DecodableValue;
 import com.syntifi.casper.sdk.model.interfaces.EncodableValue;
 import com.syntifi.casper.sdk.model.storedvalue.StoredValue;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
  * Casper CLValue A Casper value, i.e. a value which can be stored and

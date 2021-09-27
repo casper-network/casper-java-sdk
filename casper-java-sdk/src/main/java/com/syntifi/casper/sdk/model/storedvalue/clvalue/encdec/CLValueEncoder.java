@@ -9,7 +9,6 @@ import java.util.Arrays;
 import com.syntifi.casper.sdk.exception.CLValueEncodeException;
 import com.syntifi.casper.sdk.exception.NoSuchCLTypeException;
 import com.syntifi.casper.sdk.exception.NotImplementedException;
-import com.syntifi.casper.sdk.model.key.Signature;
 import com.syntifi.casper.sdk.model.storedvalue.clvalue.AbstractCLValue;
 import com.syntifi.casper.sdk.model.storedvalue.clvalue.CLTypeData;
 import com.syntifi.casper.sdk.model.storedvalue.clvalue.CLValueAny;

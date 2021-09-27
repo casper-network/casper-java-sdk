@@ -8,10 +8,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
 import com.syntifi.casper.sdk.exception.CLValueDecodeException;
-import com.syntifi.casper.sdk.model.key.AlgoTaggedHex;
-import com.syntifi.casper.sdk.model.key.Algorithm;
 import com.syntifi.casper.sdk.model.key.PublicKey;
-import com.syntifi.casper.sdk.model.key.Signature;
 import com.syntifi.casper.sdk.model.storedvalue.clvalue.AbstractCLValue;
 import com.syntifi.casper.sdk.model.storedvalue.clvalue.CLTypeData;
 import com.syntifi.casper.sdk.model.storedvalue.clvalue.CLValueAny;
@@ -249,10 +246,8 @@ public class CLValueDecoder extends ByteArrayInputStream {
         LOGGER.debug(LOG_BUFFER_VALUE_MESSAGE_STRING, buf);
 
         BigInteger unsignedLong;
-        // FIXME: Since this is a positive (unsigned) number, we may prefix with a zero
+        // Since this is a positive (unsigned) number, we should prefix with a zero
         // byte to parse correctly
-        // Must evaluate that two complement issue loading the unsined long into
-        // BitInteger
         try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
             outputStream.write(0);
             outputStream.write(buf);
