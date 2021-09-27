@@ -242,7 +242,7 @@ public class CLValueEncoder extends ByteArrayOutputStream {
             throws IOException, CLValueEncodeException {
         checkBoundsFor(clValue.getValue(), type);
 
-        LOGGER.debug(LOG_BUFFER_WRITE_TYPE_VALUE_MESSAGE_STRING, type.getName(), BigInteger.class.getSimpleName(),
+        LOGGER.debug(LOG_BUFFER_WRITE_TYPE_VALUE_MESSAGE_STRING, type.getClTypeName(), BigInteger.class.getSimpleName(),
                 clValue.getValue());
 
         byte bigIntegerLength = (byte) (Math.ceil(clValue.getValue().bitLength() / 8.0));
@@ -322,12 +322,12 @@ public class CLValueEncoder extends ByteArrayOutputStream {
             max = MAX_U512;
         } else {
             throw new CLValueEncodeException("Error checking numeric bounds", new NoSuchCLTypeException(
-                    String.format("%s is not a numeric type with check bounds for encoding", type.getName())));
+                    String.format("%s is not a numeric type with check bounds for encoding", type.getClTypeName())));
         }
 
         if (value.compareTo(max) > 0 || value.compareTo(ZERO) < 0) {
             throw new CLValueEncodeException(
-                    String.format(ENCODE_EXCEPTION_OUT_OF_BOUNDS_MESSAGE_STRING, value.toString(), type.getName()));
+                    String.format(ENCODE_EXCEPTION_OUT_OF_BOUNDS_MESSAGE_STRING, value.toString(), type.getClTypeName()));
         }
     }
 }

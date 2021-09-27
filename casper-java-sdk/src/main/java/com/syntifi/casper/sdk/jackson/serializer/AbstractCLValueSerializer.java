@@ -34,16 +34,17 @@ public abstract class AbstractCLValueSerializer<T extends AbstractCLValue<?>> ex
             throw new SerializationException("Error serializing CLValues", e);
         }
 
-        // TODO: How to work with parsed value? Set as null or find how to parse?
-
         gen.writeStartObject();
 
         writeCLType(gen, value.getClType(), false);
 
         gen.writeStringField("bytes", value.getBytes());
+
+        // TODO: How to work with parsed value? Set as null or do we have to parse?
         if (value.getParsed() != null) {
             gen.writeObjectField("parsed", value.getParsed());
         }
+
         gen.writeEndObject();
     }
 
@@ -59,9 +60,9 @@ public abstract class AbstractCLValueSerializer<T extends AbstractCLValue<?>> ex
     protected void writeCLType(JsonGenerator gen, CLType clType, Boolean isChild) throws IOException {
         if (clType.getChildTypes() == null) {
             if (Boolean.FALSE.equals(isChild)) {
-                gen.writeStringField("cl_type", clType.getClTypeData().getName());
+                gen.writeStringField("cl_type", clType.getClTypeData().getClTypeName());
             } else {
-                gen.writeString(clType.getClTypeData().getName());
+                gen.writeString(clType.getClTypeData().getClTypeName());
             }
         } else {
             if (Boolean.FALSE.equals(isChild)) {
@@ -69,18 +70,18 @@ public abstract class AbstractCLValueSerializer<T extends AbstractCLValue<?>> ex
             } else {
                 gen.writeStartObject();
             }
-            gen.writeFieldName(clType.getClTypeData().getName());
+            gen.writeFieldName(clType.getClTypeData().getClTypeName());
             if (clType.getClTypeData().equals(CLTypeData.LIST)) {
-                gen.writeString(clType.getChildTypes().get(0).getClTypeData().getName());
+                gen.writeString(clType.getChildTypes().get(0).getClTypeData().getClTypeName());
             } else if (clType.getClTypeData().equals(CLTypeData.MAP)) {
                 gen.writeStartObject();
-                gen.writeStringField("key", clType.getChildTypes().get(0).getClTypeData().getName());
-                gen.writeStringField("value", clType.getChildTypes().get(1).getClTypeData().getName());
+                gen.writeStringField("key", clType.getChildTypes().get(0).getClTypeData().getClTypeName());
+                gen.writeStringField("value", clType.getChildTypes().get(1).getClTypeData().getClTypeName());
                 gen.writeEndObject();
             } else if (clType.getClTypeData().equals(CLTypeData.RESULT)) {
                 gen.writeStartObject();
-                gen.writeStringField("ok", clType.getChildTypes().get(0).getClTypeData().getName());
-                gen.writeStringField("err", clType.getChildTypes().get(1).getClTypeData().getName());
+                gen.writeStringField("ok", clType.getChildTypes().get(0).getClTypeData().getClTypeName());
+                gen.writeStringField("err", clType.getChildTypes().get(1).getClTypeData().getClTypeName());
                 gen.writeEndObject();
             } else {
                 gen.writeStartArray();

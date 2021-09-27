@@ -3,6 +3,8 @@ package com.syntifi.casper.sdk.model.uref;
 import com.syntifi.casper.sdk.exception.DynamicInstanceException;
 import com.syntifi.casper.sdk.model.storedvalue.clvalue.CLValueURef;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
@@ -14,6 +16,7 @@ import lombok.Getter;
  * @since 0.0.1
  */
 @Getter
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public enum URefAccessRight {
     NONE(0x0),
     READ(0x1),
@@ -25,10 +28,6 @@ public enum URefAccessRight {
     READ_ADD_WRITE(0x7);
 
     public final int serializationTag;
-
-    private URefAccessRight(int serializationTag) {
-        this.serializationTag = serializationTag;
-    }
 
     public static URefAccessRight getTypeBySerializationTag(byte serializationTag) throws DynamicInstanceException {
         for (URefAccessRight accessRight: values()) {

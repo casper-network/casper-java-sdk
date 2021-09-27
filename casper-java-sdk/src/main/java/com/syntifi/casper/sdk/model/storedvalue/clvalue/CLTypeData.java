@@ -6,6 +6,8 @@ import com.syntifi.casper.sdk.exception.DynamicInstanceException;
 import com.syntifi.casper.sdk.exception.NoSuchCLTypeException;
 import com.syntifi.casper.sdk.model.storedvalue.StoredValue;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
@@ -19,9 +21,8 @@ import lombok.Getter;
  * @since 0.0.1
  */
 @Getter
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public enum CLTypeData {
-    // TODO: Register and check if all types are present and fix identifier type and
-    // value
     BOOL(CLType.BOOL, 0x0, CLValueBool.class), 
     I32(CLType.I32, 0x1, CLValueI32.class),
     I64(CLType.I64, 0x2, CLValueI64.class), 
@@ -47,15 +48,9 @@ public enum CLTypeData {
     PUBLIC_KEY(CLType.PUBLIC_KEY, 0x22, CLValuePublicKey.class),
     BYTE_ARRAY(CLType.BYTE_ARRAY, 0x23, CLValueByteArray.class);
 
-    private final String name;
+    private final String clTypeName;
     private final int serializationTag;
     private final Class<?> clazz;
-
-    private CLTypeData(String name, int serializationTag, Class<?> clazz) {
-        this.name = name;
-        this.serializationTag = serializationTag;
-        this.clazz = clazz;
-    }
 
     /**
      * Retrieve CLType by its serialization tag
@@ -82,7 +77,7 @@ public enum CLTypeData {
      */
     public static Class<?> getClassByName(String name) throws NoSuchCLTypeException {
         for (CLTypeData clType : values()) {
-            if (clType.name.equals(name)) {
+            if (clType.clTypeName.equals(name)) {
                 return clType.getClazz();
             }
         }
@@ -98,7 +93,7 @@ public enum CLTypeData {
      */
     public static CLTypeData getTypeByName(String name) throws NoSuchCLTypeException {
         for (CLTypeData clType : values()) {
-            if (clType.name.equals(name)) {
+            if (clType.clTypeName.equals(name)) {
                 return clType;
             }
         }
