@@ -75,8 +75,7 @@ public class CLValueMap extends AbstractCLValue<Map<? extends AbstractCLValue<?>
     }
 
     static List<CLType> getCLTypeDataOfChildren(Map<? extends AbstractCLValue<?>, ? extends AbstractCLValue<?>> value) {
-        Entry<? extends AbstractCLValue<?>, ? extends AbstractCLValue<?>> entry = (Entry<? extends AbstractCLValue<?>, ? extends AbstractCLValue<?>>) value
-                .entrySet().toArray()[0];
+        Entry<? extends AbstractCLValue<?>, ? extends AbstractCLValue<?>> entry = value.entrySet().iterator().next();
 
         return Arrays.asList(entry.getKey().getClType(), entry.getValue().getClType());
     }
