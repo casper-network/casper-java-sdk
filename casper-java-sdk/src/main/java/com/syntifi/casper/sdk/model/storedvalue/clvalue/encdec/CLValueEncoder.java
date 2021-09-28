@@ -7,7 +7,7 @@ import java.nio.ByteBuffer;
 import java.util.Arrays;
 
 import com.syntifi.casper.sdk.exception.CLValueEncodeException;
-import com.syntifi.casper.sdk.exception.NoSuchCLTypeException;
+import com.syntifi.casper.sdk.exception.NoSuchTypeException;
 import com.syntifi.casper.sdk.exception.NotImplementedException;
 import com.syntifi.casper.sdk.model.storedvalue.clvalue.AbstractCLValue;
 import com.syntifi.casper.sdk.model.storedvalue.clvalue.CLTypeData;
@@ -321,7 +321,7 @@ public class CLValueEncoder extends ByteArrayOutputStream {
         } else if (type.equals(CLTypeData.U512)) {
             max = MAX_U512;
         } else {
-            throw new CLValueEncodeException("Error checking numeric bounds", new NoSuchCLTypeException(
+            throw new CLValueEncodeException("Error checking numeric bounds", new NoSuchTypeException(
                     String.format("%s is not a numeric type with check bounds for encoding", type.getClTypeName())));
         }
 

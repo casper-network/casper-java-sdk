@@ -15,7 +15,7 @@ import com.fasterxml.jackson.databind.jsontype.TypeIdResolver;
 import com.fasterxml.jackson.databind.jsontype.impl.AsPropertyTypeDeserializer;
 import com.fasterxml.jackson.databind.node.TreeTraversingParser;
 import com.fasterxml.jackson.databind.type.TypeFactory;
-import com.syntifi.casper.sdk.exception.NoSuchCLTypeException;
+import com.syntifi.casper.sdk.exception.NoSuchTypeException;
 import com.syntifi.casper.sdk.model.storedvalue.clvalue.CLTypeData;
 
 /**
@@ -50,7 +50,7 @@ public class CLTypeDeserializer extends AsPropertyTypeDeserializer {
         Class<?> subType;
         try {
             subType = findSubType(node);
-        } catch (NoSuchCLTypeException e) {
+        } catch (NoSuchTypeException e) {
             throw new IOException("Parse error", e);
         }
         TypeFactory factory = new ObjectMapper().getTypeFactory();
@@ -65,7 +65,7 @@ public class CLTypeDeserializer extends AsPropertyTypeDeserializer {
         }
     }
 
-    protected Class<?> findSubType(JsonNode node) throws IOException, NoSuchCLTypeException {
+    protected Class<?> findSubType(JsonNode node) throws IOException, NoSuchTypeException {
         Class<?> subType;
         JsonNode clType = node.get("cl_type");
 

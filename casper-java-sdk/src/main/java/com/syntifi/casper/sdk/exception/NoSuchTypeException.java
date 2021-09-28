@@ -10,12 +10,12 @@ import lombok.NoArgsConstructor;
  * @since 0.0.1
  */
 @NoArgsConstructor
-public class NoSuchCLTypeException extends Exception {
-    public NoSuchCLTypeException(String message) {
+public class NoSuchTypeException extends Exception {
+    public NoSuchTypeException(String message) {
         super(message);
     }
 
-    public NoSuchCLTypeException(String message, Throwable cause) {
+    public NoSuchTypeException(String message, Throwable cause) {
         super(message, cause);
     }
 }

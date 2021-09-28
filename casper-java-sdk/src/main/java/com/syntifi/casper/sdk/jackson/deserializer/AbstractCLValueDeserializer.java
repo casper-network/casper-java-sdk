@@ -16,7 +16,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.syntifi.casper.sdk.exception.CLValueDecodeException;
 import com.syntifi.casper.sdk.exception.DeserializationException;
 import com.syntifi.casper.sdk.exception.DynamicInstanceException;
-import com.syntifi.casper.sdk.exception.NoSuchCLTypeException;
+import com.syntifi.casper.sdk.exception.NoSuchTypeException;
 import com.syntifi.casper.sdk.model.storedvalue.clvalue.AbstractCLValue;
 import com.syntifi.casper.sdk.model.storedvalue.clvalue.CLTypeData;
 import com.syntifi.casper.sdk.model.storedvalue.clvalue.CLType;
@@ -40,7 +40,7 @@ public abstract class AbstractCLValueDeserializer<T extends AbstractCLValue<?>> 
 
         try {
             object.setClType(extractCLTypeData(new CLType(), node.get(CL_TYPE_JSON_PROP_NAME)));
-        } catch (NoSuchCLTypeException e) {
+        } catch (NoSuchTypeException e) {
             throw new DeserializationException("Error deserializing CLValues", e);
         }
 
@@ -67,9 +67,9 @@ public abstract class AbstractCLValueDeserializer<T extends AbstractCLValue<?>> 
      * @param clType object that holds the current level of type data
      * @param node       cl_type node from jackson
      * @return the constructed {@link CLType}
-     * @throws NoSuchCLTypeException unknown CLType found
+     * @throws NoSuchTypeException unknown CLType found
      */
-    private CLType extractCLTypeData(CLType clType, JsonNode node) throws NoSuchCLTypeException {
+    private CLType extractCLTypeData(CLType clType, JsonNode node) throws NoSuchTypeException {
         if (node.isObject()) {
             ObjectNode clTypeNode = (ObjectNode) node;
             Iterator<Map.Entry<String, JsonNode>> fieldsIterator = clTypeNode.fields();

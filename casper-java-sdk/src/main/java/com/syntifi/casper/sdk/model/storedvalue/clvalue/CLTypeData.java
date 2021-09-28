@@ -3,7 +3,7 @@ package com.syntifi.casper.sdk.model.storedvalue.clvalue;
 import java.lang.reflect.InvocationTargetException;
 
 import com.syntifi.casper.sdk.exception.DynamicInstanceException;
-import com.syntifi.casper.sdk.exception.NoSuchCLTypeException;
+import com.syntifi.casper.sdk.exception.NoSuchTypeException;
 import com.syntifi.casper.sdk.model.storedvalue.StoredValue;
 
 import lombok.AccessLevel;
@@ -57,15 +57,15 @@ public enum CLTypeData {
      * 
      * @param serializationTag
      * @return
-     * @throws NoSuchCLTypeException
+     * @throws NoSuchTypeException
      */
-    public static CLTypeData getTypeBySerializationTag(byte serializationTag) throws NoSuchCLTypeException {
+    public static CLTypeData getTypeBySerializationTag(byte serializationTag) throws NoSuchTypeException {
         for (CLTypeData clType : values()) {
             if (clType.serializationTag == serializationTag) {
                 return clType;
             }
         }
-        throw new NoSuchCLTypeException();
+        throw new NoSuchTypeException();
     }
 
     /**
@@ -73,15 +73,15 @@ public enum CLTypeData {
      * 
      * @param name
      * @return
-     * @throws NoSuchCLTypeException
+     * @throws NoSuchTypeException
      */
-    public static Class<?> getClassByName(String name) throws NoSuchCLTypeException {
+    public static Class<?> getClassByName(String name) throws NoSuchTypeException {
         for (CLTypeData clType : values()) {
             if (clType.clTypeName.equals(name)) {
                 return clType.getClazz();
             }
         }
-        throw new NoSuchCLTypeException();
+        throw new NoSuchTypeException();
     }
 
     /**
@@ -89,15 +89,15 @@ public enum CLTypeData {
      * 
      * @param name
      * @return
-     * @throws NoSuchCLTypeException
+     * @throws NoSuchTypeException
      */
-    public static CLTypeData getTypeByName(String name) throws NoSuchCLTypeException {
+    public static CLTypeData getTypeByName(String name) throws NoSuchTypeException {
         for (CLTypeData clType : values()) {
             if (clType.clTypeName.equals(name)) {
                 return clType;
             }
         }
-        throw new NoSuchCLTypeException();
+        throw new NoSuchTypeException();
     }
 
     /**

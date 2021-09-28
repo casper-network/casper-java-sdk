@@ -11,7 +11,7 @@ import java.util.Optional;
 
 import com.syntifi.casper.sdk.exception.CLValueDecodeException;
 import com.syntifi.casper.sdk.exception.CLValueEncodeException;
-import com.syntifi.casper.sdk.exception.NoSuchCLTypeException;
+import com.syntifi.casper.sdk.exception.NoSuchTypeException;
 import com.syntifi.casper.sdk.model.storedvalue.clvalue.CLType;
 import com.syntifi.casper.sdk.model.storedvalue.clvalue.CLValueBool;
 import com.syntifi.casper.sdk.model.storedvalue.clvalue.CLValueByteArray;
@@ -190,7 +190,7 @@ public class EncoderDecoderTests {
     }
 
     @Test
-    void should_be_able_to_encode_sample_data() throws IOException, CLValueEncodeException, NoSuchCLTypeException {
+    void should_be_able_to_encode_sample_data() throws IOException, CLValueEncodeException, NoSuchTypeException {
         for (TestData<?> testData : successTestDataList) {
             try (CLValueEncoder encoder = new CLValueEncoder()) {
                 switch (testData.getName()) {
@@ -250,7 +250,7 @@ public class EncoderDecoderTests {
     }
 
     @Test
-    void should_be_inside_bounds() throws IOException, CLValueEncodeException, NoSuchCLTypeException {
+    void should_be_inside_bounds() throws IOException, CLValueEncodeException, NoSuchTypeException {
         for (TestData<?> testData : lastValidNumberTestDataList) {
             try (CLValueEncoder encoder = new CLValueEncoder()) {
                 switch (testData.getName()) {
@@ -281,7 +281,7 @@ public class EncoderDecoderTests {
 
     @Test
     void should_throw_CLValueEncodeException_for_out_of_bounds()
-            throws IOException, CLValueEncodeException, NoSuchCLTypeException {
+            throws IOException, CLValueEncodeException, NoSuchTypeException {
         for (TestData<?> testData : outOfBoundsTestDataList) {
             try (CLValueEncoder encoder = new CLValueEncoder()) {
                 switch (testData.getName()) {
@@ -317,7 +317,7 @@ public class EncoderDecoderTests {
 
     @Test
     void should_throw_CLValueDecodeException_for_wrong_input_length()
-            throws IOException, CLValueDecodeException, NoSuchCLTypeException {
+            throws IOException, CLValueDecodeException, NoSuchTypeException {
         try (CLValueDecoder decoder = new CLValueDecoder("")) {
             assertThrows(CLValueDecodeException.class, () -> decoder.readBool(new CLValueBool()));
             assertThrows(CLValueDecodeException.class, () -> decoder.readU32(new CLValueU32()));
