@@ -1,7 +1,7 @@
 package com.casper.sdk;
 
-import com.casper.sdk.service.HashService;
-import com.casper.sdk.service.SigningService;
+import com.casper.sdk.service.hash.HashService;
+import com.casper.sdk.service.signing.SigningService;
 import com.casper.sdk.service.json.JsonConversionService;
 import com.casper.sdk.service.serialization.cltypes.TypesFactory;
 import com.casper.sdk.service.serialization.types.ByteSerializerFactory;

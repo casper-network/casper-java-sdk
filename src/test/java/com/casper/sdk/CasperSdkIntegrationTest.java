@@ -1,6 +1,7 @@
 package com.casper.sdk;
 
-import com.casper.sdk.service.HashService;
+import com.casper.sdk.service.hash.HashService;
+import com.casper.sdk.service.signing.SignatureAlgorithm;
 import com.casper.sdk.types.*;
 import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
 import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
@@ -160,12 +161,12 @@ class CasperSdkIntegrationTest {
 
     private AsymmetricCipherKeyPair geUserKeyPair(int userNumber) throws IOException {
         final KeyPairStreams streams = geUserKeyPairStreams(userNumber);
-        return casperSdk.loadKeyPair(streams.getPublicKeyIn(), streams.getPrivateKeyIn());
+        return casperSdk.loadKeyPair(streams.getPublicKeyIn(), streams.getPrivateKeyIn(), SignatureAlgorithm.ED25519);
     }
 
     private AsymmetricCipherKeyPair getNodeKeyPair(final int nodeNumber) throws IOException {
         final KeyPairStreams streams = getNodeKeyPairSteams(nodeNumber);
-        return casperSdk.loadKeyPair(streams.getPublicKeyIn(), streams.getPrivateKeyIn());
+        return casperSdk.loadKeyPair(streams.getPublicKeyIn(), streams.getPrivateKeyIn(), SignatureAlgorithm.ED25519);
     }
 
 

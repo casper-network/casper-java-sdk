@@ -1,9 +1,10 @@
 package com.casper.sdk.types;
 
 import com.casper.sdk.exceptions.HashException;
+import com.casper.sdk.service.hash.HashService;
+import com.casper.sdk.service.signing.SignatureAlgorithm;
+import com.casper.sdk.service.signing.SigningService;
 import com.casper.sdk.service.json.JsonConversionService;
-import com.casper.sdk.service.HashService;
-import com.casper.sdk.service.SigningService;
 import com.casper.sdk.service.serialization.cltypes.TypesFactory;
 import com.casper.sdk.service.serialization.cltypes.TypesSerializer;
 import com.casper.sdk.service.serialization.types.ByteSerializerFactory;
@@ -18,7 +19,8 @@ import java.io.InputStream;
 import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
 import java.time.Duration;
-import java.util.*;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * Util methods for making Deploy message
@@ -130,6 +132,7 @@ public class DeployService {
      * Creates a new standard payment
      *
      * @param paymentAmount the number of notes paying to execution engine
+     * @return a new standard payment
      */
     public ModuleBytes standardPayment(final Number paymentAmount) {
 
@@ -167,7 +170,7 @@ public class DeployService {
 
     public Deploy signDeploy(final Deploy deploy, final AsymmetricCipherKeyPair keyPair) {
 
-        final byte[] signed = signingService.signWithPrivateKey(keyPair.getPrivate(), deploy.getHash().getHash());
+        final byte[] signed = signingService.signWithPrivateKey(keyPair.getPrivate(), deploy.getHash().getHash(), SignatureAlgorithm.ED25519);
 
         byte[] publicKeyBytes = ((Ed25519PublicKeyParameters) keyPair.getPublic()).getEncoded();
         final PublicKey publicKey = new PublicKey(publicKeyBytes, KeyAlgorithm.ED25519);

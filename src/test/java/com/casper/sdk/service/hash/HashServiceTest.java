@@ -1,5 +1,6 @@
-package com.casper.sdk.service;
+package com.casper.sdk.service.hash;
 
+import com.casper.sdk.service.hash.HashService;
 import org.hamcrest.core.Is;
 import org.junit.jupiter.api.Test;
 

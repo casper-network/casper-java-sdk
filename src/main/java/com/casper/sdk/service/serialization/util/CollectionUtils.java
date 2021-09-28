@@ -14,9 +14,10 @@ public class CollectionUtils {
     public static class List {
 
         /**
-         * Returns a ordered list containing the provided elements
+         * Returns an ordered list containing the provided elements
+         *
          * @param elements the elements to add to the list
-         * @param <T> the type of the elements
+         * @param <T>      the type of the elements
          * @return a new set
          */
         @SafeVarargs
@@ -27,18 +28,18 @@ public class CollectionUtils {
 
     public static class Map {
         /**
-         * Returns an map containing the provided key pairs.
+         * Returns a map containing the provided key pairs.
          *
          * @param keyValuePairs the key pairs as an array with a key followed by a value
          * @param <K>           the key type
          * @param <V>           the value type
          * @return a new R map
          */
+        @SuppressWarnings("unchecked")
         public static <K, V> java.util.Map<K, V> of(Object... keyValuePairs) {
             if (keyValuePairs != null) {
                 final java.util.Map<K, V> map = new LinkedHashMap<>();
                 for (int i = 0; i < keyValuePairs.length; i += 2) {
-                    //noinspection unchecked
                     map.put((K) keyValuePairs[i], (V) keyValuePairs[i + 1]);
                 }
                 return map;
@@ -51,9 +52,10 @@ public class CollectionUtils {
     public static class Set {
 
         /**
-         * Returns a ordered set containing the provided elements
+         * Returns an ordered set containing the provided elements
+         *
          * @param elements the elements to add to the set
-         * @param <T> the type of the elements
+         * @param <T>      the type of the elements
          * @return a new set
          */
         @SafeVarargs
@@ -66,5 +68,17 @@ public class CollectionUtils {
                 return Collections.emptySet();
             }
         }
+    }
+
+    /**
+     * Utility method to suppress Java's stupid generics warnings
+     *
+     * @param obj the object to cast to a generic type
+     * @param <T> the type to cast to
+     * @return the cast object
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> T genericCast(Object obj) {
+        return (T) obj;
     }
 }

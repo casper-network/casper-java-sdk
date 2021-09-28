@@ -1,4 +1,4 @@
-package com.casper.sdk.service;
+package com.casper.sdk.service.hash;
 
 import com.casper.sdk.types.KeyAlgorithm;
 import com.casper.sdk.exceptions.HashException;

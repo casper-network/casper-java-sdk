@@ -1,6 +1,7 @@
 package com.casper.sdk.how_to.common;
 
 import com.casper.sdk.CasperSdk;
+import com.casper.sdk.service.signing.SignatureAlgorithm;
 import com.casper.sdk.types.KeyAlgorithm;
 import com.casper.sdk.types.PublicKey;
 import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
@@ -26,7 +27,7 @@ public abstract class Methods {
         final FileInputStream publicKeyIn = new FileInputStream(new File(userNPath, "public_key.pem"));
         final FileInputStream privateKeyIn = new FileInputStream(new File(userNPath, "secret_key.pem"));
 
-        return casperSdk.loadKeyPair(publicKeyIn, privateKeyIn);
+        return casperSdk.loadKeyPair(publicKeyIn, privateKeyIn, SignatureAlgorithm.ED25519);
     }
 
     protected String getNctlHome(final String defaultNctlHome) {
@@ -45,7 +46,7 @@ public abstract class Methods {
         final FileInputStream publicKeyIn = new FileInputStream(new File(userNPath, "public_key.pem"));
         final FileInputStream privateKeyIn = new FileInputStream(new File(userNPath, "secret_key.pem"));
 
-        return casperSdk.loadKeyPair(publicKeyIn, privateKeyIn);
+        return casperSdk.loadKeyPair(publicKeyIn, privateKeyIn, SignatureAlgorithm.ED25519);
     }
 
 }

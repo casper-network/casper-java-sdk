@@ -1,6 +1,7 @@
 package com.casper.sdk;
 
 import com.casper.sdk.service.serialization.cltypes.CLValueBuilder;
+import com.casper.sdk.service.signing.SignatureAlgorithm;
 import com.casper.sdk.types.*;
 import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
 import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
@@ -80,11 +81,11 @@ public class InvokeContractIntTest {
 
     private AsymmetricCipherKeyPair geUserKeyPair(final CasperSdk casperSdk, int userNumber) throws IOException {
         final IntegrationTestUtils.KeyPairStreams streams = geUserKeyPairStreams(userNumber);
-        return casperSdk.loadKeyPair(streams.getPublicKeyIn(), streams.getPrivateKeyIn());
+        return casperSdk.loadKeyPair(streams.getPublicKeyIn(), streams.getPrivateKeyIn(), SignatureAlgorithm.ED25519);
     }
 
     private AsymmetricCipherKeyPair getNodeKeyPair(final CasperSdk casperSdk, final int nodeNumber) throws IOException {
         final IntegrationTestUtils.KeyPairStreams streams = getNodeKeyPairSteams(nodeNumber);
-        return casperSdk.loadKeyPair(streams.getPublicKeyIn(), streams.getPrivateKeyIn());
+        return casperSdk.loadKeyPair(streams.getPublicKeyIn(), streams.getPrivateKeyIn(), SignatureAlgorithm.ED25519);
     }
 }

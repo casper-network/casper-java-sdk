@@ -50,9 +50,9 @@ public class ByteUtils {
      * @return the last 'length' bytes from a byte array
      */
     public static byte[] lastNBytes(byte[] toTruncate, final int length) {
-        byte[] secretBytes = new byte[length];
+        byte[] lastNBytes = new byte[length];
         int start = toTruncate.length - length;
-        System.arraycopy(toTruncate, start, secretBytes, 0, length);
-        return secretBytes;
+        System.arraycopy(toTruncate, start, lastNBytes, 0, length);
+        return lastNBytes;
     }
 }

@@ -20,7 +20,7 @@ public class JsonConversionService {
     private final ObjectMapper mapper;
 
     public JsonConversionService() {
-        this.mapper =  new ObjectMapper();
+        this.mapper = new ObjectMapper();
         final DefaultPrettyPrinter prettyPrinter = new DefaultPrettyPrinter();
         prettyPrinter.indentArraysWith(DefaultIndenter.SYSTEM_LINEFEED_INSTANCE);
         mapper.writer(prettyPrinter);
@@ -62,6 +62,8 @@ public class JsonConversionService {
      * Converts a JSON string to a casper type object
      *
      * @param json the JSON to parse
+     * @param type the class of the object to create from JSON
+     * @param <T>  type of object to create from JSON
      * @return the casper type object parsed from the JSON
      * @throws IOException - on a read error
      */
@@ -73,7 +75,9 @@ public class JsonConversionService {
     /**
      * Parses JSON from an input stream to create a casper type object
      *
-     * @param in the stream to of JSON to parse
+     * @param in   the stream to of JSON to parse
+     * @param type the class of the object to create from JSON
+     * @param <T>  the type of the object to create from JSON
      * @return the casper type object parsed from the JSON
      * @throws IOException - on a read error
      */

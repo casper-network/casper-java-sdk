@@ -23,6 +23,13 @@ public class DeployParams {
 
     /**
      * Container for `Deploy` construction options.
+     *
+     * @param accountPublicKey the account public key
+     * @param chainName        the name of the chain
+     * @param gasPrice         the gas price
+     * @param timestamp        the time stamp
+     * @param ttl              the time to live
+     * @param dependencies     the dependencies
      */
     public DeployParams(final PublicKey accountPublicKey,
                         final String chainName,

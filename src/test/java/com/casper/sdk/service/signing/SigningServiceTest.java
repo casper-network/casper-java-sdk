@@ -1,4 +1,4 @@
-package com.casper.sdk.service;
+package com.casper.sdk.service.signing;
 
 import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
 import org.bouncycastle.crypto.Signer;
@@ -20,7 +20,7 @@ class SigningServiceTest {
     private final SigningService signingService = new SigningService();
 
     @Test
-    void testLoadKeyPair() throws Exception {
+    void testLoadKeyPair() {
 
         // Copy of a deploy hash
         final byte[] message = {
@@ -35,24 +35,29 @@ class SigningServiceTest {
         //noinspection ConstantConditions
         final AsymmetricCipherKeyPair asymmetricCipherKeyPair = signingService.loadKeyPair(
                 new File(SigningServiceTest.class.getResource(PUBLIC_KEY).getFile()),
-                new File(SigningServiceTest.class.getResource(PRIVATE_KEY).getFile())
+                new File(SigningServiceTest.class.getResource(PRIVATE_KEY).getFile()),
+                SignatureAlgorithm.ED25519
         );
 
         // Sign the message using the private key
-        final byte[] signedBytes = signingService.signWithPrivateKey(asymmetricCipherKeyPair.getPrivate(), message);
+        final byte[] signedBytes = signingService.signWithPrivateKey(
+                asymmetricCipherKeyPair.getPrivate(),
+                message,
+                SignatureAlgorithm.ED25519
+        );
 
         // Assert the message was signed
         assertThat(signedBytes.length, is(64));
 
         // Verify the signature
-        assertThat(signingService.verifySignature(asymmetricCipherKeyPair.getPublic(), message, signedBytes), is(true));
+        assertThat(signingService.verifySignature(asymmetricCipherKeyPair.getPublic(), message, signedBytes, SignatureAlgorithm.ED25519), is(true));
     }
 
 
     @Test
     void generateEdDSAKey() throws Exception {
 
-        final AsymmetricCipherKeyPair keyPair = signingService.generateEdDSAKey();
+        final AsymmetricCipherKeyPair keyPair = signingService.generateKeyPair(SignatureAlgorithm.ED25519);
         assertThat(keyPair.getPublic(), is(notNullValue()));
         assertThat(keyPair.getPrivate(), is(notNullValue()));
 

@@ -1,13 +1,14 @@
 package com.casper.sdk;
 
 import com.casper.sdk.exceptions.ValueNotFoundException;
-import com.casper.sdk.service.HashService;
-import com.casper.sdk.service.SigningService;
+import com.casper.sdk.service.hash.HashService;
 import com.casper.sdk.service.http.rpc.NodeClient;
 import com.casper.sdk.service.json.JsonConversionService;
 import com.casper.sdk.service.serialization.cltypes.TypesFactory;
 import com.casper.sdk.service.serialization.types.ByteSerializerFactory;
 import com.casper.sdk.service.serialization.util.ByteUtils;
+import com.casper.sdk.service.signing.SignatureAlgorithm;
+import com.casper.sdk.service.signing.SigningService;
 import com.casper.sdk.types.*;
 import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
 
@@ -119,6 +120,7 @@ public class CasperSdk {
      * @param deployParams the deployment parameters
      * @param session      the  session/transfer
      * @param payment      the payment
+     * @return a  new unsigned deploy for transfer purpose
      */
     public Deploy makeTransferDeploy(final DeployParams deployParams,
                                      final DeployExecutable session,
@@ -137,6 +139,7 @@ public class CasperSdk {
      * @param deployParams the deployment parameters
      * @param session      the  session/transfer
      * @param payment      the payment
+     * @return a new unsigned deploy
      */
     public Deploy makeDeploy(final DeployParams deployParams,
                              final DeployExecutable session,
@@ -161,6 +164,7 @@ public class CasperSdk {
      * @param signedDeploy Signed deploy object
      * @return the deploy hash, ech deploy gets a unique hash. This is part of the cryptographic security of blockchain
      * technology. No two deploys will ever return the same hash.
+     * @throws Exception on error putting deploy
      */
     public Digest putDeploy(final Deploy signedDeploy) throws Exception {
         return new Digest(nodeClient.putDeploy(signedDeploy));
@@ -175,14 +179,16 @@ public class CasperSdk {
      * @throws IOException if there is a problem loading the files
      */
     public AsymmetricCipherKeyPair loadKeyPair(final InputStream publicKeyIn,
-                                               final InputStream privateKeyIn) throws IOException {
-        return signingService.loadKeyPair(publicKeyIn, privateKeyIn);
+                                               final InputStream privateKeyIn,
+                                               SignatureAlgorithm algorithm) {
+        return signingService.loadKeyPair(publicKeyIn, privateKeyIn, algorithm);
     }
 
     /**
-     * Creates a new standard payment
+     * Creates a new standard payment.
      *
      * @param paymentAmount the number of notes paying to execution engine
+     * @return a new standard payment module bytes
      */
     public ModuleBytes standardPayment(final Number paymentAmount) {
         return deployService.standardPayment(paymentAmount);

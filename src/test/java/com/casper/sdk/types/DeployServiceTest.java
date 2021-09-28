@@ -1,8 +1,9 @@
 package com.casper.sdk.types;
 
 import com.casper.sdk.service.json.JsonConversionService;
-import com.casper.sdk.service.HashService;
-import com.casper.sdk.service.SigningService;
+import com.casper.sdk.service.hash.HashService;
+import com.casper.sdk.service.signing.SignatureAlgorithm;
+import com.casper.sdk.service.signing.SigningService;
 import com.casper.sdk.service.serialization.cltypes.TypesFactory;
 import com.casper.sdk.service.serialization.types.ByteSerializerFactory;
 import com.casper.sdk.service.serialization.util.CollectionUtils;
@@ -246,7 +247,7 @@ class DeployServiceTest {
     }
 
     @Test
-    void signDeploy() throws IOException {
+    void signDeploy() {
 
         final Deploy deploy = deployService.makeDeploy(
 
@@ -269,7 +270,8 @@ class DeployServiceTest {
 
         final AsymmetricCipherKeyPair keyPair = signingService.loadKeyPair(
                 new File(DeployServiceTest.class.getResource(PUBLIC_KEY).getFile()),
-                new File(DeployServiceTest.class.getResource(PRIVATE_KEY).getFile())
+                new File(DeployServiceTest.class.getResource(PRIVATE_KEY).getFile()),
+                SignatureAlgorithm.ED25519
         );
 
         final Deploy signedDeploy = deployService.signDeploy(deploy, keyPair);

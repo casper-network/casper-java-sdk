@@ -34,8 +34,8 @@ public class ByteSerializerFactory {
      * @param <T>    the type of the type object
      * @return the byte serializer
      */
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public <T> ByteSerializer<T> getByteSerializer(final T source) {
-        //noinspection unchecked,rawtypes
         return (ByteSerializer) getByteSerializerByType(source.getClass());
     }
 
@@ -46,19 +46,17 @@ public class ByteSerializerFactory {
      * @param <T>  the type of the object
      * @return the byte serializer
      */
+    @SuppressWarnings({"unchecked", "SingleStatementInBlock"})
     public <T> ByteSerializer<T> getByteSerializerByType(final Class<T> type) {
-        //noinspection unchecked
         ByteSerializer<T> byteSerializer = (ByteSerializer<T>) serializerMap.get(type);
         if (byteSerializer == null) {
             final Class<?> superclass = type.getSuperclass();
             if (superclass != null && !superclass.equals(Object.class)) {
-                //noinspection unchecked
                 byteSerializer = (ByteSerializer<T>) getByteSerializerByType(superclass);
             }
         }
 
         if (byteSerializer == null && Collection.class.isAssignableFrom(type)) {
-            //noinspection unchecked
             byteSerializer = (ByteSerializer<T>) getByteSerializerByType(Collection.class);
         }
         return byteSerializer;
@@ -67,5 +65,4 @@ public class ByteSerializerFactory {
     protected void register(final ByteSerializer<?> byteSerializer) {
         serializerMap.put(byteSerializer.getType(), byteSerializer);
     }
-
 }
