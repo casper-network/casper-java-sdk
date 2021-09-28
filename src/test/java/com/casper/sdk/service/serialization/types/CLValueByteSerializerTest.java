@@ -1,7 +1,8 @@
 package com.casper.sdk.service.serialization.types;
 
-import com.casper.sdk.types.*;
+import com.casper.sdk.service.serialization.cltypes.CLValueBuilder;
 import com.casper.sdk.service.serialization.cltypes.TypesFactory;
+import com.casper.sdk.types.*;
 import org.junit.jupiter.api.Test;
 
 import static com.casper.sdk.service.serialization.util.ByteUtils.concat;
@@ -52,7 +53,6 @@ class CLValueByteSerializerTest {
         assertThat(byteSerializer.toBytes(source), is(expected));
     }
 
-
     @Test
     void optionValueToBytes() {
 
@@ -90,6 +90,29 @@ class CLValueByteSerializerTest {
         };
 
         assertThat(byteSerializer.toBytes(optionValue), is(expected));
+    }
 
+
+    @Test
+    void keyValueToBytes() {
+
+        // Create key value from bytes prefixed with the key type
+        final CLKeyValue clKeyValue = CLValueBuilder.key(decodeHex("012b177f0739348d33ce868b2f95bb83decf5b5dcc71279d4bec64c87f60b805d5"));
+
+        // Assert they key type is a has
+        assertThat(clKeyValue.getKeyType(), is(CLKeyInfo.KeyType.HASH_ID));
+
+        assertThat(clKeyValue.getBytes().length, is(33));
+        assertThat(clKeyValue.getBytes(), is(decodeHex("012b177f0739348d33ce868b2f95bb83decf5b5dcc71279d4bec64c87f60b805d5")));
+
+        assertThat(clKeyValue.getKeyBytes().length, is(32));
+        assertThat(clKeyValue.getKeyBytes(), is(decodeHex("2b177f0739348d33ce868b2f95bb83decf5b5dcc71279d4bec64c87f60b805d5")));
+
+        // Assert that the key can be correctly serialized to bytes
+        final byte[] expected = decodeHex("21" + // Length of key with prefix = 33 (0x21)
+                                          "000000012b177f0739348d33ce868b2f95bb83decf5b5dcc71279d4bec64c87f60b805d5" +
+                                          "0B"); // CL Type == 11 (0x0B)
+
+        assertThat(byteSerializer.toBytes(clKeyValue), is(expected));
     }
 }
