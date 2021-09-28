@@ -4,6 +4,7 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent
 plugins {
 	id 'java'
     id 'jacoco'
+    id 'io.freefair.lombok' version "${lombokPluginVersion}"
 }
 
 group = 'com.syntifi.casper'
@@ -21,14 +22,6 @@ dependencies {
     implementation "com.fasterxml.jackson.core:jackson-annotations:${jacksonVersion}"
     implementation "org.javatuples:javatuples:${tupleVersion}"
     implementation "commons-codec:commons-codec:1.15" //using it only for Hex. change to bouncycastle later? 
-
-    // lombok compile
-	compileOnly "org.projectlombok:lombok:${lombokVersion}"
-	annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
-
-    // lombok testing
-	testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
-	testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 
     // log4j and slf4j
     compileOnly "org.slf4j:slf4j-api:${slf4jApiVersion}"
