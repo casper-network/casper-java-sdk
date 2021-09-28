@@ -37,7 +37,7 @@ public class CLKeyValueJsonSerializer extends JsonSerializer<CLKeyValue> {
         return value.toHex();
     }
 
-    private void writeParsed(CLKeyValue value, JsonGenerator gen) throws IOException {
+    private void writeParsed(final CLKeyValue value, final JsonGenerator gen) throws IOException {
 
         final String strParsed;
 

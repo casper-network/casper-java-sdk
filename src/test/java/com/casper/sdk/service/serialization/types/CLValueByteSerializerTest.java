@@ -53,7 +53,6 @@ class CLValueByteSerializerTest {
         assertThat(byteSerializer.toBytes(source), is(expected));
     }
 
-
     @Test
     void optionValueToBytes() {
 
