@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 public final class StringByteHelper {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(StringByteHelper.class);
-    
+
     private StringByteHelper() {
     }
 
@@ -15,7 +15,7 @@ public final class StringByteHelper {
      * 
      * @param bytes array of bytes to reverse
      */
-    static void reverse(byte[] bytes) {
+    public static void reverse(byte[] bytes) {
         LOGGER.debug("Reversing bytes: {}", bytes);
         for (int i = 0; i < Math.abs(bytes.length / 2); i++) {
             byte temp = bytes[i];
@@ -31,7 +31,7 @@ public final class StringByteHelper {
      * @param hexString the hex-encoded {@link String} to decode
      * @return decoded array of bytes
      */
-    static byte[] hexStringToByteArray(String hexString) {
+    public static byte[] hexStringToByteArray(String hexString) {
         int len = hexString.length();
         byte[] bytes = new byte[len / 2];
         for (int i = 0; i < len; i += 2) {
@@ -48,7 +48,7 @@ public final class StringByteHelper {
      * @param bytes the byte array to encode
      * @return hex-encoded value {@link String}
      */
-    static String convertBytesToHex(byte[] bytes) {
+    public static String convertBytesToHex(byte[] bytes) {
         StringBuilder result = new StringBuilder();
         for (byte temp : bytes) {
             result.append(String.format("%02x", temp));

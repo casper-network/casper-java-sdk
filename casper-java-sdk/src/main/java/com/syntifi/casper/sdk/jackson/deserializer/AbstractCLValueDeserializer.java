@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Map.Entry;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
@@ -18,8 +18,8 @@ import com.syntifi.casper.sdk.exception.DeserializationException;
 import com.syntifi.casper.sdk.exception.DynamicInstanceException;
 import com.syntifi.casper.sdk.exception.NoSuchTypeException;
 import com.syntifi.casper.sdk.model.storedvalue.clvalue.AbstractCLValue;
-import com.syntifi.casper.sdk.model.storedvalue.clvalue.CLTypeData;
 import com.syntifi.casper.sdk.model.storedvalue.clvalue.CLType;
+import com.syntifi.casper.sdk.model.storedvalue.clvalue.CLTypeData;
 import com.syntifi.casper.sdk.model.storedvalue.clvalue.encdec.CLValueDecoder;
 
 /**
@@ -65,17 +65,17 @@ public abstract class AbstractCLValueDeserializer<T extends AbstractCLValue<?>> 
      * consistent
      * 
      * @param clType object that holds the current level of type data
-     * @param node       cl_type node from jackson
+     * @param node   cl_type node from jackson
      * @return the constructed {@link CLType}
      * @throws NoSuchTypeException unknown CLType found
      */
     private CLType extractCLTypeData(CLType clType, JsonNode node) throws NoSuchTypeException {
         if (node.isObject()) {
             ObjectNode clTypeNode = (ObjectNode) node;
-            Iterator<Map.Entry<String, JsonNode>> fieldsIterator = clTypeNode.fields();
+            Iterator<Entry<String, JsonNode>> fieldsIterator = clTypeNode.fields();
 
             while (fieldsIterator.hasNext()) {
-                Map.Entry<String, JsonNode> item = fieldsIterator.next();
+                Entry<String, JsonNode> item = fieldsIterator.next();
                 clType.setClTypeData(CLTypeData.getTypeByName(item.getKey()));
                 clType.setChildTypes(new ArrayList<>());
                 JsonNode subItem = item.getValue();
@@ -85,32 +85,18 @@ public abstract class AbstractCLValueDeserializer<T extends AbstractCLValue<?>> 
                     // CLType} ,
                     // i.e. the key of the Jsonobject does not represent a CLType, but the value
                     // does
-                    // Same for Result - {"ok": CLType, "err": CLType}
+                    // Same for Result - "{"ok": CLType, "err": CLType}"
                     if (subItem.has("key") && subItem.has("value") && subItem.size() == 2) {
-                        List<String> labels = Arrays.asList("key", "value");
-                        for (String string : labels) {
-                            CLType keyVal = new CLType();
-                            keyVal.setClTypeData(CLTypeData.getTypeByName(subItem.get(string).asText()));
-                            clType.getChildTypes().add(keyVal);
-                        }
+                        extractCLTypeDataMap(clType, subItem);
                     } else if (subItem.has("ok") && subItem.has("err") && subItem.size() == 2) {
-                        List<String> labels = Arrays.asList("ok", "err");
-                        for (String string : labels) {
-                            CLType keyVal = new CLType();
-                            keyVal.setClTypeData(CLTypeData.getTypeByName(subItem.get(string).asText()));
-                            clType.getChildTypes().add(keyVal);
-                        }
+                        extractCLTypeDataResult(clType, subItem);
                     } else {
                         clType.getChildTypes().add(extractCLTypeData(new CLType(), subItem));
                     }
                 } else if (subItem.isArray()) {
-                    ArrayNode clSubTypes = (ArrayNode) item.getValue();
-                    Iterator<JsonNode> subTypesIterator = clSubTypes.elements();
-
-                    while (subTypesIterator.hasNext()) {
-                        JsonNode subType = subTypesIterator.next();
-                        clType.getChildTypes().add(extractCLTypeData(new CLType(), subType));
-                    }
+                    extractCLTypeDataArray(clType, item);
+                } else if (item.getKey().equals(CLType.BYTE_ARRAY)) {
+                    clType.setChildTypes(null);
                 } else {
                     CLType child = new CLType();
                     child.setClTypeData(CLTypeData.getTypeByName(subItem.asText()));
@@ -122,6 +108,34 @@ public abstract class AbstractCLValueDeserializer<T extends AbstractCLValue<?>> 
         }
 
         return clType;
+    }
+
+    private void extractCLTypeDataArray(CLType clType, Entry<String, JsonNode> item) throws NoSuchTypeException {
+        ArrayNode clSubTypes = (ArrayNode) item.getValue();
+        Iterator<JsonNode> subTypesIterator = clSubTypes.elements();
+
+        while (subTypesIterator.hasNext()) {
+            JsonNode subType = subTypesIterator.next();
+            clType.getChildTypes().add(extractCLTypeData(new CLType(), subType));
+        }
+    }
+
+    private void extractCLTypeDataMap(CLType clType, JsonNode subItem) throws NoSuchTypeException {
+        List<String> labels = Arrays.asList("key", "value");
+        for (String string : labels) {
+            CLType keyVal = new CLType();
+            keyVal.setClTypeData(CLTypeData.getTypeByName(subItem.get(string).asText()));
+            clType.getChildTypes().add(keyVal);
+        }
+    }
+
+    private void extractCLTypeDataResult(CLType clType, JsonNode subItem) throws NoSuchTypeException {
+        List<String> labels = Arrays.asList("ok", "err");
+        for (String string : labels) {
+            CLType keyVal = new CLType();
+            keyVal.setClTypeData(CLTypeData.getTypeByName(subItem.get(string).asText()));
+            clType.getChildTypes().add(keyVal);
+        }
     }
 
     /**

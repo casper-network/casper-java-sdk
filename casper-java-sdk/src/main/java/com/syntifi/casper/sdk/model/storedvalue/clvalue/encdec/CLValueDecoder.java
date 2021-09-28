@@ -110,6 +110,10 @@ public class CLValueDecoder extends ByteArrayInputStream {
         clValue.setValue(u8);
     }
 
+    public void readByteArray(CLValueByteArray clValue) throws CLValueDecodeException, IOException {
+        readByteArray(clValue, this.buf.length);
+    }
+
     public void readByteArray(CLValueByteArray clValue, int length) throws CLValueDecodeException, IOException {
         byte[] bytes = readBytes(length);
 
@@ -329,7 +333,8 @@ public class CLValueDecoder extends ByteArrayInputStream {
                     BigInteger.class.getSimpleName(), lengthOfNextNumber, readBytes));
         }
 
-        clValue.setBytes(StringByteHelper.convertBytesToHex(new byte[] { lengthOfNextNumber }) + StringByteHelper.convertBytesToHex(buf));
+        clValue.setBytes(StringByteHelper.convertBytesToHex(new byte[] { lengthOfNextNumber })
+                + StringByteHelper.convertBytesToHex(buf));
 
         StringByteHelper.reverse(buf);
 

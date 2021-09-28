@@ -23,6 +23,7 @@ import com.syntifi.casper.sdk.model.storedvalue.StoredValueData;
 import com.syntifi.casper.sdk.model.storedvalue.clvalue.AbstractCLValue;
 import com.syntifi.casper.sdk.model.storedvalue.clvalue.CLTypeData;
 import com.syntifi.casper.sdk.model.storedvalue.clvalue.CLValueBool;
+import com.syntifi.casper.sdk.model.storedvalue.clvalue.CLValueByteArray;
 import com.syntifi.casper.sdk.model.storedvalue.clvalue.CLValueI32;
 import com.syntifi.casper.sdk.model.storedvalue.clvalue.CLValueList;
 import com.syntifi.casper.sdk.model.storedvalue.clvalue.CLValueMap;
@@ -83,7 +84,7 @@ public class CLValuesTests {
     }
 
     @Test
-    void test_u8() throws IOException {
+    void test_u8_clvalue_mapping() throws IOException {
         String inputJson = getPrettyJson(loadJsonFromFile("stored-value-samples/stored-value-u8.json"));
 
         LOGGER.debug("Original JSON: {}", inputJson);
@@ -101,7 +102,7 @@ public class CLValuesTests {
     }
 
     @Test
-    void test_string() throws IOException {
+    void test_string_clvalue_mapping() throws IOException {
         String inputJson = getPrettyJson(loadJsonFromFile("stored-value-samples/stored-value-string.json"));
 
         LOGGER.debug("Original JSON: {}", inputJson);
@@ -119,7 +120,7 @@ public class CLValuesTests {
     }
 
     @Test
-    void test_tuple1_bool() throws IOException, CLValueEncodeException, DynamicInstanceException {
+    void test_tuple1_bool_clvalue_mapping() throws IOException, CLValueEncodeException, DynamicInstanceException {
         String inputJson = getPrettyJson(loadJsonFromFile("stored-value-samples/stored-value-tuple1-bool.json"));
 
         LOGGER.debug("Original JSON: {}", inputJson);
@@ -141,7 +142,7 @@ public class CLValuesTests {
     }
 
     @Test
-    void test_tuple2_i32_string() throws IOException, CLValueEncodeException, DynamicInstanceException {
+    void test_tuple2_i32_string_clvalue_mapping() throws IOException, CLValueEncodeException, DynamicInstanceException {
         String inputJson = getPrettyJson(loadJsonFromFile("stored-value-samples/stored-value-tuple2-i32-string.json"));
 
         LOGGER.debug("Original JSON: {}", inputJson);
@@ -163,7 +164,7 @@ public class CLValuesTests {
     }
 
     @Test
-    void test_tuple3_u8_string_bool() throws IOException, CLValueEncodeException, DynamicInstanceException {
+    void test_tuple3_u8_string_bool_clvalue_mapping() throws IOException, CLValueEncodeException, DynamicInstanceException {
         String inputJson = getPrettyJson(
                 loadJsonFromFile("stored-value-samples/stored-value-tuple3-u8-string-bool.json"));
 
@@ -187,7 +188,7 @@ public class CLValuesTests {
     }
 
     @Test
-    void test_tuple3_i32_string_bool() throws IOException, CLValueEncodeException, DynamicInstanceException {
+    void test_tuple3_i32_string_bool_clvalue_mapping() throws IOException, CLValueEncodeException, DynamicInstanceException {
         String inputJson = getPrettyJson(
                 loadJsonFromFile("stored-value-samples/stored-value-tuple3-i32-string-bool.json"));
 
@@ -211,7 +212,7 @@ public class CLValuesTests {
     }
 
     @Test
-    void test_tuple3_tuple1_bool_string_bool() throws IOException, CLValueEncodeException, DynamicInstanceException {
+    void test_tuple3_tuple1_bool_string_bool_clvalue_mapping() throws IOException, CLValueEncodeException, DynamicInstanceException {
         String inputJson = getPrettyJson(
                 loadJsonFromFile("stored-value-samples/stored-value-tuple3-tuple1-bool-string-bool.json"));
 
@@ -236,7 +237,7 @@ public class CLValuesTests {
     }
 
     @Test
-    void test_tuple3_tuple1_u512_string_bool() throws IOException, CLValueEncodeException, DynamicInstanceException {
+    void test_tuple3_tuple1_u512_string_bool_clvalue_mapping() throws IOException, CLValueEncodeException, DynamicInstanceException {
         String inputJson = getPrettyJson(
                 loadJsonFromFile("stored-value-samples/stored-value-tuple3-tuple1-u512-string-bool.json"));
 
@@ -261,7 +262,7 @@ public class CLValuesTests {
     }
 
     @Test
-    void test_list_i32() throws IOException, CLValueEncodeException, DynamicInstanceException {
+    void test_list_i32_clvalue_mapping() throws IOException, CLValueEncodeException, DynamicInstanceException {
         String inputJson = getPrettyJson(loadJsonFromFile("stored-value-samples/stored-value-list-i32.json"));
 
         LOGGER.debug("Original JSON: {}", inputJson);
@@ -283,7 +284,7 @@ public class CLValuesTests {
     }
 
     @Test
-    void test_map_string_i32() throws IOException, CLValueEncodeException, DynamicInstanceException {
+    void test_map_string_i32_clvalue_mapping() throws IOException, CLValueEncodeException, DynamicInstanceException {
         String inputJson = getPrettyJson(loadJsonFromFile("stored-value-samples/stored-value-map-string-i32.json"));
 
         LOGGER.debug("Original JSON: {}", inputJson);
@@ -307,13 +308,13 @@ public class CLValuesTests {
     }
 
     @Test
-    void test_result_i32_string() throws IOException, CLValueEncodeException, DynamicInstanceException {
+    void test_result_i32_string_clvalue_mapping() throws IOException, CLValueEncodeException, DynamicInstanceException {
         String inputJson = getPrettyJson(loadJsonFromFile("stored-value-samples/stored-value-result-i32-string.json"));
 
         LOGGER.debug("Original JSON: {}", inputJson);
 
         StoredValueData sv = OBJECT_MAPPER.readValue(inputJson, StoredValueData.class);
-        // Should be CLValueMap
+        // Should be CLValueResult
         assertTrue(sv.getCasperStoredValue().getClValue() instanceof CLValueResult);
         Result result = new Result();
         result.setOk(new CLValueI32(10));
@@ -332,7 +333,7 @@ public class CLValuesTests {
     }
 
     @Test
-    void test_option_empty() throws IOException, CLValueEncodeException, DynamicInstanceException {
+    void test_option_empty_clvalue_mapping() throws IOException, CLValueEncodeException, DynamicInstanceException {
         String inputJson = getPrettyJson(loadJsonFromFile("stored-value-samples/stored-value-option-empty.json"));
 
         LOGGER.debug("Original JSON: {}", inputJson);
@@ -354,7 +355,7 @@ public class CLValuesTests {
     }
 
     @Test
-    void test_option_bool() throws IOException, CLValueEncodeException, DynamicInstanceException {
+    void test_option_bool_clvalue_mapping() throws IOException, CLValueEncodeException, DynamicInstanceException {
         String inputJson = getPrettyJson(loadJsonFromFile("stored-value-samples/stored-value-option-bool.json"));
 
         LOGGER.debug("Original JSON: {}", inputJson);
@@ -376,7 +377,7 @@ public class CLValuesTests {
     }
 
     @Test
-    void test_option_i32() throws IOException, CLValueEncodeException, DynamicInstanceException {
+    void test_option_i32_clvalue_mapping() throws IOException, CLValueEncodeException, DynamicInstanceException {
         String inputJson = getPrettyJson(loadJsonFromFile("stored-value-samples/stored-value-option-i32.json"));
 
         LOGGER.debug("Original JSON: {}", inputJson);
@@ -398,13 +399,13 @@ public class CLValuesTests {
     }
 
     @Test
-    void test_unit() throws IOException, CLValueEncodeException, DynamicInstanceException {
+    void test_unit_clvalue_mapping() throws IOException, CLValueEncodeException, DynamicInstanceException {
         String inputJson = getPrettyJson(loadJsonFromFile("stored-value-samples/stored-value-unit.json"));
 
         LOGGER.debug("Original JSON: {}", inputJson);
 
         StoredValueData sv = OBJECT_MAPPER.readValue(inputJson, StoredValueData.class);
-        // Should be CLValueOption
+        // Should be CLValueUnit
         assertTrue(sv.getCasperStoredValue().getClValue() instanceof CLValueUnit);
         CLValueUnit expected = new CLValueUnit();
         try (CLValueEncoder clve = new CLValueEncoder()) {
@@ -440,18 +441,45 @@ public class CLValuesTests {
     }
 
     @Test
-    void test_publicKey_clvalue_mapping() throws IOException, DecoderException {
+    void test_public_key_clvalue_mapping() throws IOException, DecoderException {
         String inputJson = getPrettyJson(loadJsonFromFile("stored-value-samples/stored-value-publickey.json"));
 
         LOGGER.debug("Original JSON: {}", inputJson);
 
         StoredValueData sv = OBJECT_MAPPER.readValue(inputJson, StoredValueData.class);
-        // Should be CLValuURef
+        // Should be CLValuePublicKey
         assertTrue(sv.getCasperStoredValue().getClValue() instanceof CLValuePublicKey);
         PublicKey expected = new PublicKey();
         expected.setAlgorithm(Algorithm.ED25519);
-        expected.setKey(Hex.decodeHex("2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a".toCharArray()));
+        expected.setKey(
+                Hex.decodeHex("2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a".toCharArray()));
         assertEquals(expected, sv.getCasperStoredValue().getClValue().getValue());
+
+        String reserializedJson = getPrettyJson(sv);
+
+        LOGGER.debug("Serialized JSON: {}", reserializedJson);
+
+        assertEquals(inputJson, reserializedJson);
+    }
+
+    @Test
+    void test_byte_array() throws IOException, CLValueEncodeException, DynamicInstanceException {
+        String inputJson = getPrettyJson(loadJsonFromFile("stored-value-samples/stored-value-bytearray.json"));
+
+        LOGGER.debug("Original JSON: {}", inputJson);
+
+        StoredValueData sv = OBJECT_MAPPER.readValue(inputJson, StoredValueData.class);
+        // Should be CLValueByteArray
+        assertTrue(sv.getCasperStoredValue().getClValue() instanceof CLValueByteArray);
+        CLValueByteArray expected = new CLValueByteArray(new byte[] { 122, -50, 107, 117, -83, -99, 95, 64, -35, 5, 34,
+                44, 108, -122, 69, -78, 28, -20, 71, 119, 98, 48, -34, 0, 111, -53, -39, 107, -38, 124, 73, -75 });
+        try (CLValueEncoder clve = new CLValueEncoder()) {
+            expected.encode(clve);
+        }
+
+        sv.getCasperStoredValue().getClValue().equals(expected);
+
+        assertEquals(expected, sv.getCasperStoredValue().getClValue());
 
         String reserializedJson = getPrettyJson(sv);
 

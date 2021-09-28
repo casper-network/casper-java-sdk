@@ -1,6 +1,7 @@
 package com.syntifi.casper.sdk.model.storedvalue.clvalue;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -37,7 +38,25 @@ public class CLValueByteArray extends AbstractCLValue<byte[]> {
 
     @Override
     public void decode(CLValueDecoder clvd) throws IOException, CLValueDecodeException {
-        // FIXME: How to correctly use bytearray
-        clvd.readByteArray(this, 32);
+        clvd.readByteArray(this);
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (o == this) return true;
+        if (!(o instanceof CLValueByteArray)) return false;
+        final CLValueByteArray other = (CLValueByteArray) o;
+        if (!other.canEqual(this)) return false;
+        if (this.getClType() == null ? other.getClType() != null : !this.getClType().equals(other.getClType())) return false;        
+        if (this.getBytes() == null ?  other.getBytes() != null : !this.getBytes().equals( other.getBytes())) return false;
+        if (this.getParsed() == null ? other.getParsed() != null : !this.getParsed().equals(other.getParsed())) return false;
+        if (this.getValue() == null ? other.getValue() != null : !Arrays.equals(this.getValue(), other.getValue())) return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        final int result = 1;
+        return result;
     }
 }
