@@ -36,7 +36,7 @@ public class CLKeyValueJsonSerializerTest {
 
         assertThat(json, hasJsonPath("$.cl_type", is("Key")));
         assertThat(json, hasJsonPath("$.bytes", is("00" + KEY_HEX)));
-        assertThat(json, hasJsonPath("$.parsed.Hash", is("hash-" + KEY_HEX)));
+        assertThat(json, hasJsonPath("$.parsed.Hash", is("account-hash-" + KEY_HEX)));
     }
 
     /**
@@ -76,6 +76,6 @@ public class CLKeyValueJsonSerializerTest {
 
         assertThat(json, hasJsonPath("$.cl_type", is("Key")));
         assertThat(json, hasJsonPath("$.bytes", is("02" + keyHex)));
-        assertThat(json, hasJsonPath("$.parsed.Hash", is("hash-" + keyHex)));
+        assertThat(json, hasJsonPath("$.parsed.Hash", is("uref-" + keyHex)));
     }
 }

@@ -55,4 +55,14 @@ public class ByteUtils {
         System.arraycopy(toTruncate, start, secretBytes, 0, length);
         return secretBytes;
     }
+
+    /**
+     * Converts a number to a byte value in a byte array
+     *
+     * @param toByteInArray the number to convert
+     * @return the byte array containing a single byte value
+     */
+    public static byte[] toByteArray(final Number toByteInArray) {
+        return new byte[]{toByteInArray.byteValue()};
+    }
 }
