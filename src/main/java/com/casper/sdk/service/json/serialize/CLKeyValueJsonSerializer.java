@@ -1,8 +1,8 @@
 package com.casper.sdk.service.json.serialize;
 
 import com.casper.sdk.service.serialization.util.ByteUtils;
+import com.casper.sdk.types.CLKeyInfo;
 import com.casper.sdk.types.CLKeyValue;
-import com.casper.sdk.types.CLValue;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
@@ -14,8 +14,6 @@ import java.io.IOException;
  * JSON serializer for the specialized {@link CLKeyValue}
  */
 public class CLKeyValueJsonSerializer extends JsonSerializer<CLKeyValue> {
-
-    private static final String HASH_PREFIX = "hash-";
 
     @Override
     public void serialize(final CLKeyValue value,
@@ -32,21 +30,21 @@ public class CLKeyValueJsonSerializer extends JsonSerializer<CLKeyValue> {
 
     @NotNull
     private String buildJsonBytes(final CLKeyValue value) {
-        return "0" + value.getKeyType().getTag() + getValueBytes(value);
+        return getValueBytes(value);
     }
 
-    protected String getValueBytes(CLKeyValue value) {
+    protected String getValueBytes(final CLKeyValue value) {
         return value.toHex();
     }
 
-    private void writeParsed(CLValue value, JsonGenerator gen) throws IOException {
+    private void writeParsed(CLKeyValue value, JsonGenerator gen) throws IOException {
 
         final String strParsed;
 
         if (value.getParsed() != null) {
-            strParsed = buildParsed(value.getParsed().toString());
-        } else if (value.getBytes() != null) {
-            strParsed = buildParsed(ByteUtils.encodeHexString(value.getBytes()));
+            strParsed = buildParsed(value.getParsed().toString(), value.getKeyType());
+        } else if (value.getKeyBytes() != null) {
+            strParsed = buildParsed(ByteUtils.encodeHexString(value.getKeyBytes()), value.getKeyType());
         } else {
             strParsed = null;
         }
@@ -60,11 +58,11 @@ public class CLKeyValueJsonSerializer extends JsonSerializer<CLKeyValue> {
         }
     }
 
-    private String buildParsed(final String parsed) {
-        if (parsed.startsWith(HASH_PREFIX)) {
+    private String buildParsed(final String parsed, final CLKeyInfo.KeyType keyType) {
+        if (parsed.contains("-")) {
             return parsed;
         } else {
-            return HASH_PREFIX + parsed;
+            return keyType.getParsedName() + "-" + parsed;
         }
     }
 }
