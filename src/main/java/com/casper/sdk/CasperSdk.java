@@ -176,7 +176,6 @@ public class CasperSdk {
      * @param publicKeyIn  the public key .pem file input stream
      * @param privateKeyIn the private key .pem file input stream
      * @return the files loaded into a AsymmetricCipherKeyPair
-     * @throws IOException if there is a problem loading the files
      */
     public AsymmetricCipherKeyPair loadKeyPair(final InputStream publicKeyIn,
                                                final InputStream privateKeyIn,

@@ -16,7 +16,8 @@ import java.security.SecureRandom;
 
 /**
  * Signer for the Ed25519 algorithm
- */ class Ed25519Signer extends AbstractSigner {
+ */
+class Ed25519Signer extends AbstractSigner {
 
     Ed25519Signer() {
         super(SignatureAlgorithm.ED25519);

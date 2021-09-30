@@ -30,7 +30,6 @@ class SigningServiceTest {
                 (byte) 14, (byte) 215, (byte) 85, (byte) 234, (byte) 161
         };
 
-
         // Load AsymmetricCipherKeyPair from .pem files
         //noinspection ConstantConditions
         final AsymmetricCipherKeyPair asymmetricCipherKeyPair = signingService.loadKeyPair(

@@ -4,9 +4,15 @@ import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
 import org.bouncycastle.crypto.params.AsymmetricKeyParameter;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.security.Security;
 
+/**
+ * The service for signing
+ */
 public class SigningService {
 
     static {
@@ -42,6 +48,7 @@ public class SigningService {
      *
      * @param publicKeyIn  the public key .pem file input stream
      * @param privateKeyIn the private key .pem file input stream
+     * @param algorithm    the algorithm of the key pair to load
      * @return the files loaded into a AsymmetricCipherKeyPair
      */
     public AsymmetricCipherKeyPair loadKeyPair(final InputStream publicKeyIn,
@@ -52,6 +59,14 @@ public class SigningService {
     }
 
 
+    /**
+     * Signs a message using the provided key
+     *
+     * @param privateKey the private key to sign with
+     * @param toSign     the message to sign
+     * @param algorithm  the algorithm of the keypair to sign with
+     * @return the signed message
+     */
     public byte[] signWithPrivateKey(final AsymmetricKeyParameter privateKey,
                                      final byte[] toSign,
                                      final SignatureAlgorithm algorithm) {
@@ -60,6 +75,15 @@ public class SigningService {
     }
 
 
+    /**
+     * Verifies a signed message
+     *
+     * @param publicKeyParameters the public key to  verify signature with
+     * @param toSign              the message to sign
+     * @param signature           the signed message
+     * @param algorithm           the algorithm of the keypair to sign with
+     * @return true if the signature is valid otherwise false
+     */
     public boolean verifySignature(final AsymmetricKeyParameter publicKeyParameters,
                                    final byte[] toSign,
                                    final byte[] signature,
@@ -68,7 +92,7 @@ public class SigningService {
         return getSigner(algorithm).verifySignature(publicKeyParameters, toSign, signature);
     }
 
-    private Signer getSigner(SignatureAlgorithm signatureAlgorithm) {
+    private Signer getSigner(final SignatureAlgorithm signatureAlgorithm) {
         return signerFactory.getSigner(signatureAlgorithm);
     }
 }
