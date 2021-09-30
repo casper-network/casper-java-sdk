@@ -1,9 +1,13 @@
 package com.casper.sdk.service.serialization.cltypes;
 
+import com.casper.sdk.exceptions.ConversionException;
+import com.casper.sdk.service.serialization.util.ByteUtils;
 import com.casper.sdk.types.*;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.math.BigInteger;
+
+import static com.casper.sdk.service.serialization.util.ByteUtils.toByteArray;
 
 /**
  * Builder to help with programmatic conversion of value types.
@@ -50,21 +54,25 @@ public class CLValueBuilder {
         return buildCLValue(CLType.U512, value);
     }
 
+    public static CLKeyValue key(final byte[] value) {
+        if (value.length != 33) {
+            throw new ConversionException("Missing key type from byte array");
+        }
+        return new CLKeyValue(ByteUtils.lastNBytes(value, 32), CLKeyInfo.KeyType.valueOf(value[0]), null);
+    }
+
     public static CLKeyValue accountKey(final byte[] value) {
-        return createKey(value, CLKeyInfo.KeyType.ACCOUNT_ID);
+        return key(ByteUtils.concat(toByteArray(CLKeyInfo.KeyType.ACCOUNT_ID.getTag()), value));
     }
 
     public static CLKeyValue hashKey(final byte[] value) {
-        return createKey(value, CLKeyInfo.KeyType.HASH_ID);
+        return key(ByteUtils.concat(toByteArray(CLKeyInfo.KeyType.HASH_ID.getTag()), value));
     }
 
     public static CLKeyValue uRefKey(final byte[] value) {
-        return createKey(value, CLKeyInfo.KeyType.UREF_ID);
+        return key(ByteUtils.concat(toByteArray(CLKeyInfo.KeyType.UREF_ID.getTag()), value));
     }
 
-    private static CLKeyValue createKey(byte[] value, CLKeyInfo.KeyType keyType) {
-        return new CLKeyValue(value, keyType, null);
-    }
 
     private static CLValue buildCLValue(final CLType type, final Object value) {
         return new CLValue(TYPES_FACTORY.getInstance(type).serialize(value), type, value);
