@@ -1,24 +1,21 @@
 package com.casper.sdk.types;
 
-import com.casper.sdk.service.json.JsonConversionService;
 import com.casper.sdk.service.hash.HashService;
-import com.casper.sdk.service.signing.SignatureAlgorithm;
-import com.casper.sdk.service.signing.SigningService;
+import com.casper.sdk.service.json.JsonConversionService;
 import com.casper.sdk.service.serialization.cltypes.TypesFactory;
 import com.casper.sdk.service.serialization.types.ByteSerializerFactory;
 import com.casper.sdk.service.serialization.util.CollectionUtils;
-import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
-import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
+import com.casper.sdk.service.signing.SigningService;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
+import java.security.KeyPair;
 import java.time.Instant;
 import java.util.Set;
 
-import static com.casper.sdk.service.serialization.util.ByteUtils.concat;
 import static com.casper.sdk.service.serialization.util.ByteUtils.decodeHex;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -268,10 +265,9 @@ class DeployServiceTest {
 
         assertThat(deploy.getApprovals().size(), is(0));
 
-        final AsymmetricCipherKeyPair keyPair = signingService.loadKeyPair(
+        final KeyPair keyPair = signingService.loadKeyPair(
                 new File(DeployServiceTest.class.getResource(PUBLIC_KEY).getFile()),
-                new File(DeployServiceTest.class.getResource(PRIVATE_KEY).getFile()),
-                SignatureAlgorithm.ED25519
+                new File(DeployServiceTest.class.getResource(PRIVATE_KEY).getFile())
         );
 
         final Deploy signedDeploy = deployService.signDeploy(deploy, keyPair);
@@ -284,11 +280,9 @@ class DeployServiceTest {
         assertThat(approval.getSignature().toAccount().length, is(65));
         assertThat(approval.getSignature().getBytes().length, is(64));
 
-        final Ed25519PublicKeyParameters publicKeyParameters = (Ed25519PublicKeyParameters) keyPair.getPublic();
-        assertThat(
-                approval.getSigner().toAccount(),
-                is(concat(new byte[]{(byte) KeyAlgorithm.ED25519.getValue()}, publicKeyParameters.getEncoded()))
-        );
+        byte[] encoded = signingService.getPublicKeyRawBytes(keyPair.getPublic());
+
+        assertThat(approval.getSigner().toAccount(), is(encoded));
     }
 
     @Test

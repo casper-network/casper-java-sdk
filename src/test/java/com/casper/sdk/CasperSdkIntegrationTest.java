@@ -1,10 +1,7 @@
 package com.casper.sdk;
 
 import com.casper.sdk.service.hash.HashService;
-import com.casper.sdk.service.signing.SignatureAlgorithm;
 import com.casper.sdk.types.*;
-import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
-import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -13,6 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.security.KeyPair;
 import java.time.Instant;
 
 import static com.casper.sdk.IntegrationTestUtils.*;
@@ -110,13 +108,13 @@ class CasperSdkIntegrationTest {
     @Test
     void putDeploy() throws Throwable {
 
-        final AsymmetricCipherKeyPair userOneKeyPair = geUserKeyPair(1);
-        final AsymmetricCipherKeyPair userTwoKeyPair = geUserKeyPair(2);
+        final KeyPair userOneKeyPair = geUserKeyPair(1);
+        final KeyPair userTwoKeyPair = geUserKeyPair(2);
 
-        final AsymmetricCipherKeyPair nodeOneKeyPair = getNodeKeyPair(1);
+        final KeyPair nodeOneKeyPair = getNodeKeyPair(1);
 
-        final PublicKey fromPublicKey = new PublicKey(((Ed25519PublicKeyParameters) nodeOneKeyPair.getPublic()).getEncoded(), KeyAlgorithm.ED25519);
-        final PublicKey toPublicKey = new PublicKey(((Ed25519PublicKeyParameters) userTwoKeyPair.getPublic()).getEncoded(), KeyAlgorithm.ED25519);
+        final PublicKey fromPublicKey = new PublicKey(nodeOneKeyPair.getPublic().getEncoded(), KeyAlgorithm.ED25519);
+        final PublicKey toPublicKey = new PublicKey(userTwoKeyPair.getPublic().getEncoded(), KeyAlgorithm.ED25519);
 
         // Make the session, a transfer from user one to user two
         final Transfer transfer = casperSdk.newTransfer(new BigInteger("2500000000"),
@@ -159,14 +157,14 @@ class CasperSdkIntegrationTest {
     }
 
 
-    private AsymmetricCipherKeyPair geUserKeyPair(int userNumber) throws IOException {
+    private KeyPair geUserKeyPair(int userNumber) throws IOException {
         final KeyPairStreams streams = geUserKeyPairStreams(userNumber);
-        return casperSdk.loadKeyPair(streams.getPublicKeyIn(), streams.getPrivateKeyIn(), SignatureAlgorithm.ED25519);
+        return casperSdk.loadKeyPair(streams.getPublicKeyIn(), streams.getPrivateKeyIn());
     }
 
-    private AsymmetricCipherKeyPair getNodeKeyPair(final int nodeNumber) throws IOException {
+    private KeyPair getNodeKeyPair(final int nodeNumber) throws IOException {
         final KeyPairStreams streams = getNodeKeyPairSteams(nodeNumber);
-        return casperSdk.loadKeyPair(streams.getPublicKeyIn(), streams.getPrivateKeyIn(), SignatureAlgorithm.ED25519);
+        return casperSdk.loadKeyPair(streams.getPublicKeyIn(), streams.getPrivateKeyIn());
     }
 
 

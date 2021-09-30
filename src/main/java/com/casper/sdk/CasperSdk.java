@@ -7,13 +7,12 @@ import com.casper.sdk.service.json.JsonConversionService;
 import com.casper.sdk.service.serialization.cltypes.TypesFactory;
 import com.casper.sdk.service.serialization.types.ByteSerializerFactory;
 import com.casper.sdk.service.serialization.util.ByteUtils;
-import com.casper.sdk.service.signing.SignatureAlgorithm;
 import com.casper.sdk.service.signing.SigningService;
 import com.casper.sdk.types.*;
-import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 
@@ -154,7 +153,7 @@ public class CasperSdk {
      * @param signKeyPair the keypair to sign the Deploy object
      * @return the signed deploy
      */
-    public Deploy signDeploy(final Deploy deploy, final AsymmetricCipherKeyPair signKeyPair) {
+    public Deploy signDeploy(final Deploy deploy, final KeyPair signKeyPair) {
         return deployService.signDeploy(deploy, signKeyPair);
     }
 
@@ -177,10 +176,9 @@ public class CasperSdk {
      * @param privateKeyIn the private key .pem file input stream
      * @return the files loaded into a AsymmetricCipherKeyPair
      */
-    public AsymmetricCipherKeyPair loadKeyPair(final InputStream publicKeyIn,
-                                               final InputStream privateKeyIn,
-                                               SignatureAlgorithm algorithm) {
-        return signingService.loadKeyPair(publicKeyIn, privateKeyIn, algorithm);
+    public KeyPair loadKeyPair(final InputStream publicKeyIn,
+                               final InputStream privateKeyIn) {
+        return signingService.loadKeyPair(publicKeyIn, privateKeyIn);
     }
 
     /**

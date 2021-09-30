@@ -2,8 +2,6 @@ package com.casper.sdk.types;
 
 import com.casper.sdk.exceptions.HashException;
 import com.casper.sdk.service.hash.HashService;
-import com.casper.sdk.service.signing.SignatureAlgorithm;
-import com.casper.sdk.service.signing.SigningService;
 import com.casper.sdk.service.json.JsonConversionService;
 import com.casper.sdk.service.serialization.cltypes.TypesFactory;
 import com.casper.sdk.service.serialization.cltypes.TypesSerializer;
@@ -11,12 +9,12 @@ import com.casper.sdk.service.serialization.types.ByteSerializerFactory;
 import com.casper.sdk.service.serialization.util.ByteUtils;
 import com.casper.sdk.service.serialization.util.CollectionUtils;
 import com.casper.sdk.service.serialization.util.NumberUtils;
-import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
-import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
+import com.casper.sdk.service.signing.SigningService;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
+import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
 import java.time.Duration;
 import java.util.LinkedHashSet;
@@ -168,11 +166,11 @@ public class DeployService {
         return serializerFactory.getByteSerializer(deployExecutable).toBytes(deployExecutable);
     }
 
-    public Deploy signDeploy(final Deploy deploy, final AsymmetricCipherKeyPair keyPair) {
+    public Deploy signDeploy(final Deploy deploy, final KeyPair keyPair) {
 
-        final byte[] signed = signingService.signWithPrivateKey(keyPair.getPrivate(), deploy.getHash().getHash(), SignatureAlgorithm.ED25519);
+        final byte[] signed = signingService.signWithPrivateKey(keyPair.getPrivate(), deploy.getHash().getHash());
 
-        byte[] publicKeyBytes = ((Ed25519PublicKeyParameters) keyPair.getPublic()).getEncoded();
+        byte[] publicKeyBytes = signingService.getPublicKeyRawBytes(keyPair.getPublic());
         final PublicKey publicKey = new PublicKey(publicKeyBytes, KeyAlgorithm.ED25519);
 
         // Update the deploy  approvals with signed

@@ -1,15 +1,13 @@
 package com.casper.sdk;
 
 import com.casper.sdk.service.serialization.cltypes.CLValueBuilder;
-import com.casper.sdk.service.signing.SignatureAlgorithm;
 import com.casper.sdk.types.*;
-import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
-import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.security.KeyPair;
 import java.time.Instant;
 
 import static com.casper.sdk.IntegrationTestUtils.*;
@@ -35,13 +33,13 @@ public class InvokeContractIntTest {
         final CasperSdk casperSdk = new CasperSdk("http://localhost", 11101);
 
         // Step 2: Set contract operator key pair.
-        final AsymmetricCipherKeyPair userTwoKeyPair = geUserKeyPair(casperSdk, 2);
-        final AsymmetricCipherKeyPair nodeOneKeyPair = getNodeKeyPair(casperSdk, 1);
+        final KeyPair userTwoKeyPair = geUserKeyPair(casperSdk, 2);
+        final KeyPair nodeOneKeyPair = getNodeKeyPair(casperSdk, 1);
 
         // Step 3: Query node for global state root hash.
         final String stateRootHash = casperSdk.getStateRootHash();
 
-        final PublicKey fromPublicKey = new PublicKey(((Ed25519PublicKeyParameters) nodeOneKeyPair.getPublic()).getEncoded(), KeyAlgorithm.ED25519);
+        final PublicKey fromPublicKey = new PublicKey(nodeOneKeyPair.getPublic().getEncoded(), KeyAlgorithm.ED25519);
 
         // Step 4: Query node for contract hash.
         final String accountHex = getPublicKeyAccountHex(userTwoKeyPair);
@@ -79,13 +77,13 @@ public class InvokeContractIntTest {
     }
 
 
-    private AsymmetricCipherKeyPair geUserKeyPair(final CasperSdk casperSdk, int userNumber) throws IOException {
+    private KeyPair geUserKeyPair(final CasperSdk casperSdk, int userNumber) throws IOException {
         final IntegrationTestUtils.KeyPairStreams streams = geUserKeyPairStreams(userNumber);
-        return casperSdk.loadKeyPair(streams.getPublicKeyIn(), streams.getPrivateKeyIn(), SignatureAlgorithm.ED25519);
+        return casperSdk.loadKeyPair(streams.getPublicKeyIn(), streams.getPrivateKeyIn());
     }
 
-    private AsymmetricCipherKeyPair getNodeKeyPair(final CasperSdk casperSdk, final int nodeNumber) throws IOException {
+    private KeyPair getNodeKeyPair(final CasperSdk casperSdk, final int nodeNumber) throws IOException {
         final IntegrationTestUtils.KeyPairStreams streams = getNodeKeyPairSteams(nodeNumber);
-        return casperSdk.loadKeyPair(streams.getPublicKeyIn(), streams.getPrivateKeyIn(), SignatureAlgorithm.ED25519);
+        return casperSdk.loadKeyPair(streams.getPublicKeyIn(), streams.getPrivateKeyIn());
     }
 }

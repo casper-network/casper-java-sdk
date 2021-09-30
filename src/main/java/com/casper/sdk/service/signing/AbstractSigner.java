@@ -1,12 +1,13 @@
 package com.casper.sdk.service.signing;
 
 import com.casper.sdk.exceptions.SignatureException;
-import org.bouncycastle.util.io.pem.PemObject;
-import org.bouncycastle.util.io.pem.PemReader;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.SecureRandom;
+import java.security.spec.ECGenParameterSpec;
+
+import static com.casper.sdk.service.signing.SigningService.PROVIDER;
 
 abstract class AbstractSigner implements Signer {
 
@@ -21,16 +22,15 @@ abstract class AbstractSigner implements Signer {
         return algorithm;
     }
 
-    byte[] readPemFile(final InputStream keyStream) {
-
-        final PemReader pemReader = new PemReader(new InputStreamReader(keyStream));
-        final PemObject pemObject;
+    KeyPair generateKeyPair(final String algorithm, final String curve) {
         try {
-            pemObject = pemReader.readPemObject();
-        } catch (IOException e) {
+            final KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(algorithm, PROVIDER);
+            final ECGenParameterSpec ecGenParameterSpec = new ECGenParameterSpec(curve);
+            keyPairGenerator.initialize(ecGenParameterSpec, new SecureRandom());
+            return keyPairGenerator.generateKeyPair();
+        } catch (Exception e) {
             throw new SignatureException(e);
         }
-
-        return pemObject.getContent();
     }
+
 }
