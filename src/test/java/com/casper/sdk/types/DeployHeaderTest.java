@@ -34,7 +34,7 @@ class DeployHeaderTest {
     void getAccount() {
 
         assertThat(deployHeader.getAccount().getBytes(), is(PublicKey.fromString("7f747b67bd3fe63c2a736739dfe40156d622347346e70f68f51c178a75ce5537")));
-        assertThat(deployHeader.getAccount().getKeyAlgorithm(), is(KeyAlgorithm.ED25519));
+        assertThat(deployHeader.getAccount().getKeyAlgorithm(), is(SignatureAlgorithm.ED25519));
     }
 
     @Test

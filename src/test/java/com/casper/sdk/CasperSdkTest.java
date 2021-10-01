@@ -39,7 +39,7 @@ class CasperSdkTest {
 
         final Transfer transfer = deployService.newTransfer(
                 10,
-                new PublicKey(recipientPublicKey, KeyAlgorithm.ED25519),
+                new PublicKey(recipientPublicKey, SignatureAlgorithm.ED25519),
                 34
         );
 

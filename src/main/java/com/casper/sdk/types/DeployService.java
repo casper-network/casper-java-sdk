@@ -171,13 +171,13 @@ public class DeployService {
         final byte[] signed = signingService.signWithPrivateKey(keyPair.getPrivate(), deploy.getHash().getHash());
 
         byte[] publicKeyBytes = signingService.getPublicKeyRawBytes(keyPair.getPublic());
-        final PublicKey publicKey = new PublicKey(publicKeyBytes, KeyAlgorithm.ED25519);
+        final PublicKey publicKey = new PublicKey(publicKeyBytes, SignatureAlgorithm.ED25519);
 
         // Update the deploy  approvals with signed
         deploy.getApprovals().add(
                 new DeployApproval(
-                        new PublicKey(publicKey.toAccount(), KeyAlgorithm.ED25519),
-                        new Signature(signed, KeyAlgorithm.ED25519)
+                        new PublicKey(publicKey.toAccount(), SignatureAlgorithm.ED25519),
+                        new Signature(signed, SignatureAlgorithm.ED25519)
                 )
         );
 

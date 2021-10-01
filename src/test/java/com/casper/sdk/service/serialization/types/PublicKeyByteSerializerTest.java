@@ -1,6 +1,6 @@
 package com.casper.sdk.service.serialization.types;
 
-import com.casper.sdk.types.KeyAlgorithm;
+import com.casper.sdk.types.SignatureAlgorithm;
 import com.casper.sdk.types.PublicKey;
 import com.casper.sdk.service.serialization.util.ByteUtils;
 import org.hamcrest.core.Is;
@@ -28,7 +28,7 @@ class PublicKeyByteSerializerTest {
 
         final byte[] expected = ByteUtils.concat(new byte[]{1}, key);
 
-        final byte[] bytes = serializer.toBytes(new PublicKey(key, KeyAlgorithm.ED25519));
+        final byte[] bytes = serializer.toBytes(new PublicKey(key, SignatureAlgorithm.ED25519));
         assertThat(bytes, Is.is(expected));
 
     }

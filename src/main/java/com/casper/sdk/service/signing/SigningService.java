@@ -1,38 +1,34 @@
 package com.casper.sdk.service.signing;
 
 import com.casper.sdk.exceptions.SignatureException;
-import com.casper.sdk.service.serialization.util.ByteUtils;
-import com.casper.sdk.types.KeyAlgorithm;
+import com.casper.sdk.types.SignatureAlgorithm;
 import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
 import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
-import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPublicKey;
-import org.bouncycastle.jcajce.provider.asymmetric.edec.BCEdDSAPublicKey;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.bouncycastle.math.ec.ECPoint;
 import org.bouncycastle.openssl.PEMKeyPair;
 import org.bouncycastle.openssl.PEMParser;
 import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter;
+import org.bouncycastle.openssl.jcajce.JcaPEMWriter;
 
 import java.io.*;
 import java.security.*;
-import java.util.Arrays;
 
 /**
  * The service for signing
  */
 public class SigningService {
 
-    static final String PROVIDER = "BC";
+    static final String PROVIDER = BouncyCastleProvider.PROVIDER_NAME;
 
     static {
+        // Java 8 does not support the algorithms we need so must use BouncyCastleProvider
         Security.addProvider(new BouncyCastleProvider());
     }
 
-    private final SignerFactory signerFactory = new SignerFactory();
-
+    private final KeyPairFactory keyPairFactory = new KeyPairFactory();
 
     public KeyPair generateKeyPair(final SignatureAlgorithm algorithm) {
-        return getSigner(algorithm).generateKeyPair();
+        return getKeyPairBuilder(algorithm).generateKeyPair();
     }
 
     /**
@@ -91,34 +87,8 @@ public class SigningService {
      * @return the raw bytes
      */
     public byte[] getPublicKeyRawBytes(final PublicKey publicKey) {
-
-        if (publicKey instanceof BCEdDSAPublicKey) {
-            return ByteUtils.concat(
-                    ByteUtils.toByteArray(KeyAlgorithm.ED25519.getValue()),
-                    ((BCEdDSAPublicKey) publicKey).getPointEncoding()
-            );
-        } else if (publicKey instanceof BCECPublicKey) {
-            ECPoint q = ((BCECPublicKey) publicKey).getQ();
-            return ByteUtils.concat(
-                    ByteUtils.toByteArray(KeyAlgorithm.SECP256K1.getValue()),
-                    q.getEncoded(true)
-            );
-        } else {
-            final byte[] encoded = publicKey.getEncoded();
-            final int size = getKeySize(publicKey);
-            return Arrays.copyOf(encoded, encoded.length - 2 * (size / Byte.SIZE));
-        }
+        return getKeyPairBuilderForPublicKey(publicKey).getPublicKeyRawBytes(publicKey);
     }
-
-    private int getKeySize(final PublicKey publicKey) {
-        final int siz;
-        if ("secp256k1".equalsIgnoreCase(publicKey.getAlgorithm())) {
-            return 33;
-        } else {
-            return 32;
-        }
-    }
-
 
     /**
      * Verifies a signed message
@@ -133,7 +103,6 @@ public class SigningService {
                                    final byte[] signature) {
 
         try {
-
             final Signature sig = Signature.getInstance(publicKey.getAlgorithm(), PROVIDER);
             sig.initVerify(publicKey);
             sig.update(toSign);
@@ -143,11 +112,34 @@ public class SigningService {
         }
     }
 
-    private Signer getSigner(final SignatureAlgorithm signatureAlgorithm) {
-        return signerFactory.getSigner(signatureAlgorithm);
+    /**
+     * Writes a key to a PEM file
+     *
+     * @param out        the stream to write to
+     * @param privateKey the private key to write in a .PEM file
+     */
+    public void saveKey(final OutputStream out, final Key privateKey) {
+
+        try {
+            JcaPEMWriter jcaPEMWriter = new JcaPEMWriter(new OutputStreamWriter(out));
+            jcaPEMWriter.writeObject(privateKey);
+            jcaPEMWriter.flush();
+            jcaPEMWriter.close();
+        } catch (IOException e) {
+            throw new SignatureException(e);
+        }
     }
 
-    private PrivateKey toPrivateKey(final InputStream privateKeyIn) {
+    private KeyPairBuilder getKeyPairBuilder(final SignatureAlgorithm signatureAlgorithm) {
+        return keyPairFactory.getKeyPairBuilder(signatureAlgorithm);
+    }
+
+    private KeyPairBuilder getKeyPairBuilderForPublicKey(final PublicKey publicKey) {
+        return keyPairFactory.getKeyPairBuilderForPublicKey(publicKey);
+    }
+
+    PrivateKey toPrivateKey(final InputStream privateKeyIn) {
+
         try {
             final PEMParser pemParser = new PEMParser(new InputStreamReader(privateKeyIn));
             final Object object = pemParser.readObject();
@@ -164,7 +156,7 @@ public class SigningService {
         }
     }
 
-    private PublicKey toPublicKey(final InputStream publicKeyIn) {
+     PublicKey toPublicKey(final InputStream publicKeyIn) {
 
         try {
             final PEMParser pemParser = new PEMParser(new InputStreamReader(publicKeyIn));
@@ -175,6 +167,4 @@ public class SigningService {
             throw new SignatureException(e);
         }
     }
-
-
 }

@@ -1,11 +1,17 @@
 package com.casper.sdk.service.signing;
 
 import com.casper.sdk.service.serialization.util.ByteUtils;
+import com.casper.sdk.types.SignatureAlgorithm;
+import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyPair;
+import java.security.PrivateKey;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -15,10 +21,8 @@ class SigningServiceTest {
 
     private static final String ED25519K_PRIVATE_KEY = "/account/user-1/secret_key.pem";
     private static final String ED25519K_PUBLIC_KEY = "/account/user-1/public_key.pem";
-
     private static final String SECP256K1_SECRET_KEY = "/SECP256K1/key1_secret_key.pem";
     private static final String SECP256K1_PUBLIC_KEY = "/SECP256K1/key1_public_key.pem";
-
 
     private final SigningService signingService = new SigningService();
 
@@ -52,11 +56,11 @@ class SigningServiceTest {
         // Verify the signature
         assertThat(signingService.verifySignature(keyPair.getPublic(), message, signedBytes), is(true));
 
-        String expectedRaw = "01d30f6a241199e68217cb05abcefc7c8267c5226b8e644f1f8d0a79b87ed04f07";
-        byte[] publicKeyRawBytes = signingService.getPublicKeyRawBytes(keyPair.getPublic());
+        final String expectedRaw = "01d30f6a241199e68217cb05abcefc7c8267c5226b8e644f1f8d0a79b87ed04f07";
+        final byte[] publicKeyRawBytes = signingService.getPublicKeyRawBytes(keyPair.getPublic());
         assertThat(publicKeyRawBytes, is(ByteUtils.decodeHex(expectedRaw)));
+        assertThat(publicKeyRawBytes.length, is(33));
     }
-
 
     @Test
     void generateEd25519KeyPair() {
@@ -72,7 +76,6 @@ class SigningServiceTest {
 
         assertThat(signingService.verifySignature(keyPair.getPublic(), message, signature), is(true));
     }
-
 
     @Test
     @SuppressWarnings("ConstantConditions")
@@ -109,7 +112,6 @@ class SigningServiceTest {
         assertThat(signingService.verifySignature(keyPair.getPublic(), message, signedMessage), is(true));
     }
 
-
     @Test
     @SuppressWarnings("ConstantConditions")
     void signWithSecp256k1PrivateKeyAndVerifySignature() throws Exception {
@@ -130,11 +132,53 @@ class SigningServiceTest {
         final byte[] signedMessage = signingService.signWithPrivateKey(keyPair.getPrivate(), message);
         assertThat(signingService.verifySignature(keyPair.getPublic(), message, signedMessage), is(true));
 
-        String expectedRaw = "02035793d9a677ec9cf0d3d2a7a61fb98c173c04b63925cfe387203b19d312fa37b0";
-        byte[] publicKeyRawBytes = signingService.getPublicKeyRawBytes(keyPair.getPublic());
+        final String expectedRaw = "02035793d9a677ec9cf0d3d2a7a61fb98c173c04b63925cfe387203b19d312fa37b0";
+        final byte[] publicKeyRawBytes = signingService.getPublicKeyRawBytes(keyPair.getPublic());
+        assertThat(publicKeyRawBytes.length, is(34));
         assertThat(publicKeyRawBytes, is(ByteUtils.decodeHex(expectedRaw)));
     }
 
 
+    @Test
+    void saveSecp256k1PrivatePem() throws IOException {
 
+        final KeyPair keyPair = signingService.loadKeyPair(
+                SigningServiceTest.class.getResource(SECP256K1_PUBLIC_KEY).openStream(),
+                SigningServiceTest.class.getResource(SECP256K1_SECRET_KEY).openStream()
+        );
+
+        final ByteArrayOutputStream privateOut = new ByteArrayOutputStream();
+        signingService.saveKey(privateOut, keyPair.getPrivate());
+
+        // Load the key back and ensure it is valid
+        byte[] pemBytes = privateOut.toByteArray();
+        final String expectedPrivate = IOUtils.toString(SigningServiceTest.class.getResource(SECP256K1_SECRET_KEY).openStream(), StandardCharsets.UTF_8);
+        assertThat(new String(pemBytes, StandardCharsets.UTF_8), is(expectedPrivate));
+
+
+        final PrivateKey privateKey = signingService.toPrivateKey(new ByteArrayInputStream(pemBytes));
+        assertThat(privateKey.getEncoded(), is(keyPair.getPrivate().getEncoded()));
+        assertThat(privateKey.getAlgorithm(), is(keyPair.getPrivate().getAlgorithm()));
+        assertThat(privateKey.getFormat(), is(keyPair.getPrivate().getFormat()));
+    }
+
+    @Test
+    void saveSecp256k1PublicPem() throws IOException {
+
+        final KeyPair keyPair = signingService.loadKeyPair(
+                SigningServiceTest.class.getResource(SECP256K1_PUBLIC_KEY).openStream(),
+                SigningServiceTest.class.getResource(SECP256K1_SECRET_KEY).openStream()
+        );
+
+        final ByteArrayOutputStream publicOut = new ByteArrayOutputStream();
+        signingService.saveKey(publicOut, keyPair.getPublic());
+
+        // Load the key back and ensure it is valid
+        byte[] pemBytes = publicOut.toByteArray();
+
+        final java.security.PublicKey publicKey = signingService.toPublicKey(new ByteArrayInputStream(pemBytes));
+        assertThat(publicKey.getEncoded(), is(keyPair.getPublic().getEncoded()));
+        assertThat(publicKey.getAlgorithm(), is(keyPair.getPublic().getAlgorithm()));
+        assertThat(publicKey.getFormat(), is(keyPair.getPublic().getFormat()));
+    }
 }

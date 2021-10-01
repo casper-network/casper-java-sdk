@@ -1,6 +1,6 @@
 package com.casper.sdk.service.hash;
 
-import com.casper.sdk.types.KeyAlgorithm;
+import com.casper.sdk.types.SignatureAlgorithm;
 import com.casper.sdk.exceptions.HashException;
 import com.casper.sdk.service.serialization.util.ByteUtils;
 import com.rfksystems.blake2b.Blake2b;
@@ -30,7 +30,7 @@ public class HashService {
         }
 
         try {
-            algo = KeyAlgorithm.valueOf(Integer.parseInt(key.substring(0, 2))).toString().toLowerCase();
+            algo = SignatureAlgorithm.valueOf(Integer.parseInt(key.substring(0, 2))).toString().toLowerCase();
             switch (key.substring(0, 2)) {
                 case "01":
                     if (key.length() != 66) {
@@ -108,7 +108,7 @@ public class HashService {
             throw new IllegalArgumentException("Key size must be equal or greater than 66 chars");
         }
 
-        final KeyAlgorithm keyAlgorithm = KeyAlgorithm.fromId((char) key[0]);
+        final SignatureAlgorithm keyAlgorithm = SignatureAlgorithm.fromId((char) key[0]);
 
         switch (keyAlgorithm) {
 

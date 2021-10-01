@@ -10,21 +10,21 @@ import java.util.Arrays;
 import java.util.Objects;
 
 /**
- * type type: representing a public key derived from an ECC key pair.
+ * Representing a public key derived from an ECC key pair.
  */
 @JsonDeserialize(using = PublicKeyJsonDeserializer.class)
 @JsonSerialize(using = PublicKeyJsonSerializer.class)
 public class PublicKey extends AbstractCLType implements HasTag {
 
-    protected final KeyAlgorithm keyAlgorithm;
+    protected final SignatureAlgorithm keyAlgorithm;
     /** Either 32 or 64 bytes (compressed) depending upon ECC type does not include the key algorithm byte */
     private final byte[] bytes;
 
-    public PublicKey(final byte[] bytes, final KeyAlgorithm keyAlgorithm) {
+    public PublicKey(final byte[] bytes, final SignatureAlgorithm keyAlgorithm) {
         this(bytes, keyAlgorithm, false);
     }
 
-    public PublicKey(final byte[] bytes, final KeyAlgorithm keyAlgorithm, final boolean notStandardLength) {
+    public PublicKey(final byte[] bytes, final SignatureAlgorithm keyAlgorithm, final boolean notStandardLength) {
         super(new CLTypeInfo(CLType.PUBLIC_KEY));
         Objects.requireNonNull(bytes, "bytes cannot be null");
 
@@ -36,19 +36,19 @@ public class PublicKey extends AbstractCLType implements HasTag {
             this.keyAlgorithm = keyAlgorithm;
         } else if (keyLen == 1) {
             // byte array
-            this.keyAlgorithm = KeyAlgorithm.fromId((char) bytes[0]);
+            this.keyAlgorithm = SignatureAlgorithm.fromId((char) bytes[0]);
             this.bytes = new byte[bytes.length - 1];
             System.arraycopy(bytes, 1, this.bytes, 0, bytes.length - 1);
         } else if (keyLen == 2) {
             // Hex string bytes
-            this.keyAlgorithm = KeyAlgorithm.fromId((char) bytes[1]);
+            this.keyAlgorithm = SignatureAlgorithm.fromId((char) bytes[1]);
             this.bytes = ByteUtils.decodeHex(new String(bytes).substring(2));
         } else {
             throw new IllegalArgumentException("Invalid key " + Arrays.toString(bytes) + " length " + bytes.length);
         }
     }
 
-    public PublicKey(final String key, final KeyAlgorithm keyAlgorithm) {
+    public PublicKey(final String key, final SignatureAlgorithm keyAlgorithm) {
         super(new CLTypeInfo(CLType.PUBLIC_KEY));
         Objects.requireNonNull(key, "keys cannot be null");
 
@@ -59,11 +59,11 @@ public class PublicKey extends AbstractCLType implements HasTag {
             this.keyAlgorithm = keyAlgorithm;
         } else if (keyLen == 1) {
             // byte array
-            this.keyAlgorithm = KeyAlgorithm.fromId(key.charAt(0));
+            this.keyAlgorithm = SignatureAlgorithm.fromId(key.charAt(0));
             this.bytes = ByteUtils.decodeHex(key.substring(1));
         } else if (keyLen == 2) {
             // Hex string bytes
-            this.keyAlgorithm = KeyAlgorithm.fromId(key.charAt(1));
+            this.keyAlgorithm = SignatureAlgorithm.fromId(key.charAt(1));
             this.bytes = ByteUtils.decodeHex(key.substring(2));
         } else {
             throw new IllegalArgumentException("Invalid key " + key + " length " + key.length());
@@ -83,7 +83,7 @@ public class PublicKey extends AbstractCLType implements HasTag {
         return bytes;
     }
 
-    public KeyAlgorithm getKeyAlgorithm() {
+    public SignatureAlgorithm getKeyAlgorithm() {
         return keyAlgorithm;
     }
 

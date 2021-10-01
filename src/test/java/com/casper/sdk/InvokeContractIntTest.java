@@ -39,7 +39,7 @@ public class InvokeContractIntTest {
         // Step 3: Query node for global state root hash.
         final String stateRootHash = casperSdk.getStateRootHash();
 
-        final PublicKey fromPublicKey = new PublicKey(nodeOneKeyPair.getPublic().getEncoded(), KeyAlgorithm.ED25519);
+        final PublicKey fromPublicKey = new PublicKey(nodeOneKeyPair.getPublic().getEncoded(), SignatureAlgorithm.ED25519);
 
         // Step 4: Query node for contract hash.
         final String accountHex = getPublicKeyAccountHex(userTwoKeyPair);

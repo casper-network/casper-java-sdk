@@ -33,8 +33,8 @@ public class TransferBetweenAccounts extends Methods {
         final KeyPair nodeOneKeyPair = super.getNodeKeyPair(1, NCTL_HOME, casperSdk);
         final KeyPair nodeTwoKeyPair = super.getUserKeyPair(2, NCTL_HOME, casperSdk);
 
-        final PublicKey fromPublicKey = new PublicKey(nodeOneKeyPair.getPublic().getEncoded(), KeyAlgorithm.ED25519);
-        final PublicKey toPublicKey = new PublicKey(nodeTwoKeyPair.getPublic().getEncoded(), KeyAlgorithm.ED25519);
+        final PublicKey fromPublicKey = new PublicKey(nodeOneKeyPair.getPublic().getEncoded(), SignatureAlgorithm.ED25519);
+        final PublicKey toPublicKey = new PublicKey(nodeTwoKeyPair.getPublic().getEncoded(), SignatureAlgorithm.ED25519);
 
         // Make the session, a transfer from user one to user two
         final com.casper.sdk.types.Transfer transfer = casperSdk.newTransfer(new BigInteger("2500000000"),

@@ -1,6 +1,6 @@
 package com.casper.sdk;
 
-import com.casper.sdk.types.KeyAlgorithm;
+import com.casper.sdk.types.SignatureAlgorithm;
 import com.casper.sdk.types.PublicKey;
 
 import java.io.File;
@@ -33,7 +33,7 @@ public class IntegrationTestUtils {
     private static final String NCTL_HOME = "~/Documents/casper/casper-node/utils/nctl";
 
     static String getPublicKeyAccountHex(final KeyPair keyPair) {
-        final PublicKey publicKey = new PublicKey(keyPair.getPublic().getEncoded(), KeyAlgorithm.ED25519);
+        final PublicKey publicKey = new PublicKey(keyPair.getPublic().getEncoded(), SignatureAlgorithm.ED25519);
         return publicKey.toAccountHex();
     }
 

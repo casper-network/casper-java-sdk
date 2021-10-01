@@ -113,8 +113,8 @@ class CasperSdkIntegrationTest {
 
         final KeyPair nodeOneKeyPair = getNodeKeyPair(1);
 
-        final PublicKey fromPublicKey = new PublicKey(nodeOneKeyPair.getPublic().getEncoded(), KeyAlgorithm.ED25519);
-        final PublicKey toPublicKey = new PublicKey(userTwoKeyPair.getPublic().getEncoded(), KeyAlgorithm.ED25519);
+        final PublicKey fromPublicKey = new PublicKey(nodeOneKeyPair.getPublic().getEncoded(), SignatureAlgorithm.ED25519);
+        final PublicKey toPublicKey = new PublicKey(userTwoKeyPair.getPublic().getEncoded(), SignatureAlgorithm.ED25519);
 
         // Make the session, a transfer from user one to user two
         final Transfer transfer = casperSdk.newTransfer(new BigInteger("2500000000"),
