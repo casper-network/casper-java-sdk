@@ -1,9 +1,13 @@
 package com.casper.sdk.service.signing;
 
+import com.casper.sdk.exceptions.SignatureException;
 import com.casper.sdk.service.serialization.util.ByteUtils;
 import com.casper.sdk.types.SignatureAlgorithm;
+import org.bouncycastle.crypto.params.AsymmetricKeyParameter;
+import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
 import org.bouncycastle.jcajce.provider.asymmetric.edec.BCEdDSAPublicKey;
 
+import java.lang.reflect.Constructor;
 import java.security.KeyPair;
 import java.security.PublicKey;
 
@@ -36,5 +40,18 @@ class Ed25519KeyPariBuilder extends AbstractKeyPairBuilder {
         );
     }
 
+    @Override
+    public PublicKey createPublicKey(final byte[] publicKey) {
+
+        try {
+            // Fixme we must be able to do with KeyFactory
+            final Constructor<BCEdDSAPublicKey> constructor = BCEdDSAPublicKey.class.getDeclaredConstructor(AsymmetricKeyParameter.class);
+            constructor.setAccessible(true);
+            return constructor.newInstance(new Ed25519PublicKeyParameters(publicKey));
+
+        } catch (Exception e) {
+            throw new SignatureException(e);
+        }
+    }
 }
 

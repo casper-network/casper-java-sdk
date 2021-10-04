@@ -18,6 +18,7 @@ import java.security.*;
  */
 public class SigningService {
 
+    /** The name of the BouncyCastleProvider */
     static final String PROVIDER = BouncyCastleProvider.PROVIDER_NAME;
 
     static {
@@ -25,8 +26,15 @@ public class SigningService {
         Security.addProvider(new BouncyCastleProvider());
     }
 
+    /** The factory for key pair generation */
     private final KeyPairFactory keyPairFactory = new KeyPairFactory();
 
+    /**
+     * Generates a key pair for the specified algorithm.
+     *
+     * @param algorithm the algorithm of new key pair to generate
+     * @return a new key pair of the specified algorithm
+     */
     public KeyPair generateKeyPair(final SignatureAlgorithm algorithm) {
         return getKeyPairBuilder(algorithm).generateKeyPair();
     }
@@ -81,13 +89,23 @@ public class SigningService {
     }
 
     /**
-     * Obtains the public keys raw bytes not the encoded bytes with the algorithm as the 1st byte
+     * Obtains the java security public keys raw and converts to a casper labs public key.
      *
      * @param publicKey the public key to obtain the raw bytes from
      * @return the raw bytes
      */
-    public byte[] getPublicKeyRawBytes(final PublicKey publicKey) {
-        return getKeyPairBuilderForPublicKey(publicKey).getPublicKeyRawBytes(publicKey);
+    public com.casper.sdk.types.PublicKey toClPublicKey(final PublicKey publicKey) {
+        return new com.casper.sdk.types.PublicKey(getKeyPairBuilderForPublicKey(publicKey).getPublicKeyRawBytes(publicKey));
+    }
+
+    /**
+     * Obtains the java security public keys raw and converts to a casper labs public key.
+     *
+     * @param publicKey the public key to obtain the raw bytes from
+     * @return the raw bytes
+     */
+    public PublicKey fromClPublicKey(final com.casper.sdk.types.PublicKey publicKey) {
+        return getKeyPairBuilder(publicKey.getKeyAlgorithm()).createPublicKey(publicKey.getBytes());
     }
 
     /**
@@ -115,27 +133,19 @@ public class SigningService {
     /**
      * Writes a key to a PEM file
      *
-     * @param out        the stream to write to
-     * @param privateKey the private key to write in a .PEM file
+     * @param out        the stream to write a key to
+     * @param privateKey the  key to write in a .PEM file
      */
-    public void saveKey(final OutputStream out, final Key privateKey) {
+    public void writeKey(final OutputStream out, final Key privateKey) {
 
         try {
-            JcaPEMWriter jcaPEMWriter = new JcaPEMWriter(new OutputStreamWriter(out));
+            final JcaPEMWriter jcaPEMWriter = new JcaPEMWriter(new OutputStreamWriter(out));
             jcaPEMWriter.writeObject(privateKey);
             jcaPEMWriter.flush();
             jcaPEMWriter.close();
         } catch (IOException e) {
             throw new SignatureException(e);
         }
-    }
-
-    private KeyPairBuilder getKeyPairBuilder(final SignatureAlgorithm signatureAlgorithm) {
-        return keyPairFactory.getKeyPairBuilder(signatureAlgorithm);
-    }
-
-    private KeyPairBuilder getKeyPairBuilderForPublicKey(final PublicKey publicKey) {
-        return keyPairFactory.getKeyPairBuilderForPublicKey(publicKey);
     }
 
     PrivateKey toPrivateKey(final InputStream privateKeyIn) {
@@ -156,8 +166,7 @@ public class SigningService {
         }
     }
 
-     PublicKey toPublicKey(final InputStream publicKeyIn) {
-
+    PublicKey toPublicKey(final InputStream publicKeyIn) {
         try {
             final PEMParser pemParser = new PEMParser(new InputStreamReader(publicKeyIn));
             final Object object = pemParser.readObject();
@@ -166,5 +175,13 @@ public class SigningService {
         } catch (IOException e) {
             throw new SignatureException(e);
         }
+    }
+
+    private KeyPairBuilder getKeyPairBuilder(final SignatureAlgorithm signatureAlgorithm) {
+        return keyPairFactory.getKeyPairBuilder(signatureAlgorithm);
+    }
+
+    private KeyPairBuilder getKeyPairBuilderForPublicKey(final PublicKey publicKey) {
+        return keyPairFactory.getKeyPairBuilderForPublicKey(publicKey);
     }
 }

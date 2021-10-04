@@ -1,6 +1,5 @@
 package com.casper.sdk.service.serialization.util;
 
-import com.casper.sdk.exceptions.ConversionException;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
 
@@ -34,7 +33,7 @@ public class ByteUtils {
         try {
             return Hex.decodeHex(hex.toCharArray());
         } catch (DecoderException e) {
-            throw new ConversionException("Unable to decode: \"" + hex + "\" length " + hex.length(), e);
+            throw new IllegalArgumentException("Unable to decode: \"" + hex + "\" length " + hex.length(), e);
         }
     }
 

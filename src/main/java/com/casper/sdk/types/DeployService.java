@@ -1,6 +1,5 @@
 package com.casper.sdk.types;
 
-import com.casper.sdk.exceptions.HashException;
 import com.casper.sdk.service.hash.HashService;
 import com.casper.sdk.service.json.JsonConversionService;
 import com.casper.sdk.service.serialization.cltypes.TypesFactory;
@@ -15,7 +14,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
 import java.security.KeyPair;
-import java.security.NoSuchAlgorithmException;
 import java.time.Duration;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -111,13 +109,8 @@ public class DeployService {
         // Prefix the option bytes with OPTION_NONE or OPTION_SOME
         final byte[] idBytes = CLOptionValue.prefixOption(u64Serializer.serialize(id));
 
-        final String accountHash;
-        try {
-            final String accountKey = target.toAccountHex();
-            accountHash = hashService.getAccountHash(accountKey);
-        } catch (NoSuchAlgorithmException e) {
-            throw new HashException("error creating account hash for " + target, e);
-        }
+        final String accountKey = target.toAccountHex();
+        final String accountHash = hashService.getAccountHash(accountKey);
 
         final DeployNamedArg amountArg = new DeployNamedArg("amount", new CLValue(amountBytes, CLType.U512, amount.toString()));
         final DeployNamedArg targetArg = new DeployNamedArg("target", new CLValue(accountHash, new CLByteArrayInfo(32), target.toAccountHex()));
@@ -170,14 +163,13 @@ public class DeployService {
 
         final byte[] signed = signingService.signWithPrivateKey(keyPair.getPrivate(), deploy.getHash().getHash());
 
-        byte[] publicKeyBytes = signingService.getPublicKeyRawBytes(keyPair.getPublic());
-        final PublicKey publicKey = new PublicKey(publicKeyBytes, SignatureAlgorithm.ED25519);
+        final PublicKey publicKey = signingService.toClPublicKey(keyPair.getPublic());
 
         // Update the deploy  approvals with signed
         deploy.getApprovals().add(
                 new DeployApproval(
-                        new PublicKey(publicKey.toAccount(), SignatureAlgorithm.ED25519),
-                        new Signature(signed, SignatureAlgorithm.ED25519)
+                        new PublicKey(publicKey.toAccount()),
+                        new Signature(signed, publicKey.getKeyAlgorithm())
                 )
         );
 

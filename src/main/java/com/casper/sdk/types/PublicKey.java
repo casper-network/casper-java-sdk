@@ -6,7 +6,6 @@ import com.casper.sdk.service.serialization.util.ByteUtils;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-import java.util.Arrays;
 import java.util.Objects;
 
 /**
@@ -21,61 +20,32 @@ public class PublicKey extends AbstractCLType implements HasTag {
     private final byte[] bytes;
 
     public PublicKey(final byte[] bytes, final SignatureAlgorithm keyAlgorithm) {
-        this(bytes, keyAlgorithm, false);
-    }
-
-    public PublicKey(final byte[] bytes, final SignatureAlgorithm keyAlgorithm, final boolean notStandardLength) {
         super(new CLTypeInfo(CLType.PUBLIC_KEY));
+
         Objects.requireNonNull(bytes, "bytes cannot be null");
+        Objects.requireNonNull(keyAlgorithm, "keyAlgorithm cannot be null");
 
-        int keyLen = bytes.length % 8;
+        this.keyAlgorithm = keyAlgorithm;
+        this.bytes = bytes;
 
-        if (keyLen == 0 || notStandardLength) {
-            //Objects.requireNonNull(keyAlgorithm, "keyAlgorithm cannot be null");
-            this.bytes = bytes;
-            this.keyAlgorithm = keyAlgorithm;
-        } else if (keyLen == 1) {
-            // byte array
-            this.keyAlgorithm = SignatureAlgorithm.fromId((char) bytes[0]);
-            this.bytes = new byte[bytes.length - 1];
-            System.arraycopy(bytes, 1, this.bytes, 0, bytes.length - 1);
-        } else if (keyLen == 2) {
-            // Hex string bytes
-            this.keyAlgorithm = SignatureAlgorithm.fromId((char) bytes[1]);
-            this.bytes = ByteUtils.decodeHex(new String(bytes).substring(2));
-        } else {
-            throw new IllegalArgumentException("Invalid key " + Arrays.toString(bytes) + " length " + bytes.length);
-        }
     }
 
     public PublicKey(final String key, final SignatureAlgorithm keyAlgorithm) {
-        super(new CLTypeInfo(CLType.PUBLIC_KEY));
-        Objects.requireNonNull(key, "keys cannot be null");
-
-        int keyLen = key.length() % 8;
-
-        if (keyLen == 0) {
-            this.bytes = ByteUtils.decodeHex(key);
-            this.keyAlgorithm = keyAlgorithm;
-        } else if (keyLen == 1) {
-            // byte array
-            this.keyAlgorithm = SignatureAlgorithm.fromId(key.charAt(0));
-            this.bytes = ByteUtils.decodeHex(key.substring(1));
-        } else if (keyLen == 2) {
-            // Hex string bytes
-            this.keyAlgorithm = SignatureAlgorithm.fromId(key.charAt(1));
-            this.bytes = ByteUtils.decodeHex(key.substring(2));
-        } else {
-            throw new IllegalArgumentException("Invalid key " + key + " length " + key.length());
-        }
+        this(ByteUtils.decodeHex(key), keyAlgorithm);
     }
 
     public PublicKey(final String key) {
-        this(key, null);
+        this(ByteUtils.decodeHex(key));
     }
 
     public PublicKey(final byte[] key) {
-        this(key, null);
+        this(removeAlgorithmBytes(key), SignatureAlgorithm.fromId((char) key[0]));
+    }
+
+    private static byte[] removeAlgorithmBytes(final byte[] key) {
+        byte[] bytes = new byte[key.length - 1];
+        System.arraycopy(key, 1, bytes, 0, key.length - 1);
+        return bytes;
     }
 
     @Override

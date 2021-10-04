@@ -110,7 +110,7 @@ class DeployServiceTest {
                         null),
 
                 deployService.newTransfer(new BigInteger("24500000000"),
-                        new PublicKey("010101010101010101010101010101010101010101010101010101010101010101", SignatureAlgorithm.ED25519),
+                        new PublicKey("010101010101010101010101010101010101010101010101010101010101010101"),
                         new BigInteger("999")),
 
                 deployService.standardPayment(new BigInteger("1000000000"))
@@ -280,9 +280,10 @@ class DeployServiceTest {
         assertThat(approval.getSignature().toAccount().length, is(65));
         assertThat(approval.getSignature().getBytes().length, is(64));
 
-        byte[] encoded = signingService.getPublicKeyRawBytes(keyPair.getPublic());
-
-        assertThat(approval.getSigner().toAccount(), is(encoded));
+        final PublicKey publicKey = signingService.toClPublicKey(keyPair.getPublic());
+        byte[] actual = approval.getSigner().toAccount();
+        byte[] expected = publicKey.toAccount();
+        assertThat(actual, is(expected));
     }
 
     @Test
