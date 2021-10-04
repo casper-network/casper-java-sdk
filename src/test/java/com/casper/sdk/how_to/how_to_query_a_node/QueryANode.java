@@ -57,8 +57,9 @@ public class QueryANode extends Methods {
     @Test
     public void testGetAccountMainPurseURef() throws Throwable {
 
-        final String accountMainPurseURef = casperSdk.getAccountMainPurseURef(super.getPublicKeyAccountHex(
-                super.getUserKeyPair(1, NCTL_HOME, casperSdk)));
+        final String accountMainPurseURef = casperSdk.getAccountMainPurseURef(
+                getUserKeyPair(1, NCTL_HOME, casperSdk).getPublic()
+        );
 
         assert (accountMainPurseURef != null);
 
@@ -77,8 +78,9 @@ public class QueryANode extends Methods {
     @Test
     public void testGetAccountBalance() throws Throwable {
 
-        final String accountBalance = casperSdk.getAccountBalance(super.getPublicKeyAccountHex(
-                super.getUserKeyPair(1, NCTL_HOME, casperSdk)));
+        final String accountBalance = casperSdk.getAccountBalance(
+                super.getUserKeyPair(1, NCTL_HOME, casperSdk).getPublic()
+        );
 
         assert (accountBalance != null);
 
@@ -87,7 +89,9 @@ public class QueryANode extends Methods {
     @Test
     public void testGetAccountInfo() throws Throwable {
 
-        final String accountInfo = casperSdk.getAccountInfo(super.getUserKeyPair(1, NCTL_HOME, casperSdk).getPublic());
+        final String accountInfo = casperSdk.getAccountInfo(
+                super.getUserKeyPair(1, NCTL_HOME, casperSdk).getPublic()
+        );
 
         assert (accountInfo != null);
 

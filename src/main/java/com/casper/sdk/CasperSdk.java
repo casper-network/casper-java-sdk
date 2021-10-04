@@ -63,12 +63,12 @@ public class CasperSdk {
     }
 
 
-    public String getAccountBalance(final String accountKey) throws Exception {
-        return nodeClient.getAccountBalance(accountKey);
+    public String getAccountBalance(final PublicKey accountKey) throws Exception {
+        return nodeClient.getAccountBalance(signingService.toClPublicKey(accountKey).toAccountHex());
     }
 
-    public String getAccountMainPurseURef(final String accountKey) throws Exception {
-        return nodeClient.getAccountMainPurseURef(accountKey);
+    public String getAccountMainPurseURef(final PublicKey accountKey) throws Exception {
+        return nodeClient.getAccountMainPurseURef(signingService.toClPublicKey(accountKey).toAccountHex());
     }
 
     public String getStateRootHash() throws Exception {
@@ -182,6 +182,10 @@ public class CasperSdk {
         return signingService.loadKeyPair(publicKeyIn, privateKeyIn);
     }
 
+    public byte[] getPublicKeyBytes(final PublicKey publicKey) {
+        return signingService.toClPublicKey(publicKey).getBytes();
+    }
+
     /**
      * Creates a new standard payment.
      *
@@ -213,5 +217,16 @@ public class CasperSdk {
      */
     public String deployToJson(final Deploy deploy) throws IOException {
         return jsonConversionService.toJson(deploy);
+    }
+
+    /**
+     * Creates a public key from a hex string where the first byte is the algorithm type and the following bytes the raw
+     * public key bytes.
+     *
+     * @param publicKeyHex the public key hex
+     * @return the java security public key
+     */
+    public PublicKey createPublicKey(final String publicKeyHex) {
+        return signingService.fromClPublicKey(new CLPublicKey(publicKeyHex));
     }
 }

@@ -33,6 +33,7 @@ public class IntegrationTestUtils {
     private static final String NCTL_HOME = "~/Documents/casper/casper-node/utils/nctl";
 
     static String getPublicKeyAccountHex(final KeyPair keyPair) {
+
         final CLPublicKey publicKey = new CLPublicKey(keyPair.getPublic().getEncoded(), SignatureAlgorithm.ED25519);
         return publicKey.toAccountHex();
     }

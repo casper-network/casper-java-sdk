@@ -168,7 +168,7 @@ public class DeployService {
         // Update the deploy  approvals with signed
         deploy.getApprovals().add(
                 new DeployApproval(
-                        new CLPublicKey(publicKey.toAccount()),
+                        publicKey,
                         new Signature(signed, publicKey.getKeyAlgorithm())
                 )
         );

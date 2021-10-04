@@ -71,13 +71,13 @@ class CasperSdkIntegrationTest {
 
     @Test
     void getAccountBalance() throws Throwable {
-        final String accountBalance = casperSdk.getAccountBalance(getPublicKeyAccountHex(geUserKeyPair(1)));
+        final String accountBalance = casperSdk.getAccountBalance(geUserKeyPair(1).getPublic());
         assertThat(accountBalance, is(notNullValue()));
     }
 
     @Test
     void getAccountMainPurseURef() throws Throwable {
-        final String accountMainPurseURef = casperSdk.getAccountMainPurseURef(getPublicKeyAccountHex(geUserKeyPair(1)));
+        final String accountMainPurseURef = casperSdk.getAccountMainPurseURef(geUserKeyPair(1).getPublic());
         assertThat(accountMainPurseURef, is(notNullValue()));
     }
 
@@ -154,7 +154,6 @@ class CasperSdkIntegrationTest {
         final byte[] accountHash = new HashService().getHash(expectedSerializedBody);
         assertThat(accountHash, is(expectedHash));
     }
-
 
     private KeyPair geUserKeyPair(int userNumber) throws IOException {
         final KeyPairStreams streams = geUserKeyPairStreams(userNumber);
