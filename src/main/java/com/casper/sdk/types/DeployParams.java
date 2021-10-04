@@ -3,6 +3,7 @@ package com.casper.sdk.types;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.security.PublicKey;
 
 public class DeployParams {
     /** The default ttl value is 1800000, which is 30 minutes in milliseconds */
@@ -31,7 +32,7 @@ public class DeployParams {
      * @param ttl              the time to live
      * @param dependencies     the dependencies
      */
-    public DeployParams(final PublicKey accountPublicKey,
+    public DeployParams(final java.security.PublicKey accountPublicKey,
                         final String chainName,
                         final Number gasPrice,
                         final Long timestamp,

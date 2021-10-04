@@ -59,7 +59,7 @@ class CasperSdkIntegrationTest {
 
     @Test
     void getAccountInfo() throws Throwable {
-        final String accountInfo = casperSdk.getAccountInfo(getPublicKeyAccountHex(geUserKeyPair(1)));
+        final String accountInfo = casperSdk.getAccountInfo(geUserKeyPair(1).getPublic());
         assertThat(accountInfo, is(notNullValue()));
     }
 
@@ -113,8 +113,7 @@ class CasperSdkIntegrationTest {
 
         final KeyPair nodeOneKeyPair = getNodeKeyPair(1);
 
-        final PublicKey fromPublicKey = new PublicKey(nodeOneKeyPair.getPublic().getEncoded(), SignatureAlgorithm.ED25519);
-        final PublicKey toPublicKey = new PublicKey(userTwoKeyPair.getPublic().getEncoded(), SignatureAlgorithm.ED25519);
+        final CLPublicKey toPublicKey = new CLPublicKey(userTwoKeyPair.getPublic().getEncoded(), SignatureAlgorithm.ED25519);
 
         // Make the session, a transfer from user one to user two
         final Transfer transfer = casperSdk.newTransfer(new BigInteger("2500000000"),
@@ -127,7 +126,7 @@ class CasperSdkIntegrationTest {
         // Create the transfer
         final Deploy deploy = casperSdk.makeTransferDeploy(
                 new DeployParams(
-                        fromPublicKey,
+                        nodeOneKeyPair.getPublic(),
                         "casper-net-1",
                         10,
                         Instant.now().toEpochMilli(),

@@ -82,7 +82,7 @@ public class DeployService {
         final Digest bodyHash = makeBodyHash(session, payment);
 
         final DeployHeader header = new DeployHeader(
-                deployParams.getAccountPublicKey(),
+                signingService.toClPublicKey(deployParams.getAccountPublicKey()),
                 deployParams.getTimestamp(),
                 toTtlStr(deployParams.getTtl()),
                 deployParams.getGasPrice(),
@@ -102,7 +102,7 @@ public class DeployService {
         return new Digest(hash);
     }
 
-    public Transfer newTransfer(final Number amount, final PublicKey target, final Number id) {
+    public Transfer newTransfer(final Number amount, final CLPublicKey target, final Number id) {
 
         final byte[] amountBytes = u512Serializer.serialize(amount);
 
@@ -163,12 +163,12 @@ public class DeployService {
 
         final byte[] signed = signingService.signWithPrivateKey(keyPair.getPrivate(), deploy.getHash().getHash());
 
-        final PublicKey publicKey = signingService.toClPublicKey(keyPair.getPublic());
+        final CLPublicKey publicKey = signingService.toClPublicKey(keyPair.getPublic());
 
         // Update the deploy  approvals with signed
         deploy.getApprovals().add(
                 new DeployApproval(
-                        new PublicKey(publicKey.toAccount()),
+                        new CLPublicKey(publicKey.toAccount()),
                         new Signature(signed, publicKey.getKeyAlgorithm())
                 )
         );

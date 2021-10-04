@@ -1,7 +1,7 @@
 package com.casper.sdk.service.json.deserialize;
 
 import com.casper.sdk.types.SignatureAlgorithm;
-import com.casper.sdk.types.PublicKey;
+import com.casper.sdk.types.CLPublicKey;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 
@@ -14,7 +14,7 @@ import static org.hamcrest.core.IsNull.notNullValue;
 /**
  * Unit tests for the PublicKeyJsonDeserializer
  */
-class PublicKeyJsonDeserializerTest {
+class CLPublicKeyJsonDeserializerTest {
 
     private static final String JSON = /* \"signer\":*/ "\"017f747b67bd3fe63c2a736739dfe40156d622347346e70f68f51c178a75ce5537\"";
 
@@ -25,11 +25,11 @@ class PublicKeyJsonDeserializerTest {
     void deserializePublicKey() throws IOException {
 
         final ObjectMapper mapper = new ObjectMapper();
-        final PublicKey publicKey = mapper.reader().readValue(JSON, PublicKey.class);
+        final CLPublicKey publicKey = mapper.reader().readValue(JSON, CLPublicKey.class);
         assertThat(publicKey, is(notNullValue()));
         assertThat(
                 publicKey.getBytes(),
-                is(PublicKey.fromString("7f747b67bd3fe63c2a736739dfe40156d622347346e70f68f51c178a75ce5537"))
+                is(CLPublicKey.fromString("7f747b67bd3fe63c2a736739dfe40156d622347346e70f68f51c178a75ce5537"))
         );
 
         assertThat(publicKey.getKeyAlgorithm(), is(SignatureAlgorithm.ED25519));

@@ -1,6 +1,7 @@
 package com.casper.sdk.service.signing;
 
 import com.casper.sdk.exceptions.SignatureException;
+import com.casper.sdk.types.CLPublicKey;
 import com.casper.sdk.types.SignatureAlgorithm;
 import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
 import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
@@ -94,8 +95,8 @@ public class SigningService {
      * @param publicKey the public key to obtain the raw bytes from
      * @return the raw bytes
      */
-    public com.casper.sdk.types.PublicKey toClPublicKey(final PublicKey publicKey) {
-        return new com.casper.sdk.types.PublicKey(getKeyPairBuilderForPublicKey(publicKey).getPublicKeyRawBytes(publicKey));
+    public CLPublicKey toClPublicKey(final PublicKey publicKey) {
+        return new CLPublicKey(getKeyPairBuilderForPublicKey(publicKey).getPublicKeyRawBytes(publicKey));
     }
 
     /**
@@ -104,7 +105,7 @@ public class SigningService {
      * @param publicKey the public key to obtain the raw bytes from
      * @return the raw bytes
      */
-    public PublicKey fromClPublicKey(final com.casper.sdk.types.PublicKey publicKey) {
+    public PublicKey fromClPublicKey(final CLPublicKey publicKey) {
         return getKeyPairBuilder(publicKey.getKeyAlgorithm()).createPublicKey(publicKey.getBytes());
     }
 

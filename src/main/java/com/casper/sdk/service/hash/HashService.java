@@ -21,36 +21,6 @@ public class HashService {
         Security.addProvider(new Blake2bProvider());
     }
 
-    private String getAlgo(final String key) {
-
-
-        if (key == null || key.length() < 66) {
-            throw new IllegalArgumentException("Key size must be equal or greater than 66 chars");
-        }
-
-        String algo = getAlgorithmName(key);
-
-        switch (key.substring(0, 2)) {
-            case "01":
-                if (key.length() != 66) {
-                    throw new IllegalArgumentException("Key length must be 66 chars");
-                }
-                break;
-            case "02":
-                if (key.length() != 68) {
-                    throw new IllegalArgumentException("Key length must be 68 chars");
-                }
-                break;
-
-            default:
-                throw new IllegalArgumentException(String.format("Unknown key prefix: [%s]", key.substring(0, 2)));
-        }
-
-
-        return algo;
-    }
-
-
     /**
      * Get the blake2b hash
      *
@@ -64,16 +34,16 @@ public class HashService {
     /**
      * Create a 32byte hashed array from the provided byte array
      *
-     * @param in the input bytes
+     * @param accountKey the input bytes
      * @return a hashed 32 byte array as a hex string
      */
-    public byte[] getAccountHash(final byte[] in) {
+    public byte[] getAccountHash(final byte[] accountKey) {
 
         try {
             final MessageDigest digest = MessageDigest.getInstance(Blake2b.BLAKE2_B_256);
-            digest.update(getAlgoNameBytes(in));
+            digest.update(getAlgoNameBytes(accountKey));
             digest.update(new byte[1]);
-            digest.update(in, 1, in.length - 1);
+            digest.update(accountKey, 1, accountKey.length - 1);
             return digest.digest();
         } catch (NoSuchAlgorithmException e) {
             throw new HashException("Error getAccountHash", e);
@@ -95,15 +65,6 @@ public class HashService {
             throw new HashException("Error getHash", e);
         }
     }
-
-    private String getAlgorithmName(final String key) {
-        try {
-            return SignatureAlgorithm.valueOf(Integer.parseInt(key.substring(0, 2))).toString().toLowerCase();
-        } catch (Exception e) {
-            throw new IllegalArgumentException("Invalid key " + key, e);
-        }
-    }
-
 
     private byte[] getAlgoNameBytes(byte[] key) {
 

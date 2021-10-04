@@ -2,7 +2,7 @@ package com.casper.sdk.how_to.common;
 
 import com.casper.sdk.CasperSdk;
 import com.casper.sdk.types.SignatureAlgorithm;
-import com.casper.sdk.types.PublicKey;
+import com.casper.sdk.types.CLPublicKey;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,7 +15,7 @@ import java.security.KeyPair;
 public abstract class Methods {
 
     protected String getPublicKeyAccountHex(final KeyPair keyPair) {
-        final PublicKey publicKey = new PublicKey(keyPair.getPublic().getEncoded(), SignatureAlgorithm.ED25519);
+        final CLPublicKey publicKey = new CLPublicKey(keyPair.getPublic().getEncoded(), SignatureAlgorithm.ED25519);
         return publicKey.toAccountHex();
     }
 

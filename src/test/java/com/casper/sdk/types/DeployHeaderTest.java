@@ -17,7 +17,7 @@ class DeployHeaderTest {
     void setUp() {
 
         deployHeader = new DeployHeader(
-                new PublicKey("017f747b67bd3fe63c2a736739dfe40156d622347346e70f68f51c178a75ce5537"),
+                new CLPublicKey("017f747b67bd3fe63c2a736739dfe40156d622347346e70f68f51c178a75ce5537"),
                 "2021-05-04T14:20:35.104Z",
                 "30m",
                 20,
@@ -33,7 +33,7 @@ class DeployHeaderTest {
     @Test
     void getAccount() {
 
-        assertThat(deployHeader.getAccount().getBytes(), is(PublicKey.fromString("7f747b67bd3fe63c2a736739dfe40156d622347346e70f68f51c178a75ce5537")));
+        assertThat(deployHeader.getAccount().getBytes(), is(CLPublicKey.fromString("7f747b67bd3fe63c2a736739dfe40156d622347346e70f68f51c178a75ce5537")));
         assertThat(deployHeader.getAccount().getKeyAlgorithm(), is(SignatureAlgorithm.ED25519));
     }
 

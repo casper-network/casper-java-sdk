@@ -1,7 +1,7 @@
 package com.casper.sdk.service.signing;
 
 import com.casper.sdk.service.serialization.util.ByteUtils;
-import com.casper.sdk.types.PublicKey;
+import com.casper.sdk.types.CLPublicKey;
 import com.casper.sdk.types.SignatureAlgorithm;
 import org.apache.commons.io.IOUtils;
 import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPublicKey;
@@ -61,7 +61,7 @@ class SigningServiceTest {
         assertThat(signingService.verifySignature(keyPair.getPublic(), message, signedBytes), is(true));
 
         final String expectedRaw = "01d30f6a241199e68217cb05abcefc7c8267c5226b8e644f1f8d0a79b87ed04f07";
-        final PublicKey publicKey = signingService.toClPublicKey(keyPair.getPublic());
+        final CLPublicKey publicKey = signingService.toClPublicKey(keyPair.getPublic());
         assertThat(publicKey.toAccountHex(), is(expectedRaw));
     }
 
@@ -136,7 +136,7 @@ class SigningServiceTest {
         assertThat(signingService.verifySignature(keyPair.getPublic(), message, signedMessage), is(true));
 
         final String expectedRaw = "02035793d9a677ec9cf0d3d2a7a61fb98c173c04b63925cfe387203b19d312fa37b0";
-        final PublicKey publicKey = signingService.toClPublicKey(keyPair.getPublic());
+        final CLPublicKey publicKey = signingService.toClPublicKey(keyPair.getPublic());
         assertThat(publicKey.getBytes().length, is(33));
         assertThat(publicKey.toAccountHex(), is(expectedRaw));
     }
@@ -164,7 +164,7 @@ class SigningServiceTest {
         assertThat(privateKey.getFormat(), is(keyPair.getPrivate().getFormat()));
 
         final byte[] rawBytes = ByteUtils.decodeHex("02035793d9a677ec9cf0d3d2a7a61fb98c173c04b63925cfe387203b19d312fa37b0");
-        final PublicKey publicKey = signingService.toClPublicKey(keyPair.getPublic());
+        final CLPublicKey publicKey = signingService.toClPublicKey(keyPair.getPublic());
         assertThat(publicKey.getKeyAlgorithm(), is(SignatureAlgorithm.SECP256K1));
         assertThat(publicKey.toAccount(), is(rawBytes));
     }
@@ -189,7 +189,7 @@ class SigningServiceTest {
         assertThat(publicKey.getFormat(), is(keyPair.getPublic().getFormat()));
 
         final String rawBytes = "01d30f6a241199e68217cb05abcefc7c8267c5226b8e644f1f8d0a79b87ed04f07";
-        final PublicKey clPublicKey = new PublicKey(rawBytes);
+        final CLPublicKey clPublicKey = new CLPublicKey(rawBytes);
         assertThat(clPublicKey.getKeyAlgorithm(), is(SignatureAlgorithm.ED25519));
         assertThat(clPublicKey.toAccountHex(), is(rawBytes));
     }
@@ -198,7 +198,7 @@ class SigningServiceTest {
     void eD25519k1FromClPublicKey() {
 
         final byte [] rawBytes = ByteUtils.decodeHex("01d30f6a241199e68217cb05abcefc7c8267c5226b8e644f1f8d0a79b87ed04f07");
-        final PublicKey clPublicKey = new PublicKey(rawBytes);
+        final CLPublicKey clPublicKey = new CLPublicKey(rawBytes);
         final java.security.PublicKey publicKey = signingService.fromClPublicKey(clPublicKey);
 
         assertThat(publicKey, is(instanceOf(BCEdDSAPublicKey.class)));
@@ -209,7 +209,7 @@ class SigningServiceTest {
     void secp256k1FromClPublicKey() {
 
         final byte [] rawBytes = ByteUtils.decodeHex("02035793d9a677ec9cf0d3d2a7a61fb98c173c04b63925cfe387203b19d312fa37b0");
-        final PublicKey clPublicKey = new PublicKey(rawBytes);
+        final CLPublicKey clPublicKey = new CLPublicKey(rawBytes);
         final java.security.PublicKey publicKey = signingService.fromClPublicKey(clPublicKey);
 
         assertThat(publicKey, is(instanceOf(BCECPublicKey.class)));

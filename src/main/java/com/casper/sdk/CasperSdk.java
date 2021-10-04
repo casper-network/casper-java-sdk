@@ -13,7 +13,7 @@ import com.casper.sdk.types.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.KeyPair;
-import java.security.NoSuchAlgorithmException;
+import java.security.PublicKey;
 import java.util.Map;
 
 /**
@@ -41,11 +41,12 @@ public class CasperSdk {
         this.nodeClient = new NodeClient(deployService, hashService, jsonConversionService);
     }
 
-    public String getAccountInfo(final String accountKey) throws Exception {
-        return nodeClient.getAccountInfo(accountKey);
+    public String getAccountInfo(final PublicKey accountKey) throws Exception {
+        return nodeClient.getAccountInfo(signingService.toClPublicKey(accountKey).toAccountHex());
     }
 
-    public ContractHash getContractHash(final String accountKey) throws Exception {
+
+    public ContractHash getContractHash(final PublicKey accountKey) throws Exception {
 
         final String accountInfo = getAccountInfo(accountKey);
         //noinspection rawtypes
@@ -74,7 +75,7 @@ public class CasperSdk {
         return nodeClient.getStateRootHash();
     }
 
-    public String getAccountHash(final String accountKey) throws NoSuchAlgorithmException {
+    public String getAccountHash(final String accountKey) {
         return hashService.getAccountHash(accountKey);
     }
 
@@ -199,7 +200,7 @@ public class CasperSdk {
      * @param id     the optional ID name argument value
      * @return the newly created transfer
      */
-    public Transfer newTransfer(final Number amount, final PublicKey target, final Number id) {
+    public Transfer newTransfer(final Number amount, final CLPublicKey target, final Number id) {
         return deployService.newTransfer(amount, target, id);
     }
 

@@ -39,11 +39,10 @@ public class InvokeContractIntTest {
         // Step 3: Query node for global state root hash.
         final String stateRootHash = casperSdk.getStateRootHash();
 
-        final PublicKey fromPublicKey = new PublicKey(nodeOneKeyPair.getPublic().getEncoded(), SignatureAlgorithm.ED25519);
 
         // Step 4: Query node for contract hash.
         final String accountHex = getPublicKeyAccountHex(userTwoKeyPair);
-        final ContractHash contractHash = casperSdk.getContractHash(accountHex);
+        final ContractHash contractHash = casperSdk.getContractHash(nodeOneKeyPair.getPublic());
 
         // Make a payment
         final ModuleBytes payment = casperSdk.standardPayment(new BigInteger("10000000000"));
@@ -51,7 +50,7 @@ public class InvokeContractIntTest {
         // Create the transfer
         final Deploy deploy = casperSdk.makeDeploy(
                 new DeployParams(
-                        fromPublicKey,
+                        nodeOneKeyPair.getPublic(),
                         "casper-net-1",
                         10,
                         Instant.now().toEpochMilli(),

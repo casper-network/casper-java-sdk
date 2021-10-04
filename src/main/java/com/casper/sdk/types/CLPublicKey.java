@@ -13,13 +13,13 @@ import java.util.Objects;
  */
 @JsonDeserialize(using = PublicKeyJsonDeserializer.class)
 @JsonSerialize(using = PublicKeyJsonSerializer.class)
-public class PublicKey extends AbstractCLType implements HasTag {
+public class CLPublicKey extends AbstractCLType implements HasTag {
 
     protected final SignatureAlgorithm keyAlgorithm;
     /** Either 32 or 64 bytes (compressed) depending upon ECC type does not include the key algorithm byte */
     private final byte[] bytes;
 
-    public PublicKey(final byte[] bytes, final SignatureAlgorithm keyAlgorithm) {
+    public CLPublicKey(final byte[] bytes, final SignatureAlgorithm keyAlgorithm) {
         super(new CLTypeInfo(CLType.PUBLIC_KEY));
 
         Objects.requireNonNull(bytes, "bytes cannot be null");
@@ -30,15 +30,15 @@ public class PublicKey extends AbstractCLType implements HasTag {
 
     }
 
-    public PublicKey(final String key, final SignatureAlgorithm keyAlgorithm) {
+    public CLPublicKey(final String key, final SignatureAlgorithm keyAlgorithm) {
         this(ByteUtils.decodeHex(key), keyAlgorithm);
     }
 
-    public PublicKey(final String key) {
+    public CLPublicKey(final String key) {
         this(ByteUtils.decodeHex(key));
     }
 
-    public PublicKey(final byte[] key) {
+    public CLPublicKey(final byte[] key) {
         this(removeAlgorithmBytes(key), SignatureAlgorithm.fromId((char) key[0]));
     }
 
