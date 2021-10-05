@@ -13,6 +13,4 @@ public interface TypesSerializer {
      * @return the object converted to casper bytes
      */
     byte[] serialize(final Object toSerialize);
-
-
 }

@@ -6,6 +6,7 @@ import com.casper.sdk.service.serialization.util.ByteUtils;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 /**
@@ -71,5 +72,20 @@ public class CLPublicKey extends AbstractCLType implements HasTag {
     @Override
     public int getTag() {
         return 1;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        final CLPublicKey that = (CLPublicKey) o;
+        return algorithm == that.algorithm && Arrays.equals(bytes, that.bytes);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(algorithm);
+        result = 31 * result + Arrays.hashCode(bytes);
+        return result;
     }
 }

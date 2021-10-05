@@ -21,7 +21,7 @@ public class CollectionUtils {
          * @return a new set
          */
         @SafeVarargs
-        public static <T> java.util.List<T> of(T... elements) {
+        public static <T> java.util.List<T> of(final T... elements) {
             return elements != null ? Arrays.asList(elements) : Collections.emptyList();
         }
     }
@@ -36,7 +36,7 @@ public class CollectionUtils {
          * @return a new R map
          */
         @SuppressWarnings("unchecked")
-        public static <K, V> java.util.Map<K, V> of(Object... keyValuePairs) {
+        public static <K, V> java.util.Map<K, V> of(final Object... keyValuePairs) {
             if (keyValuePairs != null) {
                 final java.util.Map<K, V> map = new LinkedHashMap<>();
                 for (int i = 0; i < keyValuePairs.length; i += 2) {
@@ -59,7 +59,7 @@ public class CollectionUtils {
          * @return a new set
          */
         @SafeVarargs
-        public static <T> java.util.Set<T> of(T... elements) {
+        public static <T> java.util.Set<T> of(final T... elements) {
             if (elements != null) {
                 final java.util.Set<T> set = new LinkedHashSet<>();
                 Collections.addAll(set, elements);
@@ -78,7 +78,7 @@ public class CollectionUtils {
      * @return the cast object
      */
     @SuppressWarnings("unchecked")
-    public static <T> T genericCast(Object obj) {
+    public static <T> T genericCast(final Object obj) {
         return (T) obj;
     }
 }

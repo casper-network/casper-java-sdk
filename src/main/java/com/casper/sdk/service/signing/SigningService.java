@@ -1,8 +1,8 @@
 package com.casper.sdk.service.signing;
 
 import com.casper.sdk.exceptions.SignatureException;
-import com.casper.sdk.types.CLPublicKey;
 import com.casper.sdk.types.Algorithm;
+import com.casper.sdk.types.CLPublicKey;
 import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
 import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;

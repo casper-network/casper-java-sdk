@@ -40,7 +40,6 @@ public class InvokeContractIntTest {
         final String stateRootHash = casperSdk.getStateRootHash();
 
         // Step 4: Query node for contract hash.
-        final CLPublicKey publicKey = casperSdk.toCLPublicKey(userTwoKeyPair.getPublic());
         final ContractHash contractHash = casperSdk.getContractHash(nodeOneKeyPair.getPublic());
 
         // Make a payment
@@ -60,14 +59,19 @@ public class InvokeContractIntTest {
                         "transfer",
                         new DeployNamedArgBuilder()
                                 .add("amount", CLValueBuilder.u256(AMOUNT_TO_TRANSFER))
-                                .add("recipient", CLValueBuilder.byteArray(publicKey.toAccount()))
+                                .add("recipient", CLValueBuilder.byteArray(userTwoKeyPair.getPublic()))
                                 .build()),
                 payment
         );
 
         // Step 5.2: Sign deploy.
         casperSdk.signDeploy(deploy, nodeOneKeyPair);
-        casperSdk.signDeploy(deploy, userTwoKeyPair);
+        final Deploy signedDeploy = casperSdk.signDeploy(deploy, userTwoKeyPair);
+
+        // Assert Approvals
+        assertThat(signedDeploy.getApprovals().size(), is(2));
+        final DeployApproval approval = signedDeploy.getApprovals().iterator().next();
+        assertThat(approval.getSigner(),is(casperSdk.toCLPublicKey(userTwoKeyPair.getPublic())));
 
         final Digest digest = casperSdk.putDeploy(deploy);
 
@@ -75,7 +79,7 @@ public class InvokeContractIntTest {
     }
 
 
-    private KeyPair geUserKeyPair(final CasperSdk casperSdk, int userNumber) throws IOException {
+    private KeyPair geUserKeyPair(final CasperSdk casperSdk, final int userNumber) throws IOException {
         final IntegrationTestUtils.KeyPairStreams streams = geUserKeyPairStreams(userNumber);
         return casperSdk.loadKeyPair(streams.getPublicKeyIn(), streams.getPrivateKeyIn());
     }

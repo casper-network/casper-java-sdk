@@ -11,7 +11,7 @@ public class ByteUtils {
      * @param arrays the array of arrays
      * @return new concatenated array
      */
-    public static byte[] concat(byte[]... arrays) {
+    public static byte[] concat(final byte[]... arrays) {
 
         int len = 0;
         for (byte[] array : arrays) {
@@ -37,7 +37,7 @@ public class ByteUtils {
         }
     }
 
-    public static String encodeHexString(byte[] bytes) {
+    public static String encodeHexString(final byte[] bytes) {
         return Hex.encodeHexString(bytes);
     }
 
@@ -48,7 +48,7 @@ public class ByteUtils {
      * @param length     the number of bytes to obtain
      * @return the last 'length' bytes from a byte array
      */
-    public static byte[] lastNBytes(byte[] toTruncate, final int length) {
+    public static byte[] lastNBytes(final byte[] toTruncate, final int length) {
         byte[] lastNBytes = new byte[length];
         int start = toTruncate.length - length;
         System.arraycopy(toTruncate, start, lastNBytes, 0, length);

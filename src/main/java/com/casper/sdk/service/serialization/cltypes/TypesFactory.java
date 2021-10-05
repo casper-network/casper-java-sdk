@@ -10,6 +10,7 @@ public class TypesFactory {
     private final Map<CLType, TypesSerializer> instances = new HashMap<>();
 
     public TypesFactory() {
+
         instances.put(CLType.BOOL, new BoolSerializer());
         instances.put(CLType.BYTE_ARRAY, new ByteArraySerializer(this));
         instances.put(CLType.KEY, new KeySerializer());
@@ -26,7 +27,8 @@ public class TypesFactory {
         instances.put(CLType.UREF, new URefSerializer());
     }
 
-    public TypesSerializer getInstance(final CLType inputType) {
-        return instances.get(inputType);
+    @SuppressWarnings("unchecked")
+    public <T extends TypesSerializer> T getInstance(final CLType inputType) {
+        return (T) instances.get(inputType);
     }
 }

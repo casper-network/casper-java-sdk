@@ -3,6 +3,9 @@ package com.casper.sdk.types;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The emum of supported signature algorithms
+ */
 public enum Algorithm {
 
     ED25519(1),

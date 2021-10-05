@@ -47,8 +47,5 @@ public class TestChain {
         node = new ObjectMapper().readTree(casperSdk.getNodePeers());
         assertNotNull(node.get("api_version").textValue());
         assertNotNull(node.get("peers").get(0).get("node_id").textValue());
-
     }
-
-
 }

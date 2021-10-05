@@ -10,7 +10,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 class ByteArraySerializerTest {
 
     private final TypesFactory typesFactory = new TypesFactory();
-    private final ByteArraySerializer serializer = (ByteArraySerializer) typesFactory.getInstance(CLType.BYTE_ARRAY);
+    private final ByteArraySerializer serializer = typesFactory.getInstance(CLType.BYTE_ARRAY);
 
     @Test
     void serializeByteArray() {

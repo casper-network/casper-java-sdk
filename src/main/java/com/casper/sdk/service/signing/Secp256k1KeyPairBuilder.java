@@ -1,7 +1,6 @@
 package com.casper.sdk.service.signing;
 
 import com.casper.sdk.exceptions.SignatureException;
-import com.casper.sdk.service.serialization.util.ByteUtils;
 import com.casper.sdk.types.Algorithm;
 import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPublicKey;
 import org.bouncycastle.jce.ECNamedCurveTable;
@@ -34,15 +33,6 @@ public class Secp256k1KeyPairBuilder extends AbstractKeyPairBuilder {
     @Override
     public boolean isSupportedPublicKey(final PublicKey publicKey) {
         return publicKey instanceof BCECPublicKey && ALGORITHM.equalsIgnoreCase(publicKey.getAlgorithm());
-    }
-
-    @Override
-    public byte[] getPublicKeyRawBytes(final PublicKey publicKey) {
-        ECPoint q = ((BCECPublicKey) publicKey).getQ();
-        return ByteUtils.concat(
-                ByteUtils.toByteArray(Algorithm.SECP256K1.getValue()),
-                q.getEncoded(true)
-        );
     }
 
     @Override

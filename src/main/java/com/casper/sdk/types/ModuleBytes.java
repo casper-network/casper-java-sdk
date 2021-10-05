@@ -8,7 +8,7 @@ public class ModuleBytes extends DeployExecutable {
         super(moduleBytes, args);
     }
 
-    public ModuleBytes(List<DeployNamedArg> args) {
+    public ModuleBytes(final List<DeployNamedArg> args) {
         this(new byte[0], args);
     }
 

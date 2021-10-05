@@ -42,21 +42,21 @@ abstract class FixedLengthNumberSerializer implements TypesSerializer {
         return bytes;
     }
 
-    private byte[] trimLeadingZero(byte[] bytes) {
+    private byte[] trimLeadingZero(final byte[] bytes) {
         byte[] copy = new byte[maxBytes];
         System.arraycopy(bytes, bytes.length - maxBytes, copy, 0, maxBytes);
-        bytes = copy;
-        return bytes;
+        return copy;
     }
 
-    private byte[] zeroPad(byte[] bytes, final boolean negative) {
+    private byte[] zeroPad(final byte[] bytes, final boolean negative) {
         if (bytes.length < maxBytes) {
             // Zero pad
             byte[] copy = new byte[maxBytes];
             Arrays.fill(copy, 0, maxBytes - bytes.length, (byte) (negative ? 0xFF : 0));
             System.arraycopy(bytes, 0, copy, maxBytes - bytes.length, bytes.length);
-            bytes = copy;
+            return copy;
+        } else {
+            return bytes;
         }
-        return bytes;
     }
 }

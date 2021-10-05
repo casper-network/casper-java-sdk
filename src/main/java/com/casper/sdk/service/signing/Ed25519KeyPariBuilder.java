@@ -1,7 +1,6 @@
 package com.casper.sdk.service.signing;
 
 import com.casper.sdk.exceptions.SignatureException;
-import com.casper.sdk.service.serialization.util.ByteUtils;
 import com.casper.sdk.types.Algorithm;
 import org.bouncycastle.crypto.params.AsymmetricKeyParameter;
 import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
@@ -30,14 +29,6 @@ class Ed25519KeyPariBuilder extends AbstractKeyPairBuilder {
     @Override
     public boolean isSupportedPublicKey(final PublicKey publicKey) {
         return publicKey instanceof BCEdDSAPublicKey && ALGORITHM.equalsIgnoreCase(publicKey.getAlgorithm());
-    }
-
-    @Override
-    public byte[] getPublicKeyRawBytes(final PublicKey publicKey) {
-        return ByteUtils.concat(
-                ByteUtils.toByteArray(Algorithm.ED25519.getValue()),
-                ((BCEdDSAPublicKey) publicKey).getPointEncoding()
-        );
     }
 
     @Override
