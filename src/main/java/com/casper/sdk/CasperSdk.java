@@ -12,6 +12,7 @@ import com.casper.sdk.types.*;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigInteger;
 import java.security.KeyPair;
 import java.security.PublicKey;
 import java.util.Map;
@@ -63,16 +64,20 @@ public class CasperSdk {
     }
 
 
-    public String getAccountBalance(final PublicKey accountKey) throws Exception {
+    public BigInteger getAccountBalance(final PublicKey accountKey) throws Exception {
         return nodeClient.getAccountBalance(signingService.toClPublicKey(accountKey).toAccountHex());
     }
 
-    public String getAccountMainPurseURef(final PublicKey accountKey) throws Exception {
+    public URef getAccountMainPurseURef(final PublicKey accountKey) throws Exception {
         return nodeClient.getAccountMainPurseURef(signingService.toClPublicKey(accountKey).toAccountHex());
     }
 
     public String getStateRootHash() throws Exception {
         return nodeClient.getStateRootHash();
+    }
+
+    public String getAccountHash(final PublicKey accountKey) {
+        return ByteUtils.encodeHexString(hashService.getAccountHash(this.getPublicKeyBytes(accountKey)));
     }
 
     public String getAccountHash(final String accountKey) {
@@ -177,13 +182,19 @@ public class CasperSdk {
      * @param privateKeyIn the private key .pem file input stream
      * @return the files loaded into a AsymmetricCipherKeyPair
      */
-    public KeyPair loadKeyPair(final InputStream publicKeyIn,
-                               final InputStream privateKeyIn) {
+    public KeyPair loadKeyPair(final InputStream publicKeyIn, final InputStream privateKeyIn) {
         return signingService.loadKeyPair(publicKeyIn, privateKeyIn);
     }
 
+    /**
+     * Obtains the bytes of a public key in casper format with the first byte being the algorithm type identifier
+     * value.
+     *
+     * @param publicKey the public key to exctract the b
+     * @return the bytes
+     */
     public byte[] getPublicKeyBytes(final PublicKey publicKey) {
-        return signingService.toClPublicKey(publicKey).getBytes();
+        return signingService.toClPublicKey(publicKey).toAccount();
     }
 
     /**
@@ -228,5 +239,15 @@ public class CasperSdk {
      */
     public PublicKey createPublicKey(final String publicKeyHex) {
         return signingService.fromClPublicKey(new CLPublicKey(publicKeyHex));
+    }
+
+    /**
+     * Converts a java security public key to a Casper Labs public key
+     *
+     * @param publicKey the public key to convert
+     * @return the Casper Labs public key
+     */
+    public CLPublicKey toCLPublicKey(final PublicKey publicKey) {
+        return signingService.toClPublicKey(publicKey);
     }
 }

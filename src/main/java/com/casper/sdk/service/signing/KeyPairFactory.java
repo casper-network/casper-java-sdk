@@ -1,7 +1,7 @@
 package com.casper.sdk.service.signing;
 
 import com.casper.sdk.exceptions.SignatureException;
-import com.casper.sdk.types.SignatureAlgorithm;
+import com.casper.sdk.types.Algorithm;
 
 import java.security.PublicKey;
 import java.util.HashMap;
@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class KeyPairFactory {
 
-    private final Map<SignatureAlgorithm, KeyPairBuilder> keyPairBuilderMap = new HashMap<>();
+    private final Map<Algorithm, KeyPairBuilder> keyPairBuilderMap = new HashMap<>();
 
     public KeyPairFactory() {
         registerSigner(new Ed25519KeyPariBuilder());
@@ -20,7 +20,7 @@ public class KeyPairFactory {
         keyPairBuilderMap.put(signer.getAlgorithm(), signer);
     }
 
-    KeyPairBuilder getKeyPairBuilder(final SignatureAlgorithm algorithm) {
+    KeyPairBuilder getKeyPairBuilder(final Algorithm algorithm) {
         return keyPairBuilderMap.get(algorithm);
     }
 

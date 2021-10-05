@@ -15,23 +15,23 @@ import java.util.Objects;
 @JsonSerialize(using = PublicKeyJsonSerializer.class)
 public class CLPublicKey extends AbstractCLType implements HasTag {
 
-    protected final SignatureAlgorithm keyAlgorithm;
+    protected final Algorithm algorithm;
     /** Either 32 or 64 bytes (compressed) depending upon ECC type does not include the key algorithm byte */
     private final byte[] bytes;
 
-    public CLPublicKey(final byte[] bytes, final SignatureAlgorithm keyAlgorithm) {
+    public CLPublicKey(final byte[] bytes, final Algorithm algorithm) {
         super(new CLTypeInfo(CLType.PUBLIC_KEY));
 
         Objects.requireNonNull(bytes, "bytes cannot be null");
-        Objects.requireNonNull(keyAlgorithm, "keyAlgorithm cannot be null");
+        Objects.requireNonNull(algorithm, "keyAlgorithm cannot be null");
 
-        this.keyAlgorithm = keyAlgorithm;
+        this.algorithm = algorithm;
         this.bytes = bytes;
 
     }
 
-    public CLPublicKey(final String key, final SignatureAlgorithm keyAlgorithm) {
-        this(ByteUtils.decodeHex(key), keyAlgorithm);
+    public CLPublicKey(final String key, final Algorithm algorithm) {
+        this(ByteUtils.decodeHex(key), algorithm);
     }
 
     public CLPublicKey(final String key) {
@@ -39,7 +39,7 @@ public class CLPublicKey extends AbstractCLType implements HasTag {
     }
 
     public CLPublicKey(final byte[] key) {
-        this(removeAlgorithmBytes(key), SignatureAlgorithm.fromId((char) key[0]));
+        this(removeAlgorithmBytes(key), Algorithm.fromId((char) key[0]));
     }
 
     private static byte[] removeAlgorithmBytes(final byte[] key) {
@@ -53,8 +53,8 @@ public class CLPublicKey extends AbstractCLType implements HasTag {
         return bytes;
     }
 
-    public SignatureAlgorithm getKeyAlgorithm() {
-        return keyAlgorithm;
+    public Algorithm getAlgorithm() {
+        return algorithm;
     }
 
     public String toAccountHex() {
@@ -63,7 +63,7 @@ public class CLPublicKey extends AbstractCLType implements HasTag {
 
     public byte[] toAccount() {
         return ByteUtils.concat(
-                new byte[]{(byte) keyAlgorithm.getValue()},
+                new byte[]{(byte) algorithm.getValue()},
                 bytes
         );
     }

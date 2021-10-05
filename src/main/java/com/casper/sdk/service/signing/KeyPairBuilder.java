@@ -1,7 +1,7 @@
 package com.casper.sdk.service.signing;
 
 
-import com.casper.sdk.types.SignatureAlgorithm;
+import com.casper.sdk.types.Algorithm;
 
 import java.security.KeyPair;
 import java.security.PublicKey;
@@ -23,7 +23,7 @@ public interface KeyPairBuilder {
      *
      * @return the signers algorithm
      */
-    SignatureAlgorithm getAlgorithm();
+    Algorithm getAlgorithm();
 
     /**
      * Indicates if the provided public key has an algorithm that is supported by this signer

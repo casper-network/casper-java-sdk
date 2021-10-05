@@ -1,6 +1,6 @@
 package com.casper.sdk.service.json.serialize;
 
-import com.casper.sdk.types.SignatureAlgorithm;
+import com.casper.sdk.types.Algorithm;
 import com.casper.sdk.types.CLPublicKey;
 import org.junit.jupiter.api.Test;
 
@@ -18,11 +18,11 @@ class PublicKeyJsonSerializerTest {
     @Test
     void serialize() throws IOException {
 
-        final CLPublicKey secKey = new CLPublicKey("12345678901234567890123456789012", SignatureAlgorithm.SECP256K1);
+        final CLPublicKey secKey = new CLPublicKey("12345678901234567890123456789012", Algorithm.SECP256K1);
         String json = writeToJsonString(secKey);
         assertThat(json, is("\"0212345678901234567890123456789012\""));
 
-        final CLPublicKey edKey = new CLPublicKey("12345678901234567890123456789012", SignatureAlgorithm.ED25519);
+        final CLPublicKey edKey = new CLPublicKey("12345678901234567890123456789012", Algorithm.ED25519);
         json = writeToJsonString(edKey);
         assertThat(json, is("\"0112345678901234567890123456789012\""));
     }

@@ -3,30 +3,30 @@ package com.casper.sdk.types;
 import java.util.HashMap;
 import java.util.Map;
 
-public enum SignatureAlgorithm {
+public enum Algorithm {
 
     ED25519(1),
     SECP256K1(2);
 
-    private static final Map<Integer, SignatureAlgorithm> map = new HashMap<>();
+    private static final Map<Integer, Algorithm> map = new HashMap<>();
 
     static {
-        for (SignatureAlgorithm key : SignatureAlgorithm.values()) {
+        for (Algorithm key : Algorithm.values()) {
             map.put(key.value, key);
         }
     }
 
     private final int value;
 
-    SignatureAlgorithm(int value) {
+    Algorithm(int value) {
         this.value = value;
     }
 
-    public static SignatureAlgorithm valueOf(int pageType) {
+    public static Algorithm valueOf(int pageType) {
         return map.get(pageType);
     }
 
-    public static SignatureAlgorithm fromId(char id) {
+    public static Algorithm fromId(char id) {
         if (id == 1 || id == '1') {
             return ED25519;
         } else if (id == 2 || id == '2') {

@@ -2,8 +2,11 @@ package com.casper.sdk.how_to.how_to_query_a_node;
 
 import com.casper.sdk.CasperSdk;
 import com.casper.sdk.how_to.common.Methods;
+import com.casper.sdk.types.URef;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+
+import java.math.BigInteger;
 
 /**
  * Uses Local Network Testing network/node control to demonstrate querying a node
@@ -57,7 +60,7 @@ public class QueryANode extends Methods {
     @Test
     public void testGetAccountMainPurseURef() throws Throwable {
 
-        final String accountMainPurseURef = casperSdk.getAccountMainPurseURef(
+        final URef accountMainPurseURef = casperSdk.getAccountMainPurseURef(
                 getUserKeyPair(1, NCTL_HOME, casperSdk).getPublic()
         );
 
@@ -78,7 +81,7 @@ public class QueryANode extends Methods {
     @Test
     public void testGetAccountBalance() throws Throwable {
 
-        final String accountBalance = casperSdk.getAccountBalance(
+        final BigInteger accountBalance = casperSdk.getAccountBalance(
                 super.getUserKeyPair(1, NCTL_HOME, casperSdk).getPublic()
         );
 
@@ -94,7 +97,5 @@ public class QueryANode extends Methods {
         );
 
         assert (accountInfo != null);
-
     }
-
 }

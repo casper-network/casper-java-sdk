@@ -54,7 +54,7 @@ class DeployServiceTest {
         final byte[] expectedTargetBytes = decodeHex("e6454d6bc07d32a178298286e589029b083da8cd718ab3d8dbdab1cfd018fb79");
         final byte[] expectedAmountBytes = decodeHex("010A");
 
-        final Transfer transfer = deployService.newTransfer(10, new CLPublicKey(keyBytes, SignatureAlgorithm.ED25519), 34);
+        final Transfer transfer = deployService.newTransfer(10, new CLPublicKey(keyBytes, Algorithm.ED25519), 34);
 
         assertThat(transfer, is(notNullValue()));
         assertThat(transfer.getTag(), is(5));
@@ -144,7 +144,7 @@ class DeployServiceTest {
         };
 
         final ModuleBytes payment = deployService.standardPayment(10000000000000L);
-        final Transfer transfer = deployService.newTransfer(10, new CLPublicKey(recipientPublicKey, SignatureAlgorithm.ED25519), 34);
+        final Transfer transfer = deployService.newTransfer(10, new CLPublicKey(recipientPublicKey, Algorithm.ED25519), 34);
 
         final byte[] bytes = deployService.serializeBody(payment, transfer);
         assertThat(bytes, is(expectedBody));
@@ -218,7 +218,7 @@ class DeployServiceTest {
         };
 
         final ModuleBytes payment = deployService.standardPayment(10000000000000L);
-        final Transfer transfer = deployService.newTransfer(10, new CLPublicKey(recipientPublicKey, SignatureAlgorithm.ED25519), 34);
+        final Transfer transfer = deployService.newTransfer(10, new CLPublicKey(recipientPublicKey, Algorithm.ED25519), 34);
 
         byte[] body = deployService.serializeBody(payment, transfer);
 
@@ -257,7 +257,7 @@ class DeployServiceTest {
                         null),
 
                 deployService.newTransfer(new BigInteger("24500000000"),
-                        new CLPublicKey("0101010101010101010101010101010101010101010101010101010101010101", SignatureAlgorithm.ED25519),
+                        new CLPublicKey("0101010101010101010101010101010101010101010101010101010101010101", Algorithm.ED25519),
                         new BigInteger("999")),
 
                 deployService.standardPayment(new BigInteger("1000000000"))
@@ -276,7 +276,7 @@ class DeployServiceTest {
 
         final DeployApproval approval = signedDeploy.getApprovals().iterator().next();
         assertThat(approval.getSignature().toAccount(), is(notNullValue()));
-        assertThat(approval.getSignature().toAccount()[0], is((byte) SignatureAlgorithm.ED25519.getValue()));
+        assertThat(approval.getSignature().toAccount()[0], is((byte) Algorithm.ED25519.getValue()));
         assertThat(approval.getSignature().toAccount().length, is(65));
         assertThat(approval.getSignature().getBytes().length, is(64));
 
@@ -312,7 +312,7 @@ class DeployServiceTest {
         };
 
         final DeployParams deployParams = new DeployParams(
-                signingService.fromClPublicKey(new CLPublicKey(senderPublicKey, SignatureAlgorithm.ED25519)),
+                signingService.fromClPublicKey(new CLPublicKey(senderPublicKey, Algorithm.ED25519)),
                 "test-network",
                 null,
                 1624302238199L,
@@ -321,7 +321,7 @@ class DeployServiceTest {
         );
 
         final ModuleBytes payment = deployService.standardPayment(10000000000000L);
-        final Transfer session = deployService.newTransfer(10, new CLPublicKey(recipientPublicKey, SignatureAlgorithm.ED25519), 34);
+        final Transfer session = deployService.newTransfer(10, new CLPublicKey(recipientPublicKey, Algorithm.ED25519), 34);
         final Digest bodyHash = deployService.makeBodyHash(payment, session);
         final DeployHeader header = new DeployHeader(
                 signingService.toClPublicKey(deployParams.getAccountPublicKey()),

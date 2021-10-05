@@ -2,7 +2,7 @@ package com.casper.sdk.service.signing;
 
 import com.casper.sdk.service.serialization.util.ByteUtils;
 import com.casper.sdk.types.CLPublicKey;
-import com.casper.sdk.types.SignatureAlgorithm;
+import com.casper.sdk.types.Algorithm;
 import org.apache.commons.io.IOUtils;
 import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPublicKey;
 import org.bouncycastle.jcajce.provider.asymmetric.edec.BCEdDSAPublicKey;
@@ -68,7 +68,7 @@ class SigningServiceTest {
     @Test
     void generateEd25519KeyPair() {
 
-        final KeyPair keyPair = signingService.generateKeyPair(SignatureAlgorithm.ED25519);
+        final KeyPair keyPair = signingService.generateKeyPair(Algorithm.ED25519);
         assertThat(keyPair.getPublic(), is(notNullValue()));
         assertThat(keyPair.getPrivate(), is(notNullValue()));
 
@@ -104,7 +104,7 @@ class SigningServiceTest {
                 (byte) 14, (byte) 215, (byte) 85, (byte) 234, (byte) 161
         };
 
-        final KeyPair keyPair = signingService.generateKeyPair(SignatureAlgorithm.SECP256K1);
+        final KeyPair keyPair = signingService.generateKeyPair(Algorithm.SECP256K1);
 
         assertThat(keyPair, is(notNullValue()));
         assertThat(keyPair.getPublic(), is(notNullValue()));
@@ -165,7 +165,7 @@ class SigningServiceTest {
 
         final byte[] rawBytes = ByteUtils.decodeHex("02035793d9a677ec9cf0d3d2a7a61fb98c173c04b63925cfe387203b19d312fa37b0");
         final CLPublicKey publicKey = signingService.toClPublicKey(keyPair.getPublic());
-        assertThat(publicKey.getKeyAlgorithm(), is(SignatureAlgorithm.SECP256K1));
+        assertThat(publicKey.getAlgorithm(), is(Algorithm.SECP256K1));
         assertThat(publicKey.toAccount(), is(rawBytes));
     }
 
@@ -190,7 +190,7 @@ class SigningServiceTest {
 
         final String rawBytes = "01d30f6a241199e68217cb05abcefc7c8267c5226b8e644f1f8d0a79b87ed04f07";
         final CLPublicKey clPublicKey = new CLPublicKey(rawBytes);
-        assertThat(clPublicKey.getKeyAlgorithm(), is(SignatureAlgorithm.ED25519));
+        assertThat(clPublicKey.getAlgorithm(), is(Algorithm.ED25519));
         assertThat(clPublicKey.toAccountHex(), is(rawBytes));
     }
 

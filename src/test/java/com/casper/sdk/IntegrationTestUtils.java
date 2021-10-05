@@ -1,13 +1,9 @@
 package com.casper.sdk;
 
-import com.casper.sdk.types.SignatureAlgorithm;
-import com.casper.sdk.types.CLPublicKey;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.security.KeyPair;
 
 public class IntegrationTestUtils {
 
@@ -31,13 +27,6 @@ public class IntegrationTestUtils {
     }
 
     private static final String NCTL_HOME = "~/Documents/casper/casper-node/utils/nctl";
-
-    static String getPublicKeyAccountHex(final KeyPair keyPair) {
-
-        final CLPublicKey publicKey = new CLPublicKey(keyPair.getPublic().getEncoded(), SignatureAlgorithm.ED25519);
-        return publicKey.toAccountHex();
-    }
-
 
     static KeyPairStreams geUserKeyPairStreams(int userNumber) throws IOException {
 

@@ -109,7 +109,7 @@ class DeployExecutableByteSerializerTest {
         };
 
         final Transfer transfer = deployService.newTransfer(10,
-                new CLPublicKey(recipientPublicKey, SignatureAlgorithm.ED25519),
+                new CLPublicKey(recipientPublicKey, Algorithm.ED25519),
                 34);
 
         final byte[] actual = serializer.toBytes(transfer);

@@ -12,7 +12,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 @JsonSerialize(using = PublicKeyJsonSerializer.class)
 public class Signature extends CLPublicKey {
 
-    public Signature(final byte[] bytes, final SignatureAlgorithm keyAlgorithm) {
+    public Signature(final byte[] bytes, final Algorithm keyAlgorithm) {
         super(bytes, keyAlgorithm);
     }
 

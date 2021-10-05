@@ -1,7 +1,7 @@
 package com.casper.sdk.service.signing;
 
 import com.casper.sdk.exceptions.SignatureException;
-import com.casper.sdk.types.SignatureAlgorithm;
+import com.casper.sdk.types.Algorithm;
 
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -12,14 +12,14 @@ import static com.casper.sdk.service.signing.SigningService.PROVIDER;
 
 abstract class AbstractKeyPairBuilder implements KeyPairBuilder {
 
-    private final SignatureAlgorithm algorithm;
+    private final Algorithm algorithm;
 
-    AbstractKeyPairBuilder(final SignatureAlgorithm algorithm) {
+    AbstractKeyPairBuilder(final Algorithm algorithm) {
         this.algorithm = algorithm;
     }
 
     @Override
-    public SignatureAlgorithm getAlgorithm() {
+    public Algorithm getAlgorithm() {
         return algorithm;
     }
 

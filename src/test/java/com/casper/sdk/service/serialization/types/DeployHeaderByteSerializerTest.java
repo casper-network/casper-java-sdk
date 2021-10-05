@@ -4,7 +4,7 @@ import com.casper.sdk.types.DeployHeader;
 import com.casper.sdk.types.Digest;
 import com.casper.sdk.types.CLPublicKey;
 import com.casper.sdk.service.serialization.cltypes.TypesFactory;
-import com.casper.sdk.types.SignatureAlgorithm;
+import com.casper.sdk.types.Algorithm;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -66,7 +66,7 @@ class DeployHeaderByteSerializerTest {
 
 
         final DeployHeader deployHeader = new DeployHeader(
-                new CLPublicKey(key, SignatureAlgorithm.SECP256K1),
+                new CLPublicKey(key, Algorithm.SECP256K1),
                 1623862516006L,
                 1800000,
                 1,

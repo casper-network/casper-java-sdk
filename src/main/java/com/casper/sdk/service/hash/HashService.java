@@ -2,7 +2,7 @@ package com.casper.sdk.service.hash;
 
 import com.casper.sdk.exceptions.HashException;
 import com.casper.sdk.service.serialization.util.ByteUtils;
-import com.casper.sdk.types.SignatureAlgorithm;
+import com.casper.sdk.types.Algorithm;
 import com.rfksystems.blake2b.Blake2b;
 import com.rfksystems.blake2b.security.Blake2bProvider;
 
@@ -72,9 +72,9 @@ public class HashService {
             throw new IllegalArgumentException("Key size must be equal or greater than 66 chars");
         }
 
-        final SignatureAlgorithm keyAlgorithm = SignatureAlgorithm.fromId((char) key[0]);
+        final Algorithm algorithm = Algorithm.fromId((char) key[0]);
 
-        switch (keyAlgorithm) {
+        switch (algorithm) {
 
             case ED25519:
                 if (key.length != 33) {
@@ -91,6 +91,6 @@ public class HashService {
                 throw new IllegalArgumentException(String.format("Unknown key prefix: [%s]", key[0]));
         }
 
-        return keyAlgorithm.name().toLowerCase().getBytes(StandardCharsets.UTF_8);
+        return algorithm.name().toLowerCase().getBytes(StandardCharsets.UTF_8);
     }
 }

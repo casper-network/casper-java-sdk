@@ -1,6 +1,6 @@
 package com.casper.sdk.service.serialization.types;
 
-import com.casper.sdk.types.SignatureAlgorithm;
+import com.casper.sdk.types.Algorithm;
 import com.casper.sdk.types.CLPublicKey;
 import com.casper.sdk.service.serialization.util.ByteUtils;
 import org.hamcrest.core.Is;
@@ -28,7 +28,7 @@ class CLPublicKeyByteSerializerTest {
 
         final byte[] expected = ByteUtils.concat(new byte[]{1}, key);
 
-        final byte[] bytes = serializer.toBytes(new CLPublicKey(key, SignatureAlgorithm.ED25519));
+        final byte[] bytes = serializer.toBytes(new CLPublicKey(key, Algorithm.ED25519));
         assertThat(bytes, Is.is(expected));
 
     }

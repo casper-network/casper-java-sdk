@@ -169,7 +169,7 @@ public class DeployService {
         deploy.getApprovals().add(
                 new DeployApproval(
                         publicKey,
-                        new Signature(signed, publicKey.getKeyAlgorithm())
+                        new Signature(signed, publicKey.getAlgorithm())
                 )
         );
 

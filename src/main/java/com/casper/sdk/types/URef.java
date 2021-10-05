@@ -2,6 +2,8 @@ package com.casper.sdk.types;
 
 import com.casper.sdk.service.serialization.util.ByteUtils;
 
+import java.util.regex.Pattern;
+
 public class URef {
 
     private final byte[] bytes;
@@ -12,9 +14,25 @@ public class URef {
         this.accessRights = accessRights;
     }
 
-    public URef(String hex, AccessRights accessRights) {
-        this(ByteUtils.decodeHex(hex), accessRights);
+    public URef(final String uRef) {
+        this(getBytes(uRef), getAccessRights(uRef));
+    }
 
+    public URef(final String hex, final AccessRights accessRights) {
+        this(ByteUtils.decodeHex(hex), accessRights);
+    }
+
+    private static byte[] getBytes(final String uRef) {
+        final String[] split = uRef.split(Pattern.quote("-"));
+        if ("uref".equals(split[0])) {
+            return ByteUtils.decodeHex(split[1]);
+        } else {
+            throw new IllegalArgumentException("invalid URef " + uRef);
+        }
+    }
+
+    private static AccessRights getAccessRights(final String uRef) {
+        return AccessRights.valueOf(Character.getNumericValue(uRef.charAt(uRef.length() - 1)));
     }
 
     public byte[] getBytes() {
@@ -24,4 +42,6 @@ public class URef {
     public AccessRights getAccessRights() {
         return accessRights != null ? accessRights : AccessRights.NONE;
     }
+
+
 }

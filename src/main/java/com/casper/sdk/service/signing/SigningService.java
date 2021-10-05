@@ -2,7 +2,7 @@ package com.casper.sdk.service.signing;
 
 import com.casper.sdk.exceptions.SignatureException;
 import com.casper.sdk.types.CLPublicKey;
-import com.casper.sdk.types.SignatureAlgorithm;
+import com.casper.sdk.types.Algorithm;
 import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
 import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
@@ -36,7 +36,7 @@ public class SigningService {
      * @param algorithm the algorithm of new key pair to generate
      * @return a new key pair of the specified algorithm
      */
-    public KeyPair generateKeyPair(final SignatureAlgorithm algorithm) {
+    public KeyPair generateKeyPair(final Algorithm algorithm) {
         return getKeyPairBuilder(algorithm).generateKeyPair();
     }
 
@@ -47,8 +47,7 @@ public class SigningService {
      * @param privateKeyFile the private key .pem file
      * @return the files loaded into a AsymmetricCipherKeyPair
      */
-    public KeyPair loadKeyPair(final File publicKeyFile,
-                               final File privateKeyFile) {
+    public KeyPair loadKeyPair(final File publicKeyFile, final File privateKeyFile) {
         try {
             return loadKeyPair(new FileInputStream(publicKeyFile), new FileInputStream(privateKeyFile));
         } catch (FileNotFoundException e) {
@@ -64,9 +63,7 @@ public class SigningService {
      * @return the files loaded into a AsymmetricCipherKeyPair
      */
     public KeyPair loadKeyPair(final InputStream publicKeyIn, final InputStream privateKeyIn) {
-        final PublicKey ecPublicKeyParameters = toPublicKey(publicKeyIn);
-        final PrivateKey ecPrivateKeyParameters = toPrivateKey(privateKeyIn);
-        return new KeyPair(ecPublicKeyParameters, ecPrivateKeyParameters);
+        return new KeyPair(toPublicKey(publicKeyIn), toPrivateKey(privateKeyIn));
     }
 
     /**
@@ -76,8 +73,7 @@ public class SigningService {
      * @param toSign     the message to sign
      * @return the signed message
      */
-    public byte[] signWithPrivateKey(final PrivateKey privateKey,
-                                     final byte[] toSign) {
+    public byte[] signWithPrivateKey(final PrivateKey privateKey, final byte[] toSign) {
 
         try {
             final Signature sig = Signature.getInstance(privateKey.getAlgorithm(), PROVIDER);
@@ -106,7 +102,7 @@ public class SigningService {
      * @return the raw bytes
      */
     public PublicKey fromClPublicKey(final CLPublicKey publicKey) {
-        return getKeyPairBuilder(publicKey.getKeyAlgorithm()).createPublicKey(publicKey.getBytes());
+        return getKeyPairBuilder(publicKey.getAlgorithm()).createPublicKey(publicKey.getBytes());
     }
 
     /**
@@ -117,9 +113,7 @@ public class SigningService {
      * @param signature the signed message
      * @return true if the signature is valid otherwise false
      */
-    public boolean verifySignature(final PublicKey publicKey,
-                                   final byte[] toSign,
-                                   final byte[] signature) {
+    public boolean verifySignature(final PublicKey publicKey, final byte[] toSign, final byte[] signature) {
 
         try {
             final Signature sig = Signature.getInstance(publicKey.getAlgorithm(), PROVIDER);
@@ -134,14 +128,14 @@ public class SigningService {
     /**
      * Writes a key to a PEM file
      *
-     * @param out        the stream to write a key to
-     * @param privateKey the  key to write in a .PEM file
+     * @param out the stream to write a key to
+     * @param key the  key to write in a .PEM file
      */
-    public void writeKey(final OutputStream out, final Key privateKey) {
+    public void writeKey(final OutputStream out, final Key key) {
 
         try {
             final JcaPEMWriter jcaPEMWriter = new JcaPEMWriter(new OutputStreamWriter(out));
-            jcaPEMWriter.writeObject(privateKey);
+            jcaPEMWriter.writeObject(key);
             jcaPEMWriter.flush();
             jcaPEMWriter.close();
         } catch (IOException e) {
@@ -178,8 +172,8 @@ public class SigningService {
         }
     }
 
-    private KeyPairBuilder getKeyPairBuilder(final SignatureAlgorithm signatureAlgorithm) {
-        return keyPairFactory.getKeyPairBuilder(signatureAlgorithm);
+    private KeyPairBuilder getKeyPairBuilder(final Algorithm algorithm) {
+        return keyPairFactory.getKeyPairBuilder(algorithm);
     }
 
     private KeyPairBuilder getKeyPairBuilderForPublicKey(final PublicKey publicKey) {

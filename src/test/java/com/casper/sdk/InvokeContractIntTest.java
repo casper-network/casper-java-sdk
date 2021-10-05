@@ -39,9 +39,8 @@ public class InvokeContractIntTest {
         // Step 3: Query node for global state root hash.
         final String stateRootHash = casperSdk.getStateRootHash();
 
-
         // Step 4: Query node for contract hash.
-        final String accountHex = getPublicKeyAccountHex(userTwoKeyPair);
+        final CLPublicKey publicKey = casperSdk.toCLPublicKey(userTwoKeyPair.getPublic());
         final ContractHash contractHash = casperSdk.getContractHash(nodeOneKeyPair.getPublic());
 
         // Make a payment
@@ -61,7 +60,7 @@ public class InvokeContractIntTest {
                         "transfer",
                         new DeployNamedArgBuilder()
                                 .add("amount", CLValueBuilder.u256(AMOUNT_TO_TRANSFER))
-                                .add("recipient", CLValueBuilder.byteArray(accountHex))
+                                .add("recipient", CLValueBuilder.byteArray(publicKey.toAccount()))
                                 .build()),
                 payment
         );

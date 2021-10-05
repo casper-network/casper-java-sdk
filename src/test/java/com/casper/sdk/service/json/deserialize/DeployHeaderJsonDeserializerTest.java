@@ -2,7 +2,7 @@ package com.casper.sdk.service.json.deserialize;
 
 import com.casper.sdk.types.DeployHeader;
 import com.casper.sdk.types.Digest;
-import com.casper.sdk.types.SignatureAlgorithm;
+import com.casper.sdk.types.Algorithm;
 import com.casper.sdk.types.CLPublicKey;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -49,7 +49,7 @@ class DeployHeaderJsonDeserializerTest {
         assertThat(deployHeader, is(notNullValue()));
         assertThat(deployHeader.getAccount(), is(notNullValue(CLPublicKey.class)));
         assertThat(CLPublicKey.toHex(deployHeader.getAccount().getBytes()), is("7f747b67bd3fe63c2a736739dfe40156d622347346e70f68f51c178a75ce5537"));
-        assertThat(deployHeader.getAccount().getKeyAlgorithm(), is(SignatureAlgorithm.ED25519));
+        assertThat(deployHeader.getAccount().getAlgorithm(), is(Algorithm.ED25519));
     }
 
     @Test

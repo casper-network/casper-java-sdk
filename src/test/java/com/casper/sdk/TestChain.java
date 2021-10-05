@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigInteger;
 import java.security.PublicKey;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -19,12 +20,11 @@ public class TestChain {
     @Test
     @Disabled
     public void testAgainstChain() throws Throwable {
-        CasperSdk casperSdk = new CasperSdk(url, port);
 
-       PublicKey publicKey = casperSdk.createPublicKey("019d9bc24944a08204c09d222405127c8ca7dc7dcc267ccc6b392deab8148d111d");
-
-        String accountBalance = casperSdk.getAccountBalance(publicKey);
-        assertEquals("1000000000000000000000000000000000", accountBalance);
+        final CasperSdk casperSdk = new CasperSdk(url, port);
+        final PublicKey publicKey = casperSdk.createPublicKey("019d9bc24944a08204c09d222405127c8ca7dc7dcc267ccc6b392deab8148d111d");
+        final BigInteger accountBalance = casperSdk.getAccountBalance(publicKey);
+        assertEquals(new BigInteger("1000000000000000000000000000000000"), accountBalance);
     }
 
 

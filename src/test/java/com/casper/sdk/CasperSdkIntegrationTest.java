@@ -65,19 +65,19 @@ class CasperSdkIntegrationTest {
 
     @Test
     void getAccountHash() throws Throwable {
-        final String accountHash = casperSdk.getAccountHash(getPublicKeyAccountHex(geUserKeyPair(1)));
+        final String accountHash = casperSdk.getAccountHash(geUserKeyPair(1).getPublic());
         assertThat(accountHash, is(notNullValue()));
     }
 
     @Test
     void getAccountBalance() throws Throwable {
-        final String accountBalance = casperSdk.getAccountBalance(geUserKeyPair(1).getPublic());
+        final BigInteger accountBalance = casperSdk.getAccountBalance(geUserKeyPair(1).getPublic());
         assertThat(accountBalance, is(notNullValue()));
     }
 
     @Test
     void getAccountMainPurseURef() throws Throwable {
-        final String accountMainPurseURef = casperSdk.getAccountMainPurseURef(geUserKeyPair(1).getPublic());
+        final URef accountMainPurseURef = casperSdk.getAccountMainPurseURef(geUserKeyPair(1).getPublic());
         assertThat(accountMainPurseURef, is(notNullValue()));
     }
 
@@ -113,7 +113,7 @@ class CasperSdkIntegrationTest {
 
         final KeyPair nodeOneKeyPair = getNodeKeyPair(1);
 
-        final CLPublicKey toPublicKey = new CLPublicKey(userTwoKeyPair.getPublic().getEncoded(), SignatureAlgorithm.ED25519);
+        final CLPublicKey toPublicKey = casperSdk.toCLPublicKey(userTwoKeyPair.getPublic());
 
         // Make the session, a transfer from user one to user two
         final Transfer transfer = casperSdk.newTransfer(new BigInteger("2500000000"),

@@ -2,7 +2,7 @@ package com.casper.sdk.service.signing;
 
 import com.casper.sdk.exceptions.SignatureException;
 import com.casper.sdk.service.serialization.util.ByteUtils;
-import com.casper.sdk.types.SignatureAlgorithm;
+import com.casper.sdk.types.Algorithm;
 import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPublicKey;
 import org.bouncycastle.jce.ECNamedCurveTable;
 import org.bouncycastle.jce.spec.ECParameterSpec;
@@ -24,7 +24,7 @@ public class Secp256k1KeyPairBuilder extends AbstractKeyPairBuilder {
     public static final String ALGORITHM = "ECDSA";
 
     Secp256k1KeyPairBuilder() {
-        super(SignatureAlgorithm.SECP256K1);
+        super(Algorithm.SECP256K1);
     }
 
     public KeyPair generateKeyPair() {
@@ -40,7 +40,7 @@ public class Secp256k1KeyPairBuilder extends AbstractKeyPairBuilder {
     public byte[] getPublicKeyRawBytes(final PublicKey publicKey) {
         ECPoint q = ((BCECPublicKey) publicKey).getQ();
         return ByteUtils.concat(
-                ByteUtils.toByteArray(SignatureAlgorithm.SECP256K1.getValue()),
+                ByteUtils.toByteArray(Algorithm.SECP256K1.getValue()),
                 q.getEncoded(true)
         );
     }
