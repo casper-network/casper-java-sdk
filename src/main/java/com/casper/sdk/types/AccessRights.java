@@ -22,7 +22,24 @@ public enum AccessRights {
     final byte bits;
 
     AccessRights(int bits) {
-        this.bits = (byte)bits;
+        this.bits = (byte) bits;
+    }
+
+    /**
+     * Obtains the AccessRight enum for the specified bits
+     *
+     * @param bits bits to test
+     * @return the corresponding access rights
+     */
+    public static AccessRights valueOf(final Number bits) {
+        final byte byteValue = bits.byteValue();
+        for (AccessRights accessRights : values()) {
+
+            if (accessRights.bits == byteValue) {
+                return accessRights;
+            }
+        }
+        throw new IllegalArgumentException("No enum constant for value " + bits);
     }
 
     public byte getBits() {

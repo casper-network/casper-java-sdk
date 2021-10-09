@@ -6,13 +6,13 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
- * Signature type type used in deployment approvals.
+ * Signature type used in deployment approvals.
  */
 @JsonDeserialize(using = SignatureJsonDeserializer.class)
 @JsonSerialize(using = PublicKeyJsonSerializer.class)
-public class Signature extends PublicKey {
+public class Signature extends CLPublicKey {
 
-    public Signature(final byte[] bytes, final KeyAlgorithm keyAlgorithm) {
+    public Signature(final byte[] bytes, final Algorithm keyAlgorithm) {
         super(bytes, keyAlgorithm);
     }
 

@@ -1,9 +1,7 @@
 package com.casper.sdk;
 
-import com.casper.sdk.service.HashService;
+import com.casper.sdk.service.hash.HashService;
 import com.casper.sdk.types.*;
-import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
-import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -12,6 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.security.KeyPair;
 import java.time.Instant;
 
 import static com.casper.sdk.IntegrationTestUtils.*;
@@ -60,25 +59,25 @@ class CasperSdkIntegrationTest {
 
     @Test
     void getAccountInfo() throws Throwable {
-        final String accountInfo = casperSdk.getAccountInfo(getPublicKeyAccountHex(geUserKeyPair(1)));
+        final String accountInfo = casperSdk.getAccountInfo(geUserKeyPair(1).getPublic());
         assertThat(accountInfo, is(notNullValue()));
     }
 
     @Test
     void getAccountHash() throws Throwable {
-        final String accountHash = casperSdk.getAccountHash(getPublicKeyAccountHex(geUserKeyPair(1)));
+        final String accountHash = casperSdk.getAccountHash(geUserKeyPair(1).getPublic());
         assertThat(accountHash, is(notNullValue()));
     }
 
     @Test
     void getAccountBalance() throws Throwable {
-        final String accountBalance = casperSdk.getAccountBalance(getPublicKeyAccountHex(geUserKeyPair(1)));
+        final BigInteger accountBalance = casperSdk.getAccountBalance(geUserKeyPair(1).getPublic());
         assertThat(accountBalance, is(notNullValue()));
     }
 
     @Test
     void getAccountMainPurseURef() throws Throwable {
-        final String accountMainPurseURef = casperSdk.getAccountMainPurseURef(getPublicKeyAccountHex(geUserKeyPair(1)));
+        final URef accountMainPurseURef = casperSdk.getAccountMainPurseURef(geUserKeyPair(1).getPublic());
         assertThat(accountMainPurseURef, is(notNullValue()));
     }
 
@@ -109,13 +108,12 @@ class CasperSdkIntegrationTest {
     @Test
     void putDeploy() throws Throwable {
 
-        final AsymmetricCipherKeyPair userOneKeyPair = geUserKeyPair(1);
-        final AsymmetricCipherKeyPair userTwoKeyPair = geUserKeyPair(2);
+        final KeyPair userOneKeyPair = geUserKeyPair(1);
+        final KeyPair userTwoKeyPair = geUserKeyPair(2);
 
-        final AsymmetricCipherKeyPair nodeOneKeyPair = getNodeKeyPair(1);
+        final KeyPair nodeOneKeyPair = getNodeKeyPair(1);
 
-        final PublicKey fromPublicKey = new PublicKey(((Ed25519PublicKeyParameters) nodeOneKeyPair.getPublic()).getEncoded(), KeyAlgorithm.ED25519);
-        final PublicKey toPublicKey = new PublicKey(((Ed25519PublicKeyParameters) userTwoKeyPair.getPublic()).getEncoded(), KeyAlgorithm.ED25519);
+        final CLPublicKey toPublicKey = casperSdk.toCLPublicKey(userTwoKeyPair.getPublic());
 
         // Make the session, a transfer from user one to user two
         final Transfer transfer = casperSdk.newTransfer(new BigInteger("2500000000"),
@@ -128,7 +126,7 @@ class CasperSdkIntegrationTest {
         // Create the transfer
         final Deploy deploy = casperSdk.makeTransferDeploy(
                 new DeployParams(
-                        fromPublicKey,
+                        nodeOneKeyPair.getPublic(),
                         "casper-net-1",
                         10,
                         Instant.now().toEpochMilli(),
@@ -157,13 +155,12 @@ class CasperSdkIntegrationTest {
         assertThat(accountHash, is(expectedHash));
     }
 
-
-    private AsymmetricCipherKeyPair geUserKeyPair(int userNumber) throws IOException {
+    private KeyPair geUserKeyPair(int userNumber) throws IOException {
         final KeyPairStreams streams = geUserKeyPairStreams(userNumber);
         return casperSdk.loadKeyPair(streams.getPublicKeyIn(), streams.getPrivateKeyIn());
     }
 
-    private AsymmetricCipherKeyPair getNodeKeyPair(final int nodeNumber) throws IOException {
+    private KeyPair getNodeKeyPair(final int nodeNumber) throws IOException {
         final KeyPairStreams streams = getNodeKeyPairSteams(nodeNumber);
         return casperSdk.loadKeyPair(streams.getPublicKeyIn(), streams.getPrivateKeyIn());
     }

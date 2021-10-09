@@ -1,7 +1,7 @@
 package com.casper.sdk.service.serialization.types;
 
-import com.casper.sdk.types.KeyAlgorithm;
-import com.casper.sdk.types.PublicKey;
+import com.casper.sdk.types.Algorithm;
+import com.casper.sdk.types.CLPublicKey;
 import com.casper.sdk.service.serialization.util.ByteUtils;
 import org.hamcrest.core.Is;
 import org.junit.jupiter.api.Test;
@@ -11,7 +11,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 /**
  * Unit tests the {@link PublicKeyByteSerializer}
  */
-class PublicKeyByteSerializerTest {
+class CLPublicKeyByteSerializerTest {
 
     private final PublicKeyByteSerializer serializer = new PublicKeyByteSerializer();
 
@@ -28,7 +28,7 @@ class PublicKeyByteSerializerTest {
 
         final byte[] expected = ByteUtils.concat(new byte[]{1}, key);
 
-        final byte[] bytes = serializer.toBytes(new PublicKey(key, KeyAlgorithm.ED25519));
+        final byte[] bytes = serializer.toBytes(new CLPublicKey(key, Algorithm.ED25519));
         assertThat(bytes, Is.is(expected));
 
     }

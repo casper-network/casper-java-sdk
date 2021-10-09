@@ -6,8 +6,9 @@ abstract class AbstractTypesSerializer implements TypesSerializer {
 
     private final TypesFactory typesFactory;
     private TypesSerializer u32Serializer;
+    private PublicKeySerializer publicKeySerializer;
 
-    AbstractTypesSerializer(TypesFactory typesFactory) {
+    AbstractTypesSerializer(final TypesFactory typesFactory) {
         this.typesFactory = typesFactory;
     }
 
@@ -16,5 +17,12 @@ abstract class AbstractTypesSerializer implements TypesSerializer {
             this.u32Serializer = typesFactory.getInstance(CLType.U32);
         }
         return u32Serializer;
+    }
+
+    PublicKeySerializer getPublicKeySerializer() {
+        if (publicKeySerializer == null) {
+            publicKeySerializer = typesFactory.getInstance(CLType.PUBLIC_KEY);
+        }
+        return publicKeySerializer;
     }
 }

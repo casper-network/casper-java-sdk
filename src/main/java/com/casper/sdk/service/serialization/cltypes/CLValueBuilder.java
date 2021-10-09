@@ -73,7 +73,6 @@ public class CLValueBuilder {
         return key(ByteUtils.concat(toByteArray(CLKeyInfo.KeyType.UREF_ID.getTag()), value));
     }
 
-
     private static CLValue buildCLValue(final CLType type, final Object value) {
         return new CLValue(TYPES_FACTORY.getInstance(type).serialize(value), type, value);
     }

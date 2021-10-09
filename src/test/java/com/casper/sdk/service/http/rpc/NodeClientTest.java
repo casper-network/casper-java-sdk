@@ -1,22 +1,28 @@
 package com.casper.sdk.service.http.rpc;
 
 import com.casper.sdk.Properties;
+import com.casper.sdk.service.serialization.util.ByteUtils;
+import com.casper.sdk.types.AccessRights;
 import com.casper.sdk.types.Deploy;
 import com.casper.sdk.types.DeployService;
 import com.casper.sdk.service.json.JsonConversionService;
-import com.casper.sdk.service.HashService;
-import com.casper.sdk.service.SigningService;
+import com.casper.sdk.service.hash.HashService;
+import com.casper.sdk.service.signing.SigningService;
 import com.casper.sdk.service.serialization.cltypes.TypesFactory;
 import com.casper.sdk.service.serialization.types.ByteSerializerFactory;
+import com.casper.sdk.types.URef;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.mockwebserver.MockWebServer;
+import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -76,17 +82,19 @@ public class NodeClientTest {
     @Test
     public void testGetPurse() throws Throwable {
 
-        final String purse = query.getAccountMainPurseURef("01048c1858b7a6ff56a20d7574fd31025ead4af9cb8a854f919d24f886a4ebb741");
+        final URef purse = query.getAccountMainPurseURef("01048c1858b7a6ff56a20d7574fd31025ead4af9cb8a854f919d24f886a4ebb741");
         assertNotNull(purse);
-        assertEquals(purse, "uref-ebda3f171068107470bce0d74eb9a302fcb8914471fe8900c66fae258a0f46ef-007");
+        assertThat(purse.getAccessRights(), is(AccessRights.READ_ADD_WRITE));
+        assertThat(purse.getBytes(), is(ByteUtils.decodeHex("ebda3f171068107470bce0d74eb9a302fcb8914471fe8900c66fae258a0f46ef")));
+      //  assertEquals(purse., "uref-ebda3f171068107470bce0d74eb9a302fcb8914471fe8900c66fae258a0f46ef-007");
     }
 
     @Test
     public void testGetAccountBalance() throws Throwable {
 
-        String balance = query.getAccountBalance("01048c1858b7a6ff56a20d7574fd31025ead4af9cb8a854f919d24f886a4ebb741");
+        final BigInteger balance = query.getAccountBalance("01048c1858b7a6ff56a20d7574fd31025ead4af9cb8a854f919d24f886a4ebb741");
         assertNotNull(balance);
-        assertEquals(balance, "1000000000000000000000000000000000");
+        assertEquals(balance, new BigInteger("1000000000000000000000000000000000"));
     }
 
     @Test
@@ -113,9 +121,14 @@ public class NodeClientTest {
     @Test
     void testPutDeploy() throws Throwable {
 
+        //noinspection ConstantConditions
         final InputStream in = getClass().getResource(DEPLOY_JSON_PATH).openStream();
         final Deploy deploy = deployService.fromJson(in);
-
         assertThat(query.putDeploy(deploy), is("01da3c604f71e0e7df83ff1ab4ef15bb04de64ca02e3d2b78de6950e8b5ee187"));
+
+        //noinspection ConstantConditions
+        String json = IOUtils.toString(getClass().getResource(DEPLOY_JSON_PATH).openStream(), StandardCharsets.UTF_8);
+        final Deploy deploy2 =deployService.fromJson(json);
+        assertThat(query.putDeploy(deploy2), is("01da3c604f71e0e7df83ff1ab4ef15bb04de64ca02e3d2b78de6950e8b5ee187"));
     }
 }

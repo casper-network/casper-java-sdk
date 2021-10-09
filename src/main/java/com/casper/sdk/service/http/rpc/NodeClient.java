@@ -1,12 +1,13 @@
 package com.casper.sdk.service.http.rpc;
 
-import com.casper.sdk.service.HashService;
-import com.casper.sdk.service.MethodEnums;
+import com.casper.sdk.service.hash.HashService;
 import com.casper.sdk.service.json.JsonConversionService;
 import com.casper.sdk.service.serialization.util.CollectionUtils;
 import com.casper.sdk.types.Deploy;
 import com.casper.sdk.types.DeployService;
+import com.casper.sdk.types.URef;
 
+import java.math.BigInteger;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Optional;
@@ -52,7 +53,7 @@ public class NodeClient {
         return result.isPresent() ? MethodEnums.ACCOUNT_INFO.getValue(result.get()) : null;
     }
 
-    public String getAccountBalance(final String accountKey) throws Exception {
+    public BigInteger getAccountBalance(final String accountKey) throws Exception {
 
         final Optional<String> result = httpMethods.rpcCallMethod(
                 new Method(STATE_GET_BALANCE,
@@ -63,10 +64,10 @@ public class NodeClient {
                 )
         );
 
-        return result.isPresent() ? MethodEnums.STATE_GET_BALANCE.getValue(result.get()) : null;
+        return result.isPresent() ? new BigInteger(MethodEnums.STATE_GET_BALANCE.getValue(result.get())) : null;
     }
 
-    public String getAccountMainPurseURef(final String accountKey) throws Exception {
+    public URef getAccountMainPurseURef(final String accountKey) throws Exception {
 
         final Optional<String> result = httpMethods.rpcCallMethod(new Method(STATE_GET_ITEM,
                         CollectionUtils.Map.of(
@@ -77,7 +78,8 @@ public class NodeClient {
                 )
         );
 
-        return result.isPresent() ? MethodEnums.STATE_GET_ITEM.getValue(result.get()) : null;
+
+        return result.isPresent() ? new URef(MethodEnums.STATE_GET_ITEM.getValue(result.get())) : null;
     }
 
     public String getAuctionInfo() throws Exception {

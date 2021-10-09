@@ -2,11 +2,11 @@ package com.casper.sdk.types;
 
 public class ContractHash extends Digest {
 
-    public ContractHash(String hash) {
+    public ContractHash(final String hash) {
         super(hash);
     }
 
-    public ContractHash(byte[] hash) {
+    public ContractHash(final byte[] hash) {
         super(hash);
     }
 }

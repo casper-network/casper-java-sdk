@@ -92,7 +92,6 @@ class DeployExecutableFactory {
             }
         }
 
-
         protected byte[] convertModuleBytes(final TreeNode treeNode) {
             final TreeNode moduleBytes = treeNode.get("ModuleBytes");
             if (moduleBytes instanceof ObjectNode) {
@@ -241,13 +240,13 @@ class DeployExecutableFactory {
      * @param codec     the codec so we can call other JsonDeserializer classes
      * @return the DeployExecutable for the specified fieldName and tree node value
      */
+    @SuppressWarnings("unchecked")
     <T extends DeployExecutable> T create(final String fieldName,
                                           final String entryPoint,
                                           final TreeNode treeNode,
                                           final ObjectCodec codec) {
         final AbstractDeployExecutableJsonFactory<?> jsonDeserializer = argsFactoryMap.get(entryPoint);
         if (jsonDeserializer != null) {
-            //noinspection unchecked
             return (T) jsonDeserializer.create(fieldName, entryPoint, treeNode, codec);
         } else {
             throw new IllegalArgumentException(fieldName + " is not a valid DeployExecutable field");

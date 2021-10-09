@@ -1,4 +1,4 @@
-package com.casper.sdk.service;
+package com.casper.sdk.service.http.rpc;
 
 import com.casper.sdk.exceptions.ValueNotFoundException;
 import com.fasterxml.jackson.core.JsonProcessingException;

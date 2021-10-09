@@ -1,23 +1,21 @@
 package com.casper.sdk.types;
 
+import com.casper.sdk.service.hash.HashService;
 import com.casper.sdk.service.json.JsonConversionService;
-import com.casper.sdk.service.HashService;
-import com.casper.sdk.service.SigningService;
 import com.casper.sdk.service.serialization.cltypes.TypesFactory;
 import com.casper.sdk.service.serialization.types.ByteSerializerFactory;
 import com.casper.sdk.service.serialization.util.CollectionUtils;
-import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
-import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
+import com.casper.sdk.service.signing.SigningService;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
+import java.security.KeyPair;
 import java.time.Instant;
 import java.util.Set;
 
-import static com.casper.sdk.service.serialization.util.ByteUtils.concat;
 import static com.casper.sdk.service.serialization.util.ByteUtils.decodeHex;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -56,7 +54,7 @@ class DeployServiceTest {
         final byte[] expectedTargetBytes = decodeHex("e6454d6bc07d32a178298286e589029b083da8cd718ab3d8dbdab1cfd018fb79");
         final byte[] expectedAmountBytes = decodeHex("010A");
 
-        final Transfer transfer = deployService.newTransfer(10, new PublicKey(keyBytes, KeyAlgorithm.ED25519), 34);
+        final Transfer transfer = deployService.newTransfer(10, new CLPublicKey(keyBytes, Algorithm.ED25519), 34);
 
         assertThat(transfer, is(notNullValue()));
         assertThat(transfer.getTag(), is(5));
@@ -104,7 +102,7 @@ class DeployServiceTest {
         final Deploy deploy = deployService.makeDeploy(
 
                 new DeployParams(
-                        new PublicKey("017f747b67bd3fe63c2a736739dfe40156d622347346e70f68f51c178a75ce5537"),
+                        signingService.fromClPublicKey(new CLPublicKey("017f747b67bd3fe63c2a736739dfe40156d622347346e70f68f51c178a75ce5537")),
                         "mainnet",
                         1,
                         Instant.now().toEpochMilli(),
@@ -112,7 +110,7 @@ class DeployServiceTest {
                         null),
 
                 deployService.newTransfer(new BigInteger("24500000000"),
-                        new PublicKey("010101010101010101010101010101010101010101010101010101010101010101", KeyAlgorithm.ED25519),
+                        new CLPublicKey("010101010101010101010101010101010101010101010101010101010101010101"),
                         new BigInteger("999")),
 
                 deployService.standardPayment(new BigInteger("1000000000"))
@@ -146,7 +144,7 @@ class DeployServiceTest {
         };
 
         final ModuleBytes payment = deployService.standardPayment(10000000000000L);
-        final Transfer transfer = deployService.newTransfer(10, new PublicKey(recipientPublicKey, KeyAlgorithm.ED25519), 34);
+        final Transfer transfer = deployService.newTransfer(10, new CLPublicKey(recipientPublicKey, Algorithm.ED25519), 34);
 
         final byte[] bytes = deployService.serializeBody(payment, transfer);
         assertThat(bytes, is(expectedBody));
@@ -178,7 +176,7 @@ class DeployServiceTest {
 
         final Set<DeployApproval> approvals = CollectionUtils.Set.of(
                 new DeployApproval(
-                        new PublicKey("017f747b67bd3fe63c2a736739dfe40156d622347346e70f68f51c178a75ce5537"),
+                        new CLPublicKey("017f747b67bd3fe63c2a736739dfe40156d622347346e70f68f51c178a75ce5537"),
                         new Signature("0195a68b1a05731b7014e580b4c67a506e0339a7fffeaded9f24eb2e7f78b96bdd900b9be8ca33e4552a9a619dc4fc5e4e3a9f74a4b0537c14a5a8007d62a5dc06")
                 )
         );
@@ -220,7 +218,7 @@ class DeployServiceTest {
         };
 
         final ModuleBytes payment = deployService.standardPayment(10000000000000L);
-        final Transfer transfer = deployService.newTransfer(10, new PublicKey(recipientPublicKey, KeyAlgorithm.ED25519), 34);
+        final Transfer transfer = deployService.newTransfer(10, new CLPublicKey(recipientPublicKey, Algorithm.ED25519), 34);
 
         byte[] body = deployService.serializeBody(payment, transfer);
 
@@ -246,12 +244,12 @@ class DeployServiceTest {
     }
 
     @Test
-    void signDeploy() throws IOException {
+    void signDeploy() {
 
         final Deploy deploy = deployService.makeDeploy(
 
                 new DeployParams(
-                        new PublicKey("017f747b67bd3fe63c2a736739dfe40156d622347346e70f68f51c178a75ce5537"),
+                        signingService.fromClPublicKey(new CLPublicKey("017f747b67bd3fe63c2a736739dfe40156d622347346e70f68f51c178a75ce5537")),
                         "mainnet",
                         1,
                         Instant.now().toEpochMilli(),
@@ -259,7 +257,7 @@ class DeployServiceTest {
                         null),
 
                 deployService.newTransfer(new BigInteger("24500000000"),
-                        new PublicKey("0101010101010101010101010101010101010101010101010101010101010101", KeyAlgorithm.ED25519),
+                        new CLPublicKey("0101010101010101010101010101010101010101010101010101010101010101", Algorithm.ED25519),
                         new BigInteger("999")),
 
                 deployService.standardPayment(new BigInteger("1000000000"))
@@ -267,7 +265,7 @@ class DeployServiceTest {
 
         assertThat(deploy.getApprovals().size(), is(0));
 
-        final AsymmetricCipherKeyPair keyPair = signingService.loadKeyPair(
+        final KeyPair keyPair = signingService.loadKeyPair(
                 new File(DeployServiceTest.class.getResource(PUBLIC_KEY).getFile()),
                 new File(DeployServiceTest.class.getResource(PRIVATE_KEY).getFile())
         );
@@ -278,15 +276,14 @@ class DeployServiceTest {
 
         final DeployApproval approval = signedDeploy.getApprovals().iterator().next();
         assertThat(approval.getSignature().toAccount(), is(notNullValue()));
-        assertThat(approval.getSignature().toAccount()[0], is((byte) KeyAlgorithm.ED25519.getValue()));
+        assertThat(approval.getSignature().toAccount()[0], is((byte) Algorithm.ED25519.getValue()));
         assertThat(approval.getSignature().toAccount().length, is(65));
         assertThat(approval.getSignature().getBytes().length, is(64));
 
-        final Ed25519PublicKeyParameters publicKeyParameters = (Ed25519PublicKeyParameters) keyPair.getPublic();
-        assertThat(
-                approval.getSigner().toAccount(),
-                is(concat(new byte[]{(byte) KeyAlgorithm.ED25519.getValue()}, publicKeyParameters.getEncoded()))
-        );
+        final CLPublicKey publicKey = signingService.toClPublicKey(keyPair.getPublic());
+        byte[] actual = approval.getSigner().toAccount();
+        byte[] expected = publicKey.toAccount();
+        assertThat(actual, is(expected));
     }
 
     @Test
@@ -315,7 +312,7 @@ class DeployServiceTest {
         };
 
         final DeployParams deployParams = new DeployParams(
-                new PublicKey(senderPublicKey, KeyAlgorithm.ED25519),
+                signingService.fromClPublicKey(new CLPublicKey(senderPublicKey, Algorithm.ED25519)),
                 "test-network",
                 null,
                 1624302238199L,
@@ -324,10 +321,10 @@ class DeployServiceTest {
         );
 
         final ModuleBytes payment = deployService.standardPayment(10000000000000L);
-        final Transfer session = deployService.newTransfer(10, new PublicKey(recipientPublicKey, KeyAlgorithm.ED25519), 34);
+        final Transfer session = deployService.newTransfer(10, new CLPublicKey(recipientPublicKey, Algorithm.ED25519), 34);
         final Digest bodyHash = deployService.makeBodyHash(payment, session);
         final DeployHeader header = new DeployHeader(
-                deployParams.getAccountPublicKey(),
+                signingService.toClPublicKey(deployParams.getAccountPublicKey()),
                 deployParams.getTimestamp(),
                 deployService.toTtlStr(deployParams.getTtl()),
                 deployParams.getGasPrice(),

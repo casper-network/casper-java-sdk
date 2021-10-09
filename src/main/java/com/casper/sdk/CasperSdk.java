@@ -1,19 +1,20 @@
 package com.casper.sdk;
 
 import com.casper.sdk.exceptions.ValueNotFoundException;
-import com.casper.sdk.service.HashService;
-import com.casper.sdk.service.SigningService;
+import com.casper.sdk.service.hash.HashService;
 import com.casper.sdk.service.http.rpc.NodeClient;
 import com.casper.sdk.service.json.JsonConversionService;
 import com.casper.sdk.service.serialization.cltypes.TypesFactory;
 import com.casper.sdk.service.serialization.types.ByteSerializerFactory;
 import com.casper.sdk.service.serialization.util.ByteUtils;
+import com.casper.sdk.service.signing.SigningService;
 import com.casper.sdk.types.*;
-import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.security.NoSuchAlgorithmException;
+import java.math.BigInteger;
+import java.security.KeyPair;
+import java.security.PublicKey;
 import java.util.Map;
 
 /**
@@ -41,11 +42,12 @@ public class CasperSdk {
         this.nodeClient = new NodeClient(deployService, hashService, jsonConversionService);
     }
 
-    public String getAccountInfo(final String accountKey) throws Exception {
-        return nodeClient.getAccountInfo(accountKey);
+    public String getAccountInfo(final PublicKey accountKey) throws Exception {
+        return nodeClient.getAccountInfo(signingService.toClPublicKey(accountKey).toAccountHex());
     }
 
-    public ContractHash getContractHash(final String accountKey) throws Exception {
+
+    public ContractHash getContractHash(final PublicKey accountKey) throws Exception {
 
         final String accountInfo = getAccountInfo(accountKey);
         //noinspection rawtypes
@@ -62,19 +64,23 @@ public class CasperSdk {
     }
 
 
-    public String getAccountBalance(final String accountKey) throws Exception {
-        return nodeClient.getAccountBalance(accountKey);
+    public BigInteger getAccountBalance(final PublicKey accountKey) throws Exception {
+        return nodeClient.getAccountBalance(signingService.toClPublicKey(accountKey).toAccountHex());
     }
 
-    public String getAccountMainPurseURef(final String accountKey) throws Exception {
-        return nodeClient.getAccountMainPurseURef(accountKey);
+    public URef getAccountMainPurseURef(final PublicKey accountKey) throws Exception {
+        return nodeClient.getAccountMainPurseURef(signingService.toClPublicKey(accountKey).toAccountHex());
     }
 
     public String getStateRootHash() throws Exception {
         return nodeClient.getStateRootHash();
     }
 
-    public String getAccountHash(final String accountKey) throws NoSuchAlgorithmException {
+    public String getAccountHash(final PublicKey accountKey) {
+        return ByteUtils.encodeHexString(hashService.getAccountHash(this.getPublicKeyBytes(accountKey)));
+    }
+
+    public String getAccountHash(final String accountKey) {
         return hashService.getAccountHash(accountKey);
     }
 
@@ -119,6 +125,7 @@ public class CasperSdk {
      * @param deployParams the deployment parameters
      * @param session      the  session/transfer
      * @param payment      the payment
+     * @return a  new unsigned deploy for transfer purpose
      */
     public Deploy makeTransferDeploy(final DeployParams deployParams,
                                      final DeployExecutable session,
@@ -137,6 +144,7 @@ public class CasperSdk {
      * @param deployParams the deployment parameters
      * @param session      the  session/transfer
      * @param payment      the payment
+     * @return a new unsigned deploy
      */
     public Deploy makeDeploy(final DeployParams deployParams,
                              final DeployExecutable session,
@@ -151,7 +159,7 @@ public class CasperSdk {
      * @param signKeyPair the keypair to sign the Deploy object
      * @return the signed deploy
      */
-    public Deploy signDeploy(final Deploy deploy, final AsymmetricCipherKeyPair signKeyPair) {
+    public Deploy signDeploy(final Deploy deploy, final KeyPair signKeyPair) {
         return deployService.signDeploy(deploy, signKeyPair);
     }
 
@@ -161,6 +169,7 @@ public class CasperSdk {
      * @param signedDeploy Signed deploy object
      * @return the deploy hash, ech deploy gets a unique hash. This is part of the cryptographic security of blockchain
      * technology. No two deploys will ever return the same hash.
+     * @throws Exception on error putting deploy
      */
     public Digest putDeploy(final Deploy signedDeploy) throws Exception {
         return new Digest(nodeClient.putDeploy(signedDeploy));
@@ -172,17 +181,27 @@ public class CasperSdk {
      * @param publicKeyIn  the public key .pem file input stream
      * @param privateKeyIn the private key .pem file input stream
      * @return the files loaded into a AsymmetricCipherKeyPair
-     * @throws IOException if there is a problem loading the files
      */
-    public AsymmetricCipherKeyPair loadKeyPair(final InputStream publicKeyIn,
-                                               final InputStream privateKeyIn) throws IOException {
+    public KeyPair loadKeyPair(final InputStream publicKeyIn, final InputStream privateKeyIn) {
         return signingService.loadKeyPair(publicKeyIn, privateKeyIn);
     }
 
     /**
-     * Creates a new standard payment
+     * Obtains the bytes of a public key in casper format with the first byte being the algorithm type identifier
+     * value.
+     *
+     * @param publicKey the public key to exctract the b
+     * @return the bytes
+     */
+    public byte[] getPublicKeyBytes(final PublicKey publicKey) {
+        return signingService.toClPublicKey(publicKey).toAccount();
+    }
+
+    /**
+     * Creates a new standard payment.
      *
      * @param paymentAmount the number of notes paying to execution engine
+     * @return a new standard payment module bytes
      */
     public ModuleBytes standardPayment(final Number paymentAmount) {
         return deployService.standardPayment(paymentAmount);
@@ -196,7 +215,7 @@ public class CasperSdk {
      * @param id     the optional ID name argument value
      * @return the newly created transfer
      */
-    public Transfer newTransfer(final Number amount, final PublicKey target, final Number id) {
+    public Transfer newTransfer(final Number amount, final CLPublicKey target, final Number id) {
         return deployService.newTransfer(amount, target, id);
     }
 
@@ -209,5 +228,26 @@ public class CasperSdk {
      */
     public String deployToJson(final Deploy deploy) throws IOException {
         return jsonConversionService.toJson(deploy);
+    }
+
+    /**
+     * Creates a public key from a hex string where the first byte is the algorithm type and the following bytes the raw
+     * public key bytes.
+     *
+     * @param publicKeyHex the public key hex
+     * @return the java security public key
+     */
+    public PublicKey createPublicKey(final String publicKeyHex) {
+        return signingService.fromClPublicKey(new CLPublicKey(publicKeyHex));
+    }
+
+    /**
+     * Converts a java security public key to a Casper Labs public key
+     *
+     * @param publicKey the public key to convert
+     * @return the Casper Labs public key
+     */
+    public CLPublicKey toCLPublicKey(final PublicKey publicKey) {
+        return signingService.toClPublicKey(publicKey);
     }
 }

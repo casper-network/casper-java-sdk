@@ -16,7 +16,7 @@ import static com.casper.sdk.service.serialization.util.TtlUtils.toTtlStr;
 public class DeployHeader {
 
     /** Public key of account dispatching deploy to a node. */
-    private final PublicKey account;
+    private final CLPublicKey account;
     /**
      * Timestamp at point of deploy creation as an ISO8601 date time  converted to  milliseconds since the UNIX
      * epoch.with UTC timezone
@@ -39,7 +39,7 @@ public class DeployHeader {
     private final String chainName;
 
     @JsonCreator
-    public DeployHeader(@JsonProperty("account") final PublicKey account,
+    public DeployHeader(@JsonProperty("account") final CLPublicKey account,
                         @JsonProperty("timestamp") final String timestamp,
                         @JsonProperty("ttl") final String ttl,
                         @JsonProperty(value = "gas_price", defaultValue = "null") final Integer gasPrice,
@@ -49,7 +49,7 @@ public class DeployHeader {
         this(account, toEpocMs(timestamp), TtlUtils.getTtlLong(ttl), gasPrice, bodyHash, dependencies, chainName);
     }
 
-    public DeployHeader(final PublicKey account,
+    public DeployHeader(final CLPublicKey account,
                         final long timestamp,
                         final long ttl,
                         final Integer gasPrice,
@@ -70,7 +70,7 @@ public class DeployHeader {
         return zonedDateTime.toInstant().toEpochMilli();
     }
 
-    public PublicKey getAccount() {
+    public CLPublicKey getAccount() {
         return account;
     }
 

@@ -2,7 +2,7 @@ package com.casper.sdk.exceptions;
 
 public class ConversionException extends RuntimeException {
 
-    public ConversionException(Throwable cause) {
+    public ConversionException(final Throwable cause) {
         super(cause);
     }
 

@@ -3,7 +3,7 @@ package com.casper.sdk.service.serialization.types;
 /**
  * Interface implemented by all classed that convert the casper type objects to byte arrays.
  *
- * @param <T>
+ * @param <T> type of object to serialize to bytes
  */
 public interface ByteSerializer<T> {
 
