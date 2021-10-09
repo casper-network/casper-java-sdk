@@ -1,7 +1,7 @@
 package com.casper.sdk.service.serialization.types;
 
-import com.casper.sdk.service.HashService;
-import com.casper.sdk.service.SigningService;
+import com.casper.sdk.service.hash.HashService;
+import com.casper.sdk.service.signing.SigningService;
 import com.casper.sdk.service.json.JsonConversionService;
 import com.casper.sdk.service.serialization.cltypes.TypesFactory;
 import com.casper.sdk.service.serialization.util.CollectionUtils;
@@ -109,7 +109,7 @@ class DeployExecutableByteSerializerTest {
         };
 
         final Transfer transfer = deployService.newTransfer(10,
-                new PublicKey(recipientPublicKey, KeyAlgorithm.ED25519),
+                new CLPublicKey(recipientPublicKey, Algorithm.ED25519),
                 34);
 
         final byte[] actual = serializer.toBytes(transfer);

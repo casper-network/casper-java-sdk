@@ -1,6 +1,5 @@
 package com.casper.sdk.service.serialization.util;
 
-import com.casper.sdk.exceptions.ConversionException;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
 
@@ -12,7 +11,7 @@ public class ByteUtils {
      * @param arrays the array of arrays
      * @return new concatenated array
      */
-    public static byte[] concat(byte[]... arrays) {
+    public static byte[] concat(final byte[]... arrays) {
 
         int len = 0;
         for (byte[] array : arrays) {
@@ -34,11 +33,11 @@ public class ByteUtils {
         try {
             return Hex.decodeHex(hex.toCharArray());
         } catch (DecoderException e) {
-            throw new ConversionException("Unable to decode: \"" + hex + "\" length " + hex.length(), e);
+            throw new IllegalArgumentException("Unable to decode: \"" + hex + "\" length " + hex.length(), e);
         }
     }
 
-    public static String encodeHexString(byte[] bytes) {
+    public static String encodeHexString(final byte[] bytes) {
         return Hex.encodeHexString(bytes);
     }
 
@@ -49,11 +48,11 @@ public class ByteUtils {
      * @param length     the number of bytes to obtain
      * @return the last 'length' bytes from a byte array
      */
-    public static byte[] lastNBytes(byte[] toTruncate, final int length) {
-        byte[] secretBytes = new byte[length];
+    public static byte[] lastNBytes(final byte[] toTruncate, final int length) {
+        byte[] lastNBytes = new byte[length];
         int start = toTruncate.length - length;
-        System.arraycopy(toTruncate, start, secretBytes, 0, length);
-        return secretBytes;
+        System.arraycopy(toTruncate, start, lastNBytes, 0, length);
+        return lastNBytes;
     }
 
     /**

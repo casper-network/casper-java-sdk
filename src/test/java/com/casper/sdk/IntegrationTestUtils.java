@@ -1,10 +1,5 @@
 package com.casper.sdk;
 
-import com.casper.sdk.types.KeyAlgorithm;
-import com.casper.sdk.types.PublicKey;
-import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
-import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -32,12 +27,6 @@ public class IntegrationTestUtils {
     }
 
     private static final String NCTL_HOME = "~/Documents/casper/casper-node/utils/nctl";
-
-    static String getPublicKeyAccountHex(final AsymmetricCipherKeyPair keyPair) {
-        final PublicKey publicKey = new PublicKey(((Ed25519PublicKeyParameters) keyPair.getPublic()).getEncoded(), KeyAlgorithm.ED25519);
-        return publicKey.toAccountHex();
-    }
-
 
     static KeyPairStreams geUserKeyPairStreams(int userNumber) throws IOException {
 

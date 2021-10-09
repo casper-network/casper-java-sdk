@@ -1,9 +1,15 @@
 package com.casper.sdk.service.serialization.cltypes;
 
-import org.apache.commons.lang3.NotImplementedException;
+import com.casper.sdk.types.CLKeyValue;
 
 class KeySerializer implements TypesSerializer {
-    @Override public byte[] serialize(final Object toSerialize) {
-       throw new NotImplementedException("KeySerializer");
+    @Override
+    public byte[] serialize(final Object toSerialize) {
+
+        if (toSerialize instanceof CLKeyValue) {
+            return ((CLKeyValue) toSerialize).getBytes();
+        } else {
+            return new byte[0];
+        }
     }
 }

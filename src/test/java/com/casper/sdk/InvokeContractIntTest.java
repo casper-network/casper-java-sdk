@@ -2,13 +2,12 @@ package com.casper.sdk;
 
 import com.casper.sdk.service.serialization.cltypes.CLValueBuilder;
 import com.casper.sdk.types.*;
-import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
-import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.security.KeyPair;
 import java.time.Instant;
 
 import static com.casper.sdk.IntegrationTestUtils.*;
@@ -34,17 +33,14 @@ public class InvokeContractIntTest {
         final CasperSdk casperSdk = new CasperSdk("http://localhost", 11101);
 
         // Step 2: Set contract operator key pair.
-        final AsymmetricCipherKeyPair userTwoKeyPair = geUserKeyPair(casperSdk, 2);
-        final AsymmetricCipherKeyPair nodeOneKeyPair = getNodeKeyPair(casperSdk, 1);
+        final KeyPair userTwoKeyPair = geUserKeyPair(casperSdk, 2);
+        final KeyPair nodeOneKeyPair = getNodeKeyPair(casperSdk, 1);
 
         // Step 3: Query node for global state root hash.
         final String stateRootHash = casperSdk.getStateRootHash();
 
-        final PublicKey fromPublicKey = new PublicKey(((Ed25519PublicKeyParameters) nodeOneKeyPair.getPublic()).getEncoded(), KeyAlgorithm.ED25519);
-
         // Step 4: Query node for contract hash.
-        final String accountHex = getPublicKeyAccountHex(userTwoKeyPair);
-        final ContractHash contractHash = casperSdk.getContractHash(accountHex);
+        final ContractHash contractHash = casperSdk.getContractHash(nodeOneKeyPair.getPublic());
 
         // Make a payment
         final ModuleBytes payment = casperSdk.standardPayment(new BigInteger("10000000000"));
@@ -52,7 +48,7 @@ public class InvokeContractIntTest {
         // Create the transfer
         final Deploy deploy = casperSdk.makeDeploy(
                 new DeployParams(
-                        fromPublicKey,
+                        nodeOneKeyPair.getPublic(),
                         "casper-net-1",
                         10,
                         Instant.now().toEpochMilli(),
@@ -63,14 +59,19 @@ public class InvokeContractIntTest {
                         "transfer",
                         new DeployNamedArgBuilder()
                                 .add("amount", CLValueBuilder.u256(AMOUNT_TO_TRANSFER))
-                                .add("recipient", CLValueBuilder.byteArray(accountHex))
+                                .add("recipient", CLValueBuilder.byteArray(userTwoKeyPair.getPublic()))
                                 .build()),
                 payment
         );
 
         // Step 5.2: Sign deploy.
         casperSdk.signDeploy(deploy, nodeOneKeyPair);
-        casperSdk.signDeploy(deploy, userTwoKeyPair);
+        final Deploy signedDeploy = casperSdk.signDeploy(deploy, userTwoKeyPair);
+
+        // Assert Approvals
+        assertThat(signedDeploy.getApprovals().size(), is(2));
+        final DeployApproval approval = signedDeploy.getApprovals().iterator().next();
+        assertThat(approval.getSigner(),is(casperSdk.toCLPublicKey(userTwoKeyPair.getPublic())));
 
         final Digest digest = casperSdk.putDeploy(deploy);
 
@@ -78,12 +79,12 @@ public class InvokeContractIntTest {
     }
 
 
-    private AsymmetricCipherKeyPair geUserKeyPair(final CasperSdk casperSdk, int userNumber) throws IOException {
+    private KeyPair geUserKeyPair(final CasperSdk casperSdk, final int userNumber) throws IOException {
         final IntegrationTestUtils.KeyPairStreams streams = geUserKeyPairStreams(userNumber);
         return casperSdk.loadKeyPair(streams.getPublicKeyIn(), streams.getPrivateKeyIn());
     }
 
-    private AsymmetricCipherKeyPair getNodeKeyPair(final CasperSdk casperSdk, final int nodeNumber) throws IOException {
+    private KeyPair getNodeKeyPair(final CasperSdk casperSdk, final int nodeNumber) throws IOException {
         final IntegrationTestUtils.KeyPairStreams streams = getNodeKeyPairSteams(nodeNumber);
         return casperSdk.loadKeyPair(streams.getPublicKeyIn(), streams.getPrivateKeyIn());
     }

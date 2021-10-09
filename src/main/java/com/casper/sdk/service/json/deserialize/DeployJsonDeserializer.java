@@ -36,7 +36,6 @@ public class DeployJsonDeserializer extends JsonDeserializer<Deploy> {
     private Deploy deserializeDeploy(final TreeNode treeNode,
                                      final ObjectCodec codec) throws IOException {
 
-        //noinspection Convert2Diamond
         return new Deploy(
                 readChildNode(treeNode, codec, "hash", Digest.class),
                 readChildNode(treeNode, codec, "header", DeployHeader.class),

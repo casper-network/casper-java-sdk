@@ -1,12 +1,12 @@
 package com.casper.sdk.service.serialization.types;
 
-import com.casper.sdk.types.PublicKey;
+import com.casper.sdk.types.CLPublicKey;
 
 import static com.casper.sdk.service.serialization.util.ByteUtils.concat;
 
-public class PublicKeyByteSerializer implements ByteSerializer<PublicKey> {
+public class PublicKeyByteSerializer implements ByteSerializer<CLPublicKey> {
     @Override
-    public byte[] toBytes(final PublicKey source) {
+    public byte[] toBytes(final CLPublicKey source) {
         return concat(
                 new byte[]{(byte) source.getTag()},
                 source.getBytes()
@@ -14,7 +14,7 @@ public class PublicKeyByteSerializer implements ByteSerializer<PublicKey> {
     }
 
     @Override
-    public Class<PublicKey> getType() {
-        return PublicKey.class;
+    public Class<CLPublicKey> getType() {
+        return CLPublicKey.class;
     }
 }

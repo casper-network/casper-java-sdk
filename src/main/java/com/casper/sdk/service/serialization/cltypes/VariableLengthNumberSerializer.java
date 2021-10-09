@@ -16,12 +16,12 @@ abstract class VariableLengthNumberSerializer implements TypesSerializer {
     /** The maximum number of bytes allowed for the number */
     private final int maxBytes;
 
-    VariableLengthNumberSerializer(int maxBytes) {
+    VariableLengthNumberSerializer(final int maxBytes) {
         this.maxBytes = maxBytes;
     }
 
     @Override
-    public byte[] serialize(Object toSerialize) {
+    public byte[] serialize(final Object toSerialize) {
         //Convert string to a bigint
         final BigInteger bigInt = toBigInteger(toSerialize);
         //Get the byte array

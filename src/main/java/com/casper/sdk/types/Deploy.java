@@ -47,13 +47,13 @@ public class Deploy {
         return header;
     }
 
+    @SuppressWarnings("unchecked")
     public <P extends DeployExecutable> P getPayment() {
-        //noinspection unchecked
         return (P) payment;
     }
 
+    @SuppressWarnings("unchecked")
     public <T extends DeployExecutable> T getSession() {
-        //noinspection unchecked
         return (T) session;
     }
 

@@ -3,7 +3,7 @@ package com.casper.sdk.service.serialization.types;
 import com.casper.sdk.types.CLType;
 import com.casper.sdk.types.DeployHeader;
 import com.casper.sdk.types.Digest;
-import com.casper.sdk.types.PublicKey;
+import com.casper.sdk.types.CLPublicKey;
 import com.casper.sdk.service.serialization.cltypes.TypesFactory;
 import com.casper.sdk.service.serialization.cltypes.TypesSerializer;
 
@@ -30,7 +30,7 @@ class DeployHeaderByteSerializer implements ByteSerializer<DeployHeader> {
     public byte[] toBytes(final DeployHeader source) {
 
         return concat(
-                factory.getByteSerializerByType(PublicKey.class).toBytes(source.getAccount()),
+                factory.getByteSerializerByType(CLPublicKey.class).toBytes(source.getAccount()),
                 u64Serializer.serialize(source.getTimestamp()),
                 u64Serializer.serialize(source.getTtl()),
                 u64Serializer.serialize(source.getGasPrice()),
