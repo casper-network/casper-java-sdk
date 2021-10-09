@@ -107,6 +107,38 @@ class CasperSdkIntegrationTest {
     }
 
     @Test
+    void getBlockInfo() throws Throwable {
+        final String blockInfo = casperSdk.getBlockInfo();
+        assertThat(blockInfo, is(notNullValue()));
+    }
+
+    @Test
+    void getBlockTransfers() throws Throwable {
+        final String blockTransfers = casperSdk.getBlockTransfers();
+        assertThat(blockTransfers, is(notNullValue()));
+    }
+
+    @Test
+    void getDeployInfo() throws Throwable {
+        final String deployInfo = casperSdk.getDeployInfo("6c4048f8ebd40a160e9df47e73680eda8ae8430309a9566655bb357a5967276b");
+        assertThat(deployInfo, is(notNullValue()));
+    }
+
+    @Test
+    void getEraInfoBySwitchBlock() throws Throwable {
+        final String eraInfoBySwitchBlock = casperSdk.getEraInfoBySwitchBlock();
+        assertThat(eraInfoBySwitchBlock, is(notNullValue()));
+    }
+
+    @Test
+    void getRpcSchema() throws Throwable {
+        final String rpcSchema = casperSdk.getRpcSchema();
+        assertThat(rpcSchema, is(notNullValue()));
+    }
+
+
+
+    @Test
     void putDeploy() throws Throwable {
 
         final AsymmetricCipherKeyPair userOneKeyPair = geUserKeyPair(1);

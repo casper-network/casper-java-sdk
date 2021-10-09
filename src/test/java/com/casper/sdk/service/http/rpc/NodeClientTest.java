@@ -18,6 +18,7 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.io.InputStream;
 
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -118,4 +119,35 @@ public class NodeClientTest {
 
         assertThat(query.putDeploy(deploy), is("01da3c604f71e0e7df83ff1ab4ef15bb04de64ca02e3d2b78de6950e8b5ee187"));
     }
+
+    @Test
+    void getBlockInfo() throws Throwable {
+        final String blockInfo = query.getBlockInfo();
+        assertThat(blockInfo, is(notNullValue()));
+    }
+
+    @Test
+    void getBlockTransfers() throws Throwable {
+        final String blockTransfers = query.getBlockTransfers();
+        assertThat(blockTransfers, is(notNullValue()));
+    }
+
+    @Test
+    void getDeployInfo() throws Throwable {
+        final String deployInfo = query.getDeployInfo("6c4048f8ebd40a160e9df47e73680eda8ae8430309a9566655bb357a5967276b");
+        assertThat(deployInfo, is(notNullValue()));
+    }
+
+    @Test
+    void getEraInfoBySwitchBlock() throws Throwable {
+        final String eraInfoBySwitchBlock = query.getEraInfoBySwitchBlock();
+        assertThat(eraInfoBySwitchBlock, is(notNullValue()));
+    }
+
+    @Test
+    void getRpcSchema() throws Throwable {
+        final String rpcSchema = query.getRpcSchema();
+        assertThat(rpcSchema, is(notNullValue()));
+    }
+
 }

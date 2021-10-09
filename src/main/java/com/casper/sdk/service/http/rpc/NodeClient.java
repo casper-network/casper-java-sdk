@@ -115,4 +115,48 @@ public class NodeClient {
 
         return result.isPresent() ? MethodEnums.ACCOUNT_PUT_DEPLOY.getValue(result.get()) : null;
     }
+
+    public String getBlockInfo() throws Exception {
+
+        final Optional<String> result = httpMethods.rpcCallMethod(new Method(CHAIN_GET_BLOCK, new HashMap<>()));
+
+        return result.isPresent() ? MethodEnums.CHAIN_GET_BLOCK.getValue(result.get()) : null;
+    }
+
+    public String getBlockTransfers() throws Exception {
+
+        final Optional<String> result = httpMethods.rpcCallMethod(new Method(CHAIN_GET_BLOCK_TRANSFERS, new HashMap<>()));
+
+        return (result.isPresent()) ? MethodEnums.CHAIN_GET_BLOCK_TRANSFERS.getValue(result.get()) : null;
+
+    }
+
+    public String getDeployInfo(String deployHash) throws Exception {
+
+        final Optional<String> result = httpMethods.rpcCallMethod(new Method(INFO_GET_DEPLOY,
+                    CollectionUtils.Map.of(
+                            "deploy_hash", deployHash
+                    )
+                ));
+
+        return (result.isPresent()) ? MethodEnums.INFO_GET_DEPLOY.getValue(result.get()) : null;
+
+    }
+
+    public String getEraInfoBySwitchBlock() throws Exception {
+
+        final Optional<String> result = httpMethods.rpcCallMethod(new Method(CHAIN_GET_ERA_INFO_BY_SWITCH_BLOCK, new HashMap<>()));
+
+        return (result.isPresent()) ? MethodEnums.CHAIN_GET_ERA_INFO_BY_SWITCH_BLOCK.getValue(result.get()) : null;
+
+    }
+
+    public String getRpcSchema() throws Exception {
+
+        final Optional<String> result = httpMethods.rpcCallMethod(new Method(RPC_DISCOVER, new HashMap<>()));
+
+        return (result.isPresent()) ? MethodEnums.RPC_DISCOVER.getValue(result.get()) : null;
+
+    }
+
 }

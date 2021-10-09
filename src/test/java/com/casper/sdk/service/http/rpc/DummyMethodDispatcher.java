@@ -34,6 +34,16 @@ final class DummyMethodDispatcher extends Dispatcher {
             responseBodyFile = "method-json/info_get_status.json";
         } else if (request.getBody().toString().contains("account_put_deploy")) {
             responseBodyFile = "method-json/account_put_deploy.json";
+        } else if  (request.getBody().toString().contains("chain_get_block")){
+            responseBodyFile = "method-json/chain_get_block.json";
+        } else if  (request.getBody().toString().contains("chain_get_block_transfers")){
+            responseBodyFile = "method-json/chain_get_block_transfers.json";
+        } else if  (request.getBody().toString().contains("chain_get_era_info_by_switch_b")){
+            responseBodyFile = "method-json/chain_get_era_info_by_switch_block.json";
+        } else if  (request.getBody().toString().contains("info_get_deploy")){
+            responseBodyFile = "method-json/info_get_deploy.json";
+        } else if  (request.getBody().toString().contains("rpc.discover")){
+            responseBodyFile = "method-json/rpc_discover.json";
         }
 
         return new MockResponse().setResponseCode(200)

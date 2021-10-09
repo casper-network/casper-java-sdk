@@ -101,6 +101,61 @@ public enum MethodEnums {
                 throw new ValueNotFoundException("deploy_hash not found " + buildErrorMessage(node));
             }
         }
+    },
+    CHAIN_GET_BLOCK{
+        @Override
+        public String getValue(final String result) throws ValueNotFoundException {
+            try{
+                final JsonNode node = new ObjectMapper().readTree(result);
+                return node.get("result").toPrettyString();
+            } catch (Exception e){
+                throw new ValueNotFoundException("result not found");
+            }
+        }
+    },
+    CHAIN_GET_BLOCK_TRANSFERS{
+        @Override
+        public String getValue(final String result) throws ValueNotFoundException {
+            try{
+                final JsonNode node = new ObjectMapper().readTree(result);
+                return node.get("result").toPrettyString();
+            } catch (Exception e){
+                throw new ValueNotFoundException("result not found");
+            }
+        }
+    },
+    INFO_GET_DEPLOY{
+        @Override
+        public String getValue(final String result) throws ValueNotFoundException {
+            try{
+                final JsonNode node = new ObjectMapper().readTree(result);
+                return node.get("result").toPrettyString();
+            } catch (Exception e){
+                throw new ValueNotFoundException("result not found");
+            }
+        }
+    },
+    CHAIN_GET_ERA_INFO_BY_SWITCH_BLOCK{
+        @Override
+        public String getValue(final String result) throws ValueNotFoundException {
+            try{
+                final JsonNode node = new ObjectMapper().readTree(result);
+                return node.get("result").toPrettyString();
+            } catch (Exception e){
+                throw new ValueNotFoundException("result not found");
+            }
+        }
+    },
+    RPC_DISCOVER {
+        @Override
+        public String getValue(final String result) throws ValueNotFoundException {
+            try {
+                final JsonNode node = new ObjectMapper().readTree(result);
+                return node.get("result").toPrettyString();
+            } catch (Exception e) {
+                throw new ValueNotFoundException("result not found");
+            }
+        }
     };
 
     public abstract String getValue(final String result) throws ValueNotFoundException;

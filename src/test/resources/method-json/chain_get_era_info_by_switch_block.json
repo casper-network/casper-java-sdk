@@ -1,0 +1,553 @@
+{
+    "jsonrpc": "2.0",
+    "id": 1,
+    "result": {
+        "api_version": "1.1.0",
+        "era_summary": {
+            "block_hash": "12284e9e6b1c440ee91d2803850a7b7ba5e4c029c6f4abeb8aa1eb743608ab73",
+            "era_id": 4,
+            "stored_value": {
+                "EraInfo": {
+                    "seigniorage_allocations": [
+                        {
+                            "Validator": {
+                                "validator_public_key": "010268bb35bd370a499ba775877aaadef1ba87bff64ca527ae55f88cd8af9791de",
+                                "amount": "37424980757"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "0106ca7c39cd272dbf21a86eeb3b36b7c26e2e9b94af64292419f7862936bca2ca",
+                                "amount": "289795989130"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "0107cba5b4826a87ddbe0ba8cda8064881b75882f05094c1a5f95e957512a3450e",
+                                "amount": "37424980757"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "010b0f958cae89f265d7585f8abc67639fd68f9764390682801c744b0e126fb9b3",
+                                "amount": "44940649703"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "010b9e10801772fdc80bc616e6a3b31296c4737c1f93a33b6f4b1ef51647f0b02a",
+                                "amount": "40487071804"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "010ee608c883a521ab5f1771651a3f85f81efb18eea5117e6301b2a151b4766c9c",
+                                "amount": "44940649703"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "01101ef8635fb189ae3c734ca699dcbb97f7f844b9b96f260642a734b85d4c1c85",
+                                "amount": "44940649703"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "0112357f15cf6461a772978c6fc72d93bc10c1abda3a85ee7b7feb593c785b95be",
+                                "amount": "40487071804"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "0115dc50b6c6df49a6aa5766ee3b102b098b03bf0992c0813d9e842f6277fb8d71",
+                                "amount": "37424980757"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "011752f095ee6d2902540ea4fafd649da4b7b0c2a6e38176fb7f661a0e463d43b4",
+                                "amount": "37424980757"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "011f290fb7cc707728c3ab3d4ab1b4989b56e0ddb322859e062b231aed18728328",
+                                "amount": "39504146357"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "0124aa3964bcd0ba9911594322a534e18e36e0c2e149b148e615505316733599af",
+                                "amount": "40487071804"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "01267447c9ac87b4330ed3395db95efbba78394533666f29a56e8a1ec7b31abbd4",
+                                "amount": "40487071804"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "01295693ba2b3822ed5d4bf06bd74858c4e3638cb17078f16781f25c1f92d34bdc",
+                                "amount": "40442375107"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "012b77bfab443aae5957d4d2d4991e55f692fa3eb56c2ac1179a188881a575292a",
+                                "amount": "37424980757"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "012e26890209f5234fdc707c2086ef84314bba0e2cc9c7cdbe199859152b3fdc30",
+                                "amount": "37424980757"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "012e30f811fe6d99df0f9efee2103c02fe3401e9eb509eb93274429f0138a93d33",
+                                "amount": "41541728640"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "0135251e59c6f01800c51c4961ef37ebd34575e28c0942fdffd2ea34b09c54f86a",
+                                "amount": "40487071804"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "0139ae034e09ee1392ae7aa6512d4b6c40d1ba726b580dcd06b9db06b057ca9b82",
+                                "amount": "37424980757"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "013a6385a646c3b96e31daec5d0bdd749c06661d0a3d027aa9d38895e846ff32c5",
+                                "amount": "40487071804"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "013cf6d30266728538302eb8130b2336d1caca61240c25c362c99a894fd0b43507",
+                                "amount": "44940649703"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "013dfb779f0677436c775b38f47283cd7e462f2a8ceba2a2cec6ed00a0e8aa6bfc",
+                                "amount": "40487071804"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "013e5702e929292627c1cde4e4e88c4e30e4e183a84b1f979ff2a5344ac6730340",
+                                "amount": "40487071804"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "01411c821113ceadf3a5498ec17ab9034aa444a036196d37030b99dbb141939188",
+                                "amount": "37424980757"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "01422b1c5ed6a39ca2901f7ead65b0b2226df337fdfde53ffc0a0d5ec2aad12181",
+                                "amount": "44940649703"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "0143147a8a4628eb45e906d8ab547fdef21e811bac12468e506e54724606498eab",
+                                "amount": "37424980757"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "01441a29bf25836949a0498cb1aa22ec7239f5221c6f291931368cddf8f740ce1b",
+                                "amount": "41167478835"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "0144e35abc4886168a53338539a8a3649ab1257d9f0c235ce38961624a025d40dd",
+                                "amount": "75606545793"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "0146c61d107ffb32738fdbb837213b240bf872536f326465642e467fe6884e7cdc",
+                                "amount": "44895664066"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "014879b8cf7f459939fed0ca762ae21cba6b2651f256c2c16e35b24ca1b82ad2e5",
+                                "amount": "40487071804"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "014d5eb3ac23735e695ae372defa057ca089a921f08a199415cc73fd118f68dc94",
+                                "amount": "37424635228"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "014fdd08ed688b19cd92fb93be9b2a9108361f63edc7d0b1fda84f3e45e3bbd8e3",
+                                "amount": "37424980757"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "0152b2b3cc1de020e0cfb5887d0fda5d99da5decaf98af90f13144e97d0e35eeaa",
+                                "amount": "40487071804"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "0157f18d47996f1bbb059f2043bafea9c218d7f50e4d4dd508bc3661844300c3d1",
+                                "amount": "40487071804"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "01587265e95c4d895c912d3091b76d7d6034f9b5b6c38074c8f88244f65813cb0c",
+                                "amount": "40487071804"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "015da9ac1f6508be409bc6ed45bc44c6afd6d94b90d60014576418a79b61d563a2",
+                                "amount": "40487071804"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "01642d7047314aaa0a85d6cb9ab0c49ddb3c020b140eb8093b7276196bc33aaf43",
+                                "amount": "37424980757"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "01691616af607822e731bba757ace7e98f2d62627645d0d970cbeda79f08d2742d",
+                                "amount": "40487071804"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "016adc82d5f8368829c9cd6088fdd39b46960dbf5a7f4fc18f498f5bc8637ec656",
+                                "amount": "40487071804"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "016f6ed70e4a5acec750dc087674e5de2ad7b6d9595945c4059c5ca1a47d4dd3ab",
+                                "amount": "44985635336"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "017563342173f4a1c345334cca27780008646357a3dc49e3c1a18422800b760855",
+                                "amount": "37424980757"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "0178afbc7b204fcffd5c6832d0e04877a97571a7a9c8d021966df9d57c1742aa10",
+                                "amount": "44490793350"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "017a684f6787e78e68c0063aad5a4fb26448b340d36c0e8aa79d67d82ce03dad28",
+                                "amount": "41541728640"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "017aecfd5ce9cb89b4c7de23a1acc57fd7ee8a724d62df8d7e76c50d85a48ffbe0",
+                                "amount": "40487071804"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "017d96b9a63abcb61c870a4f55187a0a7ac24096bdb5fc585c12a686a4d892009e",
+                                "amount": "289795989130"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "017d9aa0b86413d7ff9a9169182c53f0bacaa80d34c211adab007ed4876af17077",
+                                "amount": "40487071804"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "018210173344167e081825b3d646da040166d65e45db0e84d80be046fbfa9eea40",
+                                "amount": "37424980757"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "01852d06432105b182c299a721cffd3ebb9ccbc5060c9bd503594b1899506bcf4a",
+                                "amount": "44940649703"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "018669ea1ca10564197c9063412c27ddf590fb46f2cdfa63f0a2b7bf6b508d9e50",
+                                "amount": "40487071804"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "0189da179d3ae3fc8f0975da77851d11226bfda3327ef17e343d9112aa71426cb6",
+                                "amount": "40487071804"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "018aaba74e8a4deafb9d6877536186d85c5fcf7a73b9648023a3563a0b9bead495",
+                                "amount": "40487071804"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "018d78dfb68f4edc0d654768fe8f2d84e6b244de7664e0a30ece3c438fd0747f30",
+                                "amount": "44940649703"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "0190dd8430afb0958c25636596d1e98478ebe240c81260becf687cdf90ee088860",
+                                "amount": "37424980757"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "0196948158bf5b35c0c84f680f110b8debaa4e7628e13ba336a95651a214d3b9bd",
+                                "amount": "44985635336"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "0198bfb7b9672ab09a5dcd46d5f048beba37bcaa5234f79c8fc82803a14761b1bb",
+                                "amount": "37424980757"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "019a85d7370f913f0a9f55a12da2b031d8c0a36752cd8fd7ff0b47cff0d4fc57bd",
+                                "amount": "44817345476"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "019ae7d932207d8fad7025ef6831ffb9ca495cb9eba65a30a35e3453640d7da7c4",
+                                "amount": "44535778983"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "01a0082c060677608ef48ff2aa9a4d1833ba5bb53c0255c0d47dd3d0942bd3ab20",
+                                "amount": "37424980757"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "01a03c687285634a0115c0af1015ab0a53809f4826ee863c94e32ce48bcfdf447d",
+                                "amount": "40487071804"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "01a5e6982d0545f6896418d05174eeed02ccb2f358bf201631b55cd49708f9f2fe",
+                                "amount": "40487071804"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "01a6a98d4ba2b3853fdef668690dec016e5c4f91f1498e78eb20be04b8448feee7",
+                                "amount": "40487071804"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "01aa17f7b9889480b1bd34c3f94f263b229c7a9b01dd4dda19c2dd1d38d176c7a0",
+                                "amount": "40487071804"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "01ace6578907bfe6eba3a618e863bbe7274284c88e405e2857be80dd094726a223",
+                                "amount": "37424980757"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "01aed6b22c38bc80ce96b0c32eb856d231f3c9f4c19fbfcea7924a25a9a352e09c",
+                                "amount": "40487071804"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "01b5d00a38e1783345ffe0bfa8423e026b76480683e0b19966ee47c7f68a827c00",
+                                "amount": "37424980757"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "01b677d508c9b784c376c799033b20c1d1398694e2fe734f2e262a18600dc630fa",
+                                "amount": "37424980757"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "01b9137fcbb85baf03db2aa41e459199b27514a9943a0d2776752974c793905880",
+                                "amount": "40487071804"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "01b99d5f54a5147ee34f472d546d84037007025df5e1a13cfdca7aac05e9ac5858",
+                                "amount": "44940649703"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "01bb9d7599bb8a0464946f8b7d812db16c80fb66ae345a7649d8cba96215b4a591",
+                                "amount": "40487071804"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "01bbb7ecdd756f30c7c27cfe7d144cfa74df4eac8513024aecb48257902df42fd1",
+                                "amount": "44940649703"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "01bfde7ab665a6f7fc34dff1125511c3b548f391d6298c7faf519038d21d8dc4f2",
+                                "amount": "40397100534"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "01c54f086eaf2f0c66e70c3bc52e84cb04154d2860af641f6b2b8dc76567329c1d",
+                                "amount": "37424980757"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "01c56d4479a56a1b57d181b8f2cf6d76bb2bae0728281d953419255da9702ceab3",
+                                "amount": "40487071804"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "01c5abc22e0525fcb3b13b4f640c66f8141743ec892b1a4ec32bdcf22ff4435f13",
+                                "amount": "40487071804"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "01c642ea7442d6271119cee66f76848525d67932de3f1ec36e236e37b38d97a03b",
+                                "amount": "44940649703"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "01c91d7ac17e2289740a33d61c4dffeab43937f6c1fc0820ebcea2c199ccd73e16",
+                                "amount": "37424980757"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "01c9f96503ba3b88efa61729b1f9fd4203f083ef2d4205a47ce4a50b63e5fc6bf8",
+                                "amount": "40487071804"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "01cb4be11fae27723ac9e88dff27331b836f15ff8227ac335d8dfc7602c603badc",
+                                "amount": "40487071804"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "01cd807fb41345d8dd5a61da7991e1468173acbee53920e4dfe0d28cb8825ac664",
+                                "amount": "37424980757"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "01ce901316acefbd7b18119110a814fc6592b98a2370e0ff47ec143c21b8c7e590",
+                                "amount": "44940649703"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "01d00d2d59c18dab882b1141cb3dbcf1f05078ffedda0551c53c6a3cc1191e4672",
+                                "amount": "41541728640"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "01d66d09fb163ca2723960470777467056951df570d6add6e051af827a3b07c76a",
+                                "amount": "44940649703"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "01ddcb70a7d309e0c96ded5587c40734cfda361194d93b8187c128cddac7b18ed4",
+                                "amount": "37424980757"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "01e6c56c86ca97d7387d0c989c061ceeb205eeb04adf9ec41569292120ed9ae4a5",
+                                "amount": "40487071804"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "01f39dacb5ca4ac415041d1df96f043abe911e385cf6da99532287ebfc7947cbe0",
+                                "amount": "37424980757"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "01f8684089490edcdb5feab0eee3615f26621dfd7f16419d06299466bab6fcb9f8",
+                                "amount": "44940649703"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "01fa5736dce533c7625156e92849b2d5956ce4d0436bc5ae3903ae828f5bf864ad",
+                                "amount": "40487071804"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "01fddc7e47ac36a240007eba368e417dd52d824026fb9baaa1454817993ce985ea",
+                                "amount": "44985635336"
+                            }
+                        },
+                        {
+                            "Validator": {
+                                "validator_public_key": "01ff703503300534b33263bf3d6ef3b592ac48a0d99e9bd8c7ed415611b6829121",
+                                "amount": "37424980757"
+                            }
+                        }
+                    ]
+                }
+            },
+            "state_root_hash": "4b8b3f66fedb876c8cfb3d2a6440e5c3ae1aa8801b6946779f3baf362b7f467a",
+            "merkle_proof": "01000000050400000000000000075900000000010268bb35bd370a499ba775877aaadef1ba87bff64ca527ae55f88cd8af9791de0515e3b3b608000106ca7c39cd272dbf21a86eeb3b36b7c26e2e9b94af64292419f7862936bca2ca058ade2f7943000107cba5b4826a87ddbe0ba8cda8064881b75882f05094c1a5f95e957512a3450e0515e3b3b60800010b0f958cae89f265d7585f8abc67639fd68f9764390682801c744b0e126fb9b305e7e4ab760a00010b9e10801772fdc80bc616e6a3b31296c4737c1f93a33b6f4b1ef51647f0b02a053cb0376d0900010ee608c883a521ab5f1771651a3f85f81efb18eea5117e6301b2a151b4766c9c05e7e4ab760a0001101ef8635fb189ae3c734ca699dcbb97f7f844b9b96f260642a734b85d4c1c8505e7e4ab760a000112357f15cf6461a772978c6fc72d93bc10c1abda3a85ee7b7feb593c785b95be053cb0376d09000115dc50b6c6df49a6aa5766ee3b102b098b03bf0992c0813d9e842f6277fb8d710515e3b3b60800011752f095ee6d2902540ea4fafd649da4b7b0c2a6e38176fb7f661a0e463d43b40515e3b3b60800011f290fb7cc707728c3ab3d4ab1b4989b56e0ddb322859e062b231aed1872832805b56fa13209000124aa3964bcd0ba9911594322a534e18e36e0c2e149b148e615505316733599af053cb0376d090001267447c9ac87b4330ed3395db95efbba78394533666f29a56e8a1ec7b31abbd4053cb0376d090001295693ba2b3822ed5d4bf06bd74858c4e3638cb17078f16781f25c1f92d34bdc05c3ab8d6a0900012b77bfab443aae5957d4d2d4991e55f692fa3eb56c2ac1179a188881a575292a0515e3b3b60800012e26890209f5234fdc707c2086ef84314bba0e2cc9c7cdbe199859152b3fdc300515e3b3b60800012e30f811fe6d99df0f9efee2103c02fe3401e9eb509eb93274429f0138a93d3305807914ac09000135251e59c6f01800c51c4961ef37ebd34575e28c0942fdffd2ea34b09c54f86a053cb0376d09000139ae034e09ee1392ae7aa6512d4b6c40d1ba726b580dcd06b9db06b057ca9b820515e3b3b60800013a6385a646c3b96e31daec5d0bdd749c06661d0a3d027aa9d38895e846ff32c5053cb0376d0900013cf6d30266728538302eb8130b2336d1caca61240c25c362c99a894fd0b4350705e7e4ab760a00013dfb779f0677436c775b38f47283cd7e462f2a8ceba2a2cec6ed00a0e8aa6bfc053cb0376d0900013e5702e929292627c1cde4e4e88c4e30e4e183a84b1f979ff2a5344ac6730340053cb0376d090001411c821113ceadf3a5498ec17ab9034aa444a036196d37030b99dbb1419391880515e3b3b6080001422b1c5ed6a39ca2901f7ead65b0b2226df337fdfde53ffc0a0d5ec2aad1218105e7e4ab760a000143147a8a4628eb45e906d8ab547fdef21e811bac12468e506e54724606498eab0515e3b3b6080001441a29bf25836949a0498cb1aa22ec7239f5221c6f291931368cddf8f740ce1b0533e0c59509000144e35abc4886168a53338539a8a3649ab1257d9f0c235ce38961624a025d40dd058155809a11000146c61d107ffb32738fdbb837213b240bf872536f326465642e467fe6884e7cdc05c277fd730a00014879b8cf7f459939fed0ca762ae21cba6b2651f256c2c16e35b24ca1b82ad2e5053cb0376d0900014d5eb3ac23735e695ae372defa057ca089a921f08a199415cc73fd118f68dc94055c9daeb60800014fdd08ed688b19cd92fb93be9b2a9108361f63edc7d0b1fda84f3e45e3bbd8e30515e3b3b608000152b2b3cc1de020e0cfb5887d0fda5d99da5decaf98af90f13144e97d0e35eeaa053cb0376d09000157f18d47996f1bbb059f2043bafea9c218d7f50e4d4dd508bc3661844300c3d1053cb0376d090001587265e95c4d895c912d3091b76d7d6034f9b5b6c38074c8f88244f65813cb0c053cb0376d0900015da9ac1f6508be409bc6ed45bc44c6afd6d94b90d60014576418a79b61d563a2053cb0376d090001642d7047314aaa0a85d6cb9ab0c49ddb3c020b140eb8093b7276196bc33aaf430515e3b3b6080001691616af607822e731bba757ace7e98f2d62627645d0d970cbeda79f08d2742d053cb0376d0900016adc82d5f8368829c9cd6088fdd39b46960dbf5a7f4fc18f498f5bc8637ec656053cb0376d0900016f6ed70e4a5acec750dc087674e5de2ad7b6d9595945c4059c5ca1a47d4dd3ab0508525a790a00017563342173f4a1c345334cca27780008646357a3dc49e3c1a18422800b7608550515e3b3b608000178afbc7b204fcffd5c6832d0e04877a97571a7a9c8d021966df9d57c1742aa100586a1db5b0a00017a684f6787e78e68c0063aad5a4fb26448b340d36c0e8aa79d67d82ce03dad2805807914ac0900017aecfd5ce9cb89b4c7de23a1acc57fd7ee8a724d62df8d7e76c50d85a48ffbe0053cb0376d0900017d96b9a63abcb61c870a4f55187a0a7ac24096bdb5fc585c12a686a4d892009e058ade2f794300017d9aa0b86413d7ff9a9169182c53f0bacaa80d34c211adab007ed4876af17077053cb0376d0900018210173344167e081825b3d646da040166d65e45db0e84d80be046fbfa9eea400515e3b3b6080001852d06432105b182c299a721cffd3ebb9ccbc5060c9bd503594b1899506bcf4a05e7e4ab760a00018669ea1ca10564197c9063412c27ddf590fb46f2cdfa63f0a2b7bf6b508d9e50053cb0376d09000189da179d3ae3fc8f0975da77851d11226bfda3327ef17e343d9112aa71426cb6053cb0376d0900018aaba74e8a4deafb9d6877536186d85c5fcf7a73b9648023a3563a0b9bead495053cb0376d0900018d78dfb68f4edc0d654768fe8f2d84e6b244de7664e0a30ece3c438fd0747f3005e7e4ab760a000190dd8430afb0958c25636596d1e98478ebe240c81260becf687cdf90ee0888600515e3b3b608000196948158bf5b35c0c84f680f110b8debaa4e7628e13ba336a95651a214d3b9bd0508525a790a000198bfb7b9672ab09a5dcd46d5f048beba37bcaa5234f79c8fc82803a14761b1bb0515e3b3b60800019a85d7370f913f0a9f55a12da2b031d8c0a36752cd8fd7ff0b47cff0d4fc57bd05c46b526f0a00019ae7d932207d8fad7025ef6831ffb9ca495cb9eba65a30a35e3453640d7da7c405a70e8a5e0a0001a0082c060677608ef48ff2aa9a4d1833ba5bb53c0255c0d47dd3d0942bd3ab200515e3b3b6080001a03c687285634a0115c0af1015ab0a53809f4826ee863c94e32ce48bcfdf447d053cb0376d090001a5e6982d0545f6896418d05174eeed02ccb2f358bf201631b55cd49708f9f2fe053cb0376d090001a6a98d4ba2b3853fdef668690dec016e5c4f91f1498e78eb20be04b8448feee7053cb0376d090001aa17f7b9889480b1bd34c3f94f263b229c7a9b01dd4dda19c2dd1d38d176c7a0053cb0376d090001ace6578907bfe6eba3a618e863bbe7274284c88e405e2857be80dd094726a2230515e3b3b6080001aed6b22c38bc80ce96b0c32eb856d231f3c9f4c19fbfcea7924a25a9a352e09c053cb0376d090001b5d00a38e1783345ffe0bfa8423e026b76480683e0b19966ee47c7f68a827c000515e3b3b6080001b677d508c9b784c376c799033b20c1d1398694e2fe734f2e262a18600dc630fa0515e3b3b6080001b9137fcbb85baf03db2aa41e459199b27514a9943a0d2776752974c793905880053cb0376d090001b99d5f54a5147ee34f472d546d84037007025df5e1a13cfdca7aac05e9ac585805e7e4ab760a0001bb9d7599bb8a0464946f8b7d812db16c80fb66ae345a7649d8cba96215b4a591053cb0376d090001bbb7ecdd756f30c7c27cfe7d144cfa74df4eac8513024aecb48257902df42fd105e7e4ab760a0001bfde7ab665a6f7fc34dff1125511c3b548f391d6298c7faf519038d21d8dc4f205f6d5da67090001c54f086eaf2f0c66e70c3bc52e84cb04154d2860af641f6b2b8dc76567329c1d0515e3b3b6080001c56d4479a56a1b57d181b8f2cf6d76bb2bae0728281d953419255da9702ceab3053cb0376d090001c5abc22e0525fcb3b13b4f640c66f8141743ec892b1a4ec32bdcf22ff4435f13053cb0376d090001c642ea7442d6271119cee66f76848525d67932de3f1ec36e236e37b38d97a03b05e7e4ab760a0001c91d7ac17e2289740a33d61c4dffeab43937f6c1fc0820ebcea2c199ccd73e160515e3b3b6080001c9f96503ba3b88efa61729b1f9fd4203f083ef2d4205a47ce4a50b63e5fc6bf8053cb0376d090001cb4be11fae27723ac9e88dff27331b836f15ff8227ac335d8dfc7602c603badc053cb0376d090001cd807fb41345d8dd5a61da7991e1468173acbee53920e4dfe0d28cb8825ac6640515e3b3b6080001ce901316acefbd7b18119110a814fc6592b98a2370e0ff47ec143c21b8c7e59005e7e4ab760a0001d00d2d59c18dab882b1141cb3dbcf1f05078ffedda0551c53c6a3cc1191e467205807914ac090001d66d09fb163ca2723960470777467056951df570d6add6e051af827a3b07c76a05e7e4ab760a0001ddcb70a7d309e0c96ded5587c40734cfda361194d93b8187c128cddac7b18ed40515e3b3b6080001e6c56c86ca97d7387d0c989c061ceeb205eeb04adf9ec41569292120ed9ae4a5053cb0376d090001f39dacb5ca4ac415041d1df96f043abe911e385cf6da99532287ebfc7947cbe00515e3b3b6080001f8684089490edcdb5feab0eee3615f26621dfd7f16419d06299466bab6fcb9f805e7e4ab760a0001fa5736dce533c7625156e92849b2d5956ce4d0436bc5ae3903ae828f5bf864ad053cb0376d090001fddc7e47ac36a240007eba368e417dd52d824026fb9baaa1454817993ce985ea0508525a790a0001ff703503300534b33263bf3d6ef3b592ac48a0d99e9bd8c7ed415611b68291210515e3b3b608020000000004040000000000cb167538310a38243d17c0d77fbf30a096c091071bc8d7488649e4a5f8cbe99a01003c53ec69a3109a89e2157a11ce3110f5d36727fa5035637ad88a45fbb2c979430200efc9b4212b34ba54cba2f2d37f142cb06c0fdab86299b9813d569a0442513724030067e21dbc936e285b3f424e1fb9d56522c9b2e1a7414efb7bd7c1cb51552b88910005080000000001690dfc5172a0b622a80b6a85d1f867a4343e2b3e23b2708e8dcf57898e51b5210101e5abf310419d4ed27b1bc06bc7e169d25a1b97190cfcf35e27de833e1d5d841d02016bf132463e0179cb1683855dbb6d834d447cac840ad57941c396f85c25b69cb003019ab18f7b46db4ffba7afc8e743e9e1a7b908a5c343c095520058b4233a1ac08d040153d9237a4ea23e3ee6daeae418bab7ad3b99052d86a4da9b0694460720624d7d06016b0c4259f57aa0bb3e480b23d8c6e4c475cdb041a458bb11cf4aac9d0a19ea270701526a0e42d061bde58c2c432f444d071eb111fe7dfa926e1e9d2ff0d01fda84550800f4a4fb53d0776e6eb02bce07a37a70eee2fc6bbdff162f969b03d442e83bb6ce"
+        }
+    }
+}

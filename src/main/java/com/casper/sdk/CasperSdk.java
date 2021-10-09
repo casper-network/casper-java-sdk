@@ -90,6 +90,26 @@ public class CasperSdk {
         return nodeClient.getNodePeers();
     }
 
+    public String getBlockInfo() throws Exception {
+        return nodeClient.getBlockInfo();
+    }
+
+    public String getBlockTransfers() throws Exception {
+        return nodeClient.getBlockTransfers();
+    }
+
+    public String getDeployInfo(final String deployHash) throws Exception {
+        return nodeClient.getDeployInfo(deployHash);
+    }
+
+    public String getEraInfoBySwitchBlock() throws Exception {
+        return nodeClient.getEraInfoBySwitchBlock();
+    }
+
+    public String getRpcSchema() throws Exception {
+        return nodeClient.getRpcSchema();
+    }
+
     /**
      * Converts a JSON object to a {@link Deploy}.
      *
