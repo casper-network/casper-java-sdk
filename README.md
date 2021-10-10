@@ -34,7 +34,25 @@ Where M.m.i is the version number eg 0.1.0
 
 ## How To: Query a node ?
 
-See [here](https://github.com/casper-network/casper-java-sdk/blob/how-tos/src/test/java/com/casper/sdk/how_to/how_to_query_a_node/QueryANode.java).
+To query a node, use the CasperSDK as the entry point. Instantiate CasperSDK using the `url` and `port` of the node
+
+```java
+CasperSdk casperSdk = new CasperSdk("http://0.0.0.0", 11101);
+```
+
+Note: The above url and port hold good for local nctl based nodes. Refer to this [page](https://caspernetwork.readthedocs.io/en/latest/dapp-dev-guide/setup-nctl.html) on how to set it up. If you want to test against a real node use `http://3.136.227.9` as the url and `7777` as the port.
+
+Once we have the instance of `CasperSDK`, any implemented query method can be executed on it. For example if we want to get information about the status of a node, use the following code snippet:
+
+```java
+try {
+    String nodeStatus = casperSdk.getNodeStatus();
+    System.out.println(nodeStatus);
+} catch ( Exception exp ) {
+    System.out.println("Exception while fetching node status");
+    exp.printStackTrace();
+}
+```
 
 ## How To: Transfer funds between 2 accounts ?
 
