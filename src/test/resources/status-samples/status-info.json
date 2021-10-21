@@ -1,0 +1,32 @@
+{
+    "peers" : [
+        {
+           "address" : "195.201.142.76:35000",
+           "node_id" : "NodeId::Tls(00bf..b323)"
+        },
+        {
+           "address" : "47.242.107.138:35000",
+           "node_id" : "NodeId::Tls(fe6b..567f)"
+        },
+        {
+           "address" : "62.171.172.72:35000",
+           "node_id" : "NodeId::Tls(ff65..da37)"
+        }
+    ],
+    "api_version" : "1.3.2",
+    "build_version" : "1.3.2-e2027dbe9",
+    "chainspec_name" : "casper",
+    "last_added_block_info" : {
+        "creator" : "015fd964620f98e551065079e142840dac3fb25bd97a0d4722411cb439f9247d72",
+        "hash" : "60f11f03aa1f7f27c472f868de2ec2a0da9d05cd7252c9a00868f4eaa07cb77f",
+        "height" : 192714,
+        "era_id" : 1769,
+        "state_root_hash" : "77696d0c9dfbc40fc34098b61a578a2b7e6f4e0e0c08d63d00fc33cbb957c82e",
+        "timestamp" : "2021-08-26T07:04:13.568Z"
+    },
+    "next_upgrade" : null,
+    "our_public_signing_key" : "0137e13b86e8d02ba97ef24d0bfab2385f8249b8c4cf6a8e905acccdfe3b9e0e58",
+    "starting_state_root_hash" : "51a1ebbd43b98dd393c9aeff2cba44cf770221520eeb9dd24b505b96cd78a8a3",
+    "round_length" : null
+ }
+ 

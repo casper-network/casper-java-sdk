@@ -1,0 +1,16 @@
+{
+      "api_version" : "1.3.2",
+      "block_hash" : "db9820938ee64c7037f13ea05ab8fe7576215c3a62b02ed35c2564c2138eeb57",
+      "transfers" : [
+         {
+            "id" : null,
+            "to" : "account-hash-288797af5b4eeb5d4f36bd228b2e6479a77a27e808597ced1a7d6afe4c29febc",
+            "from" : "account-hash-2363d9065b1ecc26f50f108c22c8f3bbe6a891c81e37e0e454c68370708a6937",
+            "deploy_hash" : "c22fab5364c793bb859fd259b808ea4c101be8421b7d638dc8f52490ab3c3539",
+            "source" : "uref-7bf84ae788429c2853a45f30f0dd02af86926972fe43acecc6c8e3a2cb6de63d-007",
+            "target" : "uref-7a4ca4244548d2f5842267bb82ed5b9b24c57ec1c1b7602354985e01840196b1-004",
+            "amount" : "597335999990000",
+            "gas" : "0"
+         }
+      ]
+}

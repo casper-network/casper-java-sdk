@@ -1,0 +1,20 @@
+{
+    "account" : {
+        "account_hash" : "account-hash-f1075fce3b8cd4eab748b8705ca02444a5e35c0248662649013d8a5cb2b1a87c",
+        "action_thresholds" : {
+           "deployment" : 1,
+           "key_management" : 1
+        },
+        "associated_keys" : [
+            {
+               "account_hash" : "account-hash-f1075fce3b8cd4eab748b8705ca02444a5e35c0248662649013d8a5cb2b1a87c",
+               "weight" : 1
+            }
+        ],
+        "main_purse" : "uref-b22bc80d357df47447074e243b4d888de67c1cc7565fa82d0bb2b9b023146748-007",
+        "named_keys" : []
+    },
+    "api_version" : "1.3.2",
+    "merkle_proof" : "--merkle proof--"
+}
+ 

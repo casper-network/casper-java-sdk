@@ -1,0 +1,98 @@
+{
+    "api_version" : "1.3.2",
+    "auction_state" : {
+        "bids" : [
+             {
+                "bid" : {
+                   "delegators" : [
+                      {
+                         "delegatee" : "01026ca707c348ed8012ac6a1f28db031fadd6eb67203501a353b867a08c8b9a80",
+                         "bonding_purse" : "uref-2c1a2785c5e0af2b26e45b15374a23bd8127066937166c67a1ad4eab594add5d-007",
+                         "public_key" : "01128ddb51119f1df535cf3a763996344ab0cc79038faaee0aaaf098a078031ce6",
+                         "staked_amount" : "755056576400660"
+                      },
+                      {
+                         "delegatee" : "01026ca707c348ed8012ac6a1f28db031fadd6eb67203501a353b867a08c8b9a80",
+                         "bonding_purse" : "uref-575de810398cc4f39e88c56f3684965b82a5c79e14df8d5fbe74a62962de0bb5-007",
+                         "public_key" : "0115939cf8687a4e132ba2444c0350698e397952aa86f3248e61fb0cfc15ac527b",
+                         "staked_amount" : "29720009547735219"
+                      }
+                   ],
+                  "inactive" : false,
+                  "bonding_purse" : "uref-f5c19e7cd2abcb30f99fd0c5a5f39b2211317ebe645736e32a56e014c20a4514-007",
+                  "delegation_rate" : 30,
+                  "staked_amount" : "970940836896844"
+                },
+                "public_key" : "01026ca707c348ed8012ac6a1f28db031fadd6eb67203501a353b867a08c8b9a80"
+             },
+             {
+                "bid" : {
+                   "delegators" : [
+                      {
+                         "delegatee" : "010a8ac8d23e6c57fa340c552ddf9199d9cba9166ecc0daee640053ebfc6254610",
+                         "bonding_purse" : "uref-747b89759a356ef3e1c45c14b63161eda27e946b53566a635f1a145f7dfc930c-007",
+                         "public_key" : "010150481a99e218e14cf38004581cff8373a72e099d4d196a44ac4088a4d032be",
+                         "staked_amount" : "599180559863961"
+                      },
+                      {
+                         "delegatee" : "010a8ac8d23e6c57fa340c552ddf9199d9cba9166ecc0daee640053ebfc6254610",
+                         "bonding_purse" : "uref-dad500297e177d68f8886e5398376b661887328fd91d754af4e405bd2e8c4b0e-007",
+                         "public_key" : "0203efcf6b744b300ddf3866cb1c00f9f8ee3bd5b05d46cbb5f28165c6e654103c04",
+                         "staked_amount" : "5062388881701"
+                      },
+                      {
+                         "delegatee" : "010a8ac8d23e6c57fa340c552ddf9199d9cba9166ecc0daee640053ebfc6254610",
+                         "bonding_purse" : "uref-5c11941686e96f22fa58d5f1ce8c1a6e7ee4341535e58f065b0d4f4d83819d87-007",
+                         "public_key" : "0203f1fc69aa72b58e81c5c306cf9edab534cd40086434604fe56d9a0c7b3cf28d04",
+                         "staked_amount" : "804565191149"
+                      }
+                   ],
+                   "inactive" : false,
+                   "bonding_purse" : "uref-ded49e6e7bb9202d4e11a87bf4281ce4b64a681a6279b4aa922e5d1ce12600cb-007",
+                   "delegation_rate" : 8,
+                   "staked_amount" : "2004298511096313"
+                },
+                "public_key" : "010a8ac8d23e6c57fa340c552ddf9199d9cba9166ecc0daee640053ebfc6254610"
+             }
+          ],
+          "block_height" : 236509,
+          "era_validators" : [
+             {
+                "era_id" : 2169,
+                "validator_weights" : [
+                   {
+                      "public_key" : "01026ca707c348ed8012ac6a1f28db031fadd6eb67203501a353b867a08c8b9a80",
+                      "weight" : "162574478082356532"
+                   },
+                   {
+                      "public_key" : "01031cdce87d5fe53246492f9262932f9eb7421ea54b30da1eca06874fd2a7df60",
+                      "weight" : "17555001909519"
+                   }
+                ]
+             },
+             {
+                "era_id" : 2170,
+                "validator_weights" : [
+                   {
+                      "public_key" : "01026ca707c348ed8012ac6a1f28db031fadd6eb67203501a353b867a08c8b9a80",
+                      "weight" : "162578497366404454"
+                   },
+                   {
+                      "public_key" : "01031cdce87d5fe53246492f9262932f9eb7421ea54b30da1eca06874fd2a7df60",
+                      "weight" : "17555435916925"
+                   },
+                   {
+                      "public_key" : "0103dd8b2b18ef0b9fd5b7c8e340b104ee4d966f2a167eb1a938963f8c8f699a45",
+                      "weight" : "1135687399307054"
+                   },
+                   {
+                      "public_key" : "010427c1d1227c9d2aafe8c06c6e6b276da8dcd8fd170ca848b8e3e8e1038a6dc8",
+                      "weight" : "897631672544692"
+                   }
+                ]
+             }
+          ],
+          "state_root_hash" : "a351445a49d1b9adfa0856ed22b9f84b5aadf886a547aa16a8454fd1958db0aa"
+       }
+ }
+ 

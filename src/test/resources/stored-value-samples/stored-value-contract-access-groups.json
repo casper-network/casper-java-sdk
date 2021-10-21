@@ -1,0 +1,94 @@
+{
+   "api_version": "1.3.2",
+   "stored_value": {
+      "Contract": {
+         "contract_package_hash": "contract-package-wasmd63c44078a1931b5dc4b80a7a0ec586164fd0470ce9f8b23f6d93b9e86c5944d",
+         "contract_wasm_hash": "contract-wasm-08d9634a72c58df5d837740174c6e88e52b0370ce8c74960d600e54966a0a4cf",
+         "entry_points": [
+            {
+               "access": ["group1", "group2", "group3"],
+               "args": [
+                  {
+                     "name": "amount",
+                     "cl_type": "U512"
+                  },
+                  {
+                     "name": "testList",
+                     "cl_type": {
+                        "List": "I32"
+                     }
+                  },
+                  {
+                     "name": "testMap",
+                     "cl_type": {
+                        "Map": {
+                           "key": "String",
+                           "value": "I32"
+                        }
+                     }
+                  },
+                  {
+                     "name": "testComplex",
+                     "cl_type": {
+                        "Tuple3": [
+                           {
+                              "Tuple1": [
+                                 "Bool"
+                              ]
+                           },
+                           "String",
+                           "Bool"
+                        ]
+                     }
+                  },
+                  {
+                     "name": "account",
+                     "cl_type": {
+                        "ByteArray": 32
+                     }
+                  }
+               ],
+               "entry_point_type": "Contract",
+               "name": "finalize_payment",
+               "ret": "Unit"
+            },
+            {
+               "access": "Public",
+               "args": [],
+               "entry_point_type": "Contract",
+               "name": "get_payment_purse",
+               "ret": "URef"
+            },
+            {
+               "access": "Public",
+               "args": [],
+               "entry_point_type": "Contract",
+               "name": "get_refund_purse",
+               "ret": {
+                  "Option": "URef"
+               }
+            },
+            {
+               "access": "Public",
+               "args": [
+                  {
+                     "name": "purse",
+                     "cl_type": "URef"
+                  }
+               ],
+               "entry_point_type": "Contract",
+               "name": "set_refund_purse",
+               "ret": "Unit"
+            }
+         ],
+         "named_keys": [
+            {
+               "key": "uref-fe327f9815a1d016e1143db85e25a86341883949fd75ac1c1e7408a26c5b62ef-007",
+               "name": "payment_purse"
+            }
+         ],
+         "protocol_version": "1.0.0"
+      }
+   },
+   "merkle_proof": "-- erased --"
+}

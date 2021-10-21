@@ -1,0 +1,12 @@
+{
+    "api_version":"1.3.2",
+    "dictionary_key":"dictionary-67518854aa916c ...",
+    "merkle_proof":"936 chars",
+    "stored_value":{
+        "CLValue":{
+            "bytes":"0100000000000000",
+            "parsed":"1",
+            "cl_type":"U64"
+        }
+    }
+}
