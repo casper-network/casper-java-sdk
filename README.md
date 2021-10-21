@@ -14,12 +14,12 @@ This project implements the SDK to interact with a Casper Node. It wraps the Jso
 ## Maven repository
 
 Using gradle
-```
+```gradle
 implementation com.syntifi.casper:casper-sdk:VERSION
 ```
 
 Using maven
-```
+```xml
 <dependency>
   <groupId>com.syntifi.casper</groupId>
   <artifactId>casper-sdk</artifactId>
