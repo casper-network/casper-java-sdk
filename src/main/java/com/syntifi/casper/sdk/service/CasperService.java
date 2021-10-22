@@ -91,7 +91,7 @@ public interface CasperService {
         public StateRootHashData getStateRootHash();
 
         /**
-         * Returns a state root hash at a given Block height
+         * Returns a state root hash at a given a {@link BlockIdentifier}
          * 
          * @param blockIdentifier BlockIdentifier data
          * @return Object holding the api version and block
