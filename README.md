@@ -106,3 +106,35 @@ Return the current status of the node
 StatusData status = casperService.getStatus()
 ```
 
+### 8. Get account info
+Returns an Account from the network
+#### [By block height](https://github.com/syntifi/casper-sdk/blob/dee0fb23bcb8627fb0b068384e8bb69acb9d3145/src/test/java/com/syntifi/casper/sdk/service/CasperServiceTests.java#L280-L282)
+```Java
+AccountData account = casperService.getStateAccountInfo("--publicKey--", new HeightBlockIdentifier(1234));
+```
+#### [By block hash](https://github.com/syntifi/casper-sdk/blob/dee0fb23bcb8627fb0b068384e8bb69acb9d3145/src/test/java/com/syntifi/casper/sdk/service/CasperServiceTests.java#L268-L270)
+```Java
+AccountData account = casperService.getStateAccountInfo("--publicKey--", new HashBlockIdentifier("--hash--"));
+```
+
+### 9. Get auction info
+Returns the Auction info for a given block
+#### [By block height](https://github.com/syntifi/casper-sdk/blob/dee0fb23bcb8627fb0b068384e8bb69acb9d3145/src/test/java/com/syntifi/casper/sdk/service/CasperServiceTests.java#L302)
+```Java
+AuctionData auction = casperService.getStateAuctionInfo(new HeightBlockIdentifier(1234));
+```
+#### [By block hash](https://github.com/syntifi/casper-sdk/blob/dee0fb23bcb8627fb0b068384e8bb69acb9d3145/src/test/java/com/syntifi/casper/sdk/service/CasperServiceTests.java#L292-L293)
+```Java
+AuctionData auction = casperServiceMainnet.getStateAuctionInfo(new HashBlockIdentifier("--hash--"));
+```
+
+### 10. Get era info
+Returns an EraInfo from the network
+#### [By block height](https://github.com/syntifi/casper-sdk/blob/dee0fb23bcb8627fb0b068384e8bb69acb9d3145/src/test/java/com/syntifi/casper/sdk/service/CasperServiceTests.java#L311)
+```Java
+EraInfoData eraInfoData = casperService.getEraInfoBySwitchBlock(new HeightBlockIdentifier(1234));
+ ```
+#### [By block hash](https://github.com/syntifi/casper-sdk/blob/dee0fb23bcb8627fb0b068384e8bb69acb9d3145/src/test/java/com/syntifi/casper/sdk/service/CasperServiceTests.java#L325-L326)
+```Java
+EraInfoData eraInfoData = casperService.getEraInfoBySwitchBlock(new HashBlockIdentifier("--hash--"));
+```
