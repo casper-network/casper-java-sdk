@@ -138,3 +138,7 @@ EraInfoData eraInfoData = casperService.getEraInfoBySwitchBlock(new HeightBlockI
 ```Java
 EraInfoData eraInfoData = casperService.getEraInfoBySwitchBlock(new HashBlockIdentifier("--hash--"));
 ```
+
+### 11. Deploy
+Sends a deploy to be received by the network
+TODO
