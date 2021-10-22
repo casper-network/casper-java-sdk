@@ -97,7 +97,7 @@ PeerData peerData = casperService.getPeerData();
 ### 6. [Query stored value](https://github.com/syntifi/casper-sdk/blob/67185568cf4df5ed09dc34cc0cbf906165b56843/src/test/java/com/syntifi/casper/sdk/service/CasperServiceTests.java#L212-L215)
 Retrieve a stored value from the network
 ```Java
-StoredValueData result = casperService.getStateItem("--stateRootHash--", "key", List<"path">);
+StoredValueData result = casperService.getStateItem("--stateRootHash--", "key", Arrays.asList("The path components starting from the key as base"));
 ```
 
 ### 7. [Get node status](https://github.com/syntifi/casper-sdk/blob/67185568cf4df5ed09dc34cc0cbf906165b56843/src/test/java/com/syntifi/casper/sdk/service/CasperServiceTests.java#L242)
