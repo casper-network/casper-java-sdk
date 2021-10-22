@@ -27,9 +27,16 @@ Using maven
 </dependency>
 ```
 
-
 ## How to
 
-- [Set-up a connection](https://github.com/syntifi/casper-sdk/blob/1fe4a44acf431f5e1990b1d9f331505011da4f83/casper-java-sdk/src/test/java/com/syntifi/casper/sdk/CasperSdkApplicationTests.java#L61)
-- [Query block by Hash](https://github.com/syntifi/casper-sdk/blob/1fe4a44acf431f5e1990b1d9f331505011da4f83/casper-java-sdk/src/test/java/com/syntifi/casper/sdk/CasperSdkApplicationTests.java#L130)
+### Set-up a connection
+```Java
+casperService = CasperService.usingPeer("127.0.0.1","777");
+```
+
+https://github.com/syntifi/casper-sdk/blob/ced2293f374d0c170ff4effc9eb606afb93782d4/src/test/java/com/syntifi/casper/sdk/service/AbstractJsonRpcTests.java#L23-L39
+
+### Query a block
+
+
 
