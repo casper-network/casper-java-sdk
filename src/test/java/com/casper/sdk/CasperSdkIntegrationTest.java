@@ -2,6 +2,9 @@ package com.casper.sdk;
 
 import com.casper.sdk.service.hash.HashService;
 import com.casper.sdk.types.*;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -14,6 +17,7 @@ import java.security.KeyPair;
 import java.time.Instant;
 
 import static com.casper.sdk.IntegrationTestUtils.*;
+import static com.jayway.jsonpath.matchers.JsonPathMatchers.hasJsonPath;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -173,5 +177,22 @@ class CasperSdkIntegrationTest {
 
        String blockInfo =  casperSdk.getLatestBlockInfo();
        assertThat(blockInfo, is(notNullValue()));
+    }
+
+    @Test
+    void getBlockInfo() throws JsonProcessingException {
+
+        String blockInfo =  casperSdk.getLatestBlockInfo();
+        JsonNode jsonNode = new ObjectMapper().readTree(blockInfo);
+
+        Digest hash = new Digest(jsonNode.get("hash").textValue());
+        Number height = jsonNode.get("header").get("height").numberValue();
+        blockInfo = casperSdk.getBlockInfo(hash);
+        assertThat(blockInfo, is(notNullValue()));
+        assertThat(blockInfo, hasJsonPath("$.hash",  is(hash.toString())));
+
+        blockInfo = casperSdk.getBlockInfoByHeight(height);
+        assertThat(blockInfo, is(notNullValue()));
+        assertThat(blockInfo, hasJsonPath("$.header.height",  is(height)));
     }
 }

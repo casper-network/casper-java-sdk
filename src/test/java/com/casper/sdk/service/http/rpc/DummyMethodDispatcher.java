@@ -57,5 +57,4 @@ final class DummyMethodDispatcher extends Dispatcher {
             throw new IllegalStateException("Unable to load mock response from JSON", e);
         }
     }
-
 }
