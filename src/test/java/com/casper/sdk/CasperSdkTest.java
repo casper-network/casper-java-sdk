@@ -53,4 +53,5 @@ class CasperSdkTest {
         assertThat(transfer.getNamedArg("target").getValue().getCLType(), is(CLType.BYTE_ARRAY));
         assertThat(((CLByteArrayInfo) transfer.getNamedArg("target").getValue().getCLTypeInfo()).getSize(), is(32));
     }
+
 }

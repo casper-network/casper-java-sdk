@@ -82,25 +82,25 @@ class CasperSdkIntegrationTest {
     }
 
     @Test
-    void getStateRootHash() throws Throwable {
+    void getStateRootHash() {
         final String rootHash = casperSdk.getStateRootHash();
         assertThat(rootHash, is(notNullValue()));
     }
 
     @Test
-    void getAuctionInfo() throws Throwable {
+    void getAuctionInfo() {
         final String auctionInfo = casperSdk.getAuctionInfo();
         assertThat(auctionInfo, is(notNullValue()));
     }
 
     @Test
-    void getNodeStatus() throws Throwable {
+    void getNodeStatus() {
         final String nodeStatus = casperSdk.getNodeStatus();
         assertThat(nodeStatus, is(notNullValue()));
     }
 
     @Test
-    void getNodePeers() throws Throwable {
+    void getNodePeers() {
         final String nodePeers = casperSdk.getNodePeers();
         assertThat(nodePeers, is(notNullValue()));
     }
@@ -108,9 +108,7 @@ class CasperSdkIntegrationTest {
     @Test
     void putDeploy() throws Throwable {
 
-        final KeyPair userOneKeyPair = geUserKeyPair(1);
         final KeyPair userTwoKeyPair = geUserKeyPair(2);
-
         final KeyPair nodeOneKeyPair = getNodeKeyPair(1);
 
         final CLPublicKey toPublicKey = casperSdk.toCLPublicKey(userTwoKeyPair.getPublic());
@@ -146,6 +144,10 @@ class CasperSdkIntegrationTest {
         final Digest digest = casperSdk.putDeploy(deploy);
 
         assertThat(digest, is(notNullValue()));
+
+        final Deploy gotDeploy = casperSdk.getDeploy(digest);
+
+        assertThat(gotDeploy, is(notNullValue()));
     }
 
 

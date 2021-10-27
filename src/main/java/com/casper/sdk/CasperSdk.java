@@ -36,13 +36,13 @@ public class CasperSdk {
 
     public CasperSdk(final String url, final int port) {
 
-        Properties.properties.put("node-url", url);
-        Properties.properties.put("node-port", Integer.toString(port));
+        Properties.properties.put(Properties.NODE_URL, url);
+        Properties.properties.put(Properties.NODE_PORT, Integer.toString(port));
 
         this.nodeClient = new NodeClient(deployService, hashService, jsonConversionService);
     }
 
-    public String getAccountInfo(final PublicKey accountKey) throws Exception {
+    public String getAccountInfo(final PublicKey accountKey) {
         return nodeClient.getAccountInfo(signingService.toClPublicKey(accountKey).toAccountHex());
     }
 
@@ -64,15 +64,15 @@ public class CasperSdk {
     }
 
 
-    public BigInteger getAccountBalance(final PublicKey accountKey) throws Exception {
+    public BigInteger getAccountBalance(final PublicKey accountKey) {
         return nodeClient.getAccountBalance(signingService.toClPublicKey(accountKey).toAccountHex());
     }
 
-    public URef getAccountMainPurseURef(final PublicKey accountKey) throws Exception {
+    public URef getAccountMainPurseURef(final PublicKey accountKey) {
         return nodeClient.getAccountMainPurseURef(signingService.toClPublicKey(accountKey).toAccountHex());
     }
 
-    public String getStateRootHash() throws Exception {
+    public String getStateRootHash() {
         return nodeClient.getStateRootHash();
     }
 
@@ -84,15 +84,15 @@ public class CasperSdk {
         return hashService.getAccountHash(accountKey);
     }
 
-    public String getAuctionInfo() throws Exception {
+    public String getAuctionInfo() {
         return nodeClient.getAuctionInfo();
     }
 
-    public String getNodeStatus() throws Exception {
+    public String getNodeStatus() {
         return nodeClient.getNodeStatus();
     }
 
-    public String getNodePeers() throws Exception {
+    public String getNodePeers() {
         return nodeClient.getNodePeers();
     }
 
@@ -156,11 +156,21 @@ public class CasperSdk {
      * Sign the deploy with the specified signKeyPair.
      *
      * @param deploy      unsigned Deploy object
-     * @param signKeyPair the keypair to sign the Deploy object
+     * @param signKeyPair the keypair to sign the deploy object
      * @return the signed deploy
      */
     public Deploy signDeploy(final Deploy deploy, final KeyPair signKeyPair) {
         return deployService.signDeploy(deploy, signKeyPair);
+    }
+
+    /**
+     * Obtains deploy to network
+     *
+     * @param deployHash Signed deploy object
+     * @return the deploy
+     */
+    public Deploy getDeploy(final Digest deployHash) {
+        return nodeClient.getDeploy(deployHash);
     }
 
     /**
@@ -169,9 +179,8 @@ public class CasperSdk {
      * @param signedDeploy Signed deploy object
      * @return the deploy hash, ech deploy gets a unique hash. This is part of the cryptographic security of blockchain
      * technology. No two deploys will ever return the same hash.
-     * @throws Exception on error putting deploy
      */
-    public Digest putDeploy(final Deploy signedDeploy) throws Exception {
+    public Digest putDeploy(final Deploy signedDeploy) {
         return new Digest(nodeClient.putDeploy(signedDeploy));
     }
 
@@ -190,7 +199,7 @@ public class CasperSdk {
      * Obtains the bytes of a public key in casper format with the first byte being the algorithm type identifier
      * value.
      *
-     * @param publicKey the public key to exctract the b
+     * @param publicKey the public key to extract the bytes from
      * @return the bytes
      */
     public byte[] getPublicKeyBytes(final PublicKey publicKey) {
