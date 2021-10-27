@@ -126,9 +126,9 @@ public enum MethodEnums {
         public String getValue(String result) throws ValueNotFoundException {
             try {
                 final JsonNode node = new ObjectMapper().readTree(result);
-                return node.get(RESULT).toPrettyString();
+                return node.get(RESULT).get(Constants.BLOCK).toPrettyString();
             } catch (Exception e) {
-                throw new ValueNotFoundException("peers not found");
+                throw new ValueNotFoundException("block not found");
             }
         }
     };

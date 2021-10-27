@@ -19,4 +19,5 @@ public class Constants {
     public static final String ARGS = "args";
     public static final String ENTRY_POINT = "entry_point";
     public static final String MODULE_BYTES = "module_bytes";
+    public static final String BLOCK = "block";
 }
