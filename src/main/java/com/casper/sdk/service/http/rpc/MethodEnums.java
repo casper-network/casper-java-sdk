@@ -83,6 +83,7 @@ public enum MethodEnums {
             }
         }
     },
+
     INFO_GET_PEERS {
         @Override
         public String getValue(final String result) throws ValueNotFoundException {
@@ -94,6 +95,7 @@ public enum MethodEnums {
             }
         }
     },
+
     INFO_GET_STATUS {
         @Override
         public String getValue(final String result) throws ValueNotFoundException {
@@ -105,6 +107,7 @@ public enum MethodEnums {
             }
         }
     },
+
     ACCOUNT_PUT_DEPLOY {
         @Override
         public String getValue(final String result) throws ValueNotFoundException {
@@ -114,6 +117,18 @@ public enum MethodEnums {
                 return node.get(RESULT).get("deploy_hash").textValue();
             } catch (Exception e) {
                 throw new ValueNotFoundException("deploy_hash not found " + buildErrorMessage(node));
+            }
+        }
+    },
+
+    CHAIN_GET_BLOCK {
+        @Override
+        public String getValue(String result) throws ValueNotFoundException {
+            try {
+                final JsonNode node = new ObjectMapper().readTree(result);
+                return node.get(RESULT).toPrettyString();
+            } catch (Exception e) {
+                throw new ValueNotFoundException("peers not found");
             }
         }
     };

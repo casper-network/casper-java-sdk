@@ -168,4 +168,10 @@ class CasperSdkIntegrationTest {
     }
 
 
+    @Test
+    void getLatestBlockInfo() {
+
+       String blockInfo =  casperSdk.getLatestBlockInfo();
+       assertThat(blockInfo, is(notNullValue()));
+    }
 }
