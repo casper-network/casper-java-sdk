@@ -13,5 +13,4 @@ public class HttpException extends RuntimeException {
     public synchronized Throwable fillInStackTrace() {
         return this;
     }
-
 }

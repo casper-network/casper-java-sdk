@@ -164,9 +164,9 @@ public class CasperSdk {
     }
 
     /**
-     * Obtains deploy to network
+     * Obtains deploy from the network
      *
-     * @param deployHash Signed deploy object
+     * @param deployHash the hash of the deploy object to obtain
      * @return the deploy
      */
     public Deploy getDeploy(final Digest deployHash) {
