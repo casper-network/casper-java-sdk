@@ -15,7 +15,7 @@ import java.util.Optional;
 public class HttpMethods {
 
     private static final MediaType JSON = MediaType.get("application/json");
-    public final OkHttpClient client = new OkHttpClient();
+    private final OkHttpClient client = new OkHttpClient();
     private final JsonConversionService jsonConversionService;
 
     public HttpMethods(final JsonConversionService jsonConversionService) {
@@ -25,6 +25,7 @@ public class HttpMethods {
     public Optional<String> rpcCallMethod(final Method method) throws HttpException {
 
         try {
+
             final String content = jsonConversionService.writeValueAsString(method);
             final byte[] bytes = content.getBytes(StandardCharsets.UTF_8);
             final RequestBody body = RequestBody.create(bytes, JSON);

@@ -1,25 +1,25 @@
 package com.casper.sdk.service.http.rpc;
 
+import com.casper.sdk.Constants;
+import com.casper.sdk.exceptions.ValueNotFoundException;
 import com.casper.sdk.service.hash.HashService;
 import com.casper.sdk.service.json.JsonConversionService;
 import com.casper.sdk.service.serialization.util.CollectionUtils;
 import com.casper.sdk.types.Deploy;
 import com.casper.sdk.types.DeployService;
+import com.casper.sdk.types.Digest;
 import com.casper.sdk.types.URef;
 
 import java.math.BigInteger;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Optional;
-
-import static com.casper.sdk.Properties.*;
+import java.util.function.Function;
 
 /**
  * Service to query the chain Methods call the HTTP methods with an instantiated method object
  */
 public class NodeClient {
 
-    public static final String DEPLOY = "deploy";
     public static final String DEPLOY_TOO_LARGE_MSG = "Deploy can not be send, because it's too large: %d bytes. Max size is 1 megabyte.";
     private static final int ONE_MEGABYTE = 1048576;
     private final HttpMethods httpMethods;
@@ -34,76 +34,78 @@ public class NodeClient {
         this.httpMethods = new HttpMethods(jsonConversionService);
     }
 
-    public String getStateRootHash() throws Exception {
-        final Optional<String> result = httpMethods.rpcCallMethod(new Method(CHAIN_GET_STATE_ROOT_HASH));
-        return result.isPresent() ? MethodEnums.STATE_ROOT_HASH.getValue(result.get()) : null;
+    public String getStateRootHash() {
+        return rcpCallMethodMap(
+                new Method(Constants.CHAIN_GET_STATE_ROOT_HASH),
+                MethodEnums.STATE_ROOT_HASH::getValue
+        );
     }
 
-    public String getAccountInfo(final String accountKey) throws Exception {
+    public String getAccountInfo(final String accountKey) {
 
-        final Optional<String> result = httpMethods.rpcCallMethod(new Method(STATE_GET_ITEM,
+        return rcpCallMethodMap(
+                new Method(Constants.STATE_GET_ITEM,
                         CollectionUtils.Map.of(
                                 "state_root_hash", getStateRootHash(),
                                 "key", "account-hash-" + hashService.getAccountHash(accountKey),
                                 "path", Collections.emptyList()
                         )
-                )
+                ),
+                MethodEnums.ACCOUNT_INFO::getValue
         );
-
-        return result.isPresent() ? MethodEnums.ACCOUNT_INFO.getValue(result.get()) : null;
     }
 
-    public BigInteger getAccountBalance(final String accountKey) throws Exception {
+    public BigInteger getAccountBalance(final String accountKey) {
 
-        final Optional<String> result = httpMethods.rpcCallMethod(
-                new Method(STATE_GET_BALANCE,
+        return rcpCallMethodMap(
+                new Method(Constants.STATE_GET_BALANCE,
                         CollectionUtils.Map.of(
                                 "state_root_hash", getStateRootHash(),
                                 "purse_uref", getAccountMainPurseURef(accountKey)
                         )
-                )
+                ),
+                result -> new BigInteger(MethodEnums.STATE_GET_BALANCE.getValue(result))
         );
-
-        return result.isPresent() ? new BigInteger(MethodEnums.STATE_GET_BALANCE.getValue(result.get())) : null;
     }
 
-    public URef getAccountMainPurseURef(final String accountKey) throws Exception {
+    public URef getAccountMainPurseURef(final String accountKey) {
 
-        final Optional<String> result = httpMethods.rpcCallMethod(new Method(STATE_GET_ITEM,
+        return rcpCallMethodMap(
+                new Method(Constants.STATE_GET_ITEM,
                         CollectionUtils.Map.of(
                                 "key", "account-hash-" + hashService.getAccountHash(accountKey),
                                 "state_root_hash", getStateRootHash(),
                                 "path", Collections.emptyList()
                         )
-                )
+                ),
+                result -> new URef(MethodEnums.STATE_GET_ITEM.getValue(result))
         );
-
-
-        return result.isPresent() ? new URef(MethodEnums.STATE_GET_ITEM.getValue(result.get())) : null;
     }
 
-    public String getAuctionInfo() throws Exception {
+    public String getAuctionInfo() {
 
-        final Optional<String> result = httpMethods.rpcCallMethod(new Method(STATE_GET_AUCTION_INFO, new HashMap<>()));
-
-        return result.isPresent() ? MethodEnums.STATE_GET_AUCTION_INFO.getValue(result.get()) : null;
+        return rcpCallMethodMap(
+                new Method(Constants.STATE_GET_AUCTION_INFO, new HashMap<>()),
+                MethodEnums.STATE_GET_AUCTION_INFO::getValue
+        );
     }
 
-    public String getNodePeers() throws Exception {
+    public String getNodePeers() {
 
-        final Optional<String> result = httpMethods.rpcCallMethod(new Method(INFO_GET_PEERS, new HashMap<>()));
-
-        return result.isPresent() ? MethodEnums.INFO_GET_PEERS.getValue(result.get()) : null;
+        return rcpCallMethodMap(
+                new Method(Constants.INFO_GET_PEERS, new HashMap<>()),
+                MethodEnums.INFO_GET_PEERS::getValue
+        );
     }
 
-    public String getNodeStatus() throws Exception {
-
-        final Optional<String> result = httpMethods.rpcCallMethod(new Method(INFO_GET_STATUS, new HashMap<>()));
-
-        return result.isPresent() ? MethodEnums.INFO_GET_STATUS.getValue(result.get()) : null;
+    public String getNodeStatus() {
+        return rcpCallMethodMap(
+                new Method(Constants.INFO_GET_STATUS, new HashMap<>()),
+                MethodEnums.INFO_GET_STATUS::getValue
+        );
     }
 
-    public String putDeploy(final Deploy signedDeploy) throws Exception {
+    public String putDeploy(final Deploy signedDeploy) {
 
         final int size = deployService.deploySizeInBytes(signedDeploy);
 
@@ -111,10 +113,32 @@ public class NodeClient {
             throw new IllegalArgumentException(String.format(DEPLOY_TOO_LARGE_MSG, size));
         }
 
-        final Optional<String> result = httpMethods.rpcCallMethod(
-                new Method(ACCOUNT_PUT_DEPLOY, CollectionUtils.Map.of(DEPLOY, signedDeploy))
+        return rcpCallMethodMap(
+                new Method(Constants.ACCOUNT_PUT_DEPLOY, CollectionUtils.Map.of(Constants.DEPLOY, signedDeploy)),
+                MethodEnums.ACCOUNT_PUT_DEPLOY::getValue
+        );
+    }
+
+    public Deploy getDeploy(final Digest deployHash) {
+
+        return rcpCallMethodMap(
+                new Method(Constants.INFO_GET_DEPLOY, CollectionUtils.Map.of(Constants.DEPLOY_HASH, deployHash.toString())),
+                result -> deployService.fromJson(MethodEnums.INFO_GET_DEPLOY.getValue(result))
         );
 
-        return result.isPresent() ? MethodEnums.ACCOUNT_PUT_DEPLOY.getValue(result.get()) : null;
+    }
+
+    /**
+     * Calls the RCP method and applies the provided map function to transform the result
+     *
+     * @param method the method to call against a node
+     * @param mapper the mapper to transform the resulting JSON String
+     * @param <T>    the type of object generated by the mapper function
+     * @return the generated function
+     */
+    private <T> T rcpCallMethodMap(final Method method, final Function<String, ? extends T> mapper) {
+        return httpMethods.rpcCallMethod(method)
+                .map(mapper)
+                .orElseThrow(() -> new ValueNotFoundException("For " + method));
     }
 }

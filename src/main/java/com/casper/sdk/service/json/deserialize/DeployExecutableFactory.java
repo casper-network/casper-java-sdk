@@ -1,5 +1,6 @@
 package com.casper.sdk.service.json.deserialize;
 
+import com.casper.sdk.Constants;
 import com.casper.sdk.exceptions.ConversionException;
 import com.casper.sdk.types.*;
 import com.fasterxml.jackson.core.JsonParser;
@@ -10,6 +11,8 @@ import com.fasterxml.jackson.databind.node.TextNode;
 
 import java.io.IOException;
 import java.util.*;
+
+import static com.casper.sdk.Constants.ARGS;
 
 /**
  * Factory class for converting all DeployExecutable from JSON
@@ -93,9 +96,9 @@ class DeployExecutableFactory {
         }
 
         protected byte[] convertModuleBytes(final TreeNode treeNode) {
-            final TreeNode moduleBytes = treeNode.get("ModuleBytes");
+            final TreeNode moduleBytes = treeNode.get(ModuleBytes.class.getSimpleName());
             if (moduleBytes instanceof ObjectNode) {
-                final TreeNode textNode = moduleBytes.get("module_bytes");
+                final TreeNode textNode = moduleBytes.get(Constants.MODULE_BYTES);
                 if (textNode instanceof TextNode) {
                     return CLValue.fromString(((TextNode) textNode).textValue());
                 }
@@ -110,7 +113,7 @@ class DeployExecutableFactory {
     private static class TransferJsonFactory extends AbstractDeployExecutableJsonFactory<Transfer> {
         @Override
         protected TreeNode getArgsNode(final String fieldName, final TreeNode treeNode) {
-            return treeNode.get(fieldName).get("args");
+            return treeNode.get(fieldName).get(ARGS);
         }
 
         @Override
@@ -152,7 +155,7 @@ class DeployExecutableFactory {
 
         @Override
         protected TreeNode getArgsNode(final String entryPoint, final TreeNode treeNode) {
-            return getFieldNode(entryPoint, treeNode, "args");
+            return getFieldNode(entryPoint, treeNode, ARGS);
         }
 
         @Override
@@ -178,7 +181,7 @@ class DeployExecutableFactory {
 
         @Override
         protected TreeNode getArgsNode(final String entryPoint, final TreeNode treeNode) {
-            return getFieldNode(entryPoint, treeNode, "args");
+            return getFieldNode(entryPoint, treeNode, ARGS);
         }
 
         @Override
@@ -196,11 +199,10 @@ class DeployExecutableFactory {
         StoredContractByHash create(final String fieldName, String entryPoint, final TreeNode treeNode, final ObjectCodec codec) {
             try {
                 final List<DeployNamedArg> args = convertArgs(getArgsNode(entryPoint, treeNode), codec);
-                final Optional<String> hashOptional = getFieldValue(entryPoint, treeNode, "hash");
-                final Optional<String> entryPointOptional = getFieldValue(entryPoint, treeNode, "entry_point");
+
                 return new StoredContractByHash(
-                        hashOptional.map(ContractHash::new).orElse(null),
-                        entryPointOptional.orElse(null),
+                        getFieldValue(entryPoint, treeNode, Constants.HASH).map(ContractHash::new).orElse(null),
+                        getFieldValue(entryPoint, treeNode, Constants.ENTRY_POINT).orElse(null),
                         args
                 );
             } catch (Exception e) {
@@ -211,7 +213,7 @@ class DeployExecutableFactory {
 
         @Override
         protected TreeNode getArgsNode(final String entryPoint, final TreeNode treeNode) {
-            return getFieldNode(entryPoint, treeNode, "args");
+            return getFieldNode(entryPoint, treeNode, ARGS);
         }
 
         @Override
@@ -228,7 +230,7 @@ class DeployExecutableFactory {
         argsFactoryMap.put("StoredContractByName", new StoredContractByNameFactory());
         argsFactoryMap.put("StoredContractByHash", new StoredContractByHashFactory());
         argsFactoryMap.put("Transfer", new TransferJsonFactory());
-        argsFactoryMap.put("args", new DefaultDeployExecutableJsonFactory());
+        argsFactoryMap.put(ARGS, new DefaultDeployExecutableJsonFactory());
     }
 
     /**

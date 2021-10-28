@@ -1,5 +1,6 @@
 package com.casper.sdk.types;
 
+import com.casper.sdk.exceptions.ConversionException;
 import com.casper.sdk.service.hash.HashService;
 import com.casper.sdk.service.json.JsonConversionService;
 import com.casper.sdk.service.serialization.cltypes.TypesFactory;
@@ -137,12 +138,20 @@ public class DeployService {
         return new ModuleBytes(new byte[0], CollectionUtils.List.of(paymentArg));
     }
 
-    public Deploy fromJson(final String json) throws IOException {
-        return jsonService.fromJson(json, Deploy.class);
+    public Deploy fromJson(final String json) {
+        try {
+            return jsonService.fromJson(json, Deploy.class);
+        } catch (IOException e) {
+            throw new ConversionException(e);
+        }
     }
 
-    public Deploy fromJson(final InputStream in) throws IOException {
-        return jsonService.fromJson(in, Deploy.class);
+    public Deploy fromJson(final InputStream in) {
+        try {
+            return jsonService.fromJson(in, Deploy.class);
+        } catch (IOException e) {
+            throw new ConversionException(e);
+        }
     }
 
     /**

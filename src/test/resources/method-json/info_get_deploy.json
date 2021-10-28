@@ -1,0 +1,79 @@
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": {
+    "api_version": "1.0.0",
+    "deploy": {
+      "hash": "3752362444d2b75de05f0a849157d94acaeebdcce155716cd2848773c2a159b0",
+      "header": {
+        "account": "0168f061b4ec8b728c83815f1120c36d444de28ea4c6d696e3f098319ff4908b26",
+        "timestamp": "2021-10-26T19:11:45.203Z",
+        "ttl": "30m",
+        "gas_price": 10,
+        "body_hash": "f5cd236b1387abcc6f38c0948e8d6fcda4ad54e0a96e29946816732ce625af33",
+        "dependencies": [],
+        "chain_name": "casper-net-1"
+      },
+      "payment": {
+        "ModuleBytes": {
+          "module_bytes": "",
+          "args": [
+            [
+              "amount",
+              {
+                "cl_type": "U512",
+                "bytes": "0500e40b5402",
+                "parsed": "10000000000"
+              }
+            ]
+          ]
+        }
+      },
+      "session": {
+        "Transfer": {
+          "args": [
+            [
+              "amount",
+              {
+                "cl_type": "U512",
+                "bytes": "0400f90295",
+                "parsed": "2500000000"
+              }
+            ],
+            [
+              "target",
+              {
+                "cl_type": {
+                  "ByteArray": 32
+                },
+                "bytes": "ee29b7df45557e8eed0dfe496523deeb52ddf0b4ae1326766ffcc36e961a85ce",
+                "parsed": "ee29b7df45557e8eed0dfe496523deeb52ddf0b4ae1326766ffcc36e961a85ce"
+              }
+            ],
+            [
+              "id",
+              {
+                "cl_type": {
+                  "Option": "U64"
+                },
+                "bytes": "010100000000000000",
+                "parsed": 1
+              }
+            ]
+          ]
+        }
+      },
+      "approvals": [
+        {
+          "signer": "0168f061b4ec8b728c83815f1120c36d444de28ea4c6d696e3f098319ff4908b26",
+          "signature": "01b4badccd15bba77d7893fbe63323e9a2b698111434d9efa35e6f613b1033688e65a590ebf6e46e423cf6e3fb47463b7cf76b7dc0055d1d2f67cb386c4ffebd09"
+        },
+        {
+          "signer": "019eb4cfb46929439bed32029c984088ac92e8dd727b90655cf90e76ecaab89348",
+          "signature": "01247cf89f84b2ca5b6b7238c8e3ea54f27011b8ad1233f1190c74bf4807c27fe9c18a10af89d7e2dbaf1fb9bf40ce7a5a43a64fb4eaf614d9d70153b618ec2101"
+        }
+      ]
+    },
+    "execution_results": []
+  }
+}

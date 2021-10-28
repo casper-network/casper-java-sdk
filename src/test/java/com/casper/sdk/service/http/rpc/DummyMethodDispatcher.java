@@ -1,5 +1,6 @@
 package com.casper.sdk.service.http.rpc;
 
+import com.casper.sdk.Constants;
 import okhttp3.mockwebserver.Dispatcher;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.RecordedRequest;
@@ -34,6 +35,8 @@ final class DummyMethodDispatcher extends Dispatcher {
             responseBodyFile = "method-json/info_get_status.json";
         } else if (request.getBody().toString().contains("account_put_deploy")) {
             responseBodyFile = "method-json/account_put_deploy.json";
+        } else if (request.getBody().toString().contains(Constants.INFO_GET_DEPLOY)) {
+            responseBodyFile = "method-json/info_get_deploy.json";
         }
 
         return new MockResponse().setResponseCode(200)
