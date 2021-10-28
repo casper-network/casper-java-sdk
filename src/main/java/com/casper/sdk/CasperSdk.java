@@ -259,4 +259,33 @@ public class CasperSdk {
     public CLPublicKey toCLPublicKey(final PublicKey publicKey) {
         return signingService.toClPublicKey(publicKey);
     }
+
+    /**
+     * Obtains the latest block info from a mode
+     *
+     * @return the block info JSON
+     */
+    public String getLatestBlockInfo() {
+        return nodeClient.getLatestBlockInfo();
+    }
+
+    /**
+     * Obtains a block info by the block's hash
+     *
+     * @param hash the has of the block info to obtain
+     * @return the block info JSON
+     */
+    public String getBlockInfo(final Digest hash) {
+        return nodeClient.getBlockInfo(hash);
+    }
+
+    /**
+     * Obtains a block info by the block's height
+     *
+     * @param height the has of the block info to obtain
+     * @return the block info JSON
+     */
+    public String getBlockInfoByHeight(final Number height) {
+        return nodeClient.getBlockInfoByHeight(height);
+    }
 }

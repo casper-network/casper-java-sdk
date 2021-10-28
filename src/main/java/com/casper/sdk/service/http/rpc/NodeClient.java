@@ -13,7 +13,10 @@ import com.casper.sdk.types.URef;
 import java.math.BigInteger;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
+
+import static com.casper.sdk.service.http.rpc.MethodEnums.CHAIN_GET_BLOCK;
 
 /**
  * Service to query the chain Methods call the HTTP methods with an instantiated method object
@@ -126,6 +129,39 @@ public class NodeClient {
                 result -> deployService.fromJson(MethodEnums.INFO_GET_DEPLOY.getValue(result))
         );
 
+    }
+
+    public String getLatestBlockInfo() {
+        return getChainBlockInfo(new HashMap<>());
+    }
+
+    public String getBlockInfo(final Digest blockHash) {
+        final Map<String, Object> params = CollectionUtils.Map.of(
+                "block_identifier",
+                CollectionUtils.Map.of("Hash", blockHash.toString()
+                ));
+        return getChainBlockInfo(params);
+    }
+
+    public String getBlockInfoByHeight(final Number height) {
+        final Map<String, Object> params = CollectionUtils.Map.of(
+                "block_identifier",
+                CollectionUtils.Map.of("Height", height.toString())
+        );
+        return getChainBlockInfo(params);
+    }
+
+    /**
+     * Obtains the block info using the provided parameters
+     *
+     * @param params the parameters to obtain the block info with
+     * @return the chain block info
+     */
+    String getChainBlockInfo(final Map<String, Object> params) {
+        return rcpCallMethodMap(
+                new Method(Constants.CHAIN_GET_BLOCK, params),
+                CHAIN_GET_BLOCK::getValue
+        );
     }
 
     /**
