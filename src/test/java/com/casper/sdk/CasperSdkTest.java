@@ -1,7 +1,7 @@
 package com.casper.sdk;
 
-import com.casper.sdk.service.HashService;
-import com.casper.sdk.service.SigningService;
+import com.casper.sdk.service.hash.HashService;
+import com.casper.sdk.service.signing.SigningService;
 import com.casper.sdk.service.json.JsonConversionService;
 import com.casper.sdk.service.serialization.cltypes.TypesFactory;
 import com.casper.sdk.service.serialization.types.ByteSerializerFactory;
@@ -39,7 +39,7 @@ class CasperSdkTest {
 
         final Transfer transfer = deployService.newTransfer(
                 10,
-                new PublicKey(recipientPublicKey, KeyAlgorithm.ED25519),
+                new CLPublicKey(recipientPublicKey, Algorithm.ED25519),
                 34
         );
 
@@ -53,4 +53,5 @@ class CasperSdkTest {
         assertThat(transfer.getNamedArg("target").getValue().getCLType(), is(CLType.BYTE_ARRAY));
         assertThat(((CLByteArrayInfo) transfer.getNamedArg("target").getValue().getCLTypeInfo()).getSize(), is(32));
     }
+
 }

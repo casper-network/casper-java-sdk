@@ -1,9 +1,10 @@
 package com.casper.sdk;
 
-import com.casper.sdk.service.HashService;
+import com.casper.sdk.service.hash.HashService;
 import com.casper.sdk.types.*;
-import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
-import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -12,9 +13,11 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.security.KeyPair;
 import java.time.Instant;
 
 import static com.casper.sdk.IntegrationTestUtils.*;
+import static com.jayway.jsonpath.matchers.JsonPathMatchers.hasJsonPath;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -60,48 +63,48 @@ class CasperSdkIntegrationTest {
 
     @Test
     void getAccountInfo() throws Throwable {
-        final String accountInfo = casperSdk.getAccountInfo(getPublicKeyAccountHex(geUserKeyPair(1)));
+        final String accountInfo = casperSdk.getAccountInfo(geUserKeyPair(1).getPublic());
         assertThat(accountInfo, is(notNullValue()));
     }
 
     @Test
     void getAccountHash() throws Throwable {
-        final String accountHash = casperSdk.getAccountHash(getPublicKeyAccountHex(geUserKeyPair(1)));
+        final String accountHash = casperSdk.getAccountHash(geUserKeyPair(1).getPublic());
         assertThat(accountHash, is(notNullValue()));
     }
 
     @Test
     void getAccountBalance() throws Throwable {
-        final String accountBalance = casperSdk.getAccountBalance(getPublicKeyAccountHex(geUserKeyPair(1)));
+        final BigInteger accountBalance = casperSdk.getAccountBalance(geUserKeyPair(1).getPublic());
         assertThat(accountBalance, is(notNullValue()));
     }
 
     @Test
     void getAccountMainPurseURef() throws Throwable {
-        final String accountMainPurseURef = casperSdk.getAccountMainPurseURef(getPublicKeyAccountHex(geUserKeyPair(1)));
+        final URef accountMainPurseURef = casperSdk.getAccountMainPurseURef(geUserKeyPair(1).getPublic());
         assertThat(accountMainPurseURef, is(notNullValue()));
     }
 
     @Test
-    void getStateRootHash() throws Throwable {
+    void getStateRootHash() {
         final String rootHash = casperSdk.getStateRootHash();
         assertThat(rootHash, is(notNullValue()));
     }
 
     @Test
-    void getAuctionInfo() throws Throwable {
+    void getAuctionInfo() {
         final String auctionInfo = casperSdk.getAuctionInfo();
         assertThat(auctionInfo, is(notNullValue()));
     }
 
     @Test
-    void getNodeStatus() throws Throwable {
+    void getNodeStatus() {
         final String nodeStatus = casperSdk.getNodeStatus();
         assertThat(nodeStatus, is(notNullValue()));
     }
 
     @Test
-    void getNodePeers() throws Throwable {
+    void getNodePeers() {
         final String nodePeers = casperSdk.getNodePeers();
         assertThat(nodePeers, is(notNullValue()));
     }
@@ -109,13 +112,10 @@ class CasperSdkIntegrationTest {
     @Test
     void putDeploy() throws Throwable {
 
-        final AsymmetricCipherKeyPair userOneKeyPair = geUserKeyPair(1);
-        final AsymmetricCipherKeyPair userTwoKeyPair = geUserKeyPair(2);
+        final KeyPair userTwoKeyPair = geUserKeyPair(2);
+        final KeyPair nodeOneKeyPair = getNodeKeyPair(1);
 
-        final AsymmetricCipherKeyPair nodeOneKeyPair = getNodeKeyPair(1);
-
-        final PublicKey fromPublicKey = new PublicKey(((Ed25519PublicKeyParameters) nodeOneKeyPair.getPublic()).getEncoded(), KeyAlgorithm.ED25519);
-        final PublicKey toPublicKey = new PublicKey(((Ed25519PublicKeyParameters) userTwoKeyPair.getPublic()).getEncoded(), KeyAlgorithm.ED25519);
+        final CLPublicKey toPublicKey = casperSdk.toCLPublicKey(userTwoKeyPair.getPublic());
 
         // Make the session, a transfer from user one to user two
         final Transfer transfer = casperSdk.newTransfer(new BigInteger("2500000000"),
@@ -128,7 +128,7 @@ class CasperSdkIntegrationTest {
         // Create the transfer
         final Deploy deploy = casperSdk.makeTransferDeploy(
                 new DeployParams(
-                        fromPublicKey,
+                        nodeOneKeyPair.getPublic(),
                         "casper-net-1",
                         10,
                         Instant.now().toEpochMilli(),
@@ -148,6 +148,10 @@ class CasperSdkIntegrationTest {
         final Digest digest = casperSdk.putDeploy(deploy);
 
         assertThat(digest, is(notNullValue()));
+
+        final Deploy gotDeploy = casperSdk.getDeploy(digest);
+
+        assertThat(gotDeploy, is(notNullValue()));
     }
 
 
@@ -157,16 +161,38 @@ class CasperSdkIntegrationTest {
         assertThat(accountHash, is(expectedHash));
     }
 
-
-    private AsymmetricCipherKeyPair geUserKeyPair(int userNumber) throws IOException {
+    private KeyPair geUserKeyPair(int userNumber) throws IOException {
         final KeyPairStreams streams = geUserKeyPairStreams(userNumber);
         return casperSdk.loadKeyPair(streams.getPublicKeyIn(), streams.getPrivateKeyIn());
     }
 
-    private AsymmetricCipherKeyPair getNodeKeyPair(final int nodeNumber) throws IOException {
+    private KeyPair getNodeKeyPair(final int nodeNumber) throws IOException {
         final KeyPairStreams streams = getNodeKeyPairSteams(nodeNumber);
         return casperSdk.loadKeyPair(streams.getPublicKeyIn(), streams.getPrivateKeyIn());
     }
 
 
+    @Test
+    void getLatestBlockInfo() {
+
+       String blockInfo =  casperSdk.getLatestBlockInfo();
+       assertThat(blockInfo, is(notNullValue()));
+    }
+
+    @Test
+    void getBlockInfo() throws JsonProcessingException {
+
+        String blockInfo =  casperSdk.getLatestBlockInfo();
+        JsonNode jsonNode = new ObjectMapper().readTree(blockInfo);
+
+        Digest hash = new Digest(jsonNode.get("hash").textValue());
+        Number height = jsonNode.get("header").get("height").numberValue();
+        blockInfo = casperSdk.getBlockInfo(hash);
+        assertThat(blockInfo, is(notNullValue()));
+        assertThat(blockInfo, hasJsonPath("$.hash",  is(hash.toString())));
+
+        blockInfo = casperSdk.getBlockInfoByHeight(height);
+        assertThat(blockInfo, is(notNullValue()));
+        assertThat(blockInfo, hasJsonPath("$.header.height",  is(height)));
+    }
 }

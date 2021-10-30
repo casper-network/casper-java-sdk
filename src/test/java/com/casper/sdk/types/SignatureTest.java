@@ -19,7 +19,7 @@ class SignatureTest {
         };
 
         final Signature signature = new Signature(signatureStr);
-        assertThat(signature.getKeyAlgorithm(), is(KeyAlgorithm.ED25519));
+        assertThat(signature.getAlgorithm(), is(Algorithm.ED25519));
         assertThat(signature.getBytes().length, is(64));
         assertThat(signature.getBytes(), is(signatureBytes));
     }

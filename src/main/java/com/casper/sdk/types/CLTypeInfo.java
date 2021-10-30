@@ -14,7 +14,7 @@ public class CLTypeInfo {
     /** The type name */
     private final CLType type;
 
-    public CLTypeInfo(CLType type) {
+    public CLTypeInfo(final CLType type) {
         this.type = type;
     }
 
@@ -23,7 +23,7 @@ public class CLTypeInfo {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CLTypeInfo that = (CLTypeInfo) o;

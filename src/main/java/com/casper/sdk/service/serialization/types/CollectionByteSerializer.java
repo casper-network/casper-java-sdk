@@ -1,11 +1,13 @@
 package com.casper.sdk.service.serialization.types;
 
-import com.casper.sdk.types.CLType;
 import com.casper.sdk.service.serialization.cltypes.TypesFactory;
 import com.casper.sdk.service.serialization.cltypes.TypesSerializer;
 import com.casper.sdk.service.serialization.util.ByteArrayBuilder;
+import com.casper.sdk.types.CLType;
 
 import java.util.Collection;
+
+import static com.casper.sdk.service.serialization.util.CollectionUtils.genericCast;
 
 /**
  * The byte serializer for Lists of casper type objects.
@@ -40,7 +42,6 @@ class CollectionByteSerializer implements ByteSerializer<Collection<?>> {
 
     @Override
     public Class<Collection<?>> getType() {
-        //noinspection unchecked,rawtypes
-        return (Class) Collection.class;
+        return genericCast(Collection.class);
     }
 }

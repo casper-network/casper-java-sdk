@@ -2,8 +2,8 @@ package com.casper.sdk.service.json.deserialize;
 
 import com.casper.sdk.types.DeployHeader;
 import com.casper.sdk.types.Digest;
-import com.casper.sdk.types.KeyAlgorithm;
-import com.casper.sdk.types.PublicKey;
+import com.casper.sdk.types.Algorithm;
+import com.casper.sdk.types.CLPublicKey;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -47,9 +47,9 @@ class DeployHeaderJsonDeserializerTest {
     @Test
     void testParseDeployHeaderAccountFromJson() {
         assertThat(deployHeader, is(notNullValue()));
-        assertThat(deployHeader.getAccount(), is(notNullValue(PublicKey.class)));
-        assertThat(PublicKey.toHex(deployHeader.getAccount().getBytes()), is("7f747b67bd3fe63c2a736739dfe40156d622347346e70f68f51c178a75ce5537"));
-        assertThat(deployHeader.getAccount().getKeyAlgorithm(), is(KeyAlgorithm.ED25519));
+        assertThat(deployHeader.getAccount(), is(notNullValue(CLPublicKey.class)));
+        assertThat(CLPublicKey.toHex(deployHeader.getAccount().getBytes()), is("7f747b67bd3fe63c2a736739dfe40156d622347346e70f68f51c178a75ce5537"));
+        assertThat(deployHeader.getAccount().getAlgorithm(), is(Algorithm.ED25519));
     }
 
     @Test

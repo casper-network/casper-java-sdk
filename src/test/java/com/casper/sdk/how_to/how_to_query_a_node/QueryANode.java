@@ -2,24 +2,24 @@ package com.casper.sdk.how_to.how_to_query_a_node;
 
 import com.casper.sdk.CasperSdk;
 import com.casper.sdk.how_to.common.Methods;
-
-import org.junit.Ignore;
+import com.casper.sdk.types.URef;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigInteger;
+
 /**
- * Uses Local Network Testing network/node control to demonstrate
- * querying a node
+ * Uses Local Network Testing network/node control to demonstrate querying a node
+ *
  * @see <a href="https://docs.casperlabs.io/en/latest/dapp-dev-guide/setup-nctl.html"></a>
  */
 @Disabled // Remove this to run locally
 public class QueryANode extends Methods {
 
-    //Create new instance of the SDK with default NCTL url and port
-    final CasperSdk casperSdk = new CasperSdk("http://localhost", 40101);
-
     //Path to the NCTL utilities, change to mach your implementation
     private final static String NCTL_HOME = "~/casper-node/utils/nctl";
+    //Create new instance of the SDK with default NCTL url and port
+    final CasperSdk casperSdk = new CasperSdk("http://localhost", 40101);
 
     @Test
     public void testGetAuctionInfo() throws Throwable {
@@ -60,8 +60,9 @@ public class QueryANode extends Methods {
     @Test
     public void testGetAccountMainPurseURef() throws Throwable {
 
-        final String accountMainPurseURef = casperSdk.getAccountMainPurseURef(super.getPublicKeyAccountHex(
-                super.getUserKeyPair(1, NCTL_HOME, casperSdk)));
+        final URef accountMainPurseURef = casperSdk.getAccountMainPurseURef(
+                getUserKeyPair(1, NCTL_HOME, casperSdk).getPublic()
+        );
 
         assert (accountMainPurseURef != null);
 
@@ -80,8 +81,9 @@ public class QueryANode extends Methods {
     @Test
     public void testGetAccountBalance() throws Throwable {
 
-        final String accountBalance = casperSdk.getAccountBalance(super.getPublicKeyAccountHex(
-                super.getUserKeyPair(1, NCTL_HOME, casperSdk)));
+        final BigInteger accountBalance = casperSdk.getAccountBalance(
+                super.getUserKeyPair(1, NCTL_HOME, casperSdk).getPublic()
+        );
 
         assert (accountBalance != null);
 
@@ -90,11 +92,10 @@ public class QueryANode extends Methods {
     @Test
     public void testGetAccountInfo() throws Throwable {
 
-        final String accountInfo = casperSdk.getAccountInfo(super.getPublicKeyAccountHex(
-                super.getUserKeyPair(1, NCTL_HOME, casperSdk)));
+        final String accountInfo = casperSdk.getAccountInfo(
+                super.getUserKeyPair(1, NCTL_HOME, casperSdk).getPublic()
+        );
 
         assert (accountInfo != null);
-
     }
-
 }

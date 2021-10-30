@@ -8,13 +8,10 @@ import java.util.Map;
  */
 public class Method {
 
-    private static final String jsonrpc = "2.0";
+    private static final String JSON_RPC = "2.0";
     private static final int id = 1;
     private String method;
     private Map<String, Object> params;
-
-    public Method() {
-    }
 
     public Method(final String method) {
         this.method = method;
@@ -30,7 +27,7 @@ public class Method {
     }
 
     public String getJsonrpc() {
-        return jsonrpc;
+        return JSON_RPC;
     }
 
     public String getMethod() {
@@ -39,5 +36,13 @@ public class Method {
 
     public Map<String, Object> getParams() {
         return params;
+    }
+
+    @Override
+    public String toString() {
+        return "Method{" +
+               "method='" + method + '\'' +
+               ", params=" + params +
+               '}';
     }
 }

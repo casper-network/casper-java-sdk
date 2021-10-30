@@ -40,7 +40,7 @@ public class TtlUtils {
      * @param ttl the time to live in ms
      * @return the ttl as a duration string
      */
-    public static String toTtlStr(long ttl) {
+    public static String toTtlStr(final long ttl) {
         return Duration.ofMillis(ttl)
                 .toString()
                 .substring(2)

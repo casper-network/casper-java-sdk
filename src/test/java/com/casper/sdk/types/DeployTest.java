@@ -27,7 +27,7 @@ class DeployTest {
         deploy = new Deploy(
                 new Digest("d7a68bbe656a883d04bba9f26aa340dbe3f8ec99b2adb63b628f2bc920431998"),
                 new DeployHeader(
-                        new PublicKey("017f747b67bd3fe63c2a736739dfe40156d622347346e70f68f51c178a75ce5537")
+                        new CLPublicKey("017f747b67bd3fe63c2a736739dfe40156d622347346e70f68f51c178a75ce5537")
                         , "2021-05-04T14:20:35.104Z",
                         "30m",
                         20,

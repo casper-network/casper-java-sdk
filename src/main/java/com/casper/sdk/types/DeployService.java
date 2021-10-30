@@ -1,24 +1,23 @@
 package com.casper.sdk.types;
 
-import com.casper.sdk.exceptions.HashException;
+import com.casper.sdk.exceptions.ConversionException;
+import com.casper.sdk.service.hash.HashService;
 import com.casper.sdk.service.json.JsonConversionService;
-import com.casper.sdk.service.HashService;
-import com.casper.sdk.service.SigningService;
 import com.casper.sdk.service.serialization.cltypes.TypesFactory;
 import com.casper.sdk.service.serialization.cltypes.TypesSerializer;
 import com.casper.sdk.service.serialization.types.ByteSerializerFactory;
 import com.casper.sdk.service.serialization.util.ByteUtils;
 import com.casper.sdk.service.serialization.util.CollectionUtils;
 import com.casper.sdk.service.serialization.util.NumberUtils;
-import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
-import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
+import com.casper.sdk.service.signing.SigningService;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
-import java.security.NoSuchAlgorithmException;
+import java.security.KeyPair;
 import java.time.Duration;
-import java.util.*;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * Util methods for making Deploy message
@@ -84,7 +83,7 @@ public class DeployService {
         final Digest bodyHash = makeBodyHash(session, payment);
 
         final DeployHeader header = new DeployHeader(
-                deployParams.getAccountPublicKey(),
+                signingService.toClPublicKey(deployParams.getAccountPublicKey()),
                 deployParams.getTimestamp(),
                 toTtlStr(deployParams.getTtl()),
                 deployParams.getGasPrice(),
@@ -104,20 +103,15 @@ public class DeployService {
         return new Digest(hash);
     }
 
-    public Transfer newTransfer(final Number amount, final PublicKey target, final Number id) {
+    public Transfer newTransfer(final Number amount, final CLPublicKey target, final Number id) {
 
         final byte[] amountBytes = u512Serializer.serialize(amount);
 
         // Prefix the option bytes with OPTION_NONE or OPTION_SOME
         final byte[] idBytes = CLOptionValue.prefixOption(u64Serializer.serialize(id));
 
-        final String accountHash;
-        try {
-            final String accountKey = target.toAccountHex();
-            accountHash = hashService.getAccountHash(accountKey);
-        } catch (NoSuchAlgorithmException e) {
-            throw new HashException("error creating account hash for " + target, e);
-        }
+        final String accountKey = target.toAccountHex();
+        final String accountHash = hashService.getAccountHash(accountKey);
 
         final DeployNamedArg amountArg = new DeployNamedArg("amount", new CLValue(amountBytes, CLType.U512, amount.toString()));
         final DeployNamedArg targetArg = new DeployNamedArg("target", new CLValue(accountHash, new CLByteArrayInfo(32), target.toAccountHex()));
@@ -130,6 +124,7 @@ public class DeployService {
      * Creates a new standard payment
      *
      * @param paymentAmount the number of notes paying to execution engine
+     * @return a new standard payment
      */
     public ModuleBytes standardPayment(final Number paymentAmount) {
 
@@ -143,12 +138,20 @@ public class DeployService {
         return new ModuleBytes(new byte[0], CollectionUtils.List.of(paymentArg));
     }
 
-    public Deploy fromJson(final String json) throws IOException {
-        return jsonService.fromJson(json, Deploy.class);
+    public Deploy fromJson(final String json) {
+        try {
+            return jsonService.fromJson(json, Deploy.class);
+        } catch (IOException e) {
+            throw new ConversionException(e);
+        }
     }
 
-    public Deploy fromJson(final InputStream in) throws IOException {
-        return jsonService.fromJson(in, Deploy.class);
+    public Deploy fromJson(final InputStream in) {
+        try {
+            return jsonService.fromJson(in, Deploy.class);
+        } catch (IOException e) {
+            throw new ConversionException(e);
+        }
     }
 
     /**
@@ -165,18 +168,17 @@ public class DeployService {
         return serializerFactory.getByteSerializer(deployExecutable).toBytes(deployExecutable);
     }
 
-    public Deploy signDeploy(final Deploy deploy, final AsymmetricCipherKeyPair keyPair) {
+    public Deploy signDeploy(final Deploy deploy, final KeyPair keyPair) {
 
         final byte[] signed = signingService.signWithPrivateKey(keyPair.getPrivate(), deploy.getHash().getHash());
 
-        byte[] publicKeyBytes = ((Ed25519PublicKeyParameters) keyPair.getPublic()).getEncoded();
-        final PublicKey publicKey = new PublicKey(publicKeyBytes, KeyAlgorithm.ED25519);
+        final CLPublicKey publicKey = signingService.toClPublicKey(keyPair.getPublic());
 
         // Update the deploy  approvals with signed
         deploy.getApprovals().add(
                 new DeployApproval(
-                        new PublicKey(publicKey.toAccount(), KeyAlgorithm.ED25519),
-                        new Signature(signed, KeyAlgorithm.ED25519)
+                        publicKey,
+                        new Signature(signed, publicKey.getAlgorithm())
                 )
         );
 

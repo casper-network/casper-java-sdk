@@ -2,19 +2,22 @@ package com.casper.sdk.service.serialization.cltypes;
 
 import com.casper.sdk.service.serialization.util.ByteArrayBuilder;
 import com.casper.sdk.service.serialization.util.ByteUtils;
+import com.casper.sdk.types.CLPublicKey;
 import com.casper.sdk.types.Digest;
+
+import java.security.PublicKey;
 
 /**
  * Converts a Java Byte array to a casper byte array
  */
-public class ByteArraySerializer extends AbstractTypesSerializer {
+class ByteArraySerializer extends AbstractTypesSerializer {
 
     public ByteArraySerializer(final TypesFactory typesFactory) {
         super(typesFactory);
     }
 
     @Override
-    public byte[] serialize(Object toSerialize) {
+    public byte[] serialize(final Object toSerialize) {
 
         byte[] originalBytes = toBytes(toSerialize);
 
@@ -24,16 +27,16 @@ public class ByteArraySerializer extends AbstractTypesSerializer {
                 .toByteArray();
     }
 
-    private byte[] toBytes(Object toSerialize) {
+    private byte[] toBytes(final Object toSerialize) {
         if (toSerialize instanceof String) {
             return ByteUtils.decodeHex((String) toSerialize);
-        }
-        if (toSerialize instanceof byte[]) {
+        } else if (toSerialize instanceof byte[]) {
             return (byte[]) toSerialize;
-        } if (toSerialize instanceof Digest) {
-           return  ((Digest) toSerialize).getHash();
-        }
-        else {
+        } else if (toSerialize instanceof Digest) {
+            return ((Digest) toSerialize).getHash();
+        } else if (toSerialize instanceof PublicKey || toSerialize instanceof CLPublicKey) {
+            return getPublicKeySerializer().serialize(toSerialize);
+        } else {
             return new byte[0];
         }
     }
