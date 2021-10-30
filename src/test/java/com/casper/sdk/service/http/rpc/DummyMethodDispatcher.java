@@ -46,6 +46,8 @@ public final class DummyMethodDispatcher extends Dispatcher {
             responseBodyFile = "method-json/rpc_discover.json";
         } else if (body.contains("chain_get_era_info_by_switch_b")) {
             responseBodyFile = "method-json/chain_get_era_info_by_switch_block.json";
+        } else if (request.getRequestUrl().toString().contains("metrics")) {
+            responseBodyFile = "method-json/node-metrics.txt";
         }
 
         return new MockResponse().setResponseCode(200)

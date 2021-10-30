@@ -64,7 +64,7 @@ public class NodeClient {
                 new Method(Constants.STATE_GET_BALANCE,
                         CollectionUtils.Map.of(
                                 "state_root_hash", getStateRootHash(),
-                                "purse_uref", getAccountMainPurseURef(accountKey)
+                                "purse_uref", getAccountMainPurseURef(accountKey).toString()
                         )
                 ),
                 result -> new BigInteger(MethodEnums.STATE_GET_BALANCE.getValue(result))

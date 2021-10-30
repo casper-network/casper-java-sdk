@@ -23,9 +23,7 @@ class CasperSdkTest {
     public static final String DEPLOY_JSON_PATH = "/com/casper/sdk/types/deploy-util-test.json";
     private final static String url = "http://localhost";
     private static MockWebServer mockBackEnd;
-
     private CasperSdk casperSdk;
-
 
     @BeforeEach
     void setUp() throws IOException {
@@ -44,7 +42,6 @@ class CasperSdkTest {
     void tearDown() throws IOException {
         mockBackEnd.close();
     }
-
 
     /**
      * Tests the SDK can create a transfer object
@@ -104,8 +101,7 @@ class CasperSdkTest {
     @Test
     public void getNodeMetrics() throws Throwable {
 
-        String nodeMetrics = casperSdk.getNodeMetrics();
+        final String nodeMetrics = casperSdk.getNodeMetrics();
         assertNotNull(nodeMetrics);
-
     }
 }
