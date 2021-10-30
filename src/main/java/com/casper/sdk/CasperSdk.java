@@ -62,7 +62,7 @@ public class CasperSdk {
         }
         throw new ValueNotFoundException("'ERC20' not found in account info 'named_keys'");
     }
-    
+
     public BigInteger getAccountBalance(final PublicKey accountKey) {
         return nodeClient.getAccountBalance(signingService.toClPublicKey(accountKey).toAccountHex());
     }
@@ -297,6 +297,11 @@ public class CasperSdk {
         return nodeClient.getBlockTransfers();
     }
 
+    /**
+     * Obtains the chain ero info by switch block as JSON
+     *
+     * @return the JSON result
+     */
     public String getEraInfoBySwitchBlock() {
         return nodeClient.getEraInfoBySwitchBlock();
     }
