@@ -1,4 +1,4 @@
-package com.casper.sdk.service;
+package com.casper.sdk.service.metrics;
 
 import com.casper.sdk.Properties;
 import okhttp3.mockwebserver.Dispatcher;

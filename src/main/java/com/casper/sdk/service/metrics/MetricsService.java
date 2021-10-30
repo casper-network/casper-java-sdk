@@ -1,4 +1,4 @@
-package com.casper.sdk.service;
+package com.casper.sdk.service.metrics;
 
 import com.casper.sdk.Properties;
 import com.casper.sdk.exceptions.HttpException;
@@ -16,7 +16,7 @@ public class MetricsService {
 
     }
 
-    public String getMetrics() throws Exception {
+    public String getMetrics() {
 
         Optional<String> result = callGetMethod("metrics");
         return result.orElse(null);

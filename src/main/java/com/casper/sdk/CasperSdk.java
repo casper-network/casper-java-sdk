@@ -1,12 +1,10 @@
 package com.casper.sdk;
 
 import com.casper.sdk.exceptions.ValueNotFoundException;
-
-import com.casper.sdk.service.HashService;
-import com.casper.sdk.service.MetricsService;
-import com.casper.sdk.service.SigningService;
+import com.casper.sdk.service.hash.HashService;
 import com.casper.sdk.service.http.rpc.NodeClient;
 import com.casper.sdk.service.json.JsonConversionService;
+import com.casper.sdk.service.metrics.MetricsService;
 import com.casper.sdk.service.serialization.cltypes.TypesFactory;
 import com.casper.sdk.service.serialization.types.ByteSerializerFactory;
 import com.casper.sdk.service.serialization.util.ByteUtils;
@@ -243,11 +241,15 @@ public class CasperSdk {
         return jsonConversionService.toJson(deploy);
     }
 
-
+    /**
+     * Obtains the node metrics as JSON
+     *
+     * @return the metrics JSON result
+     */
     public String getNodeMetrics() throws Exception {
         return metricsService.getMetrics();
     }
-  
+
     /**
      * Creates a public key from a hex string where the first byte is the algorithm type and the following bytes the raw
      * public key bytes.

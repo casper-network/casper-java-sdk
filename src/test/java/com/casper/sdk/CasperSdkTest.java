@@ -1,6 +1,7 @@
 package com.casper.sdk;
 
 import com.casper.sdk.service.http.rpc.DummyMethodDispatcher;
+import com.casper.sdk.service.metrics.MetricsServiceTest;
 import com.casper.sdk.service.serialization.util.ByteUtils;
 import com.casper.sdk.types.*;
 import okhttp3.mockwebserver.MockWebServer;
@@ -15,6 +16,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.hamcrest.core.IsNull.notNullValue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class CasperSdkTest {
 
@@ -97,6 +99,13 @@ class CasperSdkTest {
         final String eraInfoBySwitchBlock = casperSdk.getEraInfoBySwitchBlock();
         assertThat(eraInfoBySwitchBlock, is(notNullValue()));
         assertThat(eraInfoBySwitchBlock, hasJsonPath("$.era_summary"));
+    }
+
+    @Test
+    public void getNodeMetrics() throws Throwable {
+
+        String nodeMetrics = casperSdk.getNodeMetrics();
+        assertNotNull(nodeMetrics);
 
     }
 }

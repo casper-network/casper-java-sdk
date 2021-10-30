@@ -74,6 +74,12 @@ class CasperSdkIntegrationTest {
     }
 
     @Test
+    void getNodeMetrics() throws Throwable {
+        final String metrics = casperSdk.getNodeMetrics();
+        assertThat(metrics, is(notNullValue()));
+    }
+
+    @Test
     void getAccountBalance() throws Throwable {
         final BigInteger accountBalance = casperSdk.getAccountBalance(geUserKeyPair(1).getPublic());
         assertThat(accountBalance, is(notNullValue()));
