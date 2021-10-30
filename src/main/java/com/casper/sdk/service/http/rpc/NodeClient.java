@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-import static com.casper.sdk.service.http.rpc.MethodEnums.CHAIN_GET_BLOCK;
+import static com.casper.sdk.service.http.rpc.MethodEnums.*;
 
 /**
  * Service to query the chain Methods call the HTTP methods with an instantiated method object
@@ -161,6 +161,39 @@ public class NodeClient {
         return rcpCallMethodMap(
                 new Method(Constants.CHAIN_GET_BLOCK, params),
                 CHAIN_GET_BLOCK::getValue
+        );
+    }
+
+    /**
+     * Obtain the RPC Schema
+     *
+     * @return the
+     */
+    public String getRpcSchema() {
+        return rcpCallMethodMap(new Method(Constants.RPC_DISCOVER, new HashMap<>()), RPC_DISCOVER::getValue);
+    }
+
+    /**
+     * Obtains the nodes chain block transfers
+     *
+     * @return the JSON of the chain block transfers
+     */
+    public String getBlockTransfers() {
+        return rcpCallMethodMap(
+                new Method(Constants.CHAIN_GET_BLOCK_TRANSFERS, new HashMap<>()),
+                CHAIN_GET_BLOCK_TRANSFERS::getValue
+        );
+    }
+
+    /**
+     * Obtains the chain era info by switch block result as JSON
+     *
+     * @return Obtains
+     */
+    public String getEraInfoBySwitchBlock() {
+        return rcpCallMethodMap(
+                new Method(Constants.CHAIN_GET_ERA_INFO_BY_SWITCH_BLOCK, new HashMap<>()),
+                CHAIN_GET_ERA_INFO_BY_SWITCH_BLOCK::getValue
         );
     }
 

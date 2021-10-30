@@ -62,8 +62,7 @@ public class CasperSdk {
         }
         throw new ValueNotFoundException("'ERC20' not found in account info 'named_keys'");
     }
-
-
+    
     public BigInteger getAccountBalance(final PublicKey accountKey) {
         return nodeClient.getAccountBalance(signingService.toClPublicKey(accountKey).toAccountHex());
     }
@@ -287,5 +286,27 @@ public class CasperSdk {
      */
     public String getBlockInfoByHeight(final Number height) {
         return nodeClient.getBlockInfoByHeight(height);
+    }
+
+    /**
+     * Returns on-chain block transfers information as JSON
+     *
+     * @return the block transfers information as JSON
+     */
+    public String getBlockTransfers() {
+        return nodeClient.getBlockTransfers();
+    }
+
+    public String getEraInfoBySwitchBlock() {
+        return nodeClient.getEraInfoBySwitchBlock();
+    }
+
+    /**
+     * Obtain the RPC Schema as a JSON string
+     *
+     * @return the RPC schema
+     */
+    public String getRpcSchema() {
+        return nodeClient.getRpcSchema();
     }
 }

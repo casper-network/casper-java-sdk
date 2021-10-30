@@ -160,4 +160,8 @@ public class NodeClientTest {
         assertThat(latestBlockInfo, hasJsonPath("$.header.height",  is(314)));
         assertThat(latestBlockInfo, hasJsonPath("$.header.era_id",  is(28)));
     }
+
+
+
+
 }
