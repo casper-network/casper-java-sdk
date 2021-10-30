@@ -1,7 +1,10 @@
 package com.casper.sdk;
 
 import com.casper.sdk.exceptions.ValueNotFoundException;
-import com.casper.sdk.service.hash.HashService;
+
+import com.casper.sdk.service.HashService;
+import com.casper.sdk.service.MetricsService;
+import com.casper.sdk.service.SigningService;
 import com.casper.sdk.service.http.rpc.NodeClient;
 import com.casper.sdk.service.json.JsonConversionService;
 import com.casper.sdk.service.serialization.cltypes.TypesFactory;
@@ -33,6 +36,7 @@ public class CasperSdk {
             new TypesFactory()
     );
     private final NodeClient nodeClient;
+    private final MetricsService metricsService;
 
     public CasperSdk(final String url, final int port) {
 
@@ -40,6 +44,7 @@ public class CasperSdk {
         Properties.properties.put(Properties.NODE_PORT, Integer.toString(port));
 
         this.nodeClient = new NodeClient(deployService, hashService, jsonConversionService);
+        metricsService = new MetricsService();
     }
 
     public String getAccountInfo(final PublicKey accountKey) {
@@ -238,6 +243,11 @@ public class CasperSdk {
         return jsonConversionService.toJson(deploy);
     }
 
+
+    public String getNodeMetrics() throws Exception {
+        return metricsService.getMetrics();
+    }
+  
     /**
      * Creates a public key from a hex string where the first byte is the algorithm type and the following bytes the raw
      * public key bytes.

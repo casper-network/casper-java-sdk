@@ -1,0 +1,466 @@
+# HELP address_gossiper_items_received number of items received by the address_gossiper
+# TYPE address_gossiper_items_received counter
+address_gossiper_items_received 12356227
+# HELP address_gossiper_table_items_current number of items in the gossip table of address_gossiper in state current
+# TYPE address_gossiper_table_items_current gauge
+address_gossiper_table_items_current 6
+# HELP address_gossiper_table_items_finished number of items in the gossip table of address_gossiper in state finished
+# TYPE address_gossiper_table_items_finished gauge
+address_gossiper_table_items_finished 921
+# HELP address_gossiper_table_items_paused number of items in the gossip table of address_gossiper in state paused
+# TYPE address_gossiper_table_items_paused gauge
+address_gossiper_table_items_paused 0
+# HELP address_gossiper_times_gossiped number of times the address_gossiper sent gossip requests to peers
+# TYPE address_gossiper_times_gossiped counter
+address_gossiper_times_gossiped 120803712
+# HELP address_gossiper_times_ran_out_of_peers number of times the address_gossiper ran out of peers and had to pause
+# TYPE address_gossiper_times_ran_out_of_peers counter
+address_gossiper_times_ran_out_of_peers 3
+# HELP allocated_ram_bytes total allocated ram in bytes
+# TYPE allocated_ram_bytes gauge
+allocated_ram_bytes 782135680
+# HELP amount_of_blocks the number of blocks finalized so far
+# TYPE amount_of_blocks gauge
+amount_of_blocks 20693
+# HELP block_completion_duration duration of time from consensus through execution for a block
+# TYPE block_completion_duration gauge
+block_completion_duration 44290
+# HELP chain_height current chain height
+# TYPE chain_height gauge
+chain_height 20693
+# HELP consumed_ram_bytes total consumed ram in bytes
+# TYPE consumed_ram_bytes gauge
+consumed_ram_bytes 3257278464
+# HELP contract_runtime_apply_commit tracking run of engine_state.apply_effect in seconds.
+# TYPE contract_runtime_apply_commit histogram
+contract_runtime_apply_commit_bucket{le="0.01"} 451
+contract_runtime_apply_commit_bucket{le="0.02"} 868
+contract_runtime_apply_commit_bucket{le="0.04"} 955
+contract_runtime_apply_commit_bucket{le="0.08"} 980
+contract_runtime_apply_commit_bucket{le="0.16"} 980
+contract_runtime_apply_commit_bucket{le="0.32"} 980
+contract_runtime_apply_commit_bucket{le="0.64"} 980
+contract_runtime_apply_commit_bucket{le="1.28"} 980
+contract_runtime_apply_commit_bucket{le="2.56"} 980
+contract_runtime_apply_commit_bucket{le="5.12"} 980
+contract_runtime_apply_commit_bucket{le="+Inf"} 980
+contract_runtime_apply_commit_sum 12.717766251000008
+contract_runtime_apply_commit_count 980
+# HELP contract_runtime_commit_step tracking run of engine_state.commit_step in seconds.
+# TYPE contract_runtime_commit_step histogram
+contract_runtime_commit_step_bucket{le="0.01"} 0
+contract_runtime_commit_step_bucket{le="0.02"} 0
+contract_runtime_commit_step_bucket{le="0.04"} 0
+contract_runtime_commit_step_bucket{le="0.08"} 0
+contract_runtime_commit_step_bucket{le="0.16"} 0
+contract_runtime_commit_step_bucket{le="0.32"} 0
+contract_runtime_commit_step_bucket{le="0.64"} 92
+contract_runtime_commit_step_bucket{le="1.28"} 108
+contract_runtime_commit_step_bucket{le="2.56"} 108
+contract_runtime_commit_step_bucket{le="5.12"} 108
+contract_runtime_commit_step_bucket{le="+Inf"} 108
+contract_runtime_commit_step_sum 58.18317743099998
+contract_runtime_commit_step_count 108
+# HELP contract_runtime_commit_upgrade tracking run of engine_state.commit_upgrade in seconds
+# TYPE contract_runtime_commit_upgrade histogram
+contract_runtime_commit_upgrade_bucket{le="0.01"} 1
+contract_runtime_commit_upgrade_bucket{le="0.02"} 1
+contract_runtime_commit_upgrade_bucket{le="0.04"} 1
+contract_runtime_commit_upgrade_bucket{le="0.08"} 1
+contract_runtime_commit_upgrade_bucket{le="0.16"} 1
+contract_runtime_commit_upgrade_bucket{le="0.32"} 1
+contract_runtime_commit_upgrade_bucket{le="0.64"} 1
+contract_runtime_commit_upgrade_bucket{le="1.28"} 1
+contract_runtime_commit_upgrade_bucket{le="2.56"} 1
+contract_runtime_commit_upgrade_bucket{le="5.12"} 1
+contract_runtime_commit_upgrade_bucket{le="+Inf"} 1
+contract_runtime_commit_upgrade_sum 0.002843508
+contract_runtime_commit_upgrade_count 1
+# HELP contract_runtime_get_balance tracking run of engine_state.get_balance in seconds.
+# TYPE contract_runtime_get_balance histogram
+contract_runtime_get_balance_bucket{le="0.01"} 4
+contract_runtime_get_balance_bucket{le="0.02"} 4
+contract_runtime_get_balance_bucket{le="0.04"} 4
+contract_runtime_get_balance_bucket{le="0.08"} 4
+contract_runtime_get_balance_bucket{le="0.16"} 4
+contract_runtime_get_balance_bucket{le="0.32"} 4
+contract_runtime_get_balance_bucket{le="0.64"} 4
+contract_runtime_get_balance_bucket{le="1.28"} 4
+contract_runtime_get_balance_bucket{le="2.56"} 4
+contract_runtime_get_balance_bucket{le="5.12"} 4
+contract_runtime_get_balance_bucket{le="+Inf"} 4
+contract_runtime_get_balance_sum 0.000692233
+contract_runtime_get_balance_count 4
+# HELP contract_runtime_get_bids tracking run of engine_state.get_bids in seconds.
+# TYPE contract_runtime_get_bids histogram
+contract_runtime_get_bids_bucket{le="0.01"} 0
+contract_runtime_get_bids_bucket{le="0.02"} 0
+contract_runtime_get_bids_bucket{le="0.04"} 0
+contract_runtime_get_bids_bucket{le="0.08"} 3
+contract_runtime_get_bids_bucket{le="0.16"} 3
+contract_runtime_get_bids_bucket{le="0.32"} 3
+contract_runtime_get_bids_bucket{le="0.64"} 3
+contract_runtime_get_bids_bucket{le="1.28"} 3
+contract_runtime_get_bids_bucket{le="2.56"} 3
+contract_runtime_get_bids_bucket{le="5.12"} 3
+contract_runtime_get_bids_bucket{le="+Inf"} 3
+contract_runtime_get_bids_sum 0.18011864
+contract_runtime_get_bids_count 3
+# HELP contract_runtime_get_era_validator_weights_by_era_id tracking run of engine_state.get_era_validator_weights_by_era_id in seconds.
+# TYPE contract_runtime_get_era_validator_weights_by_era_id histogram
+contract_runtime_get_era_validator_weights_by_era_id_bucket{le="0.01"} 0
+contract_runtime_get_era_validator_weights_by_era_id_bucket{le="0.02"} 0
+contract_runtime_get_era_validator_weights_by_era_id_bucket{le="0.04"} 0
+contract_runtime_get_era_validator_weights_by_era_id_bucket{le="0.08"} 0
+contract_runtime_get_era_validator_weights_by_era_id_bucket{le="0.16"} 0
+contract_runtime_get_era_validator_weights_by_era_id_bucket{le="0.32"} 0
+contract_runtime_get_era_validator_weights_by_era_id_bucket{le="0.64"} 0
+contract_runtime_get_era_validator_weights_by_era_id_bucket{le="1.28"} 0
+contract_runtime_get_era_validator_weights_by_era_id_bucket{le="2.56"} 0
+contract_runtime_get_era_validator_weights_by_era_id_bucket{le="5.12"} 0
+contract_runtime_get_era_validator_weights_by_era_id_bucket{le="+Inf"} 0
+contract_runtime_get_era_validator_weights_by_era_id_sum 0
+contract_runtime_get_era_validator_weights_by_era_id_count 0
+# HELP contract_runtime_get_era_validators tracking run of engine_state.get_era_validators in seconds.
+# TYPE contract_runtime_get_era_validators histogram
+contract_runtime_get_era_validators_bucket{le="0.01"} 4
+contract_runtime_get_era_validators_bucket{le="0.02"} 4
+contract_runtime_get_era_validators_bucket{le="0.04"} 4
+contract_runtime_get_era_validators_bucket{le="0.08"} 4
+contract_runtime_get_era_validators_bucket{le="0.16"} 4
+contract_runtime_get_era_validators_bucket{le="0.32"} 4
+contract_runtime_get_era_validators_bucket{le="0.64"} 4
+contract_runtime_get_era_validators_bucket{le="1.28"} 4
+contract_runtime_get_era_validators_bucket{le="2.56"} 4
+contract_runtime_get_era_validators_bucket{le="5.12"} 4
+contract_runtime_get_era_validators_bucket{le="+Inf"} 4
+contract_runtime_get_era_validators_sum 0.029983994
+contract_runtime_get_era_validators_count 4
+# HELP contract_runtime_get_validator_weights tracking run of engine_state.get_validator_weights in seconds.
+# TYPE contract_runtime_get_validator_weights histogram
+contract_runtime_get_validator_weights_bucket{le="0.01"} 137
+contract_runtime_get_validator_weights_bucket{le="0.02"} 150
+contract_runtime_get_validator_weights_bucket{le="0.04"} 150
+contract_runtime_get_validator_weights_bucket{le="0.08"} 150
+contract_runtime_get_validator_weights_bucket{le="0.16"} 150
+contract_runtime_get_validator_weights_bucket{le="0.32"} 150
+contract_runtime_get_validator_weights_bucket{le="0.64"} 150
+contract_runtime_get_validator_weights_bucket{le="1.28"} 150
+contract_runtime_get_validator_weights_bucket{le="2.56"} 150
+contract_runtime_get_validator_weights_bucket{le="5.12"} 150
+contract_runtime_get_validator_weights_bucket{le="+Inf"} 150
+contract_runtime_get_validator_weights_sum 1.0300366239999998
+contract_runtime_get_validator_weights_count 150
+# HELP contract_runtime_missing_trie_keys tracking run of engine_state.missing_trie_keys in seconds.
+# TYPE contract_runtime_missing_trie_keys histogram
+contract_runtime_missing_trie_keys_bucket{le="0.01"} 0
+contract_runtime_missing_trie_keys_bucket{le="0.02"} 0
+contract_runtime_missing_trie_keys_bucket{le="0.04"} 0
+contract_runtime_missing_trie_keys_bucket{le="0.08"} 0
+contract_runtime_missing_trie_keys_bucket{le="0.16"} 0
+contract_runtime_missing_trie_keys_bucket{le="0.32"} 0
+contract_runtime_missing_trie_keys_bucket{le="0.64"} 0
+contract_runtime_missing_trie_keys_bucket{le="1.28"} 0
+contract_runtime_missing_trie_keys_bucket{le="2.56"} 0
+contract_runtime_missing_trie_keys_bucket{le="5.12"} 0
+contract_runtime_missing_trie_keys_bucket{le="+Inf"} 0
+contract_runtime_missing_trie_keys_sum 0
+contract_runtime_missing_trie_keys_count 0
+# HELP contract_runtime_put_trie tracking run of engine_state.put_trie in seconds.
+# TYPE contract_runtime_put_trie histogram
+contract_runtime_put_trie_bucket{le="0.01"} 0
+contract_runtime_put_trie_bucket{le="0.02"} 0
+contract_runtime_put_trie_bucket{le="0.04"} 0
+contract_runtime_put_trie_bucket{le="0.08"} 0
+contract_runtime_put_trie_bucket{le="0.16"} 0
+contract_runtime_put_trie_bucket{le="0.32"} 0
+contract_runtime_put_trie_bucket{le="0.64"} 0
+contract_runtime_put_trie_bucket{le="1.28"} 0
+contract_runtime_put_trie_bucket{le="2.56"} 0
+contract_runtime_put_trie_bucket{le="5.12"} 0
+contract_runtime_put_trie_bucket{le="+Inf"} 0
+contract_runtime_put_trie_sum 0
+contract_runtime_put_trie_count 0
+# HELP contract_runtime_read_trie tracking run of engine_state.read_trie in seconds.
+# TYPE contract_runtime_read_trie histogram
+contract_runtime_read_trie_bucket{le="0.01"} 0
+contract_runtime_read_trie_bucket{le="0.02"} 0
+contract_runtime_read_trie_bucket{le="0.04"} 0
+contract_runtime_read_trie_bucket{le="0.08"} 0
+contract_runtime_read_trie_bucket{le="0.16"} 0
+contract_runtime_read_trie_bucket{le="0.32"} 0
+contract_runtime_read_trie_bucket{le="0.64"} 0
+contract_runtime_read_trie_bucket{le="1.28"} 0
+contract_runtime_read_trie_bucket{le="2.56"} 0
+contract_runtime_read_trie_bucket{le="5.12"} 0
+contract_runtime_read_trie_bucket{le="+Inf"} 0
+contract_runtime_read_trie_sum 0
+contract_runtime_read_trie_count 0
+# HELP contract_runtime_run_execute tracking run of engine_state.run_execute in seconds.
+# TYPE contract_runtime_run_execute histogram
+contract_runtime_run_execute_bucket{le="0.01"} 187
+contract_runtime_run_execute_bucket{le="0.02"} 448
+contract_runtime_run_execute_bucket{le="0.04"} 638
+contract_runtime_run_execute_bucket{le="0.08"} 980
+contract_runtime_run_execute_bucket{le="0.16"} 980
+contract_runtime_run_execute_bucket{le="0.32"} 980
+contract_runtime_run_execute_bucket{le="0.64"} 980
+contract_runtime_run_execute_bucket{le="1.28"} 980
+contract_runtime_run_execute_bucket{le="2.56"} 980
+contract_runtime_run_execute_bucket{le="5.12"} 980
+contract_runtime_run_execute_bucket{le="+Inf"} 980
+contract_runtime_run_execute_sum 27.361156314000024
+contract_runtime_run_execute_count 980
+# HELP contract_runtime_run_query tracking run of engine_state.run_query in seconds.
+# TYPE contract_runtime_run_query histogram
+contract_runtime_run_query_bucket{le="0.01"} 5
+contract_runtime_run_query_bucket{le="0.02"} 5
+contract_runtime_run_query_bucket{le="0.04"} 5
+contract_runtime_run_query_bucket{le="0.08"} 5
+contract_runtime_run_query_bucket{le="0.16"} 5
+contract_runtime_run_query_bucket{le="0.32"} 5
+contract_runtime_run_query_bucket{le="0.64"} 5
+contract_runtime_run_query_bucket{le="1.28"} 5
+contract_runtime_run_query_bucket{le="2.56"} 5
+contract_runtime_run_query_bucket{le="5.12"} 5
+contract_runtime_run_query_bucket{le="+Inf"} 5
+contract_runtime_run_query_sum 0.005355526000000001
+contract_runtime_run_query_count 5
+# HELP current_era The current era
+# TYPE current_era gauge
+current_era 274
+# HELP deploy_found_in_storage number of fetch requests that found deploy in the storage.
+# TYPE deploy_found_in_storage counter
+deploy_found_in_storage 994
+# HELP deploy_found_on_peer number of fetch requests that fetched deploy from peer.
+# TYPE deploy_found_on_peer counter
+deploy_found_on_peer 1005
+# HELP deploy_gossiper_items_received number of items received by the deploy_gossiper
+# TYPE deploy_gossiper_items_received counter
+deploy_gossiper_items_received 2081
+# HELP deploy_gossiper_table_items_current number of items in the gossip table of deploy_gossiper in state current
+# TYPE deploy_gossiper_table_items_current gauge
+deploy_gossiper_table_items_current 0
+# HELP deploy_gossiper_table_items_finished number of items in the gossip table of deploy_gossiper in state finished
+# TYPE deploy_gossiper_table_items_finished gauge
+deploy_gossiper_table_items_finished 0
+# HELP deploy_gossiper_table_items_paused number of items in the gossip table of deploy_gossiper in state paused
+# TYPE deploy_gossiper_table_items_paused gauge
+deploy_gossiper_table_items_paused 0
+# HELP deploy_gossiper_times_gossiped number of times the deploy_gossiper sent gossip requests to peers
+# TYPE deploy_gossiper_times_gossiped counter
+deploy_gossiper_times_gossiped 10191
+# HELP deploy_gossiper_times_ran_out_of_peers number of times the deploy_gossiper ran out of peers and had to pause
+# TYPE deploy_gossiper_times_ran_out_of_peers counter
+deploy_gossiper_times_ran_out_of_peers 0
+# HELP deploy_timeouts number of deploy fetch requests that timed out
+# TYPE deploy_timeouts counter
+deploy_timeouts 4
+# HELP event_dispatch_duration duration of complete dispatch of a single event in nanoseconds
+# TYPE event_dispatch_duration histogram
+event_dispatch_duration_bucket{le="100"} 56
+event_dispatch_duration_bucket{le="500"} 42323531
+event_dispatch_duration_bucket{le="1000"} 103735021
+event_dispatch_duration_bucket{le="5000"} 557151890
+event_dispatch_duration_bucket{le="10000"} 706630829
+event_dispatch_duration_bucket{le="20000"} 798128596
+event_dispatch_duration_bucket{le="50000"} 837211042
+event_dispatch_duration_bucket{le="100000"} 905982244
+event_dispatch_duration_bucket{le="200000"} 939489033
+event_dispatch_duration_bucket{le="300000"} 943306570
+event_dispatch_duration_bucket{le="400000"} 944121951
+event_dispatch_duration_bucket{le="500000"} 944229943
+event_dispatch_duration_bucket{le="600000"} 944266326
+event_dispatch_duration_bucket{le="700000"} 944298315
+event_dispatch_duration_bucket{le="800000"} 944327240
+event_dispatch_duration_bucket{le="900000"} 944351898
+event_dispatch_duration_bucket{le="1000000"} 944586182
+event_dispatch_duration_bucket{le="2000000"} 948855815
+event_dispatch_duration_bucket{le="5000000"} 950633564
+event_dispatch_duration_bucket{le="+Inf"} 951351890
+event_dispatch_duration_sum 33125343751105
+event_dispatch_duration_count 951351890
+# HELP finalization_time the amount of time, in milliseconds, between proposal and finalization of a block
+# TYPE finalization_time gauge
+finalization_time 44249
+# HELP linear_chain_sync_get_block_by_hash histogram of linear_chain_sync get_block_by_hash request
+# TYPE linear_chain_sync_get_block_by_hash histogram
+linear_chain_sync_get_block_by_hash_bucket{le="0.01"} 0
+linear_chain_sync_get_block_by_hash_bucket{le="0.02"} 0
+linear_chain_sync_get_block_by_hash_bucket{le="0.04"} 0
+linear_chain_sync_get_block_by_hash_bucket{le="0.08"} 0
+linear_chain_sync_get_block_by_hash_bucket{le="0.16"} 0
+linear_chain_sync_get_block_by_hash_bucket{le="0.32"} 0
+linear_chain_sync_get_block_by_hash_bucket{le="+Inf"} 0
+linear_chain_sync_get_block_by_hash_sum 0
+linear_chain_sync_get_block_by_hash_count 0
+# HELP linear_chain_sync_get_block_by_height histogram of linear_chain_sync get_block_by_height request
+# TYPE linear_chain_sync_get_block_by_height histogram
+linear_chain_sync_get_block_by_height_bucket{le="0.01"} 0
+linear_chain_sync_get_block_by_height_bucket{le="0.02"} 0
+linear_chain_sync_get_block_by_height_bucket{le="0.04"} 0
+linear_chain_sync_get_block_by_height_bucket{le="0.08"} 0
+linear_chain_sync_get_block_by_height_bucket{le="0.16"} 0
+linear_chain_sync_get_block_by_height_bucket{le="0.32"} 1
+linear_chain_sync_get_block_by_height_bucket{le="+Inf"} 1
+linear_chain_sync_get_block_by_height_sum 0.192700945
+linear_chain_sync_get_block_by_height_count 1
+# HELP linear_chain_sync_get_deploys histogram of linear_chain_sync get_deploys request
+# TYPE linear_chain_sync_get_deploys histogram
+linear_chain_sync_get_deploys_bucket{le="0.01"} 0
+linear_chain_sync_get_deploys_bucket{le="0.02"} 0
+linear_chain_sync_get_deploys_bucket{le="0.04"} 0
+linear_chain_sync_get_deploys_bucket{le="0.08"} 0
+linear_chain_sync_get_deploys_bucket{le="0.16"} 0
+linear_chain_sync_get_deploys_bucket{le="0.32"} 0
+linear_chain_sync_get_deploys_bucket{le="+Inf"} 0
+linear_chain_sync_get_deploys_sum 0
+linear_chain_sync_get_deploys_count 0
+# HELP mem_address_gossiper address_gossiper memory usage in bytes
+# TYPE mem_address_gossiper gauge
+mem_address_gossiper 179472
+# HELP mem_block_executor block_executor memory usage in bytes
+# TYPE mem_block_executor gauge
+mem_block_executor 12432
+# HELP mem_block_proposer block_proposer memory usage in bytes
+# TYPE mem_block_proposer gauge
+mem_block_proposer 188661
+# HELP mem_chainspec_loader chainspec_loader memory usage in bytes
+# TYPE mem_chainspec_loader gauge
+mem_chainspec_loader 47411
+# HELP mem_consensus consensus memory usage in bytes
+# TYPE mem_consensus gauge
+mem_consensus 493933796
+# HELP mem_contract_runtime contract_runtime memory usage in bytes
+# TYPE mem_contract_runtime gauge
+mem_contract_runtime 0
+# HELP mem_deploy_fetcher deploy_fetcher memory usage in bytes
+# TYPE mem_deploy_fetcher gauge
+mem_deploy_fetcher 6336
+# HELP mem_deploy_gossiper deploy_gossiper memory usage in bytes
+# TYPE mem_deploy_gossiper gauge
+mem_deploy_gossiper 27648
+# HELP mem_estimator_runtime_s time taken to estimate memory usage, in seconds
+# TYPE mem_estimator_runtime_s histogram
+mem_estimator_runtime_s_bucket{le="0.000000004"} 0
+mem_estimator_runtime_s_bucket{le="0.000000008"} 0
+mem_estimator_runtime_s_bucket{le="0.000000016"} 0
+mem_estimator_runtime_s_bucket{le="0.000000032"} 0
+mem_estimator_runtime_s_bucket{le="0.000000064"} 0
+mem_estimator_runtime_s_bucket{le="0.000000128"} 0
+mem_estimator_runtime_s_bucket{le="0.000000256"} 0
+mem_estimator_runtime_s_bucket{le="0.000000512"} 0
+mem_estimator_runtime_s_bucket{le="0.000001024"} 0
+mem_estimator_runtime_s_bucket{le="0.000002048"} 0
+mem_estimator_runtime_s_bucket{le="0.000004096"} 0
+mem_estimator_runtime_s_bucket{le="0.000008192"} 0
+mem_estimator_runtime_s_bucket{le="0.000016384"} 0
+mem_estimator_runtime_s_bucket{le="0.000032768"} 0
+mem_estimator_runtime_s_bucket{le="0.000065536"} 0
+mem_estimator_runtime_s_bucket{le="0.000131072"} 1
+mem_estimator_runtime_s_bucket{le="0.000262144"} 75
+mem_estimator_runtime_s_bucket{le="0.000524288"} 215
+mem_estimator_runtime_s_bucket{le="0.001048576"} 841
+mem_estimator_runtime_s_bucket{le="0.002097152"} 1451
+mem_estimator_runtime_s_bucket{le="0.004194304"} 2507
+mem_estimator_runtime_s_bucket{le="0.008388608"} 25606
+mem_estimator_runtime_s_bucket{le="0.016777216"} 25684
+mem_estimator_runtime_s_bucket{le="0.033554432"} 25698
+mem_estimator_runtime_s_bucket{le="0.067108864"} 26022
+mem_estimator_runtime_s_bucket{le="0.134217728"} 26214
+mem_estimator_runtime_s_bucket{le="0.268435456"} 26215
+mem_estimator_runtime_s_bucket{le="0.536870912"} 26215
+mem_estimator_runtime_s_bucket{le="1.073741824"} 26215
+mem_estimator_runtime_s_bucket{le="2.147483648"} 26215
+mem_estimator_runtime_s_bucket{le="4.294967296"} 26215
+mem_estimator_runtime_s_bucket{le="8.589934592"} 26215
+mem_estimator_runtime_s_bucket{le="+Inf"} 26215
+mem_estimator_runtime_s_sum 168.82451708300013
+mem_estimator_runtime_s_count 26215
+# HELP mem_event_stream_server mem_event_stream_server memory usage in bytes
+# TYPE mem_event_stream_server gauge
+mem_event_stream_server 0
+# HELP mem_linear_chain linear_chain memory usage in bytes
+# TYPE mem_linear_chain gauge
+mem_linear_chain 1579664
+# HELP mem_metrics metrics memory usage in bytes
+# TYPE mem_metrics gauge
+mem_metrics 0
+# HELP mem_net net memory usage in bytes
+# TYPE mem_net gauge
+mem_net 442594
+# HELP mem_proto_block_validator proto_block_validator memory usage in bytes
+# TYPE mem_proto_block_validator gauge
+mem_proto_block_validator 6912
+# HELP mem_rest_server mem_rest_server memory usage in bytes
+# TYPE mem_rest_server gauge
+mem_rest_server 0
+# HELP mem_rpc_server rpc_server memory usage in bytes
+# TYPE mem_rpc_server gauge
+mem_rpc_server 0
+# HELP mem_storage storage memory usage in bytes
+# TYPE mem_storage gauge
+mem_storage 838747
+# HELP mem_total total memory usage in bytes
+# TYPE mem_total gauge
+mem_total 497263673
+# HELP net_broadcast_requests number of broadcasting requests
+# TYPE net_broadcast_requests counter
+net_broadcast_requests 1
+# HELP net_direct_message_requests number of requests to send a message directly to a peer
+# TYPE net_direct_message_requests counter
+net_direct_message_requests 118850781
+# HELP net_open_connections number of established connections
+# TYPE net_open_connections gauge
+net_open_connections 768
+# HELP net_queued_direct_messages number of messages waiting to be sent out
+# TYPE net_queued_direct_messages gauge
+net_queued_direct_messages 8846
+# HELP owm_read_futures_in_flight number of do-nothing futures in flight created by `Codec::read_response`
+# TYPE owm_read_futures_in_flight gauge
+owm_read_futures_in_flight 0
+# HELP owm_read_futures_total number of do-nothing futures total created by `Codec::read_response`
+# TYPE owm_read_futures_total gauge
+owm_read_futures_total 0
+# HELP owm_write_futures_in_flight number of do-nothing futures in flight created by `Codec::write_response`
+# TYPE owm_write_futures_in_flight gauge
+owm_write_futures_in_flight 0
+# HELP owm_write_futures_total number of do-nothing futures total created by `Codec::write_response`
+# TYPE owm_write_futures_total gauge
+owm_write_futures_total 0
+# HELP peers Number of connected peers.
+# TYPE peers gauge
+peers 770
+# HELP pending_deploy amount of pending deploys
+# TYPE pending_deploy gauge
+pending_deploy 0
+# HELP runner_events total event count
+# TYPE runner_events counter
+runner_events 951351891
+# HELP scheduler_queue_api_count Event in the queue.
+# TYPE scheduler_queue_api_count gauge
+scheduler_queue_api_count 0
+# HELP scheduler_queue_control_count Event in the queue.
+# TYPE scheduler_queue_control_count gauge
+scheduler_queue_control_count 0
+# HELP scheduler_queue_network_count Event in the queue.
+# TYPE scheduler_queue_network_count gauge
+scheduler_queue_network_count 0
+# HELP scheduler_queue_network_incoming_count Event in the queue.
+# TYPE scheduler_queue_network_incoming_count gauge
+scheduler_queue_network_incoming_count 0
+# HELP scheduler_queue_regular_count Event in the queue.
+# TYPE scheduler_queue_regular_count gauge
+scheduler_queue_regular_count 0
+# HELP scheduler_queue_total_count total count of events in queues.
+# TYPE scheduler_queue_total_count gauge
+scheduler_queue_total_count 0
+# HELP time_of_last_finalized_block timestamp of the most recently finalized block
+# TYPE time_of_last_finalized_block gauge
+time_of_last_finalized_block 1619915833344
+# HELP time_of_last_proto_block timestamp of the most recently accepted proto block
+# TYPE time_of_last_proto_block gauge
+time_of_last_proto_block 1619912622147
+# HELP total_ram_bytes total system ram in bytes
+# TYPE total_ram_bytes gauge
+total_ram_bytes 4026441728
