@@ -2,6 +2,7 @@ package com.casper.sdk;
 
 import com.casper.sdk.exceptions.ValueNotFoundException;
 import com.casper.sdk.service.hash.HashService;
+import com.casper.sdk.service.http.rpc.HttpMethods;
 import com.casper.sdk.service.http.rpc.NodeClient;
 import com.casper.sdk.service.json.JsonConversionService;
 import com.casper.sdk.service.metrics.MetricsService;
@@ -41,8 +42,9 @@ public class CasperSdk {
         Properties.properties.put(Properties.NODE_URL, url);
         Properties.properties.put(Properties.NODE_PORT, Integer.toString(port));
 
-        this.nodeClient = new NodeClient(deployService, hashService, jsonConversionService);
-        metricsService = new MetricsService();
+        final HttpMethods httpMethods = new HttpMethods(jsonConversionService);
+        this.nodeClient = new NodeClient(deployService, hashService, httpMethods);
+        metricsService = new MetricsService(httpMethods);
     }
 
     public String getAccountInfo(final PublicKey accountKey) {
@@ -246,7 +248,7 @@ public class CasperSdk {
      *
      * @return the metrics JSON result
      */
-    public String getNodeMetrics() throws Exception {
+    public String getNodeMetrics() {
         return metricsService.getMetrics();
     }
 

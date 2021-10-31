@@ -1,6 +1,8 @@
 package com.casper.sdk.service.metrics;
 
 import com.casper.sdk.Properties;
+import com.casper.sdk.service.http.rpc.HttpMethods;
+import com.casper.sdk.service.json.JsonConversionService;
 import okhttp3.mockwebserver.Dispatcher;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
@@ -21,7 +23,7 @@ public class MetricsServiceTest {
     private final static String url = "http://localhost";
 
     private static MockWebServer mockBackEnd;
-    private final MetricsService metricsService = new MetricsService();
+    private final MetricsService metricsService = new MetricsService(new HttpMethods(new JsonConversionService()));
 
     @BeforeAll
     static void init() throws IOException {
@@ -30,7 +32,7 @@ public class MetricsServiceTest {
     }
 
     @Test
-    public void testStateRootOk() throws Throwable {
+    public void testStateRootOk() {
 
         Properties.properties.put("node-url", url);
         Properties.properties.put("node-port", String.valueOf(mockBackEnd.getPort()));
@@ -38,7 +40,7 @@ public class MetricsServiceTest {
         mockBackEnd.setDispatcher(
                 new MethodDispatcher());
 
-        String nodeMetrics = metricsService.getMetrics();
+        final String nodeMetrics = metricsService.getMetrics();
 
         assertNotNull(nodeMetrics);
 
@@ -75,8 +77,5 @@ public class MetricsServiceTest {
                 throw new IllegalStateException("Unable to load mock response from file", e);
             }
         }
-
     }
-
-
 }

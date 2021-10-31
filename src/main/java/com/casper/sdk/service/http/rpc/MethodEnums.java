@@ -30,7 +30,7 @@ public enum MethodEnums {
             JsonNode resultNode = null;
             try {
                 resultNode = getResultNode(result);
-                return resultNode.get("deploy_hash").textValue();
+                return resultNode.get(Constants.DEPLOY_HASH).textValue();
             } catch (Exception e) {
                 throw new ValueNotFoundException("deploy_hash not found " + buildErrorMessage(resultNode));
             }
@@ -120,7 +120,7 @@ public enum MethodEnums {
         @Override
         public String getValue(final String result) throws ValueNotFoundException {
             try {
-                return getResultNode(result).get("balance_value").textValue();
+                return getResultNode(result).get(Constants.BALANCE_VALUE).textValue();
             } catch (Exception e) {
                 throw new ValueNotFoundException("balance_value not found");
             }
@@ -155,13 +155,12 @@ public enum MethodEnums {
         @Override
         public String getValue(final String result) throws ValueNotFoundException {
             try {
-                return getResultNode(result).get("state_root_hash").textValue();
+                return getResultNode(result).get(Constants.STATE_ROOT_HASH).textValue();
             } catch (Exception e) {
                 throw new ValueNotFoundException("state root hash not found");
             }
         }
     };
-
 
     abstract String getValue(final String result) throws ValueNotFoundException;
 
@@ -175,7 +174,7 @@ public enum MethodEnums {
         if (error != null) {
             return error.toString();
         } else {
-            return "";
+            return Constants.EMPTY_STRING;
         }
     }
 }
