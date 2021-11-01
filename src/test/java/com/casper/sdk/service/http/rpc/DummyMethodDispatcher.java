@@ -1,6 +1,5 @@
 package com.casper.sdk.service.http.rpc;
 
-import com.casper.sdk.Constants;
 import okhttp3.mockwebserver.Dispatcher;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.RecordedRequest;
@@ -10,14 +9,12 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import static com.casper.sdk.Constants.CHAIN_GET_BLOCK;
-
-final class DummyMethodDispatcher extends Dispatcher {
+public final class DummyMethodDispatcher extends Dispatcher {
 
     private final ClassLoader classLoader = getClass().getClassLoader();
     private String responseBodyFile;
 
-    DummyMethodDispatcher() {
+    public DummyMethodDispatcher() {
     }
 
     @Override
@@ -39,10 +36,18 @@ final class DummyMethodDispatcher extends Dispatcher {
             responseBodyFile = "method-json/info_get_status.json";
         } else if (body.contains("account_put_deploy")) {
             responseBodyFile = "method-json/account_put_deploy.json";
-        } else if (body.contains(Constants.INFO_GET_DEPLOY)) {
+        } else if (body.contains("info_get_deploy")) {
             responseBodyFile = "method-json/info_get_deploy.json";
-        } else if (body.contains(CHAIN_GET_BLOCK)) {
+        } else if (body.contains("chain_get_block_transfers")) {
+            responseBodyFile = "method-json/chain_get_block_transfers.json";
+        } else if (body.contains("chain_get_block")) {
             responseBodyFile = "method-json/chain_get_block.json";
+        } else if (body.contains("rpc.discover")) {
+            responseBodyFile = "method-json/rpc_discover.json";
+        } else if (body.contains("chain_get_era_info_by_switch_b")) {
+            responseBodyFile = "method-json/chain_get_era_info_by_switch_block.json";
+        } else if (request.getRequestUrl().toString().contains("metrics")) {
+            responseBodyFile = "method-json/node-metrics.txt";
         }
 
         return new MockResponse().setResponseCode(200)

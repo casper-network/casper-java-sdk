@@ -4,7 +4,7 @@ import com.casper.sdk.service.serialization.util.ByteUtils;
 
 import java.util.regex.Pattern;
 
-public class URef  implements HasTag {
+public class URef implements HasTag {
 
     private final byte[] bytes;
     private final AccessRights accessRights;
@@ -46,5 +46,10 @@ public class URef  implements HasTag {
     @Override
     public int getTag() {
         return 2;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("uref-%s-%03d", ByteUtils.encodeHexString(getBytes()), (int) getAccessRights().getBits());
     }
 }

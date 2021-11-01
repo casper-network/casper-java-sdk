@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-import static com.casper.sdk.service.http.rpc.MethodEnums.CHAIN_GET_BLOCK;
+import static com.casper.sdk.service.http.rpc.MethodEnums.*;
 
 /**
  * Service to query the chain Methods call the HTTP methods with an instantiated method object
@@ -25,16 +25,17 @@ public class NodeClient {
 
     public static final String DEPLOY_TOO_LARGE_MSG = "Deploy can not be send, because it's too large: %d bytes. Max size is 1 megabyte.";
     private static final int ONE_MEGABYTE = 1048576;
+    private static final String HASH = "Hash";
     private final HttpMethods httpMethods;
     private final HashService hashService;
     private final DeployService deployService;
 
     public NodeClient(final DeployService deployService,
                       final HashService hashService,
-                      final JsonConversionService jsonConversionService) {
+                      final HttpMethods httpMethods) {
         this.deployService = deployService;
         this.hashService = hashService;
-        this.httpMethods = new HttpMethods(jsonConversionService);
+        this.httpMethods = httpMethods;
     }
 
     public String getStateRootHash() {
@@ -49,9 +50,9 @@ public class NodeClient {
         return rcpCallMethodMap(
                 new Method(Constants.STATE_GET_ITEM,
                         CollectionUtils.Map.of(
-                                "state_root_hash", getStateRootHash(),
-                                "key", "account-hash-" + hashService.getAccountHash(accountKey),
-                                "path", Collections.emptyList()
+                                Constants.STATE_ROOT_HASH, getStateRootHash(),
+                                Constants.KEY, "account-hash-" + hashService.getAccountHash(accountKey),
+                                Constants.PATH, Collections.emptyList()
                         )
                 ),
                 MethodEnums.ACCOUNT_INFO::getValue
@@ -63,8 +64,8 @@ public class NodeClient {
         return rcpCallMethodMap(
                 new Method(Constants.STATE_GET_BALANCE,
                         CollectionUtils.Map.of(
-                                "state_root_hash", getStateRootHash(),
-                                "purse_uref", getAccountMainPurseURef(accountKey)
+                                Constants.STATE_ROOT_HASH, getStateRootHash(),
+                                Constants.PURSE_UREF, getAccountMainPurseURef(accountKey).toString()
                         )
                 ),
                 result -> new BigInteger(MethodEnums.STATE_GET_BALANCE.getValue(result))
@@ -77,7 +78,7 @@ public class NodeClient {
                 new Method(Constants.STATE_GET_ITEM,
                         CollectionUtils.Map.of(
                                 "key", "account-hash-" + hashService.getAccountHash(accountKey),
-                                "state_root_hash", getStateRootHash(),
+                                Constants.STATE_ROOT_HASH, getStateRootHash(),
                                 "path", Collections.emptyList()
                         )
                 ),
@@ -137,16 +138,16 @@ public class NodeClient {
 
     public String getBlockInfo(final Digest blockHash) {
         final Map<String, Object> params = CollectionUtils.Map.of(
-                "block_identifier",
-                CollectionUtils.Map.of("Hash", blockHash.toString()
+                Constants.BLOCK_IDENTIFIER,
+                CollectionUtils.Map.of(HASH, blockHash.toString()
                 ));
         return getChainBlockInfo(params);
     }
 
     public String getBlockInfoByHeight(final Number height) {
         final Map<String, Object> params = CollectionUtils.Map.of(
-                "block_identifier",
-                CollectionUtils.Map.of("Height", height.toString())
+                Constants.BLOCK_IDENTIFIER,
+                CollectionUtils.Map.of(Constants.HEIGHT, height.toString())
         );
         return getChainBlockInfo(params);
     }
@@ -161,6 +162,39 @@ public class NodeClient {
         return rcpCallMethodMap(
                 new Method(Constants.CHAIN_GET_BLOCK, params),
                 CHAIN_GET_BLOCK::getValue
+        );
+    }
+
+    /**
+     * Obtain the RPC Schema
+     *
+     * @return the
+     */
+    public String getRpcSchema() {
+        return rcpCallMethodMap(new Method(Constants.RPC_DISCOVER, new HashMap<>()), RPC_DISCOVER::getValue);
+    }
+
+    /**
+     * Obtains the nodes chain block transfers
+     *
+     * @return the JSON of the chain block transfers
+     */
+    public String getBlockTransfers() {
+        return rcpCallMethodMap(
+                new Method(Constants.CHAIN_GET_BLOCK_TRANSFERS, new HashMap<>()),
+                CHAIN_GET_BLOCK_TRANSFERS::getValue
+        );
+    }
+
+    /**
+     * Obtains the chain era info by switch block result as JSON
+     *
+     * @return Obtains
+     */
+    public String getEraInfoBySwitchBlock() {
+        return rcpCallMethodMap(
+                new Method(Constants.CHAIN_GET_ERA_INFO_BY_SWITCH_BLOCK, new HashMap<>()),
+                CHAIN_GET_ERA_INFO_BY_SWITCH_BLOCK::getValue
         );
     }
 

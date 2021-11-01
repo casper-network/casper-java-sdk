@@ -37,14 +37,15 @@ public class NodeClientTest {
     private static MockWebServer mockBackEnd;
 
     private final HashService hashService = new HashService();
+    private final JsonConversionService jsonService = new JsonConversionService();
     private final DeployService deployService = new DeployService(
             new ByteSerializerFactory(),
             hashService,
-            new JsonConversionService(),
+            jsonService,
             new SigningService(),
             new TypesFactory()
     );
-    private final NodeClient nodeClient = new NodeClient(deployService, hashService, new JsonConversionService());
+    private final NodeClient nodeClient = new NodeClient(deployService, hashService, new HttpMethods(jsonService));
 
     @BeforeEach
     void setUp() throws IOException {
@@ -156,8 +157,8 @@ public class NodeClientTest {
     void getLatestBlockInfo() {
 
         String latestBlockInfo = nodeClient.getLatestBlockInfo();
-        assertThat(latestBlockInfo, hasJsonPath("$.hash",  is("ce4e6b534c69b2b29f834c6ce73a4b119090de84485149cfc8f2b10b6737166e")));
-        assertThat(latestBlockInfo, hasJsonPath("$.header.height",  is(314)));
-        assertThat(latestBlockInfo, hasJsonPath("$.header.era_id",  is(28)));
+        assertThat(latestBlockInfo, hasJsonPath("$.hash", is("ce4e6b534c69b2b29f834c6ce73a4b119090de84485149cfc8f2b10b6737166e")));
+        assertThat(latestBlockInfo, hasJsonPath("$.header.height", is(314)));
+        assertThat(latestBlockInfo, hasJsonPath("$.header.era_id", is(28)));
     }
 }

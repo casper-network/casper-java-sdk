@@ -14,7 +14,11 @@ import java.util.Optional;
  */
 public class HttpMethods {
 
-    private static final MediaType JSON = MediaType.get("application/json");
+    public static final String APPLICATION_JSON = "application/json";
+    public static final String ACCEPT = "Accept";
+    public static final String CONTENT_TYPE = "Content-type";
+    private static final MediaType JSON = MediaType.get(APPLICATION_JSON);
+    public static final String RPC = "rpc";
     private final OkHttpClient client = new OkHttpClient();
     private final JsonConversionService jsonConversionService;
 
@@ -22,7 +26,7 @@ public class HttpMethods {
         this.jsonConversionService = jsonConversionService;
     }
 
-    public Optional<String> rpcCallMethod(final Method method) throws HttpException {
+    Optional<String> rpcCallMethod(final Method method) throws HttpException {
 
         try {
 
@@ -31,13 +35,13 @@ public class HttpMethods {
             final RequestBody body = RequestBody.create(bytes, JSON);
 
             final Request request = new Request.Builder()
-                    .url(buildUrl())
-                    .header("Accept", "application/json")
-                    .header("Content-type", "application/json")
+                    .url(buildRpcUrl())
+                    .header(ACCEPT, APPLICATION_JSON)
+                    .header(CONTENT_TYPE, APPLICATION_JSON)
                     .post(body)
                     .build();
 
-            Response response = client.newCall(request).execute();
+            final Response response = client.newCall(request).execute();
             //noinspection ConstantConditions
             return Optional.ofNullable(response.body().string());
 
@@ -46,10 +50,33 @@ public class HttpMethods {
         }
     }
 
-    private String buildUrl() {
-        return Properties.properties.get("node-url") +
-               ":" +
-               Properties.properties.get("node-port") +
-               "/rpc";
+    public Optional<String> callGetMethod(final String urlPath) {
+
+        try {
+            final Request request = new Request.Builder()
+                    .url(buildUrl(urlPath))
+                    .header(ACCEPT, APPLICATION_JSON)
+                    .get()
+                    .build();
+
+            final Response response = client.newCall(request).execute();
+            //noinspection ConstantConditions
+            return Optional.ofNullable(response.body().string());
+
+        } catch (Exception e) {
+            throw new HttpException(e.getMessage());
+        }
+    }
+
+    private String buildUrl(final String urlPath) {
+        return Properties.properties.get(Properties.NODE_URL) +
+               ':' +
+               Properties.properties.get(Properties.NODE_PORT) +
+               '/' +
+               urlPath;
+    }
+
+    private String buildRpcUrl() {
+        return buildUrl(RPC);
     }
 }

@@ -1,12 +1,11 @@
 package com.casper.sdk;
 
 import com.casper.sdk.exceptions.ValueNotFoundException;
-
-import com.casper.sdk.service.HashService;
-import com.casper.sdk.service.MetricsService;
-import com.casper.sdk.service.SigningService;
+import com.casper.sdk.service.hash.HashService;
+import com.casper.sdk.service.http.rpc.HttpMethods;
 import com.casper.sdk.service.http.rpc.NodeClient;
 import com.casper.sdk.service.json.JsonConversionService;
+import com.casper.sdk.service.metrics.MetricsService;
 import com.casper.sdk.service.serialization.cltypes.TypesFactory;
 import com.casper.sdk.service.serialization.types.ByteSerializerFactory;
 import com.casper.sdk.service.serialization.util.ByteUtils;
@@ -43,8 +42,9 @@ public class CasperSdk {
         Properties.properties.put(Properties.NODE_URL, url);
         Properties.properties.put(Properties.NODE_PORT, Integer.toString(port));
 
-        this.nodeClient = new NodeClient(deployService, hashService, jsonConversionService);
-        metricsService = new MetricsService();
+        final HttpMethods httpMethods = new HttpMethods(jsonConversionService);
+        this.nodeClient = new NodeClient(deployService, hashService, httpMethods);
+        metricsService = new MetricsService(httpMethods);
     }
 
     public String getAccountInfo(final PublicKey accountKey) {
@@ -67,7 +67,6 @@ public class CasperSdk {
         }
         throw new ValueNotFoundException("'ERC20' not found in account info 'named_keys'");
     }
-
 
     public BigInteger getAccountBalance(final PublicKey accountKey) {
         return nodeClient.getAccountBalance(signingService.toClPublicKey(accountKey).toAccountHex());
@@ -244,11 +243,15 @@ public class CasperSdk {
         return jsonConversionService.toJson(deploy);
     }
 
-
-    public String getNodeMetrics() throws Exception {
+    /**
+     * Obtains the node metrics as JSON
+     *
+     * @return the metrics JSON result
+     */
+    public String getNodeMetrics() {
         return metricsService.getMetrics();
     }
-  
+
     /**
      * Creates a public key from a hex string where the first byte is the algorithm type and the following bytes the raw
      * public key bytes.
@@ -297,5 +300,32 @@ public class CasperSdk {
      */
     public String getBlockInfoByHeight(final Number height) {
         return nodeClient.getBlockInfoByHeight(height);
+    }
+
+    /**
+     * Returns on-chain block transfers information as JSON
+     *
+     * @return the block transfers information as JSON
+     */
+    public String getBlockTransfers() {
+        return nodeClient.getBlockTransfers();
+    }
+
+    /**
+     * Obtains the chain ero info by switch block as JSON
+     *
+     * @return the JSON result
+     */
+    public String getEraInfoBySwitchBlock() {
+        return nodeClient.getEraInfoBySwitchBlock();
+    }
+
+    /**
+     * Obtain the RPC Schema as a JSON string
+     *
+     * @return the RPC schema
+     */
+    public String getRpcSchema() {
+        return nodeClient.getRpcSchema();
     }
 }

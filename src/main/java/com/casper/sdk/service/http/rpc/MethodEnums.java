@@ -17,69 +17,68 @@ public enum MethodEnums {
         @Override
         public String getValue(final String result) throws ValueNotFoundException {
             try {
-                JsonNode node = new ObjectMapper().readTree(result);
-                return node.get(RESULT).toString();
+                return getResultNode(result).toPrettyString();
             } catch (JsonProcessingException e) {
                 throw new ValueNotFoundException("state root hash not found");
             }
         }
     },
 
-    STATE_ROOT_HASH {
+    ACCOUNT_PUT_DEPLOY {
         @Override
         public String getValue(final String result) throws ValueNotFoundException {
+            JsonNode resultNode = null;
             try {
-                final JsonNode node = new ObjectMapper().readTree(result);
-                return node.get(RESULT).get("state_root_hash").textValue();
+                resultNode = getResultNode(result);
+                return resultNode.get(Constants.DEPLOY_HASH).textValue();
             } catch (Exception e) {
-                throw new ValueNotFoundException("state root hash not found");
+                throw new ValueNotFoundException("deploy_hash not found " + buildErrorMessage(resultNode));
             }
         }
     },
-    STATE_GET_ITEM {
-        @Override
-        public String getValue(final String result) throws ValueNotFoundException {
-            JsonNode node = null;
-            try {
-                node = new ObjectMapper().readTree(result);
-                return node.get(RESULT).get("stored_value").get("Account").get("main_purse").textValue();
-            } catch (Exception e) {
 
-                throw new ValueNotFoundException("main_purse not found " + buildErrorMessage(node));
+    CHAIN_GET_BLOCK {
+        @Override
+        public String getValue(String result) throws ValueNotFoundException {
+            try {
+                return getResultNode(result).get(Constants.BLOCK).toPrettyString();
+            } catch (Exception e) {
+                throw new ValueNotFoundException("block not found");
             }
         }
     },
-    STATE_GET_BALANCE {
+
+    CHAIN_GET_BLOCK_TRANSFERS {
         @Override
         public String getValue(final String result) throws ValueNotFoundException {
             try {
-                final JsonNode node = new ObjectMapper().readTree(result);
-                return node.get(RESULT).get("balance_value").textValue();
+                return getResultNode(result).toPrettyString();
             } catch (Exception e) {
-                throw new ValueNotFoundException("balance_value not found");
+                throw new ValueNotFoundException("result not found");
             }
         }
     },
-    STATE_GET_AUCTION_INFO {
+
+    CHAIN_GET_ERA_INFO_BY_SWITCH_BLOCK {
         @Override
         public String getValue(final String result) throws ValueNotFoundException {
             try {
-                final JsonNode node = new ObjectMapper().readTree(result);
-                return node.get(RESULT).toPrettyString();
+                return getResultNode(result).toPrettyString();
             } catch (Exception e) {
-                throw new ValueNotFoundException("auction_state not found");
+                throw new ValueNotFoundException("result not found");
             }
         }
     },
+
     INFO_GET_DEPLOY {
         @Override
         public String getValue(String result) throws ValueNotFoundException {
-            JsonNode node = null;
+            JsonNode resultNode = null;
             try {
-                node = new ObjectMapper().readTree(result);
-                return node.get(RESULT).get(Constants.DEPLOY).toPrettyString();
+                resultNode = getResultNode(result);
+                return resultNode.get(Constants.DEPLOY).toPrettyString();
             } catch (Exception e) {
-                throw new ValueNotFoundException("deploy not found " + buildErrorMessage(node));
+                throw new ValueNotFoundException("deploy not found " + buildErrorMessage(resultNode));
             }
         }
     },
@@ -88,8 +87,7 @@ public enum MethodEnums {
         @Override
         public String getValue(final String result) throws ValueNotFoundException {
             try {
-                final JsonNode node = new ObjectMapper().readTree(result);
-                return node.get(RESULT).toPrettyString();
+                return getResultNode(result).toPrettyString();
             } catch (Exception e) {
                 throw new ValueNotFoundException("peers not found");
             }
@@ -100,47 +98,83 @@ public enum MethodEnums {
         @Override
         public String getValue(final String result) throws ValueNotFoundException {
             try {
-                final JsonNode node = new ObjectMapper().readTree(result);
-                return node.get(RESULT).toPrettyString();
+                return getResultNode(result).toPrettyString();
             } catch (Exception e) {
                 throw new ValueNotFoundException("result not found");
             }
         }
     },
 
-    ACCOUNT_PUT_DEPLOY {
+    RPC_DISCOVER {
         @Override
         public String getValue(final String result) throws ValueNotFoundException {
-            JsonNode node = null;
             try {
-                node = new ObjectMapper().readTree(result);
-                return node.get(RESULT).get("deploy_hash").textValue();
+                return getResultNode(result).toPrettyString();
             } catch (Exception e) {
-                throw new ValueNotFoundException("deploy_hash not found " + buildErrorMessage(node));
+                throw new ValueNotFoundException("result not found");
             }
         }
     },
 
-    CHAIN_GET_BLOCK {
+    STATE_GET_BALANCE {
         @Override
-        public String getValue(String result) throws ValueNotFoundException {
+        public String getValue(final String result) throws ValueNotFoundException {
             try {
-                final JsonNode node = new ObjectMapper().readTree(result);
-                return node.get(RESULT).get(Constants.BLOCK).toPrettyString();
+                return getResultNode(result).get(Constants.BALANCE_VALUE).textValue();
             } catch (Exception e) {
-                throw new ValueNotFoundException("block not found");
+                throw new ValueNotFoundException("balance_value not found");
+            }
+        }
+    },
+
+    STATE_GET_ITEM {
+        @Override
+        public String getValue(final String result) throws ValueNotFoundException {
+            JsonNode resultNode = null;
+            try {
+                resultNode = getResultNode(result);
+                return resultNode.get("stored_value").get("Account").get("main_purse").textValue();
+            } catch (Exception e) {
+                throw new ValueNotFoundException("main_purse not found " + buildErrorMessage(resultNode));
+            }
+        }
+    },
+
+    STATE_GET_AUCTION_INFO {
+        @Override
+        public String getValue(final String result) throws ValueNotFoundException {
+            try {
+                return getResultNode(result).toPrettyString();
+            } catch (Exception e) {
+                throw new ValueNotFoundException("auction_state not found");
+            }
+        }
+    },
+
+    STATE_ROOT_HASH {
+        @Override
+        public String getValue(final String result) throws ValueNotFoundException {
+            try {
+                return getResultNode(result).get(Constants.STATE_ROOT_HASH).textValue();
+            } catch (Exception e) {
+                throw new ValueNotFoundException("state root hash not found");
             }
         }
     };
 
-    public abstract String getValue(final String result) throws ValueNotFoundException;
+    abstract String getValue(final String result) throws ValueNotFoundException;
 
-    public String buildErrorMessage(final JsonNode node) {
+    JsonNode getResultNode(final String result) throws JsonProcessingException {
+        final JsonNode node = new ObjectMapper().readTree(result);
+        return node.get(RESULT);
+    }
+
+    String buildErrorMessage(final JsonNode node) {
         final JsonNode error = node != null ? node.get("error") : null;
         if (error != null) {
             return error.toString();
         } else {
-            return "";
+            return Constants.EMPTY_STRING;
         }
     }
 }
