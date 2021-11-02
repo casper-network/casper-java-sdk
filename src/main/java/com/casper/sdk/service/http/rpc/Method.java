@@ -1,5 +1,6 @@
 package com.casper.sdk.service.http.rpc;
 
+import java.util.Collections;
 import java.util.Map;
 
 /**
@@ -10,11 +11,12 @@ public class Method {
 
     private static final String JSON_RPC = "2.0";
     private static final int id = 1;
-    private String method;
-    private Map<String, Object> params;
+    private final String method;
+    /** The parameters that will be written as JSON */
+    private final Map<String, Object> params;
 
     public Method(final String method) {
-        this.method = method;
+        this(method, Collections.emptyMap());
     }
 
     public Method(final String method, final Map<String, Object> params) {

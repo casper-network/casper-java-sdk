@@ -1,7 +1,6 @@
 package com.casper.sdk;
 
 import com.casper.sdk.service.http.rpc.DummyMethodDispatcher;
-import com.casper.sdk.service.metrics.MetricsServiceTest;
 import com.casper.sdk.service.serialization.util.ByteUtils;
 import com.casper.sdk.types.*;
 import okhttp3.mockwebserver.MockWebServer;
@@ -20,7 +19,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class CasperSdkTest {
 
-    public static final String DEPLOY_JSON_PATH = "/com/casper/sdk/types/deploy-util-test.json";
     private final static String url = "http://localhost";
     private static MockWebServer mockBackEnd;
     private CasperSdk casperSdk;

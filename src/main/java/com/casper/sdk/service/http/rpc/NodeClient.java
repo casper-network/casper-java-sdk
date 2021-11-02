@@ -3,7 +3,6 @@ package com.casper.sdk.service.http.rpc;
 import com.casper.sdk.Constants;
 import com.casper.sdk.exceptions.ValueNotFoundException;
 import com.casper.sdk.service.hash.HashService;
-import com.casper.sdk.service.json.JsonConversionService;
 import com.casper.sdk.service.serialization.util.CollectionUtils;
 import com.casper.sdk.types.Deploy;
 import com.casper.sdk.types.DeployService;
