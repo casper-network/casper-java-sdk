@@ -80,12 +80,12 @@ public class InvokeContractIntTest {
 
 
     private KeyPair geUserKeyPair(final CasperSdk casperSdk, final int userNumber) throws IOException {
-        final IntegrationTestUtils.KeyPairStreams streams = geUserKeyPairStreams(userNumber);
+        final KeyPairStreams streams = geUserKeyPairStreams(userNumber);
         return casperSdk.loadKeyPair(streams.getPublicKeyIn(), streams.getPrivateKeyIn());
     }
 
     private KeyPair getNodeKeyPair(final CasperSdk casperSdk, final int nodeNumber) throws IOException {
-        final IntegrationTestUtils.KeyPairStreams streams = getNodeKeyPairSteams(nodeNumber);
+        final KeyPairStreams streams = getNodeKeyPairSteams(nodeNumber);
         return casperSdk.loadKeyPair(streams.getPublicKeyIn(), streams.getPrivateKeyIn());
     }
 }

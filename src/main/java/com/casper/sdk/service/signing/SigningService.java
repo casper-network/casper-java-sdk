@@ -144,32 +144,12 @@ public class SigningService {
     }
 
     PrivateKey toPrivateKey(final InputStream privateKeyIn) {
-
-        try {
-            final PEMParser pemParser = new PEMParser(new InputStreamReader(privateKeyIn));
-            final Object object = pemParser.readObject();
-            final JcaPEMKeyConverter converter = new JcaPEMKeyConverter().setProvider(PROVIDER);
-            if (object instanceof PrivateKeyInfo) {
-                return converter.getPrivateKey((PrivateKeyInfo) object);
-            } else if (object instanceof PEMKeyPair) {
-                return converter.getPrivateKey(((PEMKeyPair) object).getPrivateKeyInfo());
-            } else {
-                throw new SignatureException("Unknown object type " + object);
-            }
-        } catch (IOException e) {
-            throw new SignatureException(e);
-        }
+        return loadKey(privateKeyIn);
     }
 
+
     PublicKey toPublicKey(final InputStream publicKeyIn) {
-        try {
-            final PEMParser pemParser = new PEMParser(new InputStreamReader(publicKeyIn));
-            final Object object = pemParser.readObject();
-            final JcaPEMKeyConverter converter = new JcaPEMKeyConverter().setProvider(PROVIDER);
-            return converter.getPublicKey((SubjectPublicKeyInfo) object);
-        } catch (IOException e) {
-            throw new SignatureException(e);
-        }
+        return loadKey(publicKeyIn);
     }
 
     private KeyPairBuilder getKeyPairBuilder(final Algorithm algorithm) {
@@ -178,5 +158,25 @@ public class SigningService {
 
     private KeyPairBuilder getKeyPairBuilderForPublicKey(final PublicKey publicKey) {
         return keyPairFactory.getKeyPairBuilderForPublicKey(publicKey);
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T extends Key> T loadKey(final InputStream keyIn) {
+        try {
+            final PEMParser pemParser = new PEMParser(new InputStreamReader(keyIn));
+            final Object object = pemParser.readObject();
+            final JcaPEMKeyConverter converter = new JcaPEMKeyConverter().setProvider(PROVIDER);
+            if (object instanceof PrivateKeyInfo) {
+                return (T) converter.getPrivateKey((PrivateKeyInfo) object);
+            } else if (object instanceof PEMKeyPair) {
+                return (T) converter.getPrivateKey(((PEMKeyPair) object).getPrivateKeyInfo());
+            } else if (object instanceof SubjectPublicKeyInfo) {
+                return (T) converter.getPublicKey((SubjectPublicKeyInfo) object);
+            } else {
+                throw new SignatureException("Unknown object type " + object);
+            }
+        } catch (IOException e) {
+            throw new SignatureException(e);
+        }
     }
 }

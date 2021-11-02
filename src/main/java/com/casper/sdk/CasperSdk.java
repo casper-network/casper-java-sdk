@@ -15,6 +15,7 @@ import com.casper.sdk.types.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
+import java.security.Key;
 import java.security.KeyPair;
 import java.security.PublicKey;
 import java.util.Map;
@@ -101,7 +102,7 @@ public class CasperSdk {
      * Converts a JSON object to a {@link Deploy}.
      *
      * @param jsonStream the input stream to read the JSON object from
-     * @return a new {@link Deploy}
+     * @return a new {@link Deploy}gi
      * @throws IOException - if there was an error reading the stream
      */
     public Deploy deployFromJson(final InputStream jsonStream) throws IOException {
@@ -194,6 +195,16 @@ public class CasperSdk {
      */
     public KeyPair loadKeyPair(final InputStream publicKeyIn, final InputStream privateKeyIn) {
         return signingService.loadKeyPair(publicKeyIn, privateKeyIn);
+    }
+
+    /**
+     * Loads a single public or private key from a .pem in the provided stream
+     * @param in the stream for a .pem file
+     * @param <T> the type of the key
+     * @return the loaded key
+     */
+    public <T extends Key> T loadKey(final InputStream in) {
+        return signingService.loadKey(in);
     }
 
     /**
@@ -325,4 +336,5 @@ public class CasperSdk {
     public String getRpcSchema() {
         return nodeClient.getRpcSchema();
     }
+
 }

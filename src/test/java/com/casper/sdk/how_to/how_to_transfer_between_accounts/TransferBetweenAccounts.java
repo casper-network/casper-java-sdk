@@ -1,6 +1,7 @@
 package com.casper.sdk.how_to.how_to_transfer_between_accounts;
 
 import com.casper.sdk.CasperSdk;
+import com.casper.sdk.KeyPairStreams;
 import com.casper.sdk.how_to.common.Methods;
 import com.casper.sdk.types.*;
 import org.junit.jupiter.api.Disabled;
@@ -30,15 +31,19 @@ public class TransferBetweenAccounts extends Methods {
     @Test
     public void testDeploy() throws Throwable {
 
-        final KeyPair nodeOneKeyPair = super.getNodeKeyPair(1, NCTL_HOME, casperSdk);
-        final KeyPair nodeTwoKeyPair = super.getUserKeyPair(2, NCTL_HOME, casperSdk);
+        final KeyPairStreams nodeKeyOneStream = super.getNodeKeyPair(1, NCTL_HOME);
+        final KeyPair nodeOneKeyPair = casperSdk.loadKeyPair(nodeKeyOneStream.getPublicKeyIn(), nodeKeyOneStream.getPrivateKeyIn());
 
-        final CLPublicKey toPublicKey = new CLPublicKey(nodeTwoKeyPair.getPublic().getEncoded(), Algorithm.ED25519);
+        final KeyPairStreams nodeKeyTwoStream = super.getUserKeyPairStreams(2, NCTL_HOME);
+        final KeyPair nodeTwoKeyPair = casperSdk.loadKeyPair(nodeKeyTwoStream.getPublicKeyIn(), nodeKeyTwoStream.getPrivateKeyIn());
+        final CLPublicKey toPublicKey = casperSdk.toCLPublicKey(nodeTwoKeyPair.getPublic());
 
         // Make the session, a transfer from user one to user two
-        final com.casper.sdk.types.Transfer transfer = casperSdk.newTransfer(new BigInteger("2500000000"),
+        final com.casper.sdk.types.Transfer transfer = casperSdk.newTransfer(
+                new BigInteger("2500000000"),
                 toPublicKey,
-                1);
+                1
+        );
 
         // Make a payment
         final ModuleBytes payment = casperSdk.standardPayment(new BigInteger("10000000000"));
@@ -56,7 +61,6 @@ public class TransferBetweenAccounts extends Methods {
                 payment
         );
 
-
         casperSdk.signDeploy(deploy, nodeOneKeyPair);
         casperSdk.signDeploy(deploy, nodeTwoKeyPair);
 
@@ -65,7 +69,5 @@ public class TransferBetweenAccounts extends Methods {
 
         final Digest digest = casperSdk.putDeploy(deploy);
         assertThat(digest, is(notNullValue()));
-
     }
-
 }

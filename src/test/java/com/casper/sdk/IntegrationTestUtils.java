@@ -3,28 +3,8 @@ package com.casper.sdk;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
 public class IntegrationTestUtils {
-
-    static class KeyPairStreams {
-
-        private final InputStream publicKeyIn;
-        private final InputStream privateKeyIn;
-
-        KeyPairStreams(InputStream publicKeyIn, InputStream privateKeyIn) {
-            this.publicKeyIn = publicKeyIn;
-            this.privateKeyIn = privateKeyIn;
-        }
-
-        public InputStream getPublicKeyIn() {
-            return publicKeyIn;
-        }
-
-        public InputStream getPrivateKeyIn() {
-            return privateKeyIn;
-        }
-    }
 
     private static final String NCTL_HOME = "~/Documents/casper/casper-node/utils/nctl";
 
