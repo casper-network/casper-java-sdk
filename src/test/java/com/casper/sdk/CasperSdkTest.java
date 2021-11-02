@@ -32,9 +32,6 @@ class CasperSdkTest {
         mockBackEnd.start();
         mockBackEnd.setDispatcher(new DummyMethodDispatcher());
 
-        Properties.properties.put("node-url", url);
-        Properties.properties.put("node-port", String.valueOf(mockBackEnd.getPort()));
-
         casperSdk = new CasperSdk(url, mockBackEnd.getPort());
     }
 
@@ -99,7 +96,7 @@ class CasperSdkTest {
     }
 
     @Test
-    public void getNodeMetrics() throws Throwable {
+    public void getNodeMetrics() {
 
         final String nodeMetrics = casperSdk.getNodeMetrics();
         assertNotNull(nodeMetrics);

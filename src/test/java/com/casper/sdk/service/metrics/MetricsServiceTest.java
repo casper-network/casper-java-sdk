@@ -1,6 +1,5 @@
 package com.casper.sdk.service.metrics;
 
-import com.casper.sdk.Properties;
 import com.casper.sdk.service.http.rpc.HttpMethods;
 import com.casper.sdk.service.json.JsonConversionService;
 import okhttp3.mockwebserver.Dispatcher;
@@ -20,38 +19,13 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class MetricsServiceTest {
 
-    private final static String url = "http://localhost";
-
-    private static MockWebServer mockBackEnd;
-    private final MetricsService metricsService = new MetricsService(new HttpMethods(new JsonConversionService()));
-
-    @BeforeAll
-    static void init() throws IOException {
-        mockBackEnd = new MockWebServer();
-        mockBackEnd.start();
-    }
-
-    @Test
-    public void testStateRootOk() {
-
-        Properties.properties.put("node-url", url);
-        Properties.properties.put("node-port", String.valueOf(mockBackEnd.getPort()));
-
-        mockBackEnd.setDispatcher(
-                new MethodDispatcher());
-
-        final String nodeMetrics = metricsService.getMetrics();
-
-        assertNotNull(nodeMetrics);
-
-    }
-
     private static final class MethodDispatcher extends Dispatcher {
 
         private final ClassLoader classLoader = getClass().getClassLoader();
         private String responseBodyFile;
 
-        public MethodDispatcher() {}
+        public MethodDispatcher() {
+        }
 
         @NotNull
         @Override
@@ -61,7 +35,7 @@ public class MetricsServiceTest {
                 responseBodyFile = "method-json/node-metrics.txt";
             }
 
-            if ( responseBodyFile != null ) {
+            if (responseBodyFile != null) {
                 return new MockResponse().setResponseCode(200)
                         .addHeader("Content-Type", "application/text")
                         .setBody(loadResponse(responseBodyFile));
@@ -77,5 +51,26 @@ public class MetricsServiceTest {
                 throw new IllegalStateException("Unable to load mock response from file", e);
             }
         }
+    }
+
+    private final static String url = "http://localhost";
+    private static MockWebServer mockBackEnd;
+
+    @BeforeAll
+    static void init() throws IOException {
+        mockBackEnd = new MockWebServer();
+        mockBackEnd.start();
+    }
+
+    @Test
+    public void testStateRootOk() {
+
+        final MetricsService metricsService = new MetricsService(new HttpMethods(new JsonConversionService(), url, mockBackEnd.getPort()));
+        mockBackEnd.setDispatcher(new MethodDispatcher());
+
+        final String nodeMetrics = metricsService.getMetrics();
+
+        assertNotNull(nodeMetrics);
+
     }
 }

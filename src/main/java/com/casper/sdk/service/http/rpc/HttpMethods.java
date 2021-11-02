@@ -1,6 +1,5 @@
 package com.casper.sdk.service.http.rpc;
 
-import com.casper.sdk.Properties;
 import com.casper.sdk.exceptions.HttpException;
 import com.casper.sdk.service.json.JsonConversionService;
 import okhttp3.*;
@@ -17,13 +16,17 @@ public class HttpMethods {
     public static final String APPLICATION_JSON = "application/json";
     public static final String ACCEPT = "Accept";
     public static final String CONTENT_TYPE = "Content-type";
-    private static final MediaType JSON = MediaType.get(APPLICATION_JSON);
     public static final String RPC = "rpc";
+    private static final MediaType JSON = MediaType.get(APPLICATION_JSON);
     private final OkHttpClient client = new OkHttpClient();
     private final JsonConversionService jsonConversionService;
+    private final String url;
+    private final int port;
 
-    public HttpMethods(final JsonConversionService jsonConversionService) {
+    public HttpMethods(final JsonConversionService jsonConversionService, final String url, int port) {
         this.jsonConversionService = jsonConversionService;
+        this.url = url;
+        this.port = port;
     }
 
     Optional<String> rpcCallMethod(final Method method) throws HttpException {
@@ -69,11 +72,7 @@ public class HttpMethods {
     }
 
     private String buildUrl(final String urlPath) {
-        return Properties.properties.get(Properties.NODE_URL) +
-               ':' +
-               Properties.properties.get(Properties.NODE_PORT) +
-               '/' +
-               urlPath;
+        return url + ':' + port + '/' + urlPath;
     }
 
     private String buildRpcUrl() {

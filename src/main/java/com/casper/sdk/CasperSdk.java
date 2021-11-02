@@ -39,10 +39,7 @@ public class CasperSdk {
 
     public CasperSdk(final String url, final int port) {
 
-        Properties.properties.put(Properties.NODE_URL, url);
-        Properties.properties.put(Properties.NODE_PORT, Integer.toString(port));
-
-        final HttpMethods httpMethods = new HttpMethods(jsonConversionService);
+        final HttpMethods httpMethods = new HttpMethods(jsonConversionService, url, port);
         this.nodeClient = new NodeClient(deployService, hashService, httpMethods);
         metricsService = new MetricsService(httpMethods);
     }
