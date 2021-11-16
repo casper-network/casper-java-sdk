@@ -19,7 +19,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
 
-@Disabled // TODO Remove this comment to tests against a network
+///@Disabled // Remove this comment to test against a network
 public class HowToDelegate {
 
     /** Create new instance of the SDK with default NCTL url and port */
