@@ -24,6 +24,7 @@ import java.security.PublicKey;
 import java.util.Map;
 
 import static com.casper.sdk.Constants.STANDARD_PAYMENT_FOR_DELEGATION;
+import static com.casper.sdk.Constants.STANDARD_PAYMENT_FOR_DELEGATION_WITHDRAWAL;
 
 /**
  * Entry point into the SDK Exposes all permissible methods
@@ -148,6 +149,36 @@ public class CasperSdk {
                 this.standardPayment(STANDARD_PAYMENT_FOR_DELEGATION)
         );
     }
+
+
+    /**
+     * Creates a standard withdraw delegation deploy.
+     *
+     * @param deployParams       standard parameters used when creating a deploy
+     * @param amount             amount in motes to be delegated
+     * @param delegatorPublicKey public key of delegator
+     * @param validatorPublicKey public key of validator
+     * @param wasmIn             to compiled delegate.wasm
+     * @return A standard delegation deploy.
+     */
+    public Deploy makeValidatorDelegationWithdrawal(final DeployParams deployParams,
+                                                    final Number amount,
+                                                    final PublicKey delegatorPublicKey,
+                                                    final PublicKey validatorPublicKey,
+                                                    final InputStream wasmIn) {
+
+        return makeDeploy(deployParams,
+                new ModuleBytes(readWasm(wasmIn),
+                        new DeployNamedArgBuilder()
+                                .add("amount", CLValueBuilder.u512(amount))
+                                .add("delegator", CLValueBuilder.publicKey(delegatorPublicKey))
+                                .add("validator", CLValueBuilder.publicKey(validatorPublicKey))
+                                .build()
+                ),
+                this.standardPayment(STANDARD_PAYMENT_FOR_DELEGATION_WITHDRAWAL)
+        );
+    }
+
 
     /**
      * Construct new unsigned deploy for transfer purpose.
@@ -372,6 +403,7 @@ public class CasperSdk {
             throw new CasperException("Error loading wasm", e);
         }
     }
-
-
 }
+
+
+

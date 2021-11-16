@@ -111,13 +111,31 @@ class CasperSdkTest {
 
 
     @Test
-    void deployFromJson() throws IOException {
+    void deployFromJsonStream() throws IOException {
 
         // Load the deploy from JSON
         final String originalJson = IOUtils.toString(Objects.requireNonNull(getClass()
                 .getResourceAsStream(DEPLOY_TRANSFER_JSON)), StandardCharsets.UTF_8);
 
         final Deploy deploy = casperSdk.deployFromJson(getClass().getResourceAsStream(DEPLOY_TRANSFER_JSON));
+
+        assertThat(deploy, is(notNullValue()));
+
+        // Convert it back to JSON
+        final String json = deleteWhitespace(casperSdk.deployToJson(deploy));
+
+        // Assert JSON written from CL Object matches original JSON ignoring whitespace
+        assertThat(json, is(deleteWhitespace(originalJson)));
+    }
+
+    @Test
+    void deployFromJsonString() throws IOException {
+
+        // Load the deploy from JSON
+        final String originalJson = IOUtils.toString(Objects.requireNonNull(getClass()
+                .getResourceAsStream(DEPLOY_TRANSFER_JSON)), StandardCharsets.UTF_8);
+
+        final Deploy deploy = casperSdk.deployFromJson(originalJson);
 
         assertThat(deploy, is(notNullValue()));
 
