@@ -13,6 +13,7 @@ public class Constants {
     public static final String CHAIN_GET_STATE_ROOT_HASH = "chain_get_state_root_hash";
     public static final String DEPLOY = "deploy";
     public static final String DEPLOY_HASH = "deploy_hash";
+    public static final int DEFAULT_GAS_PRICE = 1;
     public static final String EMPTY_STRING = "";
     public static final String ENTRY_POINT = "entry_point";
     public static final String HASH = "hash";
@@ -30,4 +31,15 @@ public class Constants {
     public static final String STATE_GET_BALANCE = "state_get_balance";
     public static final String STATE_GET_ITEM = "state_get_item";
     public static final String STATE_ROOT_HASH = "state_root_hash";
+
+    /** Default number of motes to pay for standard payments. */
+    public static final int STANDARD_PAYMENT_FOR_NATIVE_TRANSFERS = (int) 1e8;
+    /** Default number of motes to pay for standard delegation. */
+    public static final int STANDARD_PAYMENT_FOR_DELEGATION = (int) 3e9;
+    /** Default number of motes to pay for standard delegation withdrawal. */
+    public static final int STANDARD_PAYMENT_FOR_DELEGATION_WITHDRAWAL = (int) 3e9;
+    /** Default number of motes to pay for standard auction bid. */
+    public static final int STANDARD_PAYMENT_FOR_AUCTION_BID = (int) 3e9;
+    /** Default number of motes to pay for standard auction bid withdrawal. */
+    public static final int STANDARD_PAYMENT_FOR_AUCTION_BID_WITHDRAWAL = (int) 3e9;
 }

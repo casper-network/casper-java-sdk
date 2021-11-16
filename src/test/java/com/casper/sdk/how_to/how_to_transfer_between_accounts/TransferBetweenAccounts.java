@@ -23,25 +23,26 @@ import static org.hamcrest.core.Is.is;
 @Disabled // Remove this to run locally
 public class TransferBetweenAccounts extends Methods {
 
-    //Path to the NCTL utilities, change to mach your implementation
-    private final static String NCTL_HOME = "~/casper-node/utils/nctl";
-    //Create new instance of the SDK with default NCTL url and port
+    /** Create new instance of the SDK with default NCTL url and port */
     final CasperSdk casperSdk = new CasperSdk("http://localhost", 40101);
 
     @Test
     public void testDeploy() throws Throwable {
 
-        final KeyPairStreams nodeKeyOneStream = super.getNodeKeyPair(1, NCTL_HOME);
-        final KeyPair nodeOneKeyPair = casperSdk.loadKeyPair(nodeKeyOneStream.getPublicKeyIn(), nodeKeyOneStream.getPrivateKeyIn());
+        final KeyPairStreams nodeKeyOneStream = super.getNodeKeyPair(1);
+        final KeyPair nodeOneKeyPair = casperSdk.loadKeyPair(
+                nodeKeyOneStream.getPublicKeyIn(), nodeKeyOneStream.getPrivateKeyIn()
+        );
 
-        final KeyPairStreams nodeKeyTwoStream = super.getUserKeyPairStreams(2, NCTL_HOME);
-        final KeyPair nodeTwoKeyPair = casperSdk.loadKeyPair(nodeKeyTwoStream.getPublicKeyIn(), nodeKeyTwoStream.getPrivateKeyIn());
-        final CLPublicKey toPublicKey = casperSdk.toCLPublicKey(nodeTwoKeyPair.getPublic());
+        final KeyPairStreams nodeKeyTwoStream = super.getUserKeyPairStreams(2);
+        final KeyPair nodeTwoKeyPair = casperSdk.loadKeyPair(
+                nodeKeyTwoStream.getPublicKeyIn(), nodeKeyTwoStream.getPrivateKeyIn()
+        );
 
         // Make the session, a transfer from user one to user two
         final com.casper.sdk.types.Transfer transfer = casperSdk.newTransfer(
                 new BigInteger("2500000000"),
-                toPublicKey,
+                nodeTwoKeyPair.getPublic(),
                 1
         );
 
@@ -56,7 +57,8 @@ public class TransferBetweenAccounts extends Methods {
                         10,
                         Instant.now().toEpochMilli(),
                         DeployParams.DEFAULT_TTL,
-                        null),
+                        null
+                ),
                 transfer,
                 payment
         );

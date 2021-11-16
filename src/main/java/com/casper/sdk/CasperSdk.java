@@ -1,16 +1,19 @@
 package com.casper.sdk;
 
+import com.casper.sdk.exceptions.CasperException;
 import com.casper.sdk.exceptions.ValueNotFoundException;
 import com.casper.sdk.service.hash.HashService;
 import com.casper.sdk.service.http.rpc.HttpMethods;
 import com.casper.sdk.service.http.rpc.NodeClient;
 import com.casper.sdk.service.json.JsonConversionService;
 import com.casper.sdk.service.metrics.MetricsService;
+import com.casper.sdk.service.serialization.cltypes.CLValueBuilder;
 import com.casper.sdk.service.serialization.cltypes.TypesFactory;
 import com.casper.sdk.service.serialization.types.ByteSerializerFactory;
 import com.casper.sdk.service.serialization.util.ByteUtils;
 import com.casper.sdk.service.signing.SigningService;
 import com.casper.sdk.types.*;
+import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,6 +22,8 @@ import java.security.Key;
 import java.security.KeyPair;
 import java.security.PublicKey;
 import java.util.Map;
+
+import static com.casper.sdk.Constants.STANDARD_PAYMENT_FOR_DELEGATION;
 
 /**
  * Entry point into the SDK Exposes all permissible methods
@@ -48,7 +53,6 @@ public class CasperSdk {
     public String getAccountInfo(final PublicKey accountKey) {
         return nodeClient.getAccountInfo(signingService.toClPublicKey(accountKey).toAccountHex());
     }
-
 
     public ContractHash getContractHash(final PublicKey accountKey) throws Exception {
 
@@ -80,10 +84,6 @@ public class CasperSdk {
 
     public String getAccountHash(final PublicKey accountKey) {
         return ByteUtils.encodeHexString(hashService.getAccountHash(this.getPublicKeyBytes(accountKey)));
-    }
-
-    public String getAccountHash(final String accountKey) {
-        return hashService.getAccountHash(accountKey);
     }
 
     public String getAuctionInfo() {
@@ -120,6 +120,34 @@ public class CasperSdk {
         return this.jsonConversionService.fromJson(json, Deploy.class);
     }
 
+    /**
+     * Creates a standard delegation deploy
+     *
+     * @param deployParams       standard parameters used when creating a deploy
+     * @param amount             the  amount in motes to be delegated.
+     * @param delegatorPublicKey public key of delegator.
+     * @param validatorPublicKey public key of validator
+     * @param wasmIn             input stream of a compiled delegate.wasm.
+     * @return a standard delegation deploy
+     */
+    public Deploy makeValidatorDelegation(
+            final DeployParams deployParams,
+            final Number amount,
+            final PublicKey delegatorPublicKey,
+            final PublicKey validatorPublicKey,
+            final InputStream wasmIn) {
+
+        return makeDeploy(deployParams,
+                new ModuleBytes(readWasm(wasmIn),
+                        new DeployNamedArgBuilder()
+                                .add("amount", CLValueBuilder.u512(amount))
+                                .add("delegator", CLValueBuilder.publicKey(delegatorPublicKey))
+                                .add("validator", CLValueBuilder.publicKey(validatorPublicKey))
+                                .build()
+                ),
+                this.standardPayment(STANDARD_PAYMENT_FOR_DELEGATION)
+        );
+    }
 
     /**
      * Construct new unsigned deploy for transfer purpose.
@@ -138,7 +166,6 @@ public class CasperSdk {
             throw new IllegalArgumentException("The session is not a Transfer ExecutableDeployItem");
         }
     }
-
 
     /**
      * Construct new unsigned deploy.
@@ -199,7 +226,8 @@ public class CasperSdk {
 
     /**
      * Loads a single public or private key from a .pem in the provided stream
-     * @param in the stream for a .pem file
+     *
+     * @param in  the stream for a .pem file
      * @param <T> the type of the key
      * @return the loaded key
      */
@@ -236,8 +264,8 @@ public class CasperSdk {
      * @param id     the optional ID name argument value
      * @return the newly created transfer
      */
-    public Transfer newTransfer(final Number amount, final CLPublicKey target, final Number id) {
-        return deployService.newTransfer(amount, target, id);
+    public Transfer newTransfer(final Number amount, final PublicKey target, final Number id) {
+        return deployService.newTransfer(amount, toCLPublicKey(target), id);
     }
 
     /**
@@ -336,5 +364,14 @@ public class CasperSdk {
     public String getRpcSchema() {
         return nodeClient.getRpcSchema();
     }
+
+    private byte[] readWasm(final InputStream wasmIn) {
+        try {
+            return IOUtils.toByteArray(wasmIn);
+        } catch (IOException e) {
+            throw new CasperException("Error loading wasm", e);
+        }
+    }
+
 
 }

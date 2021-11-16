@@ -3,7 +3,10 @@ package com.casper.sdk.how_to.delegate_funds_to_a_validator;
 import com.casper.sdk.CasperSdk;
 import com.casper.sdk.KeyPairStreams;
 import com.casper.sdk.how_to.common.Methods;
-import com.casper.sdk.types.*;
+import com.casper.sdk.types.Deploy;
+import com.casper.sdk.types.DeployParams;
+import com.casper.sdk.types.Digest;
+import com.casper.sdk.types.ModuleBytes;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -18,25 +21,23 @@ import static org.hamcrest.core.Is.is;
 public class TransferToValidator extends Methods {
 
     //Path to the NCTL utilities, change to mach your implementation
-    private final static String NCTL_HOME = "~/casper-node/utils/nctl";
+
     //Create new instance of the SDK with default NCTL url and port
     final CasperSdk casperSdk = new CasperSdk("http://localhost", 40101);
 
     @Test
     public void testTransferToValidator() throws IOException {
 
-        final KeyPairStreams nodeKeyOneStream = super.getNodeKeyPair(1, NCTL_HOME);
+        final KeyPairStreams nodeKeyOneStream = super.getNodeKeyPair(1);
         final KeyPair delegator = casperSdk.loadKeyPair(nodeKeyOneStream.getPublicKeyIn(), nodeKeyOneStream.getPrivateKeyIn());
 
-        final KeyPairStreams nodeKeyTwoStream = super.getUserKeyPairStreams(2, NCTL_HOME);
+        final KeyPairStreams nodeKeyTwoStream = super.getUserKeyPairStreams(2);
         final KeyPair validator = casperSdk.loadKeyPair(nodeKeyTwoStream.getPublicKeyIn(), nodeKeyTwoStream.getPrivateKeyIn());
-
-        final CLPublicKey toPublicKey = casperSdk.toCLPublicKey(validator.getPublic());
 
         // Make the session, a transfer from user one to user two
         final com.casper.sdk.types.Transfer transfer = casperSdk.newTransfer(
                 new BigInteger("2500000000"),
-                toPublicKey,
+                validator.getPublic(),
                 1
         );
 
@@ -67,8 +68,6 @@ public class TransferToValidator extends Methods {
 
 
     }
-
-
 
 
 }

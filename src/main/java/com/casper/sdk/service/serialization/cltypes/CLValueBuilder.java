@@ -6,6 +6,7 @@ import com.casper.sdk.types.*;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.math.BigInteger;
+import java.security.PublicKey;
 
 import static com.casper.sdk.service.serialization.util.ByteUtils.toByteArray;
 
@@ -67,6 +68,10 @@ public class CLValueBuilder {
 
     public static CLKeyValue hashKey(final byte[] value) {
         return key(ByteUtils.concat(toByteArray(CLKeyInfo.KeyType.HASH_ID.getTag()), value));
+    }
+
+    public static CLValue publicKey(final PublicKey publicKey) {
+        return buildCLValue(CLType.PUBLIC_KEY, publicKey);
     }
 
     public static CLKeyValue uRefKey(final byte[] value) {

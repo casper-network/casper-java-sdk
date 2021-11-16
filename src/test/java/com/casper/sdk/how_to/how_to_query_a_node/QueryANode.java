@@ -19,9 +19,9 @@ import java.security.PublicKey;
 @Disabled // Remove this to run locally
 public class QueryANode extends Methods {
 
-    //Path to the NCTL utilities, change to mach your implementation
+    /** Path to the NCTL utilities, change to mach your implementation */
     private final static String NCTL_HOME = "~/casper-node/utils/nctl";
-    //Create new instance of the SDK with default NCTL url and port
+    /** Create new instance of the SDK with default NCTL url and port */
     final CasperSdk casperSdk = new CasperSdk("http://localhost", 40101);
 
     @Test
@@ -62,19 +62,17 @@ public class QueryANode extends Methods {
     @Test
     public void testGetAccountMainPurseURef() throws Throwable {
 
-        final InputStream publicKeyIn = super.getUserKeyPairStreams(1, NCTL_HOME).getPublicKeyIn();
+        final InputStream publicKeyIn = super.getUserKeyPairStreams(1).getPublicKeyIn();
         final PublicKey publicKey = casperSdk.loadKey(publicKeyIn);
-
         final URef accountMainPurseURef = casperSdk.getAccountMainPurseURef(publicKey);
 
         assert (accountMainPurseURef != null);
-
     }
 
     @Test
     public void testGetAccountHash() throws Throwable {
 
-        final KeyPairStreams userKeyPairStreams = super.getUserKeyPairStreams(1, NCTL_HOME);
+        final KeyPairStreams userKeyPairStreams = super.getUserKeyPairStreams(1);
         final PublicKey publicKey = casperSdk.loadKey(userKeyPairStreams.getPublicKeyIn());
         final String accountHash = casperSdk.getAccountHash(publicKey);
 
@@ -85,7 +83,9 @@ public class QueryANode extends Methods {
     @Test
     public void testGetAccountBalance() throws Throwable {
 
-        final PublicKey publicKey = casperSdk.loadKey(super.getUserKeyPairStreams(1, NCTL_HOME).getPublicKeyIn());
+        final PublicKey publicKey = casperSdk.loadKey(
+                super.getUserKeyPairStreams(1).getPublicKeyIn()
+        );
         final BigInteger accountBalance = casperSdk.getAccountBalance(publicKey);
 
         assert (accountBalance != null);
@@ -95,7 +95,9 @@ public class QueryANode extends Methods {
     @Test
     public void testGetAccountInfo() throws Throwable {
 
-        final PublicKey publicKey = casperSdk.loadKey(super.getUserKeyPairStreams(1, NCTL_HOME).getPublicKeyIn());
+        final PublicKey publicKey = casperSdk.loadKey(
+                super.getUserKeyPairStreams(1).getPublicKeyIn()
+        );
         final String accountInfo = casperSdk.getAccountInfo(publicKey);
 
         assert (accountInfo != null);
