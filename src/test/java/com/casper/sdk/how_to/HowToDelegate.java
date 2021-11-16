@@ -3,7 +3,6 @@ package com.casper.sdk.how_to;
 
 import com.casper.sdk.CasperSdk;
 import com.casper.sdk.KeyPairStreams;
-import com.casper.sdk.how_to.common.Methods;
 import com.casper.sdk.types.Deploy;
 import com.casper.sdk.types.DeployParams;
 import com.casper.sdk.types.Digest;
@@ -15,12 +14,13 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 
 import static com.casper.sdk.Constants.DEFAULT_GAS_PRICE;
+import static com.casper.sdk.how_to.HowToUtils.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
 
 @Disabled // TODO Remove this comment to tests against a network
-public class HowToDelegate extends Methods {
+public class HowToDelegate {
 
     /** Create new instance of the SDK with default NCTL url and port */
     final CasperSdk casperSdk = new CasperSdk("http://localhost", 40101);

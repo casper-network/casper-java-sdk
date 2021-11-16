@@ -1,4 +1,4 @@
-package com.casper.sdk.how_to.common;
+package com.casper.sdk.how_to;
 
 import com.casper.sdk.KeyPairStreams;
 
@@ -8,14 +8,14 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * Shared methods for the How-Tos
+ * Utility methods for the How-Tos
  */
-public abstract class Methods {
+final class HowToUtils {
 
     private static final String NCTL_HOME = "nctl.home";
     private static final String DEFAULT_NCTL_HOME = "~/casper-node/utils/nctl";
 
-    protected KeyPairStreams getUserKeyPairStreams(final int userNumber) throws IOException {
+    static KeyPairStreams getUserKeyPairStreams(final int userNumber) throws IOException {
 
         final String userNPath = String.format("%s/assets/net-1/users/user-%d", getNctlHome(), userNumber);
 
@@ -25,13 +25,13 @@ public abstract class Methods {
         );
     }
 
-    protected String getNctlHome() {
+    static String getNctlHome() {
         final String nctlHome = System.getProperty(NCTL_HOME, DEFAULT_NCTL_HOME);
         // Replace user home '~' tilda with full path to user home directory
         return nctlHome.replaceFirst("^~", System.getProperty("user.home"));
     }
 
-    protected KeyPairStreams getNodeKeyPair(final int nodeNumber) throws IOException {
+    static KeyPairStreams getNodeKeyPair(final int nodeNumber) throws IOException {
 
         final String userNPath = String.format("%s/assets/net-1/nodes/node-%d/keys", getNctlHome(), nodeNumber);
 
@@ -41,7 +41,7 @@ public abstract class Methods {
         );
     }
 
-    protected InputStream getWasmIn(String wasmPath) {
-        return getClass().getResourceAsStream(getNctlHome() + wasmPath);
+    static InputStream getWasmIn(String wasmPath) {
+        return HowToUtils.class.getResourceAsStream(getNctlHome() + wasmPath);
     }
 }

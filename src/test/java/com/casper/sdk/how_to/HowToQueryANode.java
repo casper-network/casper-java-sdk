@@ -1,8 +1,7 @@
-package com.casper.sdk.how_to.how_to_query_a_node;
+package com.casper.sdk.how_to;
 
 import com.casper.sdk.CasperSdk;
 import com.casper.sdk.KeyPairStreams;
-import com.casper.sdk.how_to.common.Methods;
 import com.casper.sdk.types.URef;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -11,13 +10,15 @@ import java.io.InputStream;
 import java.math.BigInteger;
 import java.security.PublicKey;
 
+import static com.casper.sdk.how_to.HowToUtils.getUserKeyPairStreams;
+
 /**
  * Uses Local Network Testing network/node control to demonstrate querying a node
  *
  * @see <a href="https://docs.casperlabs.io/en/latest/dapp-dev-guide/setup-nctl.html"></a>
  */
 @Disabled // Remove this to run locally
-public class QueryANode extends Methods {
+public class HowToQueryANode {
 
     /** Path to the NCTL utilities, change to mach your implementation */
     private final static String NCTL_HOME = "~/casper-node/utils/nctl";
@@ -62,7 +63,7 @@ public class QueryANode extends Methods {
     @Test
     public void testGetAccountMainPurseURef() throws Throwable {
 
-        final InputStream publicKeyIn = super.getUserKeyPairStreams(1).getPublicKeyIn();
+        final InputStream publicKeyIn = getUserKeyPairStreams(1).getPublicKeyIn();
         final PublicKey publicKey = casperSdk.loadKey(publicKeyIn);
         final URef accountMainPurseURef = casperSdk.getAccountMainPurseURef(publicKey);
 
@@ -72,7 +73,7 @@ public class QueryANode extends Methods {
     @Test
     public void testGetAccountHash() throws Throwable {
 
-        final KeyPairStreams userKeyPairStreams = super.getUserKeyPairStreams(1);
+        final KeyPairStreams userKeyPairStreams = getUserKeyPairStreams(1);
         final PublicKey publicKey = casperSdk.loadKey(userKeyPairStreams.getPublicKeyIn());
         final String accountHash = casperSdk.getAccountHash(publicKey);
 
@@ -84,7 +85,7 @@ public class QueryANode extends Methods {
     public void testGetAccountBalance() throws Throwable {
 
         final PublicKey publicKey = casperSdk.loadKey(
-                super.getUserKeyPairStreams(1).getPublicKeyIn()
+                getUserKeyPairStreams(1).getPublicKeyIn()
         );
         final BigInteger accountBalance = casperSdk.getAccountBalance(publicKey);
 
@@ -96,7 +97,7 @@ public class QueryANode extends Methods {
     public void testGetAccountInfo() throws Throwable {
 
         final PublicKey publicKey = casperSdk.loadKey(
-                super.getUserKeyPairStreams(1).getPublicKeyIn()
+                getUserKeyPairStreams(1).getPublicKeyIn()
         );
         final String accountInfo = casperSdk.getAccountInfo(publicKey);
 

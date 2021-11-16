@@ -1,8 +1,7 @@
-package com.casper.sdk.how_to.how_to_transfer_between_accounts;
+package com.casper.sdk.how_to;
 
 import com.casper.sdk.CasperSdk;
 import com.casper.sdk.KeyPairStreams;
-import com.casper.sdk.how_to.common.Methods;
 import com.casper.sdk.types.*;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -11,6 +10,8 @@ import java.math.BigInteger;
 import java.security.KeyPair;
 import java.time.Instant;
 
+import static com.casper.sdk.how_to.HowToUtils.getNodeKeyPair;
+import static com.casper.sdk.how_to.HowToUtils.getUserKeyPairStreams;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -21,7 +22,7 @@ import static org.hamcrest.core.Is.is;
  * @see <a href="https://docs.casperlabs.io/en/latest/dapp-dev-guide/setup-nctl.html"></a>
  */
 @Disabled // Remove this to run locally
-public class TransferBetweenAccounts extends Methods {
+public class HowToTransferBetweenAccounts {
 
     /** Create new instance of the SDK with default NCTL url and port */
     final CasperSdk casperSdk = new CasperSdk("http://localhost", 40101);
@@ -29,18 +30,18 @@ public class TransferBetweenAccounts extends Methods {
     @Test
     public void testDeploy() throws Throwable {
 
-        final KeyPairStreams nodeKeyOneStream = super.getNodeKeyPair(1);
+        final KeyPairStreams nodeKeyOneStream = getNodeKeyPair(1);
         final KeyPair nodeOneKeyPair = casperSdk.loadKeyPair(
                 nodeKeyOneStream.getPublicKeyIn(), nodeKeyOneStream.getPrivateKeyIn()
         );
 
-        final KeyPairStreams nodeKeyTwoStream = super.getUserKeyPairStreams(2);
+        final KeyPairStreams nodeKeyTwoStream = getUserKeyPairStreams(2);
         final KeyPair nodeTwoKeyPair = casperSdk.loadKeyPair(
                 nodeKeyTwoStream.getPublicKeyIn(), nodeKeyTwoStream.getPrivateKeyIn()
         );
 
         // Make the session, a transfer from user one to user two
-        final com.casper.sdk.types.Transfer transfer = casperSdk.newTransfer(
+        final Transfer transfer = casperSdk.newTransfer(
                 new BigInteger("2500000000"),
                 nodeTwoKeyPair.getPublic(),
                 1
