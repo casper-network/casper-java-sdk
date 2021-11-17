@@ -6,7 +6,6 @@ import com.casper.sdk.KeyPairStreams;
 import com.casper.sdk.types.Deploy;
 import com.casper.sdk.types.DeployParams;
 import com.casper.sdk.types.Digest;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.security.KeyPair;
@@ -26,7 +25,7 @@ public class HowToUndelegate {
     final CasperSdk casperSdk = new CasperSdk("http://localhost", 40101);
 
     /**
-     * This test gives an example of how to validate an udelegation
+     * This test gives an example of how to validate an undelegation
      */
     @Test
     void howToUndelegate() throws Exception {

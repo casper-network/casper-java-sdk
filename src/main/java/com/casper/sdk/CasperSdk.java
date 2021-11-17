@@ -23,8 +23,7 @@ import java.security.KeyPair;
 import java.security.PublicKey;
 import java.util.Map;
 
-import static com.casper.sdk.Constants.STANDARD_PAYMENT_FOR_DELEGATION;
-import static com.casper.sdk.Constants.STANDARD_PAYMENT_FOR_DELEGATION_WITHDRAWAL;
+import static com.casper.sdk.Constants.*;
 
 /**
  * Entry point into the SDK Exposes all permissible methods
@@ -402,6 +401,37 @@ public class CasperSdk {
         } catch (IOException e) {
             throw new CasperException("Error loading wasm", e);
         }
+    }
+
+    /**
+     * Creates a validator auction bid deploy.
+     * <p>
+     * :param params: :param amount: Amount in motes to be submitted as an auction bid. :param delegation_rate: Pe.
+     * :param public_key: Public key of validator. :param path_to_wasm: P
+     *
+     * @param deployParams       standard parameters used when creating a deploy.
+     * @param amount             amount in motes to be submitted as an auction bid.
+     * @param delegationRate     percentage charged to a delegator for provided service
+     * @param validatorPublicKey public key of validator
+     * @param wasmIn             stream of compiled delegate.wasm
+     * @return a validator auction bid deploy.
+     */
+    public Deploy makeValidatorAuctionBid(final DeployParams deployParams,
+                                          final Number amount,
+                                          final int delegationRate,
+                                          final PublicKey validatorPublicKey,
+                                          final InputStream wasmIn) {
+
+        return makeDeploy(deployParams,
+                new ModuleBytes(readWasm(wasmIn),
+                        new DeployNamedArgBuilder()
+                                .add("amount", CLValueBuilder.u512(amount))
+                                .add("delegation_rate", CLValueBuilder.u8(delegationRate))
+                                .add("public_key", CLValueBuilder.publicKey(validatorPublicKey))
+                                .build()
+                ),
+                this.standardPayment(STANDARD_PAYMENT_FOR_AUCTION_BID)
+        );
     }
 }
 

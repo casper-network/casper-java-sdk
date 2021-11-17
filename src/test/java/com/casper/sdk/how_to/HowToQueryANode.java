@@ -20,8 +20,6 @@ import static com.casper.sdk.how_to.HowToUtils.getUserKeyPairStreams;
 @Disabled // Remove this to run locally
 public class HowToQueryANode {
 
-    /** Path to the NCTL utilities, change to mach your implementation */
-    private final static String NCTL_HOME = "~/casper-node/utils/nctl";
     /** Create new instance of the SDK with default NCTL url and port */
     final CasperSdk casperSdk = new CasperSdk("http://localhost", 40101);
 

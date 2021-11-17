@@ -39,6 +39,10 @@ public class CLValueBuilder {
         return buildCLValue(CLType.STRING, value);
     }
 
+    public static CLValue u8(final Object value) {
+        return buildCLValue(CLType.U8, value);
+    }
+
     public static CLValue u32(final Object value) {
         return buildCLValue(CLType.U32, value);
     }
@@ -94,4 +98,6 @@ public class CLValueBuilder {
             return 0;
         }
     }
+
+
 }
