@@ -6,6 +6,7 @@ import com.casper.sdk.KeyPairStreams;
 import com.casper.sdk.types.Deploy;
 import com.casper.sdk.types.DeployParams;
 import com.casper.sdk.types.Digest;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.security.KeyPair;
@@ -18,7 +19,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
 
-//@Disabled // Remove this comment to test against a network
+@Disabled // Remove this comment to test against a network
 public class HowToUndelegate {
 
     /** Create new instance of the SDK with default NCTL url and port */
@@ -31,11 +32,15 @@ public class HowToUndelegate {
     void howToUndelegate() throws Exception {
 
         final String pathToContract = getNctlHome() + "/assets/net-1/bin/auction/undelegate.wasm";
+
+
+        // Set counter-parties.
         final KeyPairStreams validatorKeyPair = getNodeKeyPair(1);
         final KeyPairStreams delegatorKeyPair = getUserKeyPairStreams(1);
         final PublicKey delegatorPublicKey = casperSdk.loadKey(delegatorKeyPair.getPublicKeyIn());
         final PrivateKey delegatorPrivateKey = casperSdk.loadKey(delegatorKeyPair.getPrivateKeyIn());
 
+        // Set deploy
         Deploy deploy = casperSdk.makeValidatorDelegationWithdrawal(
 
                 new DeployParams(
@@ -54,10 +59,10 @@ public class HowToUndelegate {
 
         assertThat(deploy, is(notNullValue()));
 
-        // Sign the deploy
+        // Approve the deploy
         deploy = casperSdk.signDeploy(deploy, new KeyPair(delegatorPublicKey, delegatorPrivateKey));
 
-        // Put the deploy
+        // Dispatch deploy to a node.
         final Digest digest = casperSdk.putDeploy(deploy);
 
         // Assert digest created

@@ -22,6 +22,7 @@ import java.security.Key;
 import java.security.KeyPair;
 import java.security.PublicKey;
 import java.util.Map;
+import java.util.Random;
 
 import static com.casper.sdk.Constants.*;
 
@@ -59,10 +60,10 @@ public class CasperSdk {
         final String accountInfo = getAccountInfo(accountKey);
         //noinspection rawtypes
         final Map map = jsonConversionService.fromJson(accountInfo, Map.class);
-        final Object namedKeys = map.get("named_keys");
+        final Object namedKeys = map.get(NAMED_KEYS);
         if (namedKeys instanceof Map) {
             //noinspection rawtypes
-            final String erc20 = (String) ((Map) namedKeys).get("ERC20");
+            final String erc20 = (String) ((Map) namedKeys).get(ERC_20);
             if (erc20 != null && erc20.length() > 5) {
                 return new ContractHash(ByteUtils.decodeHex(erc20.substring(5)));
             }
@@ -140,15 +141,14 @@ public class CasperSdk {
         return makeDeploy(deployParams,
                 new ModuleBytes(readWasm(wasmIn),
                         new DeployNamedArgBuilder()
-                                .add("amount", CLValueBuilder.u512(amount))
-                                .add("delegator", CLValueBuilder.publicKey(delegatorPublicKey))
-                                .add("validator", CLValueBuilder.publicKey(validatorPublicKey))
+                                .add(AMOUNT, CLValueBuilder.u512(amount))
+                                .add(DELEGATOR, CLValueBuilder.publicKey(delegatorPublicKey))
+                                .add(VALIDATOR, CLValueBuilder.publicKey(validatorPublicKey))
                                 .build()
                 ),
                 this.standardPayment(STANDARD_PAYMENT_FOR_DELEGATION)
         );
     }
-
 
     /**
      * Creates a standard withdraw delegation deploy.
@@ -169,15 +169,14 @@ public class CasperSdk {
         return makeDeploy(deployParams,
                 new ModuleBytes(readWasm(wasmIn),
                         new DeployNamedArgBuilder()
-                                .add("amount", CLValueBuilder.u512(amount))
-                                .add("delegator", CLValueBuilder.publicKey(delegatorPublicKey))
-                                .add("validator", CLValueBuilder.publicKey(validatorPublicKey))
+                                .add(AMOUNT, CLValueBuilder.u512(amount))
+                                .add(DELEGATOR, CLValueBuilder.publicKey(delegatorPublicKey))
+                                .add(VALIDATOR, CLValueBuilder.publicKey(validatorPublicKey))
                                 .build()
                 ),
                 this.standardPayment(STANDARD_PAYMENT_FOR_DELEGATION_WITHDRAWAL)
         );
     }
-
 
     /**
      * Construct new unsigned deploy for transfer purpose.
@@ -405,9 +404,6 @@ public class CasperSdk {
 
     /**
      * Creates a validator auction bid deploy.
-     * <p>
-     * :param params: :param amount: Amount in motes to be submitted as an auction bid. :param delegation_rate: Pe.
-     * :param public_key: Public key of validator. :param path_to_wasm: P
      *
      * @param deployParams       standard parameters used when creating a deploy.
      * @param amount             amount in motes to be submitted as an auction bid.
@@ -421,16 +417,69 @@ public class CasperSdk {
                                           final int delegationRate,
                                           final PublicKey validatorPublicKey,
                                           final InputStream wasmIn) {
-
-        return makeDeploy(deployParams,
+        return makeDeploy(
+                deployParams,
                 new ModuleBytes(readWasm(wasmIn),
                         new DeployNamedArgBuilder()
-                                .add("amount", CLValueBuilder.u512(amount))
-                                .add("delegation_rate", CLValueBuilder.u8(delegationRate))
-                                .add("public_key", CLValueBuilder.publicKey(validatorPublicKey))
+                                .add(AMOUNT, CLValueBuilder.u512(amount))
+                                .add(DELEGATION_RATE,
+                                        CLValueBuilder.u8(delegationRate))
+                                .add(PUBLIC_KEY, CLValueBuilder.publicKey(validatorPublicKey))
                                 .build()
                 ),
                 this.standardPayment(STANDARD_PAYMENT_FOR_AUCTION_BID)
+        );
+    }
+
+    /**
+     * Creates a native transfer deploy.
+     *
+     * @param deployParams  standard parameters used when creating a deploy.
+     * @param amount        amount in motes to be transferred.
+     * @param target        target account public key.
+     * @param correlationId identifier used to correlate transfer to internal systems.
+     * @return native transfer deploy.
+     */
+    public Deploy makeNativeTransfer(final DeployParams deployParams,
+                                     final Number amount,
+                                     final PublicKey target,
+                                     final Number correlationId) {
+        return makeDeploy(
+                deployParams,
+                newTransfer(amount, target, correlationId != null ? correlationId : getRandomCorrelationId()),
+                standardPayment(STANDARD_PAYMENT_FOR_NATIVE_TRANSFERS)
+        );
+    }
+
+    private int getRandomCorrelationId() {
+        return new Random().nextInt(MAX_TRANSFER_ID - 1) + 1;
+    }
+
+    /**
+     * Creates an auction bid withdraw delegation deploy.
+     *
+     * @param deployParams       standard parameters used when creating a deploy.
+     * @param amount             amount in motes to be withdrawn from auction.
+     * @param validatorPublicKey public key of validator.
+     * @param wasmIn             input stream of  compiled delegate.wasm.
+     * @param unbondPurse        validator's * purse to which to withdraw fund
+     * @return an auction bid withdraw delegation deploy.
+     */
+    public Deploy makeValidatorAuctionBidWithdrawal(final DeployParams deployParams,
+                                                    final Number amount,
+                                                    final PublicKey validatorPublicKey,
+                                                    final InputStream wasmIn,
+                                                    final URef unbondPurse) {
+
+        return makeDeploy(
+                deployParams,
+                new ModuleBytes(readWasm(wasmIn),
+                        new DeployNamedArgBuilder()
+                                .add(AMOUNT, CLValueBuilder.u32(amount))
+                                .add(PUBLIC_KEY, CLValueBuilder.publicKey(validatorPublicKey))
+                                .add(UNBOND_PURSE, CLValueBuilder.uRefKey(unbondPurse.getBytes()))
+                                .build()),
+                standardPayment(STANDARD_PAYMENT_FOR_AUCTION_BID_WITHDRAWAL)
         );
     }
 }

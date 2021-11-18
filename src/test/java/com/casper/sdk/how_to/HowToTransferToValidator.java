@@ -5,13 +5,13 @@ import com.casper.sdk.KeyPairStreams;
 import com.casper.sdk.types.Deploy;
 import com.casper.sdk.types.DeployParams;
 import com.casper.sdk.types.Digest;
-import com.casper.sdk.types.ModuleBytes;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.math.BigInteger;
 import java.security.KeyPair;
 import java.time.Instant;
+import java.util.Random;
 
 import static com.casper.sdk.how_to.HowToUtils.getNodeKeyPair;
 import static com.casper.sdk.how_to.HowToUtils.getUserKeyPairStreams;
@@ -19,6 +19,7 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
+@Disabled // Remove this to run locally
 public class HowToTransferToValidator {
 
     /** Create new instance of the SDK with default NCTL url and port */
@@ -30,21 +31,12 @@ public class HowToTransferToValidator {
         final KeyPairStreams nodeKeyOneStream = getNodeKeyPair(1);
         final KeyPair delegator = casperSdk.loadKeyPair(nodeKeyOneStream.getPublicKeyIn(), nodeKeyOneStream.getPrivateKeyIn());
 
-        final KeyPairStreams nodeKeyTwoStream = getUserKeyPairStreams(2);
-        final KeyPair validator = casperSdk.loadKeyPair(nodeKeyTwoStream.getPublicKeyIn(), nodeKeyTwoStream.getPrivateKeyIn());
+        final KeyPairStreams counterPartyTwoStream = getUserKeyPairStreams(2);
+        final KeyPair counterPartyTwoKeyPair = casperSdk.loadKeyPair(counterPartyTwoStream.getPublicKeyIn(), counterPartyTwoStream.getPrivateKeyIn());
+        final Number amount = 2.5e9;
+        final int correlationId = new Random().nextInt();
 
-        // Make the session, a transfer from user one to user two
-        final com.casper.sdk.types.Transfer transfer = casperSdk.newTransfer(
-                new BigInteger("2500000000"),
-                validator.getPublic(),
-                1
-        );
-
-        // Make a payment
-        final ModuleBytes payment = casperSdk.standardPayment(new BigInteger("10000000000"));
-
-        // Create the transfer
-        final Deploy deploy = casperSdk.makeTransferDeploy(
+        final Deploy deploy = casperSdk.makeNativeTransfer(
                 new DeployParams(
                         delegator.getPublic(),
                         "casper-net-1",
@@ -52,12 +44,13 @@ public class HowToTransferToValidator {
                         Instant.now().toEpochMilli(),
                         DeployParams.DEFAULT_TTL,
                         null),
-                transfer,
-                payment
+                amount,
+                counterPartyTwoKeyPair.getPublic(),
+                correlationId
         );
 
         casperSdk.signDeploy(deploy, delegator);
-        casperSdk.signDeploy(deploy, validator);
+        casperSdk.signDeploy(deploy, counterPartyTwoKeyPair);
 
         final String json = casperSdk.deployToJson(deploy);
         assertThat(json, is(notNullValue()));
