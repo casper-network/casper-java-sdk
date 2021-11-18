@@ -1,5 +1,8 @@
-package com.casper.sdk;
+package com.casper.sdk.how_to;
 
+import com.casper.sdk.CasperSdk;
+import com.casper.sdk.Constants;
+import com.casper.sdk.KeyPairStreams;
 import com.casper.sdk.service.serialization.cltypes.CLValueBuilder;
 import com.casper.sdk.types.*;
 import org.junit.jupiter.api.Disabled;
@@ -10,7 +13,9 @@ import java.math.BigInteger;
 import java.security.KeyPair;
 import java.time.Instant;
 
-import static com.casper.sdk.IntegrationTestUtils.*;
+import static com.casper.sdk.Constants.AMOUNT;
+import static com.casper.sdk.Constants.RECIPIENT;
+import static com.casper.sdk.how_to.HowToUtils.getUserKeyPairStreams;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.Is.is;
@@ -19,7 +24,7 @@ import static org.hamcrest.core.Is.is;
  * Integration tests for invoking a contract
  */
 @Disabled
-public class InvokeContractIntTest {
+public class HowToInvokeAContract {
 
     private static final long AMOUNT_TO_TRANSFER = 2000000000L;
 
@@ -27,7 +32,7 @@ public class InvokeContractIntTest {
      * Test that gives an example of using a
      */
     @Test
-    void invokeContract() throws Throwable {
+    void howToInvokeAContract() throws Throwable {
 
         // Step 1: Set casper node client.
         final CasperSdk casperSdk = new CasperSdk("http://localhost", 11101);
@@ -56,10 +61,10 @@ public class InvokeContractIntTest {
                         null),
                 new StoredContractByHash(
                         contractHash,
-                        "transfer",
+                        Constants.TRANSFER,
                         new DeployNamedArgBuilder()
-                                .add("amount", CLValueBuilder.u256(AMOUNT_TO_TRANSFER))
-                                .add("recipient", CLValueBuilder.byteArray(userTwoKeyPair.getPublic()))
+                                .add(AMOUNT, CLValueBuilder.u256(AMOUNT_TO_TRANSFER))
+                                .add(RECIPIENT, CLValueBuilder.byteArray(userTwoKeyPair.getPublic()))
                                 .build()),
                 payment
         );
@@ -71,7 +76,7 @@ public class InvokeContractIntTest {
         // Assert Approvals
         assertThat(signedDeploy.getApprovals().size(), is(2));
         final DeployApproval approval = signedDeploy.getApprovals().iterator().next();
-        assertThat(approval.getSigner(),is(casperSdk.toCLPublicKey(userTwoKeyPair.getPublic())));
+        assertThat(approval.getSigner(), is(casperSdk.toCLPublicKey(userTwoKeyPair.getPublic())));
 
         final Digest digest = casperSdk.putDeploy(deploy);
 
@@ -80,12 +85,12 @@ public class InvokeContractIntTest {
 
 
     private KeyPair geUserKeyPair(final CasperSdk casperSdk, final int userNumber) throws IOException {
-        final KeyPairStreams streams = geUserKeyPairStreams(userNumber);
+        final KeyPairStreams streams = getUserKeyPairStreams(userNumber);
         return casperSdk.loadKeyPair(streams.getPublicKeyIn(), streams.getPrivateKeyIn());
     }
 
     private KeyPair getNodeKeyPair(final CasperSdk casperSdk, final int nodeNumber) throws IOException {
-        final KeyPairStreams streams = getNodeKeyPairSteams(nodeNumber);
+        final KeyPairStreams streams = getUserKeyPairStreams(nodeNumber);
         return casperSdk.loadKeyPair(streams.getPublicKeyIn(), streams.getPrivateKeyIn());
     }
 }

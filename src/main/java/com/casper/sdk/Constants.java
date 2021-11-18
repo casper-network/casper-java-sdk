@@ -33,6 +33,7 @@ public class Constants {
     public static final String PATH = "path";
     public static final String PUBLIC_KEY = "public_key";
     public static final String PURSE_UREF = "purse_uref";
+    public static final String RECIPIENT = "recipient";
     public static final String RESULT = "result";
     public static final String RPC_DISCOVER = "rpc.discover";
     public static final String STATE_GET_AUCTION_INFO = "state_get_auction_info";
@@ -49,6 +50,7 @@ public class Constants {
     public static final int STANDARD_PAYMENT_FOR_AUCTION_BID = (int) 3e9;
     /** Default number of motes to pay for standard auction bid withdrawal. */
     public static final int STANDARD_PAYMENT_FOR_AUCTION_BID_WITHDRAWAL = (int) 3e9;
+    public static final String TRANSFER = "transfer";
     public static final String VALIDATOR = "validator";
     public static final String UNBOND_PURSE = "unbond_purse";
 }
