@@ -1,16 +1,16 @@
 package com.casper.sdk.types;
 
+import java.security.Key;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-import java.security.PublicKey;
 
 public class DeployParams {
     /** The default ttl value is 1800000, which is 30 minutes in milliseconds */
     public static final long DEFAULT_TTL = 1800000;
 
-    /** The public key of the account */
-    private final PublicKey accountPublicKey;
+    /** The key of the account */
+    private final Key accountKey;
     /** Name of the chain, to avoid the `Deploy` from being accidentally or maliciously included in a different chain. */
     private final String chainName;
     /** Conversion rate between the cost of Wasm opcodes and the motes sent by the payment code. */
@@ -25,20 +25,20 @@ public class DeployParams {
     /**
      * Container for `Deploy` construction options.
      *
-     * @param accountPublicKey the account public key
-     * @param chainName        the name of the chain
-     * @param gasPrice         the gas price
-     * @param timestamp        the time stamp
-     * @param ttl              the time to live
-     * @param dependencies     the dependencies
+     * @param accountKey   the account public key
+     * @param chainName    the name of the chain
+     * @param gasPrice     the gas price
+     * @param timestamp    the time stamp
+     * @param ttl          the time to live
+     * @param dependencies the dependencies
      */
-    public DeployParams(final java.security.PublicKey accountPublicKey,
+    public DeployParams(final java.security.Key accountKey,
                         final String chainName,
                         final Number gasPrice,
                         final Long timestamp,
                         final Long ttl,
                         final List<Digest> dependencies) {
-        this.accountPublicKey = accountPublicKey;
+        this.accountKey = accountKey;
         this.chainName = chainName;
         this.gasPrice = gasPrice != null ? gasPrice.intValue() : 1;
         if (timestamp == null) {
@@ -50,8 +50,8 @@ public class DeployParams {
         this.dependencies = dependencies != null ? dependencies : new ArrayList<>();
     }
 
-    public PublicKey getAccountPublicKey() {
-        return accountPublicKey;
+    public <T extends Key> T getAccountKey() {
+        return (T) accountKey;
     }
 
     public String getChainName() {

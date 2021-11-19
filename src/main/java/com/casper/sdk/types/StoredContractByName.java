@@ -9,7 +9,7 @@ public class StoredContractByName extends ModuleBytes implements StoredContractN
 
     /** On-chain smart contract name - only in scope when dispatch account = contract owner account. */
     private final String name;
-    /** TODO find out what is this */
+    /** The entry point */
     private final String entryPoint;
 
     public StoredContractByName(final String name,

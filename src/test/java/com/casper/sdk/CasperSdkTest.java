@@ -1,17 +1,21 @@
 package com.casper.sdk;
 
 import com.casper.sdk.service.http.rpc.DummyMethodDispatcher;
-import com.casper.sdk.service.metrics.MetricsServiceTest;
 import com.casper.sdk.service.serialization.util.ByteUtils;
 import com.casper.sdk.types.*;
 import okhttp3.mockwebserver.MockWebServer;
+import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.security.PublicKey;
+import java.util.Objects;
 
 import static com.jayway.jsonpath.matchers.JsonPathMatchers.hasJsonPath;
+import static org.apache.commons.lang3.StringUtils.deleteWhitespace;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
@@ -20,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class CasperSdkTest {
 
-    public static final String DEPLOY_JSON_PATH = "/com/casper/sdk/types/deploy-util-test.json";
+    private static final String DEPLOY_TRANSFER_JSON = "/com/casper/sdk/service/json/deploy-transfer.json";
     private final static String url = "http://localhost";
     private static MockWebServer mockBackEnd;
     private CasperSdk casperSdk;
@@ -31,9 +35,6 @@ class CasperSdkTest {
         mockBackEnd = new MockWebServer();
         mockBackEnd.start();
         mockBackEnd.setDispatcher(new DummyMethodDispatcher());
-
-        Properties.properties.put("node-url", url);
-        Properties.properties.put("node-port", String.valueOf(mockBackEnd.getPort()));
 
         casperSdk = new CasperSdk(url, mockBackEnd.getPort());
     }
@@ -49,17 +50,20 @@ class CasperSdkTest {
     @Test
     void newTransfer() {
 
-        final byte[] recipientPublicKey = {(byte) 108, (byte) 114, (byte) 213, (byte) 223, (byte) 102, (byte) 130,
+        final byte[] recipientPublicKey = {1, (byte) 108, (byte) 114, (byte) 213, (byte) 223, (byte) 102, (byte) 130,
                 (byte) 189, (byte) 133, (byte) 175, (byte) 102, (byte) 195, (byte) 84, (byte) 171, (byte) 94, (byte) 88,
                 (byte) 117, (byte) 242, (byte) 142, (byte) 146, (byte) 54, (byte) 0, (byte) 20, (byte) 129, (byte) 210,
                 (byte) 128, (byte) 211, (byte) 127, (byte) 27, (byte) 63, (byte) 229, (byte) 50, (byte) 192};
+
+        // Convert the bytes to a java.security.PublicKey
+        final PublicKey publicKey = casperSdk.createPublicKey(ByteUtils.encodeHexString(recipientPublicKey));
 
         // The recipientPublicKey hashed to 32 bytes using ED25519
         final String targetBytes = "473535565ff7b4fdd7aa3f7a083c7f9d05b82fcba57c22339fbf50e3c5474dcb";
 
         final Transfer transfer = casperSdk.newTransfer(
                 10,
-                new CLPublicKey(recipientPublicKey, Algorithm.ED25519),
+                publicKey,
                 34
         );
 
@@ -99,9 +103,46 @@ class CasperSdkTest {
     }
 
     @Test
-    public void getNodeMetrics() throws Throwable {
+    public void getNodeMetrics() {
 
         final String nodeMetrics = casperSdk.getNodeMetrics();
         assertNotNull(nodeMetrics);
+    }
+
+
+    @Test
+    void deployFromJsonStream() throws IOException {
+
+        // Load the deploy from JSON
+        final String originalJson = IOUtils.toString(Objects.requireNonNull(getClass()
+                .getResourceAsStream(DEPLOY_TRANSFER_JSON)), StandardCharsets.UTF_8);
+
+        final Deploy deploy = casperSdk.deployFromJson(getClass().getResourceAsStream(DEPLOY_TRANSFER_JSON));
+
+        assertThat(deploy, is(notNullValue()));
+
+        // Convert it back to JSON
+        final String json = deleteWhitespace(casperSdk.deployToJson(deploy));
+
+        // Assert JSON written from CL Object matches original JSON ignoring whitespace
+        assertThat(json, is(deleteWhitespace(originalJson)));
+    }
+
+    @Test
+    void deployFromJsonString() throws IOException {
+
+        // Load the deploy from JSON
+        final String originalJson = IOUtils.toString(Objects.requireNonNull(getClass()
+                .getResourceAsStream(DEPLOY_TRANSFER_JSON)), StandardCharsets.UTF_8);
+
+        final Deploy deploy = casperSdk.deployFromJson(originalJson);
+
+        assertThat(deploy, is(notNullValue()));
+
+        // Convert it back to JSON
+        final String json = deleteWhitespace(casperSdk.deployToJson(deploy));
+
+        // Assert JSON written from CL Object matches original JSON ignoring whitespace
+        assertThat(json, is(deleteWhitespace(originalJson)));
     }
 }

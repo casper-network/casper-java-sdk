@@ -16,7 +16,8 @@ import java.math.BigInteger;
 import java.security.KeyPair;
 import java.time.Instant;
 
-import static com.casper.sdk.IntegrationTestUtils.*;
+import static com.casper.sdk.IntegrationTestUtils.geUserKeyPairStreams;
+import static com.casper.sdk.IntegrationTestUtils.getNodeKeyPairSteams;
 import static com.jayway.jsonpath.matchers.JsonPathMatchers.hasJsonPath;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -25,7 +26,7 @@ import static org.hamcrest.core.Is.is;
 /**
  * Casper SDK integration tests. The NCTL test nodes must be running for these tests to execute.
  */
-@Disabled // TODO Remove this comment to tests against a network
+@Disabled // Remove this comment to test against a network
 class CasperSdkIntegrationTest {
 
     /** Path the nctl folder can be overridden with -Dnctl.home=some-path */
@@ -74,7 +75,7 @@ class CasperSdkIntegrationTest {
     }
 
     @Test
-    void getNodeMetrics() throws Throwable {
+    void getNodeMetrics() {
         final String metrics = casperSdk.getNodeMetrics();
         assertThat(metrics, is(notNullValue()));
     }
@@ -121,11 +122,9 @@ class CasperSdkIntegrationTest {
         final KeyPair userTwoKeyPair = geUserKeyPair(2);
         final KeyPair nodeOneKeyPair = getNodeKeyPair(1);
 
-        final CLPublicKey toPublicKey = casperSdk.toCLPublicKey(userTwoKeyPair.getPublic());
-
         // Make the session, a transfer from user one to user two
         final Transfer transfer = casperSdk.newTransfer(new BigInteger("2500000000"),
-                toPublicKey,
+                userTwoKeyPair.getPublic(),
                 1);
 
         // Make a payment
@@ -181,24 +180,24 @@ class CasperSdkIntegrationTest {
     @Test
     void getLatestBlockInfo() {
 
-       String blockInfo =  casperSdk.getLatestBlockInfo();
-       assertThat(blockInfo, is(notNullValue()));
+        String blockInfo = casperSdk.getLatestBlockInfo();
+        assertThat(blockInfo, is(notNullValue()));
     }
 
     @Test
     void getBlockInfo() throws JsonProcessingException {
 
-        String blockInfo =  casperSdk.getLatestBlockInfo();
+        String blockInfo = casperSdk.getLatestBlockInfo();
         JsonNode jsonNode = new ObjectMapper().readTree(blockInfo);
 
         Digest hash = new Digest(jsonNode.get("hash").textValue());
         Number height = jsonNode.get("header").get("height").numberValue();
         blockInfo = casperSdk.getBlockInfo(hash);
         assertThat(blockInfo, is(notNullValue()));
-        assertThat(blockInfo, hasJsonPath("$.hash",  is(hash.toString())));
+        assertThat(blockInfo, hasJsonPath("$.hash", is(hash.toString())));
 
         blockInfo = casperSdk.getBlockInfoByHeight(height);
         assertThat(blockInfo, is(notNullValue()));
-        assertThat(blockInfo, hasJsonPath("$.header.height",  is(height)));
+        assertThat(blockInfo, hasJsonPath("$.header.height", is(height)));
     }
 }

@@ -28,7 +28,6 @@ public class CLPublicKey extends AbstractCLType implements HasTag {
 
         this.algorithm = algorithm;
         this.bytes = bytes;
-
     }
 
     public CLPublicKey(final String key, final Algorithm algorithm) {

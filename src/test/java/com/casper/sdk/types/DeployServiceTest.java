@@ -232,6 +232,7 @@ class DeployServiceTest {
     @Test
     void deployToBytes() throws IOException {
 
+        //noinspection ConstantConditions
         final InputStream in = getClass().getResource(DEPLOY_JSON_PATH).openStream();
         final Deploy deploy = deployService.fromJson(in);
 
@@ -324,7 +325,7 @@ class DeployServiceTest {
         final Transfer session = deployService.newTransfer(10, new CLPublicKey(recipientPublicKey, Algorithm.ED25519), 34);
         final Digest bodyHash = deployService.makeBodyHash(payment, session);
         final DeployHeader header = new DeployHeader(
-                signingService.toClPublicKey(deployParams.getAccountPublicKey()),
+                signingService.toClPublicKey(deployParams.getAccountKey()),
                 deployParams.getTimestamp(),
                 deployService.toTtlStr(deployParams.getTtl()),
                 deployParams.getGasPrice(),

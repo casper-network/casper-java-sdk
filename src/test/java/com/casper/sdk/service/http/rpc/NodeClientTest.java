@@ -1,6 +1,5 @@
 package com.casper.sdk.service.http.rpc;
 
-import com.casper.sdk.Properties;
 import com.casper.sdk.service.hash.HashService;
 import com.casper.sdk.service.json.JsonConversionService;
 import com.casper.sdk.service.serialization.cltypes.TypesFactory;
@@ -45,7 +44,7 @@ public class NodeClientTest {
             new SigningService(),
             new TypesFactory()
     );
-    private final NodeClient nodeClient = new NodeClient(deployService, hashService, new HttpMethods(jsonService));
+    private  NodeClient nodeClient;
 
     @BeforeEach
     void setUp() throws IOException {
@@ -53,9 +52,7 @@ public class NodeClientTest {
         mockBackEnd = new MockWebServer();
         mockBackEnd.start();
         mockBackEnd.setDispatcher(new DummyMethodDispatcher());
-
-        Properties.properties.put("node-url", url);
-        Properties.properties.put("node-port", String.valueOf(mockBackEnd.getPort()));
+        nodeClient = new NodeClient(deployService, hashService, new HttpMethods(jsonService, url, mockBackEnd.getPort()));
     }
 
     @AfterEach
