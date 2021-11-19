@@ -64,7 +64,7 @@ See [here](https://github.com/casper-network/casper-java-sdk/blob/main/src/test/
 
 ## How To: Undelegate funds from a validator ?
 
-See [here](https://github.com/casper-network/casper-java-sdk/blob/main/src/test/java/com/casper/sdk/how_to/HowToUnDelegate.java).
+See [here](https://github.com/casper-network/casper-java-sdk/blob/main/src/test/java/com/casper/sdk/how_to/HowToUndelegate.java).
 
 ## How To: Stake funds as a validator ?
 
