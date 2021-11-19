@@ -83,7 +83,7 @@ public class DeployService {
         final Digest bodyHash = makeBodyHash(session, payment);
 
         final DeployHeader header = new DeployHeader(
-                signingService.toClPublicKey(deployParams.getAccountPublicKey()),
+                signingService.toClPublicKey(deployParams.getAccountKey()),
                 deployParams.getTimestamp(),
                 toTtlStr(deployParams.getTtl()),
                 deployParams.getGasPrice(),

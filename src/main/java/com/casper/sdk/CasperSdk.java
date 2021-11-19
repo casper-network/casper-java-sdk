@@ -1,6 +1,7 @@
 package com.casper.sdk;
 
 import com.casper.sdk.exceptions.CasperException;
+import com.casper.sdk.exceptions.ConversionException;
 import com.casper.sdk.exceptions.ValueNotFoundException;
 import com.casper.sdk.service.hash.HashService;
 import com.casper.sdk.service.http.rpc.HttpMethods;
@@ -55,11 +56,16 @@ public class CasperSdk {
         return nodeClient.getAccountInfo(signingService.toClPublicKey(accountKey).toAccountHex());
     }
 
-    public ContractHash getContractHash(final PublicKey accountKey) throws Exception {
+    public ContractHash getContractHash(final PublicKey accountKey) {
 
         final String accountInfo = getAccountInfo(accountKey);
         //noinspection rawtypes
-        final Map map = jsonConversionService.fromJson(accountInfo, Map.class);
+        final Map map;
+        try {
+            map = jsonConversionService.fromJson(accountInfo, Map.class);
+        } catch (IOException e) {
+            throw new ConversionException(e);
+        }
         final Object namedKeys = map.get(NAMED_KEYS);
         if (namedKeys instanceof Map) {
             //noinspection rawtypes
@@ -451,10 +457,6 @@ public class CasperSdk {
         );
     }
 
-    private int getRandomCorrelationId() {
-        return new Random().nextInt(MAX_TRANSFER_ID - 1) + 1;
-    }
-
     /**
      * Creates an auction bid withdraw delegation deploy.
      *
@@ -481,6 +483,74 @@ public class CasperSdk {
                                 .build()),
                 standardPayment(STANDARD_PAYMENT_FOR_AUCTION_BID_WITHDRAWAL)
         );
+    }
+
+    /**
+     * Creates an install contract deploy
+     *
+     * @param deployParams     standard parameters used when creating a deploy.
+     * @param payment          mount in motes to be offered as payment.
+     * @param wasmIn           path to erc20.wasm file
+     * @param tokenDecimals    number of decimal places within ERC-20 token to be minted.
+     * @param tokenName        name of ERC-20 token to be minted.
+     * @param tokenSymbol      symbol of ERC-20 token to be minted.
+     * @param tokenTotalSupply total number of ERC-20 tokens to be issued
+     * @return an install contract deploy
+     */
+    public Deploy makeInstallContract(final DeployParams deployParams,
+                                      final Number payment,
+                                      final InputStream wasmIn,
+                                      final int tokenDecimals,
+                                      final String tokenName,
+                                      final String tokenSymbol,
+                                      final Number tokenTotalSupply) {
+        return makeDeploy(
+                deployParams,
+                new ModuleBytes(
+                        this.readWasm(wasmIn),
+                        new DeployNamedArgBuilder()
+                                .add(TOKEN_DECIMALS, CLValueBuilder.u8(tokenDecimals))
+                                .add(TOKEN_NAME, CLValueBuilder.string(tokenName))
+                                .add(TOKEN_SYMBOL, CLValueBuilder.string(tokenSymbol))
+                                .add(CREATE_DEPLOY_ARG, CLValueBuilder.u256(tokenTotalSupply))
+                                .build()
+                ),
+                standardPayment(payment)
+        );
+
+    }
+
+    /**
+     * Creates a new invoke contract delpoy
+     *
+     * @param deployParams standard parameters used when creating a deploy.
+     * @param payment      amount in motes to be offered as payment
+     * @param amount       amount of ERC-20 tokens to be transferred to user
+     * @param operatorKey  operator account key
+     * @param recipient    public ket of recipient user
+     * @return a new invoke contract delpoy
+     */
+    public Deploy makeInvokeContract(final DeployParams deployParams,
+                                     final Number payment,
+                                     final Number amount,
+                                     final PublicKey operatorKey,
+                                     final PublicKey recipient) {
+
+        return makeDeploy(deployParams,
+                new StoredContractByHash(
+                        getContractHash(operatorKey),
+                        TRANSFER,
+                        new DeployNamedArgBuilder()
+                                .add(AMOUNT, CLValueBuilder.u256(amount))
+                                .add(RECIPIENT, CLValueBuilder.publicKey(recipient))
+                                .build()
+                ),
+                standardPayment(payment)
+        );
+    }
+
+    private int getRandomCorrelationId() {
+        return new Random().nextInt(MAX_TRANSFER_ID - 1) + 1;
     }
 }
 

@@ -12,6 +12,7 @@ public class Constants {
     public static final String CHAIN_GET_BLOCK_TRANSFERS = "chain_get_block_transfers";
     public static final String CHAIN_GET_ERA_INFO_BY_SWITCH_BLOCK = "chain_get_era_info_by_switch_block";
     public static final String CHAIN_GET_STATE_ROOT_HASH = "chain_get_state_root_hash";
+    public static final String CREATE_DEPLOY_ARG = "create_deploy_arg";
     public static final String DELEGATION_RATE = "delegation_rate";
     public static final String DEPLOY = "deploy";
     public static final String DEPLOY_HASH = "deploy_hash";
@@ -51,6 +52,9 @@ public class Constants {
     /** Default number of motes to pay for standard auction bid withdrawal. */
     public static final int STANDARD_PAYMENT_FOR_AUCTION_BID_WITHDRAWAL = (int) 3e9;
     public static final String TRANSFER = "transfer";
+    public static final String TOKEN_DECIMALS = "token_decimals";
+    public static final String TOKEN_NAME = "token_name";
+    public static final String TOKEN_SYMBOL = "token_symbol";
     public static final String VALIDATOR = "validator";
     public static final String UNBOND_PURSE = "unbond_purse";
 }

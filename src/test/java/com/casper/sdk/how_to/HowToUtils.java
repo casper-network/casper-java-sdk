@@ -2,10 +2,7 @@ package com.casper.sdk.how_to;
 
 import com.casper.sdk.KeyPairStreams;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 
 /**
  * Utility methods for the How-Tos
@@ -39,6 +36,14 @@ final class HowToUtils {
                 new FileInputStream(new File(userNPath, "public_key.pem")),
                 new FileInputStream(new File(userNPath, "secret_key.pem"))
         );
+    }
+
+    static KeyPairStreams getFaucetKeyPair() throws FileNotFoundException {
+        return new KeyPairStreams(
+                new FileInputStream(new File(getNctlHome() + "/faucet", "public_key.pem")),
+                new FileInputStream(new File(getNctlHome() + "/faucet", "secret_key.pem"))
+        );
+
     }
 
     static InputStream getWasmIn(String wasmPath) {

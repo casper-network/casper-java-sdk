@@ -30,7 +30,6 @@ public class HowToTransferToValidator {
 
         final KeyPairStreams nodeKeyOneStream = getNodeKeyPair(1);
         final KeyPair delegator = casperSdk.loadKeyPair(nodeKeyOneStream.getPublicKeyIn(), nodeKeyOneStream.getPrivateKeyIn());
-
         final KeyPairStreams counterPartyTwoStream = getUserKeyPairStreams(2);
         final KeyPair counterPartyTwoKeyPair = casperSdk.loadKeyPair(counterPartyTwoStream.getPublicKeyIn(), counterPartyTwoStream.getPrivateKeyIn());
         final Number amount = 2.5e9;
