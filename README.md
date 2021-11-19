@@ -56,30 +56,30 @@ try {
 
 ## How To: Transfer funds between 2 accounts ?
 
-See [here](https://github.com/casper-network/casper-java-sdk/blob/how-tos/src/test/java/com/casper/sdk/how_to/HowToTransferBetweenAccounts.java).
+See [here](https://github.com/casper-network/casper-java-sdk/blob/main/src/test/java/com/casper/sdk/how_to/HowToTransferBetweenAccounts.java).
 
 ## How To: Delegate funds to a validator ?
 
-See [here](https://github.com/casper-network/casper-java-sdk/blob/how-tos/src/test/java/com/casper/sdk/how_to/HowToDelegate.java).
+See [here](https://github.com/casper-network/casper-java-sdk/blob/main/src/test/java/com/casper/sdk/how_to/HowToDelegate.java).
 
 ## How To: Undelegate funds from a validator ?
 
-See [here](https://github.com/casper-network/casper-java-sdk/blob/how-tos/src/test/java/com/casper/sdk/how_to/HowToUnDelegate.java).
+See [here](https://github.com/casper-network/casper-java-sdk/blob/main/src/test/java/com/casper/sdk/how_to/HowToUnDelegate.java).
 
 ## How To: Stake funds as a validator ?
 
-See [here](https://github.com/casper-network/casper-java-sdk/blob/how-tos/src/test/java/com/casper/sdk/how_to/HowToStake.java).
+See [here](https://github.com/casper-network/casper-java-sdk/blob/main/src/test/java/com/casper/sdk/how_to/HowToStake.java).
 
 ## How To: Unstake funds as a validator ?
 
-See [here](https://github.com/casper-network/casper-java-sdk/blob/how-tos/src/test/java/com/casper/sdk/how_to/HowToUnstake.java).
+See [here](https://github.com/casper-network/casper-java-sdk/blob/main/src/test/java/com/casper/sdk/how_to/HowToUnstake.java).
 
 ## How To: Install a smart contract ?
 
-See [here](https://github.com/casper-network/casper-java-sdk/blob/how-tos/src/test/java/com/casper/sdk/how_to/HowToInstallAContract.java).
+See [here](https://github.com/casper-network/casper-java-sdk/blob/main/src/test/java/com/casper/sdk/how_to/HowToInstallAContract.java).
 
 ## How To: Invoke a smart contract ?
 
-See [here](https://github.com/casper-network/casper-java-sdk/blob/how-tos/src/test/java/com/casper/sdk/how_to/HowToInvokeAContract.java).
+See [here](https://github.com/casper-network/casper-java-sdk/blob/main/src/test/java/com/casper/sdk/how_to/HowToInvokeAContract.java).
 
 ##### 
