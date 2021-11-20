@@ -52,10 +52,22 @@ public class CasperSdk {
         metricsService = new MetricsService(httpMethods);
     }
 
+    /**
+     * Obtains the account info JSON
+     *
+     * @param accountKey An account holder's public key
+     * @return account information in JSON format.
+     */
     public String getAccountInfo(final PublicKey accountKey) {
         return nodeClient.getAccountInfo(signingService.toClPublicKey(accountKey).toAccountHex());
     }
 
+    /**
+     * Obtains the contract has from the account info
+     *
+     * @param accountKey an account holder's public key
+     * @return ERC20 named key encapsulated in a ContractHash
+     */
     public ContractHash getContractHash(final PublicKey accountKey) {
 
         final String accountInfo = getAccountInfo(accountKey);
@@ -77,30 +89,62 @@ public class CasperSdk {
         throw new ValueNotFoundException("'ERC20' not found in account info 'named_keys'");
     }
 
+    /**
+     * Obtains the account balance at a certain global state root hash.
+     *
+     * @param accountKey they of the account
+     * @return account balance if on-chain account is found.
+     */
     public BigInteger getAccountBalance(final PublicKey accountKey) {
         return nodeClient.getAccountBalance(signingService.toClPublicKey(accountKey).toAccountHex());
     }
 
+    /**
+     * Obtains an on-chain account's main purse unforgeable reference.
+     *
+     * @param accountKey key of an on-chain account.
+     * @return an on-chain account's main purse unforgeable reference.
+     */
     public URef getAccountMainPurseURef(final PublicKey accountKey) {
         return nodeClient.getAccountMainPurseURef(signingService.toClPublicKey(accountKey).toAccountHex());
     }
 
+    /**
+     * Returns a root hash of global state
+     *
+     * @return a root hash of global state
+     */
     public String getStateRootHash() {
         return nodeClient.getStateRootHash();
     }
 
+    /**
+     * Obtains the account public key  hashed using BLAKE2_B_256 as a hex encode string
+     *
+     * @param accountKey the public key to hash
+     * @return the hashed key
+     */
     public String getAccountHash(final PublicKey accountKey) {
         return ByteUtils.encodeHexString(hashService.getAccountHash(this.getPublicKeyBytes(accountKey)));
     }
 
+    /**
+     * @return the action info string
+     */
     public String getAuctionInfo() {
         return nodeClient.getAuctionInfo();
     }
 
+    /**
+     * @return the node status information
+     */
     public String getNodeStatus() {
         return nodeClient.getNodeStatus();
     }
 
+    /**
+     * @return the node peers information
+     */
     public String getNodePeers() {
         return nodeClient.getNodePeers();
     }
@@ -400,14 +444,6 @@ public class CasperSdk {
         return nodeClient.getRpcSchema();
     }
 
-    private byte[] readWasm(final InputStream wasmIn) {
-        try {
-            return IOUtils.toByteArray(wasmIn);
-        } catch (IOException e) {
-            throw new CasperException("Error loading wasm", e);
-        }
-    }
-
     /**
      * Creates a validator auction bid deploy.
      *
@@ -551,6 +587,14 @@ public class CasperSdk {
 
     private int getRandomCorrelationId() {
         return new Random().nextInt(MAX_TRANSFER_ID - 1) + 1;
+    }
+
+    private byte[] readWasm(final InputStream wasmIn) {
+        try {
+            return IOUtils.toByteArray(wasmIn);
+        } catch (IOException e) {
+            throw new CasperException("Error loading wasm", e);
+        }
     }
 }
 
