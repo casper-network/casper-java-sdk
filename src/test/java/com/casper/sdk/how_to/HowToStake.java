@@ -31,7 +31,7 @@ public class HowToStake {
         final InputStream wasmIn = getWasmIn(pathToContract);
 
         // Set validator key.
-        final KeyPairStreams nodeKeyPair = getNodeKeyPair(1);
+        final KeyPairStreams nodeKeyPair = getNodeKeyPairStreams(1);
         final KeyPair validatorKeyPair = casperSdk.loadKeyPair(nodeKeyPair.getPublicKeyIn(), nodeKeyPair.getPrivateKeyIn());
 
         final DeployParams deployParams = new DeployParams(

@@ -35,7 +35,7 @@ public class HowToUndelegate {
 
 
         // Set counter-parties.
-        final KeyPairStreams validatorKeyPair = getNodeKeyPair(1);
+        final KeyPairStreams validatorKeyPair = getNodeKeyPairStreams(1);
         final KeyPairStreams delegatorKeyPair = getUserKeyPairStreams(1);
         final PublicKey delegatorPublicKey = casperSdk.loadKey(delegatorKeyPair.getPublicKeyIn());
         final PrivateKey delegatorPrivateKey = casperSdk.loadKey(delegatorKeyPair.getPrivateKeyIn());

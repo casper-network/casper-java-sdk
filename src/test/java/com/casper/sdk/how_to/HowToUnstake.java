@@ -13,7 +13,7 @@ import java.security.KeyPair;
 import java.security.PublicKey;
 
 import static com.casper.sdk.how_to.HowToUtils.getNctlHome;
-import static com.casper.sdk.how_to.HowToUtils.getNodeKeyPair;
+import static com.casper.sdk.how_to.HowToUtils.getNodeKeyPairStreams;
 
 @Disabled // Remove this comment to test against a network
 public class HowToUnstake {
@@ -25,7 +25,7 @@ public class HowToUnstake {
     void howToUnstake() throws Exception {
 
         final String pathToWasm = getNctlHome() + "/assets/net-1/bin/auction/withdraw_bid.wasm";
-        final KeyPairStreams validatorKeyPairSteam = getNodeKeyPair(1);
+        final KeyPairStreams validatorKeyPairSteam = getNodeKeyPairStreams(1);
 
         // Set validator key.
         final KeyPair validatorKeyPair = casperSdk.loadKeyPair(validatorKeyPairSteam.getPublicKeyIn(), validatorKeyPairSteam.getPrivateKeyIn());

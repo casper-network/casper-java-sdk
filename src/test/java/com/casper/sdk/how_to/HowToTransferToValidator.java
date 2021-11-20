@@ -13,7 +13,7 @@ import java.security.KeyPair;
 import java.time.Instant;
 import java.util.Random;
 
-import static com.casper.sdk.how_to.HowToUtils.getNodeKeyPair;
+import static com.casper.sdk.how_to.HowToUtils.getNodeKeyPairStreams;
 import static com.casper.sdk.how_to.HowToUtils.getUserKeyPairStreams;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -28,7 +28,7 @@ public class HowToTransferToValidator {
     @Test
     public void testTransferToValidator() throws IOException {
 
-        final KeyPairStreams nodeKeyOneStream = getNodeKeyPair(1);
+        final KeyPairStreams nodeKeyOneStream = getNodeKeyPairStreams(1);
         final KeyPair delegator = casperSdk.loadKeyPair(nodeKeyOneStream.getPublicKeyIn(), nodeKeyOneStream.getPrivateKeyIn());
         final KeyPairStreams counterPartyTwoStream = getUserKeyPairStreams(2);
         final KeyPair counterPartyTwoKeyPair = casperSdk.loadKeyPair(counterPartyTwoStream.getPublicKeyIn(), counterPartyTwoStream.getPrivateKeyIn());

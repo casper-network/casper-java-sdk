@@ -1,5 +1,6 @@
 package com.casper.sdk;
 
+import com.casper.sdk.how_to.HowToUtils;
 import com.casper.sdk.service.hash.HashService;
 import com.casper.sdk.types.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -16,8 +17,7 @@ import java.math.BigInteger;
 import java.security.KeyPair;
 import java.time.Instant;
 
-import static com.casper.sdk.IntegrationTestUtils.geUserKeyPairStreams;
-import static com.casper.sdk.IntegrationTestUtils.getNodeKeyPairSteams;
+import static com.casper.sdk.how_to.HowToUtils.getUserKeyPairStreams;
 import static com.jayway.jsonpath.matchers.JsonPathMatchers.hasJsonPath;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -159,23 +159,11 @@ class CasperSdkIntegrationTest {
         assertThat(gotDeploy, is(notNullValue()));
     }
 
-
     @Test
     void hashBody() {
         final byte[] accountHash = new HashService().getHash(expectedSerializedBody);
         assertThat(accountHash, is(expectedHash));
     }
-
-    private KeyPair geUserKeyPair(int userNumber) throws IOException {
-        final KeyPairStreams streams = geUserKeyPairStreams(userNumber);
-        return casperSdk.loadKeyPair(streams.getPublicKeyIn(), streams.getPrivateKeyIn());
-    }
-
-    private KeyPair getNodeKeyPair(final int nodeNumber) throws IOException {
-        final KeyPairStreams streams = getNodeKeyPairSteams(nodeNumber);
-        return casperSdk.loadKeyPair(streams.getPublicKeyIn(), streams.getPrivateKeyIn());
-    }
-
 
     @Test
     void getLatestBlockInfo() {
@@ -199,5 +187,15 @@ class CasperSdkIntegrationTest {
         blockInfo = casperSdk.getBlockInfoByHeight(height);
         assertThat(blockInfo, is(notNullValue()));
         assertThat(blockInfo, hasJsonPath("$.header.height", is(height)));
+    }
+
+    private KeyPair geUserKeyPair(int userNumber) throws IOException {
+        final KeyPairStreams streams = getUserKeyPairStreams(userNumber);
+        return casperSdk.loadKeyPair(streams.getPublicKeyIn(), streams.getPrivateKeyIn());
+    }
+
+    private KeyPair getNodeKeyPair(final int nodeNumber) throws IOException {
+        final KeyPairStreams streams = HowToUtils.getNodeKeyPairStreams(nodeNumber);
+        return casperSdk.loadKeyPair(streams.getPublicKeyIn(), streams.getPrivateKeyIn());
     }
 }

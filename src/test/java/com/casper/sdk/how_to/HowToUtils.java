@@ -7,12 +7,12 @@ import java.io.*;
 /**
  * Utility methods for the How-Tos
  */
-final class HowToUtils {
+public final class HowToUtils {
 
     private static final String NCTL_HOME = "nctl.home";
     private static final String DEFAULT_NCTL_HOME = "~/casper-node/utils/nctl";
 
-    static KeyPairStreams getUserKeyPairStreams(final int userNumber) throws IOException {
+    public static KeyPairStreams getUserKeyPairStreams(final int userNumber) throws IOException {
 
         final String userNPath = String.format("%s/assets/net-1/users/user-%d", getNctlHome(), userNumber);
 
@@ -22,13 +22,13 @@ final class HowToUtils {
         );
     }
 
-    static String getNctlHome() {
+    public static String getNctlHome() {
         final String nctlHome = System.getProperty(NCTL_HOME, DEFAULT_NCTL_HOME);
         // Replace user home '~' tilda with full path to user home directory
         return nctlHome.replaceFirst("^~", System.getProperty("user.home"));
     }
 
-    static KeyPairStreams getNodeKeyPair(final int nodeNumber) throws IOException {
+     public static KeyPairStreams getNodeKeyPairStreams(final int nodeNumber) throws IOException {
 
         final String userNPath = String.format("%s/assets/net-1/nodes/node-%d/keys", getNctlHome(), nodeNumber);
 

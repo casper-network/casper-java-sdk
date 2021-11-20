@@ -10,7 +10,7 @@ import java.math.BigInteger;
 import java.security.KeyPair;
 import java.time.Instant;
 
-import static com.casper.sdk.how_to.HowToUtils.getNodeKeyPair;
+import static com.casper.sdk.how_to.HowToUtils.getNodeKeyPairStreams;
 import static com.casper.sdk.how_to.HowToUtils.getUserKeyPairStreams;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -30,7 +30,7 @@ public class HowToTransferBetweenAccounts {
     @Test
     public void testDeploy() throws Throwable {
 
-        final KeyPairStreams nodeKeyOneStream = getNodeKeyPair(1);
+        final KeyPairStreams nodeKeyOneStream = getNodeKeyPairStreams(1);
         final KeyPair nodeOneKeyPair = casperSdk.loadKeyPair(
                 nodeKeyOneStream.getPublicKeyIn(), nodeKeyOneStream.getPrivateKeyIn()
         );
