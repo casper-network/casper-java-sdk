@@ -22,6 +22,10 @@ dependencies {
     implementation "com.fasterxml.jackson.core:jackson-annotations:${jacksonVersion}"
     implementation "org.javatuples:javatuples:${javaTuplesVersion}"
 
+    // key crypto
+    implementation "org.bouncycastle:bcpkix-jdk15on:${bouncyVersion}"
+    implementation "org.web3j:core:${web3jVersion}"
+
     // log4j and slf4j
     compileOnly "org.slf4j:slf4j-api:${slf4jApiVersion}"
     testImplementation "org.apache.logging.log4j:log4j-api:${log4jVersion}"
