@@ -14,5 +14,7 @@ public abstract class PublicKey {
 
     public abstract void readPublicKey(String filename) throws IOException;
 
+    public abstract void writePublicKey(String filename) throws IOException;
+
     public abstract String sign(String msg);
 }

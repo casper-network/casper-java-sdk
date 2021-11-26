@@ -14,6 +14,8 @@ public abstract class PrivateKey {
 
     public abstract void readPrivateKey(String filename) throws IOException;
 
+    public abstract void writePrivateKey(String filename) throws IOException;
+
     public abstract String sign(String msg);
 
     public abstract String verify(String msg);
