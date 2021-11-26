@@ -18,7 +18,5 @@ public abstract class PublicKey {
 
     public abstract void writePublicKey(String filename) throws IOException;
 
-    public abstract String sign(String msg);
-
     public abstract Bool verify(String msg);
 }

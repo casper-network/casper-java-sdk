@@ -36,11 +36,6 @@ public class Secp256k1PublicKey extends PublicKey {
         // TODO Auto-generated method stub
     }
 
-    @Override
-    public String sign(String msg) {
-        // TODO Auto-generated method stub
-        return null;
-    }
 
     @Override
     public Bool verify(String msg) {

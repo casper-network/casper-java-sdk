@@ -57,11 +57,7 @@ public class Ed25519PublicKey extends PublicKey {
         PemFileHelper.writePemFile(filename, derKey.getEncoded(), PUBLIC_KEY_DER_HEADER);
     }
 
-    @Override
-    public String sign(String msg) {
-        // TODO Auto-generated method stub
-        return null;
-    }
+
     @Override
     public Bool verify(String msg) {
         // TODO Auto-generated method stub
