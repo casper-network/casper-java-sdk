@@ -18,39 +18,23 @@ import org.bouncycastle.util.io.pem.PemWriter;
 
 import lombok.Data;
 
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 
+import java.io.IOException;
+
 @Data
-public class Secp256k1 {
+public class Secp256k1 implements CryptoKey {
     private static final ASN1ObjectIdentifier OIDCurve = new ASN1ObjectIdentifier("1.3.132.0.10");
     private static final ASN1ObjectIdentifier OIDkey = new ASN1ObjectIdentifier("1.2.840.10045.2.1");
     private ECKeyPair keyPair;
     private String publicKey;
 
-    private byte[] readPemFile(String filename) throws IOException {
-        try (FileReader keyReader = new FileReader(filename);
-            PemReader pemReader = new PemReader(keyReader)) {
-                var pemObject = pemReader.readPemObject();
-                return pemObject.getContent();
-            }
-    }
-
-    private void writePemFile(String filename, byte[] encodedKey, String keyType) throws IOException {
-        try (PemWriter pemWriter = new PemWriter(new FileWriter(filename))) {
-            pemWriter.writeObject(new PemObject(keyType, encodedKey) );
-        }
-    }
-
     public void readPrivateKey(String filename) throws IOException {
-        var domainParams = new ECDomainParameters("secp156k1");
         ASN1Sequence key = ASN1Sequence.getInstance(readPemFile(filename));
-        var keyInfo = PrivateKeyInfo.getInstance(key.getObjectAt(1));
+        PrivateKeyInfo keyInfo = PrivateKeyInfo.getInstance(key.getObjectAt(1));
         String algoId = keyInfo.getPrivateKeyAlgorithm().getAlgorithm().toString();
         if (algoId.equals(OIDCurve.getId())) {
             Credentials cs = Credentials.create(Hex.toHexString(keyInfo.getEncoded()));
@@ -71,11 +55,11 @@ public class Secp256k1 {
     */
     public void readPublicKey(String filename) throws IOException {
         ASN1Primitive derKey = ASN1Primitive.fromByteArray(readPemFile(filename));
-        var objBaseSeq = ASN1Sequence.getInstance(derKey);
+        ASN1Sequence objBaseSeq = ASN1Sequence.getInstance(derKey);
         String keyId = ASN1ObjectIdentifier.getInstance(ASN1Sequence.getInstance(objBaseSeq.getObjectAt(0)).getObjectAt(0)).getId();
         String curveId = ASN1ObjectIdentifier.getInstance(ASN1Sequence.getInstance(objBaseSeq.getObjectAt(0)).getObjectAt(1)).getId();
         if (curveId.equals(OIDCurve.getId()) && keyId.equals(OIDkey.getId())) {
-            var key = DERBitString.getInstance(objBaseSeq.getObjectAt(1));
+            DERBitString key = DERBitString.getInstance(objBaseSeq.getObjectAt(1));
             publicKey = Hex.toHexString(key.getBytes());
         }
     }
