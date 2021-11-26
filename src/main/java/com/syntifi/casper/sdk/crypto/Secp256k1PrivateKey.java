@@ -30,6 +30,12 @@ public class Secp256k1PrivateKey extends PrivateKey {
     }
 
     @Override
+    public void writePrivateKey(String filename) throws IOException {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
     public String sign(String msg) {
         ECDSASignature signature = keyPair.sign(msg.getBytes());
         // TODO Auto-generated method stub
