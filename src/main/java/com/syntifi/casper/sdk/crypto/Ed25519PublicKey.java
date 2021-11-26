@@ -9,6 +9,7 @@ import org.bouncycastle.asn1.ASN1Sequence;
 import org.bouncycastle.asn1.DERBitString;
 import org.bouncycastle.asn1.DERSequence;
 import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
+import org.web3j.abi.datatypes.Bool;
 
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -61,5 +62,9 @@ public class Ed25519PublicKey extends PublicKey {
         // TODO Auto-generated method stub
         return null;
     }
-
+    @Override
+    public Bool verify(String msg) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

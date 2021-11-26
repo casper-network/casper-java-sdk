@@ -29,11 +29,6 @@ public class Secp256k1PrivateKey extends PrivateKey {
         // TODO Auto-generated method stub
     }
 
-    @Override
-    public void writePrivateKey(String filename) throws IOException {
-        // TODO Auto-generated method stub
-        
-    }
 
     @Override
     public String sign(String msg) {
