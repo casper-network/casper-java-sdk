@@ -19,5 +19,11 @@ public class Secp256k1PublicKey extends PublicKey {
         // TODO Auto-generated method stub
         return null;
     }
+
+    @Override
+    public void writePublicKey(String filename) throws IOException {
+        // TODO Auto-generated method stub
+        
+    }
     
 }
