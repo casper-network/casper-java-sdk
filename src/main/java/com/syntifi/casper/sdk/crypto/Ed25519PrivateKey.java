@@ -10,7 +10,6 @@ import org.bouncycastle.asn1.DEROctetString;
 import org.bouncycastle.asn1.DERSequence;
 import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
 import org.bouncycastle.crypto.params.Ed25519PrivateKeyParameters;
-import org.web3j.abi.datatypes.Bool;
 
 import lombok.EqualsAndHashCode;
 
@@ -59,7 +58,7 @@ public class Ed25519PrivateKey extends PrivateKey {
     }
 
     @Override
-    public Bool verify(String msg) {
+    public Boolean verify(String msg) {
         // TODO Auto-generated method stub
         return null;
     }
@@ -68,5 +67,4 @@ public class Ed25519PrivateKey extends PrivateKey {
     public PublicKey derivePublicKey() {
         return new Ed25519PublicKey(privateKeyParameters.generatePublicKey().getEncoded());
     }
-
 }

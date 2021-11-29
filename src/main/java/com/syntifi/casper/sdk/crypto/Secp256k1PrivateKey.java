@@ -5,7 +5,6 @@ import java.io.IOException;
 import org.bouncycastle.asn1.ASN1Sequence;
 import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
 import org.bouncycastle.util.encoders.Hex;
-import org.web3j.abi.datatypes.Bool;
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.ECDSASignature;
 import org.web3j.crypto.ECKeyPair;
@@ -38,7 +37,7 @@ public class Secp256k1PrivateKey extends PrivateKey {
     }
 
     @Override
-    public Bool verify(String msg) {
+    public Boolean verify(String msg) {
         // TODO Auto-generated method stub
         return null;
     }
