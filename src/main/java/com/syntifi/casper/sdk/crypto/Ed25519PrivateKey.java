@@ -9,7 +9,12 @@ import org.bouncycastle.asn1.ASN1Primitive;
 import org.bouncycastle.asn1.DEROctetString;
 import org.bouncycastle.asn1.DERSequence;
 import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
+import org.bouncycastle.crypto.CryptoException;
+import org.bouncycastle.crypto.DataLengthException;
+import org.bouncycastle.crypto.Signer;
 import org.bouncycastle.crypto.params.Ed25519PrivateKeyParameters;
+import org.bouncycastle.crypto.signers.Ed25519Signer;
+import org.bouncycastle.util.encoders.Hex;
 
 import lombok.EqualsAndHashCode;
 
@@ -53,14 +58,33 @@ public class Ed25519PrivateKey extends PrivateKey {
 
     @Override
     public String sign(String msg) {
-        // TODO Auto-generated method stub
-        return null;
+        byte[] byteMsg = msg.getBytes();
+        Signer signer = new Ed25519Signer();
+        signer.init(true, privateKeyParameters);
+        signer.update(byteMsg, 0, byteMsg.length);
+        byte[] signature;
+        try {
+            signature = signer.generateSignature();
+            return Hex.toHexString(signature);
+        } catch (DataLengthException | CryptoException e) {
+            // TODO: throw new SomeException();
+            return null;
+        }
     }
 
     @Override
-    public Boolean verify(String msg) {
-        // TODO Auto-generated method stub
-        return null;
+    public Boolean verify(String msg, String hexSignature) {
+        byte[] byteMsg = msg.getBytes();
+
+        // Verify
+        Signer verifier = new Ed25519Signer();
+        verifier.init(false, privateKeyParameters.generatePublicKey());
+        verifier.update(byteMsg, 0, byteMsg.length);
+        boolean verified = verifier.verifySignature(Hex.decode(hexSignature));
+
+        // LOGGER.debug("Verification: " + verified); // Verification: true
+
+        return verified;
     }
 
     @Override

@@ -18,7 +18,7 @@ public abstract class PrivateKey {
 
     public abstract String sign(String msg);
 
-    public abstract Boolean verify(String msg);
+    public abstract Boolean verify(String msg, String hexSignature);
 
     public abstract PublicKey derivePublicKey();
 }

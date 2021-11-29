@@ -37,7 +37,7 @@ public class Secp256k1PrivateKey extends PrivateKey {
     }
 
     @Override
-    public Boolean verify(String msg) {
+    public Boolean verify(String msg, String hex) {
         // TODO Auto-generated method stub
         return null;
     }
