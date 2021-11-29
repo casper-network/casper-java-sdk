@@ -2,11 +2,16 @@ package com.syntifi.casper.sdk.crypto;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.bouncycastle.util.encoders.Hex;
 import org.junit.jupiter.api.Test;
@@ -35,5 +40,19 @@ public class Ed25519PublicKeyTests extends AbstractCryptoTests {
         pubKey.readPublicKey(keyFilePath);
         LOGGER.debug("Key: {}", Hex.toHexString(pubKey.getKey()));
         return pubKey;
+    }
+
+    @Test
+    void writePublicKey_should_equal_source_file() throws URISyntaxException, IOException {
+        Ed25519PublicKey privKey = loadPublicKey("crypto/Ed25519/public_key.pem");
+
+        DateFormat df = new SimpleDateFormat("yyyyMMdd-HHmmss");
+        File publicKeyFile = File.createTempFile(df.format(new Date()), "-public-key-test.pem");
+
+        LOGGER.debug("Writing public key to {}", publicKeyFile.getPath());
+        privKey.writePublicKey(publicKeyFile.getPath());
+
+        assertTrue(compareFiles(Path.of(getResourcesKeyPath("crypto/Ed25519/public_key.pem").substring(1)).toFile(),
+                publicKeyFile));
     }
 }
