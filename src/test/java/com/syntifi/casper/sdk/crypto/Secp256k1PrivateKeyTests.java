@@ -38,7 +38,7 @@ public class Secp256k1PrivateKeyTests extends AbstractCryptoTests {
         File privateKeyFile = File.createTempFile(df.format(new Date()), "-secret-key-test.pem");
         privKey.writePrivateKey(privateKeyFile.getPath());
 
-        assertTrue(compareTextFiles(Path.of(getResourcesKeyPath("crypto/secp256k1/secret_key.pem")).toFile(),
+        assertTrue(compareTextFiles(new File(getResourcesKeyPath("crypto/secp256k1/secret_key.pem")),
                 privateKeyFile));
     }
 }

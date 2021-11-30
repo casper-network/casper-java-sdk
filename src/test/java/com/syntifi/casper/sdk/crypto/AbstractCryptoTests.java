@@ -7,9 +7,8 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.file.Files;
 import java.nio.file.Paths;
-
-import org.web3j.utils.Files;
 
 public abstract class AbstractCryptoTests {
     /**
@@ -36,8 +35,8 @@ public abstract class AbstractCryptoTests {
      * @throws IOException
      */
     protected boolean compareTextFiles(File file1, File file2) throws IOException {
-        String contentFile1 = Files.readString(file1);
-        String contentFile2 = Files.readString(file2);
+        String contentFile1 = Files.readString(file1.toPath());
+        String contentFile2 = Files.readString(file2.toPath());
 
         return sanitizedFileContent(contentFile1).equals(sanitizedFileContent(contentFile2));
     }

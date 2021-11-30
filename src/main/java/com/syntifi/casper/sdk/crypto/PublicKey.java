@@ -1,6 +1,7 @@
 package com.syntifi.casper.sdk.crypto;
 
 import java.io.IOException;
+import java.security.GeneralSecurityException;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,5 +17,5 @@ public abstract class PublicKey {
 
     public abstract void writePublicKey(String filename) throws IOException;
 
-    public abstract Boolean verify(String message, String hexSignature);
+    public abstract <T> Boolean verify(String message, T signature) throws GeneralSecurityException;
 }

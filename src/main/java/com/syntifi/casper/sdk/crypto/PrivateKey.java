@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public abstract class PrivateKey {
     private byte[] key;
 
-    public abstract void readPrivateKey(String filename) throws Exception;
+    public abstract void readPrivateKey(String filename) throws IOException;
 
     public abstract void writePrivateKey(String filename) throws IOException;
 

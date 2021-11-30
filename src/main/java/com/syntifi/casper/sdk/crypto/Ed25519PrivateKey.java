@@ -57,11 +57,11 @@ public class Ed25519PrivateKey extends PrivateKey {
     }
 
     @Override
-    public String sign(String msg) {
-        byte[] byteMsg = msg.getBytes();
+    public String sign(String message) {
+        byte[] byteMessage = message.getBytes();
         Signer signer = new Ed25519Signer();
         signer.init(true, privateKeyParameters);
-        signer.update(byteMsg, 0, byteMsg.length);
+        signer.update(byteMessage, 0, byteMessage.length);
         byte[] signature;
         try {
             signature = signer.generateSignature();

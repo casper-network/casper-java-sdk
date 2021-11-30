@@ -3,7 +3,7 @@ package com.syntifi.casper.sdk.crypto;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigInteger;
-import java.security.SignatureException;
+import java.security.GeneralSecurityException;
 
 import org.bouncycastle.asn1.ASN1EncodableVector;
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
@@ -11,7 +11,6 @@ import org.bouncycastle.asn1.ASN1Primitive;
 import org.bouncycastle.asn1.ASN1Sequence;
 import org.bouncycastle.asn1.DERBitString;
 import org.bouncycastle.asn1.DERSequence;
-import org.web3j.abi.datatypes.Bool;
 import org.web3j.crypto.Hash;
 import org.web3j.crypto.Sign;
 import org.web3j.crypto.Sign.SignatureData;
@@ -60,15 +59,10 @@ public class Secp256k1PublicKey extends PublicKey {
         }
     }
 
-    public Bool verify(String msg, SignatureData signature) throws SignatureException {
-        BigInteger publicKey = Sign.signedMessageToKey(Hash.sha256(msg.getBytes()), signature);
-        return new Bool(publicKey.equals(new BigInteger(getKey())));
-    }
-
     @Override
-    public Boolean verify(String message, String hexSignature) {
-        // TODO Auto-generated method stub
-        return null;
+    public <T> Boolean verify(String message, T signature) throws GeneralSecurityException {
+        BigInteger publicKey;
+        publicKey = Sign.signedMessageToKey(Hash.sha256(message.getBytes()), (SignatureData) signature);
+        return publicKey.equals(new BigInteger(getKey()));
     }
-
 }

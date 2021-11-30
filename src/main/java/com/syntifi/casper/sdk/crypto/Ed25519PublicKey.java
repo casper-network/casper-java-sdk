@@ -1,6 +1,7 @@
 package com.syntifi.casper.sdk.crypto;
 
 import java.io.IOException;
+import java.security.GeneralSecurityException;
 
 import org.bouncycastle.asn1.ASN1EncodableVector;
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
@@ -60,14 +61,14 @@ public class Ed25519PublicKey extends PublicKey {
     }
 
     @Override
-    public Boolean verify(String msg, String hexSignature) {
-        byte[] byteMsg = msg.getBytes();
+    public <T> Boolean verify(String message, T signature) throws GeneralSecurityException {
+        byte[] byteMessage = message.getBytes();
 
         // Verify
         Signer verifier = new Ed25519Signer();
         verifier.init(false, publicKeyParameters);
-        verifier.update(byteMsg, 0, byteMsg.length);
-        boolean verified = verifier.verifySignature(Hex.decode(hexSignature));
+        verifier.update(byteMessage, 0, byteMessage.length);
+        boolean verified = verifier.verifySignature(Hex.decode((String) signature));
 
         // LOGGER.debug("Verification: " + verified); // Verification: true
 

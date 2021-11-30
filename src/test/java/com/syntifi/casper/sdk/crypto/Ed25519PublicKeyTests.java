@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.security.GeneralSecurityException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -23,11 +25,11 @@ public class Ed25519PublicKeyTests extends AbstractCryptoTests {
 
     @Test
     void readPublicKey_should_load_and_be_equal_to_generated_public_key() throws IOException, URISyntaxException {
-        Ed25519PublicKey pubKey = loadPublicKey("crypto/Ed25519/public_key.pem");                
+        Ed25519PublicKey pubKey = loadPublicKey("crypto/Ed25519/public_key.pem");
         assertNotNull(pubKey.getKey());
 
         // Compare to generated hex without leading id byte
-        Path hexKeyFilePath = Path.of(getResourcesKeyPath("crypto/Ed25519/public_key_hex"));
+        Path hexKeyFilePath = Paths.get(getResourcesKeyPath("crypto/Ed25519/public_key_hex"));
         String hexKey = Files.readString(hexKeyFilePath);
         LOGGER.debug("Hex Key from {}: {}", hexKeyFilePath, Hex.toHexString(pubKey.getKey()));
         assertEquals(hexKey.substring(2), Hex.toHexString(pubKey.getKey()));
@@ -43,12 +45,12 @@ public class Ed25519PublicKeyTests extends AbstractCryptoTests {
         LOGGER.debug("Writing public key to {}", publicKeyFile.getPath());
         pubKey.writePublicKey(publicKeyFile.getPath());
 
-        assertTrue(compareTextFiles(Path.of(getResourcesKeyPath("crypto/Ed25519/public_key.pem")).toFile(),
+        assertTrue(compareTextFiles(new File(getResourcesKeyPath("crypto/Ed25519/public_key.pem")),
                 publicKeyFile));
     }
 
     @Test
-    void verify_should_be_ok() throws URISyntaxException, IOException {
+    void verify_should_be_ok() throws URISyntaxException, IOException, GeneralSecurityException {
         String hexSignature = "4555103678684364a98478112ce0c298ed841d806d2b67b09e8f0215cc738f3c5a1fca5beaf0474ff636613821bcb97e88b3b4d700e65c6cf7574489e09f170c";
 
         Ed25519PublicKey pubKey = loadPublicKey("crypto/Ed25519/public_key.pem");
@@ -57,7 +59,7 @@ public class Ed25519PublicKeyTests extends AbstractCryptoTests {
     }
 
     private Ed25519PublicKey loadPublicKey(String publicKeyPath) throws URISyntaxException, IOException {
-        Ed25519PublicKey pubKey = new Ed25519PublicKey();        
+        Ed25519PublicKey pubKey = new Ed25519PublicKey();
         String keyFilePath = getResourcesKeyPath(publicKeyPath);
         LOGGER.debug("Reading key from {}", keyFilePath);
         pubKey.readPublicKey(keyFilePath);

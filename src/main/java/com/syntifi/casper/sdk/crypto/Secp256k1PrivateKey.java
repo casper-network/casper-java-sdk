@@ -51,18 +51,12 @@ public class Secp256k1PrivateKey extends PrivateKey {
     }
 
     @Override
-    public String sign(String msg) {
-        // TODO Auto-generated method stub
-        return null;
+    public String sign(String message) {
+        SignatureData signature = Sign.signMessage(Hash.sha256(message.getBytes()),
+                keyPair, false);
+        // FIXME: CHECK THIS
+        return signature.toString();
     }
-
-    /*
-     * public SignatureData sign(String msg) {
-     * SignatureData signature = Sign.signMessage(Hash.sha256(msg.getBytes()),
-     * keyPair, false);
-     * return signature;
-     * }
-     */
 
     @Override
     public PublicKey derivePublicKey() {

@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.nio.file.Path;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -37,7 +36,7 @@ public class Secp256k1PublicKeyTests extends AbstractCryptoTests {
         File publicKeyFile = File.createTempFile(df.format(new Date()), "-public-key-test.pem");
         pubKey.writePublicKey(publicKeyFile.getPath());
 
-        assertTrue(compareTextFiles(Path.of(getResourcesKeyPath("crypto/secp256k1/public_key.pem")).toFile(),
+        assertTrue(compareTextFiles(new File(getResourcesKeyPath("crypto/secp256k1/public_key.pem")),
                 publicKeyFile));
     }
 }

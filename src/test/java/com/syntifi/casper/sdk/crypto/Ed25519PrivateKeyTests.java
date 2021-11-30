@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -32,7 +33,7 @@ public class Ed25519PrivateKeyTests extends AbstractCryptoTests {
         Ed25519PrivateKey privKey = loadPrivateKey("crypto/Ed25519/secret_key.pem");
 
         // Compare derived public key to generated hex without leading id byte
-        Path hexKeyFilePath = Path.of(getResourcesKeyPath("crypto/Ed25519/public_key_hex"));
+        Path hexKeyFilePath = Paths.get(getResourcesKeyPath("crypto/Ed25519/public_key_hex"));
         String hexKey = Files.readString(hexKeyFilePath);
         LOGGER.debug("Derived public hex Key from {}: {}", hexKeyFilePath,
                 Hex.toHexString(privKey.derivePublicKey().getKey()));
@@ -50,7 +51,7 @@ public class Ed25519PrivateKeyTests extends AbstractCryptoTests {
         LOGGER.debug("Writing private key to {}", privateKeyFile.getPath());
         privKey.writePrivateKey(privateKeyFile.getPath());
 
-        assertTrue(compareTextFiles(Path.of(getResourcesKeyPath("crypto/Ed25519/secret_key.pem")).toFile(),
+        assertTrue(compareTextFiles(new File(getResourcesKeyPath("crypto/Ed25519/secret_key.pem")),
                 privateKeyFile));
     }
 
@@ -60,7 +61,9 @@ public class Ed25519PrivateKeyTests extends AbstractCryptoTests {
 
         String signature = privKey.sign("Test message");
 
-        assertEquals("4555103678684364a98478112ce0c298ed841d806d2b67b09e8f0215cc738f3c5a1fca5beaf0474ff636613821bcb97e88b3b4d700e65c6cf7574489e09f170c", signature);
+        assertEquals(
+                "4555103678684364a98478112ce0c298ed841d806d2b67b09e8f0215cc738f3c5a1fca5beaf0474ff636613821bcb97e88b3b4d700e65c6cf7574489e09f170c",
+                signature);
 
         LOGGER.debug("Signed as {}", signature);
     }
