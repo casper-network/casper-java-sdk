@@ -15,7 +15,7 @@ public class Secp256k1PrivateKey extends PrivateKey {
 
     @Override
     public void readPrivateKey(String filename) throws IOException {
-                ASN1Sequence key = ASN1Sequence.getInstance(PemFileHelper.readPemFile(filename));
+        ASN1Sequence key = ASN1Sequence.getInstance(PemFileHelper.readPemFile(filename));
         PrivateKeyInfo keyInfo = PrivateKeyInfo.getInstance(key.getObjectAt(1));
         String algoId = keyInfo.getPrivateKeyAlgorithm().getAlgorithm().toString();
         if (algoId.equals(ASN1Identifiers.Secp256k1OIDkey.getId())) {
@@ -28,16 +28,9 @@ public class Secp256k1PrivateKey extends PrivateKey {
         // TODO Auto-generated method stub
     }
 
-
     @Override
     public String sign(String msg) {
         ECDSASignature signature = keyPair.sign(msg.getBytes());
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Boolean verify(String msg, String hex) {
         // TODO Auto-generated method stub
         return null;
     }

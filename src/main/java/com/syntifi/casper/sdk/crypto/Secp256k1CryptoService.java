@@ -11,8 +11,6 @@ import org.bouncycastle.util.encoders.Hex;
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.ECKeyPair;
 
-import lombok.Data;
-
 public class Secp256k1CryptoService {
     private static final ASN1ObjectIdentifier OIDCurve = new ASN1ObjectIdentifier("1.3.132.0.10");
     private static final ASN1ObjectIdentifier OIDkey = new ASN1ObjectIdentifier("1.2.840.10045.2.1");

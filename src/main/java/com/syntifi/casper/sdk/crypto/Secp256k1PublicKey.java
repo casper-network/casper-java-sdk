@@ -38,7 +38,7 @@ public class Secp256k1PublicKey extends PublicKey {
 
 
     @Override
-    public Bool verify(String msg) {
+    public Boolean verify(String msg, String hexString) {
         // TODO Auto-generated method stub
         return null;
     }

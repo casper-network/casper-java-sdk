@@ -33,6 +33,29 @@ public class Ed25519PublicKeyTests extends AbstractCryptoTests {
         assertEquals(hexKey.substring(2), Hex.toHexString(pubKey.getKey()));
     }
 
+    @Test
+    void writePublicKey_should_equal_source_file() throws URISyntaxException, IOException {
+        Ed25519PublicKey pubKey = loadPublicKey("crypto/Ed25519/public_key.pem");
+
+        DateFormat df = new SimpleDateFormat("yyyyMMdd-HHmmss");
+        File publicKeyFile = File.createTempFile(df.format(new Date()), "-public-key-test.pem");
+
+        LOGGER.debug("Writing public key to {}", publicKeyFile.getPath());
+        pubKey.writePublicKey(publicKeyFile.getPath());
+
+        assertTrue(compareFiles(Path.of(getResourcesKeyPath("crypto/Ed25519/public_key.pem").substring(1)).toFile(),
+                publicKeyFile));
+    }
+
+    @Test
+    void verify_should_be_ok() throws URISyntaxException, IOException {
+        String hexSignature = "4555103678684364a98478112ce0c298ed841d806d2b67b09e8f0215cc738f3c5a1fca5beaf0474ff636613821bcb97e88b3b4d700e65c6cf7574489e09f170c";
+
+        Ed25519PublicKey pubKey = loadPublicKey("crypto/Ed25519/public_key.pem");
+
+        assertTrue(pubKey.verify("Test message", hexSignature));
+    }
+
     private Ed25519PublicKey loadPublicKey(String publicKeyPath) throws URISyntaxException, IOException {
         Ed25519PublicKey pubKey = new Ed25519PublicKey();        
         String keyFilePath = getResourcesKeyPath(publicKeyPath);
@@ -40,19 +63,5 @@ public class Ed25519PublicKeyTests extends AbstractCryptoTests {
         pubKey.readPublicKey(keyFilePath);
         LOGGER.debug("Key: {}", Hex.toHexString(pubKey.getKey()));
         return pubKey;
-    }
-
-    @Test
-    void writePublicKey_should_equal_source_file() throws URISyntaxException, IOException {
-        Ed25519PublicKey privKey = loadPublicKey("crypto/Ed25519/public_key.pem");
-
-        DateFormat df = new SimpleDateFormat("yyyyMMdd-HHmmss");
-        File publicKeyFile = File.createTempFile(df.format(new Date()), "-public-key-test.pem");
-
-        LOGGER.debug("Writing public key to {}", publicKeyFile.getPath());
-        privKey.writePublicKey(publicKeyFile.getPath());
-
-        assertTrue(compareFiles(Path.of(getResourcesKeyPath("crypto/Ed25519/public_key.pem").substring(1)).toFile(),
-                publicKeyFile));
     }
 }

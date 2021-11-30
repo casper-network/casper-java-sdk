@@ -18,5 +18,5 @@ public abstract class PublicKey {
 
     public abstract void writePublicKey(String filename) throws IOException;
 
-    public abstract Bool verify(String msg);
+    public abstract Boolean verify(String message, String hexSignature);
 }

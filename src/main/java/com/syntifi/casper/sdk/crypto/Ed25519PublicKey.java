@@ -8,8 +8,10 @@ import org.bouncycastle.asn1.ASN1Primitive;
 import org.bouncycastle.asn1.ASN1Sequence;
 import org.bouncycastle.asn1.DERBitString;
 import org.bouncycastle.asn1.DERSequence;
+import org.bouncycastle.crypto.Signer;
 import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
-import org.web3j.abi.datatypes.Bool;
+import org.bouncycastle.crypto.signers.Ed25519Signer;
+import org.bouncycastle.util.encoders.Hex;
 
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -57,10 +59,18 @@ public class Ed25519PublicKey extends PublicKey {
         PemFileHelper.writePemFile(filename, derKey.getEncoded(), PUBLIC_KEY_DER_HEADER);
     }
 
-
     @Override
-    public Bool verify(String msg) {
-        // TODO Auto-generated method stub
-        return null;
+    public Boolean verify(String msg, String hexSignature) {
+        byte[] byteMsg = msg.getBytes();
+
+        // Verify
+        Signer verifier = new Ed25519Signer();
+        verifier.init(false, publicKeyParameters);
+        verifier.update(byteMsg, 0, byteMsg.length);
+        boolean verified = verifier.verifySignature(Hex.decode(hexSignature));
+
+        // LOGGER.debug("Verification: " + verified); // Verification: true
+
+        return verified;
     }
 }

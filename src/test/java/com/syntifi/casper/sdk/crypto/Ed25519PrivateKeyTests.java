@@ -63,15 +63,6 @@ public class Ed25519PrivateKeyTests extends AbstractCryptoTests {
         LOGGER.debug("Signed as {}", signature);
     }
 
-    @Test
-    void verify_should_be_ok() throws URISyntaxException, IOException {
-        String hexSignature = "4555103678684364a98478112ce0c298ed841d806d2b67b09e8f0215cc738f3c5a1fca5beaf0474ff636613821bcb97e88b3b4d700e65c6cf7574489e09f170c";
-
-        Ed25519PrivateKey privKey = loadPrivateKey("crypto/Ed25519/secret_key.pem");
-
-        assertTrue(privKey.verify("Test message", hexSignature));
-    }
-
     private Ed25519PrivateKey loadPrivateKey(String privateKeyPath) throws URISyntaxException, IOException {
         Ed25519PrivateKey privKey = new Ed25519PrivateKey();
         String keyFilePath = getResourcesKeyPath(privateKeyPath);

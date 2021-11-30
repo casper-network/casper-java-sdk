@@ -73,21 +73,6 @@ public class Ed25519PrivateKey extends PrivateKey {
     }
 
     @Override
-    public Boolean verify(String msg, String hexSignature) {
-        byte[] byteMsg = msg.getBytes();
-
-        // Verify
-        Signer verifier = new Ed25519Signer();
-        verifier.init(false, privateKeyParameters.generatePublicKey());
-        verifier.update(byteMsg, 0, byteMsg.length);
-        boolean verified = verifier.verifySignature(Hex.decode(hexSignature));
-
-        // LOGGER.debug("Verification: " + verified); // Verification: true
-
-        return verified;
-    }
-
-    @Override
     public PublicKey derivePublicKey() {
         return new Ed25519PublicKey(privateKeyParameters.generatePublicKey().getEncoded());
     }

@@ -16,9 +16,7 @@ public abstract class PrivateKey {
 
     public abstract void writePrivateKey(String filename) throws IOException;
 
-    public abstract String sign(String msg);
-
-    public abstract Boolean verify(String msg, String hexSignature);
+    public abstract String sign(String message);
 
     public abstract PublicKey derivePublicKey();
 }
