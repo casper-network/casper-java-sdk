@@ -21,24 +21,24 @@ public class Secp256k1PrivateKeyTests extends AbstractCryptoTests {
 
     @Test
     void readPrivateKey_should_load_private_key() throws URISyntaxException, IOException {
-        Secp256k1PrivateKey pvtKey = new Secp256k1PrivateKey();
+        Secp256k1PrivateKey privKey = new Secp256k1PrivateKey();
         String filePath = getResourcesKeyPath("crypto/secp256k1/secret_key.pem");
-        pvtKey.readPrivateKey(filePath);
+        privKey.readPrivateKey(filePath);
 
-        assertNotNull(pvtKey.getKey());
+        assertNotNull(privKey.getKey());
     }
 
     @Test
-    void writePublicKey_should_equal_source_file() throws URISyntaxException, IOException {
-        Secp256k1PrivateKey pubKey = new Secp256k1PrivateKey();
+    void writePrivateKey_should_equal_source_file() throws URISyntaxException, IOException {
+        Secp256k1PrivateKey privKey = new Secp256k1PrivateKey();
         String filePath = getResourcesKeyPath("crypto/secp256k1/secret_key.pem");
-        pubKey.readPrivateKey(filePath);
+        privKey.readPrivateKey(filePath);
 
         DateFormat df = new SimpleDateFormat("yyyyMMdd-HHmmss");
-        File publicKeyFile = File.createTempFile(df.format(new Date()), "-secret-key-test.pem");
-        pubKey.writePrivateKey(publicKeyFile.getPath());
+        File privateKeyFile = File.createTempFile(df.format(new Date()), "-secret-key-test.pem");
+        privKey.writePrivateKey(privateKeyFile.getPath());
 
-        assertTrue(compareFiles(Path.of(getResourcesKeyPath("crypto/secp256k1/secret_key.pem")).toFile(),
-                publicKeyFile));
+        assertTrue(compareFiles(Path.of(getResourcesKeyPath("crypto/secp256k1/secret_key.pem").substring(1)).toFile(),
+                privateKeyFile));
     }
 }
