@@ -3,6 +3,7 @@ package com.syntifi.casper.sdk.crypto;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
 
 import org.bouncycastle.util.io.pem.PemObject;
 import org.bouncycastle.util.io.pem.PemReader;
@@ -20,9 +21,15 @@ public class PemFileHelper {
         }
     }
 
-    public static void writePemFile(String filename, byte[] encodedKey, String keyType) throws IOException {
-        try (PemWriter pemWriter = new PemWriter(new FileWriter(filename))) {
+    public static void writePemFile(Writer fileWriter, byte[] encodedKey, String keyType) throws IOException {
+        try (PemWriter pemWriter = new PemWriter(fileWriter)) {
             pemWriter.writeObject(new PemObject(keyType, encodedKey));
+        }
+    }
+
+    public static void writePemFile(String filename, byte[] encodedKey, String keyType) throws IOException {
+        try (FileWriter fileWriter = new FileWriter(filename)) {
+            writePemFile(fileWriter, encodedKey, keyType);
         }
     }
 }
