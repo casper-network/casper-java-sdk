@@ -27,7 +27,7 @@ public class Ed25519PublicKeyTests extends AbstractCryptoTests {
         assertNotNull(pubKey.getKey());
 
         // Compare to generated hex without leading id byte
-        Path hexKeyFilePath = Path.of(getResourcesKeyPath("crypto/Ed25519/public_key_hex").substring(1));
+        Path hexKeyFilePath = Path.of(getResourcesKeyPath("crypto/Ed25519/public_key_hex"));
         String hexKey = Files.readString(hexKeyFilePath);
         LOGGER.debug("Hex Key from {}: {}", hexKeyFilePath, Hex.toHexString(pubKey.getKey()));
         assertEquals(hexKey.substring(2), Hex.toHexString(pubKey.getKey()));
@@ -43,7 +43,7 @@ public class Ed25519PublicKeyTests extends AbstractCryptoTests {
         LOGGER.debug("Writing public key to {}", publicKeyFile.getPath());
         pubKey.writePublicKey(publicKeyFile.getPath());
 
-        assertTrue(compareFiles(Path.of(getResourcesKeyPath("crypto/Ed25519/public_key.pem").substring(1)).toFile(),
+        assertTrue(compareTextFiles(Path.of(getResourcesKeyPath("crypto/Ed25519/public_key.pem")).toFile(),
                 publicKeyFile));
     }
 

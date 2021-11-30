@@ -7,9 +7,11 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.file.Paths;
+
+import org.web3j.utils.Files;
 
 public abstract class AbstractCryptoTests {
-
     /**
      * Loads test key file from resources
      * 
@@ -21,7 +23,7 @@ public abstract class AbstractCryptoTests {
     protected String getResourcesKeyPath(String filename) throws URISyntaxException {
         URL url = getClass().getClassLoader().getResource(filename);
 
-        String path = url.toURI().getPath();
+        String path = Paths.get(url.toURI()).toString();
 
         return path;
     }
@@ -31,6 +33,20 @@ public abstract class AbstractCryptoTests {
      * 
      * @param file1
      * @param file2
+     * @throws IOException
+     */
+    protected boolean compareTextFiles(File file1, File file2) throws IOException {
+        String contentFile1 = Files.readString(file1);
+        String contentFile2 = Files.readString(file2);
+
+        return sanitizedFileContent(contentFile1).equals(sanitizedFileContent(contentFile2));
+    }
+
+    /**
+     * 
+     * @param file1
+     * @param file2
+     * @return
      * @throws IOException
      */
     protected boolean compareFiles(File file1, File file2) throws IOException {
@@ -50,5 +66,9 @@ public abstract class AbstractCryptoTests {
 
             return m1.equals(m2);
         }
+    }
+
+    private String sanitizedFileContent(String content) {
+        return content.replaceAll("\r\n", "\n");
     }
 }
