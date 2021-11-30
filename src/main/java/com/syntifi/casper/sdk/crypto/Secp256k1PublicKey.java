@@ -1,13 +1,26 @@
 package com.syntifi.casper.sdk.crypto;
 
+import java.io.FileWriter;
 import java.io.IOException;
+import java.math.BigInteger;
+import java.security.SignatureException;
 
+import org.bouncycastle.asn1.ASN1EncodableVector;
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.asn1.ASN1Primitive;
 import org.bouncycastle.asn1.ASN1Sequence;
 import org.bouncycastle.asn1.DERBitString;
+import org.bouncycastle.asn1.DERSequence;
 import org.web3j.abi.datatypes.Bool;
+import org.web3j.crypto.Hash;
+import org.web3j.crypto.Sign;
+import org.web3j.crypto.Sign.SignatureData;
 
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 public class Secp256k1PublicKey extends PublicKey {
 
     public Secp256k1PublicKey(byte[] bytes) {
@@ -33,12 +46,27 @@ public class Secp256k1PublicKey extends PublicKey {
 
     @Override
     public void writePublicKey(String filename) throws IOException {
-        // TODO Auto-generated method stub
+        try (FileWriter fileWriter = new FileWriter(filename)) {
+            DERBitString key = new DERBitString(getKey());
+            ASN1EncodableVector v1 = new ASN1EncodableVector();
+            v1.add(ASN1Identifiers.Secp256k1OIDkey);
+            v1.add(ASN1Identifiers.Secp256k1OIDCurve);
+            DERSequence derPrefix = new DERSequence(v1);
+            ASN1EncodableVector v2 = new ASN1EncodableVector();
+            v2.add(derPrefix);
+            v2.add(key);
+            DERSequence derKey = new DERSequence(v2);
+            PemFileHelper.writePemFile(fileWriter, derKey.getEncoded(), ASN1Identifiers.PUBLIC_KEY_DER_HEADER);
+        }
     }
 
+    public Bool verify(String msg, SignatureData signature) throws SignatureException {
+        BigInteger publicKey = Sign.signedMessageToKey(Hash.sha256(msg.getBytes()), signature);
+        return new Bool(publicKey.equals(new BigInteger(getKey())));
+    }
 
     @Override
-    public Boolean verify(String msg, String hexString) {
+    public Boolean verify(String message, String hexSignature) {
         // TODO Auto-generated method stub
         return null;
     }

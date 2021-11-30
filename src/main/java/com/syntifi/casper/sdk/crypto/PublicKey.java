@@ -2,8 +2,6 @@ package com.syntifi.casper.sdk.crypto;
 
 import java.io.IOException;
 
-import org.web3j.abi.datatypes.Bool;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
