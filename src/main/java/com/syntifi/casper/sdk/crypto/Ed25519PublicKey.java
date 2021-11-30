@@ -20,10 +20,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class Ed25519PublicKey extends PublicKey {
-    public static final String PUBLIC_KEY_DER_HEADER = "PUBLIC KEY";
-
-    // 1.3.101.112 is the OID identifier for the Ed25519 schema
-    private static final ASN1ObjectIdentifier OID = new ASN1ObjectIdentifier("1.3.101.112");
 
     private Ed25519PublicKeyParameters publicKeyParameters;
 
@@ -42,7 +38,7 @@ public class Ed25519PublicKey extends PublicKey {
         ASN1Sequence objBaseSeq = ASN1Sequence.getInstance(derKey);
         String objId = ASN1ObjectIdentifier
                 .getInstance(ASN1Sequence.getInstance(objBaseSeq.getObjectAt(0)).getObjectAt(0)).getId();
-        if (objId.equals(OID.getId())) {
+        if (objId.equals(ASN1Identifiers.Ed25519OID.getId())) {
             DERBitString key = DERBitString.getInstance(objBaseSeq.getObjectAt(1));
             publicKeyParameters = new Ed25519PublicKeyParameters(key.getBytes(), 0);
             setKey(publicKeyParameters.getEncoded());
@@ -51,13 +47,13 @@ public class Ed25519PublicKey extends PublicKey {
 
     @Override
     public void writePublicKey(String filename) throws IOException {
-        DERSequence derPrefix = new DERSequence(OID);
+        DERSequence derPrefix = new DERSequence(ASN1Identifiers.Ed25519OID);
         DERBitString key = new DERBitString(getKey());
         ASN1EncodableVector vector = new ASN1EncodableVector();
         vector.add(derPrefix);
         vector.add(key);
         DERSequence derKey = new DERSequence(vector);
-        PemFileHelper.writePemFile(filename, derKey.getEncoded(), PUBLIC_KEY_DER_HEADER);
+        PemFileHelper.writePemFile(filename, derKey.getEncoded(), ASN1Identifiers.PUBLIC_KEY_DER_HEADER);
     }
 
     @Override

@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import org.bouncycastle.asn1.ASN1EncodableVector;
 import org.bouncycastle.asn1.ASN1Integer;
-import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.asn1.ASN1Primitive;
 import org.bouncycastle.asn1.DEROctetString;
 import org.bouncycastle.asn1.DERSequence;
@@ -20,11 +19,7 @@ import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(callSuper = true)
 public class Ed25519PrivateKey extends PrivateKey {
-    public static final String PRIVATE_KEY_DER_HEADER = "PRIVATE KEY";
-
-    // 1.3.101.112 is the OID identifier for the Ed25519 schema
-    private static final ASN1ObjectIdentifier OID = new ASN1ObjectIdentifier("1.3.101.112");
-
+    
     private Ed25519PrivateKeyParameters privateKeyParameters;
 
     /*
@@ -38,7 +33,7 @@ public class Ed25519PrivateKey extends PrivateKey {
         ASN1Primitive key = ASN1Primitive.fromByteArray(PemFileHelper.readPemFile(filename));
         PrivateKeyInfo keyInfo = PrivateKeyInfo.getInstance(key);
         String algoId = keyInfo.getPrivateKeyAlgorithm().getAlgorithm().toString();
-        if (algoId.equals(OID.getId())) {
+        if (algoId.equals(ASN1Identifiers.Ed25519OID.getId())) {
             privateKeyParameters = new Ed25519PrivateKeyParameters(keyInfo.getPrivateKey().getEncoded(), 4);
             setKey(privateKeyParameters.getEncoded());
         }
@@ -46,14 +41,14 @@ public class Ed25519PrivateKey extends PrivateKey {
 
     @Override
     public void writePrivateKey(String filename) throws IOException {
-        DERSequence derPrefix = new DERSequence(OID);
+        DERSequence derPrefix = new DERSequence(ASN1Identifiers.Ed25519OID);
         DEROctetString key = new DEROctetString(new DEROctetString(getKey()));
         ASN1EncodableVector vector = new ASN1EncodableVector();
         vector.add(new ASN1Integer(0));
         vector.add(derPrefix);
         vector.add(key);
         DERSequence derKey = new DERSequence(vector);
-        PemFileHelper.writePemFile(filename, derKey.getEncoded(), PRIVATE_KEY_DER_HEADER);
+        PemFileHelper.writePemFile(filename, derKey.getEncoded(), ASN1Identifiers.PRIVATE_KEY_DER_HEADER);
     }
 
     @Override
