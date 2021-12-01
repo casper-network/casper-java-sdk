@@ -61,8 +61,7 @@ public class Secp256k1PublicKey extends PublicKey {
 
     @Override
     public <T> Boolean verify(String message, T signature) throws GeneralSecurityException {
-        BigInteger publicKey;
-        publicKey = Sign.signedMessageToKey(Hash.sha256(message.getBytes()), (SignatureData) signature);
+        BigInteger publicKey = Sign.signedMessageToKey(Hash.sha256(message.getBytes()), (SignatureData) signature);
         return publicKey.equals(new BigInteger(getKey()));
     }
 }

@@ -3,7 +3,7 @@ package com.syntifi.casper.sdk.crypto;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigInteger;
-import java.security.SignatureException;
+import java.util.Arrays;
 
 import org.bouncycastle.asn1.ASN1EncodableVector;
 import org.bouncycastle.asn1.ASN1Integer;
@@ -13,13 +13,14 @@ import org.bouncycastle.asn1.DEROctetString;
 import org.bouncycastle.asn1.DERSequence;
 import org.bouncycastle.asn1.DERTaggedObject;
 import org.bouncycastle.util.encoders.Hex;
-import org.web3j.abi.datatypes.Bool;
-import org.web3j.crypto.Credentials;
 import org.web3j.crypto.ECKeyPair;
 import org.web3j.crypto.Hash;
 import org.web3j.crypto.Sign;
 import org.web3j.crypto.Sign.SignatureData;
 
+import lombok.Getter;
+
+@Getter
 public class Secp256k1PrivateKey extends PrivateKey {
 
     private ECKeyPair keyPair;
@@ -30,8 +31,7 @@ public class Secp256k1PrivateKey extends PrivateKey {
         String algoId = key.getObjectAt(2).toString();
         if (algoId.equals("[0]" + ASN1Identifiers.Secp256k1OIDCurve) && key.getObjectAt(0).toString().equals("1")) {
             DEROctetString pk = (DEROctetString) key.getObjectAt(1);
-            Credentials cs = Credentials.create(Hex.toHexString(pk.getEncoded()));
-            keyPair = cs.getEcKeyPair();
+            keyPair = ECKeyPair.create(pk.getOctets());
             this.setKey(keyPair.getPrivateKey().toByteArray());
         }
     }
@@ -40,7 +40,8 @@ public class Secp256k1PrivateKey extends PrivateKey {
     public void writePrivateKey(String filename) throws IOException {
         try (FileWriter fileWriter = new FileWriter(filename)) {
             DERTaggedObject derPrefix = new DERTaggedObject(0, ASN1Identifiers.Secp256k1OIDCurve);
-            DEROctetString key = (DEROctetString) ASN1Primitive.fromByteArray(keyPair.getPrivateKey().toByteArray());
+            DEROctetString key = (DEROctetString) ASN1Primitive
+                    .fromByteArray(keyPair.getPrivateKey().toByteArray());
             ASN1EncodableVector vector = new ASN1EncodableVector();
             vector.add(new ASN1Integer(1));
             vector.add(key);
@@ -52,15 +53,24 @@ public class Secp256k1PrivateKey extends PrivateKey {
 
     @Override
     public String sign(String message) {
-        SignatureData signature = Sign.signMessage(Hash.sha256(message.getBytes()),
-                keyPair, false);
-        // FIXME: CHECK THIS
-        return signature.toString();
+        SignatureData signature = Sign.signMessage(Hash.sha256(message.getBytes()), keyPair, false);
+        return Hex.toHexString(signature.getR()) + Hex.toHexString(signature.getS())
+                + Hex.toHexString(signature.getV());
     }
 
     @Override
     public PublicKey derivePublicKey() {
         return new Secp256k1PublicKey(keyPair.getPublicKey().toByteArray());
+    }
+
+    public PublicKey derivePublicKey(Boolean compressed) {
+        if (compressed) {
+            BigInteger pubKey = keyPair.getPublicKey();
+            String pubKeyPrefix = pubKey.testBit(0) ? "03" : "02";
+            byte[] pubKeyBytes = Arrays.copyOf(pubKey.toByteArray(), 32);
+            return new Secp256k1PublicKey(Hex.decode(pubKeyPrefix + Hex.toHexString(pubKeyBytes)));
+        }
+        return derivePublicKey();
     }
 
 }
