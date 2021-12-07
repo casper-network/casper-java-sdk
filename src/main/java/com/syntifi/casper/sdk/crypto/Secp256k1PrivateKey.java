@@ -40,8 +40,7 @@ public class Secp256k1PrivateKey extends PrivateKey {
     public void writePrivateKey(String filename) throws IOException {
         try (FileWriter fileWriter = new FileWriter(filename)) {
             DERTaggedObject derPrefix = new DERTaggedObject(0, ASN1Identifiers.Secp256k1OIDCurve);
-            ASN1Primitive tmp = ASN1Primitive.fromByteArray(keyPair.getPrivateKey().toByteArray());
-            DEROctetString key = (DEROctetString) tmp; 
+            DEROctetString key = new DEROctetString(getKey());
             ASN1EncodableVector vector = new ASN1EncodableVector();
             vector.add(new ASN1Integer(1));
             vector.add(key);
