@@ -40,8 +40,8 @@ public class Secp256k1PrivateKey extends PrivateKey {
     public void writePrivateKey(String filename) throws IOException {
         try (FileWriter fileWriter = new FileWriter(filename)) {
             DERTaggedObject derPrefix = new DERTaggedObject(0, ASN1Identifiers.Secp256k1OIDCurve);
-            DEROctetString key = (DEROctetString) ASN1Primitive
-                    .fromByteArray(keyPair.getPrivateKey().toByteArray());
+            ASN1Primitive tmp = ASN1Primitive.fromByteArray(keyPair.getPrivateKey().toByteArray());
+            DEROctetString key = (DEROctetString) tmp; 
             ASN1EncodableVector vector = new ASN1EncodableVector();
             vector.add(new ASN1Integer(1));
             vector.add(key);
@@ -51,26 +51,63 @@ public class Secp256k1PrivateKey extends PrivateKey {
         }
     }
 
+    /**
+     * When encoded in DER, this becomes the following sequence of bytes:
+     * 
+     * 0x30 b1 0x02 b2 (vr) 0x02 b3 (vs)
+     * 
+     * where:
+     * 
+     * b1 is a single byte value, equal to the length, in bytes, of the remaining
+     * list of bytes (from the first 0x02 to the end of the encoding);
+     * b2 is a single byte value, equal to the length, in bytes, of (vr);
+     * b3 is a single byte value, equal to the length, in bytes, of (vs);
+     * (vr) is the signed big-endian encoding of the value "r
+     * 
+     * ", of minimal length;
+     * (vs) is the signed big-endian encoding of the value "s
+     * ", of minimal length.
+     */
     @Override
     public String sign(String message) {
         SignatureData signature = Sign.signMessage(Hash.sha256(message.getBytes()), keyPair, false);
-        return Hex.toHexString(signature.getR()) + Hex.toHexString(signature.getS())
-                + Hex.toHexString(signature.getV());
+        return Hex.toHexString(signature.getR()) + Hex.toHexString(signature.getS());
+        // return Hex.toHexString(signature.getR()) + canonical(signature.getS());
+        // return r.toString(16) + Sign.CURVE_PARAMS.getN().subtract(s).toString(16);
     }
 
+    /**
+     * Will automatically adjust the S component to be more than or equal to half
+     * the curve order,
+     * if necessary. This is required because for every signature (r,s) the
+     * signature (r, -s (mod
+     * N)) is a valid signature of the same message. However, we dislike the ability
+     * to modify the
+     * bits of a Ethereum transaction after it's been signed, as that violates
+     * various assumed
+     * invariants. Thus in future only one of those forms will be considered legal
+     * and the other
+     * will be banned.
+     *
+     */
+    private String canonical(byte[] s) {
+        BigInteger sBigInteger = new BigInteger(s);
+        BigInteger N = Sign.CURVE_PARAMS.getN();
+        BigInteger HALF_N = N.shiftRight(1);
+        return sBigInteger.compareTo(HALF_N) < 0 ? N.subtract(sBigInteger).toString(16) : Hex.toHexString(s);
+    }
+
+    /**
+     * Returns a Secp256k1PublicKey object in a compressed format
+     * adding the prefix 02/03 to identify the positive or negative Y followed
+     * by the X value in the elliptic curve
+     */
     @Override
     public PublicKey derivePublicKey() {
-        return new Secp256k1PublicKey(keyPair.getPublicKey().toByteArray());
+        //return new Secp256k1PublicKey(keyPair.getPublicKey().toByteArray());
+        BigInteger pubKey = keyPair.getPublicKey();
+        String pubKeyPrefix = pubKey.testBit(0) ? "03" : "02";
+        byte[] pubKeyBytes = Arrays.copyOf(pubKey.toByteArray(), 32);
+        return new Secp256k1PublicKey(Hex.decode(pubKeyPrefix + Hex.toHexString(pubKeyBytes)));
     }
-
-    public PublicKey derivePublicKey(Boolean compressed) {
-        if (compressed) {
-            BigInteger pubKey = keyPair.getPublicKey();
-            String pubKeyPrefix = pubKey.testBit(0) ? "03" : "02";
-            byte[] pubKeyBytes = Arrays.copyOf(pubKey.toByteArray(), 32);
-            return new Secp256k1PublicKey(Hex.decode(pubKeyPrefix + Hex.toHexString(pubKeyBytes)));
-        }
-        return derivePublicKey();
-    }
-
 }

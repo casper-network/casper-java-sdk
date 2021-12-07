@@ -48,7 +48,7 @@ public class Secp256k1PrivateKeyTests extends AbstractCryptoTests {
         Secp256k1PrivateKey privKey = new Secp256k1PrivateKey();
         String filePath = getResourcesKeyPath("crypto/secp256k1/secret_key.pem");
         privKey.readPrivateKey(filePath);
-        Secp256k1PublicKey pubKey = (Secp256k1PublicKey) privKey.derivePublicKey(true);
+        Secp256k1PublicKey pubKey = (Secp256k1PublicKey) privKey.derivePublicKey();
 
         DateFormat df = new SimpleDateFormat("yyyyMMdd-HHmmss");
         File derivedPublicKeyFile = File.createTempFile(df.format(new Date()), "-derived-public-key-test.pem");
@@ -70,8 +70,9 @@ public class Secp256k1PrivateKeyTests extends AbstractCryptoTests {
 
         String signature = privKey.sign("Test message");
 
+        LOGGER.info(signature);
         assertEquals(
-                "ea5b38fd0db5fb3d871c47fde1fa4c4db75d1a9e1c0ac54d826e178ee0e63707e894b19c4b07c742fce0ff8000295b079d1cd2d5eab9fafdee7b1eea1aabbea3",
+            "ea5b38fd0db5fb3d871c47fde1fa4c4db75d1a9e1c0ac54d826e178ee0e63707176b4e63b4f838bd031f007fffd6a4f71d920a10c48ea53dd1573fa2b58a829e",
                 signature);
     }
 }

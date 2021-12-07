@@ -17,5 +17,5 @@ public abstract class PublicKey {
 
     public abstract void writePublicKey(String filename) throws IOException;
 
-    public abstract <T> Boolean verify(String message, T signature) throws GeneralSecurityException;
+    public abstract Boolean verify(String message, String signature) throws GeneralSecurityException;
 }

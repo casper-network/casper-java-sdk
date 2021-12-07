@@ -4,6 +4,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.GeneralSecurityException;
+import java.util.Arrays;
 
 import org.bouncycastle.asn1.ASN1EncodableVector;
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
@@ -11,6 +12,7 @@ import org.bouncycastle.asn1.ASN1Primitive;
 import org.bouncycastle.asn1.ASN1Sequence;
 import org.bouncycastle.asn1.DERBitString;
 import org.bouncycastle.asn1.DERSequence;
+import org.bouncycastle.util.encoders.Hex;
 import org.web3j.crypto.Hash;
 import org.web3j.crypto.Sign;
 import org.web3j.crypto.Sign.SignatureData;
@@ -46,6 +48,7 @@ public class Secp256k1PublicKey extends PublicKey {
     @Override
     public void writePublicKey(String filename) throws IOException {
         try (FileWriter fileWriter = new FileWriter(filename)) {
+            //DERBitString key = new DERBitString(Secp256k1PublicKey.getShortKey(getKey()));
             DERBitString key = new DERBitString(getKey());
             ASN1EncodableVector v1 = new ASN1EncodableVector();
             v1.add(ASN1Identifiers.Secp256k1OIDkey);
@@ -60,8 +63,20 @@ public class Secp256k1PublicKey extends PublicKey {
     }
 
     @Override
-    public <T> Boolean verify(String message, T signature) throws GeneralSecurityException {
-        BigInteger publicKey = Sign.signedMessageToKey(Hash.sha256(message.getBytes()), (SignatureData) signature);
-        return publicKey.equals(new BigInteger(getKey()));
+    public Boolean verify(String message, String signature) throws GeneralSecurityException {
+        byte[] signatureBytes = Hex.decode(signature);
+        SignatureData signatureData = new SignatureData(
+                (byte) 27,
+                Arrays.copyOfRange(signatureBytes, 0, 32),
+                Arrays.copyOfRange(signatureBytes, 32, 64));
+        BigInteger derivedKey = Sign.signedMessageHashToKey(Hash.sha256(message.getBytes()), signatureData);
+        return Arrays.equals(Secp256k1PublicKey.getShortKey(derivedKey.toByteArray()), getKey());
+    }
+
+    public static byte[] getShortKey(byte[] key) {
+        BigInteger pubKey = new BigInteger(key);
+        String pubKeyPrefix = pubKey.testBit(0) ? "03" : "02";
+        byte[] pubKeyBytes = Arrays.copyOf(key, 32);
+        return Hex.decode(pubKeyPrefix + Hex.toHexString(pubKeyBytes));
     }
 }

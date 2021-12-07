@@ -57,7 +57,7 @@ public class Ed25519PublicKey extends PublicKey {
     }
 
     @Override
-    public <T> Boolean verify(String message, T signature) throws GeneralSecurityException {
+    public Boolean verify(String message, String signature) throws GeneralSecurityException {
         byte[] byteMessage = message.getBytes();
 
         // Verify
