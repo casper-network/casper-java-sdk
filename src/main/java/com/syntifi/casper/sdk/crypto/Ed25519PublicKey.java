@@ -25,6 +25,7 @@ public class Ed25519PublicKey extends PublicKey {
 
     public Ed25519PublicKey(byte[] bytes) {
         super(bytes);
+        publicKeyParameters = new Ed25519PublicKeyParameters(bytes, 0);
     }
 
     /*
