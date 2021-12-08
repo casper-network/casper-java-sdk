@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public abstract class PublicKey {
+public abstract class AbstractPublicKey {
     private byte[] key;
 
     public abstract void readPublicKey(String filename) throws IOException;

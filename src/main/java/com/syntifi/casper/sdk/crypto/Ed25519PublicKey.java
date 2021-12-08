@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class Ed25519PublicKey extends PublicKey {
+public class Ed25519PublicKey extends AbstractPublicKey {
 
     private Ed25519PublicKeyParameters publicKeyParameters;
 
@@ -65,10 +65,7 @@ public class Ed25519PublicKey extends PublicKey {
         Signer verifier = new Ed25519Signer();
         verifier.init(false, publicKeyParameters);
         verifier.update(byteMessage, 0, byteMessage.length);
-        boolean verified = verifier.verifySignature(Hex.decode((String) signature));
 
-        // LOGGER.debug("Verification: " + verified); // Verification: true
-
-        return verified;
+        return verifier.verifySignature(Hex.decode((String) signature));
     }
 }

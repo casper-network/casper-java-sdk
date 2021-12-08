@@ -18,7 +18,7 @@ import org.bouncycastle.util.encoders.Hex;
 import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(callSuper = true)
-public class Ed25519PrivateKey extends PrivateKey {
+public class Ed25519PrivateKey extends AbstractPrivateKey {
     
     private Ed25519PrivateKeyParameters privateKeyParameters;
 
@@ -68,7 +68,7 @@ public class Ed25519PrivateKey extends PrivateKey {
     }
 
     @Override
-    public PublicKey derivePublicKey() {
+    public AbstractPublicKey derivePublicKey() {
         return new Ed25519PublicKey(privateKeyParameters.generatePublicKey().getEncoded());
     }
 }

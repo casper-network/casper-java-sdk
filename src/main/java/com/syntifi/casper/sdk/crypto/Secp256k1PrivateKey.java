@@ -21,7 +21,7 @@ import org.web3j.crypto.Sign.SignatureData;
 import lombok.Getter;
 
 @Getter
-public class Secp256k1PrivateKey extends PrivateKey {
+public class Secp256k1PrivateKey extends AbstractPrivateKey {
 
     private ECKeyPair keyPair;
 
@@ -102,7 +102,7 @@ public class Secp256k1PrivateKey extends PrivateKey {
      * by the X value in the elliptic curve
      */
     @Override
-    public PublicKey derivePublicKey() {
+    public AbstractPublicKey derivePublicKey() {
         //return new Secp256k1PublicKey(keyPair.getPublicKey().toByteArray());
         BigInteger pubKey = keyPair.getPublicKey();
         String pubKeyPrefix = pubKey.testBit(0) ? "03" : "02";

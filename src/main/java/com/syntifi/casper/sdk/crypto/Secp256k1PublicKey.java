@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class Secp256k1PublicKey extends PublicKey {
+public class Secp256k1PublicKey extends AbstractPublicKey {
 
     public Secp256k1PublicKey(byte[] bytes) {
         super(bytes);
