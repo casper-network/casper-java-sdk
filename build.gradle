@@ -5,6 +5,7 @@ plugins {
 	id 'java'
     id 'jacoco'
     id 'io.freefair.lombok' version "${lombokPluginVersion}"
+    id 'maven-publish'
 }
 
 group = 'com.syntifi.casper'
@@ -82,4 +83,22 @@ jacocoTestReport {
             fileTree(dir: it, exclude: '**/exception/**')
         })
     }
+}
+
+publishing {
+  repositories {
+    maven {
+      name = "GitHubPackages"
+      url = "https://maven.pkg.github.com/syntifi/casper-sdk"
+      credentials {
+        username = System.getenv("GITHUB_ACTOR")
+        password = System.getenv("GITHUB_TOKEN")
+      }
+    }
+  }
+  publications {      
+    gpr(MavenPublication) {
+        from(components.java)
+    }
+  }
 }
