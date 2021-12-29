@@ -1,5 +1,6 @@
 package com.syntifi.casper.sdk.model;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -28,8 +29,17 @@ public abstract class AbstractJsonTests {
      */
     protected String loadJsonFromFile(String filename) throws IOException {
         String fileJson;
-        try (InputStream is = getClass().getClassLoader().getResourceAsStream(filename)) {
-            fileJson = new String(is.readAllBytes());
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+        try (InputStream is = getClass().getClassLoader().getResourceAsStream(filename)) {            
+            //copy stream
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = is.read(buffer)) != -1) {
+                baos.write(buffer, 0, bytesRead);
+            }
+            
+            fileJson = new String(baos.toByteArray());
         }
         return fileJson;
     }

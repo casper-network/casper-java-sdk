@@ -385,14 +385,14 @@ public class CLValueDecoder extends ByteArrayInputStream {
         clValue.setValue(string);
     }
 
-    public void readPublicKey(CLValuePublicKey clvalue) throws NoSuchAlgorithmException, InvalidByteStringException {
-        byte[] key = this.readAllBytes();
+    public void readPublicKey(CLValuePublicKey clvalue) throws NoSuchAlgorithmException, CLValueDecodeException, IOException {
+        byte[] key = this.readBytes(buf.length);
         clvalue.setBytes(StringByteHelper.convertBytesToHex(key));
         clvalue.setValue(PublicKey.fromTaggedHexString(clvalue.getBytes()));
     }
 
-    public void readKey(CLValueKey clvalue) throws NoSuchKeyTagException, InvalidByteStringException {
-        byte[] key = this.readAllBytes();
+    public void readKey(CLValueKey clvalue) throws NoSuchKeyTagException, CLValueDecodeException, IOException {
+        byte[] key = this.readBytes(buf.length);
         clvalue.setBytes(StringByteHelper.convertBytesToHex(key));
         clvalue.setValue(Key.fromTaggedHexString(clvalue.getBytes()));
     }
