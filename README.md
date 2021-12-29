@@ -40,6 +40,8 @@ publishing {
 
 Using [maven](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-apache-maven-registry)
 
+*~/.m2/settings.xml*:
+
 ```xml
 <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -77,7 +79,14 @@ Using [maven](https://docs.github.com/en/packages/working-with-a-github-packages
     </server>
   </servers>
 </settings>
-
+```
+*pom.xml*
+```xml
+    <dependency>
+      <groupId>com.syntifi.casper</groupId>
+      <artifactId>casper-sdk</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+    </dependency>
 ```
 
 ## How to
