@@ -8,7 +8,7 @@ import lombok.Data;
 
 /**
  * Identifier class passed to service
- * {@link CasperService#getBlock(BlockIdentifierByHash)} to identify and
+ * {@link CasperService#getBlock(BlockIdentifier)} to identify and
  * retrieve the block given its hash.
  *
  * @author Alexandre Carvalho

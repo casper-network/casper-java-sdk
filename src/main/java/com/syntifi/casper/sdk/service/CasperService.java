@@ -66,8 +66,7 @@ public interface CasperService {
         /**
          * Retrieve last block's transfers
          * 
-         * @param heightFilter Block's height
-         * @return Object holding the api version and block
+         * @return Object holding the api version and transfer data
          */
         @JsonRpcMethod("chain_get_block_transfers")
         public TransferData getBlockTransfers();
@@ -76,7 +75,7 @@ public interface CasperService {
          * Retrieve block transfers by its {@link BlockIdentifier}
          * 
          * @param blockIdentifier BlockIdentifier data
-         * @return Object holding the api version and block
+         * @return Object holding the api version and transfer data
          */
         @JsonRpcMethod("chain_get_block_transfers")
         public TransferData getBlockTransfers(@JsonRpcParam("block_identifier") BlockIdentifier blockIdentifier);
@@ -84,8 +83,7 @@ public interface CasperService {
         /**
          * Returns a state root hash at the last Block
          * 
-         * @param height identifier Block's height
-         * @return Object holding the api version and block
+         * @return Object holding the api version and state root hash data
          */
         @JsonRpcMethod("chain_get_state_root_hash")
         public StateRootHashData getStateRootHash();
@@ -94,7 +92,7 @@ public interface CasperService {
          * Returns a state root hash at a given a {@link BlockIdentifier}
          * 
          * @param blockIdentifier BlockIdentifier data
-         * @return Object holding the api version and block
+         * @return Object holding the api version and state root hash data
          */
         @JsonRpcMethod("chain_get_state_root_hash")
         public StateRootHashData getStateRootHash(@JsonRpcParam("block_identifier") BlockIdentifier blockIdentifier);
@@ -105,7 +103,8 @@ public interface CasperService {
          * @param stateRootHash Hash of the state root
          * @param key           `casper_types::Key` as formatted string
          * @param path          The path components starting from the key as base
-         * @return Object holding the api version, the merkle proof and the stored_value
+         * @return Object holding the api version, the merkle proof and the stored value
+         *         data
          */
         @JsonRpcMethod("state_get_item")
         public StoredValueData getStateItem(@JsonRpcParam("state_root_hash") String stateRootHash,
@@ -142,9 +141,9 @@ public interface CasperService {
         /**
          * Returns an Account from the network
          * 
-         * @param publicKey
+         * @param publicKey       the account's public key
          * @param blockIdentifier BlockIdentifier data
-         * @return Oject holding the api version, the account and the merkle proof
+         * @return Oject holding the api version, the account data and the merkle proof
          */
         @JsonRpcMethod("state_get_account_info")
         public AccountData getStateAccountInfo(@JsonRpcParam("public_key") String publicKey,
@@ -154,7 +153,7 @@ public interface CasperService {
          * Returns the Auction info for a given block
          * 
          * @param blockIdentifier BlockIdentifier data
-         * @return Object holding the api version and auction state
+         * @return Object holding the api version and auction state data
          */
         @JsonRpcMethod("state_get_auction_info")
         public AuctionData getStateAuctionInfo(@JsonRpcParam("block_identifier") BlockIdentifier blockIdentifier);
@@ -163,30 +162,30 @@ public interface CasperService {
          * Lookup a dictionary item via an Contract's named keys. Returns an item from a
          * Dictionary given the AccountNamedKey/ContractNamedKey/Dictionary/Uref
          * 
-         * @param rootHash
+         * @param stateRootHash        the hash of state root
          * @param dictionaryIdentifier any concrete DictionaryIdentifier
          * @return Object holding the api version, the dictionary key, the merkle proof
          *         and the stored value
          */
         @JsonRpcMethod("state_get_dictionary_item")
-        public DictionaryData getStateDictionaryItem(@JsonRpcParam("state_root_hash") String rootHash,
+        public DictionaryData getStateDictionaryItem(@JsonRpcParam("state_root_hash") String stateRootHash,
                         @JsonRpcParam("dictionary_identifier") DictionaryIdentifier dictionaryIdentifier);
 
         /**
          * Fetches balance value
          * 
-         * @param rootHash  The hash of state root
-         * @param purseUref Formatted URef
+         * @param stateRootHash the hash of state root
+         * @param purseUref     formatted URef
          * @return Result for "state_get_balance" RPC response
          */
         @JsonRpcMethod("state_get_balance")
-        public BalanceData getBalance(@JsonRpcParam("state_root_hash") String rootHash,
+        public BalanceData getBalance(@JsonRpcParam("state_root_hash") String stateRootHash,
                         @JsonRpcParam("purse_uref") String purseUref);
 
         /**
          * Sends a deploy to be received by the network
          * 
-         * @param deploy
+         * @param deploy the deploy object to send to the network
          * @return Object holding the api version and the deploy hash
          */
         @JsonRpcMethod(value = "account_put_deploy", paramsPassMode = JsonRpcParamsPassMode.ARRAY)

@@ -18,9 +18,11 @@ repositories {
 
 dependencies {	
 	implementation "com.github.briandilley.jsonrpc4j:jsonrpc4j:${jsonrpc4jVersion}"
+
     implementation "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
     implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
     implementation "com.fasterxml.jackson.core:jackson-annotations:${jacksonVersion}"
+    
     implementation "org.javatuples:javatuples:${javaTuplesVersion}"
 
     // log4j and slf4j
@@ -33,6 +35,20 @@ dependencies {
     testImplementation "org.junit.jupiter:junit-jupiter:${jupiterVersion}"	
     // Used to compare json strings while testing
     testImplementation "org.skyscreamer:jsonassert:${jsonassertVersion}"
+}
+
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives javadocJar, sourcesJar
 }
 
 test {    

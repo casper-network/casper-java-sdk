@@ -49,9 +49,9 @@ import lombok.Getter;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public enum CLTypeData {
     BOOL(AbstractCLType.BOOL, (byte) 0x0, CLValueBool.class, CLTypeBool.class),
-    I32(AbstractCLType.I32, (byte) 0x1, CLValueI32.class, CLTypeI32.class), 
+    I32(AbstractCLType.I32, (byte) 0x1, CLValueI32.class, CLTypeI32.class),
     I64(AbstractCLType.I64, (byte) 0x2, CLValueI64.class, CLTypeI64.class),
-    U8(AbstractCLType.U8, (byte) 0x3, CLValueU8.class, CLTypeU8.class), 
+    U8(AbstractCLType.U8, (byte) 0x3, CLValueU8.class, CLTypeU8.class),
     U32(AbstractCLType.U32, (byte) 0x4, CLValueU32.class, CLTypeU32.class),
     U64(AbstractCLType.U64, (byte) 0x5, CLValueU64.class, CLTypeU64.class),
     U128(AbstractCLType.U128, (byte) 0x6, CLValueU128.class, CLTypeU128.class),
@@ -59,10 +59,10 @@ public enum CLTypeData {
     U512(AbstractCLType.U512, (byte) 0x8, CLValueU512.class, CLTypeU512.class),
     UNIT(AbstractCLType.UNIT, (byte) 0x9, CLValueUnit.class, CLTypeUnit.class),
     STRING(AbstractCLType.STRING, (byte) 0x10, CLValueString.class, CLTypeString.class),
-    UREF(AbstractCLType.UREF, (byte) 0x11, CLValueURef.class, CLTypeURef.class), 
+    UREF(AbstractCLType.UREF, (byte) 0x11, CLValueURef.class, CLTypeURef.class),
     KEY(AbstractCLType.KEY, (byte) 0x12, CLValueKey.class, CLTypeKey.class),
     OPTION(AbstractCLType.OPTION, (byte) 0x13, CLValueOption.class, CLTypeOption.class),
-    LIST(AbstractCLType.LIST, (byte) 0x14, CLValueList.class, CLTypeList.class), 
+    LIST(AbstractCLType.LIST, (byte) 0x14, CLValueList.class, CLTypeList.class),
     FIXED_LIST(AbstractCLType.FIXED_LIST, (byte) 0x15, CLValueFixedList.class, CLTypeFixedList.class),
     RESULT(AbstractCLType.RESULT, (byte) 0x16, CLValueResult.class, CLTypeResult.class),
     MAP(AbstractCLType.MAP, (byte) 0x17, CLValueMap.class, CLTypeMap.class),
@@ -81,9 +81,9 @@ public enum CLTypeData {
     /**
      * Retrieve CLType by its serialization tag
      * 
-     * @param serializationTag
-     * @return
-     * @throws NoSuchTypeException
+     * @param serializationTag the serialization tag to find
+     * @return the requested {@link CLTypeData}
+     * @throws NoSuchTypeException raised when the clType is not valid/found
      */
     public static CLTypeData getTypeBySerializationTag(byte serializationTag) throws NoSuchTypeException {
         for (CLTypeData clType : values()) {
@@ -97,9 +97,10 @@ public enum CLTypeData {
     /**
      * Retrieve CLValue implementation class from CLType name
      * 
-     * @param name
-     * @return
-     * @throws NoSuchTypeException
+     * @param name the type's name
+     * @return the {@link Class} object holding the requested
+     *         {@link AbstractCLValue}
+     * @throws NoSuchTypeException raised when the clType is not valid/found
      */
     public static Class<?> getClassByName(String name) throws NoSuchTypeException {
         for (CLTypeData clType : values()) {
@@ -113,9 +114,9 @@ public enum CLTypeData {
     /**
      * Retrieve CLType class from CLType name
      * 
-     * @param name
-     * @return
-     * @throws NoSuchTypeException
+     * @param name the type's name
+     * @return the {@link Class} object holding the requested {@link AbstractCLType}
+     * @throws NoSuchTypeException raised when the clType is not valid/found
      */
     public static Class<?> getCLTypeClassByName(String name) throws NoSuchTypeException {
         for (CLTypeData clType : values()) {
@@ -129,9 +130,9 @@ public enum CLTypeData {
     /**
      * Retrieve CLType from its name
      * 
-     * @param name
-     * @return
-     * @throws NoSuchTypeException
+     * @param name the type's name
+     * @return the requested {@link CLTypeData}
+     * @throws NoSuchTypeException raised when the clType is not valid/found
      */
     public static CLTypeData getTypeByName(String name) throws NoSuchTypeException {
         for (CLTypeData clType : values()) {
@@ -145,10 +146,11 @@ public enum CLTypeData {
     /**
      * Dynamically instantiate a CLValue when needed for decoding children objects
      * 
-     * @param clValueName the {@link String} name of the CLValue to instantiate
-     * @return the desired CLValue implementation
-     * @throws DynamicInstanceException
-     * @throws NoSuchTypeException
+     * @param clValueName the name of the {@link AbstractCLValue} to instantiate
+     * @return the desired {@link AbstractCLValue} implementation
+     * @throws DynamicInstanceException error while dynamically instantiating the
+     *                                  clValue
+     * @throws NoSuchTypeException      raised when the clType is not valid/found
      */
     public static AbstractCLValue<?, ?> createCLValueFromCLTypeName(String clValueName)
             throws DynamicInstanceException, NoSuchTypeException {
@@ -159,10 +161,12 @@ public enum CLTypeData {
      * Dynamically instantiate a CLValue when needed for decoding children objects
      * 
      * @param clTypeData the {@link CLTypeData} to instantiate
-     * @return the desired CLValue implementation
-     * @throws DynamicInstanceException
+     * @return the desired {@link AbstractCLValue} implementation
+     * @throws DynamicInstanceException error while dynamically instantiating the
+     *                                  clValue
      */
-    public static AbstractCLValue<?, ?> createCLValueFromCLTypeData(CLTypeData clTypeData) throws DynamicInstanceException {
+    public static AbstractCLValue<?, ?> createCLValueFromCLTypeData(CLTypeData clTypeData)
+            throws DynamicInstanceException {
         Class<?> clazz = clTypeData.getClazz();
 
         try {
@@ -176,10 +180,11 @@ public enum CLTypeData {
     /**
      * Dynamically instantiate a CLType when needed for decoding children objects
      * 
-     * @param clValueName the {@link String} name of the CLValue to instantiate
-     * @return the desired CLType implementation
-     * @throws DynamicInstanceException
-     * @throws NoSuchTypeException
+     * @param clTypeName the name of the {@link AbstractCLType} to instantiate
+     * @return the desired {@link AbstractCLType} implementation
+     * @throws DynamicInstanceException error while dynamically instantiating the
+     *                                  clValue
+     * @throws NoSuchTypeException      raised when the clType is not valid/found
      */
     public static AbstractCLType createCLTypeFromCLTypeName(String clTypeName)
             throws DynamicInstanceException, NoSuchTypeException {
@@ -190,8 +195,9 @@ public enum CLTypeData {
      * Dynamically instantiate a CLType when needed for decoding children objects
      * 
      * @param clTypeData the {@link CLTypeData} to instantiate
-     * @return the desired CLType implementation
-     * @throws DynamicInstanceException
+     * @return the desired {@link AbstractCLType} implementation
+     * @throws DynamicInstanceException error while dynamically instantiating the
+     *                                  clValue
      */
     public static AbstractCLType createCLTypeFromCLTypeData(CLTypeData clTypeData) throws DynamicInstanceException {
         Class<?> clazz = clTypeData.getClTypeClass();

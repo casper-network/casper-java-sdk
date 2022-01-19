@@ -10,7 +10,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 /**
- * CLType for {@link AbstractCLType.TUPLE2}
+ * CLType for {@link AbstractCLType#TUPLE2}
  * 
  * @author Alexandre Carvalho
  * @author Andre Bertolace

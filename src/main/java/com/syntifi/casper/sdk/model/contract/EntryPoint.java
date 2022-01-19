@@ -51,6 +51,9 @@ public class EntryPoint {
         }
     }
 
+    /**
+     * Context of method execution
+     */
     public enum EntryPointType {
         @JsonProperty("Session")
         SESSION, @JsonProperty("Contract")
@@ -58,31 +61,31 @@ public class EntryPoint {
     }
 
     /**
-     * access(enum/List<String>) -
+     * the {@link EntryPointAccess}
      */
     @JsonIgnore
     private EntryPointAccess access;
 
     /**
-     * args(Array/Object) - Parameter to a method
+     * a list of {@link Parameter}
      */
     @JsonProperty("args")
     private List<Parameter> args;
 
-    /**
-     * entry_point_type(enum/String) - Context of method execution
+    /**     
+     * the {@link EntryPointType} Context of method execution
      */
     @JsonProperty("entry_point_type")
     private EntryPointType type;
 
     /**
-     * name(String)
+     * the name
      */
     @JsonProperty("name")
     private String name;
 
     /**
-     * ret({@link AbstractCLType})
+     * the return as {@link AbstractCLType}
      */
     @JsonIgnore
     private AbstractCLType ret;

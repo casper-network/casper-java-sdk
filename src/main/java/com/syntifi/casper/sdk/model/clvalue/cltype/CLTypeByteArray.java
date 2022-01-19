@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * CLType for {@link AbstractCLType.BYTE_ARRAY}
+ * CLType for {@link AbstractCLType#BYTE_ARRAY}
  * 
  * @author Alexandre Carvalho
  * @author Andre Bertolace

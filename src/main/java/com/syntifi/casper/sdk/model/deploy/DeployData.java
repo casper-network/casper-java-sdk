@@ -23,13 +23,13 @@ public class DeployData {
     private String apiVersion;
 
     /**
-     * @see Deploy
+     * the {@link Deploy}
      */
     @JsonProperty("deploy")
     private Deploy deploy;
 
     /**
-     * @see ExecutionResults
+     * a list of {@link JsonExecutionResult}
      */
     @JsonProperty("execution_results")
     private List<JsonExecutionResult> executionResults;

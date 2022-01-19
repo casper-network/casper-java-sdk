@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * CLType for {@link AbstractCLType.RESULT}
+ * CLType for {@link AbstractCLType#RESULT}
  * 
  * @author Alexandre Carvalho
  * @author Andre Bertolace
@@ -26,7 +26,7 @@ import lombok.Setter;
 public class CLTypeResult extends AbstractCLType {
 
     /**
-     * Support class for {@link AbstractCLType.RESULT} ok/err types
+     * Support class for {@link AbstractCLType#RESULT} ok/err types
      * 
      * @author Alexandre Carvalho
      * @author Andre Bertolace
