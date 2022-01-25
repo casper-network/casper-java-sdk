@@ -37,10 +37,6 @@ dependencies {
     testImplementation "org.skyscreamer:jsonassert:${jsonassertVersion}"
 }
 
-task printVersion {
-  print project.version
-}
-
 task javadocJar(type: Jar) {
     classifier = 'javadoc'
     from javadoc
