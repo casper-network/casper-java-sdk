@@ -15,8 +15,6 @@ import static com.casper.sdk.service.serialization.util.ByteUtils.toByteArray;
  */
 public class CLValueBuilder {
 
-
-
     private static final TypesFactory TYPES_FACTORY = new TypesFactory();
 
     public static CLValue bool(final Object value) {

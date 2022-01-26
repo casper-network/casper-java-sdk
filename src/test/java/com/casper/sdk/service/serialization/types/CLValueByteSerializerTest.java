@@ -115,15 +115,4 @@ class CLValueByteSerializerTest {
 
         assertThat(byteSerializer.toBytes(clKeyValue), is(expected));
     }
-
-
-    @Test
-    void mapValueToBytes() {
-
-        CLValue key =  CLValueBuilder.string("key");
-        CLValue value =  CLValueBuilder.i32(1234);
-
-        CLMap map = new CLMap(key, value);
-
-    }
 }
