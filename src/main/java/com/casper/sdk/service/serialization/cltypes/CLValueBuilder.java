@@ -1,12 +1,14 @@
 package com.casper.sdk.service.serialization.cltypes;
 
 import com.casper.sdk.exceptions.ConversionException;
+import com.casper.sdk.exceptions.ValueNotFoundException;
 import com.casper.sdk.service.serialization.util.ByteUtils;
 import com.casper.sdk.types.*;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.math.BigInteger;
 import java.security.PublicKey;
+import java.util.Map;
 
 import static com.casper.sdk.service.serialization.util.ByteUtils.toByteArray;
 
@@ -52,7 +54,7 @@ public class CLValueBuilder {
     }
 
     public static CLValue u256(final Object value) {
-        return buildCLValue(CLType.U32, value);
+        return buildCLValue(CLType.U256, value);
     }
 
     public static CLValue u512(final Object value) {
@@ -82,7 +84,22 @@ public class CLValueBuilder {
         return key(ByteUtils.concat(toByteArray(CLKeyInfo.KeyType.UREF_ID.getTag()), value));
     }
 
-    private static CLValue buildCLValue(final CLType type, final Object value) {
+    public static CLMap map(final Map<CLValue, CLValue> map) {
+        if (map.isEmpty()) {
+            throw new ValueNotFoundException("Maps must contain at least one key pair");
+        }
+
+        return new CLMap(TYPES_FACTORY.getInstance(CLType.MAP).serialize(map),
+                new CLMapTypeInfo(
+                        map.keySet().iterator().next().getCLTypeInfo(),
+                        map.values().iterator().next().getCLTypeInfo()
+                ),
+                map
+        );
+
+    }
+
+    public static CLValue buildCLValue(final CLType type, final Object value) {
         return new CLValue(TYPES_FACTORY.getInstance(type).serialize(value), type, value);
     }
 
