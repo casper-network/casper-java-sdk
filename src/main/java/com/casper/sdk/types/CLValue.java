@@ -5,6 +5,8 @@ import com.casper.sdk.service.json.serialize.CLValueJsonSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+import java.util.Arrays;
+
 /**
  * Type: a value to be interpreted by node software.
  */
@@ -47,5 +49,18 @@ public class CLValue extends AbstractCLType {
 
     public Object getParsed() {
         return parsed;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        final CLValue value = (CLValue) o;
+        return Arrays.equals(bytes, value.bytes);
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(bytes);
     }
 }

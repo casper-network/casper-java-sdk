@@ -21,7 +21,7 @@ abstract class AbstractCLType {
     }
 
     public static byte[] fromString(final String hex) {
-        return ByteUtils.decodeHex(hex);
+        return hex != null ? ByteUtils.decodeHex(hex) : null;
     }
 
     public static String toHex(final byte[] bytes) {
