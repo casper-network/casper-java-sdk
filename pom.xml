@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>network.casper</groupId>
     <artifactId>casper-java-sdk</artifactId>
-    <version>0.3.0</version>
+    <version>0.3.1</version>
     <name>Casper Java SDK</name>
     <description>Casper Java SDK</description>
     <url>https://casperlabs.io/</url>
