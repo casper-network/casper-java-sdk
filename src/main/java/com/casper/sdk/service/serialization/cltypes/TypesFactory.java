@@ -17,6 +17,7 @@ public class TypesFactory {
         instances.put(CLType.I32, new I32Serializer());
         instances.put(CLType.I64, new I64Serializer());
         instances.put(CLType.PUBLIC_KEY, new PublicKeySerializer());
+        instances.put(CLType.MAP, new MapSerializer(this));
         instances.put(CLType.STRING, new StringSerializer(this));
         instances.put(CLType.U32, new U32Serializer());
         instances.put(CLType.U64, new U64Serializer());
