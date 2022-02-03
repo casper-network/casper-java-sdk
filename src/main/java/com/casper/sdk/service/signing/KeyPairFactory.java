@@ -33,4 +33,8 @@ public class KeyPairFactory {
 
         throw new SignatureException("Unsupported PublicKey " + publicKey);
     }
+
+    public KeyPairBuilder getKeyPairBuilder(final String algorithm) {
+        return getKeyPairBuilder(Algorithm.fromString(algorithm));
+    }
 }

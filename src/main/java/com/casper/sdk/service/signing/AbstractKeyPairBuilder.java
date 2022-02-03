@@ -42,4 +42,26 @@ abstract class AbstractKeyPairBuilder implements KeyPairBuilder {
     public byte[] getPublicKeyRawBytes(final PublicKey publicKey) {
         return TYPES_FACTORY.getInstance(CLType.PUBLIC_KEY).serialize(publicKey);
     }
+
+    /**
+     * To be overridden by signatures that do not want DER ASN1 signatures.
+     *
+     * @param signed the signature bytes to convert
+     * @return the converted bytes
+     */
+    @Override
+    public byte[] convertFromDER(final byte[] signed) {
+        return signed;
+    }
+
+    /**
+     * To be overridden by signatures that do not want DER ASN1 signatures.
+     *
+     * @param signed the signature bytes to convert
+     * @return the converted bytes
+     */
+    @Override
+    public byte[] convertToDER(final byte[] signed) {
+        return signed;
+    }
 }

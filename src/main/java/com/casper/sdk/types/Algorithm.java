@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * The emum of supported signature algorithms
+ * The enum of supported signature algorithms
  */
 public enum Algorithm {
 
@@ -25,10 +25,6 @@ public enum Algorithm {
         this.value = value;
     }
 
-    public static Algorithm valueOf(int pageType) {
-        return map.get(pageType);
-    }
-
     public static Algorithm fromId(char id) {
         if (id == 1 || id == '1') {
             return ED25519;
@@ -36,6 +32,16 @@ public enum Algorithm {
             return SECP256K1;
         }
         throw new IllegalArgumentException("Unknown algorithm ID " + id);
+    }
+
+    public static Algorithm fromString(final String algorithm) {
+        switch (algorithm) {
+            case "ECDSA":
+                return SECP256K1;
+            case "Ed25519":
+                return ED25519;
+        }
+        throw new IllegalArgumentException("Unknown algorithm " + algorithm);
     }
 
     public int getValue() {

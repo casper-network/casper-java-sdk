@@ -79,7 +79,8 @@ public class SigningService {
             final Signature sig = Signature.getInstance(privateKey.getAlgorithm(), PROVIDER);
             sig.initSign(privateKey);
             sig.update(toSign);
-            return sig.sign();
+            return getKeyPairBuilder(privateKey.getAlgorithm()).convertFromDER(sig.sign());
+
         } catch (Exception e) {
             throw new SignatureException(e);
         }
@@ -119,7 +120,7 @@ public class SigningService {
             final Signature sig = Signature.getInstance(publicKey.getAlgorithm(), PROVIDER);
             sig.initVerify(publicKey);
             sig.update(toSign);
-            return sig.verify(signature);
+            return sig.verify(this.getKeyPairBuilder(publicKey.getAlgorithm()).convertToDER(signature));
         } catch (Exception e) {
             return false;
         }
@@ -153,6 +154,10 @@ public class SigningService {
     }
 
     private KeyPairBuilder getKeyPairBuilder(final Algorithm algorithm) {
+        return keyPairFactory.getKeyPairBuilder(algorithm);
+    }
+
+    private KeyPairBuilder getKeyPairBuilder(final String algorithm) {
         return keyPairFactory.getKeyPairBuilder(algorithm);
     }
 

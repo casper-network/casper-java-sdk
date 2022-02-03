@@ -48,4 +48,8 @@ public interface KeyPairBuilder {
      * @return a new PublicKet created from the provided bytes
      */
     PublicKey createPublicKey(final byte[] publicKey);
+
+    byte [] convertFromDER(final byte[] signed);
+
+    byte [] convertToDER(final byte[] signed);
 }
