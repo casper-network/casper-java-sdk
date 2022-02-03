@@ -1,8 +1,8 @@
 package com.casper.sdk.service.signing;
 
 import com.casper.sdk.service.serialization.util.ByteUtils;
-import com.casper.sdk.types.CLPublicKey;
 import com.casper.sdk.types.Algorithm;
+import com.casper.sdk.types.CLPublicKey;
 import org.apache.commons.io.IOUtils;
 import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPublicKey;
 import org.bouncycastle.jcajce.provider.asymmetric.edec.BCEdDSAPublicKey;
@@ -56,6 +56,14 @@ class SigningServiceTest {
 
         // Assert the message was signed
         assertThat(signedBytes.length, is(64));
+
+        // Expect the same bytes for all incarnations
+        final byte[] deterministic = new byte[]{
+                40, 26, 91, -28, -20, 113, -70, -17, 105, -30, 12, 76, 39, -64, 75, 95, -21, -124, -61, -50, 74, -78,
+                100, -77, 90, -67, -55, 37, 10, 25, 119, -49, -54, -82, 59, 99, -33, -95, 75, 82, -4, -39, -31, 9, -34,
+                69, 18, -54, -36, -9, -53, -69, 54, 14, 117, -43, 35, -97, -101, 105, 100, 125, -10, 5
+        };
+        assertThat(signedBytes, is(deterministic));
 
         // Verify the signature
         assertThat(signingService.verifySignature(keyPair.getPublic(), message, signedBytes), is(true));
@@ -197,7 +205,7 @@ class SigningServiceTest {
     @Test
     void eD25519k1FromClPublicKey() {
 
-        final byte [] rawBytes = ByteUtils.decodeHex("01d30f6a241199e68217cb05abcefc7c8267c5226b8e644f1f8d0a79b87ed04f07");
+        final byte[] rawBytes = ByteUtils.decodeHex("01d30f6a241199e68217cb05abcefc7c8267c5226b8e644f1f8d0a79b87ed04f07");
         final CLPublicKey clPublicKey = new CLPublicKey(rawBytes);
         final java.security.PublicKey publicKey = signingService.fromClPublicKey(clPublicKey);
 
@@ -208,7 +216,7 @@ class SigningServiceTest {
     @Test
     void secp256k1FromClPublicKey() {
 
-        final byte [] rawBytes = ByteUtils.decodeHex("02035793d9a677ec9cf0d3d2a7a61fb98c173c04b63925cfe387203b19d312fa37b0");
+        final byte[] rawBytes = ByteUtils.decodeHex("02035793d9a677ec9cf0d3d2a7a61fb98c173c04b63925cfe387203b19d312fa37b0");
         final CLPublicKey clPublicKey = new CLPublicKey(rawBytes);
         final java.security.PublicKey publicKey = signingService.fromClPublicKey(clPublicKey);
 
