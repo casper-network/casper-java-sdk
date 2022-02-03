@@ -81,7 +81,7 @@ public class Secp256k1KeyPairBuilder extends AbstractKeyPairBuilder {
      * Converts a P1363 encoded signature to a DER ASN1 signature
      *
      * @param p1363EncodedSignature the signature the convert
-     * @return a DER ASN1 signature
+     * @return a DER ASN.1 signature
      */
     @Override
     public byte[] convertToDER(byte[] p1363EncodedSignature) {
