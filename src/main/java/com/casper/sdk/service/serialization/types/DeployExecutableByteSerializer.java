@@ -1,9 +1,9 @@
 package com.casper.sdk.service.serialization.types;
 
-import com.casper.sdk.types.*;
 import com.casper.sdk.service.serialization.cltypes.TypesFactory;
 import com.casper.sdk.service.serialization.cltypes.TypesSerializer;
 import com.casper.sdk.service.serialization.util.ByteArrayBuilder;
+import com.casper.sdk.types.*;
 
 import java.util.List;
 
@@ -13,36 +13,17 @@ import java.util.List;
 class DeployExecutableByteSerializer implements ByteSerializer<DeployExecutable> {
 
     private final ByteSerializerFactory factory;
-    private final TypesSerializer u32Serializer;
+    private final TypesSerializer byteArraySerializer;
+    private final TypesSerializer optionSerializer;
     private final TypesSerializer stringSerializer;
+    private final TypesSerializer u32Serializer;
 
     public DeployExecutableByteSerializer(final ByteSerializerFactory factory, final TypesFactory typesFactory) {
         this.factory = factory;
-        u32Serializer = typesFactory.getInstance(CLType.U32);
+        byteArraySerializer = typesFactory.getInstance(CLType.BYTE_ARRAY);
+        optionSerializer = typesFactory.getInstance(CLType.OPTION);
         stringSerializer = typesFactory.getInstance(CLType.STRING);
-    }
-
-    @Override
-    public byte[] toBytes(final DeployExecutable deployExecutable) {
-
-        // Append the type of the 'Deploy Executable' in a single byte
-        final ByteArrayBuilder builder = new ByteArrayBuilder()
-                .append((byte) deployExecutable.getTag());
-
-        if (deployExecutable instanceof StoredContractByName) {
-            builder.append(stringSerializer.serialize(((StoredContractByName) deployExecutable).getName()))
-                    .append(stringSerializer.serialize(((StoredContractByName) deployExecutable).getEntryPoint()));
-        } else if (deployExecutable instanceof StoredContractByHash) {
-            builder.append(((StoredContractByHash) deployExecutable).getHash().getHash());
-            builder.append(stringSerializer.serialize(((StoredContractByHash) deployExecutable).getEntryPoint()));
-        } else if (deployExecutable instanceof ModuleBytes) {
-            builder.append(u32Serializer.serialize(deployExecutable.getModuleBytes()));
-        }
-
-        // Append any args if present
-        builder.append(toBytes(deployExecutable.getArgs()));
-
-        return builder.toByteArray();
+        u32Serializer = typesFactory.getInstance(CLType.U32);
     }
 
     @Override
@@ -50,7 +31,73 @@ class DeployExecutableByteSerializer implements ByteSerializer<DeployExecutable>
         return DeployExecutable.class;
     }
 
-    private byte[] toBytes(final List<DeployNamedArg> args) {
+    @Override
+    public byte[] toBytes(final DeployExecutable deployExecutable) {
+
+        // Append the type of the 'Deploy Executable' in a single byte
+        final ByteArrayBuilder builder = new ByteArrayBuilder().append((byte) deployExecutable.getTag());
+
+        if (deployExecutable instanceof StoredVersionedContractByName) {
+            builder.append(storedContractVersionNameToBytes((StoredVersionedContractByName) deployExecutable));
+        } else if (deployExecutable instanceof StoredContractByName) {
+            builder.append(storedContractByNameToBytes((StoredContractByName) deployExecutable));
+        } else if (deployExecutable instanceof StoredVersionedContractByHash) {
+            builder.append(storedVersionedContractByHashToBytes((StoredVersionedContractByHash) deployExecutable));
+        } else if (deployExecutable instanceof StoredContractByHash) {
+            builder.append(storedContractByHashToBytes((StoredContractByHash) deployExecutable));
+        } else if (deployExecutable instanceof ModuleBytes) {
+            builder.append(byteArraySerializer.serialize(deployExecutable.getModuleBytes()));
+        }
+
+        // Append any args if present
+        builder.append(namedAgsToBytes(deployExecutable.getArgs()));
+
+        return builder.toByteArray();
+    }
+
+    private byte[] storedVersionedContractByHashToBytes(final StoredVersionedContractByHash storedVersionedContractByHash) {
+        final ByteArrayBuilder builder = new ByteArrayBuilder();
+        builder.append(storedVersionedContractByHash.getHash().getHash());
+        storedVersionedContractByHash.getVersion().ifPresent(version -> builder.append(versionToBytes(version)));
+        builder.append(stringSerializer.serialize(storedVersionedContractByHash.getEntryPoint()));
+        return builder.toByteArray();
+    }
+
+    private byte[] storedContractByNameToBytes(final StoredContractByName storedContractByName) {
+        final ByteArrayBuilder builder = new ByteArrayBuilder();
+        builder.append(stringSerializer.serialize(storedContractByName.getName()))
+                .append(stringSerializer.serialize(storedContractByName.getEntryPoint()));
+        return builder.toByteArray();
+    }
+
+    private byte[] storedContractByHashToBytes(final StoredContractByHash storedContractByHash) {
+        final ByteArrayBuilder builder = new ByteArrayBuilder();
+        builder.append(storedContractByHash.getHash().getHash());
+        builder.append(stringSerializer.serialize(storedContractByHash.getEntryPoint()));
+        return builder.toByteArray();
+    }
+
+    private byte[] storedContractVersionNameToBytes(final StoredVersionedContractByName storedVersionedContractByName) {
+        final ByteArrayBuilder builder = new ByteArrayBuilder();
+        builder.append(stringSerializer.serialize(storedVersionedContractByName.getName()));
+
+        storedVersionedContractByName.getVersion().ifPresent(version -> builder.append(versionToBytes(version)));
+
+        builder.append(stringSerializer.serialize(storedVersionedContractByName.getEntryPoint()));
+        return builder.toByteArray();
+    }
+
+    private byte[] versionToBytes(final Number version) {
+
+        final CLOptionValue clOptionValue = new CLOptionValue(
+                u32Serializer.serialize(version),
+                new CLOptionTypeInfo(new CLTypeInfo(CLType.U32)),
+                version
+        );
+        return optionSerializer.serialize(clOptionValue);
+    }
+
+    private byte[] namedAgsToBytes(final List<DeployNamedArg> args) {
 
         final ByteArrayBuilder builder = new ByteArrayBuilder();
 

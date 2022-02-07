@@ -30,6 +30,7 @@ public class Constants {
     /** Maximum value of a transfer ID. */
     public static final int MAX_TRANSFER_ID = (int) Math.pow(2, 63) - 1;
     public static final String MODULE_BYTES = "module_bytes";
+    public static final String NAME = "name";
     public static final String NAMED_KEYS = "named_keys";
     public static final String PATH = "path";
     public static final String PUBLIC_KEY = "public_key";
@@ -56,5 +57,6 @@ public class Constants {
     public static final String TOKEN_NAME = "token_name";
     public static final String TOKEN_SYMBOL = "token_symbol";
     public static final String VALIDATOR = "validator";
+    public static final String VERSION = "version";
     public static final String UNBOND_PURSE = "unbond_purse";
 }

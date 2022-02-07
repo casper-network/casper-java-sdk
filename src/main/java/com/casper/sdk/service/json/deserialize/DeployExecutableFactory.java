@@ -6,10 +6,12 @@ import com.casper.sdk.types.*;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.ObjectCodec;
 import com.fasterxml.jackson.core.TreeNode;
+import com.fasterxml.jackson.databind.node.NumericNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.TextNode;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.util.*;
 
 import static com.casper.sdk.Constants.ARGS;
@@ -84,6 +86,19 @@ class DeployExecutableFactory {
             return childNode.get(fieldName);
         }
 
+        protected Optional<Number> getNumericFieldValue(final String entryPoint,
+                                                        final TreeNode treeNode,
+                                                        final String fieldName) {
+
+            final TreeNode fieldNode = getFieldNode(entryPoint, treeNode, fieldName);
+            if (fieldNode instanceof TextNode) {
+                return Optional.of(new BigInteger(((TextNode) fieldNode).textValue()));
+            } else if (fieldNode instanceof NumericNode) {
+                return Optional.of(((NumericNode) fieldNode).numberValue());
+            } else {
+                return Optional.empty();
+            }
+        }
 
         protected Optional<String> getFieldValue(final String entryPoint, final TreeNode treeNode, final String fieldName) {
 
@@ -172,8 +187,12 @@ class DeployExecutableFactory {
         @Override
         StoredContractByName create(final String fieldName, String entryPoint, final TreeNode treeNode, final ObjectCodec codec) {
             try {
-                final List<DeployNamedArg> args = convertArgs(getArgsNode(entryPoint, treeNode), codec);
-                return new StoredContractByName(fieldName, entryPoint, convertModuleBytes(treeNode), args);
+                return new StoredContractByName(
+                        getFieldValue(entryPoint, treeNode, Constants.NAME).orElse(null),
+                        getFieldValue(entryPoint, treeNode, Constants.ENTRY_POINT).orElse(null),
+                        convertModuleBytes(treeNode),
+                        convertArgs(getArgsNode(entryPoint, treeNode), codec)
+                );
             } catch (Exception e) {
                 throw new ConversionException(e);
             }
@@ -190,6 +209,33 @@ class DeployExecutableFactory {
         }
     }
 
+    private static class StoredVersionedContractByNameFactory extends AbstractDeployExecutableJsonFactory<StoredVersionedContractByName> {
+
+        StoredVersionedContractByName create(final String fieldName, String entryPoint, final TreeNode treeNode, final ObjectCodec codec) {
+            try {
+                return new StoredVersionedContractByName(
+                        getFieldValue(entryPoint, treeNode, Constants.NAME).orElse(null),
+                        getNumericFieldValue(entryPoint, treeNode, Constants.VERSION).orElse(null),
+                        getFieldValue(entryPoint, treeNode, Constants.ENTRY_POINT).orElse(null),
+                        convertModuleBytes(treeNode),
+                        convertArgs(getArgsNode(entryPoint, treeNode), codec)
+                );
+            } catch (Exception e) {
+                throw new ConversionException(e);
+            }
+        }
+
+        @Override
+        protected TreeNode getArgsNode(final String entryPoint, final TreeNode treeNode) {
+            return getFieldNode(entryPoint, treeNode, ARGS);
+        }
+
+        @Override
+        protected Class<StoredVersionedContractByName> getType() {
+            return StoredVersionedContractByName.class;
+        }
+    }
+
     /**
      * Converts JSON into a StoredContractByName such as a payment.
      */
@@ -198,12 +244,10 @@ class DeployExecutableFactory {
         @Override
         StoredContractByHash create(final String fieldName, String entryPoint, final TreeNode treeNode, final ObjectCodec codec) {
             try {
-                final List<DeployNamedArg> args = convertArgs(getArgsNode(entryPoint, treeNode), codec);
-
                 return new StoredContractByHash(
                         getFieldValue(entryPoint, treeNode, Constants.HASH).map(ContractHash::new).orElse(null),
                         getFieldValue(entryPoint, treeNode, Constants.ENTRY_POINT).orElse(null),
-                        args
+                        convertArgs(getArgsNode(entryPoint, treeNode), codec)
                 );
             } catch (Exception e) {
                 throw new ConversionException(e);
@@ -229,6 +273,7 @@ class DeployExecutableFactory {
         argsFactoryMap.put("ModuleBytes", new ModuleBytesFactory());
         argsFactoryMap.put("StoredContractByName", new StoredContractByNameFactory());
         argsFactoryMap.put("StoredContractByHash", new StoredContractByHashFactory());
+        argsFactoryMap.put("StoredVersionedContractByName", new StoredVersionedContractByNameFactory());
         argsFactoryMap.put("Transfer", new TransferJsonFactory());
         argsFactoryMap.put(ARGS, new DefaultDeployExecutableJsonFactory());
     }
