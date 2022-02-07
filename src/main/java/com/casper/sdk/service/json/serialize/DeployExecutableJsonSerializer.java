@@ -19,6 +19,8 @@ public class DeployExecutableJsonSerializer extends JsonSerializer<DeployExecuta
 
         if (value instanceof Transfer) {
             writeTransfer((Transfer) value, gen);
+        } else if (value instanceof StoredVersionedContractByHash) {
+            writeStoredVersionedContractByHash((StoredVersionedContractByHash) value, gen);
         } else if (value instanceof StoredContractByHash) {
             writeStoredContractByHash((StoredContractByHash) value, gen);
         } else if (value instanceof StoredVersionedContractByName) {
@@ -53,6 +55,24 @@ public class DeployExecutableJsonSerializer extends JsonSerializer<DeployExecuta
         gen.writeFieldName("entry_point");
         gen.writeString(storedContractByHash.getEntryPoint());
         writeArgs(storedContractByHash, gen);
+        gen.writeEndObject();
+        gen.writeEndObject();
+    }
+
+    private void writeStoredVersionedContractByHash(final StoredVersionedContractByHash storedVersionedContractByHash,
+                                                    final JsonGenerator gen)  throws IOException {
+        gen.writeStartObject();
+        gen.writeFieldName("StoredVersionedContractByHash");
+        gen.writeStartObject();
+        gen.writeFieldName("hash");
+        gen.writeString(storedVersionedContractByHash.getHash().toString());
+        if (storedVersionedContractByHash.getVersion().isPresent()) {
+            gen.writeFieldName("version");
+            gen.writeNumber(storedVersionedContractByHash.getVersion().get().longValue());
+        }
+        gen.writeFieldName("entry_point");
+        gen.writeString(storedVersionedContractByHash.getEntryPoint());
+        writeArgs(storedVersionedContractByHash, gen);
         gen.writeEndObject();
         gen.writeEndObject();
     }
