@@ -2,27 +2,28 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 
 plugins {
-	id 'java'
-    id 'jacoco'
+    id 'java-library'
     id 'io.freefair.lombok' version "${lombokPluginVersion}"
+    id 'jacoco'
+    id 'signing'
     id 'maven-publish'
 }
 
 group = 'com.syntifi.casper'
-version = '0.0.1-SNAPSHOT'
+version = '0.1.0-SNAPSHOT'
 sourceCompatibility = '8'
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
-dependencies {	
-	implementation "com.github.briandilley.jsonrpc4j:jsonrpc4j:${jsonrpc4jVersion}"
+dependencies {
+    implementation "com.github.briandilley.jsonrpc4j:jsonrpc4j:${jsonrpc4jVersion}"
 
     implementation "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
     implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
     implementation "com.fasterxml.jackson.core:jackson-annotations:${jacksonVersion}"
-    
+
     implementation "org.javatuples:javatuples:${javaTuplesVersion}"
 
     // log4j and slf4j
@@ -30,29 +31,26 @@ dependencies {
     testImplementation "org.apache.logging.log4j:log4j-api:${log4jVersion}"
     testImplementation "org.apache.logging.log4j:log4j-core:${log4jVersion}"
     testImplementation "org.apache.logging.log4j:log4j-slf4j-impl:${log4jVersion}"
-    
+
     // Use JUnit Jupiter for testing.
-    testImplementation "org.junit.jupiter:junit-jupiter:${jupiterVersion}"	
+    testImplementation "org.junit.jupiter:junit-jupiter:${jupiterVersion}"
     // Used to compare json strings while testing
     testImplementation "org.skyscreamer:jsonassert:${jsonassertVersion}"
 }
 
-task javadocJar(type: Jar) {
-    classifier = 'javadoc'
-    from javadoc
+java {
+    withJavadocJar()
+    withSourcesJar()
 }
 
-task sourcesJar(type: Jar) {
-    classifier = 'sources'
-    from sourceSets.main.allSource
+javadoc {
+    if (JavaVersion.current().isJava9Compatible()) {
+        options.addBooleanOption('html5', true)
+    }
 }
 
-artifacts {
-    archives javadocJar, sourcesJar
-}
-
-test {    
-	finalizedBy jacocoTestReport
+test {
+    finalizedBy jacocoTestReport
 
     useJUnitPlatform()
     testLogging {
@@ -61,7 +59,7 @@ test {
         events TestLogEvent.FAILED,
                TestLogEvent.PASSED,
                TestLogEvent.SKIPPED
-               //TestLogEvent.STANDARD_OUT
+        //TestLogEvent.STANDARD_OUT
         exceptionFormat TestExceptionFormat.FULL
         showExceptions true
         showCauses true
@@ -91,8 +89,8 @@ test {
     }
 }
 
-jacocoTestReport {    
-	dependsOn test
+jacocoTestReport {
+    dependsOn test
 
     afterEvaluate {
         getClassDirectories().setFrom(classDirectories.files.collect {
@@ -102,19 +100,81 @@ jacocoTestReport {
 }
 
 publishing {
-  repositories {
-    maven {
-      name = "GitHubPackages"
-      url = "https://maven.pkg.github.com/syntifi/casper-sdk"
-      credentials {
-        username = System.getenv("GITHUB_ACTOR")
-        password = System.getenv("GITHUB_TOKEN")
-      }
+    repositories {
+        maven {
+            name = 'OSSRH'
+            def releasesRepoUrl = 'https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/'
+            def snapshotsRepoUrl = 'https://s01.oss.sonatype.org/content/repositories/snapshots/'
+            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+            credentials {
+                username = System.getenv('MAVEN_USERNAME')
+                password = System.getenv('MAVEN_PASSWORD')
+            }
+        }
+        maven {
+            name = "GitHubPackages"
+            url = "https://maven.pkg.github.com/syntifi/casper-sdk"
+            credentials {
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")
+            }
+        }
     }
-  }
-  publications {      
-    gpr(MavenPublication) {
-        from(components.java)
+  
+    publications {
+        mavenJava(MavenPublication) {
+            artifactId = 'casper-sdk'
+            from components.java
+            pom {
+                name = 'Publish test project'
+                packaging = 'jar'
+                description = 'Testing deploy of artifacts'
+                url = 'https://github.com/syntifi/casper-sdk'
+
+                scm {
+                    connection = 'scm:git:https://github.com/syntifi/casper-sdk.git'
+                    developerConnection = 'git@github.com:syntifi/casper-sdk.git'
+                    url = 'https://github.com/syntifi/casper-sdk'
+                }
+
+                issueManagement {
+                    system = 'GitHub'
+                    url = 'https://github.com/syntifi/casper-sdk/issues'
+                }
+
+                ciManagement {
+                    system = 'Github Actions'
+                    url = 'https://github.com/syntifi/casper-sdk/actions'
+                }
+
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id = 'syntifi'
+                        name = 'Alexandre Carvalho'
+                        email = 'adcarvalho@gmail.com'
+                    }
+                    developer {
+                        id = 'ab3rtz'
+                        name = 'Andre Bertolace'
+                        email = 'andre@syntifi.com'
+                    }
+                }
+            }
+        }
     }
-  }
+}
+
+// Reference at https://docs.gradle.org/current/userguide/signing_plugin.html#sec:in-memory-keys
+signing {
+    def signingKey = System.getenv('GPG_SIGNING_KEY') ?: findProperty('GPG_SIGNING_KEY')
+    def signingKeyPassword = System.getenv('GPG_SIGNING_KEY_PASSWORD') ?: findProperty('GPG_SIGNING_KEY_PASSWORD')
+    useInMemoryPgpKeys(signingKey, signingKeyPassword)
+    sign publishing.publications.mavenJava
 }
