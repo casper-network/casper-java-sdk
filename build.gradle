@@ -126,9 +126,9 @@ publishing {
             artifactId = 'casper-sdk'
             from components.java
             pom {
-                name = 'Publish test project'
+                name = 'Java 8+ Casper RPC Client SDK'
                 packaging = 'jar'
-                description = 'Testing deploy of artifacts'
+                description = 'This project implements the SDK to interact with a Casper Node. It wraps the Json-RPC requests and maps the results to Java objects.'
                 url = 'https://github.com/syntifi/casper-sdk'
 
                 scm {
