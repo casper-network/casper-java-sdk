@@ -15,7 +15,7 @@ import static com.casper.sdk.how_to.HowToUtils.*;
 /**
  * Integration tests for installing a contract
  */
-@Disabled // Remove this to run locally
+//@Disabled // Remove this to run locally
 public class HowToInstallAContract {
 
     /**
@@ -27,7 +27,8 @@ public class HowToInstallAContract {
         // Step 1: Set casper node client.
         final CasperSdk casperSdk = new CasperSdk("http://localhost", 11101);
 
-        final InputStream erc20wasmIn = getWasmIn(getNctlHome() + "/assets/net-1/bin/eco/erc20.wasm");
+        //final InputStream erc20wasmIn = getWasmIn(getNctlHome() + "/assets/net-1/bin/eco/erc20.wasm");
+        final InputStream erc20wasmIn = getWasmIn("/com/casper/sdk/how_to/erc20.wasm");
         final String chainName = "casper-net-1";
         final Number payment = 50e9;
         final int tokenDecimals = 11;
@@ -42,7 +43,7 @@ public class HowToInstallAContract {
         // Set deploy.
         final Deploy deploy = casperSdk.makeInstallContract(
                 new DeployParams(
-                        operatorKeyPair.getPrivate(),
+                        operatorKeyPair.getPublic(),
                         chainName,
                         null,
                         null,

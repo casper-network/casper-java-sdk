@@ -28,7 +28,7 @@ public final class HowToUtils {
         return nctlHome.replaceFirst("^~", System.getProperty("user.home"));
     }
 
-     public static KeyPairStreams getNodeKeyPairStreams(final int nodeNumber) throws IOException {
+    public static KeyPairStreams getNodeKeyPairStreams(final int nodeNumber) throws IOException {
 
         final String userNPath = String.format("%s/assets/net-1/nodes/node-%d/keys", getNctlHome(), nodeNumber);
 
@@ -40,13 +40,13 @@ public final class HowToUtils {
 
     static KeyPairStreams getFaucetKeyPair() throws FileNotFoundException {
         return new KeyPairStreams(
-                new FileInputStream(new File(getNctlHome() + "/faucet", "public_key.pem")),
-                new FileInputStream(new File(getNctlHome() + "/faucet", "secret_key.pem"))
+                new FileInputStream(new File(getNctlHome() + "/assets/net-1/faucet", "public_key.pem")),
+                new FileInputStream(new File(getNctlHome() + "/assets/net-1/faucet", "secret_key.pem"))
         );
 
     }
 
     static InputStream getWasmIn(String wasmPath) {
-        return HowToUtils.class.getResourceAsStream(getNctlHome() + wasmPath);
+        return HowToUtils.class.getResourceAsStream(wasmPath);
     }
 }
