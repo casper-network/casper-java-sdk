@@ -13,13 +13,20 @@ import java.util.List;
 class DeployExecutableByteSerializer implements ByteSerializer<DeployExecutable> {
 
     private final ByteSerializerFactory factory;
-    private final TypesSerializer u32Serializer;
+    private final TypesSerializer byteArraySerializer;
     private final TypesSerializer stringSerializer;
+    private final TypesSerializer u32Serializer;
 
     public DeployExecutableByteSerializer(final ByteSerializerFactory factory, final TypesFactory typesFactory) {
         this.factory = factory;
-        u32Serializer = typesFactory.getInstance(CLType.U32);
+        byteArraySerializer = typesFactory.getInstance(CLType.BYTE_ARRAY);
         stringSerializer = typesFactory.getInstance(CLType.STRING);
+        u32Serializer = typesFactory.getInstance(CLType.U32);
+    }
+
+    @Override
+    public Class<DeployExecutable> getType() {
+        return DeployExecutable.class;
     }
 
     @Override
@@ -36,18 +43,13 @@ class DeployExecutableByteSerializer implements ByteSerializer<DeployExecutable>
             builder.append(((StoredContractByHash) deployExecutable).getHash().getHash());
             builder.append(stringSerializer.serialize(((StoredContractByHash) deployExecutable).getEntryPoint()));
         } else if (deployExecutable instanceof ModuleBytes) {
-            builder.append(u32Serializer.serialize(deployExecutable.getModuleBytes()));
+            builder.append(byteArraySerializer.serialize(deployExecutable.getModuleBytes()));
         }
 
         // Append any args if present
         builder.append(toBytes(deployExecutable.getArgs()));
 
         return builder.toByteArray();
-    }
-
-    @Override
-    public Class<DeployExecutable> getType() {
-        return DeployExecutable.class;
     }
 
     private byte[] toBytes(final List<DeployNamedArg> args) {
