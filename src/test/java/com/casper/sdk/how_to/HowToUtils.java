@@ -46,7 +46,7 @@ public final class HowToUtils {
 
     }
 
-    static InputStream getWasmIn(String wasmPath) {
+    public static InputStream getWasmIn(final String wasmPath) {
         return HowToUtils.class.getResourceAsStream(wasmPath);
     }
 }

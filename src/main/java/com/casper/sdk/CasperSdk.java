@@ -548,7 +548,7 @@ public class CasperSdk {
                                 .add(TOKEN_DECIMALS, CLValueBuilder.u8(tokenDecimals))
                                 .add(TOKEN_NAME, CLValueBuilder.string(tokenName))
                                 .add(TOKEN_SYMBOL, CLValueBuilder.string(tokenSymbol))
-                                .add(CREATE_DEPLOY_ARG, CLValueBuilder.u256(tokenTotalSupply))
+                                .add(TOKEN_TOTAL_SUPPLYL, CLValueBuilder.u256(tokenTotalSupply))
                                 .build()
                 ),
                 standardPayment(payment)
