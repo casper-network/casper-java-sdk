@@ -16,6 +16,7 @@ class DeployExecutableJsonSerializerTest {
 
     @Test
     void testStoredContractFromHashToJson() throws IOException {
+
         final StoredContractByHash storedContractByHash = new StoredContractByHash(
                 new ContractHash("0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f"),
                 "pclphXwfYmCmdITj8hnh",
@@ -48,7 +49,8 @@ class DeployExecutableJsonSerializerTest {
 
     @Test
     void testWriteStoredContractByName() throws IOException {
-        StoredContractByName storedContractByName = new StoredContractByName(
+
+        final StoredContractByName storedContractByName = new StoredContractByName(
                 "foo-bar",
                 "pclphXwfYmCmdITj8hnh",
                 Arrays.asList(
@@ -69,7 +71,8 @@ class DeployExecutableJsonSerializerTest {
 
     @Test
     void testWriteStoredVersionedContractByName() throws IOException {
-        StoredVersionedContractByName storedVersionedContractByName = new StoredVersionedContractByName( "foo-bar",
+
+        final StoredVersionedContractByName storedVersionedContractByName = new StoredVersionedContractByName( "foo-bar",
                 123456,
                 "pclphXwfYmCmdITj8hnh",
                 Arrays.asList(
@@ -85,5 +88,28 @@ class DeployExecutableJsonSerializerTest {
         assertThat(json, hasJsonPath("$.StoredVersionedContractByName.args"));
         assertThat(json, hasJsonPath("$.StoredVersionedContractByName.args[0]"));
         assertThat(json, hasJsonPath("$.StoredVersionedContractByName.args[1]"));
+    }
+
+    @Test
+    void testWriteStoredVersionedContractByHash() throws IOException {
+
+        final StoredVersionedContractByHash storedVersionedContractByHash = new StoredVersionedContractByHash(
+                new ContractHash("c4c411864f7b717c27839e56f6f1ebe5da3f35ec0043f437324325d65a22afa4"),
+                123456L, "entry-point",
+                Arrays.asList(
+                        new DeployNamedArg("foo", new CLValue("bar".getBytes(StandardCharsets.UTF_8), new CLTypeInfo(CLType.STRING), "bar")),
+                        new DeployNamedArg("amount", new CLValue("05005550b405", new CLTypeInfo(CLType.U64), "24500000000"))
+                )
+        );
+
+        final String json = JsonTestUtils.writeToJsonString(storedVersionedContractByHash);
+
+        assertThat(json, hasJsonPath("$.StoredVersionedContractByHash"));
+        assertThat(json, hasJsonPath("$.StoredVersionedContractByHash.hash", is("c4c411864f7b717c27839e56f6f1ebe5da3f35ec0043f437324325d65a22afa4")));
+        assertThat(json, hasJsonPath("$.StoredVersionedContractByHash.version", is(123456)));
+        assertThat(json, hasJsonPath("$.StoredVersionedContractByHash.entry_point", is("entry-point")));
+        assertThat(json, hasJsonPath("$.StoredVersionedContractByHash.args"));
+        assertThat(json, hasJsonPath("$.StoredVersionedContractByHash.args[0]"));
+        assertThat(json, hasJsonPath("$.StoredVersionedContractByHash.args[1]"));
     }
 }

@@ -8,7 +8,10 @@ public class StoredVersionedContractByHash extends StoredContractByHash {
     /** Smart contract version identifier. */
     private final Number version;
 
-    public StoredVersionedContractByHash(final ContractHash hash, final Number contractVersion, final String entryPoint, final List<DeployNamedArg> args) {
+    public StoredVersionedContractByHash(final ContractHash hash,
+                                         final Number contractVersion,
+                                         final String entryPoint,
+                                         final List<DeployNamedArg> args) {
         super(hash, entryPoint, args);
         this.version = contractVersion;
     }
