@@ -27,6 +27,7 @@ public class TypesFactory {
         instances.put(CLType.U512, new U512Serializer());
         instances.put(CLType.UNIT, new UnitSerializer());
         instances.put(CLType.UREF, new URefSerializer());
+        instances.put(CLType.OPTION, new OptionSerializer(this));
     }
 
     @SuppressWarnings("unchecked")

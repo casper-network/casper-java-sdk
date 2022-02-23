@@ -14,11 +14,14 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.Collections;
 
 import static com.casper.sdk.Constants.*;
 import static com.casper.sdk.how_to.HowToUtils.getWasmIn;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.core.Is.is;
 
 /**
@@ -152,7 +155,6 @@ class DeployExecutableByteSerializerTest {
         final byte[] actual = serializer.toBytes(storedContractByHash);
 
         assertThat(actual, is(expected));
-
     }
 
     /**
@@ -181,7 +183,44 @@ class DeployExecutableByteSerializerTest {
         final ModuleBytesByteSerializer serializer = getSerializer(moduleBytes.getClass());
         final String hexBytes = ByteUtils.encodeHexString(serializer.toBytes(moduleBytes));
         assertThat(hexBytes, is(expected));
+    }
 
+
+    @Test
+    void storedVersionedContractByHashToBytes() {
+
+        final StoredVersionedContractByHash storedVersionedContractByHash = new StoredVersionedContractByHash(
+                new ContractHash("c4c411864f7b717c27839e56f6f1ebe5da3f35ec0043f437324325d65a22afa4"),
+                123456L, "entry-point",
+                Arrays.asList(
+                        new DeployNamedArg("foo", new CLValue("bar".getBytes(StandardCharsets.UTF_8), new CLTypeInfo(CLType.STRING), "bar")),
+                        new DeployNamedArg("amount", new CLValue("05005550b405", new CLTypeInfo(CLType.U64), "24500000000"))
+                )
+        );
+
+        final StoredVersionedContractByHashByteSerializer serializer = getSerializer(StoredVersionedContractByHash.class);
+        final byte[] bytes = serializer.toBytes(storedVersionedContractByHash);
+        assertThat(bytes, is(notNullValue()));
+        assertThat(bytes.length, is(greaterThan(0)));
+    }
+
+    @Test
+    void storedVersionedContractByNameToBytes() {
+
+        final StoredVersionedContractByName storedVersionedContractByName = new StoredVersionedContractByName(
+                "payment",
+                123456L, "entry-point",
+                CLValue.fromString("05005550b405"),
+                Arrays.asList(
+                        new DeployNamedArg("foo", new CLValue("bar".getBytes(StandardCharsets.UTF_8), new CLTypeInfo(CLType.STRING), "bar")),
+                        new DeployNamedArg("amount", new CLValue("05005550b405", new CLTypeInfo(CLType.U64), "24500000000"))
+                )
+        );
+
+        final StoredVersionedContractByNameByteSerializer serializer = getSerializer(StoredVersionedContractByName.class);
+        final byte[] bytes = serializer.toBytes(storedVersionedContractByName);
+        assertThat(bytes, is(notNullValue()));
+        assertThat(bytes.length, is(greaterThan(0)));
     }
 
     @SuppressWarnings("rawtypes")
