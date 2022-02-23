@@ -1,16 +1,23 @@
 package com.casper.sdk.service.serialization.types;
 
 import com.casper.sdk.service.hash.HashService;
-import com.casper.sdk.service.signing.SigningService;
 import com.casper.sdk.service.json.JsonConversionService;
+import com.casper.sdk.service.serialization.cltypes.CLValueBuilder;
 import com.casper.sdk.service.serialization.cltypes.TypesFactory;
+import com.casper.sdk.service.serialization.util.ByteUtils;
 import com.casper.sdk.service.serialization.util.CollectionUtils;
+import com.casper.sdk.service.signing.SigningService;
 import com.casper.sdk.types.*;
+import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 
+import static com.casper.sdk.Constants.*;
+import static com.casper.sdk.how_to.HowToUtils.getWasmIn;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
@@ -19,6 +26,8 @@ import static org.hamcrest.core.Is.is;
  */
 class DeployExecutableByteSerializerTest {
 
+    public static final String EXPECTED_BYTES_TXT = "/com/casper/sdk/service/serialization/types/expected-bytes.txt";
+    public static final String ERC_20_WASM = "/com/casper/sdk/how_to/erc20.wasm";
     private final ByteSerializerFactory byteSerializerFactory = new ByteSerializerFactory();
     private final DeployExecutableByteSerializer serializer = (DeployExecutableByteSerializer) byteSerializerFactory.getByteSerializerByType(DeployExecutable.class);
     private final TypesFactory typesFactory = new TypesFactory();
@@ -140,6 +149,34 @@ class DeployExecutableByteSerializerTest {
         final byte[] actual = serializer.toBytes(storedContractByHash);
 
         assertThat(actual, is(expected));
+
+    }
+
+    /**
+     * Tests that a module_bytes containing a .wasm file can be converted to bytes
+     */
+    @Test
+    void moduleBytesWithWasmToBytes() throws IOException {
+
+        final int tokenDecimals = 11;
+        final String tokenName = "Acme Token";
+        final Number tokenTotalSupply = 1e15;
+        final String tokenSymbol = "ACME";
+        //noinspection ConstantConditions
+        final String expected = IOUtils.toString(getClass().getResource(EXPECTED_BYTES_TXT), StandardCharsets.UTF_8);
+
+        final ModuleBytes moduleBytes = new ModuleBytes(
+                IOUtils.toByteArray(getWasmIn(ERC_20_WASM)),
+                new DeployNamedArgBuilder()
+                        .add(TOKEN_DECIMALS, CLValueBuilder.u8(tokenDecimals))
+                        .add(TOKEN_NAME, CLValueBuilder.string(tokenName))
+                        .add(TOKEN_SYMBOL, CLValueBuilder.string(tokenSymbol))
+                        .add(TOKEN_TOTAL_SUPPLYL, CLValueBuilder.u256(tokenTotalSupply))
+                        .build()
+        );
+
+        final String hexBytes = ByteUtils.encodeHexString(serializer.toBytes(moduleBytes));
+        assertThat(hexBytes, is(expected));
 
     }
 }

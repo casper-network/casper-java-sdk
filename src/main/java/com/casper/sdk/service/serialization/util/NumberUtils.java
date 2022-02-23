@@ -1,5 +1,6 @@
 package com.casper.sdk.service.serialization.util;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 
 public class NumberUtils {
@@ -17,7 +18,11 @@ public class NumberUtils {
         if (source instanceof BigInteger) {
             bigInt = (BigInteger) source;
         } else if (source instanceof Number) {
-            bigInt = new BigInteger(source.toString());
+            if (source instanceof Double) {
+                bigInt = BigDecimal.valueOf((Double) source).toBigInteger();
+            } else {
+                bigInt = new BigInteger(source.toString());
+            }
         } else if (source instanceof String && ((String) source).length() > 0) {
             bigInt = new BigInteger(String.valueOf(source));
         } else {

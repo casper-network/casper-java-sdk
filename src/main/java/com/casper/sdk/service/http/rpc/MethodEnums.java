@@ -27,12 +27,11 @@ public enum MethodEnums {
     ACCOUNT_PUT_DEPLOY {
         @Override
         public String getValue(final String result) throws ValueNotFoundException {
-            JsonNode resultNode = null;
             try {
-                resultNode = getResultNode(result);
+                final JsonNode resultNode = getResultNode(result);
                 return resultNode.get(Constants.DEPLOY_HASH).textValue();
             } catch (Exception e) {
-                throw new ValueNotFoundException("deploy_hash not found " + buildErrorMessage(resultNode));
+                throw new ValueNotFoundException("deploy_hash not found " + buildErrorMessage(result));
             }
         }
     },
@@ -167,6 +166,22 @@ public enum MethodEnums {
     JsonNode getResultNode(final String result) throws JsonProcessingException {
         final JsonNode node = new ObjectMapper().readTree(result);
         return node.get(RESULT);
+    }
+
+    String buildErrorMessage(final String result) {
+
+        try {
+            final JsonNode node = new ObjectMapper().readTree(result);
+            final JsonNode error = node != null ? node.get("error") : null;
+            if (error != null) {
+                return error.toString();
+            } else {
+                return Constants.EMPTY_STRING;
+            }
+        } catch (JsonProcessingException e) {
+            return Constants.EMPTY_STRING;
+        }
+
     }
 
     String buildErrorMessage(final JsonNode node) {

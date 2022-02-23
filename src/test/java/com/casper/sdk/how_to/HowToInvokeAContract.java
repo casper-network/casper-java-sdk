@@ -20,7 +20,7 @@ import static org.hamcrest.core.Is.is;
 /**
  * Integration tests for invoking a contract
  */
-@Disabled // Remove this to run locally
+//@Disabled // Remove this to run locally
 public class HowToInvokeAContract {
 
     /**
@@ -46,7 +46,7 @@ public class HowToInvokeAContract {
         // Make deploy
         Deploy deploy = casperSdk.makeInvokeContract(
                 new DeployParams(
-                        operatorKeyPair.getPrivate(),
+                        operatorKeyPair.getPublic(),
                         chainName,
                         null,
                         null,

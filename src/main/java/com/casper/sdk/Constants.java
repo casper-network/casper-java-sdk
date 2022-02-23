@@ -56,6 +56,7 @@ public class Constants {
     public static final String TOKEN_DECIMALS = "token_decimals";
     public static final String TOKEN_NAME = "token_name";
     public static final String TOKEN_SYMBOL = "token_symbol";
+    public static final String TOKEN_TOTAL_SUPPLYL = "token_total_supply";
     public static final String VALIDATOR = "validator";
     public static final String VERSION = "version";
     public static final String UNBOND_PURSE = "unbond_purse";
