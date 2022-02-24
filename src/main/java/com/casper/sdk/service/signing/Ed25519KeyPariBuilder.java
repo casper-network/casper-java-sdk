@@ -22,8 +22,8 @@ class Ed25519KeyPariBuilder extends AbstractKeyPairBuilder {
     }
 
     @Override
-    public KeyPair generateKeyPair() {
-        return generateKeyPair(ALGORITHM, ALGORITHM);
+    public KeyPair generateKeyPair(final byte[] seed) {
+        return generateKeyPair(ALGORITHM, ALGORITHM, seed);
     }
 
     @Override
