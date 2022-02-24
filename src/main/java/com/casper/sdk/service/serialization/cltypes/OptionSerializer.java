@@ -7,6 +7,9 @@ import com.casper.sdk.types.CLTypeInfo;
 
 import java.util.Optional;
 
+/**
+ * Converts an CL Option type into a  byte array
+ */
 public class OptionSerializer implements TypesSerializer {
 
     private final TypesFactory typesFactory;
@@ -24,12 +27,17 @@ public class OptionSerializer implements TypesSerializer {
             return this.serialize(((Optional<?>) toSerialize).orElse(null));
         } else if (toSerialize instanceof CLOptionValue) {
             CLOptionValue clOptionValue = (CLOptionValue) toSerialize;
-            if (clOptionValue.getBytes() == null || clOptionValue.getBytes().length == 0) {
+            if (clOptionValue.getParsed() == null && (clOptionValue.getBytes() == null || clOptionValue.getBytes().length == 0)) {
                 builder.append(CLOptionValue.OPTION_NONE);
             } else {
                 builder.append(CLOptionValue.OPTION_SOME);
-                final CLTypeInfo innerType = ((CLOptionTypeInfo) clOptionValue.getCLTypeInfo()).getInnerType();
-                builder.append(typesFactory.getInstance(innerType.getType()).serialize(clOptionValue.getParsed()));
+                if (clOptionValue.getParsed() != null) {
+                    // Convert the parsed inner type if present
+                    final CLTypeInfo innerType = ((CLOptionTypeInfo) clOptionValue.getCLTypeInfo()).getInnerType();
+                    builder.append(typesFactory.getInstance(innerType.getType()).serialize(clOptionValue.getParsed()));
+                } else {
+                    builder.append(clOptionValue.getBytes());
+                }
             }
         }
         return builder.toByteArray();
