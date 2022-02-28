@@ -36,9 +36,9 @@ public enum TransformTypeData {
     /**
      * Retrieve Transform implementation class from Transform name 
      * 
-     * @param name
-     * @return
-     * @throws NoSuchCLTypeException
+     * @param name {@link TransformTypeData} class name
+     * @return the class object for the {@link TransformTypeData}
+     * @throws NoSuchTypeException
      */
     public static Class<?> getClassByName(String name) throws NoSuchTypeException {
         for (TransformTypeData t : values()) {

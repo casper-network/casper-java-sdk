@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * CLType for {@link AbstractCLType.OPTION}
+ * CLType for {@link AbstractCLType#OPTION}
  * 
  * @author Alexandre Carvalho
  * @author Andre Bertolace

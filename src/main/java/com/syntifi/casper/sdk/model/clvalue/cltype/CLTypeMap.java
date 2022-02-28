@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * CLType for {@link AbstractCLType.MAP}
+ * CLType for {@link AbstractCLType#MAP}
  * 
  * @author Alexandre Carvalho
  * @author Andre Bertolace
@@ -25,7 +25,7 @@ import lombok.Setter;
 @EqualsAndHashCode(callSuper = false, of = { "typeName", "keyValueTypes" })
 public class CLTypeMap extends AbstractCLType {
     /**
-     * Support class for {@link AbstractCLType.MAP} entry types
+     * Support class for {@link AbstractCLType#MAP} entry types
      * 
      * @author Alexandre Carvalho
      * @author Andre Bertolace

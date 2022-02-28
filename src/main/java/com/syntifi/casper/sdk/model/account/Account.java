@@ -24,14 +24,14 @@ public class Account {
     private String hash;
 
     /**
-     * action_thresholds({@link ActionThresholds}) Thresholds that have to be met
+     * {@link ActionThresholds} that have to be met
      * when executing an action of a certain type.
      */
     @JsonProperty("action_thresholds")
     private ActionThresholds deployment;
 
     /**
-     * associated_keys({@link AssociatedKeys})
+     * a list of {@link AssociatedKey}
      */
     @JsonProperty("associated_keys")
     private List<AssociatedKey> associatedKeys;

@@ -24,19 +24,19 @@ public class JsonBlock {
     private String hash;
 
     /**
-     * @see JsonBlockHeader
+     * {@link JsonBlockHeader}
      */
     @JsonProperty("header")
     private JsonBlockHeader header;
 
     /**
-     * @see JsonBlockBody
+     * {@link JsonBlockBody}
      */
     @JsonProperty("body")
     private JsonBlockBody body;
 
     /**
-     * List of @see JsonProof
+     * List of {@link JsonProof}
      */
     @JsonProperty("proofs")
     private List<JsonProof> proofs;

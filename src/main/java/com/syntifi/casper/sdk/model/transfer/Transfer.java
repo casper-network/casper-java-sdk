@@ -18,7 +18,7 @@ import lombok.Data;
 @Data
 public class Transfer {
     @JsonProperty("id")
-    private Long id;
+    private BigInteger id;
 
     /**
      * Hex-encoded account hash.

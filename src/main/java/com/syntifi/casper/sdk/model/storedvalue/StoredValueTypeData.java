@@ -35,7 +35,7 @@ public enum StoredValueTypeData {
      * 
      * @param name
      * @return
-     * @throws NoSuchCLTypeException
+     * @throws NoSuchTypeException
      */
     public static Class<?> getClassByName(String name) throws NoSuchTypeException {
         for (StoredValueTypeData t : values()) {

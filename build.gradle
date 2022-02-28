@@ -2,13 +2,15 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 
 plugins {
-	id 'java'
-    id 'jacoco'
+    id 'java-library'
     id 'io.freefair.lombok' version "${lombokPluginVersion}"
+    id 'jacoco'
+    id 'signing'
+    id 'maven-publish'
 }
 
 group = 'com.syntifi.casper'
-version = '0.0.1-SNAPSHOT'
+version = '0.2.0-SNAPSHOT'
 sourceCompatibility = '8'
 
 repositories {
@@ -25,26 +27,31 @@ dependencies {
     implementation "com.fasterxml.jackson.core:jackson-annotations:${jacksonVersion}"
     implementation "org.javatuples:javatuples:${javaTuplesVersion}"
 
-    // key crypto
-    implementation "org.bouncycastle:bcpkix-jdk15on:${bouncyVersion}"
-    implementation "org.web3j:core:${web3jVersion}"
-
     // log4j and slf4j
     compileOnly "org.slf4j:slf4j-api:${slf4jApiVersion}"
     testImplementation "org.apache.logging.log4j:log4j-api:${log4jVersion}"
     testImplementation "org.apache.logging.log4j:log4j-core:${log4jVersion}"
     testImplementation "org.apache.logging.log4j:log4j-slf4j-impl:${log4jVersion}"
-    
+
     // Use JUnit Jupiter for testing.
-    testImplementation "org.junit.jupiter:junit-jupiter:${jupiterVersion}"	
+    testImplementation "org.junit.jupiter:junit-jupiter:${jupiterVersion}"
     // Used to compare json strings while testing
     testImplementation "org.skyscreamer:jsonassert:${jsonassertVersion}"
-    // Apache Utils
-    testImplementation 'commons-io:commons-io:2.11.0'
 }
 
-test {    
-	finalizedBy jacocoTestReport
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
+javadoc {
+    if (JavaVersion.current().isJava9Compatible()) {
+        options.addBooleanOption('html5', true)
+    }
+}
+
+test {
+    finalizedBy jacocoTestReport
 
     useJUnitPlatform()
     testLogging {
@@ -83,12 +90,92 @@ test {
     }
 }
 
-jacocoTestReport {    
-	dependsOn test
+jacocoTestReport {
+    dependsOn test
 
     afterEvaluate {
         getClassDirectories().setFrom(classDirectories.files.collect {
             fileTree(dir: it, exclude: '**/exception/**')
         })
     }
+}
+
+publishing {
+    repositories {
+        maven {
+            name = 'OSSRH'
+            def releasesRepoUrl = 'https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/'
+            def snapshotsRepoUrl = 'https://s01.oss.sonatype.org/content/repositories/snapshots/'
+            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+            credentials {
+                username = System.getenv('MAVEN_USERNAME')
+                password = System.getenv('MAVEN_PASSWORD')
+            }
+        }
+        maven {
+            name = "GitHubPackages"
+            url = "https://maven.pkg.github.com/syntifi/casper-sdk"
+            credentials {
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
+
+    publications {
+        mavenJava(MavenPublication) {
+            artifactId = 'casper-sdk'
+            from components.java
+            pom {
+                name = 'Java 8+ Casper RPC Client SDK'
+                packaging = 'jar'
+                description = 'This project implements the SDK to interact with a Casper Node. It wraps the Json-RPC requests and maps the results to Java objects.'
+                url = 'https://github.com/syntifi/casper-sdk'
+
+                scm {
+                    connection = 'scm:git:https://github.com/syntifi/casper-sdk.git'
+                    developerConnection = 'git@github.com:syntifi/casper-sdk.git'
+                    url = 'https://github.com/syntifi/casper-sdk'
+                }
+
+                issueManagement {
+                    system = 'GitHub'
+                    url = 'https://github.com/syntifi/casper-sdk/issues'
+                }
+
+                ciManagement {
+                    system = 'Github Actions'
+                    url = 'https://github.com/syntifi/casper-sdk/actions'
+                }
+
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id = 'syntifi'
+                        name = 'Alexandre Carvalho'
+                        email = 'adcarvalho@gmail.com'
+                    }
+                    developer {
+                        id = 'ab3rtz'
+                        name = 'Andre Bertolace'
+                        email = 'andre@syntifi.com'
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Reference at https://docs.gradle.org/current/userguide/signing_plugin.html#sec:in-memory-keys
+signing {
+    def signingKey = System.getenv('GPG_SIGNING_KEY') ?: findProperty('GPG_SIGNING_KEY')
+    def signingKeyPassword = System.getenv('GPG_SIGNING_KEY_PASSWORD') ?: findProperty('GPG_SIGNING_KEY_PASSWORD')
+    useInMemoryPgpKeys(signingKey, signingKeyPassword)
+    sign publishing.publications.mavenJava
 }

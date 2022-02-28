@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import com.syntifi.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
 import com.syntifi.casper.sdk.exception.DynamicInstanceException;
 import com.syntifi.casper.sdk.exception.InvalidByteStringException;
+import com.syntifi.casper.sdk.model.clvalue.CLValueURef;
 import com.syntifi.casper.sdk.model.clvalue.encdec.StringByteHelper;
 
 import lombok.AllArgsConstructor;
@@ -23,7 +24,7 @@ import lombok.NoArgsConstructor;
  * @author Alexandre Carvalho
  * @author Andre Bertolace
  * @since 0.0.1
- * @See CLValueURef
+ * @see CLValueURef
  */
 @Data
 @AllArgsConstructor

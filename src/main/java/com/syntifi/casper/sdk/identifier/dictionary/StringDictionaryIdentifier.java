@@ -8,7 +8,7 @@ import lombok.Data;
 
 /**
  * Identifier class passed to service
- * {@link CasperService#getDictionaryItem(String, StringDictionaryIdentifier)} to
+ * {@link CasperService#getStateDictionaryItem(String, DictionaryIdentifier)} to
  * Lookup a dictionary item via it's unique key
  *
  * @author Alexandre Carvalho

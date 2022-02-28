@@ -1,20 +1,34 @@
 package com.syntifi.casper.sdk.model.clvalue.encdec;
 
-import com.syntifi.casper.sdk.exception.CLValueDecodeException;
-import com.syntifi.casper.sdk.exception.CLValueEncodeException;
-import com.syntifi.casper.sdk.model.clvalue.*;
-import com.syntifi.casper.sdk.model.clvalue.cltype.AbstractCLType;
-import lombok.Getter;
-import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import com.syntifi.casper.sdk.exception.CLValueDecodeException;
+import com.syntifi.casper.sdk.exception.CLValueEncodeException;
+import com.syntifi.casper.sdk.model.clvalue.CLValueBool;
+import com.syntifi.casper.sdk.model.clvalue.CLValueByteArray;
+import com.syntifi.casper.sdk.model.clvalue.CLValueI32;
+import com.syntifi.casper.sdk.model.clvalue.CLValueI64;
+import com.syntifi.casper.sdk.model.clvalue.CLValueString;
+import com.syntifi.casper.sdk.model.clvalue.CLValueU128;
+import com.syntifi.casper.sdk.model.clvalue.CLValueU256;
+import com.syntifi.casper.sdk.model.clvalue.CLValueU32;
+import com.syntifi.casper.sdk.model.clvalue.CLValueU512;
+import com.syntifi.casper.sdk.model.clvalue.CLValueU64;
+import com.syntifi.casper.sdk.model.clvalue.CLValueU8;
+import com.syntifi.casper.sdk.model.clvalue.cltype.AbstractCLType;
+
+import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import lombok.Getter;
 
 /**
  * Unit tests for {@link CLValueEncoder} and {@link CLValueDecoder}

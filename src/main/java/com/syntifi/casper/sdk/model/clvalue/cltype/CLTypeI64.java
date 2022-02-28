@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
- * CLType for {@link AbstractCLType.I64}
+ * CLType for {@link AbstractCLType#I64}
  * 
  * @author Alexandre Carvalho
  * @author Andre Bertolace

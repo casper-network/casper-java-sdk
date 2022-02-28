@@ -8,7 +8,7 @@ import lombok.Data;
 
 /**
  * Identifier class passed to service
- * {@link CasperService#getDictionaryItem(String, ContractNamedKeyDictionaryIdentifier)}
+ * {@link CasperService#getStateDictionaryItem(String, DictionaryIdentifier)}
  * to Lookup a dictionary item via a Contract named keys for dictionary item calls
  *
  * @author Alexandre Carvalho

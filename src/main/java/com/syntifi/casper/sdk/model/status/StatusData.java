@@ -1,11 +1,8 @@
 package com.syntifi.casper.sdk.model.status;
 
-import java.math.BigInteger;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.syntifi.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
 import com.syntifi.casper.sdk.model.key.PublicKey;
 import com.syntifi.casper.sdk.model.peer.PeerEntry;
 
@@ -67,8 +64,13 @@ public class StatusData {
     /**
      * The next round length if this node is a validator
      */
-    @JsonIgnore
-    private BigInteger roundLength;
+    @JsonProperty("round_length")
+    private String roundLength;
+
+    /**
+     * Time passed since the node has started
+     */
+    private String uptime;
 
     /**
      * The state root hash used at the start of the current session
@@ -76,15 +78,4 @@ public class StatusData {
     @JsonProperty("starting_state_root_hash")
     private String startStateRootHash;
 
-    @JsonProperty("round_length")
-    @ExcludeFromJacocoGeneratedReport
-    protected String getJsonRoundLength() {
-        return this.roundLength != null ? this.roundLength.toString(10) : null;
-    }
-
-    @JsonProperty("round_length")
-    @ExcludeFromJacocoGeneratedReport
-    protected void setJsonRoundLength(String value) {
-        this.roundLength = value != null ? new BigInteger(value, 10) : null;
-    }
 }

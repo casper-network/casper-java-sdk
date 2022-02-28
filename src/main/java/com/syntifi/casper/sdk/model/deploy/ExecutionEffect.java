@@ -15,12 +15,12 @@ import lombok.Data;
 public class ExecutionEffect {
     
     /**
-     * @see Operation
+     * a list of {@link Operation}
      */
     private List<Operation> operations;
 
     /**
-     * @see TrasnformEntry 
+     * a list of {@link Entry}
      */
     private List<Entry> transforms;
 }

@@ -8,8 +8,8 @@ import lombok.Data;
 
 /**
  * Identifier class passed to service
- * {@link CasperService#getDictionaryItem(String, URefDictionaryIdentifier)} to Lookup a
- * dictionary item via its seed URef
+ * {@link CasperService#getStateDictionaryItem(String, DictionaryIdentifier)} to
+ * Lookup a dictionary item via its seed URef
  *
  * @author Alexandre Carvalho
  * @author Andre Bertolace

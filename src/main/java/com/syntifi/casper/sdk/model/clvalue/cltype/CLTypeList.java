@@ -10,7 +10,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * CLType for {@link AbstractCLType.LIST}
+ * CLType for {@link AbstractCLType#LIST}
  * 
  * @author Alexandre Carvalho
  * @author Andre Bertolace

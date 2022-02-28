@@ -27,7 +27,7 @@ public class UnbondingPurse {
     private BigInteger unbondingAmount;
 
     /**
-     * @see Uref
+     * the bondingPurse's {@link URef}
      */
     @JsonProperty("bonding_purse")
     private URef bondingPurse;
@@ -39,17 +39,13 @@ public class UnbondingPurse {
     private BigInteger eraOfCreation;
 
     /**
-     * Unbonders public key
-     * 
-     * @see PublickKey
+     * Unbonders {@link PublicKey}
      */
     @JsonProperty("unbonder_public_key")
     private PublicKey unbonderPublicKey;
 
     /**
-     * Validators public key
-     * 
-     * @see PublickKey
+     * Validators {@link PublicKey}
      */
     @JsonProperty("validator_public_key")
     private PublicKey validatorPublicKey;
