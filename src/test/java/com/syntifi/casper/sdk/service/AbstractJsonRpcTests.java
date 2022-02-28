@@ -21,10 +21,10 @@ public abstract class AbstractJsonRpcTests extends AbstractJsonTests {
     @Getter
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     public enum CasperNetwork {
-        MAIN_NET("81.169.180.210", 7777), TEST_NET("65.21.238.244", 7777);
+        MAIN_NET("63.33.251.206", 7777), TEST_NET("138.201.54.44", 7777);
 
-        private String ip;
-        private int port;
+        private final String ip;
+        private final int port;
     }
 
     protected static CasperService casperServiceMainnet;

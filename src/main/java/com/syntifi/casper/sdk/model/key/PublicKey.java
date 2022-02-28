@@ -6,13 +6,13 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.syntifi.casper.sdk.crypto.AbstractPublicKey;
-import com.syntifi.casper.sdk.crypto.Ed25519PublicKey;
-import com.syntifi.casper.sdk.crypto.Secp256k1PublicKey;
 import com.syntifi.casper.sdk.exception.InvalidByteStringException;
 import com.syntifi.casper.sdk.jackson.deserializer.PublicKeyDeserializer;
 import com.syntifi.casper.sdk.model.clvalue.encdec.StringByteHelper;
 
+import com.syntifi.crypto.key.AbstractPublicKey;
+import com.syntifi.crypto.key.Ed25519PublicKey;
+import com.syntifi.crypto.key.Secp256k1PublicKey;
 import lombok.NoArgsConstructor;
 
 /**

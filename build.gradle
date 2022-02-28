@@ -13,10 +13,13 @@ sourceCompatibility = '8'
 
 repositories {
 	mavenCentral()
+    maven { url 'https://s01.oss.sonatype.org/content/repositories/snapshots' }
 }
 
-dependencies {	
-	implementation "com.github.briandilley.jsonrpc4j:jsonrpc4j:${jsonrpc4jVersion}"
+dependencies {
+    implementation "com.github.briandilley.jsonrpc4j:jsonrpc4j:${jsonrpc4jVersion}"
+    implementation "com.syntifi.crypto:crypto-key-ed25519:${cryptokeyVersion}"
+    implementation "com.syntifi.crypto:crypto-key-secp256k1:${cryptokeyVersion}"
     implementation "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
     implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
     implementation "com.fasterxml.jackson.core:jackson-annotations:${jacksonVersion}"
@@ -37,7 +40,7 @@ dependencies {
     // Used to compare json strings while testing
     testImplementation "org.skyscreamer:jsonassert:${jsonassertVersion}"
     // Apache Utils
-    testImplementation 'commons-io:commons-io:2.6'
+    testImplementation 'commons-io:commons-io:2.11.0'
 }
 
 test {    
