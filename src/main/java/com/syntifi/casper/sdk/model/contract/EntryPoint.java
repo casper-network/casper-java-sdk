@@ -12,8 +12,9 @@ import com.syntifi.casper.sdk.model.clvalue.cltype.AbstractCLType;
 import com.syntifi.casper.sdk.model.clvalue.cltype.AbstractCLTypeBasic;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 /**
  * No description available
@@ -22,7 +23,9 @@ import lombok.Getter;
  * @author Andre Bertolace
  * @since 0.0.1
  */
-@Data
+@Getter
+@Setter
+@Builder
 public class EntryPoint {
 
     public interface EntryPointAccess {
@@ -72,7 +75,7 @@ public class EntryPoint {
     @JsonProperty("args")
     private List<Parameter> args;
 
-    /**     
+    /**
      * the {@link EntryPointType} Context of method execution
      */
     @JsonProperty("entry_point_type")

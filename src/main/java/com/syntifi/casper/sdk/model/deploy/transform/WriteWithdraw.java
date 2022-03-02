@@ -6,7 +6,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.syntifi.casper.sdk.model.deploy.UnbondingPurse;
 
-import lombok.Data;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * An implmentation of Transform that Writes the given Withdraw to global state.
@@ -17,7 +19,9 @@ import lombok.Data;
  * @author Andre Bertolace
  * @since 0.0.1
  */
-@Data
+@Getter
+@Setter
+@Builder
 @JsonTypeName("WriteWithdraw")
 public class WriteWithdraw implements Transform {
 

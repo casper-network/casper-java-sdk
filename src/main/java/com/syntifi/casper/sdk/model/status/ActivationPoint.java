@@ -8,7 +8,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.syntifi.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
 
-import lombok.Data;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * The first era to which the associated protocol version applies
@@ -17,11 +19,13 @@ import lombok.Data;
  * @author Andre Bertolace
  * @since 0.0.1
  */
-@Data
+@Getter
+@Setter
+@Builder
 public class ActivationPoint {
 
     /**
-     * Era ID 
+     * Era ID
      */
     @JsonIgnore
     private BigInteger eraId;
@@ -35,13 +39,13 @@ public class ActivationPoint {
 
     @JsonProperty("era_id")
     @ExcludeFromJacocoGeneratedReport
-	protected String getJsonEraId() {
+    protected String getJsonEraId() {
         return this.eraId.toString(10);
     }
 
     @JsonProperty("era_id")
     @ExcludeFromJacocoGeneratedReport
-	protected void setJsonEraId(String value) {
+    protected void setJsonEraId(String value) {
         this.eraId = new BigInteger(value, 10);
     }
 }

@@ -7,7 +7,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.syntifi.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
 import com.syntifi.casper.sdk.model.key.PublicKey;
 
-import lombok.Data;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Casper block validator weight
@@ -17,7 +19,9 @@ import lombok.Data;
  * @see JsonEraEnd
  * @since 0.0.1
  */
-@Data
+@Getter
+@Setter
+@Builder
 public class JsonValidatorWeight {
 
     /**

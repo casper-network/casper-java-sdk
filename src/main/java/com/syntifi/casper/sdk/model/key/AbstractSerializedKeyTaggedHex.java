@@ -4,7 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.syntifi.casper.sdk.model.clvalue.encdec.StringByteHelper;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Hex-encoded key, including the tag byte.
@@ -13,7 +14,8 @@ import lombok.Data;
  * @author Andre Bertolace
  * @since 0.0.1
  */
-@Data
+@Getter
+@Setter
 public abstract class AbstractSerializedKeyTaggedHex<T extends Tag> {
 
     /**

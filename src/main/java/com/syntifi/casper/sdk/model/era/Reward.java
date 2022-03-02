@@ -2,7 +2,9 @@ package com.syntifi.casper.sdk.model.era;
 
 import com.syntifi.casper.sdk.model.key.PublicKey;
 
-import lombok.Data;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Casper block era reward data
@@ -12,14 +14,16 @@ import lombok.Data;
  * @see JsonEraReport
  * @since 0.0.1
  */
-@Data
+@Getter
+@Setter
+@Builder
 public class Reward {
-    
+
     /**
      * @see PublicKey
      */
     private PublicKey validator;
-   
+
     /**
      * amount
      */

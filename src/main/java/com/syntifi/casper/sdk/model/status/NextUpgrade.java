@@ -2,7 +2,9 @@ package com.syntifi.casper.sdk.model.status;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import lombok.Data;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Information about the next scheduled upgrade
@@ -11,7 +13,9 @@ import lombok.Data;
  * @author Andre Bertolace
  * @since 0.0.1
  */
-@Data
+@Getter
+@Setter
+@Builder
 public class NextUpgrade {
 
     /**
@@ -21,7 +25,7 @@ public class NextUpgrade {
     private ActivationPoint activationPoint;
 
     /**
-     * Protocol version 
+     * Protocol version
      */
     @JsonProperty("protocol_version")
     private String protocolVersion;

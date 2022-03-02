@@ -1,6 +1,8 @@
 package com.syntifi.casper.sdk.model.contract;
 
-import lombok.Data;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * A (labelled) "user group". Each method of a versioned contract may be
@@ -10,7 +12,9 @@ import lombok.Data;
  * @author Andre Bertolace
  * @since 0.0.1
  */
-@Data
+@Getter
+@Setter
+@Builder
 public class Group {
     private String name;
 }

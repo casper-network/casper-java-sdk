@@ -2,7 +2,9 @@ package com.syntifi.casper.sdk.model.peer;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import lombok.Data;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * The node ID and network address of each connected peer.
@@ -11,14 +13,16 @@ import lombok.Data;
  * @author Andre Bertolace
  * @since 0.0.1
  */
-@Data
+@Getter
+@Setter
+@Builder
 public class PeerEntry {
 
     /**
      * IP:PORT
      */
     private String address;
-   
+
     /**
      * node ID
      */

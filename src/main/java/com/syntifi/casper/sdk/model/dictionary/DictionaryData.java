@@ -1,10 +1,11 @@
 package com.syntifi.casper.sdk.model.dictionary;
-    
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.syntifi.casper.sdk.model.storedvalue.StoredValue;
 
-import lombok.Data;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Dictionary key and stored value
@@ -13,11 +14,13 @@ import lombok.Data;
  * @author Andre Bertolace
  * @since 0.0.1
  */
-@Data
+@Getter
+@Setter
+@Builder
 public class DictionaryData {
-    
+
     /**
-     * The RPC API version 
+     * The RPC API version
      */
     @JsonProperty("api_version")
     private String apiVersion;
@@ -29,13 +32,13 @@ public class DictionaryData {
     private String dictionaryKey;
 
     /**
-     * The merkle proof 
+     * The merkle proof
      */
     @JsonProperty("merkle_proof")
     private String merkleProof;
 
     /**
-     * The stored value 
+     * The stored value
      */
     @JsonProperty("stored_value")
     private StoredValue<?> storedValue;

@@ -8,7 +8,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.syntifi.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
 import com.syntifi.casper.sdk.model.uref.URef;
 
-import lombok.Data;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * An entry in a founding validator map representing a bid.
@@ -17,7 +19,9 @@ import lombok.Data;
  * @author Andre Bertolace
  * @since 0.0.1
  */
-@Data
+@Getter
+@Setter
+@Builder
 public class JsonBid {
 
     /**
@@ -52,13 +56,13 @@ public class JsonBid {
 
     @JsonProperty("staked_amount")
     @ExcludeFromJacocoGeneratedReport
-	protected String getJsonStakedAmount() {
+    protected String getJsonStakedAmount() {
         return this.stakedAmount.toString(10);
     }
 
     @JsonProperty("staked_amount")
     @ExcludeFromJacocoGeneratedReport
-	protected void setJsonStakedAmount(String value) {
+    protected void setJsonStakedAmount(String value) {
         this.stakedAmount = new BigInteger(value, 10);
     }
 }

@@ -3,7 +3,9 @@ package com.syntifi.casper.sdk.model.deploy.transform;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
-import lombok.Data;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * An implmentation of Transform that Adds the given `i32`
@@ -14,7 +16,9 @@ import lombok.Data;
  * @author Andre Bertolace
  * @since 0.0.1
  */
-@Data
+@Getter
+@Setter
+@Builder
 @JsonTypeName("AddInt32")
 public class AddInt32 implements Transform {
 

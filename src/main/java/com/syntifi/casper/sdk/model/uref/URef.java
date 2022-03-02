@@ -12,8 +12,10 @@ import com.syntifi.casper.sdk.model.clvalue.CLValueURef;
 import com.syntifi.casper.sdk.model.clvalue.encdec.StringByteHelper;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * URef is a tuple that contains the address of the URef and the access rights
@@ -26,7 +28,9 @@ import lombok.NoArgsConstructor;
  * @since 0.0.1
  * @see CLValueURef
  */
-@Data
+@Getter
+@Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class URef {

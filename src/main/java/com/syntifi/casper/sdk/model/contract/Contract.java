@@ -4,7 +4,9 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import lombok.Data;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Methods and type signatures supported by a contract.
@@ -13,7 +15,9 @@ import lombok.Data;
  * @author Andre Bertolace
  * @since 0.0.1
  */
-@Data
+@Getter
+@Setter
+@Builder
 public class Contract {
 
     /**
@@ -21,7 +25,7 @@ public class Contract {
      */
     @JsonProperty("contract_package_hash")
     private String packageHash;
-    
+
     /**
      * contract_wasm_hash(String) The hash address of the contract wasm.
      */

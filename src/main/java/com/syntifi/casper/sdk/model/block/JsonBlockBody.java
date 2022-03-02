@@ -5,7 +5,9 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.syntifi.casper.sdk.model.key.PublicKey;
 
-import lombok.Data;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * A JSON-friendly representation of `Body`
@@ -15,11 +17,13 @@ import lombok.Data;
  * @see JsonBlock
  * @since 0.0.1
  */
-@Data
+@Getter
+@Setter
+@Builder
 public class JsonBlockBody {
 
     /**
-     * @see PublicKey 
+     * @see PublicKey
      */
     @JsonProperty("proposer")
     private PublicKey proposer;

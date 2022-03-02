@@ -8,7 +8,9 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.syntifi.casper.sdk.model.key.PublicKey;
 
-import lombok.Data;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * The header portion of a [`Deploy`](struct.Deploy.html).
@@ -17,13 +19,15 @@ import lombok.Data;
  * @author Andre Bertolace
  * @since 0.0.1
  */
-@Data
+@Getter
+@Setter
+@Builder
 public class DeployHeader {
 
     /**
      * @see PublicKey
      */
-    private PublicKey account; 
+    private PublicKey account;
 
     /**
      * Body hash
@@ -43,10 +47,10 @@ public class DeployHeader {
     private List<String> dependencies;
 
     /**
-     * Gas price 
+     * Gas price
      */
     @JsonProperty("gas_price")
-    private BigInteger gasPrice; 
+    private BigInteger gasPrice;
 
     /**
      * Timestamp formatted as per RFC 3339

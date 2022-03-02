@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.syntifi.casper.sdk.model.transfer.Transfer;
 
-import lombok.Data;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Stored Value for {@link Transfer}
@@ -14,7 +16,9 @@ import lombok.Data;
  * @see StoredValue
  * @since 0.0.1
  */
-@Data
+@Getter
+@Setter
+@Builder
 @JsonTypeName("Transfer")
 public class StoredValueTransfer implements StoredValue<Transfer> {
     @JsonProperty("Transfer")

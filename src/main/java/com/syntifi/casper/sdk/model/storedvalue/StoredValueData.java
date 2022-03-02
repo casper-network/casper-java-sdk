@@ -2,7 +2,9 @@ package com.syntifi.casper.sdk.model.storedvalue;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * Root class for a Casper Stored Value
@@ -11,7 +13,9 @@ import lombok.Data;
  * @author Andre Bertolace
  * @since 0.0.1
  */
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
 public class StoredValueData {
     @JsonProperty("api_version")
     private String apiVersion;

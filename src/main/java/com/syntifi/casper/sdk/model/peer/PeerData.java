@@ -4,7 +4,9 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import lombok.Data;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Root class for a Casper peer info request
@@ -14,7 +16,9 @@ import lombok.Data;
  * @see PeerData
  * @since 0.0.1
  */
-@Data
+@Getter
+@Setter
+@Builder
 public class PeerData {
 
     /**
@@ -22,7 +26,7 @@ public class PeerData {
      */
     @JsonProperty("api_version")
     private String apiVersion;
-   
+
     /**
      * List of @see PeerEntry
      */

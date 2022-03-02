@@ -8,7 +8,9 @@ import com.syntifi.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
 import com.syntifi.casper.sdk.model.key.PublicKey;
 import com.syntifi.casper.sdk.model.uref.URef;
 
-import lombok.Data;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Unbonding Purse
@@ -17,7 +19,9 @@ import lombok.Data;
  * @author Andre Bertolace
  * @since 0.0.1
  */
-@Data
+@Getter
+@Setter
+@Builder
 public class UnbondingPurse {
 
     /**
@@ -52,13 +56,13 @@ public class UnbondingPurse {
 
     @JsonProperty("unbonding_amount")
     @ExcludeFromJacocoGeneratedReport
-	protected String getJsonUnbondingAmount() {
+    protected String getJsonUnbondingAmount() {
         return this.unbondingAmount.toString(10);
     }
 
     @JsonProperty("unbonding_amount")
     @ExcludeFromJacocoGeneratedReport
-	protected void setJsonUnbondingAmount(String value) {
+    protected void setJsonUnbondingAmount(String value) {
         this.unbondingAmount = new BigInteger(value, 10);
     }
 }

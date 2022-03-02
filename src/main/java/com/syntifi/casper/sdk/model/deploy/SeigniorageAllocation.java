@@ -8,7 +8,10 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.syntifi.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * Info about a seigniorage allocation for a validator
@@ -17,7 +20,10 @@ import lombok.Data;
  * @author Andre Bertolace
  * @since 0.0.1
  */
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.WRAPPER_OBJECT)
 @JsonSubTypes({ @JsonSubTypes.Type(value = Validator.class, name = "Validator"),
         @JsonSubTypes.Type(value = Delegator.class, name = "Delegator") })
@@ -31,13 +37,13 @@ public class SeigniorageAllocation {
 
     @JsonProperty("amount")
     @ExcludeFromJacocoGeneratedReport
-	protected String getJsonAmount() {
+    protected String getJsonAmount() {
         return this.amount.toString(10);
     }
 
     @JsonProperty("amount")
     @ExcludeFromJacocoGeneratedReport
-	protected void setJsonAmount(String value) {
+    protected void setJsonAmount(String value) {
         this.amount = new BigInteger(value, 10);
     }
 }

@@ -9,7 +9,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.syntifi.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
 import com.syntifi.casper.sdk.model.deploy.ExecutionEffect;
 
-import lombok.Data;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Abstract Executable Result of type Success containing the details of the
@@ -20,7 +22,9 @@ import lombok.Data;
  * @since 0.0.1
  * @see ExecutionResult
  */
-@Data
+@Getter
+@Setter
+@Builder
 @JsonTypeName("Success")
 public class Success implements ExecutionResult {
 

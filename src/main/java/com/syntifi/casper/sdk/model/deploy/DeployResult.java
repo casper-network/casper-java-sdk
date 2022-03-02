@@ -2,7 +2,9 @@ package com.syntifi.casper.sdk.model.deploy;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import lombok.Data;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Result for the account_put_deploy RPC response
@@ -11,7 +13,9 @@ import lombok.Data;
  * @author Andre Bertolace
  * @since 0.0.1
  */
-@Data
+@Getter
+@Setter
+@Builder
 public class DeployResult {
 
     /**
@@ -27,5 +31,3 @@ public class DeployResult {
     private String deployHash;
 
 }
-
-

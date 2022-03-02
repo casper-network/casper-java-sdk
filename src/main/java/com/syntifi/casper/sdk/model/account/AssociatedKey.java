@@ -2,7 +2,9 @@ package com.syntifi.casper.sdk.model.account;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import lombok.Data;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Associated Key
@@ -11,9 +13,11 @@ import lombok.Data;
  * @author Andre Bertolace
  * @since 0.0.1
  */
-@Data
+@Getter
+@Setter
+@Builder
 public class AssociatedKey {
-    
+
     /**
      * account_hash(String) Hex-encoded account hash.
      */

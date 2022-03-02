@@ -15,7 +15,6 @@ import com.syntifi.casper.sdk.model.clvalue.encdec.CLValueEncoder;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -42,7 +41,8 @@ public class CLValueResult extends AbstractCLValue<CLValueResult.Result, CLTypeR
      * @see CLTypeData
      * @since 0.0.1
      */
-    @Data
+    @Getter
+    @Setter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
     protected class Result {
@@ -54,7 +54,7 @@ public class CLValueResult extends AbstractCLValue<CLValueResult.Result, CLTypeR
     @JsonProperty("cl_type")
     private CLTypeResult clType = new CLTypeResult();
 
-    public CLValueResult(AbstractCLValue<?,?> ok, AbstractCLValue<?,?> err) {
+    public CLValueResult(AbstractCLValue<?, ?> ok, AbstractCLValue<?, ?> err) {
         this.setValue(this.new Result(ok, err));
         setChildTypes();
     }

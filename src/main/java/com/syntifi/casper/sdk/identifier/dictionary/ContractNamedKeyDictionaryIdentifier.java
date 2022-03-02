@@ -4,18 +4,23 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.syntifi.casper.sdk.service.CasperService;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Identifier class passed to service
  * {@link CasperService#getStateDictionaryItem(String, DictionaryIdentifier)}
- * to Lookup a dictionary item via a Contract named keys for dictionary item calls
+ * to Lookup a dictionary item via a Contract named keys for dictionary item
+ * calls
  *
  * @author Alexandre Carvalho
  * @author Andre Bertolace
  * @since 0.0.1
  */
-@Data
+@Getter
+@Setter
+@Builder
 @AllArgsConstructor
 public class ContractNamedKeyDictionaryIdentifier implements DictionaryIdentifier {
     @JsonProperty("ContractNamedKey")

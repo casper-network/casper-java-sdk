@@ -6,7 +6,9 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.syntifi.casper.sdk.model.era.JsonEraEnd;
 
-import lombok.Data;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Holds the header data of a Casper block
@@ -16,7 +18,9 @@ import lombok.Data;
  * @see JsonBlock
  * @since 0.0.1
  */
-@Data
+@Getter
+@Setter
+@Builder
 public class JsonBlockHeader {
 
     /**

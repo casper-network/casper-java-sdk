@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.syntifi.casper.sdk.model.key.PublicKey;
 import com.syntifi.casper.sdk.model.key.Signature;
 
-import lombok.Data;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Holds the block proof data
@@ -14,7 +16,9 @@ import lombok.Data;
  * @see JsonBlock
  * @since 0.0.1
  */
-@Data
+@Getter
+@Setter
+@Builder
 public class JsonProof {
 
     /**
