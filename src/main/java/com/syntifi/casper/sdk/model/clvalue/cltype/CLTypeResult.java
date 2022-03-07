@@ -34,9 +34,10 @@ public class CLTypeResult extends AbstractCLType {
      */
     @Getter
     @Setter
+    @EqualsAndHashCode
     @NoArgsConstructor
     @AllArgsConstructor
-    public class CLTypeResultOkErrTypes {
+    public static class CLTypeResultOkErrTypes {
         @JsonIgnore
         private AbstractCLType okClType;
         @JsonIgnore

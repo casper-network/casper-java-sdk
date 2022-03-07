@@ -10,6 +10,7 @@ import com.syntifi.casper.sdk.model.clvalue.cltype.CLTypeI32;
 import com.syntifi.casper.sdk.model.clvalue.encdec.CLValueDecoder;
 import com.syntifi.casper.sdk.model.clvalue.encdec.CLValueEncoder;
 
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,8 +26,9 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 public class CLValueI32 extends AbstractCLValue<Integer, CLTypeI32> {
     private CLTypeI32 clType = new CLTypeI32();
 

@@ -26,6 +26,7 @@ dependencies {
     implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
     implementation "com.fasterxml.jackson.core:jackson-annotations:${jacksonVersion}"
     implementation "org.javatuples:javatuples:${javaTuplesVersion}"
+    implementation "joda-time:joda-time:${jodaTimeVersion}"
 
     // log4j and slf4j
     compileOnly "org.slf4j:slf4j-api:${slf4jApiVersion}"

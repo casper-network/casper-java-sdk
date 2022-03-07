@@ -14,6 +14,7 @@ import com.syntifi.casper.sdk.model.clvalue.cltype.CLTypeOption;
 import com.syntifi.casper.sdk.model.clvalue.encdec.CLValueDecoder;
 import com.syntifi.casper.sdk.model.clvalue.encdec.CLValueEncoder;
 
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -29,6 +30,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = true)
+@AllArgsConstructor
 public class CLValueOption extends AbstractCLValue<Optional<AbstractCLValue<?, ?>>, CLTypeOption> {
     @JsonProperty("cl_type")
     private CLTypeOption clType = new CLTypeOption();

@@ -33,9 +33,10 @@ public class CLTypeMap extends AbstractCLType {
      */
     @Getter
     @Setter
+    @EqualsAndHashCode
     @NoArgsConstructor
     @AllArgsConstructor
-    public class CLTypeMapEntryType {
+    public static class CLTypeMapEntryType {
         @JsonIgnore
         private AbstractCLType keyType;
         @JsonIgnore

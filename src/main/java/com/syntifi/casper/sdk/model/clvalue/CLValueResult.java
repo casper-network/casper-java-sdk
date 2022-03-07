@@ -43,6 +43,7 @@ public class CLValueResult extends AbstractCLValue<CLValueResult.Result, CLTypeR
      */
     @Getter
     @Setter
+    @EqualsAndHashCode
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
     protected class Result {
@@ -109,6 +110,6 @@ public class CLValueResult extends AbstractCLValue<CLValueResult.Result, CLTypeR
 
     protected void setChildTypes() {
         clType.setOkErrTypes(
-                clType.new CLTypeResultOkErrTypes(getValue().getOk().getClType(), getValue().getErr().getClType()));
+                new CLTypeResult.CLTypeResultOkErrTypes(getValue().getOk().getClType(), getValue().getErr().getClType()));
     }
 }

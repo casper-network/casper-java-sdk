@@ -25,7 +25,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@EqualsAndHashCode(callSuper = true, of = "clType")
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 public class CLValueU8 extends AbstractCLValue<Byte, CLTypeU8> {
     private CLTypeU8 clType = new CLTypeU8();

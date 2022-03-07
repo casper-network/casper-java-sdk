@@ -94,6 +94,6 @@ public class CLValueMap extends AbstractCLValueWithChildren<Map<? extends Abstra
         Entry<? extends AbstractCLValue<?, ?>, ? extends AbstractCLValue<?, ?>> entry = getValue().entrySet().iterator().next();
 
         clType.setKeyValueTypes(
-                clType.new CLTypeMapEntryType(entry.getKey().getClType(), entry.getValue().getClType()));
+                new CLTypeMap.CLTypeMapEntryType(entry.getKey().getClType(), entry.getValue().getClType()));
     }
 }

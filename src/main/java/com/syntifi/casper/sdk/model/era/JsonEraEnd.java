@@ -4,6 +4,12 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 /**
  * Casper block root Era data
  * 
@@ -11,6 +17,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @author Andre Bertolace
  * @since 0.0.1
  */
+
+@Getter
+ @Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class JsonEraEnd {
     
     /**

@@ -3,8 +3,10 @@ package com.syntifi.casper.sdk.model.dictionary;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.syntifi.casper.sdk.model.storedvalue.StoredValue;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
@@ -17,6 +19,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class DictionaryData {
 
     /**

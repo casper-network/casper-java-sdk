@@ -25,7 +25,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@EqualsAndHashCode(callSuper = true, of = "clType")
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 public class CLValueBool extends AbstractCLValue<Boolean, CLTypeBool> {
     private CLTypeBool clType = new CLTypeBool();

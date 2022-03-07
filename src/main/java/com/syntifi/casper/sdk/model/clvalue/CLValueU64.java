@@ -12,6 +12,7 @@ import com.syntifi.casper.sdk.model.clvalue.cltype.CLTypeU64;
 import com.syntifi.casper.sdk.model.clvalue.encdec.CLValueDecoder;
 import com.syntifi.casper.sdk.model.clvalue.encdec.CLValueEncoder;
 
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,6 +30,7 @@ import lombok.Setter;
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
+@AllArgsConstructor
 public class CLValueU64 extends AbstractCLValue<BigInteger, CLTypeU64> {
     private CLTypeU64 clType = new CLTypeU64();
 

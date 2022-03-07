@@ -9,6 +9,7 @@ import com.syntifi.casper.sdk.exception.NoSuchKeyTagException;
 import com.syntifi.casper.sdk.jackson.deserializer.KeyDeserializer;
 import com.syntifi.casper.sdk.model.clvalue.encdec.StringByteHelper;
 
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
@@ -20,6 +21,7 @@ import lombok.NoArgsConstructor;
  */
 @JsonDeserialize(using = KeyDeserializer.class)
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 public class Key extends AbstractSerializedKeyTaggedHex<KeyTag> {
 
     public static Key fromTaggedHexString(String hex) throws NoSuchKeyTagException, InvalidByteStringException {

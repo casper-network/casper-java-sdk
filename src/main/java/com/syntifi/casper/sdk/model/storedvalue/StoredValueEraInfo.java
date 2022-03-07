@@ -4,8 +4,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.syntifi.casper.sdk.model.deploy.EraInfo;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
@@ -19,6 +22,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@EqualsAndHashCode
 @JsonTypeName("EraInfo")
 public class StoredValueEraInfo implements StoredValue<EraInfo> {
     @JsonProperty("EraInfo")
