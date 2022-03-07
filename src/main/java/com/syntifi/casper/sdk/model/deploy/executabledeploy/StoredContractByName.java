@@ -11,6 +11,8 @@ import com.syntifi.casper.sdk.exception.NoSuchTypeException;
 import com.syntifi.casper.sdk.model.clvalue.encdec.CLValueEncoder;
 import com.syntifi.casper.sdk.model.deploy.NamedArg;
 
+import org.bouncycastle.util.encoders.Hex;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -63,12 +65,18 @@ public class StoredContractByName implements ExecutableDeployItem {
     @Override
     public void encode(CLValueEncoder clve)
             throws IOException, CLValueEncodeException, DynamicInstanceException, NoSuchTypeException {
+        String a = Hex.toHexString(clve.toByteArray());
         clve.write(getOrder());
+        String b = Hex.toHexString(clve.toByteArray());
         clve.writeString(getName());
+        String c = Hex.toHexString(clve.toByteArray());
         clve.writeString(getEntryPoint());
+        String d = Hex.toHexString(clve.toByteArray());
         clve.writeInt(args.size());
         for (NamedArg<?> namedArg : args) {
             namedArg.encode(clve);
         }
+        String e = Hex.toHexString(clve.toByteArray());
+        String f = Hex.toHexString(clve.toByteArray());
     }
 }

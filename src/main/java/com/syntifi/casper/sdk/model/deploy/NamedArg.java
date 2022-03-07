@@ -11,6 +11,8 @@ import com.syntifi.casper.sdk.model.clvalue.cltype.AbstractCLType;
 import com.syntifi.casper.sdk.model.clvalue.encdec.CLValueEncoder;
 import com.syntifi.casper.sdk.model.clvalue.encdec.interfaces.EncodableValue;
 
+import org.bouncycastle.util.encoders.Hex;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -45,7 +47,12 @@ public class NamedArg<P extends AbstractCLType> implements EncodableValue {
     @Override
     public void encode(CLValueEncoder clve)
             throws IOException, CLValueEncodeException, DynamicInstanceException, NoSuchTypeException {
+        String a = Hex.toHexString(clve.toByteArray());
         clve.writeString(type);
+        String b = Hex.toHexString(clve.toByteArray());
+        //HERE
         clValue.encode(clve);
+        String c = Hex.toHexString(clve.toByteArray());
+        String d = Hex.toHexString(clve.toByteArray());
     }
 }

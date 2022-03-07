@@ -77,4 +77,9 @@ public abstract class AbstractCLValue<T, P extends AbstractCLType> implements En
     public abstract P getClType();
 
     public abstract void setClType(P value);
+
+    public void encode(CLValueEncoder clve) throws IOException, NoSuchTypeException, CLValueEncodeException, DynamicInstanceException {
+        int val = (int) (getClType().getClTypeData().getSerializationTag()); 
+        clve.writeInt(val);
+    }
 }

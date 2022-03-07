@@ -46,6 +46,7 @@ public class CLValueTuple2
     @Override
     public void encode(CLValueEncoder clve)
             throws IOException, CLValueEncodeException, DynamicInstanceException, NoSuchTypeException {
+        super.encode(clve);
         setChildTypes();
 
         getValue().getValue0().encode(clve);
