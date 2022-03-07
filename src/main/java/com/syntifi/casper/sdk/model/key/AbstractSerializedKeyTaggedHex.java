@@ -1,8 +1,15 @@
 package com.syntifi.casper.sdk.model.key;
 
+import java.io.IOException;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.syntifi.casper.sdk.exception.CLValueEncodeException;
+import com.syntifi.casper.sdk.exception.DynamicInstanceException;
+import com.syntifi.casper.sdk.exception.NoSuchTypeException;
+import com.syntifi.casper.sdk.model.clvalue.encdec.CLValueEncoder;
 import com.syntifi.casper.sdk.model.clvalue.encdec.StringByteHelper;
+import com.syntifi.casper.sdk.model.clvalue.encdec.interfaces.EncodableValue;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -22,7 +29,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of = {"tag", "key"})
-public abstract class AbstractSerializedKeyTaggedHex<T extends Tag> {
+public abstract class AbstractSerializedKeyTaggedHex<T extends Tag> implements EncodableValue {
 
     /**
      * @see Tag
@@ -40,5 +47,15 @@ public abstract class AbstractSerializedKeyTaggedHex<T extends Tag> {
     public String getAlgoTaggedHex() {
         return StringByteHelper.convertBytesToHex(new byte[] { this.tag.getByteTag() })
                 + StringByteHelper.convertBytesToHex(this.getKey());
+    }
+
+    /**
+     * Implements TaggedHEx encoder
+     */
+    @Override
+    public void encode(CLValueEncoder clve)
+            throws IOException, CLValueEncodeException, DynamicInstanceException, NoSuchTypeException {
+        clve.write(getTag().getByteTag());
+        clve.writeBytes(getKey());
     }
 }

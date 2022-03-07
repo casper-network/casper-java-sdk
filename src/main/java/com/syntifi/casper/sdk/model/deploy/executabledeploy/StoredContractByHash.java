@@ -1,13 +1,20 @@
 package com.syntifi.casper.sdk.model.deploy.executabledeploy;
 
+import java.io.IOException;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.syntifi.casper.sdk.exception.CLValueEncodeException;
+import com.syntifi.casper.sdk.exception.DynamicInstanceException;
+import com.syntifi.casper.sdk.exception.NoSuchTypeException;
+import com.syntifi.casper.sdk.model.clvalue.encdec.CLValueEncoder;
 import com.syntifi.casper.sdk.model.deploy.NamedArg;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
@@ -21,13 +28,15 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @JsonTypeName("StoredContractByHash")
 public class StoredContractByHash implements ExecutableDeployItem {
 
     /**
-     * @see NamedArg
+     * Hex-encoded Hash
      */
-    private List<NamedArg<?, ?>> args;
+    private String hash;
 
     /**
      * Entry Point
@@ -36,7 +45,31 @@ public class StoredContractByHash implements ExecutableDeployItem {
     private String entryPoint;
 
     /**
-     * Hex-encoded Hash
+     * @see NamedArg
      */
-    private String hash;
+    private List<NamedArg<?>> args;
+
+    /**
+     * @link ExecutableDeploy order 1
+     */
+    @Override
+    public byte getOrder() {
+        return 0x1;
+    }
+
+    /**
+     * Implements the StoredContractByHAsh encoder
+     */
+    @Override
+    public void encode(CLValueEncoder clve)
+            throws IOException, CLValueEncodeException, DynamicInstanceException, NoSuchTypeException {
+        clve.write(getOrder());
+        clve.writeString(getHash());
+        clve.writeString(getEntryPoint());
+        clve.writeInt(args.size());
+        for (NamedArg<?> namedArg : args) {
+            namedArg.encode(clve);
+        }
+    }
+
 }

@@ -1,8 +1,13 @@
 package com.syntifi.casper.sdk.model.deploy.executabledeploy;
 
+import java.io.IOException;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.syntifi.casper.sdk.exception.CLValueEncodeException;
+import com.syntifi.casper.sdk.exception.DynamicInstanceException;
+import com.syntifi.casper.sdk.exception.NoSuchTypeException;
+import com.syntifi.casper.sdk.model.clvalue.encdec.CLValueEncoder;
 import com.syntifi.casper.sdk.model.deploy.NamedArg;
 
 import lombok.AllArgsConstructor;
@@ -30,6 +35,27 @@ public class Transfer implements ExecutableDeployItem {
     /**
      * List of @see NamedArg
      */
-    private List<NamedArg<?, ?>> args;
+ 
+     private List<NamedArg<?>> args;
 
+    /**
+     * @link ExecutableDeploy order 5
+     */
+    @Override
+    public byte getOrder() {
+        return 0x6;
+    }
+
+    /**
+     * Implements the Transfer encoder
+     */
+    @Override
+    public void encode(CLValueEncoder clve)
+            throws IOException, CLValueEncodeException, DynamicInstanceException, NoSuchTypeException {
+        clve.write(getOrder());
+        clve.writeInt(args.size());
+        for (NamedArg<?> namedArg : args) {
+            namedArg.encode(clve);
+        }
+    }
 }

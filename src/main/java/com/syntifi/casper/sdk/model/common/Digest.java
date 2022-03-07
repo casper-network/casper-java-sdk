@@ -1,15 +1,15 @@
-package com.syntifi.casper.sdk.model.deploy;
+package com.syntifi.casper.sdk.model.common;
 
 import java.io.IOException;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonValue;
 import com.syntifi.casper.sdk.exception.CLValueEncodeException;
 import com.syntifi.casper.sdk.exception.DynamicInstanceException;
 import com.syntifi.casper.sdk.exception.NoSuchTypeException;
-import com.syntifi.casper.sdk.model.clvalue.AbstractCLValue;
-import com.syntifi.casper.sdk.model.clvalue.cltype.AbstractCLType;
 import com.syntifi.casper.sdk.model.clvalue.encdec.CLValueEncoder;
 import com.syntifi.casper.sdk.model.clvalue.encdec.interfaces.EncodableValue;
+
+import org.bouncycastle.util.encoders.Hex;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,34 +18,42 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * Named arguments to a contract
- * 
+ * Digest for Hex String
+ *
  * @author Alexandre Carvalho
  * @author Andre Bertolace
  * @since 0.0.1
  */
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonFormat(shape = JsonFormat.Shape.ARRAY)
-public class NamedArg<P extends AbstractCLType> implements EncodableValue {
+@Builder
+public class Digest implements EncodableValue {
+    @JsonValue
+    private String digest;
+
+    public byte[] getDigest() {
+        return Hex.decode(this.digest);
+    }
+
+    public void setDigest(byte[] hash) {
+        this.digest = Hex.toHexString(hash);
+    }
+
+    public static Digest digestFromBytes(byte[] bytes) {
+        Digest digest = new Digest();
+        digest.setDigest(bytes);
+        return digest;
+    }
 
     /**
-     * The first value in the array is the type of the arg
+     * Implements Digest encoder
      */
-    private String type;
-
-    /**
-     * The second value in the array is a CLValue type
-     */
-    private AbstractCLValue<?, P> clValue;
-
     @Override
     public void encode(CLValueEncoder clve)
             throws IOException, CLValueEncodeException, DynamicInstanceException, NoSuchTypeException {
-        clve.writeString(type);
-        clValue.encode(clve);
+        clve.write(getDigest());
     }
+
 }

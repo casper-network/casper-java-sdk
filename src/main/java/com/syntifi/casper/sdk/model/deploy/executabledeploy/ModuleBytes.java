@@ -1,13 +1,20 @@
 package com.syntifi.casper.sdk.model.deploy.executabledeploy;
 
+import java.io.IOException;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.syntifi.casper.sdk.exception.CLValueEncodeException;
+import com.syntifi.casper.sdk.exception.DynamicInstanceException;
+import com.syntifi.casper.sdk.exception.NoSuchTypeException;
+import com.syntifi.casper.sdk.model.clvalue.encdec.CLValueEncoder;
 import com.syntifi.casper.sdk.model.deploy.NamedArg;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
@@ -21,6 +28,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @JsonTypeName("ModuleBytes")
 public class ModuleBytes implements ExecutableDeployItem {
 
@@ -33,5 +42,28 @@ public class ModuleBytes implements ExecutableDeployItem {
     /**
      * @see NamedArg
      */
-    private List<NamedArg<?, ?>> args;
+    private List<NamedArg<?>> args;
+
+
+    /**
+     * @link ExecutableDeploy order 0
+     */
+    @Override
+    public byte getOrder() {
+        return 0x0;
+    }
+
+    /**
+     * Implements the ModuleBytes encoder
+     */
+    @Override
+    public void encode(CLValueEncoder clve) throws IOException, CLValueEncodeException, DynamicInstanceException, NoSuchTypeException  {
+        clve.write(getOrder());
+        clve.writeInt(args.size());
+        for (NamedArg<?> namedArg : args) {
+            namedArg.encode(clve);
+        }
+        clve.writeString(getBytes());
+    }
+
 }

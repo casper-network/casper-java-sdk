@@ -2,6 +2,7 @@ package com.syntifi.casper.sdk.model.deploy.executabledeploy;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.syntifi.casper.sdk.model.clvalue.encdec.interfaces.EncodableValue;
 
 /**
  * Abstract Executable Deploy Item containing the runtime args of the contract.
@@ -25,5 +26,6 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @JsonSubTypes.Type(value = StoredVersionedContractByHash.class, name = "StoredVersionedContractByHash"),
         @JsonSubTypes.Type(value = StoredVersionedContractByName.class, name = "StoredVersionedContractByName"),
         @JsonSubTypes.Type(value = Transfer.class, name = "Transfer") })
-public interface ExecutableDeployItem {
+public interface ExecutableDeployItem extends EncodableValue{
+    public byte getOrder();
 }

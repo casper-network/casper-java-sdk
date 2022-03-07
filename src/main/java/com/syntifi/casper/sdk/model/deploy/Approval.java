@@ -1,5 +1,12 @@
 package com.syntifi.casper.sdk.model.deploy;
 
+import java.io.IOException;
+
+import com.syntifi.casper.sdk.exception.CLValueEncodeException;
+import com.syntifi.casper.sdk.exception.DynamicInstanceException;
+import com.syntifi.casper.sdk.exception.NoSuchTypeException;
+import com.syntifi.casper.sdk.model.clvalue.encdec.CLValueEncoder;
+import com.syntifi.casper.sdk.model.clvalue.encdec.interfaces.EncodableValue;
 import com.syntifi.casper.sdk.model.key.PublicKey;
 import com.syntifi.casper.sdk.model.key.Signature;
 
@@ -21,7 +28,7 @@ import lombok.Setter;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Approval {
+public class Approval implements EncodableValue {
 
     /**
      * @see PublicKey
@@ -32,4 +39,13 @@ public class Approval {
      * @see Signature
      */
     private Signature signature;
+
+    /**
+     * Implements Approval encoder 
+     */
+    @Override
+    public void encode(CLValueEncoder clve) throws IOException, CLValueEncodeException, DynamicInstanceException, NoSuchTypeException  {
+        signer.encode(clve);
+        signature.encode(clve);
+    }
 }

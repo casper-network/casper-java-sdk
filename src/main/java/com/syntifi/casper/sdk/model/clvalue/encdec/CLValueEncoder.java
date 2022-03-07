@@ -119,13 +119,7 @@ public class CLValueEncoder extends ByteArrayOutputStream {
         LOGGER.debug(LOG_BUFFER_WRITE_TYPE_VALUE_MESSAGE_STRING, CLTypeData.I32, Integer.class.getSimpleName(),
                 clValue.getValue());
 
-        ByteBuffer intByteBuffer = ByteBuffer.allocate(4).putInt(clValue.getValue());
-
-        byte[] intByteArray = intByteBuffer.array();
-
-        StringByteHelper.reverse(intByteArray);
-
-        this.write(intByteArray);
+        byte[] intByteArray = writeInt(clValue.getValue());
 
         clValue.setBytes(StringByteHelper.convertBytesToHex(intByteArray));
     }
@@ -140,17 +134,29 @@ public class CLValueEncoder extends ByteArrayOutputStream {
         LOGGER.debug(LOG_BUFFER_WRITE_TYPE_VALUE_MESSAGE_STRING, CLTypeData.U32, Long.class.getSimpleName(),
                 clValue.getValue());
 
-        int unsignedInteger = clValue.getValue().intValue();
+        byte[] uIntByteArray = writeInt(clValue.getValue().intValue());
 
-        ByteBuffer unsignedIntegerByteBuffer = ByteBuffer.allocate(4).putInt(unsignedInteger);
+        clValue.setBytes(StringByteHelper.convertBytesToHex(uIntByteArray));
+    }
 
-        byte[] unsignedIntegerByteArray = unsignedIntegerByteBuffer.array();
+    /**
+     * Writes an Integet value to byte buffer
+     * 
+     * @param value
+     * @return byte[]
+     * @throws IOException
+     */
+    public byte[] writeInt(Integer value) throws IOException {
+        LOGGER.debug("Writing Java Type {}: {}", Integer.class.getSimpleName(), value);
 
-        StringByteHelper.reverse(unsignedIntegerByteArray);
+        ByteBuffer intByteBuffer = ByteBuffer.allocate(4).putInt(value);
 
-        this.write(unsignedIntegerByteArray);
+        byte[] intByteArray = intByteBuffer.array();
 
-        clValue.setBytes(StringByteHelper.convertBytesToHex(unsignedIntegerByteArray));
+        StringByteHelper.reverse(intByteArray);
+
+        this.write(intByteArray);
+        return intByteArray;
     }
 
     /**
@@ -163,15 +169,29 @@ public class CLValueEncoder extends ByteArrayOutputStream {
         LOGGER.debug(LOG_BUFFER_WRITE_TYPE_VALUE_MESSAGE_STRING, CLTypeData.I64, Long.class.getSimpleName(),
                 clValue.getValue());
 
-        ByteBuffer longByteBuffer = ByteBuffer.allocate(8).putLong(clValue.getValue());
+        byte[] longByteArray = writeLong(clValue.getValue());
+
+        clValue.setBytes(StringByteHelper.convertBytesToHex(longByteArray));
+    }
+
+    /**
+     * Writes a Long value to byte buffer
+     * 
+     * @param value
+     * @return byte[]
+     * @throws IOException
+     */
+    public byte[] writeLong(Long value) throws IOException {
+        LOGGER.debug("Writing Java Type {}: {}", Long.class.getSimpleName(), value);
+
+        ByteBuffer longByteBuffer = ByteBuffer.allocate(8).putLong(value);
 
         byte[] longByteArray = longByteBuffer.array();
 
         StringByteHelper.reverse(longByteArray);
 
         this.write(longByteArray);
-
-        clValue.setBytes(StringByteHelper.convertBytesToHex(longByteArray));
+        return longByteArray;
     }
 
     /**
@@ -247,10 +267,27 @@ public class CLValueEncoder extends ByteArrayOutputStream {
                 clValue.getValue());
 
         byte bigIntegerLength = (byte) (Math.ceil(clValue.getValue().bitLength() / 8.0));
+        byte[] bigIntegerBytes = writeBigInteger(clValue.getValue());
+
+        clValue.setBytes(StringByteHelper.convertBytesToHex(new byte[] { bigIntegerLength })
+                + StringByteHelper.convertBytesToHex(bigIntegerBytes));
+    }
+
+    /**
+     * Writes a BigInteger to the CLValue byte buffer
+     * 
+     * @param bigInteger
+     * @return a byte array
+     * @throws IOException
+     */
+    public byte[] writeBigInteger(BigInteger bigInteger) throws IOException {
+        LOGGER.debug("Writing Java Type {}: {}", BigInteger.class.getSimpleName(), bigInteger);
+
+        byte bigIntegerLength = (byte) (Math.ceil(bigInteger.bitLength() / 8.0));
 
         this.write(bigIntegerLength);
 
-        byte[] byteArray = clValue.getValue().toByteArray();
+        byte[] byteArray = bigInteger.toByteArray();
 
         // Removing leading zeroes
         int i = 0;
@@ -272,8 +309,7 @@ public class CLValueEncoder extends ByteArrayOutputStream {
 
         this.write(bigIntegerBytes);
 
-        clValue.setBytes(StringByteHelper.convertBytesToHex(new byte[] { bigIntegerLength })
-                + StringByteHelper.convertBytesToHex(bigIntegerBytes));
+        return bigIntegerBytes;
     }
 
     /**
@@ -286,20 +322,36 @@ public class CLValueEncoder extends ByteArrayOutputStream {
         LOGGER.debug(LOG_BUFFER_WRITE_TYPE_VALUE_MESSAGE_STRING, CLTypeData.STRING, String.class.getSimpleName(),
                 clValue.getValue());
 
-        ByteBuffer intByteBuffer = ByteBuffer.allocate(4).putInt(clValue.getValue().length());
+        byte[] stringBytes = writeString(clValue.getValue());
+
+        clValue.setBytes(StringByteHelper.convertBytesToHex(stringBytes));
+    }
+
+    /**
+     * Writes a String to the byte buffer
+     * 
+     * @param string to encode
+     * @return byte[]
+     * @throws IOException
+     */
+    public byte[] writeString(String string) throws IOException {
+        LOGGER.debug("Writing Java Type {}: {}", String.class.getSimpleName(), string);
+
+        ByteBuffer intByteBuffer = ByteBuffer.allocate(4).putInt(string.length());
 
         byte[] intByteArray = intByteBuffer.array();
 
         StringByteHelper.reverse(intByteArray);
 
-        this.write(intByteArray);
+        ByteBuffer stringBuffer = ByteBuffer.allocate(4 + string.length());
+        stringBuffer.put(intByteArray);
+        stringBuffer.put(string.getBytes());
 
-        byte[] stringBytes = clValue.getValue().getBytes();
+        byte[] stringBytes = stringBuffer.array();
 
         this.write(stringBytes);
 
-        clValue.setBytes(
-                StringByteHelper.convertBytesToHex(intByteArray) + StringByteHelper.convertBytesToHex(stringBytes));
+        return stringBytes;
     }
 
     /**

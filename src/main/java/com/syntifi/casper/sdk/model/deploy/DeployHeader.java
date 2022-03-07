@@ -1,11 +1,18 @@
 package com.syntifi.casper.sdk.model.deploy;
 
-import java.math.BigInteger;
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.syntifi.casper.sdk.exception.CLValueEncodeException;
+import com.syntifi.casper.sdk.exception.DynamicInstanceException;
+import com.syntifi.casper.sdk.exception.NoSuchTypeException;
+import com.syntifi.casper.sdk.model.clvalue.encdec.CLValueEncoder;
+import com.syntifi.casper.sdk.model.clvalue.encdec.interfaces.EncodableValue;
+import com.syntifi.casper.sdk.model.common.Digest;
+import com.syntifi.casper.sdk.model.common.Ttl;
 import com.syntifi.casper.sdk.model.key.PublicKey;
 
 import lombok.AllArgsConstructor;
@@ -26,7 +33,7 @@ import lombok.Setter;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class DeployHeader {
+public class DeployHeader implements EncodableValue {
 
     /**
      * @see PublicKey
@@ -37,7 +44,7 @@ public class DeployHeader {
      * Body hash
      */
     @JsonProperty("body_hash")
-    private String bodyHash;
+    private Digest bodyHash;
 
     /**
      * Chain name
@@ -48,13 +55,13 @@ public class DeployHeader {
     /**
      * Dependencies
      */
-    private List<String> dependencies;
+    private List<Digest> dependencies;
 
     /**
      * Gas price
      */
     @JsonProperty("gas_price")
-    private BigInteger gasPrice;
+    private Long gasPrice;
 
     /**
      * Timestamp formatted as per RFC 3339
@@ -66,5 +73,22 @@ public class DeployHeader {
     /**
      * Human-readable duration
      */
-    private String ttl;
+    private Ttl ttl;
+
+    /**
+     * Implements DeployHearder encoder 
+     */
+    @Override
+    public void encode(CLValueEncoder clve) throws IOException, CLValueEncodeException, DynamicInstanceException, NoSuchTypeException  {
+        account.encode(clve);
+        clve.writeLong(timeStamp.getTime());
+        ttl.encode(clve);
+        clve.writeLong(gasPrice);
+        bodyHash.encode(clve);
+        clve.writeInt(dependencies.size());
+        for (Digest dependency: dependencies) {
+            clve.writeBytes(dependency.getDigest());
+        }
+        clve.writeString(chainName);
+    }
 }
