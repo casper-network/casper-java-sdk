@@ -26,6 +26,7 @@ import com.syntifi.casper.sdk.model.clvalue.encdec.interfaces.EncodableValue;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import org.bouncycastle.util.encoders.Hex;
 
 /**
  * Base class for CLValues
@@ -79,7 +80,7 @@ public abstract class AbstractCLValue<T, P extends AbstractCLType> implements En
     public abstract void setClType(P value);
 
     public void encode(CLValueEncoder clve) throws IOException, NoSuchTypeException, CLValueEncodeException, DynamicInstanceException {
-        int val = (int) (getClType().getClTypeData().getSerializationTag()); 
-        clve.writeInt(val);
+        byte val = (getClType().getClTypeData().getSerializationTag());
+        clve.write(val);
     }
 }

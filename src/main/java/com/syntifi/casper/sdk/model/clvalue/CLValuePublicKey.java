@@ -53,8 +53,8 @@ public class CLValuePublicKey extends AbstractCLValue<PublicKey, CLTypePublicKey
 
     @Override
     public void encode(CLValueEncoder clve) throws IOException, NoSuchTypeException, CLValueEncodeException, DynamicInstanceException {
-        super.encode(clve);
         clve.writePublicKey(this);
+        super.encode(clve);
     }
 
     @Override

@@ -51,8 +51,8 @@ public class CLValueU8 extends AbstractCLValue<Byte, CLTypeU8> {
 
     @Override
     public void encode(CLValueEncoder clve) throws IOException, NoSuchTypeException, CLValueEncodeException, DynamicInstanceException {
-        super.encode(clve);
         clve.writeU8(this);
+        super.encode(clve);
     }
 
     @Override

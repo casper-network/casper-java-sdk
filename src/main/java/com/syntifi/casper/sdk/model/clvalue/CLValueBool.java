@@ -51,8 +51,8 @@ public class CLValueBool extends AbstractCLValue<Boolean, CLTypeBool> {
 
     @Override
     public void encode(CLValueEncoder clve) throws IOException, NoSuchTypeException, CLValueEncodeException, DynamicInstanceException {
-        super.encode(clve);
         clve.writeBool(this);
+        super.encode(clve);
     }
 
     @Override

@@ -360,8 +360,11 @@ public class CLValueEncoder extends ByteArrayOutputStream {
      * @param clValue {@link CLValuePublicKey} value to encode
      */
     public void writePublicKey(CLValuePublicKey clValue) {
-        clValue.setBytes(StringByteHelper.convertBytesToHex(new byte[] { clValue.getValue().getTag().getByteTag() })
+        byte[] tag = new byte[] { clValue.getValue().getTag().getByteTag() };
+        clValue.setBytes(StringByteHelper.convertBytesToHex(tag)
                 + StringByteHelper.convertBytesToHex(clValue.getValue().getKey()));
+        this.writeBytes(tag);
+        this.writeBytes(clValue.getValue().getKey());
     }
 
     /**

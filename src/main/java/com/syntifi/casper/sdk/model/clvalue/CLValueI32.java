@@ -13,8 +13,6 @@ import com.syntifi.casper.sdk.model.clvalue.cltype.CLTypeI32;
 import com.syntifi.casper.sdk.model.clvalue.encdec.CLValueDecoder;
 import com.syntifi.casper.sdk.model.clvalue.encdec.CLValueEncoder;
 
-import org.bouncycastle.util.encoders.Hex;
-
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -55,12 +53,8 @@ public class CLValueI32 extends AbstractCLValue<Integer, CLTypeI32> {
 
     @Override
     public void encode(CLValueEncoder clve) throws IOException, NoSuchTypeException, CLValueEncodeException, DynamicInstanceException {
-        String a = Hex.toHexString(clve.toByteArray());
-        super.encode(clve);
-        String b = Hex.toHexString(clve.toByteArray());
         clve.writeI32(this);
-        String c = Hex.toHexString(clve.toByteArray());
-        String d = Hex.toHexString(clve.toByteArray());
+        super.encode(clve);
     }
 
     @Override

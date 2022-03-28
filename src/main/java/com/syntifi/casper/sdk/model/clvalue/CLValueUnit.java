@@ -54,8 +54,8 @@ public class CLValueUnit extends AbstractCLValue<Object, CLTypeUnit> {
 
     @Override
     public void encode(CLValueEncoder clve) throws IOException, NoSuchTypeException, CLValueEncodeException, DynamicInstanceException {
-        super.encode(clve);
         setBytes(UNITY_EMPTY_VALUE);
+        super.encode(clve);
     }
 
     @Override

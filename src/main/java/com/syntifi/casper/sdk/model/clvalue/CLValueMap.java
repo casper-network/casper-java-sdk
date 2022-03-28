@@ -45,7 +45,6 @@ public class CLValueMap extends
 
     @Override
     public void encode(CLValueEncoder clve) throws IOException, NoSuchTypeException, CLValueEncodeException, DynamicInstanceException {
-        super.encode(clve);
         setChildTypes();
 
         CLValueI32 mapLength = new CLValueI32(getValue().size());
@@ -57,6 +56,7 @@ public class CLValueMap extends
             entry.getValue().encode(clve);
             setBytes(getBytes() + entry.getKey().getBytes() + entry.getValue().getBytes());
         }
+        super.encode(clve);
     }
 
     @Override

@@ -53,8 +53,8 @@ public class CLValueKey extends AbstractCLValue<Key, CLTypeKey> {
 
     @Override
     public void encode(CLValueEncoder clve) throws IOException, NoSuchTypeException, CLValueEncodeException, DynamicInstanceException {
-        super.encode(clve);
         clve.writeKey(this);
+        super.encode(clve);
     }
 
     @Override

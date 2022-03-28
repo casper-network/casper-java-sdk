@@ -45,12 +45,10 @@ public class CLValueTuple1 extends AbstractCLValueWithChildren<Unit<? extends Ab
     @Override
     public void encode(CLValueEncoder clve)
             throws IOException, CLValueEncodeException, DynamicInstanceException, NoSuchTypeException {
-        super.encode(clve);
         setChildTypes();
-
         getValue().getValue0().encode(clve);
-
         setBytes(getValue().getValue0().getBytes());
+        super.encode(clve);
     }
 
     @Override

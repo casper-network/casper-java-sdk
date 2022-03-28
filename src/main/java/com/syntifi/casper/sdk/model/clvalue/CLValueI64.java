@@ -51,8 +51,8 @@ public class CLValueI64 extends AbstractCLValue<Long, CLTypeI64> {
 
     @Override
     public void encode(CLValueEncoder clve) throws IOException, NoSuchTypeException, CLValueEncodeException, DynamicInstanceException {
-        super.encode(clve);
         clve.writeI64(this);
+        super.encode(clve);
     }
 
     @Override

@@ -45,7 +45,6 @@ public class CLValueFixedList extends AbstractCLValue<List<? extends AbstractCLV
     @Override
     public void encode(CLValueEncoder clve)
             throws IOException, CLValueEncodeException, DynamicInstanceException, NoSuchTypeException {
-        super.encode(clve);
         setListType();
 
         setBytes("");
@@ -53,6 +52,7 @@ public class CLValueFixedList extends AbstractCLValue<List<? extends AbstractCLV
             child.encode(clve);
             setBytes(getBytes() + child.getBytes());
         }
+        super.encode(clve);
     }
 
     @Override

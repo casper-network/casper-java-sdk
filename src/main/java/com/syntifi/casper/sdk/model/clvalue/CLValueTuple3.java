@@ -46,7 +46,6 @@ public class CLValueTuple3 extends
     @Override
     public void encode(CLValueEncoder clve)
             throws IOException, CLValueEncodeException, DynamicInstanceException, NoSuchTypeException {
-        super.encode(clve);
         setChildTypes();
 
         getValue().getValue0().encode(clve);
@@ -55,6 +54,7 @@ public class CLValueTuple3 extends
 
         setBytes(getValue().getValue0().getBytes() + getValue().getValue1().getBytes()
                 + getValue().getValue2().getBytes());
+        super.encode(clve);
     }
 
     @Override

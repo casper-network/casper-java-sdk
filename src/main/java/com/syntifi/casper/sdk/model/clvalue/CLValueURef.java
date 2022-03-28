@@ -57,12 +57,12 @@ public class CLValueURef extends AbstractCLValue<URef, CLTypeURef> {
 
     @Override
     public void encode(CLValueEncoder clve) throws IOException, NoSuchTypeException, CLValueEncodeException, DynamicInstanceException {
-        super.encode(clve);
         URef uref = this.getValue();
         byte[] urefByte = new byte[uref.getAddress().length + 1];
         System.arraycopy(uref.getAddress(), 0, urefByte, 0, uref.getAddress().length);
         urefByte[32] = uref.getAccessRight().serializationTag; 
         setBytes(StringByteHelper.convertBytesToHex(urefByte));
+        super.encode(clve);
     }
 
     @Override

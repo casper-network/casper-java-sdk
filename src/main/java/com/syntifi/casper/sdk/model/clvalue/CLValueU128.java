@@ -52,8 +52,8 @@ public class CLValueU128 extends AbstractCLValue<BigInteger, CLTypeU128> {
 
     @Override
     public void encode(CLValueEncoder clve) throws IOException, CLValueEncodeException, NoSuchTypeException, DynamicInstanceException {
-        super.encode(clve);
         clve.writeU128(this);
+        super.encode(clve);
     }
 
     @Override

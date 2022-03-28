@@ -2,6 +2,7 @@ package com.syntifi.casper.sdk.service;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.security.GeneralSecurityException;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.Random;
 
 import com.syntifi.casper.sdk.exception.CLValueEncodeException;
 import com.syntifi.casper.sdk.exception.DynamicInstanceException;
+import com.syntifi.casper.sdk.exception.InvalidByteStringException;
 import com.syntifi.casper.sdk.exception.NoSuchTypeException;
 import com.syntifi.casper.sdk.model.clvalue.CLValueOption;
 import com.syntifi.casper.sdk.model.clvalue.CLValuePublicKey;
@@ -21,13 +23,17 @@ import com.syntifi.casper.sdk.model.clvalue.cltype.CLTypeU512;
 import com.syntifi.casper.sdk.model.clvalue.encdec.CLValueEncoder;
 import com.syntifi.casper.sdk.model.common.Digest;
 import com.syntifi.casper.sdk.model.common.Ttl;
+import com.syntifi.casper.sdk.model.deploy.Approval;
 import com.syntifi.casper.sdk.model.deploy.Deploy;
 import com.syntifi.casper.sdk.model.deploy.DeployHeader;
 import com.syntifi.casper.sdk.model.deploy.NamedArg;
 import com.syntifi.casper.sdk.model.deploy.executabledeploy.ModuleBytes;
 import com.syntifi.casper.sdk.model.deploy.executabledeploy.Transfer;
+import com.syntifi.casper.sdk.model.key.AlgorithmTag;
 import com.syntifi.casper.sdk.model.key.PublicKey;
+import com.syntifi.casper.sdk.model.key.Signature;
 import com.syntifi.crypto.key.AbstractPrivateKey;
+import com.syntifi.crypto.key.Secp256k1PrivateKey;
 
 import org.bouncycastle.crypto.digests.Blake2bDigest;
 
@@ -35,7 +41,8 @@ public class CasperTransferDeployService {
 
     public static Deploy buildTransferDeploy(AbstractPrivateKey fromPrivateKey,
             PublicKey toPublicKey, BigInteger amount, String chainName)
-            throws IOException, CLValueEncodeException, DynamicInstanceException, NoSuchTypeException {
+            throws IOException, CLValueEncodeException, DynamicInstanceException, NoSuchTypeException,
+            GeneralSecurityException, InvalidByteStringException {
         long id = new Random().nextInt();
         BigInteger paymentAmount = BigInteger.valueOf(10000000000L);
         long gasPrice = 1L;
@@ -43,7 +50,8 @@ public class CasperTransferDeployService {
                 .builder()
                 .ttl("30m")
                 .build();
-        return CasperTransferDeployService.buildTransferDeploy(chainName, fromPrivateKey, toPublicKey, amount, id,
+        return CasperTransferDeployService.buildTransferDeploy(chainName, fromPrivateKey, toPublicKey, amount,
+                id,
                 paymentAmount, gasPrice, ttl, null);
     }
 
@@ -62,11 +70,14 @@ public class CasperTransferDeployService {
      * @throws DynamicInstanceException
      * @throws CLValueEncodeException
      * @throws IOException
+     * @throws GeneralSecurityException
+     * @throws InvalidByteStringException
      */
     public static Deploy buildTransferDeploy(String chainName, AbstractPrivateKey fromPrivateKey,
             PublicKey toPublicKey, BigInteger amount, Long id, BigInteger paymentAmount,
             Long gasPrice, Ttl ttl, List<Digest> dependencies)
-            throws IOException, CLValueEncodeException, DynamicInstanceException, NoSuchTypeException {
+            throws IOException, CLValueEncodeException, DynamicInstanceException, NoSuchTypeException,
+            GeneralSecurityException, InvalidByteStringException {
 
         List<NamedArg<?>> transferArgs = new LinkedList<>();
         NamedArg<CLTypeU512> amountNamedArg = new NamedArg<>("amount",
@@ -100,6 +111,7 @@ public class CasperTransferDeployService {
         byte[] sessionAnPaymentBytes = clve.toByteArray();
         clve.flush();
 
+        // TODO: use com.syntifi.crypto.key.hash.Blake2b digest method
         byte[] bodyHash = CasperTransferDeployService.digest(sessionAnPaymentBytes);
 
         DeployHeader deployHeader = DeployHeader
@@ -114,11 +126,30 @@ public class CasperTransferDeployService {
                 .build();
         deployHeader.encode(clve);
 
-        Deploy deploy = Deploy.builder().header(deployHeader).build();
+        byte[] signatureBytes = fromPrivateKey.sign(bodyHash);
+        Signature signature = new Signature();
+        signature.setKey(signatureBytes);
+        signature.setTag((fromPrivateKey instanceof Secp256k1PrivateKey)
+                ? AlgorithmTag.SECP256K1
+                : AlgorithmTag.ED25519);
 
-        return deploy;
+        List<Approval> approvals = new LinkedList<>();
+        approvals.add(Approval.builder()
+                .signer(PublicKey.fromBytes(fromPrivateKey.derivePublicKey().getKey()))
+                .signature(signature)
+                .build());
+
+        return Deploy.builder()
+                .hash(Digest.digestFromBytes(bodyHash))
+                .header(deployHeader)
+                .payment(payment)
+                .session(session)
+                .approvals(approvals)
+                .build();
+
     }
 
+    // TODO: use com.syntifi.crypto.key.hash.Blake2b digest method and delete this
     static byte[] digest(byte[] input) {
         Blake2bDigest d = new Blake2bDigest();
         d.update(input, 0, input.length);
