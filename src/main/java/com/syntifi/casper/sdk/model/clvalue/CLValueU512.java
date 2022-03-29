@@ -53,9 +53,11 @@ public class CLValueU512 extends AbstractCLValue<BigInteger, CLTypeU512> {
     }
 
     @Override
-    public void encode(CLValueEncoder clve) throws IOException, CLValueEncodeException, NoSuchTypeException, DynamicInstanceException {
+    public void encode(CLValueEncoder clve, boolean encodeType) throws IOException, CLValueEncodeException, NoSuchTypeException {
         clve.writeU512(this);
-        super.encode(clve);
+        if (encodeType) {
+            this.encodeType(clve);
+        }
     }
 
     @Override

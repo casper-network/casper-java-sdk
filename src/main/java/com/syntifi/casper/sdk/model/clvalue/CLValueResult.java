@@ -61,23 +61,24 @@ public class CLValueResult extends AbstractCLValue<CLValueResult.Result, CLTypeR
     }
 
     @Override
-    public void encode(CLValueEncoder clve)
-            throws IOException, CLValueEncodeException, DynamicInstanceException, NoSuchTypeException {
+    public void encode(CLValueEncoder clve, boolean encodeType) throws IOException, NoSuchTypeException, CLValueEncodeException {
         setChildTypes();
 
         CLValueBool clValueTrue = new CLValueBool(true);
-        clValueTrue.encode(clve);
+        clValueTrue.encode(clve, false);
 
-        getValue().getOk().encode(clve);
+        getValue().getOk().encode(clve, false);
 
         CLValueBool clValueFalse = new CLValueBool(false);
-        clValueFalse.encode(clve);
+        clValueFalse.encode(clve, false);
 
-        getValue().getErr().encode(clve);
+        getValue().getErr().encode(clve, false);
 
         setBytes(clValueTrue.getBytes() + getValue().getOk().getBytes() + clValueFalse.getBytes()
                 + getValue().getErr().getBytes());
-        super.encode(clve);
+        if (encodeType) {
+            this.encodeType(clve);
+        }
     }
 
     @Override

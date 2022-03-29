@@ -55,7 +55,7 @@ public class StoredVersionedContractByHash implements ExecutableDeployItem {
     private List<NamedArg<?>> args;
 
     /**
-     * @link ExecutableDeploy order 4
+     * {@link ExecutableDeployItem} order 3
      */
     @Override
     public byte getOrder() {
@@ -66,7 +66,7 @@ public class StoredVersionedContractByHash implements ExecutableDeployItem {
      * Implements the StoredVersionedContractByHash encoder
      */
     @Override
-    public void encode(CLValueEncoder clve)
+    public void encode(CLValueEncoder clve, boolean encodeType)
             throws IOException, CLValueEncodeException, DynamicInstanceException, NoSuchTypeException {
         clve.write(getOrder());
         clve.writeString(getHash());
@@ -74,7 +74,7 @@ public class StoredVersionedContractByHash implements ExecutableDeployItem {
         clve.writeString(getEntryPoint());
         clve.writeInt(args.size());
         for (NamedArg<?> namedArg : args) {
-            namedArg.encode(clve);
+            namedArg.encode(clve, true);
         }
     }
 }

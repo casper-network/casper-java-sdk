@@ -44,19 +44,21 @@ public class CLValueMap extends
     }
 
     @Override
-    public void encode(CLValueEncoder clve) throws IOException, NoSuchTypeException, CLValueEncodeException, DynamicInstanceException {
+    public void encode(CLValueEncoder clve, boolean encodeType) throws IOException, NoSuchTypeException, CLValueEncodeException {
         setChildTypes();
 
         CLValueI32 mapLength = new CLValueI32(getValue().size());
-        mapLength.encode(clve);
+        mapLength.encode(clve, false);
         setBytes(mapLength.getBytes());
 
         for (Entry<? extends AbstractCLValue<?, ?>, ? extends AbstractCLValue<?, ?>> entry : getValue().entrySet()) {
-            entry.getKey().encode(clve);
-            entry.getValue().encode(clve);
+            entry.getKey().encode(clve, false);
+            entry.getValue().encode(clve, false);
             setBytes(getBytes() + entry.getKey().getBytes() + entry.getValue().getBytes());
         }
-        super.encode(clve);
+        if (encodeType) {
+            this.encodeType(clve);
+        }
     }
 
     @Override

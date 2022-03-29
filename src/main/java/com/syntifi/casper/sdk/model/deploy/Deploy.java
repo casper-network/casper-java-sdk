@@ -11,8 +11,6 @@ import com.syntifi.casper.sdk.model.clvalue.encdec.interfaces.EncodableValue;
 import com.syntifi.casper.sdk.model.common.Digest;
 import com.syntifi.casper.sdk.model.deploy.executabledeploy.ExecutableDeployItem;
 
-import org.bouncycastle.util.encoders.Hex;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -63,17 +61,15 @@ public class Deploy implements EncodableValue {
      * Implements Deploy encoder 
      */
     @Override
-    public void encode(CLValueEncoder clve) throws IOException, CLValueEncodeException, DynamicInstanceException, NoSuchTypeException  {
-        header.encode(clve);
-        hash.encode(clve);
-        payment.encode(clve);
-        session.encode(clve);
-        String e = Hex.toHexString(clve.toByteArray());
+    public void encode(CLValueEncoder clve, boolean encodeType) throws IOException, CLValueEncodeException, DynamicInstanceException, NoSuchTypeException  {
+        header.encode(clve, true);
+        hash.encode(clve, true);
+        payment.encode(clve, true);
+        session.encode(clve, true);
         clve.writeInt(approvals.size());
         for (Approval approval: approvals) {
-            approval.encode(clve);
+            approval.encode(clve, true);
         }
-        String f = Hex.toHexString(clve.toByteArray());
     }
 }
 

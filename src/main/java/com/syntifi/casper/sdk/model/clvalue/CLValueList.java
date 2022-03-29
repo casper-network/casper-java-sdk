@@ -42,20 +42,21 @@ public class CLValueList extends AbstractCLValue<List<? extends AbstractCLValue<
     }
 
     @Override
-    public void encode(CLValueEncoder clve)
-            throws IOException, NoSuchTypeException, CLValueEncodeException, DynamicInstanceException {
+    public void encode(CLValueEncoder clve, boolean encodeType) throws IOException, NoSuchTypeException, CLValueEncodeException {
         setListType();
 
         // List length is written first
         CLValueI32 length = new CLValueI32(getValue().size());
-        length.encode(clve);
+        length.encode(clve, false);
         setBytes(length.getBytes());
 
         for (AbstractCLValue<?, ?> child : getValue()) {
-            child.encode(clve);
+            child.encode(clve, false);
             setBytes(getBytes() + child.getBytes());
         }
-        super.encode(clve);
+        if (encodeType) {
+            this.encodeType(clve);
+        }
     }
 
     @Override

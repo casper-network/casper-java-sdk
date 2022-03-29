@@ -38,9 +38,11 @@ public class CLValueByteArray extends AbstractCLValue<byte[], CLTypeByteArray> {
     }
 
     @Override
-    public void encode(CLValueEncoder clve) throws IOException, NoSuchTypeException, CLValueEncodeException, DynamicInstanceException {
+    public void encode(CLValueEncoder clve, boolean encodeType) throws IOException, NoSuchTypeException {
         clve.writeByteArray(this);
-        super.encode(clve);
+        if (encodeType) {
+            this.encodeType(clve);
+        }
     }
 
     @Override

@@ -46,7 +46,7 @@ public class ModuleBytes implements ExecutableDeployItem {
 
 
     /**
-     * @link ExecutableDeploy order 0
+     * {@link ExecutableDeployItem} order 0
      */
     @Override
     public byte getOrder() {
@@ -57,13 +57,12 @@ public class ModuleBytes implements ExecutableDeployItem {
      * Implements the ModuleBytes encoder
      */
     @Override
-    public void encode(CLValueEncoder clve) throws IOException, CLValueEncodeException, DynamicInstanceException, NoSuchTypeException  {
+    public void encode(CLValueEncoder clve, boolean encodeType) throws IOException, CLValueEncodeException, DynamicInstanceException, NoSuchTypeException  {
         clve.write(getOrder());
+        clve.writeString(getBytes());
         clve.writeInt(args.size());
         for (NamedArg<?> namedArg : args) {
-            namedArg.encode(clve);
+            namedArg.encode(clve, encodeType);
         }
-        clve.writeString(getBytes());
     }
-
 }

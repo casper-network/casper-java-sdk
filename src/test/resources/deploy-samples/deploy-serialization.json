@@ -17,7 +17,7 @@
                 [
                     "quantity",
                     {
-                        "cl_type": "U32",
+                        "cl_type": "I32",
                         "bytes": "e8030000",
                         "parsed": 1000
                     }
@@ -31,7 +31,7 @@
                 [
                     "amount",
                     {
-                        "cl_type": "U32",
+                        "cl_type": "I32",
                         "bytes": "e8030000",
                         "parsed": 1000
                     }

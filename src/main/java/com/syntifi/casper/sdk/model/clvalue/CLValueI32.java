@@ -52,9 +52,11 @@ public class CLValueI32 extends AbstractCLValue<Integer, CLTypeI32> {
     }
 
     @Override
-    public void encode(CLValueEncoder clve) throws IOException, NoSuchTypeException, CLValueEncodeException, DynamicInstanceException {
+    public void encode(CLValueEncoder clve, boolean encodeType) throws IOException, NoSuchTypeException {
         clve.writeI32(this);
-        super.encode(clve);
+        if (encodeType) {
+            this.encodeType(clve);
+        }
     }
 
     @Override

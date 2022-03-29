@@ -1,5 +1,6 @@
 package com.syntifi.casper.sdk.model.deploy.executabledeploy;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.syntifi.casper.sdk.model.clvalue.encdec.interfaces.EncodableValue;
@@ -27,5 +28,6 @@ import com.syntifi.casper.sdk.model.clvalue.encdec.interfaces.EncodableValue;
         @JsonSubTypes.Type(value = StoredVersionedContractByName.class, name = "StoredVersionedContractByName"),
         @JsonSubTypes.Type(value = Transfer.class, name = "Transfer") })
 public interface ExecutableDeployItem extends EncodableValue{
-    public byte getOrder();
+    @JsonIgnore
+    byte getOrder();
 }

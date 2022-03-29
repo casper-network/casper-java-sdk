@@ -50,8 +50,11 @@ public class CLValueAny extends AbstractCLValue<Object, CLTypeAny> {
     }
 
     @Override
-    public void encode(CLValueEncoder clve) throws IOException, NoSuchTypeException, CLValueEncodeException, DynamicInstanceException {
+    public void encode(CLValueEncoder clve, boolean encodeType) throws IOException, NoSuchTypeException {
         clve.writeAny(this);
+        if (encodeType) {
+            this.encodeType(clve);
+        }
     }
 
     @Override

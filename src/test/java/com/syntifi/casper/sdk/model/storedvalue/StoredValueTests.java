@@ -48,8 +48,7 @@ public class StoredValueTests extends AbstractJsonTests {
     private static final String MERKLE_PROOF = "-- erased --";
 
     @Test
-    void validate_CLValueAny_Mapping()
-            throws IOException, CLValueEncodeException, DynamicInstanceException, NoSuchTypeException, JSONException {
+    void validate_CLValueAny_Mapping() throws IOException, CLValueEncodeException, NoSuchTypeException, JSONException {
         String inputJson = getPrettyJson(loadJsonFromFile("stored-value-samples/stored-value-any.json"));
 
         LOGGER.debug("Original JSON: {}", inputJson);
@@ -72,8 +71,7 @@ public class StoredValueTests extends AbstractJsonTests {
     }
 
     @Test
-    void validate_CLValueU8_Mapping()
-            throws IOException, CLValueEncodeException, DynamicInstanceException, NoSuchTypeException, JSONException {
+    void validate_CLValueU8_Mapping() throws IOException, CLValueEncodeException, NoSuchTypeException, JSONException {
         String inputJson = getPrettyJson(loadJsonFromFile("stored-value-samples/stored-value-u8.json"));
 
         LOGGER.debug("Original JSON: {}", inputJson);
@@ -96,8 +94,7 @@ public class StoredValueTests extends AbstractJsonTests {
     }
 
     @Test
-    void validate_CLValueU32_Mapping() throws IOException, DynamicInstanceException,
-            NoSuchTypeException, JSONException, CLValueEncodeException {
+    void validate_CLValueU32_Mapping() throws IOException, NoSuchTypeException, JSONException, CLValueEncodeException {
         String inputJson = getPrettyJson(loadJsonFromFile("stored-value-samples/stored-value-u32.json"));
 
         LOGGER.debug("Original JSON: {}", inputJson);
@@ -121,8 +118,7 @@ public class StoredValueTests extends AbstractJsonTests {
     }
 
     @Test
-    void validate_CLValueU64_Mapping() throws IOException, DynamicInstanceException,
-            NoSuchTypeException, JSONException, CLValueEncodeException {
+    void validate_CLValueU64_Mapping() throws IOException, NoSuchTypeException, JSONException, CLValueEncodeException {
         String inputJson = getPrettyJson(loadJsonFromFile("stored-value-samples/stored-value-u64.json"));
 
         LOGGER.debug("Original JSON: {}", inputJson);
@@ -145,8 +141,7 @@ public class StoredValueTests extends AbstractJsonTests {
     }
 
     @Test
-    void validate_CLValueU128_Mapping() throws IOException, DynamicInstanceException,
-            NoSuchTypeException, JSONException, CLValueEncodeException {
+    void validate_CLValueU128_Mapping() throws IOException, NoSuchTypeException, JSONException, CLValueEncodeException {
         String inputJson = getPrettyJson(loadJsonFromFile("stored-value-samples/stored-value-u128.json"));
 
         LOGGER.debug("Original JSON: {}", inputJson);
@@ -169,8 +164,7 @@ public class StoredValueTests extends AbstractJsonTests {
     }
 
     @Test
-    void validate_CLValueU256_Mapping() throws IOException, DynamicInstanceException,
-            NoSuchTypeException, JSONException, CLValueEncodeException {
+    void validate_CLValueU256_Mapping() throws IOException, NoSuchTypeException, JSONException, CLValueEncodeException {
         String inputJson = getPrettyJson(loadJsonFromFile("stored-value-samples/stored-value-u256.json"));
 
         LOGGER.debug("Original JSON: {}", inputJson);
@@ -194,8 +188,7 @@ public class StoredValueTests extends AbstractJsonTests {
     }
 
     @Test
-    void validate_CLValueI64_Mapping() throws IOException, DynamicInstanceException,
-            NoSuchTypeException, JSONException, CLValueEncodeException {
+    void validate_CLValueI64_Mapping() throws IOException, NoSuchTypeException, JSONException, CLValueEncodeException {
         String inputJson = getPrettyJson(loadJsonFromFile("stored-value-samples/stored-value-i64.json"));
 
         LOGGER.debug("Original JSON: {}", inputJson);
@@ -218,8 +211,7 @@ public class StoredValueTests extends AbstractJsonTests {
     }
 
     @Test
-    void validate_CLValueString_Mapping()
-            throws IOException, CLValueEncodeException, DynamicInstanceException, NoSuchTypeException, JSONException {
+    void validate_CLValueString_Mapping() throws IOException, CLValueEncodeException, NoSuchTypeException, JSONException {
         String inputJson = getPrettyJson(loadJsonFromFile("stored-value-samples/stored-value-string.json"));
 
         LOGGER.debug("Original JSON: {}", inputJson);
@@ -242,7 +234,7 @@ public class StoredValueTests extends AbstractJsonTests {
 
     @Test
     void validate_CLValueTuple1_Mapping_with_bool() throws IOException,
-            DynamicInstanceException, CLValueEncodeException, NoSuchTypeException, JSONException {
+            CLValueEncodeException, NoSuchTypeException, JSONException {
         String inputJson = getPrettyJson(loadJsonFromFile("stored-value-samples/stored-value-tuple1-bool.json"));
 
         LOGGER.debug("Original JSON: {}", inputJson);
@@ -265,7 +257,7 @@ public class StoredValueTests extends AbstractJsonTests {
 
     @Test
     void validate_CLValueTuple2_Mapping_with_i32_string() throws IOException,
-            DynamicInstanceException, CLValueEncodeException, NoSuchTypeException, JSONException {
+            CLValueEncodeException, NoSuchTypeException, JSONException {
         String inputJson = getPrettyJson(loadJsonFromFile("stored-value-samples/stored-value-tuple2-i32-string.json"));
 
         LOGGER.debug("Original JSON: {}", inputJson);
@@ -289,7 +281,7 @@ public class StoredValueTests extends AbstractJsonTests {
 
     @Test
     void validate_CLValueTuple3_Mapping_with_u8_string_bool() throws IOException,
-            DynamicInstanceException, CLValueEncodeException, NoSuchTypeException, JSONException {
+            CLValueEncodeException, NoSuchTypeException, JSONException {
         String inputJson = getPrettyJson(
                 loadJsonFromFile("stored-value-samples/stored-value-tuple3-u8-string-bool.json"));
 
@@ -314,7 +306,7 @@ public class StoredValueTests extends AbstractJsonTests {
 
     @Test
     void validate_CLValueTuple3_Mapping_with_i32_string_bool() throws IOException,
-            DynamicInstanceException, CLValueEncodeException, NoSuchTypeException, JSONException {
+            CLValueEncodeException, NoSuchTypeException, JSONException {
         String inputJson = getPrettyJson(
                 loadJsonFromFile("stored-value-samples/stored-value-tuple3-i32-string-bool.json"));
 
@@ -338,7 +330,7 @@ public class StoredValueTests extends AbstractJsonTests {
     }
 
     @Test
-    void validate_CLValueTuple3_Mapping_with_tuple1_bool_string_bool() throws IOException, DynamicInstanceException, CLValueEncodeException, NoSuchTypeException, JSONException {
+    void validate_CLValueTuple3_Mapping_with_tuple1_bool_string_bool() throws IOException,  CLValueEncodeException, NoSuchTypeException, JSONException {
         String inputJson = getPrettyJson(
                 loadJsonFromFile("stored-value-samples/stored-value-tuple3-tuple1-bool-string-bool.json"));
 
@@ -364,7 +356,7 @@ public class StoredValueTests extends AbstractJsonTests {
 
     @Test
     void validate_CLValueTuple3_Mapping_with_tuple2_tuple1_u512_u512_tuple1_string_tuple1_bool()
-            throws IOException, DynamicInstanceException, CLValueEncodeException,
+            throws IOException,  CLValueEncodeException,
             NoSuchTypeException, JSONException {
         String inputJson = getPrettyJson(loadJsonFromFile(
                 "stored-value-samples/stored-value-tuple3-tuple2-tuple1-u512-u512-tuple1-string-tuple1-bool.json"));
@@ -393,7 +385,7 @@ public class StoredValueTests extends AbstractJsonTests {
     }
 
     @Test
-    void validate_CLValueTuple3_Mapping_with_tuple1_u512_string_bool() throws IOException, DynamicInstanceException, CLValueEncodeException, NoSuchTypeException, JSONException {
+    void validate_CLValueTuple3_Mapping_with_tuple1_u512_string_bool() throws IOException,  CLValueEncodeException, NoSuchTypeException, JSONException {
         String inputJson = getPrettyJson(
                 loadJsonFromFile("stored-value-samples/stored-value-tuple3-tuple1-u512-string-bool.json"));
 
@@ -420,7 +412,7 @@ public class StoredValueTests extends AbstractJsonTests {
     }
 
     @Test
-    void validate_CLValueList_Mapping_with_i32() throws IOException, DynamicInstanceException,
+    void validate_CLValueList_Mapping_with_i32() throws IOException,
             NoSuchTypeException, JSONException, CLValueEncodeException {
         String inputJson = getPrettyJson(loadJsonFromFile("stored-value-samples/stored-value-list-i32.json"));
 
@@ -445,7 +437,7 @@ public class StoredValueTests extends AbstractJsonTests {
 
     @Test
     void validate_CLValueFixedList_Mapping_with_i32() throws IOException,
-            DynamicInstanceException, NoSuchTypeException, JSONException, CLValueEncodeException {
+             NoSuchTypeException, JSONException, CLValueEncodeException {
         String inputJson = getPrettyJson(loadJsonFromFile("stored-value-samples/stored-value-fixedlist-i32.json"));
 
         LOGGER.debug("Original JSON: {}", inputJson);
@@ -468,7 +460,7 @@ public class StoredValueTests extends AbstractJsonTests {
     }
 
     @Test
-    void validate_CLValueFixedList_Mapping_with_tuple1_i32() throws IOException, DynamicInstanceException, NoSuchTypeException, JSONException, CLValueEncodeException {
+    void validate_CLValueFixedList_Mapping_with_tuple1_i32() throws IOException,  NoSuchTypeException, JSONException, CLValueEncodeException {
         String inputJson = getPrettyJson(
                 loadJsonFromFile("stored-value-samples/stored-value-fixedlist-tuple1-i32.json"));
 
@@ -518,7 +510,7 @@ public class StoredValueTests extends AbstractJsonTests {
     }
 
     @Test
-    void validate_CLValueList_Mapping_with_tuple2_i32_i32() throws IOException, DynamicInstanceException, NoSuchTypeException, JSONException, CLValueEncodeException {
+    void validate_CLValueList_Mapping_with_tuple2_i32_i32() throws IOException,  NoSuchTypeException, JSONException, CLValueEncodeException {
         String inputJson = getPrettyJson(
                 loadJsonFromFile("stored-value-samples/stored-value-list-tuple2-i32-i32.json"));
 
@@ -545,7 +537,7 @@ public class StoredValueTests extends AbstractJsonTests {
 
     @Test
     void validate_CLValueMap_Mapping_with_string_i32() throws IOException,
-            DynamicInstanceException, NoSuchTypeException, JSONException, CLValueEncodeException {
+             NoSuchTypeException, JSONException, CLValueEncodeException {
         String inputJson = getPrettyJson(loadJsonFromFile("stored-value-samples/stored-value-map-string-i32.json"));
 
         LOGGER.debug("Original JSON: {}", inputJson);
@@ -570,7 +562,7 @@ public class StoredValueTests extends AbstractJsonTests {
 
     @Test
     void validate_CLValueMap_Mapping_with_string_tuple1_i32() throws IOException,
-            DynamicInstanceException, NoSuchTypeException, JSONException, CLValueEncodeException {
+             NoSuchTypeException, JSONException, CLValueEncodeException {
         String inputJson = getPrettyJson(
                 loadJsonFromFile("stored-value-samples/stored-value-map-string-tuple1-i32.json"));
 
@@ -596,7 +588,7 @@ public class StoredValueTests extends AbstractJsonTests {
 
     @Test
     void validate_CLValueResult_Mapping_with_i32_string() throws IOException,
-            DynamicInstanceException, NoSuchTypeException, JSONException, CLValueEncodeException {
+             NoSuchTypeException, JSONException, CLValueEncodeException {
         String inputJson = getPrettyJson(loadJsonFromFile("stored-value-samples/stored-value-result-i32-string.json"));
 
         LOGGER.debug("Original JSON: {}", inputJson);
@@ -619,7 +611,7 @@ public class StoredValueTests extends AbstractJsonTests {
 
     @Test
     void validate_CLValueResult_Mapping_with_i32_tuple1_string() throws IOException,
-            DynamicInstanceException, NoSuchTypeException, JSONException, CLValueEncodeException {
+             NoSuchTypeException, JSONException, CLValueEncodeException {
         String inputJson = getPrettyJson(
                 loadJsonFromFile("stored-value-samples/stored-value-result-i32-tuple1-string.json"));
 
@@ -644,7 +636,7 @@ public class StoredValueTests extends AbstractJsonTests {
 
     @Test
     void validate_CLValueOption_Mapping_with_empty() throws IOException,
-            DynamicInstanceException, NoSuchTypeException, JSONException, CLValueEncodeException {
+             NoSuchTypeException, JSONException, CLValueEncodeException {
         String inputJson = getPrettyJson(loadJsonFromFile("stored-value-samples/stored-value-option-empty.json"));
 
         LOGGER.debug("Original JSON: {}", inputJson);
@@ -667,7 +659,7 @@ public class StoredValueTests extends AbstractJsonTests {
 
     @Test
     void validate_CLValueOption_Mapping_with_bool() throws IOException,
-            DynamicInstanceException, NoSuchTypeException, JSONException, CLValueEncodeException {
+             NoSuchTypeException, JSONException, CLValueEncodeException {
         String inputJson = getPrettyJson(loadJsonFromFile("stored-value-samples/stored-value-option-bool.json"));
 
         LOGGER.debug("Original JSON: {}", inputJson);
@@ -689,7 +681,7 @@ public class StoredValueTests extends AbstractJsonTests {
     }
 
     @Test
-    void validate_CLValueOption_Mapping_with_i32() throws IOException, DynamicInstanceException,
+    void validate_CLValueOption_Mapping_with_i32() throws IOException,
             NoSuchTypeException, JSONException, CLValueEncodeException {
         String inputJson = getPrettyJson(loadJsonFromFile("stored-value-samples/stored-value-option-i32.json"));
 
@@ -713,7 +705,7 @@ public class StoredValueTests extends AbstractJsonTests {
 
     @Test
     void validate_CLValueOption_Mapping_with_tuple2_i32_string() throws IOException,
-            DynamicInstanceException, NoSuchTypeException, JSONException, CLValueEncodeException {
+             NoSuchTypeException, JSONException, CLValueEncodeException {
         String inputJson = getPrettyJson(
                 loadJsonFromFile("stored-value-samples/stored-value-option-tuple2-i32-string.json"));
 
@@ -737,7 +729,7 @@ public class StoredValueTests extends AbstractJsonTests {
     }
 
     @Test
-    void validate_CLValueUnit_Mapping() throws IOException, DynamicInstanceException,
+    void validate_CLValueUnit_Mapping() throws IOException,
             CLValueEncodeException, NoSuchTypeException, JSONException {
         String inputJson = getPrettyJson(loadJsonFromFile("stored-value-samples/stored-value-unit.json"));
 
@@ -760,7 +752,7 @@ public class StoredValueTests extends AbstractJsonTests {
     }
 
     @Test
-    void validate_CLValueURef_Mapping() throws IOException, CLValueEncodeException, DynamicInstanceException,
+    void validate_CLValueURef_Mapping() throws IOException, CLValueEncodeException,
             NoSuchTypeException, JSONException, InvalidByteStringException {
         String inputJson = getPrettyJson(loadJsonFromFile("stored-value-samples/stored-value-uref.json"));
 
@@ -787,7 +779,7 @@ public class StoredValueTests extends AbstractJsonTests {
     }
 
     @Test
-    void validate_CLValueKey_Mapping_of_account() throws IOException, CLValueEncodeException, DynamicInstanceException,
+    void validate_CLValueKey_Mapping_of_account() throws IOException, CLValueEncodeException,
             NoSuchTypeException, JSONException, InvalidByteStringException {
         String inputJson = getPrettyJson(loadJsonFromFile("stored-value-samples/stored-value-key-account.json"));
 
@@ -814,7 +806,7 @@ public class StoredValueTests extends AbstractJsonTests {
     }
 
     @Test
-    void validate_CLValueKey_Mapping_of_hash() throws IOException, CLValueEncodeException, DynamicInstanceException,
+    void validate_CLValueKey_Mapping_of_hash() throws IOException, CLValueEncodeException,
             NoSuchTypeException, JSONException, InvalidByteStringException {
         String inputJson = getPrettyJson(loadJsonFromFile("stored-value-samples/stored-value-key-hash.json"));
 
@@ -841,7 +833,7 @@ public class StoredValueTests extends AbstractJsonTests {
     }
 
     @Test
-    void validate_CLValuePublicKey_Mapping() throws IOException, CLValueEncodeException, DynamicInstanceException,
+    void validate_CLValuePublicKey_Mapping() throws IOException, CLValueEncodeException,
             NoSuchTypeException, JSONException, InvalidByteStringException {
         String inputJson = getPrettyJson(loadJsonFromFile("stored-value-samples/stored-value-publickey.json"));
 
@@ -868,7 +860,7 @@ public class StoredValueTests extends AbstractJsonTests {
     }
 
     @Test
-    void validate_CLValueByteArray_Mapping() throws IOException, DynamicInstanceException,
+    void validate_CLValueByteArray_Mapping() throws IOException,
             CLValueEncodeException, NoSuchTypeException, JSONException {
         String inputJson = getPrettyJson(loadJsonFromFile("stored-value-samples/stored-value-bytearray.json"));
 
@@ -979,7 +971,7 @@ public class StoredValueTests extends AbstractJsonTests {
     }
 
     private StoredValueData createAndInitExpectedStoredValueData(AbstractCLValue<?, ?> expectedClValue)
-            throws IOException, CLValueEncodeException, DynamicInstanceException, NoSuchTypeException {
+            throws IOException, CLValueEncodeException, NoSuchTypeException {
         StoredValueData expected = new StoredValueData();
         expected.setApiVersion(API_VERSION);
         expected.setMerkleProof(MERKLE_PROOF);
@@ -991,7 +983,7 @@ public class StoredValueTests extends AbstractJsonTests {
         // This is done here to account for the missing encode call made by jackson
         // serializer
         try (CLValueEncoder clve = new CLValueEncoder()) {
-            expectedClValue.encode(clve);
+            expectedClValue.encode(clve, false);
         }
 
         return expected;

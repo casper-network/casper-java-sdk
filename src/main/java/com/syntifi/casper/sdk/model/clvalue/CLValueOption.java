@@ -45,11 +45,11 @@ public class CLValueOption extends AbstractCLValue<Optional<AbstractCLValue<?, ?
     }
 
     @Override
-    public void encode(CLValueEncoder clve) throws IOException, NoSuchTypeException, CLValueEncodeException, DynamicInstanceException {
+    public void encode(CLValueEncoder clve, boolean encodeType) throws IOException, NoSuchTypeException, CLValueEncodeException {
         Optional<AbstractCLValue<?, ?>> value = getValue();
 
         CLValueBool isPresent = new CLValueBool(value.isPresent() && value.get().getValue() != null);
-        isPresent.encode(clve);
+        isPresent.encode(clve, false);
         setBytes(isPresent.getBytes());
 
         Optional<AbstractCLValue<?, ?>> child = getValue();
@@ -59,10 +59,15 @@ public class CLValueOption extends AbstractCLValue<Optional<AbstractCLValue<?, ?
                     .setChildTypes(((AbstractCLTypeWithChildren) clType.getChildType()).getChildTypes());
         }
         if (child.isPresent() && isPresent.getValue().equals(Boolean.TRUE)) {
-            child.get().encode(clve);
+            child.get().encode(clve, false);
             setBytes(getBytes() + child.get().getBytes());
         }
-        super.encode(clve);
+        if (encodeType) {
+            this.encodeType(clve);
+            if (child.isPresent() && isPresent.getValue().equals(Boolean.TRUE)) {
+                child.get().encodeType(clve);
+            }
+        }
     }
 
     @Override

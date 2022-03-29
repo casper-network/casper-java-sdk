@@ -10,8 +10,6 @@ import com.syntifi.casper.sdk.exception.NoSuchTypeException;
 import com.syntifi.casper.sdk.model.clvalue.encdec.CLValueEncoder;
 import com.syntifi.casper.sdk.model.deploy.NamedArg;
 
-import org.bouncycastle.util.encoders.Hex;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -41,7 +39,7 @@ public class Transfer implements ExecutableDeployItem {
      private List<NamedArg<?>> args;
 
     /**
-     * @link ExecutableDeploy order 5
+     * {@link ExecutableDeployItem} order 5
      */
     @Override
     public byte getOrder() {
@@ -52,17 +50,12 @@ public class Transfer implements ExecutableDeployItem {
      * Implements the Transfer encoder
      */
     @Override
-    public void encode(CLValueEncoder clve)
+    public void encode(CLValueEncoder clve, boolean encodeType)
             throws IOException, CLValueEncodeException, DynamicInstanceException, NoSuchTypeException {
-        String a = Hex.toHexString(clve.toByteArray());
         clve.write(getOrder());
-        String b = Hex.toHexString(clve.toByteArray());
         clve.writeInt(args.size());
-        String c = Hex.toHexString(clve.toByteArray());
         for (NamedArg<?> namedArg : args) {
-            namedArg.encode(clve);
+            namedArg.encode(clve, true);
         }
-        String d = Hex.toHexString(clve.toByteArray());
-        String e = Hex.toHexString(clve.toByteArray());
     }
 }

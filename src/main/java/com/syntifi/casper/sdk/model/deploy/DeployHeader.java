@@ -23,7 +23,7 @@ import lombok.Setter;
 
 /**
  * The header portion of a [`Deploy`](struct.Deploy.html).
- * 
+ *
  * @author Alexandre Carvalho
  * @author Andre Bertolace
  * @since 0.0.1
@@ -76,18 +76,20 @@ public class DeployHeader implements EncodableValue {
     private Ttl ttl;
 
     /**
-     * Implements DeployHearder encoder 
+     * Implements DeployHearder encoder
      */
     @Override
-    public void encode(CLValueEncoder clve) throws IOException, CLValueEncodeException, DynamicInstanceException, NoSuchTypeException  {
-        account.encode(clve);
+    public void encode(CLValueEncoder clve, boolean encodeType) throws IOException, CLValueEncodeException, DynamicInstanceException, NoSuchTypeException {
+        account.encode(clve, encodeType);
         clve.writeLong(timeStamp.getTime());
-        ttl.encode(clve);
+        ttl.encode(clve, encodeType);
         clve.writeLong(gasPrice);
-        bodyHash.encode(clve);
-        clve.writeInt(dependencies.size());
-        for (Digest dependency: dependencies) {
-            clve.writeBytes(dependency.getDigest());
+        bodyHash.encode(clve, encodeType);
+        if (dependencies != null) {
+            clve.writeInt(dependencies.size());
+            for (Digest dependency : dependencies) {
+                clve.writeBytes(dependency.getDigest());
+            }
         }
         clve.writeString(chainName);
     }

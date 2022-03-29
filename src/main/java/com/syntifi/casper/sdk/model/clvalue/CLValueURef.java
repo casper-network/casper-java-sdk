@@ -26,7 +26,7 @@ import lombok.Setter;
  * representation of the URef is 33 bytes long. The first 32 bytes are the byte
  * representation of the URef address, and the last byte contains the bits
  * corresponding to the access rights of the URef.
- * 
+ *
  * @author Alexandre Carvalho
  * @author Andre Bertolace
  * @see AbstractCLValue
@@ -39,30 +39,32 @@ import lombok.Setter;
 public class CLValueURef extends AbstractCLValue<URef, CLTypeURef> {
     private CLTypeURef clType = new CLTypeURef();
 
-    @JsonSetter("cl_type")
-    @ExcludeFromJacocoGeneratedReport
-	protected void setJsonClType(CLTypeURef clType) {
-        this.clType = clType;
-    }
-
-    @JsonGetter("cl_type")
-    @ExcludeFromJacocoGeneratedReport
-	protected String getJsonClType() {
-        return this.getClType().getTypeName();
-    }
-
     public CLValueURef(URef value) {
         this.setValue(value);
     }
 
+    @JsonGetter("cl_type")
+    @ExcludeFromJacocoGeneratedReport
+    protected String getJsonClType() {
+        return this.getClType().getTypeName();
+    }
+
+    @JsonSetter("cl_type")
+    @ExcludeFromJacocoGeneratedReport
+    protected void setJsonClType(CLTypeURef clType) {
+        this.clType = clType;
+    }
+
     @Override
-    public void encode(CLValueEncoder clve) throws IOException, NoSuchTypeException, CLValueEncodeException, DynamicInstanceException {
+    public void encode(CLValueEncoder clve, boolean encodeType) throws IOException, NoSuchTypeException, CLValueEncodeException {
         URef uref = this.getValue();
         byte[] urefByte = new byte[uref.getAddress().length + 1];
         System.arraycopy(uref.getAddress(), 0, urefByte, 0, uref.getAddress().length);
-        urefByte[32] = uref.getAccessRight().serializationTag; 
+        urefByte[32] = uref.getAccessRight().serializationTag;
         setBytes(StringByteHelper.convertBytesToHex(urefByte));
-        super.encode(clve);
+        if (encodeType) {
+            this.encodeType(clve);
+        }
     }
 
     @Override
@@ -97,9 +99,7 @@ public class CLValueURef extends AbstractCLValue<URef, CLTypeURef> {
             return false;
         final Object thisClType = this.getClType();
         final Object otherClType = other.getClType();
-        if (thisClType == null ? otherClType != null : !thisClType.equals(otherClType))
-            return false;
-        return true;
+        return thisClType == null ? otherClType == null : thisClType.equals(otherClType);
     }
 
     @ExcludeFromJacocoGeneratedReport
