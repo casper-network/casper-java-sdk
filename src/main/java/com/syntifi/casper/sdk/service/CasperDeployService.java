@@ -29,6 +29,7 @@ import com.syntifi.casper.sdk.model.key.PublicKey;
 import com.syntifi.casper.sdk.model.key.Signature;
 import com.syntifi.crypto.key.AbstractPrivateKey;
 
+import com.syntifi.crypto.key.hash.Blake2b;
 import org.bouncycastle.crypto.digests.Blake2bDigest;
 import org.jetbrains.annotations.NotNull;
 
@@ -125,7 +126,7 @@ public class CasperDeployService {
         CLValueEncoder clve = new CLValueEncoder();
         payment.encode(clve, true);
         session.encode(clve, true);
-        byte[] sessionAnPaymentHash = CasperDeployService.digest(clve.toByteArray(), 32);
+        byte[] sessionAnPaymentHash = Blake2b.digest(clve.toByteArray(), 32);
         clve.flush();
         clve.reset();
 
@@ -142,7 +143,7 @@ public class CasperDeployService {
                 .dependencies(dependencies)
                 .build();
         deployHeader.encode(clve, true);
-        byte[] headerHash = CasperDeployService.digest(clve.toByteArray(), 32);
+        byte[] headerHash = Blake2b.digest(clve.toByteArray(), 32);
 
         Signature signature = Signature.sign(fromPrivateKey, headerHash);
 
@@ -160,15 +161,5 @@ public class CasperDeployService {
                 .approvals(approvals)
                 .build();
 
-    }
-
-    // TODO: use com.syntifi.crypto.key.hash.Blake2b digest method and delete this
-    @NotNull
-    static byte[] digest(byte[] input, int length) {
-        Blake2bDigest d = new Blake2bDigest(length * 8);
-        d.update(input, 0, input.length);
-        byte[] result = new byte[d.getDigestSize()];
-        d.doFinal(result, 0);
-        return result;
     }
 }

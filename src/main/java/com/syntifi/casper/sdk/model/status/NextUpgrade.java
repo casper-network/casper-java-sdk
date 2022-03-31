@@ -26,7 +26,10 @@ public class NextUpgrade {
      * @see ActivationPoint
      */
     @JsonProperty("activation_point")
-    private ActivationPoint activationPoint;
+    //private ActivationPoint activationPoint;
+    // TODO: the response from the JSON-RPC is different from that specified in the RPC-JSON documentation.
+    // Here it is adapted to comply with the API response
+    private Integer activationPoint;
 
     /**
      * Protocol version

@@ -20,6 +20,7 @@ repositories {
 
 dependencies {
     implementation "com.github.briandilley.jsonrpc4j:jsonrpc4j:${jsonrpc4jVersion}"
+    implementation "com.syntifi.crypto:crypto-key-common:${cryptokeyVersion}"
     implementation "com.syntifi.crypto:crypto-key-ed25519:${cryptokeyVersion}"
     implementation "com.syntifi.crypto:crypto-key-secp256k1:${cryptokeyVersion}"
     implementation "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
