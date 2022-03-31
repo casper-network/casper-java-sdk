@@ -1,7 +1,6 @@
 package com.syntifi.casper.sdk.model.deploy.transform;
 
 import com.syntifi.casper.sdk.exception.NoSuchTypeException;
-
 import lombok.Getter;
 
 @Getter
@@ -28,17 +27,17 @@ public enum TransformTypeData {
     private final String name;
     private final Class<?> clazz;
 
-    private TransformTypeData(String name, Class<?> clazz) {
+    TransformTypeData(String name, Class<?> clazz) {
         this.name = name;
         this.clazz = clazz;
     }
 
     /**
-     * Retrieve Transform implementation class from Transform name 
-     * 
+     * Retrieve Transform implementation class from Transform name
+     *
      * @param name {@link TransformTypeData} class name
      * @return the class object for the {@link TransformTypeData}
-     * @throws NoSuchTypeException
+     * @throws NoSuchTypeException if no type is found for given name
      */
     public static Class<?> getClassByName(String name) throws NoSuchTypeException {
         for (TransformTypeData t : values()) {
@@ -47,5 +46,5 @@ public enum TransformTypeData {
             }
         }
         throw new NoSuchTypeException();
-    } 
+    }
 }

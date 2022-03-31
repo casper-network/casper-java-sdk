@@ -1,22 +1,23 @@
 package com.syntifi.casper.sdk.model.clvalue;
 
-import java.io.IOException;
-import java.util.Arrays;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.syntifi.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
 import com.syntifi.casper.sdk.exception.CLValueDecodeException;
+import com.syntifi.casper.sdk.exception.NoSuchTypeException;
 import com.syntifi.casper.sdk.model.clvalue.cltype.CLTypeByteArray;
 import com.syntifi.casper.sdk.model.clvalue.encdec.CLValueDecoder;
 import com.syntifi.casper.sdk.model.clvalue.encdec.CLValueEncoder;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Objects;
+
 /**
  * Casper ByteArray CLValue implementation
- * 
+ *
  * @author Alexandre Carvalho
  * @author Andre Bertolace
  * @see AbstractCLValue
@@ -35,8 +36,11 @@ public class CLValueByteArray extends AbstractCLValue<byte[], CLTypeByteArray> {
     }
 
     @Override
-    public void encode(CLValueEncoder clve) throws IOException {
+    public void encode(CLValueEncoder clve, boolean encodeType) throws IOException, NoSuchTypeException {
         clve.writeByteArray(this);
+        if (encodeType) {
+            this.encodeType(clve);
+        }
     }
 
     @Override
@@ -52,11 +56,11 @@ public class CLValueByteArray extends AbstractCLValue<byte[], CLTypeByteArray> {
         if (!(o instanceof CLValueByteArray))
             return false;
         final CLValueByteArray other = (CLValueByteArray) o;
-        if (!other.canEqual((Object) this))
+        if (!other.canEqual(this))
             return false;
         final Object thisBytes = this.getBytes();
         final Object otherBytes = other.getBytes();
-        if (thisBytes == null ? otherBytes != null : !thisBytes.equals(otherBytes))
+        if (!Objects.equals(thisBytes, otherBytes))
             return false;
         final byte[] thisValue = this.getValue();
         final byte[] otherValue = other.getValue();
@@ -64,9 +68,7 @@ public class CLValueByteArray extends AbstractCLValue<byte[], CLTypeByteArray> {
             return false;
         final Object thisClType = this.getClType();
         final Object otherClType = other.getClType();
-        if (thisClType == null ? otherClType != null : !thisClType.equals(otherClType))
-            return false;
-        return true;
+        return Objects.equals(thisClType, otherClType);
     }
 
     @ExcludeFromJacocoGeneratedReport

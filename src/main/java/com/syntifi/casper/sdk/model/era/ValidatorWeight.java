@@ -1,23 +1,30 @@
 package com.syntifi.casper.sdk.model.era;
 
-import java.math.BigInteger;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.syntifi.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
 import com.syntifi.casper.sdk.model.key.PublicKey;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import lombok.Data;
+import java.math.BigInteger;
 
 /**
  * Casper block validator weight
- * 
+ *
  * @author Alexandre Carvalho
  * @author Andre Bertolace
  * @see JsonEraEnd
  * @since 0.0.1
  */
-@Data
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class ValidatorWeight {
 
     /**

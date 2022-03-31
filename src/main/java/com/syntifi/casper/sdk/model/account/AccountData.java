@@ -1,17 +1,24 @@
 package com.syntifi.casper.sdk.model.account;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * Root class for a Casper block request
- * 
+ *
  * @author Alexandre Carvalho
  * @author Andre Bertolace
  * @since 0.0.1
  */
-@Data
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class AccountData {
 
     /**
@@ -26,9 +33,8 @@ public class AccountData {
     private Account account;
 
     /**
-     * The merkle proof 
+     * The merkle proof
      */
     @JsonProperty("merkle_proof")
     private String merkelProof;
 }
-

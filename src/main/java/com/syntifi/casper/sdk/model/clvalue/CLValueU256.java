@@ -1,25 +1,25 @@
 package com.syntifi.casper.sdk.model.clvalue;
 
-import java.io.IOException;
-import java.math.BigInteger;
-
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.syntifi.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
 import com.syntifi.casper.sdk.exception.CLValueDecodeException;
 import com.syntifi.casper.sdk.exception.CLValueEncodeException;
+import com.syntifi.casper.sdk.exception.NoSuchTypeException;
 import com.syntifi.casper.sdk.model.clvalue.cltype.CLTypeU256;
 import com.syntifi.casper.sdk.model.clvalue.encdec.CLValueDecoder;
 import com.syntifi.casper.sdk.model.clvalue.encdec.CLValueEncoder;
-
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.IOException;
+import java.math.BigInteger;
+
 /**
  * Casper U256 CLValue implementation
- * 
+ *
  * @author Alexandre Carvalho
  * @author Andre Bertolace
  * @see AbstractCLValue
@@ -49,8 +49,11 @@ public class CLValueU256 extends AbstractCLValue<BigInteger, CLTypeU256> {
     }
 
     @Override
-    public void encode(CLValueEncoder clve) throws IOException, CLValueEncodeException {
+    public void encode(CLValueEncoder clve, boolean encodeType) throws IOException, CLValueEncodeException, NoSuchTypeException {
         clve.writeU256(this);
+        if (encodeType) {
+            this.encodeType(clve);
+        }
     }
 
     @Override

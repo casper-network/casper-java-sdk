@@ -2,19 +2,33 @@ package com.syntifi.casper.sdk.model.key;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.syntifi.casper.sdk.exception.CLValueEncodeException;
+import com.syntifi.casper.sdk.exception.DynamicInstanceException;
+import com.syntifi.casper.sdk.exception.NoSuchTypeException;
+import com.syntifi.casper.sdk.model.clvalue.encdec.CLValueEncoder;
 import com.syntifi.casper.sdk.model.clvalue.encdec.StringByteHelper;
+import com.syntifi.casper.sdk.model.clvalue.encdec.interfaces.EncodableValue;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import lombok.Data;
+import java.io.IOException;
 
 /**
  * Hex-encoded key, including the tag byte.
- * 
+ *
  * @author Alexandre Carvalho
  * @author Andre Bertolace
  * @since 0.0.1
  */
-@Data
-public abstract class AbstractSerializedKeyTaggedHex<T extends Tag> {
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@EqualsAndHashCode(of = {"tag", "key"})
+public abstract class AbstractSerializedKeyTaggedHex<T extends Tag> implements EncodableValue {
 
     /**
      * @see Tag
@@ -30,7 +44,17 @@ public abstract class AbstractSerializedKeyTaggedHex<T extends Tag> {
 
     @JsonValue
     public String getAlgoTaggedHex() {
-        return StringByteHelper.convertBytesToHex(new byte[] { this.tag.getByteTag() })
+        return StringByteHelper.convertBytesToHex(new byte[]{this.tag.getByteTag()})
                 + StringByteHelper.convertBytesToHex(this.getKey());
+    }
+
+    /**
+     * Implements TaggedHEx encoder
+     */
+    @Override
+    public void encode(CLValueEncoder clve, boolean encodeType)
+            throws IOException, CLValueEncodeException, DynamicInstanceException, NoSuchTypeException {
+        clve.write(getTag().getByteTag());
+        clve.write(getKey());
     }
 }

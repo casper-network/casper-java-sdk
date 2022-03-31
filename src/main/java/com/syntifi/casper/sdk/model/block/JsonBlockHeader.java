@@ -1,22 +1,29 @@
 package com.syntifi.casper.sdk.model.block;
 
-import java.util.Date;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.syntifi.casper.sdk.model.era.JsonEraEnd;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import lombok.Data;
+import java.util.Date;
 
 /**
  * Holds the header data of a Casper block
- * 
+ *
  * @author Alexandre Carvalho
  * @author Andre Bertolace
  * @see JsonBlock
  * @since 0.0.1
  */
-@Data
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class JsonBlockHeader {
 
     /**

@@ -1,15 +1,14 @@
 package com.syntifi.casper.sdk.jackson.deserializer;
 
-import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
-
-import com.syntifi.casper.sdk.exception.NoSuchKeyTagException;
 import com.syntifi.casper.sdk.model.key.AlgorithmTag;
 import com.syntifi.casper.sdk.model.key.PublicKey;
 
+import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
+
 /**
  * Customize the mapping of Casper's PublicKey
- * 
+ *
  * @author Alexandre Carvalho
  * @author Andre Bertolace
  * @since 0.0.1
@@ -22,7 +21,7 @@ public class PublicKeyDeserializer extends AbstractSerializedKeyTaggedHexDeseria
     }
 
     @Override
-    protected void loadKey(PublicKey key, byte[] bytes) throws NoSuchAlgorithmException, NoSuchKeyTagException {
+    protected void loadKey(PublicKey key, byte[] bytes) throws NoSuchAlgorithmException {
         key.setTag(AlgorithmTag.getByTag(bytes[0]));
         key.setKey(Arrays.copyOfRange(bytes, 1, bytes.length));
     }

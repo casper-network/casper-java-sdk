@@ -1,10 +1,5 @@
 package com.syntifi.casper.sdk.model.clvalue;
 
-import java.io.IOException;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.syntifi.casper.sdk.exception.CLValueDecodeException;
 import com.syntifi.casper.sdk.exception.CLValueEncodeException;
@@ -15,15 +10,19 @@ import com.syntifi.casper.sdk.model.clvalue.cltype.CLTypeData;
 import com.syntifi.casper.sdk.model.clvalue.cltype.CLTypeMap;
 import com.syntifi.casper.sdk.model.clvalue.encdec.CLValueDecoder;
 import com.syntifi.casper.sdk.model.clvalue.encdec.CLValueEncoder;
-
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.IOException;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+
 /**
  * Casper Map CLValue implementation
- * 
+ *
  * @author Alexandre Carvalho
  * @author Andre Bertolace
  * @see AbstractCLValue
@@ -33,7 +32,8 @@ import lombok.Setter;
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
-public class CLValueMap extends AbstractCLValueWithChildren<Map<? extends AbstractCLValue<?, ?>, ? extends AbstractCLValue<?, ?>>, CLTypeMap> {
+public class CLValueMap extends
+        AbstractCLValueWithChildren<Map<? extends AbstractCLValue<?, ?>, ? extends AbstractCLValue<?, ?>>, CLTypeMap> {
     @JsonProperty("cl_type")
     private CLTypeMap clType = new CLTypeMap();
 
@@ -43,18 +43,20 @@ public class CLValueMap extends AbstractCLValueWithChildren<Map<? extends Abstra
     }
 
     @Override
-    public void encode(CLValueEncoder clve)
-            throws IOException, CLValueEncodeException, DynamicInstanceException, NoSuchTypeException {
+    public void encode(CLValueEncoder clve, boolean encodeType) throws IOException, NoSuchTypeException, CLValueEncodeException {
         setChildTypes();
 
         CLValueI32 mapLength = new CLValueI32(getValue().size());
-        mapLength.encode(clve);
+        mapLength.encode(clve, false);
         setBytes(mapLength.getBytes());
 
         for (Entry<? extends AbstractCLValue<?, ?>, ? extends AbstractCLValue<?, ?>> entry : getValue().entrySet()) {
-            entry.getKey().encode(clve);
-            entry.getValue().encode(clve);
+            entry.getKey().encode(clve, false);
+            entry.getValue().encode(clve, false);
             setBytes(getBytes() + entry.getKey().getBytes() + entry.getValue().getBytes());
+        }
+        if (encodeType) {
+            this.encodeType(clve);
         }
     }
 
@@ -72,14 +74,16 @@ public class CLValueMap extends AbstractCLValueWithChildren<Map<? extends Abstra
             AbstractCLValue<?, ?> key = CLTypeData.createCLValueFromCLTypeData(keyType);
             if (key.getClType() instanceof AbstractCLTypeWithChildren) {
                 ((AbstractCLTypeWithChildren) key.getClType())
-                        .setChildTypes(((AbstractCLTypeWithChildren) clType.getKeyValueTypes().getKeyType()).getChildTypes());
+                        .setChildTypes(
+                                ((AbstractCLTypeWithChildren) clType.getKeyValueTypes().getKeyType()).getChildTypes());
             }
             key.decode(clvd);
 
             AbstractCLValue<?, ?> val = CLTypeData.createCLValueFromCLTypeData(valType);
             if (val.getClType() instanceof AbstractCLTypeWithChildren) {
                 ((AbstractCLTypeWithChildren) val.getClType())
-                        .setChildTypes(((AbstractCLTypeWithChildren) clType.getKeyValueTypes().getValueType()).getChildTypes());
+                        .setChildTypes(((AbstractCLTypeWithChildren) clType.getKeyValueTypes().getValueType())
+                                .getChildTypes());
             }
             val.decode(clvd);
 
@@ -91,9 +95,10 @@ public class CLValueMap extends AbstractCLValueWithChildren<Map<? extends Abstra
 
     @Override
     protected void setChildTypes() {
-        Entry<? extends AbstractCLValue<?, ?>, ? extends AbstractCLValue<?, ?>> entry = getValue().entrySet().iterator().next();
+        Entry<? extends AbstractCLValue<?, ?>, ? extends AbstractCLValue<?, ?>> entry = getValue().entrySet().iterator()
+                .next();
 
         clType.setKeyValueTypes(
-                clType.new CLTypeMapEntryType(entry.getKey().getClType(), entry.getValue().getClType()));
+                new CLTypeMap.CLTypeMapEntryType(entry.getKey().getClType(), entry.getValue().getClType()));
     }
 }

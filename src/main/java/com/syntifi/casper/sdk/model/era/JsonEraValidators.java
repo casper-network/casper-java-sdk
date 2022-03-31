@@ -1,20 +1,27 @@
 package com.syntifi.casper.sdk.model.era;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.math.BigInteger;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-import lombok.Data;
-
 /**
  * An entry in the validator map.
- * 
+ *
  * @author Alexandre Carvalho
  * @author Andre Bertolace
  * @since 0.0.1
  */
-@Data
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class JsonEraValidators {
 
     /**

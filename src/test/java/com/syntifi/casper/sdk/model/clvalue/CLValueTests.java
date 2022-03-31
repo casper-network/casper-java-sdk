@@ -1,18 +1,14 @@
 package com.syntifi.casper.sdk.model.clvalue;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import com.syntifi.casper.sdk.exception.DynamicInstanceException;
 import com.syntifi.casper.sdk.exception.NoSuchTypeException;
 import com.syntifi.casper.sdk.model.clvalue.cltype.CLTypeAny;
 import com.syntifi.casper.sdk.model.clvalue.cltype.CLTypeData;
-
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class CLValueTests {
     private static final Logger LOGGER = LoggerFactory.getLogger(CLValueTests.class);
@@ -34,14 +30,14 @@ public class CLValueTests {
     }
 
     @Test
-    void getTypeBySerializationTag_should_return_correct_CLTypeData() throws DynamicInstanceException, NoSuchTypeException {
+    void getTypeBySerializationTag_should_return_correct_CLTypeData() throws NoSuchTypeException {
         for (CLTypeData typeData : CLTypeData.values()) {
             assertEquals(typeData, CLTypeData.getTypeBySerializationTag(typeData.getSerializationTag()));
         }
     }
 
     @Test
-    void createCLTypeFromCLTypeData_should_return_correct_CLType() throws DynamicInstanceException, NoSuchTypeException {
+    void createCLTypeFromCLTypeData_should_return_correct_CLType() throws DynamicInstanceException {
         assertTrue(CLTypeData.createCLTypeFromCLTypeData(CLTypeData.ANY) instanceof CLTypeAny);
     }
 

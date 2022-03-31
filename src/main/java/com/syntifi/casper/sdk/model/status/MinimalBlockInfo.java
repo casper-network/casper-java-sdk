@@ -1,24 +1,31 @@
 package com.syntifi.casper.sdk.model.status;
 
-import java.math.BigInteger;
-import java.sql.Date;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.syntifi.casper.sdk.model.key.PublicKey;
 import com.syntifi.casper.sdk.model.peer.PeerData;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import lombok.Data;
+import java.math.BigInteger;
+import java.sql.Date;
 
 /**
  * Minimal info of a `Block`
- * 
+ *
  * @author Alexandre Carvalho
  * @author Andre Bertolace
  * @see PeerData
  * @since 0.0.1
  */
-@Data
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class MinimalBlockInfo {
 
     /**

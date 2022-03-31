@@ -7,7 +7,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.syntifi.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * An implmentation of Transform that Adds the given `u128`
@@ -18,7 +22,11 @@ import lombok.Data;
  * @author Andre Bertolace
  * @since 0.0.1
  */
-@Data
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @JsonTypeName("AddUInt128")
 public class AddUInt128 implements Transform {
 
@@ -28,15 +36,25 @@ public class AddUInt128 implements Transform {
     @JsonIgnore
     private BigInteger u128;
 
+    /**
+     * getter for u128 json serialization
+     *
+     * @return cost as expected for json serialization
+     */
     @JsonProperty("AddUInt128")
     @ExcludeFromJacocoGeneratedReport
-	protected String getJsonU128() {
+    protected String getJsonU128() {
         return this.u128.toString(10);
     }
 
+    /**
+     * setter for u128 from json deserialized value
+     *
+     * @param value the deserialized value
+     */
     @JsonProperty("AddUInt128")
     @ExcludeFromJacocoGeneratedReport
-	protected void setJsonU128(String value) {
+    protected void setJsonU128(String value) {
         this.u128 = new BigInteger(value, 10);
     }
 }

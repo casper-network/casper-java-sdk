@@ -1,8 +1,5 @@
 package com.syntifi.casper.sdk.model.clvalue;
 
-import java.io.IOException;
-import java.util.Optional;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.syntifi.casper.sdk.exception.CLValueDecodeException;
 import com.syntifi.casper.sdk.exception.CLValueEncodeException;
@@ -13,14 +10,17 @@ import com.syntifi.casper.sdk.model.clvalue.cltype.CLTypeData;
 import com.syntifi.casper.sdk.model.clvalue.cltype.CLTypeOption;
 import com.syntifi.casper.sdk.model.clvalue.encdec.CLValueDecoder;
 import com.syntifi.casper.sdk.model.clvalue.encdec.CLValueEncoder;
-
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.IOException;
+import java.util.Optional;
+
 /**
  * Casper Option CLValue implementation
- * 
+ *
  * @author Alexandre Carvalho
  * @author Andre Bertolace
  * @see AbstractCLValue
@@ -29,6 +29,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = true)
+@AllArgsConstructor
 public class CLValueOption extends AbstractCLValue<Optional<AbstractCLValue<?, ?>>, CLTypeOption> {
     @JsonProperty("cl_type")
     private CLTypeOption clType = new CLTypeOption();
@@ -43,12 +44,11 @@ public class CLValueOption extends AbstractCLValue<Optional<AbstractCLValue<?, ?
     }
 
     @Override
-    public void encode(CLValueEncoder clve)
-            throws IOException, CLValueEncodeException, DynamicInstanceException, NoSuchTypeException {
+    public void encode(CLValueEncoder clve, boolean encodeType) throws IOException, NoSuchTypeException, CLValueEncodeException {
         Optional<AbstractCLValue<?, ?>> value = getValue();
-        
+
         CLValueBool isPresent = new CLValueBool(value.isPresent() && value.get().getValue() != null);
-        isPresent.encode(clve);
+        isPresent.encode(clve, false);
         setBytes(isPresent.getBytes());
 
         Optional<AbstractCLValue<?, ?>> child = getValue();
@@ -58,8 +58,14 @@ public class CLValueOption extends AbstractCLValue<Optional<AbstractCLValue<?, ?
                     .setChildTypes(((AbstractCLTypeWithChildren) clType.getChildType()).getChildTypes());
         }
         if (child.isPresent() && isPresent.getValue().equals(Boolean.TRUE)) {
-            child.get().encode(clve);
+            child.get().encode(clve, false);
             setBytes(getBytes() + child.get().getBytes());
+        }
+        if (encodeType) {
+            this.encodeType(clve);
+            if (child.isPresent() && isPresent.getValue().equals(Boolean.TRUE)) {
+                child.get().encodeType(clve);
+            }
         }
     }
 

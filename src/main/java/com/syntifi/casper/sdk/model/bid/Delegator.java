@@ -1,23 +1,30 @@
 package com.syntifi.casper.sdk.model.bid;
 
-import java.math.BigInteger;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.syntifi.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
 import com.syntifi.casper.sdk.model.key.PublicKey;
 import com.syntifi.casper.sdk.model.uref.URef;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import lombok.Data;
+import java.math.BigInteger;
 
 /**
  * Represents a party delegating their stake to a validator (or \"delegatee\")
- * 
+ *
  * @author Alexandre Carvalho
  * @author Andre Bertolace
  * @since 0.0.1
  */
-@Data
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Delegator {
     /**
      * @see PublicKey
@@ -36,7 +43,7 @@ public class Delegator {
      */
     @JsonProperty("bonding_purse")
     private URef bondingPurse;
-  
+
     /**
      * @see PublicKey
      */
@@ -44,20 +51,20 @@ public class Delegator {
     private PublicKey delegatorPublicKey;
 
     /**
-     * ammount
+     * staked amount
      */
     @JsonIgnore
     private BigInteger stakedAmount;
-    
+
     @JsonProperty("staked_amount")
     @ExcludeFromJacocoGeneratedReport
-	protected String getJsonStakedAmount() {
+    protected String getJsonStakedAmount() {
         return this.stakedAmount.toString(10);
     }
 
     @JsonProperty("staked_amount")
     @ExcludeFromJacocoGeneratedReport
-	protected void setJsonStakedAmount(String value) {
+    protected void setJsonStakedAmount(String value) {
         this.stakedAmount = new BigInteger(value, 10);
     }
 }

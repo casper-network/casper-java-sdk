@@ -1,22 +1,23 @@
 package com.syntifi.casper.sdk.model.clvalue;
 
-import java.io.IOException;
-
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.syntifi.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
 import com.syntifi.casper.sdk.exception.CLValueDecodeException;
+import com.syntifi.casper.sdk.exception.CLValueEncodeException;
 import com.syntifi.casper.sdk.exception.DynamicInstanceException;
+import com.syntifi.casper.sdk.exception.NoSuchTypeException;
 import com.syntifi.casper.sdk.model.clvalue.cltype.CLTypeURef;
 import com.syntifi.casper.sdk.model.clvalue.encdec.CLValueDecoder;
 import com.syntifi.casper.sdk.model.clvalue.encdec.CLValueEncoder;
 import com.syntifi.casper.sdk.model.clvalue.encdec.StringByteHelper;
 import com.syntifi.casper.sdk.model.uref.URef;
 import com.syntifi.casper.sdk.model.uref.URefAccessRight;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.io.IOException;
 
 /**
  * Casper Boolean CLURef implementation URef is a tuple that contains the
@@ -24,7 +25,7 @@ import lombok.Setter;
  * representation of the URef is 33 bytes long. The first 32 bytes are the byte
  * representation of the URef address, and the last byte contains the bits
  * corresponding to the access rights of the URef.
- * 
+ *
  * @author Alexandre Carvalho
  * @author Andre Bertolace
  * @see AbstractCLValue
@@ -37,29 +38,32 @@ import lombok.Setter;
 public class CLValueURef extends AbstractCLValue<URef, CLTypeURef> {
     private CLTypeURef clType = new CLTypeURef();
 
-    @JsonSetter("cl_type")
-    @ExcludeFromJacocoGeneratedReport
-	protected void setJsonClType(CLTypeURef clType) {
-        this.clType = clType;
-    }
-
-    @JsonGetter("cl_type")
-    @ExcludeFromJacocoGeneratedReport
-	protected String getJsonClType() {
-        return this.getClType().getTypeName();
-    }
-
     public CLValueURef(URef value) {
         this.setValue(value);
     }
 
+    @JsonGetter("cl_type")
+    @ExcludeFromJacocoGeneratedReport
+    protected String getJsonClType() {
+        return this.getClType().getTypeName();
+    }
+
+    @JsonSetter("cl_type")
+    @ExcludeFromJacocoGeneratedReport
+    protected void setJsonClType(CLTypeURef clType) {
+        this.clType = clType;
+    }
+
     @Override
-    public void encode(CLValueEncoder clve) throws IOException {
+    public void encode(CLValueEncoder clve, boolean encodeType) throws IOException, NoSuchTypeException, CLValueEncodeException {
         URef uref = this.getValue();
         byte[] urefByte = new byte[uref.getAddress().length + 1];
         System.arraycopy(uref.getAddress(), 0, urefByte, 0, uref.getAddress().length);
-        urefByte[32] = uref.getAccessRight().serializationTag; 
+        urefByte[32] = uref.getAccessRight().serializationTag;
         setBytes(StringByteHelper.convertBytesToHex(urefByte));
+        if (encodeType) {
+            this.encodeType(clve);
+        }
     }
 
     @Override
@@ -94,9 +98,7 @@ public class CLValueURef extends AbstractCLValue<URef, CLTypeURef> {
             return false;
         final Object thisClType = this.getClType();
         final Object otherClType = other.getClType();
-        if (thisClType == null ? otherClType != null : !thisClType.equals(otherClType))
-            return false;
-        return true;
+        return thisClType == null ? otherClType == null : thisClType.equals(otherClType);
     }
 
     @ExcludeFromJacocoGeneratedReport

@@ -1,26 +1,40 @@
 package com.syntifi.casper.sdk.model.deploy;
 
+import com.syntifi.casper.sdk.exception.CLValueEncodeException;
+import com.syntifi.casper.sdk.exception.DynamicInstanceException;
+import com.syntifi.casper.sdk.exception.NoSuchTypeException;
+import com.syntifi.casper.sdk.model.clvalue.encdec.CLValueEncoder;
+import com.syntifi.casper.sdk.model.clvalue.encdec.interfaces.EncodableValue;
+import com.syntifi.casper.sdk.model.common.Digest;
+import com.syntifi.casper.sdk.model.deploy.executabledeploy.ExecutableDeployItem;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.io.IOException;
 import java.util.List;
 
-import com.syntifi.casper.sdk.model.deploy.executabledeploy.ExecutableDeployItem;
-
-import lombok.Data;
-
 /**
- * A deploy; an item containing a smart contract along with the requester's
+ * Deploy an item containing a smart contract along with the requesters'
  * signature(s)
- * 
+ *
  * @author Alexandre Carvalho
  * @author Andre Bertolace
  * @since 0.0.1
  */
-@Data
-public class Deploy {
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class Deploy implements EncodableValue {
 
     /**
      * Hex-encoded deploy hash
      */
-    private String hash;
+    private Digest hash;
 
     /**
      * @see DeployHeader
@@ -41,4 +55,20 @@ public class Deploy {
      * @see ExecutableDeployItem
      */
     private ExecutableDeployItem session;
+
+    /**
+     * Implements Deploy encoder
+     */
+    @Override
+    public void encode(CLValueEncoder clve, boolean encodeType) throws IOException, CLValueEncodeException, DynamicInstanceException, NoSuchTypeException {
+        header.encode(clve, true);
+        hash.encode(clve, true);
+        payment.encode(clve, true);
+        session.encode(clve, true);
+        clve.writeInt(approvals.size());
+        for (Approval approval : approvals) {
+            approval.encode(clve, true);
+        }
+    }
 }
+

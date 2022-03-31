@@ -1,8 +1,5 @@
 package com.syntifi.casper.sdk.model.clvalue;
 
-import java.io.IOException;
-import java.util.Arrays;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.syntifi.casper.sdk.exception.CLValueDecodeException;
 import com.syntifi.casper.sdk.exception.CLValueEncodeException;
@@ -13,17 +10,18 @@ import com.syntifi.casper.sdk.model.clvalue.cltype.CLTypeData;
 import com.syntifi.casper.sdk.model.clvalue.cltype.CLTypeTuple3;
 import com.syntifi.casper.sdk.model.clvalue.encdec.CLValueDecoder;
 import com.syntifi.casper.sdk.model.clvalue.encdec.CLValueEncoder;
-
-import org.javatuples.Triplet;
-
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.javatuples.Triplet;
+
+import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * Casper Tuple3 CLValue implementation
- * 
+ *
  * @author Alexandre Carvalho
  * @author Andre Bertolace
  * @see AbstractCLValue
@@ -44,16 +42,18 @@ public class CLValueTuple3 extends
     }
 
     @Override
-    public void encode(CLValueEncoder clve)
-            throws IOException, CLValueEncodeException, DynamicInstanceException, NoSuchTypeException {
+    public void encode(CLValueEncoder clve, boolean encodeType) throws IOException, NoSuchTypeException, CLValueEncodeException {
         setChildTypes();
 
-        getValue().getValue0().encode(clve);
-        getValue().getValue1().encode(clve);
-        getValue().getValue2().encode(clve);
+        getValue().getValue0().encode(clve, false);
+        getValue().getValue1().encode(clve, false);
+        getValue().getValue2().encode(clve, false);
 
         setBytes(getValue().getValue0().getBytes() + getValue().getValue1().getBytes()
                 + getValue().getValue2().getBytes());
+        if (encodeType) {
+            this.encodeType(clve);
+        }
     }
 
     @Override

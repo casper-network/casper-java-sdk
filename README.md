@@ -142,6 +142,13 @@ EraInfoData eraInfoData = casperService.getEraInfoBySwitchBlock(new HashBlockIde
 ```
 
 ### 11. Deploy
-Sends a deploy to be received by the network
+#### [Transfering CSPR ](https://github.com/syntifi/casper-sdk/blob/347e8a8a3538f18a064dc4e224b3d1816b6e8f90/src/test/java/com/syntifi/casper/sdk/service/CasperDeployServiceTests.java#L73-L77)
 
-TODO
+```Java
+Deploy deploy = CasperDeployService.buildTransferDeploy(from, to,
+    BigInteger.valueOf(2500000000L), "casper-test",
+    id, BigInteger.valueOf(100000000L), 1L, ttl, new Date(),
+    new ArrayList<>());
+
+DeployResult deployResult =  casperServiceTestnet.putDeploy(deploy);
+```

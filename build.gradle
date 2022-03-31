@@ -14,17 +14,20 @@ version = '0.2.0-SNAPSHOT'
 sourceCompatibility = '8'
 
 repositories {
-    mavenCentral()
+	mavenCentral()
+    maven { url 'https://s01.oss.sonatype.org/content/repositories/snapshots' }
 }
 
 dependencies {
     implementation "com.github.briandilley.jsonrpc4j:jsonrpc4j:${jsonrpc4jVersion}"
-
+    implementation "com.syntifi.crypto:crypto-key-common:${cryptokeyVersion}"
+    implementation "com.syntifi.crypto:crypto-key-ed25519:${cryptokeyVersion}"
+    implementation "com.syntifi.crypto:crypto-key-secp256k1:${cryptokeyVersion}"
     implementation "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
     implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
     implementation "com.fasterxml.jackson.core:jackson-annotations:${jacksonVersion}"
-
     implementation "org.javatuples:javatuples:${javaTuplesVersion}"
+    implementation "joda-time:joda-time:${jodaTimeVersion}"
 
     // log4j and slf4j
     compileOnly "org.slf4j:slf4j-api:${slf4jApiVersion}"
@@ -59,7 +62,7 @@ test {
         events TestLogEvent.FAILED,
                TestLogEvent.PASSED,
                TestLogEvent.SKIPPED
-        //TestLogEvent.STANDARD_OUT
+               //TestLogEvent.STANDARD_OUT
         exceptionFormat TestExceptionFormat.FULL
         showExceptions true
         showCauses true
@@ -120,7 +123,7 @@ publishing {
             }
         }
     }
-  
+
     publications {
         mavenJava(MavenPublication) {
             artifactId = 'casper-sdk'

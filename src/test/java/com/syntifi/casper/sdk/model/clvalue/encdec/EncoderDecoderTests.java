@@ -6,13 +6,11 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import com.syntifi.casper.sdk.exception.CLValueDecodeException;
 import com.syntifi.casper.sdk.exception.CLValueEncodeException;
-import com.syntifi.casper.sdk.exception.NoSuchTypeException;
 import com.syntifi.casper.sdk.model.clvalue.CLValueBool;
 import com.syntifi.casper.sdk.model.clvalue.CLValueByteArray;
 import com.syntifi.casper.sdk.model.clvalue.CLValueI32;
@@ -34,7 +32,7 @@ import lombok.Getter;
 
 /**
  * Unit tests for {@link CLValueEncoder} and {@link CLValueDecoder}
- * 
+ *
  * @author Alexandre Carvalho
  * @author Andre Bertolace
  * @since 0.0.1
@@ -46,16 +44,16 @@ public class EncoderDecoderTests {
     /**
      * A container for test data to test CLValue Encoder/Decoder
      */
-    private class TestData<T> {
+    private static class TestData<T> {
         @Getter
-        private String name;
+        private final String name;
         @Getter
-        private T value;
+        private final T value;
         @Getter
-        private String hexEncodedValue;
+        private final String hexEncodedValue;
 
         @Getter
-        private Class<?>[] supportTypes;
+        private final Class<?>[] supportTypes;
 
         TestData(String name, T value, String hexEncodedValue, Class<?>[] supportTypes) {
             this.name = name;
@@ -65,37 +63,34 @@ public class EncoderDecoderTests {
         }
     }
 
-    private List<TestData<? extends Object>> successTestDataList = Stream.of(
-            new TestData<Boolean>(AbstractCLType.BOOL, true, "01", null),
-            new TestData<Byte>(AbstractCLType.U8, Byte.valueOf("7"), "07", null),
-            new TestData<Long>(AbstractCLType.U32, Long.valueOf(7), "07000000", null),
-            new TestData<Integer>(AbstractCLType.I32, Integer.valueOf(7), "07000000", null),
-            new TestData<Long>(AbstractCLType.I64, Long.valueOf(7), "0700000000000000", null),
-            new TestData<BigInteger>(AbstractCLType.U64, new BigInteger("1024", 10), "0004000000000000", null),
-            new TestData<BigInteger>(AbstractCLType.U64, new BigInteger("18446744073709551615", 10), "ffffffffffffffff",
+    private final List<TestData<?>> successTestDataList = Arrays.asList(
+            new TestData<>(AbstractCLType.BOOL, true, "01", null),
+            new TestData<>(AbstractCLType.U8, Byte.valueOf("7"), "07", null),
+            new TestData<>(AbstractCLType.U32, 7L, "07000000", null),
+            new TestData<>(AbstractCLType.I32, 7, "07000000", null),
+            new TestData<>(AbstractCLType.I64, 7L, "0700000000000000", null),
+            new TestData<>(AbstractCLType.U64, new BigInteger("1024", 10), "0004000000000000", null),
+            new TestData<>(AbstractCLType.U64, new BigInteger("18446744073709551615", 10), "ffffffffffffffff",
                     null),
-            new TestData<BigInteger>(AbstractCLType.U512, new BigInteger("7", 10), "0107", null),
-            new TestData<BigInteger>(AbstractCLType.U512, new BigInteger("1024", 10), "020004", null),
-            new TestData<BigInteger>(AbstractCLType.U512, new BigInteger("123456789101112131415", 10),
+            new TestData<>(AbstractCLType.U512, new BigInteger("7", 10), "0107", null),
+            new TestData<>(AbstractCLType.U512, new BigInteger("1024", 10), "020004", null),
+            new TestData<>(AbstractCLType.U512, new BigInteger("123456789101112131415", 10),
                     "0957ff1ada959f4eb106", null),
-            new TestData<BigInteger>(AbstractCLType.U512, new BigInteger("2500010000", 10), "0410200395", null),
-            new TestData<String>(AbstractCLType.STRING, "the string", "0a00000074686520737472696e67", null),
-            new TestData<String>(AbstractCLType.STRING, "Hello, World!", "0d00000048656c6c6f2c20576f726c6421", null))
-            .collect(Collectors.toList());
+            new TestData<>(AbstractCLType.U512, new BigInteger("2500010000", 10), "0410200395", null),
+            new TestData<>(AbstractCLType.STRING, "the string", "0a00000074686520737472696e67", null),
+            new TestData<>(AbstractCLType.STRING, "Hello, World!", "0d00000048656c6c6f2c20576f726c6421", null));
 
-    private List<TestData<? extends Object>> lastValidNumberTestDataList = Stream.of(
-            new TestData<BigInteger>(AbstractCLType.U64, CLValueEncoder.MAX_U64, null, null),
-            new TestData<BigInteger>(AbstractCLType.U128, CLValueEncoder.MAX_U128, null, null),
-            new TestData<BigInteger>(AbstractCLType.U256, CLValueEncoder.MAX_U256, null, null),
-            new TestData<BigInteger>(AbstractCLType.U512, CLValueEncoder.MAX_U512, null, null))
-            .collect(Collectors.toList());
+    private final List<TestData<?>> lastValidNumberTestDataList = Arrays.asList(
+            new TestData<>(AbstractCLType.U64, CLValueEncoder.MAX_U64, null, null),
+            new TestData<>(AbstractCLType.U128, CLValueEncoder.MAX_U128, null, null),
+            new TestData<>(AbstractCLType.U256, CLValueEncoder.MAX_U256, null, null),
+            new TestData<>(AbstractCLType.U512, CLValueEncoder.MAX_U512, null, null));
 
-    private List<TestData<? extends Object>> outOfBoundsTestDataList = Stream.of(
-            new TestData<BigInteger>(AbstractCLType.U64, CLValueEncoder.MAX_U64.add(CLValueEncoder.ONE), null, null),
-            new TestData<BigInteger>(AbstractCLType.U128, CLValueEncoder.MAX_U128.add(CLValueEncoder.ONE), null, null),
-            new TestData<BigInteger>(AbstractCLType.U256, CLValueEncoder.MAX_U256.add(CLValueEncoder.ONE), null, null),
-            new TestData<BigInteger>(AbstractCLType.U512, CLValueEncoder.MAX_U512.add(CLValueEncoder.ONE), null, null))
-            .collect(Collectors.toList());
+    private final List<TestData<?>> outOfBoundsTestDataList = Arrays.asList(
+            new TestData<>(AbstractCLType.U64, CLValueEncoder.MAX_U64.add(CLValueEncoder.ONE), null, null),
+            new TestData<>(AbstractCLType.U128, CLValueEncoder.MAX_U128.add(CLValueEncoder.ONE), null, null),
+            new TestData<>(AbstractCLType.U256, CLValueEncoder.MAX_U256.add(CLValueEncoder.ONE), null, null),
+            new TestData<>(AbstractCLType.U512, CLValueEncoder.MAX_U512.add(CLValueEncoder.ONE), null, null));
 
     @Test
     void validateDecode_with_SampleData() throws IOException, CLValueDecodeException {
@@ -168,7 +163,7 @@ public class EncoderDecoderTests {
     }
 
     @Test
-    void validateEncode_with_SampleData() throws IOException, CLValueEncodeException, NoSuchTypeException {
+    void validateEncode_with_SampleData() throws IOException, CLValueEncodeException {
         for (TestData<?> testData : successTestDataList) {
             try (CLValueEncoder encoder = new CLValueEncoder()) {
                 switch (testData.getName()) {
@@ -228,7 +223,7 @@ public class EncoderDecoderTests {
     }
 
     @Test
-    void numbersShouldBeInsideTheirTypeBounds() throws IOException, CLValueEncodeException, NoSuchTypeException {
+    void numbersShouldBeInsideTheirTypeBounds() throws IOException, CLValueEncodeException {
         for (TestData<?> testData : lastValidNumberTestDataList) {
             try (CLValueEncoder encoder = new CLValueEncoder()) {
                 switch (testData.getName()) {
@@ -267,7 +262,7 @@ public class EncoderDecoderTests {
 
     @Test
     void dataOutOfBounds_should_throw_CLValueEncodeException()
-            throws IOException, CLValueEncodeException, NoSuchTypeException {
+            throws IOException {
         for (TestData<?> testData : outOfBoundsTestDataList) {
             try (CLValueEncoder encoder = new CLValueEncoder()) {
                 switch (testData.getName()) {
@@ -303,7 +298,7 @@ public class EncoderDecoderTests {
 
     @Test
     void dataWithWrongInputLength_should_throw_CLValueDecodeException()
-            throws IOException, CLValueDecodeException, NoSuchTypeException {
+            throws IOException, CLValueDecodeException {
         try (CLValueDecoder decoder = new CLValueDecoder("")) {
             assertThrows(CLValueDecodeException.class, () -> decoder.readBool(new CLValueBool()));
             assertThrows(CLValueDecodeException.class, () -> decoder.readU32(new CLValueU32()));

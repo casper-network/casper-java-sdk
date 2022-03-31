@@ -2,9 +2,10 @@ package com.syntifi.casper.sdk.identifier.dictionary;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.syntifi.casper.sdk.service.CasperService;
-
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Identifier class passed to service
@@ -15,7 +16,9 @@ import lombok.Data;
  * @author Andre Bertolace
  * @since 0.0.1
  */
-@Data
+@Getter
+@Setter
+@Builder
 @AllArgsConstructor
 public class URefDictionaryIdentifier implements DictionaryIdentifier {
     @JsonProperty("URef")

@@ -1,12 +1,5 @@
 package com.syntifi.casper.sdk.model.clvalue.encdec;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.math.BigInteger;
-import java.security.NoSuchAlgorithmException;
-
 import com.syntifi.casper.sdk.exception.BufferEndCLValueDecodeException;
 import com.syntifi.casper.sdk.exception.CLValueDecodeException;
 import com.syntifi.casper.sdk.exception.InvalidByteStringException;
@@ -29,13 +22,19 @@ import com.syntifi.casper.sdk.model.clvalue.CLValueU8;
 import com.syntifi.casper.sdk.model.clvalue.cltype.CLTypeData;
 import com.syntifi.casper.sdk.model.key.Key;
 import com.syntifi.casper.sdk.model.key.PublicKey;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.math.BigInteger;
+import java.security.NoSuchAlgorithmException;
+
 /**
  * Casper CLValue Decoding methods
- * 
+ *
  * @author Alexandre Carvalho
  * @author Andre Bertolace
  * @see AbstractCLValue
@@ -50,12 +49,12 @@ public class CLValueDecoder extends ByteArrayInputStream {
     private static final String LOG_DECODED_VALUE_MESSAGE_STRING = "Decoded value for {}: {}";
     private static final String DECODE_EXCEPTION_BUFFER_END_EMPTY_MESSAGE_STRING = "Buffer empty, could not read data";
     private static final String DECODE_EXCEPTION_BUFFER_END_MESSAGE_STRING = "Buffer ended, could not read more data";
-    private static final String DECODE_EXCEPTION_WRONG_LENGHT_MESSAGE_STRING = "Could not read %s (Expected length: %d, Actual length: %d)";
+    private static final String DECODE_EXCEPTION_WRONG_LENGTH_MESSAGE_STRING = "Could not read %s (Expected length: %d, Actual length: %d)";
     private static final String DECODE_EXCEPTION_OUT_OF_BOUNDS_MESSAGE_STRING = "Value %s out of bounds for expected type %s";
 
     /**
      * Initializes buffer with decoded bytes from hex-encoded {@link String}
-     * 
+     *
      * @param hexString hex-encoded {@link String} of a CLValue
      * @throws InvalidByteStringException if the byte string is invalid or can't be parsed
      */
@@ -68,16 +67,16 @@ public class CLValueDecoder extends ByteArrayInputStream {
     /**
      * Boolean values serialize as a single byte; true maps to 1, while false maps
      * to 0.
-     * 
+     *
      * @param clValue target {@link CLValueBool}
-     * @throws IOException error with input/output while reading the byte array
+     * @throws IOException            error with input/output while reading the byte array
      * @throws CLValueDecodeException exception holding information of failure to decode a {@link AbstractCLValue}
      */
     public void readBool(CLValueBool clValue) throws IOException, CLValueDecodeException {
         int length = 1;
         byte[] buf = new byte[length];
 
-        int readBytes = 0;
+        int readBytes;
         if ((readBytes = this.read(buf)) != length) {
             throwReadBytesError(Boolean.class.getSimpleName(), length, readBytes);
         }
@@ -96,14 +95,14 @@ public class CLValueDecoder extends ByteArrayInputStream {
     }
 
     /**
-     * Numeric values consisting of 64 bits or less serialize in the two’s
+     * Numeric values consisting of 64 bits or fewer serialize in the two’s
      * complement representation with little-endian byte order, and the appropriate
      * number of bytes for the bit-width.
-     * 
+     * <p>
      * E.g. 7u8 serializes as 0x07
-     * 
+     *
      * @param clValue target {@link CLValueU8}
-     * @throws IOException error with input/output while reading the byte array
+     * @throws IOException            error with input/output while reading the byte array
      * @throws CLValueDecodeException exception holding information of failure to decode a {@link AbstractCLValue}
      */
     public void readU8(CLValueU8 clValue) throws IOException, CLValueDecodeException {
@@ -111,17 +110,17 @@ public class CLValueDecoder extends ByteArrayInputStream {
 
         LOGGER.debug(LOG_DECODED_VALUE_MESSAGE_STRING, Byte.class.getSimpleName(), u8);
 
-        clValue.setBytes(StringByteHelper.convertBytesToHex(new byte[] { u8 }));
+        clValue.setBytes(StringByteHelper.convertBytesToHex(new byte[]{u8}));
         clValue.setValue(u8);
     }
 
     /**
-     * Reads a byteArrayy into a clvalue
-     * 
+     * Reads a byteArray into a clvalue
+     *
      * @param clValue target {@link CLValueByteArray}
-     * @param length the length of the array
+     * @param length  the length of the array
      * @throws CLValueDecodeException exception holding information of failure to decode a {@link AbstractCLValue}
-     * @throws IOException error with input/output while reading the byte array
+     * @throws IOException            error with input/output while reading the byte array
      */
     public void readByteArray(CLValueByteArray clValue, int length) throws CLValueDecodeException, IOException {
         byte[] bytes = readBytes(length);
@@ -133,21 +132,21 @@ public class CLValueDecoder extends ByteArrayInputStream {
     }
 
     /**
-     * Numeric values consisting of 64 bits or less serialize in the two’s
+     * Numeric values consisting of 64 bits or fewer serialize in the two’s
      * complement representation with little-endian byte order, and the appropriate
      * number of bytes for the bit-width.
-     * 
+     * <p>
      * E.g. 7u32 serializes as 0x07000000 E.g. 1024u32 serializes as 0x00040000
-     * 
+     *
      * @param clValue target {@link CLValueI32}
-     * @throws IOException error with input/output while reading the byte array
+     * @throws IOException            error with input/output while reading the byte array
      * @throws CLValueDecodeException exception holding information of failure to decode a {@link AbstractCLValue}
      */
     public void readI32(CLValueI32 clValue) throws IOException, CLValueDecodeException {
         int length = 4;
         byte[] buf = new byte[length];
 
-        int readBytes = 0;
+        int readBytes;
         if ((readBytes = this.read(buf)) != length) {
             throwReadBytesError(Integer.class.getSimpleName(), length, readBytes);
         }
@@ -168,16 +167,16 @@ public class CLValueDecoder extends ByteArrayInputStream {
     /**
      * Reads a {@link Long} value from buffer, representing an Unsigned
      * {@link Integer} (U32)
-     * 
+     *
      * @param clValue target {@link CLValueU32}
-     * @throws IOException error with input/output while reading the byte array
+     * @throws IOException            error with input/output while reading the byte array
      * @throws CLValueDecodeException exception holding information of failure to decode a {@link AbstractCLValue}
      */
     public void readU32(CLValueU32 clValue) throws IOException, CLValueDecodeException {
         int length = 4;
         byte[] buf = new byte[length];
 
-        int readBytes = 0;
+        int readBytes;
         if ((readBytes = this.read(buf)) != length) {
             throwReadBytesError(Long.class.getSimpleName(), length, readBytes);
         }
@@ -198,22 +197,22 @@ public class CLValueDecoder extends ByteArrayInputStream {
     }
 
     /**
-     * Numeric values consisting of 64 bits or less serialize in the two’s
+     * Numeric values consisting of 64 bits or fewer serialize in the two’s
      * complement representation with little-endian byte order, and the appropriate
      * number of bytes for the bit-width.
-     * 
+     * <p>
      * E.g. 7u8 serializes as 0x07 E.g. 7u32 serializes as 0x07000000 E.g. 1024u32
      * serializes as 0x00040000
-     * 
+     *
      * @param clValue target {@link CLValueI64}
-     * @throws IOException error with input/output while reading the byte array
+     * @throws IOException            error with input/output while reading the byte array
      * @throws CLValueDecodeException exception holding information of failure to decode a {@link AbstractCLValue}
      */
     public void readI64(CLValueI64 clValue) throws IOException, CLValueDecodeException {
         int length = 8;
         byte[] buf = new byte[length];
 
-        int readBytes = 0;
+        int readBytes;
         if ((readBytes = this.read(buf)) != length) {
             throwReadBytesError(Long.class.getSimpleName(), length, readBytes);
         }
@@ -235,16 +234,16 @@ public class CLValueDecoder extends ByteArrayInputStream {
     /**
      * Reads a {@link BigInteger} value from buffer, representing an Unsigned
      * {@link Long} (U32)
-     * 
+     *
      * @param clValue target {@link CLValueU64}
-     * @throws IOException error with input/output while reading the byte array
+     * @throws IOException            error with input/output while reading the byte array
      * @throws CLValueDecodeException exception holding information of failure to decode a {@link AbstractCLValue}
      */
     public void readU64(CLValueU64 clValue) throws IOException, CLValueDecodeException {
         int length = 8;
         byte[] buf = new byte[length];
 
-        int readBytes = 0;
+        int readBytes;
         if ((readBytes = this.read(buf)) != length) {
             throwReadBytesError(BigInteger.class.getSimpleName(), length, readBytes);
         }
@@ -272,9 +271,9 @@ public class CLValueDecoder extends ByteArrayInputStream {
 
     /**
      * Reads U128 from buffer
-     * 
+     *
      * @param clValue target {@link CLValueU128}
-     * @throws IOException error with input/output while reading the byte array
+     * @throws IOException            error with input/output while reading the byte array
      * @throws CLValueDecodeException exception holding information of failure to decode a {@link AbstractCLValue}
      */
     public void readU128(CLValueU128 clValue) throws IOException, CLValueDecodeException {
@@ -283,9 +282,9 @@ public class CLValueDecoder extends ByteArrayInputStream {
 
     /**
      * Reads U256 from buffer
-     * 
+     *
      * @param clValue target {@link CLValueU256}
-     * @throws IOException error with input/output while reading the byte array
+     * @throws IOException            error with input/output while reading the byte array
      * @throws CLValueDecodeException exception holding information of failure to decode a {@link AbstractCLValue}
      */
     public void readU256(CLValueU256 clValue) throws IOException, CLValueDecodeException {
@@ -294,9 +293,9 @@ public class CLValueDecoder extends ByteArrayInputStream {
 
     /**
      * Reads U512 from buffer
-     * 
+     *
      * @param clValue target {@link CLValueU512}
-     * @throws IOException error with input/output while reading the byte array
+     * @throws IOException            error with input/output while reading the byte array
      * @throws CLValueDecodeException exception holding information of failure to decode a {@link AbstractCLValue}
      */
     public void readU512(CLValueU512 clValue) throws IOException, CLValueDecodeException {
@@ -310,21 +309,21 @@ public class CLValueDecoder extends ByteArrayInputStream {
      * chosen as small as possible to represent the given number. This is done to
      * reduce the serialization size when small numbers are represented within a
      * wide data type.
-     * 
+     * <p>
      * E.g. U512::from(7) serializes as 0x0107 E.g. U512::from(1024) serializes as
      * 0x020004 E.g. U512::from("123456789101112131415") serializes as
      * 0x0957ff1ada959f4eb106
-     * 
+     *
      * @param clValue target {@link AbstractCLValue}
-     * @throws IOException error with input/output while reading the byte array
+     * @throws IOException            error with input/output while reading the byte array
      * @throws CLValueDecodeException exception holding information of failure to decode a {@link AbstractCLValue}
      */
     protected void readBigInteger(AbstractCLValue<BigInteger, ?> clValue) throws IOException, CLValueDecodeException {
         byte[] buf = new byte[1];
 
-        int readBytes = 0;
+        int readBytes;
         if ((readBytes = this.read(buf)) != 1) {
-            throw new CLValueDecodeException(String.format(DECODE_EXCEPTION_WRONG_LENGHT_MESSAGE_STRING,
+            throw new CLValueDecodeException(String.format(DECODE_EXCEPTION_WRONG_LENGTH_MESSAGE_STRING,
                     Byte.class.getSimpleName(), 1, readBytes));
         }
 
@@ -338,7 +337,7 @@ public class CLValueDecoder extends ByteArrayInputStream {
             throwReadBytesError(BigInteger.class.getSimpleName(), lengthOfNextNumber, readBytes);
         }
 
-        clValue.setBytes(StringByteHelper.convertBytesToHex(new byte[] { lengthOfNextNumber })
+        clValue.setBytes(StringByteHelper.convertBytesToHex(new byte[]{lengthOfNextNumber})
                 + StringByteHelper.convertBytesToHex(buf));
 
         StringByteHelper.reverse(buf);
@@ -354,16 +353,16 @@ public class CLValueDecoder extends ByteArrayInputStream {
 
     /**
      * Reads a {@link CLValueString} value from buffer
-     * 
+     *
      * @param clValue target {@link CLValueString}
-     * @throws IOException error with input/output while reading the byte array
+     * @throws IOException            error with input/output while reading the byte array
      * @throws CLValueDecodeException exception holding information of failure to decode a {@link AbstractCLValue}
      */
     public void readString(CLValueString clValue) throws IOException, CLValueDecodeException {
         int numberByteLength = 4;
         byte[] bufLength = new byte[numberByteLength];
 
-        int readBytes = 0;
+        int readBytes;
         if ((readBytes = this.read(bufLength)) != numberByteLength) {
             throwReadBytesError(Integer.class.getSimpleName(), numberByteLength, readBytes);
         }
@@ -395,11 +394,11 @@ public class CLValueDecoder extends ByteArrayInputStream {
 
     /**
      * Reads a {@link CLValuePublicKey} value from buffer
-     * 
+     *
      * @param clValue target {@link CLValuePublicKey}
      * @throws NoSuchAlgorithmException the requested algorithm was not found
-     * @throws CLValueDecodeException exception holding information of failure to decode a {@link AbstractCLValue}
-     * @throws IOException error with input/output while reading the byte array
+     * @throws CLValueDecodeException   exception holding information of failure to decode a {@link AbstractCLValue}
+     * @throws IOException              error with input/output while reading the byte array
      */
     public void readPublicKey(CLValuePublicKey clValue) throws NoSuchAlgorithmException, CLValueDecodeException, IOException {
         byte[] key = this.readBytes(buf.length);
@@ -409,11 +408,11 @@ public class CLValueDecoder extends ByteArrayInputStream {
 
     /**
      * Reads a {@link CLValueKey} value from buffer
-     * 
+     *
      * @param clValue target {@link CLValueKey}
-     * @throws NoSuchKeyTagException the requested key tag was not found
+     * @throws NoSuchKeyTagException  the requested key tag was not found
      * @throws CLValueDecodeException exception holding information of failure to decode a {@link AbstractCLValue}
-     * @throws IOException error with input/output while reading the byte array
+     * @throws IOException            error with input/output while reading the byte array
      */
     public void readKey(CLValueKey clValue) throws NoSuchKeyTagException, CLValueDecodeException, IOException {
         byte[] key = this.readBytes(buf.length);
@@ -423,9 +422,9 @@ public class CLValueDecoder extends ByteArrayInputStream {
 
     /**
      * Reads all bytes as a generic {@link Object} into a {@link CLValueAny}
-     * 
+     *
      * @param clValue target {@link CLValueAny}
-     * @throws IOException error with input/output while reading the byte array
+     * @throws IOException            error with input/output while reading the byte array
      * @throws CLValueDecodeException exception holding information of failure to decode a {@link AbstractCLValue}
      */
     public void readAny(CLValueAny clValue) throws IOException, CLValueDecodeException {
@@ -439,10 +438,10 @@ public class CLValueDecoder extends ByteArrayInputStream {
 
     /**
      * Reads a single byte
-     * 
+     *
      * @return the byte read
      * @throws CLValueDecodeException exception holding information of failure to decode a {@link AbstractCLValue}
-     * @throws IOException error with input/output while reading the byte array
+     * @throws IOException            error with input/output while reading the byte array
      */
     protected byte readByte() throws CLValueDecodeException, IOException {
         return this.readBytes(1)[0];
@@ -450,16 +449,16 @@ public class CLValueDecoder extends ByteArrayInputStream {
 
     /**
      * Reads a specified number of bytes
-     * 
+     *
      * @param length the number of bytes to read
      * @return bytes read
      * @throws CLValueDecodeException exception holding information of failure to decode a {@link AbstractCLValue}
-     * @throws IOException error with input/output while reading the byte array
+     * @throws IOException            error with input/output while reading the byte array
      */
     protected byte[] readBytes(int length) throws CLValueDecodeException, IOException {
         byte[] buf = new byte[length];
 
-        int readBytes = 0;
+        int readBytes;
         if ((readBytes = this.read(buf)) != length) {
             throwReadBytesError(Byte.class.getSimpleName(), length, readBytes);
         }
@@ -470,19 +469,18 @@ public class CLValueDecoder extends ByteArrayInputStream {
     }
 
     /**
-     * 
-     * @param simpleName the object's simple name
-     * @param expectedLength the expected length
+     * @param simpleName      the object's simple name
+     * @param expectedLength  the expected length
      * @param readBytesLength the actual read bytes length
      * @throws CLValueDecodeException exception holding information of failure to decode a {@link AbstractCLValue}
      */
     private void throwReadBytesError(String simpleName, int expectedLength, int readBytesLength) throws CLValueDecodeException {
         if (this.buf.length == 0) {
             throw new BufferEndCLValueDecodeException(DECODE_EXCEPTION_BUFFER_END_EMPTY_MESSAGE_STRING);
-        } else if (this.buf.length > 0 && readBytesLength == -1) {
+        } else if (readBytesLength == -1) {
             throw new BufferEndCLValueDecodeException(DECODE_EXCEPTION_BUFFER_END_MESSAGE_STRING);
         } else {
-            throw new CLValueDecodeException(String.format(DECODE_EXCEPTION_WRONG_LENGHT_MESSAGE_STRING, simpleName,
+            throw new CLValueDecodeException(String.format(DECODE_EXCEPTION_WRONG_LENGTH_MESSAGE_STRING, simpleName,
                     expectedLength, readBytesLength));
         }
     }

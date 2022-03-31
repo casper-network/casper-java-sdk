@@ -2,20 +2,27 @@ package com.syntifi.casper.sdk.model.deploy;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.syntifi.casper.sdk.model.deploy.executionresult.ExecutionResult;
-
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * The execution result of a single deploy.
- * 
+ *
  * @author Alexandre Carvalho
  * @author Andre Bertolace
  * @since 0.0.1
  */
-@Data
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class JsonExecutionResult {
-    
-     /**
+
+    /**
      * The block hash.
      */
     @JsonProperty("block_hash")
@@ -26,4 +33,3 @@ public class JsonExecutionResult {
      */
     private ExecutionResult result;
 }
-

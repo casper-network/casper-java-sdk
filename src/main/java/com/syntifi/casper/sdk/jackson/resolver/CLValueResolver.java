@@ -1,7 +1,5 @@
 package com.syntifi.casper.sdk.jackson.resolver;
 
-import java.util.Collection;
-
 import com.fasterxml.jackson.databind.DeserializationConfig;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.jsontype.NamedType;
@@ -10,14 +8,16 @@ import com.fasterxml.jackson.databind.jsontype.impl.StdTypeResolverBuilder;
 import com.syntifi.casper.sdk.jackson.deserializer.CLValueDeserializer;
 import com.syntifi.casper.sdk.model.clvalue.AbstractCLValue;
 
+import java.util.Collection;
+
 /**
  * Specification of the Custom Type Resolver for CLValue subtype identification. This
  * is used by jackson with the @JsonTypeResolver decorator
- * 
+ *
  * @author Alexandre Carvalho
  * @author Andre Bertolace
- * @since 0.0.1
  * @see AbstractCLValue
+ * @since 0.0.1
  */
 public class CLValueResolver extends StdTypeResolverBuilder {
     @Override

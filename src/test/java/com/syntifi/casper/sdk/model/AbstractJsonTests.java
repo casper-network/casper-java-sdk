@@ -23,23 +23,26 @@ public abstract class AbstractJsonTests {
     /**
      * Loads test json from resources
      * 
-     * @param filename
-     * @return
-     * @throws IOException
+     * @param filename the file to load
+     * @return the file content as String
+     * @throws IOException thrown if error reading/accessing file
      */
     protected String loadJsonFromFile(String filename) throws IOException {
         String fileJson;
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-        try (InputStream is = getClass().getClassLoader().getResourceAsStream(filename)) {            
-            //copy stream
-            byte[] buffer = new byte[1024];
-            int bytesRead;
-            while ((bytesRead = is.read(buffer)) != -1) {
-                baos.write(buffer, 0, bytesRead);
+        final int bufLen = 4 * 0x400; // 4KB
+        byte[] buf = new byte[bufLen];
+        int readLen;
+        try (InputStream is = getClass().getClassLoader().getResourceAsStream(filename)) {
+            try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+                while (true) {
+                    assert is != null;
+                    if ((readLen = is.read(buf, 0, bufLen)) == -1) break;
+                    outputStream.write(buf, 0, readLen);
+                }
+
+                fileJson = outputStream.toString();
             }
-            
-            fileJson = new String(baos.toByteArray());
         }
         return fileJson;
     }
@@ -49,8 +52,8 @@ public abstract class AbstractJsonTests {
      * 
      * @param json json string to prettify
      * @return prettified json
-     * @throws JsonMappingException
-     * @throws JsonProcessingException
+     * @throws JsonMappingException thrown if a mapping error occurs
+     * @throws JsonProcessingException thrown if a json procesing error
      */
     protected String getPrettyJson(String json) throws JsonMappingException, JsonProcessingException {
         Object jsonObject = OBJECT_MAPPER.readValue(json, Object.class);
@@ -62,8 +65,8 @@ public abstract class AbstractJsonTests {
      * 
      * @param jsonObject object to serialize and prettify
      * @return prettified json
-     * @throws JsonMappingException
-     * @throws JsonProcessingException
+     * @throws JsonMappingException thrown if a mapping error occurs
+     * @throws JsonProcessingException thrown if a json procesing error
      */
     protected String getPrettyJson(Object jsonObject) throws JsonMappingException, JsonProcessingException {
         return OBJECT_MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(jsonObject);

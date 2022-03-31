@@ -3,27 +3,31 @@ package com.syntifi.casper.sdk.model.deploy.transform;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.syntifi.casper.sdk.model.bid.Bid;
-
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
- * An implmentation of Transform that Writes the given Bid to global state.
- * @see Transform
- * 
+ * An implementation of Transform that Writes the given Bid to global state.
+ *
  * @author Alexandre Carvalho
  * @author Andre Bertolace
+ * @see Transform
  * @since 0.0.1
  */
-@Data
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @JsonTypeName("WriteBid")
 public class WriteBid implements Transform {
-   
+
     /**
-     * @see Bid 
+     * @see Bid
      */
     @JsonProperty("WriteBid")
     private Bid bid;
 }
-
-
-

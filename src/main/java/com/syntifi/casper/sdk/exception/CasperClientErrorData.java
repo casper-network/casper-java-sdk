@@ -1,15 +1,19 @@
 package com.syntifi.casper.sdk.exception;
 
-import lombok.Data;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Json RPC service error data
- * 
+ *
  * @author Alexandre Carvalho
  * @author Andre Bertolace
  * @since 0.0.1
  */
-@Data
+@Getter
+@Setter
+@Builder
 public class CasperClientErrorData {
     private int code;
     private String message;
