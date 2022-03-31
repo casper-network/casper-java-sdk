@@ -1,14 +1,13 @@
 package com.syntifi.casper.sdk.model.storedvalue;
 
 import com.syntifi.casper.sdk.exception.NoSuchTypeException;
-
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
  * Stored Value type data and class mapping
- * 
+ *
  * @author Alexandre Carvalho
  * @author Andre Bertolace
  * @see StoredValue
@@ -32,10 +31,10 @@ public enum StoredValueTypeData {
 
     /**
      * Retrieve Transform implementation class from Transform name
-     * 
-     * @param name
-     * @return
-     * @throws NoSuchTypeException
+     *
+     * @param name the name to use for fetching class
+     * @return the class object for given name
+     * @throws NoSuchTypeException thrown if class type not found
      */
     public static Class<?> getClassByName(String name) throws NoSuchTypeException {
         for (StoredValueTypeData t : values()) {

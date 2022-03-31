@@ -1,7 +1,5 @@
 package com.syntifi.casper.sdk.model.clvalue;
 
-import java.io.IOException;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.syntifi.casper.sdk.exception.CLValueDecodeException;
 import com.syntifi.casper.sdk.exception.CLValueEncodeException;
@@ -12,7 +10,6 @@ import com.syntifi.casper.sdk.model.clvalue.cltype.CLTypeData;
 import com.syntifi.casper.sdk.model.clvalue.cltype.CLTypeResult;
 import com.syntifi.casper.sdk.model.clvalue.encdec.CLValueDecoder;
 import com.syntifi.casper.sdk.model.clvalue.encdec.CLValueEncoder;
-
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -20,9 +17,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.IOException;
+
 /**
  * Casper Result CLValue implementation
- * 
+ *
  * @author Alexandre Carvalho
  * @author Andre Bertolace
  * @see AbstractCLValue
@@ -35,7 +34,7 @@ import lombok.Setter;
 public class CLValueResult extends AbstractCLValue<CLValueResult.Result, CLTypeResult> {
     /**
      * `Result` with `Ok` and `Err` variants of `CLType`s.
-     * 
+     *
      * @author Alexandre Carvalho
      * @author Andre Bertolace
      * @see CLTypeData
@@ -46,7 +45,7 @@ public class CLValueResult extends AbstractCLValue<CLValueResult.Result, CLTypeR
     @EqualsAndHashCode
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
-    protected class Result {
+    protected static class Result {
         private AbstractCLValue<?, ?> ok;
 
         private AbstractCLValue<?, ?> err;
@@ -56,7 +55,7 @@ public class CLValueResult extends AbstractCLValue<CLValueResult.Result, CLTypeR
     private CLTypeResult clType = new CLTypeResult();
 
     public CLValueResult(AbstractCLValue<?, ?> ok, AbstractCLValue<?, ?> err) {
-        this.setValue(this.new Result(ok, err));
+        this.setValue(new Result(ok, err));
         setChildTypes();
     }
 

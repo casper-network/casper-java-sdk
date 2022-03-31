@@ -6,7 +6,7 @@ import com.syntifi.casper.sdk.jackson.resolver.StoredValueResolver;
 
 /**
  * Stored Value interface and jackson resolver for subtypes
- * 
+ *
  * @author Alexandre Carvalho
  * @author Andre Bertolace
  * @since 0.0.1
@@ -14,5 +14,5 @@ import com.syntifi.casper.sdk.jackson.resolver.StoredValueResolver;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NONE)
 @JsonTypeResolver(StoredValueResolver.class)
 public interface StoredValue<T> {
-    public T getValue();
+    T getValue();
 }

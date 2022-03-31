@@ -6,7 +6,7 @@ import lombok.Setter;
 
 /**
  * Json RPC service error data
- * 
+ *
  * @author Alexandre Carvalho
  * @author Andre Bertolace
  * @since 0.0.1

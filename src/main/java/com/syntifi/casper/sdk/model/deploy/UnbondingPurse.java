@@ -1,22 +1,21 @@
 package com.syntifi.casper.sdk.model.deploy;
 
-import java.math.BigInteger;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.syntifi.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
 import com.syntifi.casper.sdk.model.key.PublicKey;
 import com.syntifi.casper.sdk.model.uref.URef;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigInteger;
+
 /**
  * Unbonding Purse
- * 
+ *
  * @author Alexandre Carvalho
  * @author Andre Bertolace
  * @since 0.0.1
@@ -58,12 +57,22 @@ public class UnbondingPurse {
     @JsonProperty("validator_public_key")
     private PublicKey validatorPublicKey;
 
+    /**
+     * getter for unbondingAmount json serialization
+     *
+     * @return cost as expected for json serialization
+     */
     @JsonProperty("unbonding_amount")
     @ExcludeFromJacocoGeneratedReport
     protected String getJsonUnbondingAmount() {
         return this.unbondingAmount.toString(10);
     }
 
+    /**
+     * setter for unbondingAmount from json deserialized value
+     *
+     * @param value the deserialized value
+     */
     @JsonProperty("unbonding_amount")
     @ExcludeFromJacocoGeneratedReport
     protected void setJsonUnbondingAmount(String value) {

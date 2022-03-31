@@ -1,13 +1,7 @@
 package com.syntifi.casper.sdk.service;
 
-import java.io.IOException;
-import java.math.BigInteger;
-import java.security.GeneralSecurityException;
-import java.util.*;
-
 import com.syntifi.casper.sdk.exception.CLValueEncodeException;
 import com.syntifi.casper.sdk.exception.DynamicInstanceException;
-import com.syntifi.casper.sdk.exception.InvalidByteStringException;
 import com.syntifi.casper.sdk.exception.NoSuchTypeException;
 import com.syntifi.casper.sdk.model.clvalue.CLValueOption;
 import com.syntifi.casper.sdk.model.clvalue.CLValuePublicKey;
@@ -28,10 +22,17 @@ import com.syntifi.casper.sdk.model.deploy.executabledeploy.Transfer;
 import com.syntifi.casper.sdk.model.key.PublicKey;
 import com.syntifi.casper.sdk.model.key.Signature;
 import com.syntifi.crypto.key.AbstractPrivateKey;
-
 import com.syntifi.crypto.key.hash.Blake2b;
-import org.bouncycastle.crypto.digests.Blake2bDigest;
-import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
+import java.math.BigInteger;
+import java.security.GeneralSecurityException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Random;
 
 /**
  * Deploy Service class implementing the process to generate deploys
@@ -50,17 +51,16 @@ public class CasperDeployService {
      * @param amount         amount to transfer
      * @param chainName      network name
      * @return Deploy
-     * @throws IOException
-     * @throws CLValueEncodeException
-     * @throws DynamicInstanceException
-     * @throws NoSuchTypeException
-     * @throws GeneralSecurityException
-     * @throws InvalidByteStringException
+     * @throws NoSuchTypeException      thrown if type not found
+     * @throws DynamicInstanceException thrown if it could not instantiate a type
+     * @throws CLValueEncodeException   thrown if failed to encode a cl value
+     * @throws IOException              thrown if an IO error occurs
+     * @throws GeneralSecurityException thrown when an error occurs with cryptographic keys
      */
     public static Deploy buildTransferDeploy(AbstractPrivateKey fromPrivateKey,
                                              PublicKey toPublicKey, BigInteger amount, String chainName)
             throws IOException, CLValueEncodeException, DynamicInstanceException, NoSuchTypeException,
-            GeneralSecurityException, InvalidByteStringException {
+            GeneralSecurityException {
         long id = Math.abs(new Random().nextInt());
         BigInteger paymentAmount = BigInteger.valueOf(25000000000L);
         long gasPrice = 1L;
@@ -84,18 +84,17 @@ public class CasperDeployService {
      * @param ttl            time to live in milliseconds (default value is 1800000
      *                       ms (30 minutes))
      * @return Deploy
-     * @throws NoSuchTypeException
-     * @throws DynamicInstanceException
-     * @throws CLValueEncodeException
-     * @throws IOException
-     * @throws GeneralSecurityException
-     * @throws InvalidByteStringException
+     * @throws NoSuchTypeException      thrown if type not found
+     * @throws DynamicInstanceException thrown if it could not instantiate a type
+     * @throws CLValueEncodeException   thrown if failed to encode a cl value
+     * @throws IOException              thrown if an IO error occurs
+     * @throws GeneralSecurityException thrown when an error occurs with cryptographic keys
      */
     public static Deploy buildTransferDeploy(AbstractPrivateKey fromPrivateKey, PublicKey toPublicKey,
                                              BigInteger amount, String chainName, Long id, BigInteger paymentAmount,
                                              Long gasPrice, Ttl ttl, Date date, List<Digest> dependencies)
             throws IOException, CLValueEncodeException, DynamicInstanceException, NoSuchTypeException,
-            GeneralSecurityException, InvalidByteStringException {
+            GeneralSecurityException {
 
         List<NamedArg<?>> transferArgs = new LinkedList<>();
         NamedArg<CLTypeU512> amountNamedArg = new NamedArg<>("amount",

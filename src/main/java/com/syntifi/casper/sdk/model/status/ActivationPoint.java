@@ -1,22 +1,21 @@
 package com.syntifi.casper.sdk.model.status;
 
-import java.math.BigInteger;
-import java.sql.Date;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.syntifi.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigInteger;
+import java.sql.Date;
+
 /**
  * The first era to which the associated protocol version applies
- * 
+ *
  * @author Alexandre Carvalho
  * @author Andre Bertolace
  * @since 0.0.1

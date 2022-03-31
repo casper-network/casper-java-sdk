@@ -48,7 +48,7 @@ public class JsonBid {
     private List<JsonDelegator> delegators;
 
     /**
-     * Is this an innactive validator
+     * Is this an inactive validator?
      */
     private boolean inactive;
 

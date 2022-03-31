@@ -8,7 +8,7 @@ import lombok.Setter;
 
 /**
  * An operation performed while executing a deploy.
- * 
+ *
  * @author Alexandre Carvalho
  * @author Andre Bertolace
  * @since 0.0.1

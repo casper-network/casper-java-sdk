@@ -1,8 +1,5 @@
 package com.syntifi.casper.sdk.model.contract;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -10,16 +7,18 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.syntifi.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
 import com.syntifi.casper.sdk.model.clvalue.cltype.AbstractCLType;
 import com.syntifi.casper.sdk.model.clvalue.cltype.AbstractCLTypeBasic;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * No description available
- * 
+ *
  * @author Alexandre Carvalho
  * @author Andre Bertolace
  * @since 0.0.1
@@ -32,7 +31,7 @@ import lombok.Setter;
 public class EntryPoint {
 
     public interface EntryPointAccess {
-        public Object getValue();
+        Object getValue();
     }
 
     public enum EntryPointAccessEnum implements EntryPointAccess {
@@ -46,10 +45,10 @@ public class EntryPoint {
     }
 
     @AllArgsConstructor
-    public class EntryPointAccessList implements EntryPointAccess {
+    public static class EntryPointAccessList implements EntryPointAccess {
 
         @Getter
-        private List<String> groups = new ArrayList<>();
+        private List<String> groups;
 
         @Override
         public List<String> getValue() {
@@ -63,7 +62,7 @@ public class EntryPoint {
     public enum EntryPointType {
         @JsonProperty("Session")
         SESSION, @JsonProperty("Contract")
-        CONTRACT;
+        CONTRACT
     }
 
     /**
@@ -98,8 +97,8 @@ public class EntryPoint {
 
     /**
      * Accessor for jackson serialization
-     * 
-     * @return String if access is enum, List<String> if list.
+     *
+     * @return String if access is enum, List<String> if is list.
      */
     @JsonGetter("access")
     private Object getJsonAccess() {
@@ -108,10 +107,11 @@ public class EntryPoint {
 
     /**
      * Accessor for jackson serialization
-     * 
-     * @param access
+     *
+     * @param access the access type of entry point
      */
     @JsonSetter("access")
+    @SuppressWarnings("unchecked")
     private void setJsonAccess(Object access) {
         if (access instanceof String) {
             this.access = EntryPointAccessEnum.PUBLIC;
@@ -122,8 +122,8 @@ public class EntryPoint {
 
     /**
      * Accessor for jackson serialization
-     * 
-     * @param clType
+     *
+     * @param clType the cltype for ret
      */
     @JsonSetter("ret")
     @ExcludeFromJacocoGeneratedReport
@@ -133,7 +133,7 @@ public class EntryPoint {
 
     /**
      * Accessor for jackson serialization
-     * 
+     *
      * @return String if cl_type is basic type, CLType object if not.
      */
     @JsonGetter("ret")

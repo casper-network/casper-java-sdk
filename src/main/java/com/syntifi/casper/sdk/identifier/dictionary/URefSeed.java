@@ -2,7 +2,6 @@ package com.syntifi.casper.sdk.identifier.dictionary;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.syntifi.casper.sdk.model.uref.URef;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

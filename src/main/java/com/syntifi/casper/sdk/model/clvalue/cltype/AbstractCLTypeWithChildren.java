@@ -1,28 +1,27 @@
 package com.syntifi.casper.sdk.model.clvalue.cltype;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.syntifi.casper.sdk.exception.NoSuchTypeException;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.syntifi.casper.sdk.exception.NoSuchTypeException;
-
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-
 /**
  * Base class for all types which have an array of child types
- * 
+ *
  * @author Alexandre Carvalho
  * @author Andre Bertolace
  * @since 0.0.1
  */
 @Setter
 @Getter
-@EqualsAndHashCode(callSuper = false, of = { "childTypes" })
+@EqualsAndHashCode(callSuper = false, of = {"childTypes"})
 public abstract class AbstractCLTypeWithChildren extends AbstractCLType {
 
     @JsonIgnore

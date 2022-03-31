@@ -1,18 +1,17 @@
 package com.syntifi.casper.sdk.model.bid;
 
-import java.math.BigInteger;
-import java.util.LinkedList;
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.syntifi.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.math.BigInteger;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Vesting schedule.
@@ -29,7 +28,7 @@ import lombok.Setter;
 public class VestingSchedule {
 
     /**
-     * release time in miliseconds
+     * release time in milliseconds
      */
     @JsonProperty("initial_release_timestamp_millis")
     private BigInteger initialReleaseTimeStampMillis;

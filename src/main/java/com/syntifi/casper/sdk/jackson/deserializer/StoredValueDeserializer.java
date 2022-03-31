@@ -14,16 +14,16 @@ import com.syntifi.casper.sdk.model.storedvalue.StoredValueTypeData;
  * Core Deserializer for the CLValue property. This deserializer is used by the
  * {@link CLValueResolver} to return the correct CLType object in Java depending
  * on the cl_type sent over json
- * 
+ *
  * @author Alexandre Carvalho
  * @author Andre Bertolace
- * @since 0.0.1
  * @see StoredValue
+ * @since 0.0.1
  */
 public class StoredValueDeserializer extends AbstractAnyOfDeserializer {
 
     public StoredValueDeserializer(final JavaType bt, final TypeIdResolver idRes, final String typePropertyName,
-            final boolean typeIdVisible, JavaType defaultImpl) {
+                                   final boolean typeIdVisible, JavaType defaultImpl) {
         super(bt, idRes, typePropertyName, typeIdVisible, defaultImpl);
     }
 

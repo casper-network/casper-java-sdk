@@ -4,16 +4,17 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.syntifi.casper.sdk.model.clvalue.AbstractCLValue;
 import com.syntifi.casper.sdk.model.clvalue.cltype.AbstractCLType;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Objects;
+
 /**
  * Stored Value for {@link AbstractCLType}
- * 
+ *
  * @author Alexandre Carvalho
  * @author Andre Bertolace
  * @see StoredValue
@@ -36,13 +37,11 @@ public class StoredValueCLValue implements StoredValue<AbstractCLValue<?, ?>> {
         if (!(o instanceof StoredValueCLValue))
             return false;
         final StoredValueCLValue other = (StoredValueCLValue) o;
-        if (!other.canEqual((Object) this))
+        if (!other.canEqual(this))
             return false;
         final Object this$value = this.getValue();
         final Object other$value = other.getValue();
-        if (this$value == null ? other$value != null : !this$value.equals(other$value))
-            return false;
-        return true;
+        return Objects.equals(this$value, other$value);
     }
 
     protected boolean canEqual(final Object other) {

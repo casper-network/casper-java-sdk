@@ -7,5 +7,5 @@ package com.syntifi.casper.sdk.identifier.dictionary;
  * @author Andre Bertolace
  * @since 0.0.1
  */
-public interface DictionaryIdentifier {    
+public interface DictionaryIdentifier {
 }

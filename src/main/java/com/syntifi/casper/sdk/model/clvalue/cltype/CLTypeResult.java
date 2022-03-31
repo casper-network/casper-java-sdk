@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.syntifi.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
-
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -14,19 +13,19 @@ import lombok.Setter;
 
 /**
  * CLType for {@link AbstractCLType#RESULT}
- * 
+ *
  * @author Alexandre Carvalho
  * @author Andre Bertolace
  * @see AbstractCLType
  * @since 0.0.1
  */
 @Getter
-@EqualsAndHashCode(callSuper = false, of = { "typeName", "okErrTypes" })
+@EqualsAndHashCode(callSuper = false, of = {"typeName", "okErrTypes"})
 public class CLTypeResult extends AbstractCLType {
 
     /**
      * Support class for {@link AbstractCLType#RESULT} ok/err types
-     * 
+     *
      * @author Alexandre Carvalho
      * @author Andre Bertolace
      * @see AbstractCLType

@@ -1,10 +1,5 @@
 package com.syntifi.casper.sdk.model.clvalue;
 
-import java.io.IOException;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.syntifi.casper.sdk.exception.CLValueDecodeException;
 import com.syntifi.casper.sdk.exception.CLValueEncodeException;
@@ -15,15 +10,19 @@ import com.syntifi.casper.sdk.model.clvalue.cltype.CLTypeData;
 import com.syntifi.casper.sdk.model.clvalue.cltype.CLTypeMap;
 import com.syntifi.casper.sdk.model.clvalue.encdec.CLValueDecoder;
 import com.syntifi.casper.sdk.model.clvalue.encdec.CLValueEncoder;
-
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.IOException;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+
 /**
  * Casper Map CLValue implementation
- * 
+ *
  * @author Alexandre Carvalho
  * @author Andre Bertolace
  * @see AbstractCLValue

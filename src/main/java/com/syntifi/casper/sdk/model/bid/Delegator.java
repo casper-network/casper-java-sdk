@@ -1,22 +1,21 @@
 package com.syntifi.casper.sdk.model.bid;
 
-import java.math.BigInteger;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.syntifi.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
 import com.syntifi.casper.sdk.model.key.PublicKey;
 import com.syntifi.casper.sdk.model.uref.URef;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigInteger;
+
 /**
  * Represents a party delegating their stake to a validator (or \"delegatee\")
- * 
+ *
  * @author Alexandre Carvalho
  * @author Andre Bertolace
  * @since 0.0.1
@@ -52,7 +51,7 @@ public class Delegator {
     private PublicKey delegatorPublicKey;
 
     /**
-     * ammount
+     * staked amount
      */
     @JsonIgnore
     private BigInteger stakedAmount;

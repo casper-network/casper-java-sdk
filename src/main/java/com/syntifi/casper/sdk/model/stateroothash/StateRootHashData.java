@@ -1,7 +1,6 @@
 package com.syntifi.casper.sdk.model.stateroothash;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,7 +9,7 @@ import lombok.Setter;
 
 /**
  * Root class for a Casper state root hash request
- * 
+ *
  * @author Alexandre Carvalho
  * @author Andre Bertolace
  * @since 0.0.1

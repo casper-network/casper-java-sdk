@@ -1,9 +1,5 @@
 package com.syntifi.casper.sdk.model.clvalue;
 
-import java.io.IOException;
-import java.util.LinkedList;
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.syntifi.casper.sdk.exception.CLValueDecodeException;
 import com.syntifi.casper.sdk.exception.CLValueEncodeException;
@@ -14,15 +10,18 @@ import com.syntifi.casper.sdk.model.clvalue.cltype.CLTypeData;
 import com.syntifi.casper.sdk.model.clvalue.cltype.CLTypeList;
 import com.syntifi.casper.sdk.model.clvalue.encdec.CLValueDecoder;
 import com.syntifi.casper.sdk.model.clvalue.encdec.CLValueEncoder;
-
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * Casper List CLValue implementation
- * 
+ *
  * @author Alexandre Carvalho
  * @author Andre Bertolace
  * @see AbstractCLValue

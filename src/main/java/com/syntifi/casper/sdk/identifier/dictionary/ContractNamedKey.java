@@ -1,7 +1,6 @@
 package com.syntifi.casper.sdk.identifier.dictionary;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

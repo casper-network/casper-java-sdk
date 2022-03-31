@@ -79,7 +79,7 @@ public abstract class AbstractAnyOfDeserializer extends AsPropertyTypeDeserializ
      * 
      * @param classType the name of the class type
      * @return {@link Class} of the type
-     * @throws NoSuchTypeException
+     * @throws NoSuchTypeException thrown if no type for the given classType String
      */
     protected abstract Class<?> getClassByName(String classType) throws NoSuchTypeException;
 }

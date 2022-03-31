@@ -1,20 +1,19 @@
 package com.syntifi.casper.sdk.model.key;
 
-import java.util.Arrays;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.syntifi.casper.sdk.exception.InvalidByteStringException;
 import com.syntifi.casper.sdk.exception.NoSuchKeyTagException;
 import com.syntifi.casper.sdk.jackson.deserializer.KeyDeserializer;
 import com.syntifi.casper.sdk.model.clvalue.encdec.StringByteHelper;
-
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.util.Arrays;
+
 /**
  * Hex-encoded key, including the tag info.
- * 
+ *
  * @author Alexandre Carvalho
  * @author Andre Bertolace
  * @since 0.0.1

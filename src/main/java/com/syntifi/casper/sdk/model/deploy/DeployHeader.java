@@ -1,9 +1,5 @@
 package com.syntifi.casper.sdk.model.deploy;
 
-import java.io.IOException;
-import java.util.Date;
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.syntifi.casper.sdk.exception.CLValueEncodeException;
@@ -14,12 +10,15 @@ import com.syntifi.casper.sdk.model.clvalue.encdec.interfaces.EncodableValue;
 import com.syntifi.casper.sdk.model.common.Digest;
 import com.syntifi.casper.sdk.model.common.Ttl;
 import com.syntifi.casper.sdk.model.key.PublicKey;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.io.IOException;
+import java.util.Date;
+import java.util.List;
 
 /**
  * The header portion of a [`Deploy`](struct.Deploy.html).

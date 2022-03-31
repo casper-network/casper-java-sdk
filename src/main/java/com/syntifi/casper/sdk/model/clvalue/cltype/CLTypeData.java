@@ -1,7 +1,5 @@
 package com.syntifi.casper.sdk.model.clvalue.cltype;
 
-import java.lang.reflect.InvocationTargetException;
-
 import com.syntifi.casper.sdk.exception.DynamicInstanceException;
 import com.syntifi.casper.sdk.exception.NoSuchTypeException;
 import com.syntifi.casper.sdk.model.clvalue.AbstractCLValue;
@@ -30,16 +28,17 @@ import com.syntifi.casper.sdk.model.clvalue.CLValueU8;
 import com.syntifi.casper.sdk.model.clvalue.CLValueURef;
 import com.syntifi.casper.sdk.model.clvalue.CLValueUnit;
 import com.syntifi.casper.sdk.model.storedvalue.StoredValue;
-
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.lang.reflect.InvocationTargetException;
+
 /**
  * Casper CLType definitions and type mappings
- * 
+ * <p>
  * All types must be listed and mapped here.
- * 
+ *
  * @author Alexandre Carvalho
  * @author Andre Bertolace
  * @see StoredValue
@@ -80,7 +79,7 @@ public enum CLTypeData {
 
     /**
      * Retrieve CLType by its serialization tag
-     * 
+     *
      * @param serializationTag the serialization tag to find
      * @return the requested {@link CLTypeData}
      * @throws NoSuchTypeException raised when the clType is not valid/found
@@ -96,10 +95,10 @@ public enum CLTypeData {
 
     /**
      * Retrieve CLValue implementation class from CLType name
-     * 
+     *
      * @param name the type's name
      * @return the {@link Class} object holding the requested
-     *         {@link AbstractCLValue}
+     * {@link AbstractCLValue}
      * @throws NoSuchTypeException raised when the clType is not valid/found
      */
     public static Class<?> getClassByName(String name) throws NoSuchTypeException {
@@ -113,7 +112,7 @@ public enum CLTypeData {
 
     /**
      * Retrieve CLType class from CLType name
-     * 
+     *
      * @param name the type's name
      * @return the {@link Class} object holding the requested {@link AbstractCLType}
      * @throws NoSuchTypeException raised when the clType is not valid/found
@@ -129,7 +128,7 @@ public enum CLTypeData {
 
     /**
      * Retrieve CLType from its name
-     * 
+     *
      * @param name the type's name
      * @return the requested {@link CLTypeData}
      * @throws NoSuchTypeException raised when the clType is not valid/found
@@ -145,7 +144,7 @@ public enum CLTypeData {
 
     /**
      * Dynamically instantiate a CLValue when needed for decoding children objects
-     * 
+     *
      * @param clValueName the name of the {@link AbstractCLValue} to instantiate
      * @return the desired {@link AbstractCLValue} implementation
      * @throws DynamicInstanceException error while dynamically instantiating the
@@ -159,7 +158,7 @@ public enum CLTypeData {
 
     /**
      * Dynamically instantiate a CLValue when needed for decoding children objects
-     * 
+     *
      * @param clTypeData the {@link CLTypeData} to instantiate
      * @return the desired {@link AbstractCLValue} implementation
      * @throws DynamicInstanceException error while dynamically instantiating the
@@ -179,7 +178,7 @@ public enum CLTypeData {
 
     /**
      * Dynamically instantiate a CLType when needed for decoding children objects
-     * 
+     *
      * @param clTypeName the name of the {@link AbstractCLType} to instantiate
      * @return the desired {@link AbstractCLType} implementation
      * @throws DynamicInstanceException error while dynamically instantiating the
@@ -193,7 +192,7 @@ public enum CLTypeData {
 
     /**
      * Dynamically instantiate a CLType when needed for decoding children objects
-     * 
+     *
      * @param clTypeData the {@link CLTypeData} to instantiate
      * @return the desired {@link AbstractCLType} implementation
      * @throws DynamicInstanceException error while dynamically instantiating the

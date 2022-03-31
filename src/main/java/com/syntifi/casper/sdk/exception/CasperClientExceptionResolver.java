@@ -15,7 +15,7 @@ import com.syntifi.casper.sdk.service.CasperObjectMapper;
  * @since 0.0.1
  */
 public class CasperClientExceptionResolver implements ExceptionResolver {
-    private static ObjectMapper objectMapper = new CasperObjectMapper();
+    private static final ObjectMapper objectMapper = new CasperObjectMapper();
 
     @Override
     public Throwable resolveException(ObjectNode response) {

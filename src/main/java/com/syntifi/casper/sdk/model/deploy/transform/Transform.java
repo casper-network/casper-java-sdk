@@ -6,8 +6,10 @@ import com.syntifi.casper.sdk.jackson.resolver.TransformResolver;
 
 /**
  * Abstract Transform containing the actual transformation performed while
- * executing a deploy. It can be any of the following types:
- * 
+ * executing a deployment. It can be any of the following types:
+ *
+ * @author Alexandre Carvalho
+ * @author Andre Bertolace
  * @see AddInt32
  * @see AddUInt64
  * @see AddUInt128
@@ -23,9 +25,6 @@ import com.syntifi.casper.sdk.jackson.resolver.TransformResolver;
  * @see WriteEraInfo
  * @see WriteTransfer
  * @see WriteWithdraw
- * 
- * @author Alexandre Carvalho
- * @author Andre Bertolace
  * @since 0.0.1
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NONE)

@@ -5,13 +5,12 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonTypeResolver;
 import com.syntifi.casper.sdk.exception.NoSuchTypeException;
 import com.syntifi.casper.sdk.jackson.resolver.CLTypeResolver;
-
 import lombok.Getter;
 import lombok.Setter;
 
 /**
  * Basic class for CLType implementation
- * 
+ *
  * @author Alexandre Carvalho
  * @author Andre Bertolace
  * @see AbstractCLType
@@ -52,7 +51,7 @@ public abstract class AbstractCLType {
 
     /**
      * Required getter for implementations of CLType
-     * 
+     *
      * @return the CLType name
      */
     @JsonIgnore
@@ -60,7 +59,7 @@ public abstract class AbstractCLType {
 
     /**
      * @return the {@link CLTypeData} for the current CLType
-     * @throws NoSuchTypeException
+     * @throws NoSuchTypeException thrown if no cl type data found
      */
     @JsonIgnore
     public CLTypeData getClTypeData() throws NoSuchTypeException {

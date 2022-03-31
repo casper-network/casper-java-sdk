@@ -1,7 +1,5 @@
 package com.syntifi.casper.sdk.model.key;
 
-import java.io.IOException;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.syntifi.casper.sdk.exception.CLValueEncodeException;
@@ -10,16 +8,17 @@ import com.syntifi.casper.sdk.exception.NoSuchTypeException;
 import com.syntifi.casper.sdk.model.clvalue.encdec.CLValueEncoder;
 import com.syntifi.casper.sdk.model.clvalue.encdec.StringByteHelper;
 import com.syntifi.casper.sdk.model.clvalue.encdec.interfaces.EncodableValue;
-
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.IOException;
+
 /**
  * Hex-encoded key, including the tag byte.
- * 
+ *
  * @author Alexandre Carvalho
  * @author Andre Bertolace
  * @since 0.0.1
@@ -45,7 +44,7 @@ public abstract class AbstractSerializedKeyTaggedHex<T extends Tag> implements E
 
     @JsonValue
     public String getAlgoTaggedHex() {
-        return StringByteHelper.convertBytesToHex(new byte[] { this.tag.getByteTag() })
+        return StringByteHelper.convertBytesToHex(new byte[]{this.tag.getByteTag()})
                 + StringByteHelper.convertBytesToHex(this.getKey());
     }
 

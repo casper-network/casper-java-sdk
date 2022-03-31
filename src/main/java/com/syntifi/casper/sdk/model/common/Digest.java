@@ -1,21 +1,19 @@
 package com.syntifi.casper.sdk.model.common;
 
-import java.io.IOException;
-
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.syntifi.casper.sdk.exception.CLValueEncodeException;
 import com.syntifi.casper.sdk.exception.DynamicInstanceException;
 import com.syntifi.casper.sdk.exception.NoSuchTypeException;
 import com.syntifi.casper.sdk.model.clvalue.encdec.CLValueEncoder;
 import com.syntifi.casper.sdk.model.clvalue.encdec.interfaces.EncodableValue;
-
-import org.bouncycastle.util.encoders.Hex;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.bouncycastle.util.encoders.Hex;
+
+import java.io.IOException;
 
 /**
  * Digest for Hex String
@@ -55,5 +53,4 @@ public class Digest implements EncodableValue {
             throws IOException, CLValueEncodeException, DynamicInstanceException, NoSuchTypeException {
         clve.write(getDigest());
     }
-
 }

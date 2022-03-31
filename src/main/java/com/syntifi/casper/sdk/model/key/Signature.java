@@ -2,9 +2,7 @@ package com.syntifi.casper.sdk.model.key;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.syntifi.casper.sdk.jackson.deserializer.SignatureDeserializer;
-
 import com.syntifi.crypto.key.AbstractPrivateKey;
-import com.syntifi.crypto.key.AbstractPublicKey;
 import com.syntifi.crypto.key.Secp256k1PrivateKey;
 import lombok.Builder;
 import lombok.NoArgsConstructor;

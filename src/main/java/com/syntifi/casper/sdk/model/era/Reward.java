@@ -1,7 +1,6 @@
 package com.syntifi.casper.sdk.model.era;
 
 import com.syntifi.casper.sdk.model.key.PublicKey;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,7 +9,7 @@ import lombok.Setter;
 
 /**
  * Casper block era reward data
- * 
+ *
  * @author Alexandre Carvalho
  * @author Andre Bertolace
  * @see JsonEraReport

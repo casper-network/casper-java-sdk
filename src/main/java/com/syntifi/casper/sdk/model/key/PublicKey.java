@@ -1,8 +1,5 @@
 package com.syntifi.casper.sdk.model.key;
 
-import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -11,14 +8,15 @@ import com.syntifi.casper.sdk.jackson.deserializer.PublicKeyDeserializer;
 import com.syntifi.casper.sdk.model.clvalue.encdec.StringByteHelper;
 import com.syntifi.crypto.key.AbstractPublicKey;
 import com.syntifi.crypto.key.Ed25519PublicKey;
-import com.syntifi.crypto.key.Secp256k1PrivateKey;
 import com.syntifi.crypto.key.Secp256k1PublicKey;
-
 import lombok.NoArgsConstructor;
+
+import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 
 /**
  * Hex-encoded cryptographic public key, including the algorithm tag prefix.
- * 
+ *
  * @author Alexandre Carvalho
  * @author Andre Bertolace
  * @since 0.0.1

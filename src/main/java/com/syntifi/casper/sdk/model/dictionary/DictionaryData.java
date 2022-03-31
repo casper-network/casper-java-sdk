@@ -2,7 +2,6 @@ package com.syntifi.casper.sdk.model.dictionary;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.syntifi.casper.sdk.model.storedvalue.StoredValue;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,7 +10,7 @@ import lombok.Setter;
 
 /**
  * Dictionary key and stored value
- * 
+ *
  * @author Alexandre Carvalho
  * @author Andre Bertolace
  * @since 0.0.1

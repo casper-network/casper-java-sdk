@@ -1,22 +1,21 @@
 package com.syntifi.casper.sdk.model.deploy;
 
-import java.math.BigInteger;
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.syntifi.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
 import com.syntifi.casper.sdk.model.uref.URef;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigInteger;
+import java.util.List;
+
 /**
  * Information relating to the given Deploy
- * 
+ *
  * @author Alexandre Carvalho
  * @author Andre Bertolace
  * @since 0.0.1
@@ -47,7 +46,7 @@ public class DeployInfo {
 
     /**
      * Source purse used for payment of the Deploy.
-     * 
+     *
      * @see URef
      */
     private URef source;

@@ -1,7 +1,5 @@
 package com.syntifi.casper.sdk.model.clvalue;
 
-import java.io.IOException;
-
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -22,10 +20,11 @@ import com.syntifi.casper.sdk.model.clvalue.encdec.CLValueDecoder;
 import com.syntifi.casper.sdk.model.clvalue.encdec.CLValueEncoder;
 import com.syntifi.casper.sdk.model.clvalue.encdec.interfaces.DecodableValue;
 import com.syntifi.casper.sdk.model.clvalue.encdec.interfaces.EncodableValue;
-
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.io.IOException;
 
 /**
  * Base class for CLValues

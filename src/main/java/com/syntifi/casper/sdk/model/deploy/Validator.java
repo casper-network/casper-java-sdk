@@ -3,7 +3,6 @@ package com.syntifi.casper.sdk.model.deploy;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.syntifi.casper.sdk.model.key.PublicKey;
-
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -20,7 +19,7 @@ public class Validator extends SeigniorageAllocation {
 
     /**
      * Validator's public key
-     * 
+     *
      * @see PublicKey
      */
     @JsonProperty("validator_public_key")

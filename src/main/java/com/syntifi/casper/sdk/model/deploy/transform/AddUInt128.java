@@ -36,12 +36,22 @@ public class AddUInt128 implements Transform {
     @JsonIgnore
     private BigInteger u128;
 
+    /**
+     * getter for u128 json serialization
+     *
+     * @return cost as expected for json serialization
+     */
     @JsonProperty("AddUInt128")
     @ExcludeFromJacocoGeneratedReport
     protected String getJsonU128() {
         return this.u128.toString(10);
     }
 
+    /**
+     * setter for u128 from json deserialized value
+     *
+     * @param value the deserialized value
+     */
     @JsonProperty("AddUInt128")
     @ExcludeFromJacocoGeneratedReport
     protected void setJsonU128(String value) {

@@ -1,12 +1,11 @@
 package com.syntifi.casper.sdk.model.clvalue;
 
 import com.syntifi.casper.sdk.model.clvalue.cltype.AbstractCLType;
-
 import lombok.EqualsAndHashCode;
 
 /**
  * Abstract class for those CLValues which have a child collection
- * 
+ *
  * @author Alexandre Carvalho
  * @author Andre Bertolace
  * @see AbstractCLValue
