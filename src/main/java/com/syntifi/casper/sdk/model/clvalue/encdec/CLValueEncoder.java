@@ -359,12 +359,12 @@ public class CLValueEncoder extends ByteArrayOutputStream {
      * 
      * @param clValue {@link CLValuePublicKey} value to encode
      */
-    public void writePublicKey(CLValuePublicKey clValue) {
+    public void writePublicKey(CLValuePublicKey clValue) throws IOException {
         byte[] tag = new byte[] { clValue.getValue().getTag().getByteTag() };
         clValue.setBytes(StringByteHelper.convertBytesToHex(tag)
                 + StringByteHelper.convertBytesToHex(clValue.getValue().getKey()));
-        this.writeBytes(tag);
-        this.writeBytes(clValue.getValue().getKey());
+        this.write(tag);
+        this.write(clValue.getValue().getKey());
     }
 
     /**

@@ -88,7 +88,7 @@ public class DeployHeader implements EncodableValue {
         if (dependencies != null) {
             clve.writeInt(dependencies.size());
             for (Digest dependency : dependencies) {
-                clve.writeBytes(dependency.getDigest());
+                clve.write(dependency.getDigest());
             }
         }
         clve.writeString(chainName);
