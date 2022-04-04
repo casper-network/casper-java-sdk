@@ -16,7 +16,7 @@ This project implements the SDK to interact with a Casper Node. It wraps the Jso
 Using gradle:
 
 ```gradle
-implementation 'com.syntifi.casper:casper-sdk:0.2.0'
+implementation 'com.syntifi.casper:casper-sdk:0.2.1'
 ```
 
 Using maven:
@@ -25,7 +25,7 @@ Using maven:
 <dependency>
   <groupId>com.syntifi.casper</groupId>
   <artifactId>casper-sdk</artifactId>
-  <version>0.2.0</version>
+  <version>0.2.1</version>
 </dependency>
 ```
 
