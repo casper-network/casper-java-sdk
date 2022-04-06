@@ -37,7 +37,18 @@ public class SigningService {
      * @return a new key pair of the specified algorithm
      */
     public KeyPair generateKeyPair(final Algorithm algorithm) {
-        return getKeyPairBuilder(algorithm).generateKeyPair();
+        return getKeyPairBuilder(algorithm).generateKeyPair(null);
+    }
+
+    /**
+     * Generates a key pair for the specified algorithm.
+     *
+     * @param algorithm the algorithm of new key pair to generate
+     * @param seed      the entropy source to be used when generating a key pair
+     * @return a new key pair of the specified algorithm
+     */
+    public KeyPair generateKeyPair(final Algorithm algorithm, final byte[] seed) {
+        return getKeyPairBuilder(algorithm).generateKeyPair(seed);
     }
 
     /**

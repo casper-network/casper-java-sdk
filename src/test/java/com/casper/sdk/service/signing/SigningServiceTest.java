@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyPair;
 import java.security.PrivateKey;
+import java.security.SecureRandom;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -89,6 +90,25 @@ class SigningServiceTest {
     }
 
     @Test
+    void generateEd25519KeyPairFromSeed() {
+
+        final SecureRandom random = new SecureRandom();
+        byte[] seed = new byte[20];
+        random.nextBytes(seed);
+
+        final KeyPair keyPair = signingService.generateKeyPair(Algorithm.ED25519, seed);
+        assertThat(keyPair.getPublic(), is(notNullValue()));
+        assertThat(keyPair.getPrivate(), is(notNullValue()));
+
+        // the message
+        byte[] message = "Message to sign".getBytes(StandardCharsets.UTF_8);
+
+        byte[] signature = signingService.signWithPrivateKey(keyPair.getPrivate(), message);
+
+        assertThat(signingService.verifySignature(keyPair.getPublic(), message, signature), is(true));
+    }
+
+    @Test
     @SuppressWarnings("ConstantConditions")
     void loadSecp256k1KeyPair() throws Exception {
 
@@ -113,6 +133,32 @@ class SigningServiceTest {
         };
 
         final KeyPair keyPair = signingService.generateKeyPair(Algorithm.SECP256K1);
+
+        assertThat(keyPair, is(notNullValue()));
+        assertThat(keyPair.getPublic(), is(notNullValue()));
+        assertThat(keyPair.getPrivate(), is(notNullValue()));
+
+        final byte[] signedMessage = signingService.signWithPrivateKey(keyPair.getPrivate(), message);
+
+        assertThat(signingService.verifySignature(keyPair.getPublic(), message, signedMessage), is(true));
+    }
+
+
+    @Test
+    void generateSecp256k1KeyPairFromSeed() {
+
+        final SecureRandom random = new SecureRandom();
+        byte[] seed = new byte[20];
+        random.nextBytes(seed);
+
+        final byte[] message = {
+                (byte) 153, (byte) 144, (byte) 19, (byte) 83, (byte) 219, (byte) 161, (byte) 143, (byte) 137, (byte) 59,
+                (byte) 67, (byte) 187, (byte) 238, (byte) 65, (byte) 111, (byte) 80, (byte) 243, (byte) 142, (byte) 77,
+                (byte) 113, (byte) 46, (byte) 2, (byte) 166, (byte) 121, (byte) 118, (byte) 34, (byte) 205, (byte) 123,
+                (byte) 14, (byte) 215, (byte) 85, (byte) 234, (byte) 161
+        };
+
+        final KeyPair keyPair = signingService.generateKeyPair(Algorithm.SECP256K1, seed);
 
         assertThat(keyPair, is(notNullValue()));
         assertThat(keyPair.getPublic(), is(notNullValue()));

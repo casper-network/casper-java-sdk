@@ -33,8 +33,9 @@ public class Secp256k1KeyPairBuilder extends AbstractKeyPairBuilder {
         super(Algorithm.SECP256K1);
     }
 
-    public KeyPair generateKeyPair() {
-        return generateKeyPair(ALGORITHM, CURVE_NAME);
+    @Override
+    public KeyPair generateKeyPair(final byte[] seed) {
+        return generateKeyPair(ALGORITHM, CURVE_NAME, seed);
     }
 
     @Override

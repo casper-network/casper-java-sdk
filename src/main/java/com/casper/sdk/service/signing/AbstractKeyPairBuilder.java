@@ -27,11 +27,12 @@ abstract class AbstractKeyPairBuilder implements KeyPairBuilder {
         return algorithm;
     }
 
-    KeyPair generateKeyPair(final String algorithm, final String curve) {
+    KeyPair generateKeyPair(final String algorithm, final String curve, final byte[] seed) {
         try {
             final KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(algorithm, PROVIDER);
             final ECGenParameterSpec ecGenParameterSpec = new ECGenParameterSpec(curve);
-            keyPairGenerator.initialize(ecGenParameterSpec, new SecureRandom());
+            final SecureRandom secureRandom = seed != null ? new SecureRandom(seed) : new SecureRandom();
+            keyPairGenerator.initialize(ecGenParameterSpec, secureRandom);
             return keyPairGenerator.generateKeyPair();
         } catch (Exception e) {
             throw new SignatureException(e);

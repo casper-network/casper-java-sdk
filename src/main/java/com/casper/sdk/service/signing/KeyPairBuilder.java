@@ -3,6 +3,7 @@ package com.casper.sdk.service.signing;
 
 import com.casper.sdk.types.Algorithm;
 
+import javax.annotation.Nullable;
 import java.security.KeyPair;
 import java.security.PublicKey;
 
@@ -13,10 +14,10 @@ public interface KeyPairBuilder {
 
     /**
      * Generates a new key pair
-     *
+     * @param seed the optional entropy source to be used when generating a key pair
      * @return a new key pain
      */
-    KeyPair generateKeyPair();
+    KeyPair generateKeyPair(@Nullable final byte [] seed);
 
     /**
      * The algorithm of the signer
