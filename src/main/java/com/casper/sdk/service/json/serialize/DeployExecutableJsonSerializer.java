@@ -19,16 +19,20 @@ public class DeployExecutableJsonSerializer extends JsonSerializer<DeployExecuta
 
         if (value instanceof Transfer) {
             writeTransfer((Transfer) value, gen);
+        } else if (value instanceof StoredVersionedContractByHash) {
+            writeStoredVersionedContractByHash((StoredVersionedContractByHash) value, gen);
         } else if (value instanceof StoredContractByHash) {
             writeStoredContractByHash((StoredContractByHash) value, gen);
-        }
-        else if (value instanceof ModuleBytes) {
+        } else if (value instanceof StoredVersionedContractByName) {
+            writeStoredVersionedContractByName((StoredVersionedContractByName) value, gen);
+        } else if (value instanceof StoredContractByName) {
+            writeStoredContractByName((StoredContractByName) value, gen);
+        } else if (value instanceof ModuleBytes) {
             writePayment((ModuleBytes) value, gen);
         } else {
             writeArgs(value, gen);
         }
     }
-
 
     private void writePayment(final ModuleBytes payment, final JsonGenerator gen) throws IOException {
         gen.writeStartObject();
@@ -54,6 +58,59 @@ public class DeployExecutableJsonSerializer extends JsonSerializer<DeployExecuta
         gen.writeEndObject();
         gen.writeEndObject();
     }
+
+    private void writeStoredVersionedContractByHash(final StoredVersionedContractByHash storedVersionedContractByHash,
+                                                    final JsonGenerator gen)  throws IOException {
+        gen.writeStartObject();
+        gen.writeFieldName("StoredVersionedContractByHash");
+        gen.writeStartObject();
+        gen.writeFieldName("hash");
+        gen.writeString(storedVersionedContractByHash.getHash().toString());
+        if (storedVersionedContractByHash.getVersion().isPresent()) {
+            gen.writeFieldName("version");
+            gen.writeNumber(storedVersionedContractByHash.getVersion().get().longValue());
+        }
+        gen.writeFieldName("entry_point");
+        gen.writeString(storedVersionedContractByHash.getEntryPoint());
+        writeArgs(storedVersionedContractByHash, gen);
+        gen.writeEndObject();
+        gen.writeEndObject();
+    }
+
+    private void writeStoredContractByName(final StoredContractByName storedContractByName,
+                                           final JsonGenerator gen) throws IOException {
+        gen.writeStartObject();
+        gen.writeFieldName("StoredContractByName");
+        gen.writeStartObject();
+        gen.writeFieldName("name");
+        gen.writeString(storedContractByName.getName());
+        gen.writeFieldName("entry_point");
+        gen.writeString(storedContractByName.getEntryPoint());
+        writeArgs(storedContractByName, gen);
+        gen.writeEndObject();
+        gen.writeEndObject();
+    }
+
+    private void writeStoredVersionedContractByName(final StoredVersionedContractByName storedVersionedContractByName,
+                                                    final JsonGenerator gen) throws IOException {
+        gen.writeStartObject();
+        gen.writeFieldName("StoredVersionedContractByName");
+        gen.writeStartObject();
+        gen.writeFieldName("name");
+        gen.writeString(storedVersionedContractByName.getName());
+
+        if (storedVersionedContractByName.getVersion().isPresent()) {
+            gen.writeFieldName("version");
+            gen.writeNumber(storedVersionedContractByName.getVersion().get().longValue());
+        }
+
+        gen.writeFieldName("entry_point");
+        gen.writeString(storedVersionedContractByName.getEntryPoint());
+        writeArgs(storedVersionedContractByName, gen);
+        gen.writeEndObject();
+        gen.writeEndObject();
+    }
+
 
     private void writeTransfer(final Transfer transfer,
                                final JsonGenerator gen) throws IOException {

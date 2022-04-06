@@ -20,7 +20,12 @@ public class ByteSerializerFactory {
         register(new CollectionByteSerializer(this, typesFactory));
         register(new DeployApprovalByteSerializer());
         register(new DeployByteSerializer(this));
-        register(new DeployExecutableByteSerializer(this, typesFactory));
+        register(new StoredContractByHashByteSerializer(this, typesFactory));
+        register(new StoredContractByNameByteSerializer(this, typesFactory));
+        register(new StoredVersionedContractByHashByteSerializer(this, typesFactory));
+        register(new StoredVersionedContractByNameByteSerializer(this, typesFactory));
+        register(new TransferByteSerializer(this, typesFactory));
+        register(new ModuleBytesByteSerializer(this, typesFactory));
         register(new DeployHeaderByteSerializer(this, typesFactory));
         register(new DeployNamedArgByteSerializer(typesFactory));
         register(new DigestByteSerializer());

@@ -14,22 +14,24 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.Collections;
 
 import static com.casper.sdk.Constants.*;
 import static com.casper.sdk.how_to.HowToUtils.getWasmIn;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.core.Is.is;
 
 /**
- * Unit tests the {@link DeployExecutableByteSerializer}.
+ * Unit tests the {@link AbstractDeployExecutableByteSerializer}.
  */
 class DeployExecutableByteSerializerTest {
 
     public static final String EXPECTED_BYTES_TXT = "/com/casper/sdk/service/serialization/types/expected-bytes.txt";
     public static final String ERC_20_WASM = "/com/casper/sdk/how_to/erc20.wasm";
     private final ByteSerializerFactory byteSerializerFactory = new ByteSerializerFactory();
-    private final DeployExecutableByteSerializer serializer = (DeployExecutableByteSerializer) byteSerializerFactory.getByteSerializerByType(DeployExecutable.class);
     private final TypesFactory typesFactory = new TypesFactory();
     private final DeployService deployService = new DeployService(
             new ByteSerializerFactory(),
@@ -87,6 +89,7 @@ class DeployExecutableByteSerializerTest {
                 8   // type of value
         };
 
+        final ModuleBytesByteSerializer serializer = getSerializer(moduleBytes.getClass());
         final byte[] actual = serializer.toBytes(moduleBytes);
         assertThat(actual, is(expected));
     }
@@ -121,6 +124,7 @@ class DeployExecutableByteSerializerTest {
                 new CLPublicKey(recipientPublicKey, Algorithm.ED25519),
                 34);
 
+        final TransferByteSerializer serializer = getSerializer(transfer.getClass());
         final byte[] actual = serializer.toBytes(transfer);
 
         assertThat(actual, is(expected));
@@ -146,10 +150,11 @@ class DeployExecutableByteSerializerTest {
                 63, 53, -20, 0, 67, -12, 55, 50, 67, 37, -42, 90, 34, -81, -92, 20, 0, 0, 0, 112, 99, 108, 112, 104, 88,
                 119, 102, 89, 109, 67, 109, 100, 73, 84, 106, 56, 104, 110, 104, 1, 0, 0, 0, 6, 0, 0, 0, 97, 109, 111,
                 117, 110, 116, 5, 0, 0, 0, 4, 0, -54, -102, 59, 8};
+
+        final StoredContractByHashByteSerializer serializer = getSerializer(storedContractByHash.getClass());
         final byte[] actual = serializer.toBytes(storedContractByHash);
 
         assertThat(actual, is(expected));
-
     }
 
     /**
@@ -175,8 +180,52 @@ class DeployExecutableByteSerializerTest {
                         .build()
         );
 
+        final ModuleBytesByteSerializer serializer = getSerializer(moduleBytes.getClass());
         final String hexBytes = ByteUtils.encodeHexString(serializer.toBytes(moduleBytes));
         assertThat(hexBytes, is(expected));
+    }
 
+
+    @Test
+    void storedVersionedContractByHashToBytes() {
+
+        final StoredVersionedContractByHash storedVersionedContractByHash = new StoredVersionedContractByHash(
+                new ContractHash("c4c411864f7b717c27839e56f6f1ebe5da3f35ec0043f437324325d65a22afa4"),
+                123456L, "entry-point",
+                Arrays.asList(
+                        new DeployNamedArg("foo", new CLValue("bar".getBytes(StandardCharsets.UTF_8), new CLTypeInfo(CLType.STRING), "bar")),
+                        new DeployNamedArg("amount", new CLValue("05005550b405", new CLTypeInfo(CLType.U64), "24500000000"))
+                )
+        );
+
+        final StoredVersionedContractByHashByteSerializer serializer = getSerializer(StoredVersionedContractByHash.class);
+        final byte[] bytes = serializer.toBytes(storedVersionedContractByHash);
+        assertThat(bytes, is(notNullValue()));
+        assertThat(bytes.length, is(greaterThan(0)));
+    }
+
+    @Test
+    void storedVersionedContractByNameToBytes() {
+
+        final StoredVersionedContractByName storedVersionedContractByName = new StoredVersionedContractByName(
+                "payment",
+                123456L, "entry-point",
+                CLValue.fromString("05005550b405"),
+                Arrays.asList(
+                        new DeployNamedArg("foo", new CLValue("bar".getBytes(StandardCharsets.UTF_8), new CLTypeInfo(CLType.STRING), "bar")),
+                        new DeployNamedArg("amount", new CLValue("05005550b405", new CLTypeInfo(CLType.U64), "24500000000"))
+                )
+        );
+
+        final StoredVersionedContractByNameByteSerializer serializer = getSerializer(StoredVersionedContractByName.class);
+        final byte[] bytes = serializer.toBytes(storedVersionedContractByName);
+        assertThat(bytes, is(notNullValue()));
+        assertThat(bytes.length, is(greaterThan(0)));
+    }
+
+    @SuppressWarnings("rawtypes")
+    private <T extends AbstractDeployExecutableByteSerializer> T getSerializer(final Class type) {
+        //noinspection unchecked
+        return (T) byteSerializerFactory.getByteSerializerByType(type);
     }
 }

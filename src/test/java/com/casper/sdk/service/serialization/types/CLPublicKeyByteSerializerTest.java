@@ -30,6 +30,5 @@ class CLPublicKeyByteSerializerTest {
 
         final byte[] bytes = serializer.toBytes(new CLPublicKey(key, Algorithm.ED25519));
         assertThat(bytes, Is.is(expected));
-
     }
 }
