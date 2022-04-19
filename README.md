@@ -1,3 +1,7 @@
+[![Java CI](https://github.com/syntifi/casper-sdk/actions/workflows/gradle.yml/badge.svg)](https://github.com/syntifi/casper-sdk/actions/workflows/gradle.yml)
+![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/syntifi/casper-sdk?sort=semver)
+[![Project license](https://img.shields.io/badge/license-Apache%202-blue)](https://www.apache.org/licenses/LICENSE-2.0.txt)
+
 # Casper Java SDK
  
 This project implements the SDK to interact with a Casper Node. It wraps the Json-RPC requests and maps the results to Java objects. 
@@ -5,6 +9,7 @@ This project implements the SDK to interact with a Casper Node. It wraps the Jso
 ## Dependencies
 - Java 8 
 - Gradle
+- [crypto-keys](https://github.com/syntifi/crypto-keys)
 
 ## Build instructions
 ```
