@@ -1,9 +1,10 @@
 package com.casper.sdk.service.serialization.cltypes;
 
 import com.casper.sdk.service.serialization.util.ByteUtils;
-import com.casper.sdk.service.serialization.util.CollectionUtils;
 import com.casper.sdk.types.*;
 import org.junit.jupiter.api.Test;
+
+import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -27,7 +28,7 @@ class MapSerializerTest {
 
         final CLMap clMap = new CLMap((byte[]) null,
                 new CLMapTypeInfo(new CLByteArrayInfo(32), new CLTypeInfo(CLType.U256)),
-                CollectionUtils.Map.of(
+                Map.of(
 
                         new CLValue(ByteUtils.decodeHex(hexKey1), new CLByteArrayInfo(32), hexKey1),
                         CLValueBuilder.u256("400000"),

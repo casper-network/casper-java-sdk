@@ -5,7 +5,6 @@ import com.casper.sdk.service.json.JsonConversionService;
 import com.casper.sdk.service.serialization.cltypes.CLValueBuilder;
 import com.casper.sdk.service.serialization.cltypes.TypesFactory;
 import com.casper.sdk.service.serialization.util.ByteUtils;
-import com.casper.sdk.service.serialization.util.CollectionUtils;
 import com.casper.sdk.service.signing.SigningService;
 import com.casper.sdk.types.*;
 import org.apache.commons.io.IOUtils;
@@ -16,6 +15,7 @@ import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 import static com.casper.sdk.Constants.*;
 import static com.casper.sdk.how_to.HowToUtils.getWasmIn;
@@ -55,7 +55,7 @@ class DeployExecutableByteSerializerTest {
                 new CLValue(amountBytes, CLType.U512, paymentAmount)
         );
 
-        final ModuleBytes moduleBytes = new ModuleBytes(new byte[0], CollectionUtils.List.of(paymentArg));
+        final ModuleBytes moduleBytes = new ModuleBytes(new byte[0], List.of(paymentArg));
 
         final byte[] expected = new byte[]{
                 0, // Type 0 module bytes

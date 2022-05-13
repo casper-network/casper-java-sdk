@@ -2,7 +2,6 @@ package com.casper.sdk.types;
 
 import com.casper.sdk.service.serialization.cltypes.CLValueBuilder;
 import com.casper.sdk.service.serialization.util.ByteUtils;
-import com.casper.sdk.service.serialization.util.CollectionUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -115,7 +114,7 @@ class CLMapTest {
         assertThat(clMap.size(), is(0));
         assertThat(clMap.isEmpty(), is(true));
 
-        clMap.putAll(CollectionUtils.Map.of(key1, value1, key2, value2));
+        clMap.putAll(Map.of(key1, value1, key2, value2));
 
         assertThat(clMap.getKeyType(), is(key1.getCLTypeInfo()));
         assertThat(clMap.getValueType(), is(value2.getCLTypeInfo()));
@@ -129,7 +128,7 @@ class CLMapTest {
         final CLMap map = new CLMap(
                 (String) null,
                 new CLMapTypeInfo(key1.getCLTypeInfo(), value1.getCLTypeInfo()),
-                CollectionUtils.Map.of(key1, value1)
+                Map.of(key1, value1)
         );
 
         assertThat(map.isModified(), is(false));
@@ -148,7 +147,7 @@ class CLMapTest {
 
         final CLMap clMap = new CLMap((byte[]) null,
                 new CLMapTypeInfo(new CLByteArrayInfo(32), new CLTypeInfo(CLType.U256)),
-                CollectionUtils.Map.of(
+                Map.of(
                         new CLValue(ByteUtils.decodeHex(hexKey), new CLByteArrayInfo(32), hexKey),
                         CLValueBuilder.u256("400000")
                 )

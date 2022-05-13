@@ -7,7 +7,7 @@ import com.casper.sdk.types.CLType;
 
 import java.util.Collection;
 
-import static com.casper.sdk.service.serialization.util.CollectionUtils.genericCast;
+import static com.casper.sdk.service.serialization.util.GenericsUtils.genericCast;
 
 /**
  * The byte serializer for Lists of casper type objects.

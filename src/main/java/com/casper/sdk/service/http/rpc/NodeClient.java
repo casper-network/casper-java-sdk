@@ -3,7 +3,6 @@ package com.casper.sdk.service.http.rpc;
 import com.casper.sdk.Constants;
 import com.casper.sdk.exceptions.ValueNotFoundException;
 import com.casper.sdk.service.hash.HashService;
-import com.casper.sdk.service.serialization.util.CollectionUtils;
 import com.casper.sdk.types.Deploy;
 import com.casper.sdk.types.DeployService;
 import com.casper.sdk.types.Digest;
@@ -48,7 +47,7 @@ public class NodeClient {
 
         return rcpCallMethodMap(
                 new Method(Constants.STATE_GET_ITEM,
-                        CollectionUtils.Map.of(
+                        Map.of(
                                 Constants.STATE_ROOT_HASH, getStateRootHash(),
                                 Constants.KEY, "account-hash-" + hashService.getAccountHash(accountKey),
                                 Constants.PATH, Collections.emptyList()
@@ -62,7 +61,7 @@ public class NodeClient {
 
         return rcpCallMethodMap(
                 new Method(Constants.STATE_GET_BALANCE,
-                        CollectionUtils.Map.of(
+                        Map.of(
                                 Constants.STATE_ROOT_HASH, getStateRootHash(),
                                 Constants.PURSE_UREF, getAccountMainPurseURef(accountKey).toString()
                         )
@@ -75,7 +74,7 @@ public class NodeClient {
 
         return rcpCallMethodMap(
                 new Method(Constants.STATE_GET_ITEM,
-                        CollectionUtils.Map.of(
+                        Map.of(
                                 "key", "account-hash-" + hashService.getAccountHash(accountKey),
                                 Constants.STATE_ROOT_HASH, getStateRootHash(),
                                 "path", Collections.emptyList()
@@ -117,7 +116,7 @@ public class NodeClient {
         }
 
         return rcpCallMethodMap(
-                new Method(Constants.ACCOUNT_PUT_DEPLOY, CollectionUtils.Map.of(Constants.DEPLOY, signedDeploy)),
+                new Method(Constants.ACCOUNT_PUT_DEPLOY, Map.of(Constants.DEPLOY, signedDeploy)),
                 MethodEnums.ACCOUNT_PUT_DEPLOY::getValue
         );
     }
@@ -125,7 +124,7 @@ public class NodeClient {
     public Deploy getDeploy(final Digest deployHash) {
 
         return rcpCallMethodMap(
-                new Method(Constants.INFO_GET_DEPLOY, CollectionUtils.Map.of(Constants.DEPLOY_HASH, deployHash.toString())),
+                new Method(Constants.INFO_GET_DEPLOY, Map.of(Constants.DEPLOY_HASH, deployHash.toString())),
                 result -> deployService.fromJson(MethodEnums.INFO_GET_DEPLOY.getValue(result))
         );
 
@@ -136,17 +135,17 @@ public class NodeClient {
     }
 
     public String getBlockInfo(final Digest blockHash) {
-        final Map<String, Object> params = CollectionUtils.Map.of(
+        final Map<String, Object> params = Map.of(
                 Constants.BLOCK_IDENTIFIER,
-                CollectionUtils.Map.of(HASH, blockHash.toString()
+                Map.of(HASH, blockHash.toString()
                 ));
         return getChainBlockInfo(params);
     }
 
     public String getBlockInfoByHeight(final Number height) {
-        final Map<String, Object> params = CollectionUtils.Map.of(
+        final Map<String, Object> params = Map.of(
                 Constants.BLOCK_IDENTIFIER,
-                CollectionUtils.Map.of(Constants.HEIGHT, height.toString())
+                Map.of(Constants.HEIGHT, height.toString())
         );
         return getChainBlockInfo(params);
     }

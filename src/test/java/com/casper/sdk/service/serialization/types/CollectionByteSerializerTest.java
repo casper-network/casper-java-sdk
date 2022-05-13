@@ -1,18 +1,18 @@
 package com.casper.sdk.service.serialization.types;
 
-import com.casper.sdk.service.serialization.util.CollectionUtils;
+import com.casper.sdk.service.serialization.cltypes.TypesFactory;
+import com.casper.sdk.service.serialization.util.ByteUtils;
 import com.casper.sdk.types.CLType;
 import com.casper.sdk.types.CLValue;
 import com.casper.sdk.types.DeployNamedArg;
-import com.casper.sdk.service.serialization.cltypes.TypesFactory;
-import com.casper.sdk.service.serialization.util.ByteUtils;
 import org.junit.jupiter.api.Test;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.casper.sdk.service.serialization.util.ByteUtils.*;
+import static com.casper.sdk.service.serialization.util.ByteUtils.concat;
+import static com.casper.sdk.service.serialization.util.ByteUtils.decodeHex;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
@@ -32,7 +32,7 @@ class CollectionByteSerializerTest {
     @Test
     void populatedListToBytes() {
 
-        final List<DeployNamedArg> args = CollectionUtils.List.of(
+        final List<DeployNamedArg> args = List.of(
                 new DeployNamedArg("amount",
                         new CLValue(
                                 ByteUtils.decodeHex("05005550b405"),
