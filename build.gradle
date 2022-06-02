@@ -1,0 +1,80 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+}
+
+apply plugin: 'java'
+
+group = 'network.casper'
+version='0.3.4'
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+
+    implementation "com.rfksystems:blake2b:${blake2bVersion}"
+    implementation "commons-codec:commons-codec:${commonsCodecVersion}"
+    implementation "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
+    implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
+    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${jacksonVersion}"
+    implementation "org.bouncycastle:bcprov-jdk15on:${cprovVersion}"
+    implementation "com.sshtools:maverick-synergy:${maverickSynergyVersion}"
+    implementation "org.apache.commons:commons-lang3:${commonsLangVersion}"
+    implementation "com.squareup.okhttp3:okhttp:${okHttpVersion}"
+    implementation "commons-io:commons-io:${commonsIoVersion}"
+    implementation "org.bouncycastle:bcprov-jdk15on:${bouncycastleVersion}"
+    implementation "org.bouncycastle:bcpkix-jdk14:${bouncycastleVersion}"
+    implementation "com.google.code.findbugs:jsr305:${jsr305Version}"
+    //implementation "com.syntifi.crypto:crypto-key-ed25519:0.2.0"
+    //implementation "com.syntifi.crypto:crypto-key-secp256k1:0.2.0"
+
+    testImplementation "com.squareup.okhttp3:mockwebserver:${mockwebserverVersion}"
+    testImplementation "com.jayway.jsonpath:json-path-assert:${jsonPathAssertVersion}"
+    testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
+    testImplementation "org.junit.jupiter:junit-jupiter-params:${junitVersion}"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
+}
+
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/casper-network/casper-java-sdk")
+            credentials {
+                username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
+                password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
+            }
+        }
+    }
+    publications {
+        gpr(MavenPublication) {
+            from(components.java)
+        }
+    }
+}
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'com.casper.sdk.controller.CasperSdk'
+        )
+    }
+}
+
+task casperJar(type: Jar) {
+    archiveBaseName = 'casper-java-sdk'
+    archiveVersion = '0.1.0'
+    manifest {
+        attributes 'Main-Class': 'com.casper.sdk.controller.CasperSdk'
+    }
+    from { configurations.compileClasspath.findAll { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
+test {
+    useJUnitPlatform()
+}

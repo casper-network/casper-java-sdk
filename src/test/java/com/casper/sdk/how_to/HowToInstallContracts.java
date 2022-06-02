@@ -15,8 +15,8 @@ import static com.casper.sdk.how_to.HowToUtils.*;
 /**
  * Integration tests for installing a contract
  */
-//@Disabled // Remove this to run locally
-public class HowToInstallAContract {
+@Disabled // Remove this to run locally
+public class HowToInstallContracts {
 
     /**
      * Test that gives an example of using a
