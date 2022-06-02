@@ -1,12 +1,10 @@
 package com.casper.sdk.service.serialization.types;
 
-import com.casper.sdk.types.CLType;
-import com.casper.sdk.types.DeployHeader;
-import com.casper.sdk.types.Digest;
-import com.casper.sdk.types.CLPublicKey;
+import com.casper.sdk.types.*;
 import com.casper.sdk.service.serialization.cltypes.TypesFactory;
 import com.casper.sdk.service.serialization.cltypes.TypesSerializer;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import static com.casper.sdk.service.serialization.util.ByteUtils.concat;
@@ -28,13 +26,18 @@ class DeployHeaderByteSerializer implements ByteSerializer<DeployHeader> {
 
     @Override
     public byte[] toBytes(final DeployHeader source) {
-
+        byte[] encodedPublicKey = factory.getByteSerializerByType(CLPublicKey.class).toBytes(source.getAccount());
+        //Fix for serialization always giving an ED key type on the header.
+        if(source.getAccount().getAlgorithm().equals(Algorithm.SECP256K1)){
+            encodedPublicKey[0] = 0x02;
+        }
         return concat(
-                factory.getByteSerializerByType(CLPublicKey.class).toBytes(source.getAccount()),
+                encodedPublicKey,
                 u64Serializer.serialize(source.getTimestamp()),
                 u64Serializer.serialize(source.getTtl()),
                 u64Serializer.serialize(source.getGasPrice()),
                 // toBytesDeployHash
+                //source.getBodyHash().getHash(),
                 factory.getByteSerializerByType(Digest.class).toBytes(source.getBodyHash()),
                 // toBytesVecT
                 factory.getByteSerializerByType(List.class).toBytes(source.getDependencies()),
