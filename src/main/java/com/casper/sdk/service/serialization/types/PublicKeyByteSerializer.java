@@ -8,7 +8,7 @@ public class PublicKeyByteSerializer implements ByteSerializer<CLPublicKey> {
     @Override
     public byte[] toBytes(final CLPublicKey source) {
         return concat(
-                new byte[]{(byte) source.getTag()},
+                new byte[]{(byte) source.getAlgorithm().getValue()},
                 source.getBytes()
         );
     }
