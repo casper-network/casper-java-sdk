@@ -27,7 +27,7 @@ class DeployHeaderByteSerializerTest {
 
         // The expected bytes for deserialization of the header
         byte[] expected = {
-                1, // Key Tag
+                2, // Key Tag for Algorithm.SECP256K1
 
                 // Key
                 (byte) 129, 69, 104, (byte) 208, (byte) 203, (byte) 178, (byte) 192, (byte) 136, (byte) 241,
