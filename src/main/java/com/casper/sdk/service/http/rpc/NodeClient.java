@@ -186,6 +186,23 @@ public class NodeClient {
     }
 
     /**
+     * Obtains the nodes chain block transfers
+     *
+     * @param blockHash block hash
+     * @return the JSON of the chain block transfers
+     */
+    public String getBlockTransfers(String blockHash) {
+        final Map<String, Object> params = CollectionUtils.Map.of(
+                Constants.BLOCK_IDENTIFIER,
+                CollectionUtils.Map.of(Constants.BLOCK_HASH, blockHash)
+        );
+        return rcpCallMethodMap(
+                new Method(Constants.CHAIN_GET_BLOCK_TRANSFERS, params),
+                CHAIN_GET_BLOCK_TRANSFERS::getValue
+        );
+    }
+
+    /**
      * Obtains the chain era info by switch block result as JSON
      *
      * @return Obtains

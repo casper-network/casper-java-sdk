@@ -426,6 +426,10 @@ public class CasperSdk {
         return nodeClient.getBlockTransfers();
     }
 
+    public String getBlockTransfers(String blockHash) {
+        return nodeClient.getBlockTransfers(blockHash);
+    }
+
     /**
      * Obtains the chain ero info by switch block as JSON
      *

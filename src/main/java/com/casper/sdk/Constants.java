@@ -21,6 +21,7 @@ public class Constants {
     public static final String ENTRY_POINT = "entry_point";
     public static final String ERC_20 = "ERC20";
     public static final String HASH = "hash";
+    public static final String BLOCK_HASH = "Hash";
     public static final String HEIGHT = "Height";
     public static final String INFO_GET_DEPLOY = "info_get_deploy";
     public static final String INFO_GET_PEERS = "info_get_peers";
