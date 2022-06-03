@@ -146,7 +146,7 @@ public class NodeClient {
     public String getBlockInfoByHeight(final Number height) {
         final Map<String, Object> params = CollectionUtils.Map.of(
                 Constants.BLOCK_IDENTIFIER,
-                CollectionUtils.Map.of(Constants.HEIGHT, height.toString())
+                CollectionUtils.Map.of(Constants.HEIGHT, height)
         );
         return getChainBlockInfo(params);
     }
