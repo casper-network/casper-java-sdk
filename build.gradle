@@ -29,8 +29,9 @@ dependencies {
     implementation "org.bouncycastle:bcprov-jdk15on:${bouncycastleVersion}"
     implementation "org.bouncycastle:bcpkix-jdk14:${bouncycastleVersion}"
     implementation "com.google.code.findbugs:jsr305:${jsr305Version}"
-    //implementation "com.syntifi.crypto:crypto-key-ed25519:0.2.0"
-    //implementation "com.syntifi.crypto:crypto-key-secp256k1:0.2.0"
+    implementation "com.syntifi.crypto:crypto-key-common:${cryptokeyVersion}"
+    implementation "com.syntifi.crypto:crypto-key-ed25519:${cryptokeyVersion}"
+    implementation "com.syntifi.crypto:crypto-key-secp256k1:${cryptokeyVersion}"
 
     testImplementation "com.squareup.okhttp3:mockwebserver:${mockwebserverVersion}"
     testImplementation "com.jayway.jsonpath:json-path-assert:${jsonPathAssertVersion}"
@@ -60,7 +61,7 @@ publishing {
 jar {
     manifest {
         attributes(
-                'Main-Class': 'com.casper.sdk.controller.CasperSdk'
+                'Main-Class': 'com.casper.sdk.CasperSdk'
         )
     }
 }
@@ -69,7 +70,7 @@ task casperJar(type: Jar) {
     archiveBaseName = 'casper-java-sdk'
     archiveVersion = '0.1.0'
     manifest {
-        attributes 'Main-Class': 'com.casper.sdk.controller.CasperSdk'
+        attributes 'Main-Class': 'com.casper.sdk.CasperSdk'
     }
     from { configurations.compileClasspath.findAll { it.isDirectory() ? it : zipTree(it) } }
     with jar

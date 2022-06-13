@@ -76,10 +76,10 @@ See [here](https://github.com/casper-network/casper-java-sdk/blob/main/src/test/
 
 ## How To: Install a smart contract ?
 
-See [here](https://github.com/casper-network/casper-java-sdk/blob/main/src/test/java/com/casper/sdk/how_to/HowToInstallAContract.java).
+See [here](https://github.com/casper-network/casper-java-sdk/blob/main/src/test/java/com/casper/sdk/how_to/HowToInstallContracts.java).
 
 ## How To: Invoke a smart contract ?
 
-See [here](https://github.com/casper-network/casper-java-sdk/blob/main/src/test/java/com/casper/sdk/how_to/HowToInvokeAContract.java).
+See [here](https://github.com/casper-network/casper-java-sdk/blob/main/src/test/java/com/casper/sdk/how_to/HowToInvokeContracts.java).
 
 ##### 
