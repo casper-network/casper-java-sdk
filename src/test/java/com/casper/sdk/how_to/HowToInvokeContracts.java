@@ -20,8 +20,8 @@ import static org.hamcrest.core.Is.is;
 /**
  * Integration tests for invoking a contract
  */
-@Disabled // Remove this to run locally
-public class HowToInvokeContracts {
+//@Disabled // Remove this to run locally
+public class HowToInvokeAContract {
 
     /**
      * Test that gives an example of using a
