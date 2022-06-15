@@ -5,6 +5,7 @@ import com.casper.sdk.types.Algorithm;
 
 import javax.annotation.Nullable;
 import java.security.KeyPair;
+import java.security.PrivateKey;
 import java.security.PublicKey;
 
 /**
@@ -14,10 +15,11 @@ public interface KeyPairBuilder {
 
     /**
      * Generates a new key pair
+     *
      * @param seed the optional entropy source to be used when generating a key pair
      * @return a new key pain
      */
-    KeyPair generateKeyPair(@Nullable final byte [] seed);
+    KeyPair generateKeyPair(@Nullable final byte[] seed);
 
     /**
      * The algorithm of the signer
@@ -50,7 +52,22 @@ public interface KeyPairBuilder {
      */
     PublicKey createPublicKey(final byte[] publicKey);
 
-    byte [] convertFromDER(final byte[] signed);
+    /**
+     * Signs a message using the provided key
+     *
+     * @param privateKey the private key to sign with
+     * @param message    the message to sign
+     * @return the signed message
+     */
+    byte[] signWithPrivateKey(final PrivateKey privateKey, final byte[] message);
 
-    byte [] convertToDER(final byte[] signed);
+    /**
+     * Verifies a signed message
+     *
+     * @param publicKey the public key to  verify signature with
+     * @param message   the message to sign
+     * @param signature the signed message
+     * @return true if the signature is valid otherwise false
+     */
+    boolean verifySignature(final PublicKey publicKey, final byte[] message, final byte[] signature);
 }

@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyPair;
 import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.security.SecureRandom;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -173,13 +174,7 @@ class SigningServiceTest {
     @SuppressWarnings("ConstantConditions")
     void signWithSecp256k1PrivateKeyAndVerifySignature() throws Exception {
 
-        // Copy of a deploy hash
-        final byte[] message = {
-                (byte) 153, (byte) 144, (byte) 19, (byte) 83, (byte) 219, (byte) 161, (byte) 143, (byte) 137, (byte) 59,
-                (byte) 67, (byte) 187, (byte) 238, (byte) 65, (byte) 111, (byte) 80, (byte) 243, (byte) 142, (byte) 77,
-                (byte) 113, (byte) 46, (byte) 2, (byte) 166, (byte) 121, (byte) 118, (byte) 34, (byte) 205, (byte) 123,
-                (byte) 14, (byte) 215, (byte) 85, (byte) 234, (byte) 161
-        };
+        final byte[] message = "The quick brown fox jumped over the lazy dog more than once".getBytes(StandardCharsets.UTF_8);
 
         final KeyPair keyPair = signingService.loadKeyPair(
                 SigningServiceTest.class.getResource(SECP256K1_PUBLIC_KEY).openStream(),
@@ -268,5 +263,20 @@ class SigningServiceTest {
 
         assertThat(publicKey, is(instanceOf(BCECPublicKey.class)));
         assertThat(signingService.toClPublicKey(publicKey).getBytes(), is(clPublicKey.getBytes()));
+    }
+
+    @Test
+    void
+    secp256k1SignAndVerifyFromFile() {
+
+        final byte[] message = "The quick brown fox jumped over the lazy dog".getBytes(StandardCharsets.UTF_8);
+        final byte[] expectedSigned = ByteUtils.decodeHex("898aca19a91a770078ca62dd14627305718a49c8fd2f59782cfe067a60ae3d7b2fa92d6ac504ce68c6d8b492325aaa32907c5eeab33a21262717d7ed1c5b932e");
+
+        final PrivateKey privateKey = signingService.loadKey(getClass().getResourceAsStream(SECP256K1_SECRET_KEY));
+        final byte[] signed = signingService.signWithPrivateKey(privateKey, message);
+        assertThat(signed, is(expectedSigned));
+
+        final PublicKey publicKey = signingService.loadKey(getClass().getResourceAsStream(SECP256K1_PUBLIC_KEY));
+        assertThat(signingService.verifySignature(publicKey, message, signed), is(true));
     }
 }

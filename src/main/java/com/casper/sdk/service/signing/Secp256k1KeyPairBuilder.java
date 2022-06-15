@@ -1,21 +1,25 @@
 package com.casper.sdk.service.signing;
 
 import com.casper.sdk.exceptions.SignatureException;
+import com.casper.sdk.service.serialization.util.ByteUtils;
 import com.casper.sdk.types.Algorithm;
-import org.bouncycastle.asn1.ASN1EncodableVector;
-import org.bouncycastle.asn1.ASN1Integer;
-import org.bouncycastle.asn1.ASN1Sequence;
-import org.bouncycastle.asn1.DERSequence;
+import org.bouncycastle.crypto.params.ECPrivateKeyParameters;
+import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPrivateKey;
 import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPublicKey;
 import org.bouncycastle.jce.ECNamedCurveTable;
 import org.bouncycastle.jce.spec.ECParameterSpec;
 import org.bouncycastle.jce.spec.ECPublicKeySpec;
 import org.bouncycastle.math.ec.ECPoint;
+import org.bouncycastle.util.encoders.Hex;
+import org.web3j.crypto.ECKeyPair;
+import org.web3j.crypto.Hash;
+import org.web3j.crypto.Sign;
 
-import java.io.IOException;
 import java.math.BigInteger;
+import java.nio.ByteBuffer;
 import java.security.KeyFactory;
 import java.security.KeyPair;
+import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.util.Arrays;
 
@@ -57,52 +61,51 @@ public class Secp256k1KeyPairBuilder extends AbstractKeyPairBuilder {
         }
     }
 
-    /**
-     * Converts an DER ASN.1 signature to a P1363 Signature
-     *
-     * @param asn1EncodedSignature the DER signature bytes
-     * @return the P1363 signature
-     */
     @Override
-    public byte[] convertFromDER(byte[] asn1EncodedSignature) {
-        final ASN1Sequence seq = ASN1Sequence.getInstance(asn1EncodedSignature);
-        final BigInteger r = ((ASN1Integer) seq.getObjectAt(0)).getValue();
-        final BigInteger s = ((ASN1Integer) seq.getObjectAt(1)).getValue();
-        int n = (r.bitLength() + 7) / 8;
-        // round up to the nearest even integer
-        //noinspection IntegerDivisionInFloatingPointContext
-        n = Math.round((n + 1) / 2) * 2;
-        final byte[] out = new byte[2 * n];
-        toFixed(r, out, 0, n);
-        toFixed(s, out, n, n);
-        return out;
+    public byte[] signWithPrivateKey(final PrivateKey privateKey, final byte[] message) {
+
+        // The Standard Java API create a DER format signature casper requires a
+        final BCECPrivateKey bcecPrivateKey = (BCECPrivateKey) privateKey;
+        final BigInteger d = bcecPrivateKey.getD();
+        final ECKeyPair keyPair = ECKeyPair.create(d);
+        final Sign.SignatureData signature = Sign.signMessage(Hash.sha256(message), keyPair, false);
+        final ByteBuffer bb = ByteBuffer.allocate(signature.getR().length + signature.getS().length);
+        bb.put(signature.getR());
+        bb.put(signature.getS());
+        return bb.array();
     }
 
-    /**
-     * Converts a P1363 encoded signature to a DER ASN1 signature
-     *
-     * @param p1363EncodedSignature the signature the convert
-     * @return a DER ASN.1 signature
-     */
     @Override
-    public byte[] convertToDER(byte[] p1363EncodedSignature) {
-        final int n = p1363EncodedSignature.length / 2;
-        final BigInteger r = new BigInteger(+1, Arrays.copyOfRange(p1363EncodedSignature, 0, n));
-        final BigInteger s = new BigInteger(+1, Arrays.copyOfRange(p1363EncodedSignature, n, n * 2));
-        final ASN1EncodableVector v = new ASN1EncodableVector();
-        v.add(new ASN1Integer(r));
-        v.add(new ASN1Integer(s));
+    public boolean verifySignature(final PublicKey publicKey, final byte[] message, final byte[] signature) {
+
         try {
-            return new DERSequence(v).getEncoded();
-        } catch (IOException e) {
+            final byte[] x = ((BCECPublicKey) publicKey).getQ().getXCoord().getEncoded();
+            final byte[] y = ((BCECPublicKey) publicKey).getQ().getYCoord().getEncoded();
+            final byte[] shortPublicKey = getShortKey(new BigInteger(ByteUtils.concat(x, y)));
+            final Sign.SignatureData signatureData = new Sign.SignatureData(
+                    (byte) 27,
+                    Arrays.copyOfRange(signature, 0, 32),
+                    Arrays.copyOfRange(signature, 32, 64)
+            );
+            final BigInteger derivedKey = Sign.signedMessageHashToKey(Hash.sha256(message), signatureData);
+
+            byte[] shortDerivedKey = getShortKey(derivedKey);
+            boolean verified = Arrays.equals(shortDerivedKey, shortPublicKey);
+            return verified;
+        } catch (Exception e) {
             throw new SignatureException(e);
         }
     }
 
-    private void toFixed(BigInteger x, byte[] a, int off, int len) {
-        final byte[] t = x.toByteArray();
-        if (t.length == len + 1 && t[0] == 0) System.arraycopy(t, 1, a, off, len);
-        else if (t.length <= len) System.arraycopy(t, 0, a, off + len - t.length, t.length);
-        else throw new SignatureException("Invalid length");
+    /**
+     * Gets a short key from a {@link BigInteger} key
+     *
+     * @param key the key as a {@link BigInteger}
+     * @return short key as byte array
+     */
+    private byte[] getShortKey(final BigInteger key) {
+        final String pubKeyPrefix = key.testBit(0) ? "03" : "02";
+        final byte[] pubKeyBytes = Arrays.copyOf(key.toByteArray(), 32);
+        return Hex.decode(pubKeyPrefix + Hex.toHexString(pubKeyBytes));
     }
 }

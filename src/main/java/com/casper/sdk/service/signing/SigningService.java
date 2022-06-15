@@ -81,20 +81,11 @@ public class SigningService {
      * Signs a message using the provided key
      *
      * @param privateKey the private key to sign with
-     * @param toSign     the message to sign
+     * @param message    the message to sign
      * @return the signed message
      */
-    public byte[] signWithPrivateKey(final PrivateKey privateKey, final byte[] toSign) {
-
-        try {
-            final Signature sig = Signature.getInstance(privateKey.getAlgorithm(), PROVIDER);
-            sig.initSign(privateKey);
-            sig.update(toSign);
-            return getKeyPairBuilder(privateKey.getAlgorithm()).convertFromDER(sig.sign());
-
-        } catch (Exception e) {
-            throw new SignatureException(e);
-        }
+    public byte[] signWithPrivateKey(final PrivateKey privateKey, final byte[] message) {
+        return getKeyPairBuilder(privateKey.getAlgorithm()).signWithPrivateKey(privateKey, message);
     }
 
     /**
@@ -121,20 +112,12 @@ public class SigningService {
      * Verifies a signed message
      *
      * @param publicKey the public key to  verify signature with
-     * @param toSign    the message to sign
+     * @param message   the message to sign
      * @param signature the signed message
      * @return true if the signature is valid otherwise false
      */
-    public boolean verifySignature(final PublicKey publicKey, final byte[] toSign, final byte[] signature) {
-
-        try {
-            final Signature sig = Signature.getInstance(publicKey.getAlgorithm(), PROVIDER);
-            sig.initVerify(publicKey);
-            sig.update(toSign);
-            return sig.verify(this.getKeyPairBuilder(publicKey.getAlgorithm()).convertToDER(signature));
-        } catch (Exception e) {
-            return false;
-        }
+    public boolean verifySignature(final PublicKey publicKey, final byte[] message, final byte[] signature) {
+        return getKeyPairBuilder(publicKey.getAlgorithm()).verifySignature(publicKey, message, signature);
     }
 
     /**
