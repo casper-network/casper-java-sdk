@@ -2,10 +2,10 @@ package com.casper.sdk.service.serialization.types;
 
 import com.casper.sdk.service.serialization.cltypes.CLValueBuilder;
 import com.casper.sdk.service.serialization.cltypes.TypesFactory;
+import com.casper.sdk.service.serialization.util.CollectionUtils;
 import com.casper.sdk.types.*;
 import org.junit.jupiter.api.Test;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static com.casper.sdk.service.serialization.util.ByteUtils.concat;
@@ -117,5 +117,17 @@ class CLValueByteSerializerTest {
                                           "0B"); // CL Type == 11 (0x0B)
 
         assertThat(byteSerializer.toBytes(clKeyValue), is(expected));
+    }
+
+
+    @Test
+    void clMapTypeBytesTest() {
+
+        final Digest contractHash = new Digest("8c7b947748f9715c3f24d83fbe60ab03b9602976ebcfe29535143c3dc19eca01");
+        final Map<CLValue, CLValue> clMap = CollectionUtils.Map.of(CLValueBuilder.byteArray(contractHash), CLValueBuilder.u256(50000));
+
+        byte[] bytes = byteSerializer.toBytes(CLValueBuilder.map(clMap));
+
+        assertThat(bytes[0], is(CLType.MAP.getClType()));
     }
 }
