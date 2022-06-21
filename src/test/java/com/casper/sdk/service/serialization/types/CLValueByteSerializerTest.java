@@ -92,7 +92,6 @@ class CLValueByteSerializerTest {
         assertThat(byteSerializer.toBytes(optionValue), is(expected));
     }
 
-
     @Test
     void keyValueToBytes() {
 
@@ -133,6 +132,5 @@ class CLValueByteSerializerTest {
         // Obtain the value with its type info
         final byte[] bytes = byteSerializer.toBytes(clMap);
         assertThat(bytes, is(expectedWithTypeBytes));
-
     }
 }
