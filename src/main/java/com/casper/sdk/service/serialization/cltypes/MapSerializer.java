@@ -30,7 +30,7 @@ public class MapSerializer implements TypesSerializer {
                 return serializeMap((Map<CLValue, CLValue>) toSerialize);
 
             } else {
-                // The map in not new and has not been modified so write as is
+                // The map is not new and has not been modified so write as is
                 return ((CLMap) toSerialize).getBytes();
             }
         } else if (toSerialize instanceof Map) {
