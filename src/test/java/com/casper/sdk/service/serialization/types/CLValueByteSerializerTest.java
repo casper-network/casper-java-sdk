@@ -6,8 +6,6 @@ import com.casper.sdk.service.serialization.util.CollectionUtils;
 import com.casper.sdk.types.*;
 import org.junit.jupiter.api.Test;
 
-import java.util.Map;
-
 import static com.casper.sdk.service.serialization.util.ByteUtils.concat;
 import static com.casper.sdk.service.serialization.util.ByteUtils.decodeHex;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -39,7 +37,6 @@ class CLValueByteSerializerTest {
 
     @Test
     void u512ValueToBytes() {
-
 
         final CLValue source = new CLValue(
                 decodeHex("0500e40b5402"),
@@ -123,15 +120,19 @@ class CLValueByteSerializerTest {
     @Test
     void clMapTypeBytesTest() {
 
-        final Digest contractHash = new Digest("8c7b947748f9715c3f24d83fbe60ab03b9602976ebcfe29535143c3dc19eca01");
-        final Map<CLValue, CLValue> clMap = CollectionUtils.Map.of(CLValueBuilder.byteArray(contractHash), CLValueBuilder.u256(50000));
+        final CLValue key = CLValueBuilder.string("ABC");
+        final CLValue value = CLValueBuilder.i32(10);
+        final byte[] expectedBytes = {1, 0, 0, 0, 3, 0, 0, 0, 65, 66, 67, 10, 0, 0, 0};
 
-        byte[] bytes = byteSerializer.toBytes(CLValueBuilder.map(clMap));
+        // Assert the value builder can generate the bytes
+        final CLMap clMap = CLValueBuilder.map(CollectionUtils.Map.of(key, value));
+        assertThat(clMap.getBytes(), is(expectedBytes));
 
-        assertThat(bytes[4], is(CLType.MAP.getClType()));
-        assertThat(bytes[5], is(CLType.BYTE_ARRAY.getClType()));
-        assertThat(bytes[6], is(CLType.U256.getClType()));
+        final byte[] expectedWithTypeBytes = {15, 0, 0, 0, 1, 0, 0, 0, 3, 0, 0, 0, 65, 66, 67, 10, 0, 0, 0, 17, 10, 1};
 
-        // TODO test values are converted
+        // Obtain the value with its type info
+        final byte[] bytes = byteSerializer.toBytes(clMap);
+        assertThat(bytes, is(expectedWithTypeBytes));
+
     }
 }

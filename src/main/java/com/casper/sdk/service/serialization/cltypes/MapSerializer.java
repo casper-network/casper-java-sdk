@@ -23,24 +23,33 @@ public class MapSerializer implements TypesSerializer {
     public byte[] serialize(final Object toSerialize) {
 
         if (toSerialize instanceof CLMap) {
-            if (((CLMap) toSerialize).isModified() || ((CLMap) toSerialize).getBytes() == null) {
 
+            if (((CLMap) toSerialize).isModified() || ((CLMap) toSerialize).getBytes() == null) {
                 ((CLMap) toSerialize).setModified(false);
-                return ByteUtils.concat(
-                        typesFactory.getInstance(CLType.U32).serialize(((CLMap) toSerialize).size()),
-                        buildMapBytes((CLMap)toSerialize)
-                );
+                //noinspection unchecked
+                return serializeMap((Map<CLValue, CLValue>) toSerialize);
 
             } else {
-                // The map has not been modified so write as is
+                // The map in not new and has not been modified so write as is
                 return ((CLMap) toSerialize).getBytes();
             }
+        } else if (toSerialize instanceof Map) {
+            //noinspection unchecked
+            return serializeMap((Map<CLValue, CLValue>) toSerialize);
         } else {
             return new byte[0];
         }
     }
 
-    private byte[] buildMapBytes(final CLMap clMap) {
+    private byte[] serializeMap(final Map<CLValue, CLValue> toSerialize) {
+        return ByteUtils.concat(
+                typesFactory.getInstance(CLType.U32).serialize(toSerialize.size()),
+                buildKeyValueBytes(toSerialize)
+        );
+    }
+
+    private byte[] buildKeyValueBytes(final Map<CLValue, CLValue> clMap) {
+
         final ByteArrayBuilder builder = new ByteArrayBuilder();
 
         for (Map.Entry<CLValue, CLValue> entry : clMap.entrySet()) {

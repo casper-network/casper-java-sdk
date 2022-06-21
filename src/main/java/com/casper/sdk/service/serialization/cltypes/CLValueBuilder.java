@@ -89,7 +89,10 @@ public class CLValueBuilder {
             throw new ValueNotFoundException("Maps must contain at least one key pair");
         }
 
-        return new CLMap(TYPES_FACTORY.getInstance(CLType.MAP).serialize(map),
+        final byte[] bytes = TYPES_FACTORY.getInstance(CLType.MAP).serialize(map);
+
+        return new CLMap(
+                bytes,
                 new CLMapTypeInfo(
                         map.keySet().iterator().next().getCLTypeInfo(),
                         map.values().iterator().next().getCLTypeInfo()
