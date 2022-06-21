@@ -128,6 +128,10 @@ class CLValueByteSerializerTest {
 
         byte[] bytes = byteSerializer.toBytes(CLValueBuilder.map(clMap));
 
-        assertThat(bytes[0], is(CLType.MAP.getClType()));
+        assertThat(bytes[4], is(CLType.MAP.getClType()));
+        assertThat(bytes[5], is(CLType.BYTE_ARRAY.getClType()));
+        assertThat(bytes[6], is(CLType.U256.getClType()));
+
+        // TODO test values are converted
     }
 }
