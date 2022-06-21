@@ -3,6 +3,9 @@ package com.casper.sdk.service.signing;
 import com.casper.sdk.exceptions.SignatureException;
 import com.casper.sdk.service.serialization.util.ByteUtils;
 import com.casper.sdk.types.Algorithm;
+import org.bouncycastle.asn1.x9.X9ECParameters;
+import org.bouncycastle.crypto.ec.CustomNamedCurves;
+import org.bouncycastle.crypto.params.ECDomainParameters;
 import org.bouncycastle.crypto.params.ECPrivateKeyParameters;
 import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPrivateKey;
 import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPublicKey;
@@ -90,8 +93,7 @@ public class Secp256k1KeyPairBuilder extends AbstractKeyPairBuilder {
             final BigInteger derivedKey = Sign.signedMessageHashToKey(Hash.sha256(message), signatureData);
 
             byte[] shortDerivedKey = getShortKey(derivedKey);
-            boolean verified = Arrays.equals(shortDerivedKey, shortPublicKey);
-            return verified;
+            return Arrays.equals(shortDerivedKey, shortPublicKey);
         } catch (Exception e) {
             throw new SignatureException(e);
         }
