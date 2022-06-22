@@ -46,6 +46,11 @@ public class Secp256k1KeyPairBuilder extends AbstractKeyPairBuilder {
     }
 
     @Override
+    KeyPair generateKeyPair(final String algorithm, final String curve, final byte[] seed) {
+        throw new SignatureException("secp256k1 KeyPair generation is not yet supported.");
+    }
+
+    @Override
     public boolean isSupportedPublicKey(final PublicKey publicKey) {
         return publicKey instanceof BCECPublicKey && ALGORITHM.equalsIgnoreCase(publicKey.getAlgorithm());
     }
@@ -67,7 +72,7 @@ public class Secp256k1KeyPairBuilder extends AbstractKeyPairBuilder {
     @Override
     public byte[] signWithPrivateKey(final PrivateKey privateKey, final byte[] message) {
 
-        // The Standard Java API create a DER format signature casper requires a
+        // The Standard Java API creates a DER format signature casper requires a
         final BCECPrivateKey bcecPrivateKey = (BCECPrivateKey) privateKey;
         final BigInteger d = bcecPrivateKey.getD();
         final ECKeyPair keyPair = ECKeyPair.create(d);

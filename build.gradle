@@ -21,7 +21,6 @@ dependencies {
     implementation "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
     implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
     implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${jacksonVersion}"
-    implementation "org.bouncycastle:bcprov-jdk15on:${cprovVersion}"
     implementation "com.sshtools:maverick-synergy:${maverickSynergyVersion}"
     implementation "org.apache.commons:commons-lang3:${commonsLangVersion}"
     implementation "com.squareup.okhttp3:okhttp:${okHttpVersion}"

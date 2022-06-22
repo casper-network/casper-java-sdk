@@ -1,5 +1,6 @@
 package com.casper.sdk.service.signing;
 
+import com.casper.sdk.exceptions.SignatureException;
 import com.casper.sdk.service.serialization.util.ByteUtils;
 import com.casper.sdk.types.Algorithm;
 import com.casper.sdk.types.CLPublicKey;
@@ -22,6 +23,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.hamcrest.core.IsNull.notNullValue;
+import static org.hamcrest.core.StringContains.containsString;
+import static org.junit.Assert.fail;
 
 class SigningServiceTest {
 
@@ -133,15 +136,21 @@ class SigningServiceTest {
                 (byte) 14, (byte) 215, (byte) 85, (byte) 234, (byte) 161
         };
 
-        final KeyPair keyPair = signingService.generateKeyPair(Algorithm.SECP256K1);
+        try {
+            final KeyPair keyPair = signingService.generateKeyPair(Algorithm.SECP256K1);
 
-        assertThat(keyPair, is(notNullValue()));
-        assertThat(keyPair.getPublic(), is(notNullValue()));
-        assertThat(keyPair.getPrivate(), is(notNullValue()));
+            fail("Should have thrown SignatureException");
 
-        final byte[] signedMessage = signingService.signWithPrivateKey(keyPair.getPrivate(), message);
+            assertThat(keyPair, is(notNullValue()));
+            assertThat(keyPair.getPublic(), is(notNullValue()));
+            assertThat(keyPair.getPrivate(), is(notNullValue()));
 
-        assertThat(signingService.verifySignature(keyPair.getPublic(), message, signedMessage), is(true));
+            final byte[] signedMessage = signingService.signWithPrivateKey(keyPair.getPrivate(), message);
+
+            assertThat(signingService.verifySignature(keyPair.getPublic(), message, signedMessage), is(true));
+        } catch (SignatureException e) {
+            assertThat(e.getMessage(), containsString("secp256k1 KeyPair generation is not yet supported"));
+        }
     }
 
 
@@ -159,22 +168,30 @@ class SigningServiceTest {
                 (byte) 14, (byte) 215, (byte) 85, (byte) 234, (byte) 161
         };
 
-        final KeyPair keyPair = signingService.generateKeyPair(Algorithm.SECP256K1, seed);
+        try {
+            final KeyPair keyPair = signingService.generateKeyPair(Algorithm.SECP256K1, seed);
 
-        assertThat(keyPair, is(notNullValue()));
-        assertThat(keyPair.getPublic(), is(notNullValue()));
-        assertThat(keyPair.getPrivate(), is(notNullValue()));
+            fail("Should have thrown SignatureException");
 
-        final byte[] signedMessage = signingService.signWithPrivateKey(keyPair.getPrivate(), message);
+            assertThat(keyPair, is(notNullValue()));
+            assertThat(keyPair.getPublic(), is(notNullValue()));
+            assertThat(keyPair.getPrivate(), is(notNullValue()));
 
-        assertThat(signingService.verifySignature(keyPair.getPublic(), message, signedMessage), is(true));
+            final byte[] signedMessage = signingService.signWithPrivateKey(keyPair.getPrivate(), message);
+
+            assertThat(signingService.verifySignature(keyPair.getPublic(), message, signedMessage), is(true));
+        } catch (SignatureException e) {
+            assertThat(e.getMessage(), containsString("secp256k1 KeyPair generation is not yet supported"));
+        }
     }
 
     @Test
     @SuppressWarnings("ConstantConditions")
     void signWithSecp256k1PrivateKeyAndVerifySignature() throws Exception {
 
-        final byte[] message = "The quick brown fox jumped over the lazy dog more than once".getBytes(StandardCharsets.UTF_8);
+        final byte[] message = "The quick brown fox jumped over the lazy dog".getBytes(StandardCharsets.UTF_8);
+
+        final byte[] expectedSigned = ByteUtils.decodeHex("898aca19a91a770078ca62dd14627305718a49c8fd2f59782cfe067a60ae3d7b2fa92d6ac504ce68c6d8b492325aaa32907c5eeab33a21262717d7ed1c5b932e");
 
         final KeyPair keyPair = signingService.loadKeyPair(
                 SigningServiceTest.class.getResource(SECP256K1_PUBLIC_KEY).openStream(),
@@ -182,6 +199,9 @@ class SigningServiceTest {
         );
 
         final byte[] signedMessage = signingService.signWithPrivateKey(keyPair.getPrivate(), message);
+
+        assertThat(signedMessage, is(expectedSigned));
+
         assertThat(signingService.verifySignature(keyPair.getPublic(), message, signedMessage), is(true));
 
         final String expectedRaw = "02035793d9a677ec9cf0d3d2a7a61fb98c173c04b63925cfe387203b19d312fa37b0";

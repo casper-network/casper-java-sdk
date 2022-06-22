@@ -1,11 +1,13 @@
 package com.casper.sdk.service.signing;
 
+import com.casper.sdk.exceptions.SignatureException;
 import com.casper.sdk.service.serialization.util.ByteUtils;
 import com.casper.sdk.types.Algorithm;
 import org.bouncycastle.asn1.x9.X9ECParameters;
 import org.bouncycastle.crypto.ec.CustomNamedCurves;
 import org.bouncycastle.crypto.params.ECDomainParameters;
 import org.bouncycastle.util.encoders.Hex;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.web3j.crypto.ECKeyPair;
 import org.web3j.crypto.Hash;
@@ -22,9 +24,15 @@ import java.util.Arrays;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
+import static org.hamcrest.core.StringContains.containsString;
+import static org.junit.jupiter.api.Assertions.fail;
 
+/**
+ * Tests for issues/108.
+ *
+ * @see <a href="https://github.com/casper-network/casper-java-sdk/issues/108">issues/108</a>
+ */
 class Secp256k1PrivateKeyTest {
-
 
     public static final X9ECParameters CURVE_PARAMS = CustomNamedCurves.getByName("secp256k1");
     public static final byte[] MESSAGE = "The quick brown fox jumped over the lazy dog".getBytes(StandardCharsets.UTF_8);
@@ -152,31 +160,40 @@ class Secp256k1PrivateKeyTest {
     @Test
     void generatePrivateKey() throws Exception {
 
-        KeyPair keyPair = signingService.generateKeyPair(Algorithm.SECP256K1);
+        try {
+            KeyPair keyPair = signingService.generateKeyPair(Algorithm.SECP256K1);
 
-        ECKeyPair ecKeyPair = ECKeyPair.create(keyPair);
-        BigInteger publicKey = ecKeyPair.getPublicKey();
+            fail("secp256k1 KeyPair generation is not yet supported.");
 
-        Sign.SignatureData signature = Sign.signMessage(Hash.sha256(MESSAGE), ecKeyPair, false);
+            ECKeyPair ecKeyPair = ECKeyPair.create(keyPair);
+            BigInteger publicKey = ecKeyPair.getPublicKey();
 
-        ByteBuffer bb = ByteBuffer.allocate(signature.getR().length + signature.getS().length);
-        bb.put(signature.getR());
-        bb.put(signature.getS());
-        byte[] signed = bb.array();
+            Sign.SignatureData signature = Sign.signMessage(Hash.sha256(MESSAGE), ecKeyPair, false);
 
-        assertThat(signed, is(notNullValue()));
+            ByteBuffer bb = ByteBuffer.allocate(signature.getR().length + signature.getS().length);
+            bb.put(signature.getR());
+            bb.put(signature.getS());
+            byte[] signed = bb.array();
 
-        Sign.SignatureData signatureData = new Sign.SignatureData(
-                (byte) 27,
-                Arrays.copyOfRange(signed, 0, 32),
-                Arrays.copyOfRange(signed, 32, 64));
-        BigInteger derivedKey = Sign.signedMessageHashToKey(Hash.sha256(MESSAGE), signatureData);
+            assertThat(signed, is(notNullValue()));
 
-        BigInteger publicKeyFromPrivate = Sign.publicKeyFromPrivate(ecKeyPair.getPrivateKey());
+            Sign.SignatureData signatureData = new Sign.SignatureData(
+                    (byte) 27,
+                    Arrays.copyOfRange(signed, 0, 32),
+                    Arrays.copyOfRange(signed, 32, 64));
+            BigInteger derivedKey = Sign.signedMessageHashToKey(Hash.sha256(MESSAGE), signatureData);
 
-        byte[] key = getKey(ecKeyPair);
-        boolean equals = Arrays.equals(getShortKey(derivedKey.toByteArray()), key);
-        assertThat(equals, is(true));
+            BigInteger publicKeyFromPrivate = Sign.publicKeyFromPrivate(ecKeyPair.getPrivateKey());
+
+            byte[] key = getKey(ecKeyPair);
+            boolean equals = Arrays.equals(getShortKey(derivedKey.toByteArray()), key);
+            assertThat(equals, is(true));
+
+        } catch (SignatureException e) {
+            assertThat(e.getMessage(), containsString("secp256k1 KeyPair generation is not yet supported"));
+        }
+
+
     }
 
 
@@ -185,12 +202,5 @@ class Secp256k1PrivateKeyTest {
         String pubKeyPrefix = pubKey.testBit(0) ? "03" : "02";
         byte[] pubKeyBytes = Arrays.copyOf(pubKey.toByteArray(), 32);
         return Hex.decode(pubKeyPrefix + Hex.toHexString(pubKeyBytes));
-    }
-
-
-
-    @Test
-    void generatePrivateKeyFromSeed() {
-
     }
 }
