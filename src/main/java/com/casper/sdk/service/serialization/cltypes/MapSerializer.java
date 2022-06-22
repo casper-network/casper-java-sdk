@@ -24,7 +24,8 @@ public class MapSerializer implements TypesSerializer {
 
         if (toSerialize instanceof CLMap) {
 
-            if (((CLMap) toSerialize).isModified() || ((CLMap) toSerialize).getBytes() == null) {
+            // The map is mutable to the bytes need to be reserialized if modified or not yet created
+            if (isModifiedOrNotYetSerialized((CLMap) toSerialize)) {
                 ((CLMap) toSerialize).setModified(false);
                 //noinspection unchecked
                 return serializeMap((Map<CLValue, CLValue>) toSerialize);
@@ -39,6 +40,10 @@ public class MapSerializer implements TypesSerializer {
         } else {
             return new byte[0];
         }
+    }
+
+    private boolean isModifiedOrNotYetSerialized(final CLMap toSerialize) {
+        return toSerialize.isModified() || toSerialize.getBytes() == null;
     }
 
     private byte[] serializeMap(final Map<CLValue, CLValue> toSerialize) {
