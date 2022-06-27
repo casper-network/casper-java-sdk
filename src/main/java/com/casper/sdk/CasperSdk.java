@@ -427,6 +427,16 @@ public class CasperSdk {
     }
 
     /**
+     * Returns on-chain block transfers information as JSON for a specific block hash
+     *
+     * @param blockHash the block hash to otain the transfers for
+     * @return the block transfers information as JSON
+     */
+    public String getBlockTransfers(final String blockHash) {
+        return nodeClient.getBlockTransfers(blockHash);
+    }
+
+    /**
      * Obtains the chain ero info by switch block as JSON
      *
      * @return the JSON result
