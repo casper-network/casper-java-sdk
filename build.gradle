@@ -93,10 +93,6 @@ publishing {
             credentials {
                 username = System.getenv("GITHUB_ACTOR")
                 password = System.getenv("GITHUB_TOKEN")
-
-                logger.info(System.getenv("USERNAME"))
-                logger.info(System.getenv("TOKEN"))
-
             }
         }
     }
