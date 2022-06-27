@@ -3,9 +3,11 @@
 
 name: Java CI with Maven
 
-on:
-  release:
-    types: [created]
+#on:
+#  release:
+#    types: [push]
+
+on: push
 
 jobs:
   build:

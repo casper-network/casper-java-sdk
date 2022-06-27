@@ -6,7 +6,7 @@ plugins {
 apply plugin: 'java'
 
 group = 'network.casper'
-version='0.3.4'
+version='0.3.6'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
@@ -43,8 +43,8 @@ publishing {
             name = "GitHubPackages"
             url = uri("https://maven.pkg.github.com/casper-network/casper-java-sdk")
             credentials {
-                username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
-                password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
+                username = project.findProperty("gpr.user") ?: System.getenv("MAVEN_USERNAME")
+                password = project.findProperty("gpr.key") ?: System.getenv("MAVEN_GPG_PASSPHRASE")
             }
         }
     }
