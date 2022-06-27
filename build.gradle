@@ -148,8 +148,8 @@ publishing {
 
     // Reference at https://docs.gradle.org/current/userguide/signing_plugin.html#sec:in-memory-keys
     signing {
-        def signingKey = System.getenv('OSSRH_GPG_SECRET_KEY') ?: findProperty('OSSRH_GPG_SECRET_KEY')
-        def signingKeyPassword = System.getenv('OSSRH_GPG_SECRET_KEY_PASSWORD') ?: findProperty('OSSRH_GPG_SECRET_KEY_PASSWORD')
+        def signingKey = System.getenv('MAVEN_GPG_KEY') ?: findProperty('MAVEN_GPG_KEY')
+        def signingKeyPassword = System.getenv('MAVEN_GPG_PASSPHRASE') ?: findProperty('MAVEN_GPG_PASSPHRASE')
         useInMemoryPgpKeys(signingKey, signingKeyPassword)
         sign publishing.publications.mavenJava
     }
