@@ -26,7 +26,7 @@ import static org.hamcrest.core.Is.is;
 /**
  * Casper SDK integration tests. The NCTL test nodes must be running for these tests to execute.
  */
-@Disabled // Remove this comment to test against a network
+//@Disabled // Remove this comment to test against a network
 class CasperSdkIntegrationTest {
 
     /** Path the nctl folder can be overridden with -Dnctl.home=some-path */
@@ -187,6 +187,21 @@ class CasperSdkIntegrationTest {
         blockInfo = casperSdk.getBlockInfoByHeight(height);
         assertThat(blockInfo, is(notNullValue()));
         assertThat(blockInfo, hasJsonPath("$.header.height", is(height)));
+    }
+
+    @Test
+    void getBlockTransfers() throws JsonProcessingException {
+
+        final String blockTransfers = casperSdk.getBlockTransfers();
+        assertThat(blockTransfers, is(notNullValue()));
+        assertThat(blockTransfers, hasJsonPath("$.block_hash"));
+        assertThat(blockTransfers, hasJsonPath("$.transfers"));
+
+        final JsonNode jsonNode = new ObjectMapper().readTree(blockTransfers);
+        final String blockHash = jsonNode.get("block_hash").textValue();
+
+        final String blockTransfersByHash = casperSdk.getBlockTransfers(blockHash);
+        assertThat(blockTransfersByHash, hasJsonPath("$.transfers"));
     }
 
     private KeyPair geUserKeyPair(int userNumber) throws IOException {
