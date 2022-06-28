@@ -138,15 +138,15 @@ public class NodeClient {
     public String getBlockInfo(final Digest blockHash) {
         final Map<String, Object> params = CollectionUtils.Map.of(
                 Constants.BLOCK_IDENTIFIER,
-                CollectionUtils.Map.of(HASH, blockHash.toString()
-                ));
+                CollectionUtils.Map.of(HASH, blockHash)
+        );
         return getChainBlockInfo(params);
     }
 
     public String getBlockInfoByHeight(final Number height) {
         final Map<String, Object> params = CollectionUtils.Map.of(
                 Constants.BLOCK_IDENTIFIER,
-                CollectionUtils.Map.of(Constants.HEIGHT, height.toString())
+                CollectionUtils.Map.of(Constants.HEIGHT, height)
         );
         return getChainBlockInfo(params);
     }
@@ -184,6 +184,25 @@ public class NodeClient {
                 CHAIN_GET_BLOCK_TRANSFERS::getValue
         );
     }
+
+    /**
+     * Obtains the nodes chain block transfers
+     *
+     * @param blockHash block hash to obtain transfers for
+     * @return the JSON of the chain block transfers
+     */
+    public String getBlockTransfers(final String blockHash) {
+
+        final Map<String, Object> params = CollectionUtils.Map.of(
+                Constants.BLOCK_IDENTIFIER,
+                CollectionUtils.Map.of(Constants.BLOCK_HASH, blockHash)
+        );
+        return rcpCallMethodMap(
+                new Method(Constants.CHAIN_GET_BLOCK_TRANSFERS, params),
+                CHAIN_GET_BLOCK_TRANSFERS::getValue
+        );
+    }
+
 
     /**
      * Obtains the chain era info by switch block result as JSON

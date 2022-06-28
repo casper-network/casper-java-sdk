@@ -189,6 +189,21 @@ class CasperSdkIntegrationTest {
         assertThat(blockInfo, hasJsonPath("$.header.height", is(height)));
     }
 
+    @Test
+    void getBlockTransfers() throws JsonProcessingException {
+
+        final String blockTransfers = casperSdk.getBlockTransfers();
+        assertThat(blockTransfers, is(notNullValue()));
+        assertThat(blockTransfers, hasJsonPath("$.block_hash"));
+        assertThat(blockTransfers, hasJsonPath("$.transfers"));
+
+        final JsonNode jsonNode = new ObjectMapper().readTree(blockTransfers);
+        final String blockHash = jsonNode.get("block_hash").textValue();
+
+        final String blockTransfersByHash = casperSdk.getBlockTransfers(blockHash);
+        assertThat(blockTransfersByHash, hasJsonPath("$.transfers"));
+    }
+
     private KeyPair geUserKeyPair(int userNumber) throws IOException {
         final KeyPairStreams streams = getUserKeyPairStreams(userNumber);
         return casperSdk.loadKeyPair(streams.getPublicKeyIn(), streams.getPrivateKeyIn());

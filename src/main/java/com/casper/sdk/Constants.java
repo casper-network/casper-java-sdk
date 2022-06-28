@@ -7,6 +7,7 @@ public class Constants {
     public static final String ARGS = "args";
     public static final String BALANCE_VALUE = "balance_value";
     public static final String BLOCK = "block";
+    public static final String BLOCK_HASH = "Hash";
     public static final String BLOCK_IDENTIFIER = "block_identifier";
     public static final String CHAIN_GET_BLOCK = "chain_get_block";
     public static final String CHAIN_GET_BLOCK_TRANSFERS = "chain_get_block_transfers";
