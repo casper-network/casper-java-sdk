@@ -26,7 +26,7 @@ import static org.hamcrest.core.Is.is;
 /**
  * Casper SDK integration tests. The NCTL test nodes must be running for these tests to execute.
  */
-@Disabled // Remove this comment to test against a network
+//@Disabled // Remove this comment to test against a network
 class CasperSdkIntegrationTest {
 
     /** Path the nctl folder can be overridden with -Dnctl.home=some-path */
@@ -144,7 +144,6 @@ class CasperSdkIntegrationTest {
         );
 
         casperSdk.signDeploy(deploy, nodeOneKeyPair);
-        casperSdk.signDeploy(deploy, userTwoKeyPair);
 
         final String json = casperSdk.deployToJson(deploy);
 

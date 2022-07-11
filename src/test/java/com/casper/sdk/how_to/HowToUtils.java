@@ -3,6 +3,7 @@ package com.casper.sdk.how_to;
 import com.casper.sdk.KeyPairStreams;
 
 import java.io.*;
+import java.nio.file.Files;
 
 /**
  * Utility methods for the How-Tos
@@ -10,15 +11,15 @@ import java.io.*;
 public final class HowToUtils {
 
     private static final String NCTL_HOME = "nctl.home";
-    private static final String DEFAULT_NCTL_HOME = "~/casper-node/utils/nctl";
+    private static final String DEFAULT_NCTL_HOME = "~/casper/casper-node/utils/nctl";
 
     public static KeyPairStreams getUserKeyPairStreams(final int userNumber) throws IOException {
 
         final String userNPath = String.format("%s/assets/net-1/users/user-%d", getNctlHome(), userNumber);
 
         return new KeyPairStreams(
-                new FileInputStream(new File(userNPath, "public_key.pem")),
-                new FileInputStream(new File(userNPath, "secret_key.pem"))
+                Files.newInputStream(new File(userNPath, "public_key.pem").toPath()),
+                Files.newInputStream(new File(userNPath, "secret_key.pem").toPath())
         );
     }
 
@@ -33,15 +34,15 @@ public final class HowToUtils {
         final String userNPath = String.format("%s/assets/net-1/nodes/node-%d/keys", getNctlHome(), nodeNumber);
 
         return new KeyPairStreams(
-                new FileInputStream(new File(userNPath, "public_key.pem")),
-                new FileInputStream(new File(userNPath, "secret_key.pem"))
+                Files.newInputStream(new File(userNPath, "public_key.pem").toPath()),
+                Files.newInputStream(new File(userNPath, "secret_key.pem").toPath())
         );
     }
 
-    static KeyPairStreams getFaucetKeyPair() throws FileNotFoundException {
+    static KeyPairStreams getFaucetKeyPair() throws IOException {
         return new KeyPairStreams(
-                new FileInputStream(new File(getNctlHome() + "/assets/net-1/faucet", "public_key.pem")),
-                new FileInputStream(new File(getNctlHome() + "/assets/net-1/faucet", "secret_key.pem"))
+                Files.newInputStream(new File(getNctlHome() + "/assets/net-1/faucet", "public_key.pem").toPath()),
+                Files.newInputStream(new File(getNctlHome() + "/assets/net-1/faucet", "secret_key.pem").toPath())
         );
 
     }

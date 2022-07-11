@@ -24,7 +24,7 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.hamcrest.core.StringContains.containsString;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 
 class SigningServiceTest {
 
@@ -215,8 +215,8 @@ class SigningServiceTest {
     void saveSecp256k1PrivatePem() throws IOException {
 
         final KeyPair keyPair = signingService.loadKeyPair(
-                SigningServiceTest.class.getResource(SECP256K1_PUBLIC_KEY).openStream(),
-                SigningServiceTest.class.getResource(SECP256K1_SECRET_KEY).openStream()
+                SigningServiceTest.class.getResourceAsStream(SECP256K1_PUBLIC_KEY),
+                SigningServiceTest.class.getResourceAsStream(SECP256K1_SECRET_KEY)
         );
 
         final ByteArrayOutputStream privateOut = new ByteArrayOutputStream();
@@ -224,7 +224,8 @@ class SigningServiceTest {
 
         // Load the key back and ensure it is valid
         final byte[] pemBytes = privateOut.toByteArray();
-        final String expectedPrivate = IOUtils.toString(SigningServiceTest.class.getResource(SECP256K1_SECRET_KEY).openStream(), StandardCharsets.UTF_8);
+        //noinspection ConstantConditions
+        final String expectedPrivate = IOUtils.toString(SigningServiceTest.class.getResourceAsStream(SECP256K1_SECRET_KEY), StandardCharsets.UTF_8);
         assertThat(new String(pemBytes, StandardCharsets.UTF_8), is(expectedPrivate));
 
         final PrivateKey privateKey = signingService.toPrivateKey(new ByteArrayInputStream(pemBytes));
@@ -239,11 +240,11 @@ class SigningServiceTest {
     }
 
     @Test
-    void saveED25519PublicPem() throws IOException {
+    void saveED25519PublicPem() {
 
         final KeyPair keyPair = signingService.loadKeyPair(
-                SigningServiceTest.class.getResource(ED25519K_PUBLIC_KEY).openStream(),
-                SigningServiceTest.class.getResource(ED25519K_PRIVATE_KEY).openStream()
+                SigningServiceTest.class.getResourceAsStream(ED25519K_PUBLIC_KEY),
+                SigningServiceTest.class.getResourceAsStream(ED25519K_PRIVATE_KEY)
         );
 
         final ByteArrayOutputStream publicOut = new ByteArrayOutputStream();
