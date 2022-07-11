@@ -1,17 +1,22 @@
+
+
 plugins {
     id 'java-library'
+    id 'signing'
     id 'maven-publish'
+    id 'jacoco'
 }
 
 apply plugin: 'java'
 
 group = 'network.casper'
-version='0.3.4'
+version='0.3.7'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 repositories {
     mavenCentral()
+    maven { url 'https://s01.oss.sonatype.org/content/repositories/snapshots' }
 }
 
 dependencies {
@@ -37,21 +42,14 @@ dependencies {
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
 }
 
-publishing {
-    repositories {
-        maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/casper-network/casper-java-sdk")
-            credentials {
-                username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
-                password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
-            }
-        }
-    }
-    publications {
-        gpr(MavenPublication) {
-            from(components.java)
-        }
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
+javadoc {
+    if (JavaVersion.current().isJava9Compatible()) {
+        options.addBooleanOption('html5', true)
     }
 }
 
@@ -75,4 +73,88 @@ task casperJar(type: Jar) {
 
 test {
     useJUnitPlatform()
+}
+
+publishing {
+    repositories {
+        maven {
+            name = 'OSSRH'
+            def releasesRepoUrl = 'https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/'
+            def snapshotsRepoUrl = 'https://s01.oss.sonatype.org/content/repositories/snapshots/'
+            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+            credentials {
+                username = System.getenv('MAVEN_USERNAME')
+                password = System.getenv('MAVEN_PASSWORD')
+            }
+        }
+        maven {
+            name = "GitHubPackages"
+            url = "https://maven.pkg.github.com/casper-network/casper-java-sdk"
+            credentials {
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
+
+    publications {
+        mavenJava(MavenPublication) {
+            artifactId = 'casper-sdk'
+            from components.java
+            pom {
+                name = 'Casper Java SDK'
+                packaging = 'jar'
+                description = 'SDK to streamline the 3rd party Java client integration processes. Such 3rd parties include exchanges & app developers.'
+                url = 'https://github.com/casper-network/casper-java-sdk'
+
+                scm {
+                    connection = 'scm:git:https://github.com/casper-network/casper-java-sdk.git'
+                    developerConnection = 'git@github.com:casper-network/casper-java-sdk.git'
+                    url = 'https://github.com/casper-network/casper-java-sdk'
+                }
+
+                issueManagement {
+                    system = 'GitHub'
+                    url = 'https://github.com/casper-network/casper-java-sdk/issues'
+                }
+
+                ciManagement {
+                    system = 'Github Actions'
+                    url = 'https://github.com/casper-network/casper-java-sdk/actions'
+                }
+
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id = 'meywood'
+                        name = 'Ian Mills'
+                        email = 'ian@meywood.com'
+                    }
+                    developer {
+                        id = 'stormeye'
+                        name = 'Carl Norburn'
+                        email = 'carl@stormeye.co.uk'
+                    }
+                }
+            }
+        }
+    }
+
+    // Reference at https://docs.gradle.org/current/userguide/signing_plugin.html#sec:in-memory-keys
+    signing {
+        def signingKey = System.getenv('MAVEN_GPG_KEY') ?: findProperty('MAVEN_GPG_KEY')
+        def signingKeyPassword = System.getenv('MAVEN_GPG_PASSPHRASE') ?: findProperty('MAVEN_GPG_PASSPHRASE')
+
+
+
+        useInMemoryPgpKeys(signingKey, signingKeyPassword)
+        sign publishing.publications.mavenJava
+    }
+
 }
