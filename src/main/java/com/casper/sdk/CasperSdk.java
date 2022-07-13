@@ -8,6 +8,9 @@ import com.casper.sdk.service.http.rpc.HttpMethods;
 import com.casper.sdk.service.http.rpc.NodeClient;
 import com.casper.sdk.service.json.JsonConversionService;
 import com.casper.sdk.service.metrics.MetricsService;
+import com.casper.sdk.service.result.Account;
+import com.casper.sdk.service.result.AccountInfo;
+import com.casper.sdk.service.result.PeerData;
 import com.casper.sdk.service.serialization.cltypes.CLValueBuilder;
 import com.casper.sdk.service.serialization.cltypes.TypesFactory;
 import com.casper.sdk.service.serialization.types.ByteSerializerFactory;
@@ -23,7 +26,9 @@ import java.security.Key;
 import java.security.KeyPair;
 import java.security.PublicKey;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Random;
+import java.util.stream.Stream;
 
 import static com.casper.sdk.Constants.*;
 
@@ -58,7 +63,7 @@ public class CasperSdk {
      * @param accountKey An account holder's public key
      * @return account information in JSON format.
      */
-    public String getAccountInfo(final PublicKey accountKey) {
+    public AccountInfo getAccountInfo(final PublicKey accountKey) {
         return nodeClient.getAccountInfo(signingService.toClPublicKey(accountKey).toAccountHex());
     }
 
@@ -70,10 +75,20 @@ public class CasperSdk {
      */
     public ContractHash getContractHash(final PublicKey accountKey) {
 
-        final String accountInfo = getAccountInfo(accountKey);
+        final AccountInfo accountInfo = getAccountInfo(accountKey);
         //noinspection rawtypes
         final Map map;
-        try {
+
+        final Account account = accountInfo.getStoredValue().getAccount();
+        Optional<String> first = account.getNamedKeys().stream()
+                .filter(nk -> ERC_20.equals(nk.getKey()))
+                .map(nk -> nk.getName())
+                .findFirst();
+
+        String erc20 = first.orElseThrow(() -> new ValueNotFoundException("'ERC20' not found in account info 'named_keys'"));
+        return new ContractHash(ByteUtils.decodeHex(erc20.substring(5)));
+
+      /*  try {
             map = jsonConversionService.fromJson(accountInfo, Map.class);
         } catch (IOException e) {
             throw new ConversionException(e);
@@ -86,7 +101,7 @@ public class CasperSdk {
                 return new ContractHash(ByteUtils.decodeHex(erc20.substring(5)));
             }
         }
-        throw new ValueNotFoundException("'ERC20' not found in account info 'named_keys'");
+        throw new ValueNotFoundException("'ERC20' not found in account info 'named_keys'");*/
     }
 
     /**
@@ -145,7 +160,7 @@ public class CasperSdk {
     /**
      * @return the node peers information
      */
-    public String getNodePeers() {
+    public PeerData getNodePeers() {
         return nodeClient.getNodePeers();
     }
 
@@ -289,7 +304,7 @@ public class CasperSdk {
      * technology. No two deploys will ever return the same hash.
      */
     public Digest putDeploy(final Deploy signedDeploy) {
-        return new Digest(nodeClient.putDeploy(signedDeploy));
+        return nodeClient.putDeploy(signedDeploy);
     }
 
     /**

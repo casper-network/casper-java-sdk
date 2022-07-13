@@ -2,6 +2,8 @@ package com.casper.sdk.service.http.rpc;
 
 import com.casper.sdk.service.hash.HashService;
 import com.casper.sdk.service.json.JsonConversionService;
+import com.casper.sdk.service.result.AccountInfo;
+import com.casper.sdk.service.result.PeerData;
 import com.casper.sdk.service.serialization.cltypes.TypesFactory;
 import com.casper.sdk.service.serialization.types.ByteSerializerFactory;
 import com.casper.sdk.service.serialization.util.ByteUtils;
@@ -44,7 +46,7 @@ public class NodeClientTest {
             new SigningService(),
             new TypesFactory()
     );
-    private  NodeClient nodeClient;
+    private NodeClient nodeClient;
 
     @BeforeEach
     void setUp() throws IOException {
@@ -72,10 +74,11 @@ public class NodeClientTest {
     @Test
     public void testGetAccountInfo() throws Throwable {
 
-        final String info = nodeClient.getAccountInfo("01048c1858b7a6ff56a20d7574fd31025ead4af9cb8a854f919d24f886a4ebb741");
+        final AccountInfo info = nodeClient.getAccountInfo("01048c1858b7a6ff56a20d7574fd31025ead4af9cb8a854f919d24f886a4ebb741");
         assertNotNull(info);
-        final JsonNode node = new ObjectMapper().readTree(info);
-        assertEquals(node.get("stored_value").get("Account").get("account_hash").textValue(), "account-hash-ef5b5e0720614aeb59b0283513379b61af9e429b94e9904ea64a60ed599173ae");
+        assertThat(info.getStoredValue().getAccount().getAccountHash(), is("account-hash-ef5b5e0720614aeb59b0283513379b61af9e429b94e9904ea64a60ed599173ae"));
+        // final JsonNode node = new ObjectMapper().readTree(info);
+        // assertEquals(node.get("stored_value").get("Account").get("account_hash").textValue(), "account-hash-ef5b5e0720614aeb59b0283513379b61af9e429b94e9904ea64a60ed599173ae");
     }
 
     @Test
@@ -106,7 +109,7 @@ public class NodeClientTest {
     @Test
     public void testGetNodePeers() {
 
-        String peers = nodeClient.getNodePeers();
+        PeerData peers = nodeClient.getNodePeers();
         assertNotNull(peers);
     }
 

@@ -1,0 +1,16 @@
+{
+  "api_version" : "1.0.0",
+  "peers" : [ {
+    "node_id" : "tls:1148..8ea0",
+    "address" : "127.0.0.1:22104"
+  }, {
+    "node_id" : "tls:1e10..2a8c",
+    "address" : "127.0.0.1:22102"
+  }, {
+    "node_id" : "tls:48d3..016b",
+    "address" : "127.0.0.1:22103"
+  }, {
+    "node_id" : "tls:a90c..21a3",
+    "address" : "127.0.0.1:22105"
+  } ]
+}

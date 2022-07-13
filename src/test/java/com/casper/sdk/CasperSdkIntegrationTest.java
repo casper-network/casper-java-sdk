@@ -2,12 +2,13 @@ package com.casper.sdk;
 
 import com.casper.sdk.how_to.HowToUtils;
 import com.casper.sdk.service.hash.HashService;
+import com.casper.sdk.service.result.AccountInfo;
+import com.casper.sdk.service.result.PeerData;
 import com.casper.sdk.types.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,15 +19,17 @@ import java.security.KeyPair;
 import java.time.Instant;
 
 import static com.casper.sdk.how_to.HowToUtils.getUserKeyPairStreams;
+import static com.jayway.jsonassert.impl.matcher.IsCollectionWithSize.hasSize;
 import static com.jayway.jsonpath.matchers.JsonPathMatchers.hasJsonPath;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
 /**
  * Casper SDK integration tests. The NCTL test nodes must be running for these tests to execute.
  */
-@Disabled // Remove this comment to test against a network
+//@Disabled // Remove this comment to test against a network
 class CasperSdkIntegrationTest {
 
     /** Path the nctl folder can be overridden with -Dnctl.home=some-path */
@@ -57,14 +60,17 @@ class CasperSdkIntegrationTest {
     /** The SDK under test the NCTL test nodes must be running for these tests to execute */
     private CasperSdk casperSdk;
 
+    // 127.0.0.1:2210
+
     @BeforeEach
     void setUp() {
         casperSdk = new CasperSdk("http://localhost", 11101);
+     //   casperSdk = new CasperSdk("http://139.180.189.141", 7777);
     }
 
     @Test
     void getAccountInfo() throws Throwable {
-        final String accountInfo = casperSdk.getAccountInfo(geUserKeyPair(1).getPublic());
+        final AccountInfo accountInfo = casperSdk.getAccountInfo(geUserKeyPair(1).getPublic());
         assertThat(accountInfo, is(notNullValue()));
     }
 
@@ -112,8 +118,12 @@ class CasperSdkIntegrationTest {
 
     @Test
     void getNodePeers() {
-        final String nodePeers = casperSdk.getNodePeers();
+        final PeerData nodePeers = casperSdk.getNodePeers();
         assertThat(nodePeers, is(notNullValue()));
+        assertThat(nodePeers.getApiVersion(), is("1.0.0"));
+        assertThat(nodePeers.getPeers(), hasSize(4));
+        assertThat(nodePeers.getPeers().get(0).getNodeId(), startsWith("tls:"));
+        assertThat(nodePeers.getPeers().get(0).getAddress(), is(notNullValue()));
     }
 
     @Test
@@ -144,7 +154,6 @@ class CasperSdkIntegrationTest {
         );
 
         casperSdk.signDeploy(deploy, nodeOneKeyPair);
-        casperSdk.signDeploy(deploy, userTwoKeyPair);
 
         final String json = casperSdk.deployToJson(deploy);
 
