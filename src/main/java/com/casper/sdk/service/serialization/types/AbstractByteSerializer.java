@@ -3,10 +3,7 @@ package com.casper.sdk.service.serialization.types;
 import com.casper.sdk.service.serialization.cltypes.TypesFactory;
 import com.casper.sdk.service.serialization.cltypes.TypesSerializer;
 import com.casper.sdk.service.serialization.util.ByteArrayBuilder;
-import com.casper.sdk.types.CLByteArrayInfo;
-import com.casper.sdk.types.CLOptionTypeInfo;
-import com.casper.sdk.types.CLType;
-import com.casper.sdk.types.CLTypeInfo;
+import com.casper.sdk.types.*;
 
 abstract class AbstractByteSerializer<T> implements ByteSerializer<T> {
 
@@ -40,9 +37,20 @@ abstract class AbstractByteSerializer<T> implements ByteSerializer<T> {
             case OPTION:
                 return getOptionType(typeInfo);
 
+            case MAP:
+                return getMapType((CLMapTypeInfo) typeInfo);
+
             default:
                 throw new IllegalArgumentException("Wrong type " + typeInfo.getType());
         }
+    }
+
+    private byte[] getMapType(final CLMapTypeInfo typeInfo) {
+        return new ByteArrayBuilder()
+                .append(getTypeBytes(typeInfo))
+                .append(getTypeBytes(typeInfo.getKeyType()))
+                .append(getTypeBytes(typeInfo.getValueType()))
+                .toByteArray();
     }
 
     public TypesSerializer getU32Serializer() {

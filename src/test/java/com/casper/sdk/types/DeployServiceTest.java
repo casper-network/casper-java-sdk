@@ -2,6 +2,7 @@ package com.casper.sdk.types;
 
 import com.casper.sdk.service.hash.HashService;
 import com.casper.sdk.service.json.JsonConversionService;
+import com.casper.sdk.service.serialization.cltypes.CLValueBuilder;
 import com.casper.sdk.service.serialization.cltypes.TypesFactory;
 import com.casper.sdk.service.serialization.types.ByteSerializerFactory;
 import com.casper.sdk.service.serialization.util.CollectionUtils;

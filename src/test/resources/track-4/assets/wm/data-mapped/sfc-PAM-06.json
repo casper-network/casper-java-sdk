@@ -1,0 +1,51 @@
+{
+    "contract_type": "PAM",
+    "identifiers": [
+        {
+            "value": "DE000XXB41V7",
+            "scheme": "ISIN"
+        },
+        {
+            "value": "XXB41V",
+            "scheme": "WKN"
+        }
+    ],
+    "fields": [
+        {
+            "name": "currency",
+            "value": "EUR"
+        },
+        {
+            "name": "cycleAnchorDateOfInterestPayment",
+            "value": "2022-11-24T00:00:00"
+        },
+        {
+            "name": "cycleOfInterestPayment",
+            "value": "P1YL0"
+        },
+        {
+            "name": "dayCountConvention",
+            "value": "AA"
+        },
+        {
+            "name": "initialExchangeDate",
+            "value": "2021-11-24T00:00:00"
+        },
+        {
+            "name": "maturityDate",
+            "value": "2031-11-24T00:00:00"
+        },
+        {
+            "name": "nominalInterestRate",
+            "value": 0.0075
+        },
+        {
+            "name": "notionalPrincipal",
+            "value": 100000000.0
+        },
+        {
+            "name": "statusDate",
+            "value": "2021-11-18T23:59:59"
+        }
+    ]
+}

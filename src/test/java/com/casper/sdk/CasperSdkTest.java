@@ -93,6 +93,12 @@ class CasperSdkTest {
         assertThat(blockTransfers, hasJsonPath("$.transfers"));
         assertThat(blockTransfers, hasJsonPath("$.transfers[0].deploy_hash", is("5db09c0275c4c1ba54ebcc69784ed767350bf9c2b0be7ab4fec1ca84acd1c47d")));
         assertThat(blockTransfers, hasJsonPath("$.transfers[0].amount", is("7000000000")));
+
+        final String blockTransfersByHash = casperSdk.getBlockTransfers("5db09c0275c4c1ba54ebcc69784ed767350bf9c2b0be7ab4fec1ca84acd1c47d");
+        assertThat(blockTransfersByHash, hasJsonPath("$.transfers[0].deploy_hash", is("5db09c0275c4c1ba54ebcc69784ed767350bf9c2b0be7ab4fec1ca84acd1c47d")));
+        assertThat(blockTransfersByHash, hasJsonPath("$.transfers[0].amount", is("7000000000")));
+
+
     }
 
     @Test
@@ -100,6 +106,14 @@ class CasperSdkTest {
         final String eraInfoBySwitchBlock = casperSdk.getEraInfoBySwitchBlock();
         assertThat(eraInfoBySwitchBlock, is(notNullValue()));
         assertThat(eraInfoBySwitchBlock, hasJsonPath("$.era_summary"));
+    }
+
+    @Test
+    void getBlockInfo() {
+        final String blockInfo = casperSdk.getBlockInfo(new Digest("ce4e6b534c69b2b29f834c6ce73a4b119090de84485149cfc8f2b10b6737166e"));
+        assertThat(blockInfo, hasJsonPath("$.hash", is("ce4e6b534c69b2b29f834c6ce73a4b119090de84485149cfc8f2b10b6737166e")));
+        assertThat(blockInfo, hasJsonPath("$.header.parent_hash", is("9aaaa6eb668ac38815d7f13e6a03f59c09c289cf99fabf8074de208ef181b1b9")));
+        assertThat(blockInfo, hasJsonPath("$.header.state_root_hash", is("16ab9e0fb81ca9fb3b8678d1d53bef9136e781ceae55221fd63762468a86844a")));
     }
 
     @Test
