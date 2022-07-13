@@ -2,6 +2,8 @@ package com.casper.sdk;
 
 import com.casper.sdk.how_to.HowToUtils;
 import com.casper.sdk.service.hash.HashService;
+import com.casper.sdk.service.serialization.cltypes.CLValueBuilder;
+import com.casper.sdk.service.serialization.util.CollectionUtils;
 import com.casper.sdk.types.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -15,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.KeyPair;
+import java.security.PublicKey;
 import java.time.Instant;
 
 import static com.casper.sdk.how_to.HowToUtils.getUserKeyPairStreams;
@@ -29,7 +32,9 @@ import static org.hamcrest.core.Is.is;
 @Disabled // Remove this comment to test against a network
 class CasperSdkIntegrationTest {
 
-    /** Path the nctl folder can be overridden with -Dnctl.home=some-path */
+    /**
+     * Path the nctl folder can be overridden with -Dnctl.home=some-path
+     */
 
     private final Logger logger = LoggerFactory.getLogger(CasperSdkIntegrationTest.class);
     private final byte[] expectedSerializedBody = {
@@ -54,7 +59,9 @@ class CasperSdkIntegrationTest {
             (byte) 135, (byte) 250, (byte) 107, (byte) 113, (byte) 237, (byte) 101, (byte) 127, (byte) 51,
             (byte) 144, (byte) 81, (byte) 19, (byte) 196, (byte) 35, (byte) 39
     };
-    /** The SDK under test the NCTL test nodes must be running for these tests to execute */
+    /**
+     * The SDK under test the NCTL test nodes must be running for these tests to execute
+     */
     private CasperSdk casperSdk;
 
     @BeforeEach
