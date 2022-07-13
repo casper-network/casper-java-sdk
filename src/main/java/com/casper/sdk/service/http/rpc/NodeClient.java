@@ -3,6 +3,8 @@ package com.casper.sdk.service.http.rpc;
 import com.casper.sdk.Constants;
 import com.casper.sdk.exceptions.ValueNotFoundException;
 import com.casper.sdk.service.hash.HashService;
+import com.casper.sdk.service.result.AccountInfo;
+import com.casper.sdk.service.result.PeerData;
 import com.casper.sdk.service.serialization.util.CollectionUtils;
 import com.casper.sdk.types.Deploy;
 import com.casper.sdk.types.DeployService;
@@ -40,11 +42,11 @@ public class NodeClient {
     public String getStateRootHash() {
         return rcpCallMethodMap(
                 new Method(Constants.CHAIN_GET_STATE_ROOT_HASH),
-                MethodEnums.STATE_ROOT_HASH::getValue
+                STATE_ROOT_HASH::getValue
         );
     }
 
-    public String getAccountInfo(final String accountKey) {
+    public AccountInfo getAccountInfo(final String accountKey) {
 
         return rcpCallMethodMap(
                 new Method(Constants.STATE_GET_ITEM,
@@ -54,7 +56,7 @@ public class NodeClient {
                                 Constants.PATH, Collections.emptyList()
                         )
                 ),
-                MethodEnums.ACCOUNT_INFO::getValue
+                ACCOUNT_INFO::getValue
         );
     }
 
@@ -67,7 +69,7 @@ public class NodeClient {
                                 Constants.PURSE_UREF, getAccountMainPurseURef(accountKey).toString()
                         )
                 ),
-                result -> new BigInteger(MethodEnums.STATE_GET_BALANCE.getValue(result))
+                STATE_GET_BALANCE::getValue
         );
     }
 
@@ -81,7 +83,7 @@ public class NodeClient {
                                 "path", Collections.emptyList()
                         )
                 ),
-                result -> new URef(MethodEnums.STATE_GET_ITEM.getValue(result))
+                STATE_GET_ITEM::getValue
         );
     }
 
@@ -89,26 +91,26 @@ public class NodeClient {
 
         return rcpCallMethodMap(
                 new Method(Constants.STATE_GET_AUCTION_INFO, new HashMap<>()),
-                MethodEnums.STATE_GET_AUCTION_INFO::getValue
+                STATE_GET_AUCTION_INFO::getValue
         );
     }
 
-    public String getNodePeers() {
+    public PeerData getNodePeers() {
 
         return rcpCallMethodMap(
                 new Method(Constants.INFO_GET_PEERS, new HashMap<>()),
-                MethodEnums.INFO_GET_PEERS::getValue
+                INFO_GET_PEERS::getValue
         );
     }
 
     public String getNodeStatus() {
         return rcpCallMethodMap(
                 new Method(Constants.INFO_GET_STATUS, new HashMap<>()),
-                MethodEnums.INFO_GET_STATUS::getValue
+                INFO_GET_STATUS::getValue
         );
     }
 
-    public String putDeploy(final Deploy signedDeploy) {
+    public Digest putDeploy(final Deploy signedDeploy) {
 
         final int size = deployService.deploySizeInBytes(signedDeploy);
 
@@ -118,7 +120,7 @@ public class NodeClient {
 
         return rcpCallMethodMap(
                 new Method(Constants.ACCOUNT_PUT_DEPLOY, CollectionUtils.Map.of(Constants.DEPLOY, signedDeploy)),
-                MethodEnums.ACCOUNT_PUT_DEPLOY::getValue
+                ACCOUNT_PUT_DEPLOY::getValue
         );
     }
 
@@ -126,9 +128,8 @@ public class NodeClient {
 
         return rcpCallMethodMap(
                 new Method(Constants.INFO_GET_DEPLOY, CollectionUtils.Map.of(Constants.DEPLOY_HASH, deployHash.toString())),
-                result -> deployService.fromJson(MethodEnums.INFO_GET_DEPLOY.getValue(result))
+                INFO_GET_DEPLOY::getValue
         );
-
     }
 
     public String getLatestBlockInfo() {

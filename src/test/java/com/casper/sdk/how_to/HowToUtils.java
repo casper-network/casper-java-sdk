@@ -10,7 +10,7 @@ import java.io.*;
 public final class HowToUtils {
 
     private static final String NCTL_HOME = "nctl.home";
-    private static final String DEFAULT_NCTL_HOME = "~/casper-node/utils/nctl";
+    private static final String DEFAULT_NCTL_HOME = "~/casper/casper-node/utils/nctl";
 
     public static KeyPairStreams getUserKeyPairStreams(final int userNumber) throws IOException {
 

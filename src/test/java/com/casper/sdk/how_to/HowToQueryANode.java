@@ -2,6 +2,8 @@ package com.casper.sdk.how_to;
 
 import com.casper.sdk.CasperSdk;
 import com.casper.sdk.KeyPairStreams;
+import com.casper.sdk.service.result.AccountInfo;
+import com.casper.sdk.service.result.PeerData;
 import com.casper.sdk.types.URef;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -44,7 +46,7 @@ public class HowToQueryANode {
     @Test
     public void testGetNodePeers() {
 
-        final String nodePeers = casperSdk.getNodePeers();
+        final PeerData nodePeers = casperSdk.getNodePeers();
 
         assert (nodePeers != null);
     }
@@ -97,7 +99,7 @@ public class HowToQueryANode {
         final PublicKey publicKey = casperSdk.loadKey(
                 getUserKeyPairStreams(1).getPublicKeyIn()
         );
-        final String accountInfo = casperSdk.getAccountInfo(publicKey);
+        final AccountInfo accountInfo = casperSdk.getAccountInfo(publicKey);
 
         assert (accountInfo != null);
     }
