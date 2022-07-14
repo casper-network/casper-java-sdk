@@ -20,9 +20,11 @@ public class DeployNamedArgByteSerializer implements ByteSerializer<DeployNamedA
     public byte[] toBytes(DeployNamedArg source) {
         byte[] name = source.getName().getBytes();
 
+        byte[] nameBytes = ByteUtils.concat(u32Serializer.serialize(name.length), name);
+        byte[] valueBytes = valueSerializer.toBytes(source.getValue());
         return ByteUtils.concat(
-                ByteUtils.concat(u32Serializer.serialize(name.length), name),
-                valueSerializer.toBytes(source.getValue())
+                nameBytes,
+                valueBytes
         );
     }
 

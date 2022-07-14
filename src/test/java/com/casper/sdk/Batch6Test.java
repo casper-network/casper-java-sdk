@@ -38,10 +38,12 @@ public class Batch6Test {
 
         final CLValue key1 = CLValueBuilder.byteArray("e07cA98F1b5C15bC9ce75e8adB8a3b4D334A1B1Fa14DD16CfD3320bf77Cc3aAb");
         final CLValue value = CLValueBuilder.u256(0.4e6);
-        final CLValue key2 = CLValueBuilder.byteArray("e3D394334Ce46C6043BCd33E4686D2B7a369C606BfCce4C26ca14d2C73Fac824");
 
-        final CLValue key3 = CLValueBuilder.byteArray("Bbf348055524243E10605e534C952043042E219d6305CC948A1bDcbc767CC970");
-        final CLValue value3 = CLValueBuilder.u256(600000);
+        final CLValue key2 = CLValueBuilder.byteArray("Bbf348055524243E10605e534C952043042E219d6305CC948A1bDcbc767CC970");
+        final CLValue value2 = CLValueBuilder.u256(600000);
+
+        final CLValue key3 = CLValueBuilder.byteArray("e3D394334Ce46C6043BCd33E4686D2B7a369C606BfCce4C26ca14d2C73Fac824");
+        final CLValue key4 = CLValueBuilder.byteArray("219ac9a617DE3433d6ab1C9fA4aa9FB8D874DBa9A00b2B562d16da5334606575");
 
         final Deploy deploy = casperSdk.makeDeploy(
                 new DeployParams(
@@ -59,10 +61,10 @@ public class Batch6Test {
                                 .add("instrument_id", CLValueBuilder.string(contractuuid))
                                 .add("asset_decimals", CLValueBuilder.u256(10))
                                 .add("asset_units", CLValueBuilder.u256(1000000))
-                                .add("asset_holders", CLValueBuilder.map(CollectionUtils.Map.of(key1, value, key3, value3)))
+                                .add("asset_holders", CLValueBuilder.map(CollectionUtils.Map.of(key1, value, key2, value2)))
                                 .add("liability_decimals", CLValueBuilder.u256(1))
                                 .add("liability_units", CLValueBuilder.u256(40000))
-                                .add("liability_holders", CLValueBuilder.map(CollectionUtils.Map.of(key2, value)))
+                                .add("liability_holders", CLValueBuilder.map(CollectionUtils.Map.of(key3, value, key4, value2)))
                                 .build()),
                 casperSdk.standardPayment(new BigInteger("10000000000"))
         );
@@ -124,7 +126,9 @@ public class Batch6Test {
         assertThat(json, hasJsonPath("$.session.StoredContractByHash.args[4].[1].parsed[1].key", is("Bbf348055524243E10605e534C952043042E219d6305CC948A1bDcbc767CC970")));
         assertThat(json, hasJsonPath("$.session.StoredContractByHash.args[4].[1].parsed[1].value", is(600000)));
 
-        // EXPECTED == 02000000e07ca98f1b5c15bc9ce75e8adb8a3b4d334a1b1fa14dd16cfd3320bf77cc3aab03801a06bbf348055524243e10605e534c952043042e219d6305cc948a1bdcbc767cc97003c02709
         assertThat(json, hasJsonPath("$.session.StoredContractByHash.args[4].[1].bytes", is("02000000e07ca98f1b5c15bc9ce75e8adb8a3b4d334a1b1fa14dd16cfd3320bf77cc3aab03801a06bbf348055524243e10605e534c952043042e219d6305cc948a1bdcbc767cc97003c02709")));
+
+        assertThat(json, hasJsonPath("$.session.StoredContractByHash.args[7].[0]", is("liability_holders")));
+        assertThat(json, hasJsonPath("$.session.StoredContractByHash.args[7].[1].bytes", is("02000000e3d394334ce46c6043bcd33e4686d2b7a369c606bfcce4c26ca14d2c73fac82403801a06219ac9a617de3433d6ab1c9fa4aa9fb8d874dba9a00b2b562d16da533460657503c02709")));
     }
 }
