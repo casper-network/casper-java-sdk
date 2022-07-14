@@ -8,6 +8,8 @@ import com.casper.sdk.types.CLValue;
 
 import java.util.Map;
 
+import static com.casper.sdk.service.serialization.util.ByteUtils.lastNBytes;
+
 /**
  * The serializer for a Map
  */
@@ -47,9 +49,11 @@ public class MapSerializer implements TypesSerializer {
     }
 
     private byte[] serializeMap(final Map<CLValue, CLValue> toSerialize) {
+        byte[] length = typesFactory.getInstance(CLType.U32).serialize(toSerialize.size());
+        byte[] map = buildKeyValueBytes(toSerialize);
         return ByteUtils.concat(
-                typesFactory.getInstance(CLType.U32).serialize(toSerialize.size()),
-                buildKeyValueBytes(toSerialize)
+                length,
+                map
         );
     }
 
@@ -58,9 +62,26 @@ public class MapSerializer implements TypesSerializer {
         final ByteArrayBuilder builder = new ByteArrayBuilder();
 
         for (Map.Entry<CLValue, CLValue> entry : clMap.entrySet()) {
-            builder.append(entry.getKey().getBytes());
-            builder.append(entry.getValue().getBytes());
+            builder.append(removeLength(entry.getKey()));
+            builder.append(removeLength(entry.getValue()));
         }
         return builder.toByteArray();
+    }
+
+    private byte[] removeLength(final CLValue value) {
+
+        if (value.getCLType() == CLType.BYTE_ARRAY) {
+            return removeLength(value.getBytes());
+        } else {
+            return value.getBytes();
+        }
+    }
+
+    private byte[] removeLength(byte[] bytes) {
+        if (bytes != null && bytes.length > 3) {
+            return lastNBytes(bytes, bytes.length - 4);
+        } else {
+            return bytes;
+        }
     }
 }
