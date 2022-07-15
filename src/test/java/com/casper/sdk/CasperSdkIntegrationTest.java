@@ -29,7 +29,7 @@ import static org.hamcrest.core.Is.is;
 /**
  * Casper SDK integration tests. The NCTL test nodes must be running for these tests to execute.
  */
-//@Disabled // Remove this comment to test against a network
+@Disabled // Remove this comment to test against a network
 class CasperSdkIntegrationTest {
 
     /**
