@@ -28,13 +28,11 @@ import static org.hamcrest.core.Is.is;
 
 /**
  * Casper SDK integration tests. The NCTL test nodes must be running for these tests to execute.
+ *
+ * Path the nctl folder can be overridden with -Dnctl.home=some-path
  */
 @Disabled // Remove this comment to test against a network
 class CasperSdkIntegrationTest {
-
-    /**
-     * Path the nctl folder can be overridden with -Dnctl.home=some-path
-     */
 
     private final Logger logger = LoggerFactory.getLogger(CasperSdkIntegrationTest.class);
     private final byte[] expectedSerializedBody = {

@@ -15,14 +15,16 @@ targetCompatibility = 1.8
 repositories {
     mavenCentral()
     maven { url 'https://s01.oss.sonatype.org/content/repositories/snapshots' }
+    maven { url 'https://repo1.maven.org/maven2' }
 }
+
 
 dependencies {
 
     implementation "com.rfksystems:blake2b:${blake2bVersion}"
     implementation "commons-codec:commons-codec:${commonsCodecVersion}"
     implementation "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
-    implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
+    implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonDatabindVersion}"
     implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${jacksonVersion}"
     implementation "com.sshtools:maverick-synergy:${maverickSynergyVersion}"
     implementation "org.apache.commons:commons-lang3:${commonsLangVersion}"
