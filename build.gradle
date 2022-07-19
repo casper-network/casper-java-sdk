@@ -83,8 +83,8 @@ publishing {
             def snapshotsRepoUrl = 'https://s01.oss.sonatype.org/content/repositories/snapshots/'
             url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
             credentials {
-                username = System.getenv('MAVEN_USERNAME')
-                password = System.getenv('MAVEN_PASSWORD')
+                username = System.getenv('OSSRH_USERNAME')
+                password = System.getenv('OSSRH_PASSWORD')
             }
         }
         maven {
@@ -152,8 +152,8 @@ publishing {
 
     // Reference at https://docs.gradle.org/current/userguide/signing_plugin.html#sec:in-memory-keys
     signing {
-        def signingKey = System.getenv('GPG_SIGNING_KEY') ?: findProperty('GPG_SIGNING_KEY')
-        def signingKeyPassword = System.getenv('GPG_SIGNING_KEY_PASSWORD') ?: findProperty('GPG_SIGNING_KEY_PASSWORD')
+        def signingKey = System.getenv('OSSRH_GPG_SECRET_KEY') ?: findProperty('OSSRH_GPG_SECRET_KEY')
+        def signingKeyPassword = System.getenv('OSSRH_GPG_SECRET_KEY_PASSWORD') ?: findProperty('OSSRH_GPG_SECRET_KEY_PASSWORD')
 
         useInMemoryPgpKeys(signingKey, signingKeyPassword)
         sign publishing.publications.mavenJava
