@@ -8,7 +8,7 @@ plugins {
 apply plugin: 'java'
 
 group = 'network.casper'
-version='0.3.10'
+version='0.3.11'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
@@ -63,7 +63,7 @@ jar {
 
 task casperJar(type: Jar) {
     archiveBaseName = 'casper-java-sdk'
-    archiveVersion = '0.3.10'
+    archiveVersion = '0.3.11'
     manifest {
         attributes 'Main-Class': 'com.casper.sdk.CasperSdk'
     }
