@@ -98,7 +98,7 @@ publishing {
 
     publications {
         mavenJava(MavenPublication) {
-            artifactId = 'casper-sdk'
+            artifactId = 'casper-java-sdk'
             from components.java
             pom {
                 name = 'Casper Java SDK'
