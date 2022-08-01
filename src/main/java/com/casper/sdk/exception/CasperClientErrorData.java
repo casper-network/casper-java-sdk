@@ -1,8 +1,6 @@
 package com.casper.sdk.exception;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 /**
  * Json RPC service error data
@@ -14,6 +12,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class CasperClientErrorData {
     private int code;
     private String message;

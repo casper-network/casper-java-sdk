@@ -13,6 +13,7 @@ import com.casper.sdk.model.stateroothash.StateRootHashData;
 import com.casper.sdk.model.status.StatusData;
 import com.casper.sdk.model.storedvalue.StoredValueData;
 import com.casper.sdk.model.transfer.TransferData;
+import com.casper.sdk.model.validator.ValidatorChangeData;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.googlecode.jsonrpc4j.ExceptionResolver;
 import com.googlecode.jsonrpc4j.JsonRpcHttpClient;
@@ -40,7 +41,7 @@ import java.util.Map;
  */
 public interface CasperService {
 
-    /** NODE INFORMATIONAL METHODS **/
+    /* NODE INFORMATIONAL METHODS */
 
     /**
      * Builds a CasperService for the node ip/port pair
@@ -71,7 +72,7 @@ public interface CasperService {
     @JsonRpcMethod("info_get_peers")
     PeerData getPeerData();
 
-    /** INFORMATIONAL METHODS **/
+    /* INFORMATIONAL METHODS */
 
     /**
      * Returns the current status of the node
@@ -145,7 +146,9 @@ public interface CasperService {
 
     //TODO
     @JsonRpcMethod("query_global_state")
-    JsonNode queryGlobalState();
+    JsonNode queryGlobalState(@JsonRpcParam("state_identifier") BlockIdentifier blockIdentifier,
+                              @JsonRpcParam("key") String key,
+                              @JsonRpcParam("path") String[] path);
 
     //TODO
     @JsonRpcMethod("query_balance")
@@ -186,7 +189,7 @@ public interface CasperService {
     DictionaryData getStateDictionaryItem(@JsonRpcParam("state_root_hash") String stateRootHash,
                                           @JsonRpcParam("dictionary_identifier") DictionaryIdentifier dictionaryIdentifier);
 
-    /** TRANSACTIONAL METHODS **/
+    /* TRANSACTIONAL METHODS */
 
     /**
      * Sends a deploy to be received by the network
@@ -201,7 +204,7 @@ public interface CasperService {
     @JsonRpcMethod("speculative_exec")
     JsonNode speculativeExec();
 
-    /** PROOF OF STAKE METHODS **/
+    /* PROOF OF STAKE METHODS */
 
     /**
      * Returns the Auction info for a given block
@@ -212,9 +215,13 @@ public interface CasperService {
     @JsonRpcMethod("state_get_auction_info")
     AuctionData getStateAuctionInfo(@JsonRpcParam("block_identifier") BlockIdentifier blockIdentifier);
 
-    //TODO
-    @JsonRpcMethod("info_get_validators_changes")
-    JsonNode getValidatorsChanges();
+    /**
+     * Returns the Validator Changes in between two eras
+     *
+     * @return Object holding the api version and the validator change data
+     */
+    @JsonRpcMethod("info_get_validator_changes")
+    ValidatorChangeData getValidatorsChanges();
 
     /**
      * Returns an EraInfo from the network
@@ -225,7 +232,7 @@ public interface CasperService {
     @JsonRpcMethod("chain_get_era_info_by_switch_block")
     EraInfoData getEraInfoBySwitchBlock(@JsonRpcParam("block_identifier") BlockIdentifier blockIdentifier);
 
-    /** DEPRECATED METHODS **/
+    /* DEPRECATED METHODS */
     /**
      * Returns a stored value from the network. This RPC is deprecated, use `query_global_state` instead"
      *
