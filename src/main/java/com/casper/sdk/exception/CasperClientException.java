@@ -16,4 +16,9 @@ public class CasperClientException extends RuntimeException {
     public CasperClientException(String message, Throwable cause) {
         super(message, cause);
     }
+
+    public CasperClientException(String message) {
+        super(message);
+
+    }
 }

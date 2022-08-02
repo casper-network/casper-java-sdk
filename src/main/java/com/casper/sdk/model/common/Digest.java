@@ -6,11 +6,7 @@ import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.encdec.CLValueEncoder;
 import com.casper.sdk.model.clvalue.encdec.interfaces.EncodableValue;
 import com.fasterxml.jackson.annotation.JsonValue;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.bouncycastle.util.encoders.Hex;
 
 import java.io.IOException;
@@ -26,6 +22,7 @@ import java.io.IOException;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(of = "digest")
 @Builder
 public class Digest implements EncodableValue {
     @JsonValue
@@ -52,5 +49,10 @@ public class Digest implements EncodableValue {
     public void encode(CLValueEncoder clve, boolean encodeType)
             throws IOException, CLValueEncodeException, DynamicInstanceException, NoSuchTypeException {
         clve.write(getDigest());
+    }
+
+    @Override
+    public String toString() {
+        return digest;
     }
 }
