@@ -16,7 +16,7 @@ import java.util.List;
 
 /**
  * Abstract Executable Result of type Success containing the details of the
- * contract execution. It shows the result of a successs execution
+ * contract execution. It shows the result of a successful execution
  *
  * @author Alexandre Carvalho
  * @author Andre Bertolace
