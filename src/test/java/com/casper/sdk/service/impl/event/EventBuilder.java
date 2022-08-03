@@ -1,11 +1,11 @@
 package com.casper.sdk.service.impl.event;
 
 
+import com.casper.sdk.exception.CasperClientException;
 import com.casper.sdk.model.event.Event;
+import com.casper.sdk.model.event.EventData;
 import com.casper.sdk.model.event.EventTarget;
 import com.casper.sdk.model.event.EventType;
-import com.casper.sdk.exception.CasperClientException;
-import com.casper.sdk.model.event.EventData;
 import com.casper.sdk.model.event.shutdown.Shutdown;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -30,14 +30,16 @@ final class EventBuilder {
     private final EventType eventType;
     /** The target type of the event to build */
     private final EventTarget eventTarget;
+    private final String source;
     /** Indicates if an ID line is expected for the current data line */
     private boolean idExpected = true;
     /** Used to build the pojo model objects from the JSON in the data line */
     private final ObjectMapper mapper;
 
-    EventBuilder(final EventType eventType, final EventTarget eventTarget) {
+    EventBuilder(final EventType eventType, final EventTarget eventTarget, final String source) {
         this.eventType = eventType;
         this.eventTarget = eventTarget;
+        this.source = source;
         mapper = new ObjectMapper();
     }
 
@@ -85,7 +87,7 @@ final class EventBuilder {
         final T event;
         if (this.eventTarget == EventTarget.RAW) {
             //noinspection unchecked
-            event = (T) new RawEvent(eventType, data, id);
+            event = (T) new RawEvent(eventType, source, data, id);
         } else if (eventTarget == EventTarget.POJO) {
             //noinspection unchecked
             event = (T) buildPojoEvent();
@@ -112,7 +114,7 @@ final class EventBuilder {
                 //noinspection unchecked
                 root = mapper.readValue(value, EventRoot.class);
             }
-            event = new PojoEvent<>(eventType, EventRoot.getData(root), id);
+            event = new PojoEvent<>(eventType, source, id, EventRoot.getData(root));
         } catch (JsonProcessingException e) {
             throw new CasperClientException("Error building POJO event for: " + data, e);
         }

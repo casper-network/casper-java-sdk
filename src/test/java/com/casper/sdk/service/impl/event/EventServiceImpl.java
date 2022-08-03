@@ -86,7 +86,7 @@ final class EventServiceImpl implements EventService {
                                                        final EventTarget eventTarget,
                                                        final Reader reader) {
 
-        final EventBuilder eventBuilder = new EventBuilder(eventType, eventTarget);
+        final EventBuilder eventBuilder = new EventBuilder(eventType, eventTarget, uri.toString());
 
         //noinspection unchecked
         return new BufferedReader(reader)

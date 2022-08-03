@@ -10,11 +10,17 @@ import java.util.Optional;
 public interface Event<T> {
 
     /**
+     * The node URL that is the source of the event
+     *
+     * @return the  URL of the source node
+     */
+    String getSource();
+
+    /**
      * The type of the event
      *
      * @return the type of the event
      */
-
     EventType getEventType();
 
     /**

@@ -24,13 +24,13 @@ public interface EventService {
      * @param eventType   the type of event to read
      * @param eventTarget the target of the event JSON string or POJO
      * @param reader      the reader to read the event from
-     * @param <T>         the type of the event
-     * @param <E>         the type of the events content
+     * @param <EventT>         the type of the event
+     * @param <DataT>         the type of the events data content
      * @return the read event
      */
-    <T, E extends Event<E>> Stream<T> readEvent(final EventType eventType,
-                                                final EventTarget eventTarget,
-                                                final Reader reader);
+    <EventT, DataT extends Event<DataT>> Stream<EventT> readEvent(final EventType eventType,
+                                                                  final EventTarget eventTarget,
+                                                                  final Reader reader);
 
 
     /**
@@ -39,13 +39,13 @@ public interface EventService {
      *
      * @param eventType   the type of event to read
      * @param eventTarget the target of the event JSON string or POJO
-     * @param <T>         the type of the event
-     * @param <E>         the type of the events content
+     * @param <EventT>         the type of the event
+     * @param <DataT>     the type of the events data content
      * @return the read event
      */
-    <T, E extends Event<E>> Stream<T> readEventStream(final EventType eventType,
-                                                      final EventTarget eventTarget,
-                                                      final Long startFrom);
+    <EventT, DataT extends Event<DataT>> Stream<EventT> readEventStream(final EventType eventType,
+                                                                        final EventTarget eventTarget,
+                                                                        final Long startFrom);
 
 
     /**

@@ -11,7 +11,7 @@ import com.casper.sdk.model.event.EventTarget;
  */
 final class RawEvent extends AbstractEvent<String> {
 
-    RawEvent(final EventType eventType, final String data, final Long id) {
-        super(eventType, data, id);
+    RawEvent(final EventType eventType, final String source, final String data, final Long id) {
+        super(eventType, source, id, data);
     }
 }

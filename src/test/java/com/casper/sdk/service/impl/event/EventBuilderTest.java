@@ -72,7 +72,7 @@ class EventBuilderTest {
     void buildApiVersionEvent() throws IOException {
 
         final InputStream in = EventBuilderTest.class.getClassLoader().getResourceAsStream(API_VERSION_EVENT);
-        final EventBuilder builder = new EventBuilder(EventType.MAIN, EventTarget.POJO);
+        final EventBuilder builder = new EventBuilder(EventType.MAIN, EventTarget.POJO, "http://localhost:81012");
         final BufferedReader reader = new BufferedReader(new InputStreamReader(in));
         builder.processLine(reader.readLine());
 
@@ -216,7 +216,7 @@ class EventBuilderTest {
                                             final String eventPath) throws IOException {
 
         final InputStream in = EventBuilderTest.class.getClassLoader().getResourceAsStream(eventPath);
-        final EventBuilder builder = new EventBuilder(eventType, eventTarget);
+        final EventBuilder builder = new EventBuilder(eventType, eventTarget, "http://localhost:81012");
         final BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 
         builder.processLine(reader.readLine());
