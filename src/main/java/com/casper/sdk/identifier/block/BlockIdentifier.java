@@ -1,7 +1,7 @@
 package com.casper.sdk.identifier.block;
 
 /**
- * Simple contract interface for BlockIdentifier parameter
+ * Simple interface for BlockIdentifier parameter
  *
  * @author Alexandre Carvalho
  * @author Andre Bertolace

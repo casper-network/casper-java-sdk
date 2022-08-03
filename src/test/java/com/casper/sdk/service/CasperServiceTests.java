@@ -7,11 +7,16 @@ import java.util.Collections;
 import java.util.List;
 
 import com.casper.sdk.exception.CasperClientException;
+import com.casper.sdk.exception.DynamicInstanceException;
+import com.casper.sdk.exception.InvalidByteStringException;
 import com.casper.sdk.identifier.block.BlockIdentifier;
 import com.casper.sdk.identifier.block.HashBlockIdentifier;
 import com.casper.sdk.identifier.block.HeightBlockIdentifier;
+import com.casper.sdk.identifier.global.BlockHashIdentifier;
+import com.casper.sdk.identifier.global.GlobalStateIdentifier;
 import com.casper.sdk.model.account.AccountData;
 import com.casper.sdk.model.auction.AuctionData;
+import com.casper.sdk.model.balance.GetBalanceData;
 import com.casper.sdk.model.clvalue.CLValueString;
 import com.casper.sdk.model.clvalue.encdec.StringByteHelper;
 import com.casper.sdk.model.deploy.executabledeploy.ModuleBytes;
@@ -19,6 +24,7 @@ import com.casper.sdk.model.deploy.executabledeploy.StoredContractByHash;
 import com.casper.sdk.model.deploy.executionresult.Success;
 import com.casper.sdk.model.deploy.transform.WriteCLValue;
 import com.casper.sdk.model.era.EraInfoData;
+import com.casper.sdk.model.globalstate.GlobalStateData;
 import com.casper.sdk.model.key.PublicKey;
 import com.casper.sdk.model.stateroothash.StateRootHashData;
 import com.casper.sdk.model.status.StatusData;
@@ -33,8 +39,8 @@ import com.casper.sdk.model.deploy.DeployData;
 import com.casper.sdk.model.key.AlgorithmTag;
 import com.casper.sdk.model.peer.PeerData;
 
+import com.casper.sdk.model.uref.URef;
 import com.casper.sdk.model.validator.ValidatorChangeData;
-import com.fasterxml.jackson.databind.JsonNode;
 import org.json.JSONException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -237,7 +243,8 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
 
     @Test
     void getAccountStateInfoByBlockHash() {
-        AccountData account = casperServiceMainnet.getStateAccountInfo("012dbde8cac6493c07c5548edc89ab7803c376278ec91757475867324d99f5f4dd", new HashBlockIdentifier("721767b0bcf867ccab81b3a47b1443bbef38b2ee9e2b791288f6e2a427181931"));
+        AccountData account = casperServiceMainnet.getStateAccountInfo("012dbde8cac6493c07c5548edc89ab7803c376278ec91757475867324d99f5f4dd",
+                new HashBlockIdentifier("721767b0bcf867ccab81b3a47b1443bbef38b2ee9e2b791288f6e2a427181931"));
 
         assertNotNull(account);
         assertNotNull(account.getAccount());
@@ -299,13 +306,22 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
         // JSONAssert.assertEquals(inputJson, getPrettyJson(eraInfoData), false);
     }
 
-    /*@Test
+    @Test
+    void getBalance() throws InvalidByteStringException, IOException, DynamicInstanceException {
+        GetBalanceData balance= casperServiceMainnet.getBalance("78e5d93246bcf9aa3336c4c80cd9359589cbddceda75e31bb3d65b0c6bda3b59",
+                URef.fromString("uref-b22bc80d357df47447074e243b4d888de67c1cc7565fa82d0bb2b9b023146748-007"));
+
+        assertNotNull(balance);
+        assertEquals(balance.getValue(), BigInteger.valueOf(26636848765718L));
+    }
+
+    @Test
     void queryGlobalState() {
-        BlockIdentifier blockIdentifier = new HashBlockIdentifier("13C2D7a68ECDD4b74BF4393C88915C836c863fC4bf11d7f2Bd930A1bBCcACdcb");
-        String key = "deploy-af684263911154d26fa05be9963171802801a0b6aff8f199b7391eacb8edc9e1";
-        JsonNode globalState = casperServiceTestnet.queryGlobalState(blockIdentifier, key, new String[0]);
+        GlobalStateIdentifier blockIdentifier = new BlockHashIdentifier("5f7b36ae101036c40922373f059b8764be10b6d69e568a47974a4ba6a4dad6db");
+        String key = "deploy-46c75f79954218942a05c0efdc5c40031db3b5b1e43b95135d43874e21fabdae";
+        GlobalStateData globalState = casperServiceMainnet.queryGlobalState(blockIdentifier, key, new String[0]);
         assertNotNull(globalState);
-    }*/
+    }
 
     @Test
     void queryValidatorChanges() {
