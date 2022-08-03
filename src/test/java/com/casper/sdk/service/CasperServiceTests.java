@@ -74,10 +74,10 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
         for (int i = 0; i < blocks_to_check; i++) {
             LOGGER.debug(String.format("Testing with block height %d", i));
             JsonBlockData resultByHeight = casperServiceMainnet.getBlock(new HeightBlockIdentifier(i));
-            String hash = resultByHeight.getBlock().getHash();
+            String hash = resultByHeight.getBlock().getHash().toString();
             JsonBlockData resultByHash = casperServiceMainnet.getBlock(new HashBlockIdentifier(hash));
 
-            assertEquals(resultByHash.getBlock().getHash(), hash);
+            assertEquals(resultByHash.getBlock().getHash().toString(), hash);
         }
     }
 

@@ -1,5 +1,6 @@
 package com.casper.sdk.model.block;
 
+import com.casper.sdk.model.common.Digest;
 import com.casper.sdk.model.era.JsonEraEnd;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -35,7 +36,7 @@ public class JsonBlockHeader {
      * Hex-encoded hash digest
      */
     @JsonProperty("state_root_hash")
-    private String stateRootHash;
+    private Digest stateRootHash;
 
     /**
      * boolean
@@ -53,19 +54,19 @@ public class JsonBlockHeader {
      * Hex-encoded hash digest
      */
     @JsonProperty("body_hash")
-    private String bodyHash;
+    private Digest bodyHash;
 
     /**
      * Hex-encoded hash digest.
      */
     @JsonProperty("parent_hash")
-    private String parentHash;
+    private Digest parentHash;
 
     /**
      * Hex-encoded hash digest
      */
     @JsonProperty("accumulated_seed")
-    private String accumulatedSeed;
+    private Digest accumulatedSeed;
 
     /**
      * Timestamp formatted as per RFC 3339

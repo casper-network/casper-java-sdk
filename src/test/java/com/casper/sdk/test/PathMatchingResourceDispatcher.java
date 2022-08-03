@@ -12,7 +12,7 @@ import java.io.InputStream;
 
 public class PathMatchingResourceDispatcher extends Dispatcher {
 
-    /** The path to the resource to use */
+    /** The path to the resource to serve for the path that matches the pathMatcher */
     private final String resourcePath;
     /** The matcher for the URL request path */
     private final Matcher<String> pathMatcher;

@@ -25,9 +25,16 @@ import com.casper.sdk.model.key.Tag;
 public abstract class AbstractSerializedKeyTaggedHexDeserializer<T extends AbstractSerializedKeyTaggedHex<S>, S extends Tag>
         extends JsonDeserializer<T> {
 
+    /** Missing PublicKey in Events is shown as "00" */
+    private static final String NULL_PUBLIC_KEY = "00";
+
     @Override
     public T deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
         JsonNode node = p.getCodec().readTree(p);
+
+        if (NULL_PUBLIC_KEY.equals(node.textValue())) {
+            return null;
+        }
 
         T object = this.getInstanceOf();
 
