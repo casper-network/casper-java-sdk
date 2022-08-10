@@ -3,7 +3,6 @@ package com.casper.sdk.service.impl.event;
 import com.casper.sdk.model.event.EventType;
 import com.casper.sdk.model.event.EventData;
 import com.casper.sdk.model.event.EventTarget;
-import lombok.AllArgsConstructor;
 
 /**
  * An event that contains the event data as Pojo model returned from the event service when

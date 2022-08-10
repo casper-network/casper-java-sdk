@@ -16,6 +16,7 @@ import com.casper.sdk.model.event.shutdown.Shutdown;
 import com.casper.sdk.model.event.step.Step;
 import com.casper.sdk.model.event.version.ApiVersion;
 import com.casper.sdk.model.key.PublicKey;
+
 import org.joda.time.DateTime;
 import org.junit.jupiter.api.Test;
 

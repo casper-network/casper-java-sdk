@@ -45,6 +45,4 @@ final class EventUrlBuilder {
             return "";
         }
     }
-
-
 }
