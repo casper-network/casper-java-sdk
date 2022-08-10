@@ -1,7 +1,5 @@
 package com.casper.sdk.service;
 
-import com.casper.sdk.exception.CLValueEncodeException;
-import com.casper.sdk.exception.DynamicInstanceException;
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.CLValueOption;
 import com.casper.sdk.model.clvalue.CLValuePublicKey;
@@ -10,29 +8,24 @@ import com.casper.sdk.model.clvalue.CLValueU64;
 import com.casper.sdk.model.clvalue.cltype.CLTypeOption;
 import com.casper.sdk.model.clvalue.cltype.CLTypePublicKey;
 import com.casper.sdk.model.clvalue.cltype.CLTypeU512;
-import com.casper.sdk.model.clvalue.encdec.CLValueEncoder;
-import com.casper.sdk.model.deploy.NamedArg;
-import com.casper.sdk.model.deploy.executabledeploy.ModuleBytes;
-import com.casper.sdk.model.deploy.executabledeploy.Transfer;
-import com.casper.sdk.model.key.PublicKey;
 import com.casper.sdk.model.common.Digest;
 import com.casper.sdk.model.common.Ttl;
 import com.casper.sdk.model.deploy.Approval;
 import com.casper.sdk.model.deploy.Deploy;
 import com.casper.sdk.model.deploy.DeployHeader;
+import com.casper.sdk.model.deploy.NamedArg;
+import com.casper.sdk.model.deploy.executabledeploy.ModuleBytes;
+import com.casper.sdk.model.deploy.executabledeploy.Transfer;
+import com.casper.sdk.model.key.PublicKey;
 import com.casper.sdk.model.key.Signature;
 import com.syntifi.crypto.key.AbstractPrivateKey;
 import com.syntifi.crypto.key.hash.Blake2b;
+import dev.oak3.sbs4j.SerializerBuffer;
+import dev.oak3.sbs4j.exception.ValueSerializationException;
 
-import java.io.IOException;
 import java.math.BigInteger;
 import java.security.GeneralSecurityException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 
 /**
  * Deploy Service class implementing the process to generate deploys
@@ -52,15 +45,11 @@ public class CasperDeployService {
      * @param chainName      network name
      * @return Deploy
      * @throws NoSuchTypeException      thrown if type not found
-     * @throws DynamicInstanceException thrown if it could not instantiate a type
-     * @throws CLValueEncodeException   thrown if failed to encode a cl value
-     * @throws IOException              thrown if an IO error occurs
      * @throws GeneralSecurityException thrown when an error occurs with cryptographic keys
      */
     public static Deploy buildTransferDeploy(AbstractPrivateKey fromPrivateKey,
                                              PublicKey toPublicKey, BigInteger amount, String chainName)
-            throws IOException, CLValueEncodeException, DynamicInstanceException, NoSuchTypeException,
-            GeneralSecurityException {
+            throws NoSuchTypeException, GeneralSecurityException, ValueSerializationException {
         long id = Math.abs(new Random().nextInt());
         BigInteger paymentAmount = BigInteger.valueOf(25000000000L);
         long gasPrice = 1L;
@@ -85,16 +74,12 @@ public class CasperDeployService {
      *                       ms (30 minutes))
      * @return Deploy
      * @throws NoSuchTypeException      thrown if type not found
-     * @throws DynamicInstanceException thrown if it could not instantiate a type
-     * @throws CLValueEncodeException   thrown if failed to encode a cl value
-     * @throws IOException              thrown if an IO error occurs
      * @throws GeneralSecurityException thrown when an error occurs with cryptographic keys
      */
     public static Deploy buildTransferDeploy(AbstractPrivateKey fromPrivateKey, PublicKey toPublicKey,
                                              BigInteger amount, String chainName, Long id, BigInteger paymentAmount,
                                              Long gasPrice, Ttl ttl, Date date, List<Digest> dependencies)
-            throws IOException, CLValueEncodeException, DynamicInstanceException, NoSuchTypeException,
-            GeneralSecurityException {
+            throws NoSuchTypeException, GeneralSecurityException, ValueSerializationException {
 
         List<NamedArg<?>> transferArgs = new LinkedList<>();
         NamedArg<CLTypeU512> amountNamedArg = new NamedArg<>("amount",
@@ -122,12 +107,11 @@ public class CasperDeployService {
                 .args(paymentArgs)
                 .bytes("")
                 .build();
-        CLValueEncoder clve = new CLValueEncoder();
-        payment.encode(clve, true);
-        session.encode(clve, true);
-        byte[] sessionAnPaymentHash = Blake2b.digest(clve.toByteArray(), 32);
-        clve.flush();
-        clve.reset();
+        SerializerBuffer ser = new SerializerBuffer();
+        payment.serialize(ser, true);
+        session.serialize(ser, true);
+        byte[] sessionAnPaymentHash = Blake2b.digest(ser.toByteArray(), 32);
+        ser.getBuffer().reset();
 
         PublicKey fromPublicKey = PublicKey.fromAbstractPublicKey(fromPrivateKey.derivePublicKey());
 
@@ -141,8 +125,8 @@ public class CasperDeployService {
                 .chainName(chainName)
                 .dependencies(dependencies)
                 .build();
-        deployHeader.encode(clve, true);
-        byte[] headerHash = Blake2b.digest(clve.toByteArray(), 32);
+        deployHeader.serialize(ser, true);
+        byte[] headerHash = Blake2b.digest(ser.toByteArray(), 32);
 
         Signature signature = Signature.sign(fromPrivateKey, headerHash);
 

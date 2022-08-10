@@ -1,19 +1,20 @@
 package com.casper.sdk.model.clvalue;
 
+import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.cltype.CLTypeAny;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonSetter;
-import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
-import com.casper.sdk.exception.CLValueDecodeException;
-import com.casper.sdk.model.clvalue.encdec.CLValueDecoder;
-import com.casper.sdk.model.clvalue.encdec.CLValueEncoder;
+import dev.oak3.sbs4j.DeserializerBuffer;
+import dev.oak3.sbs4j.SerializerBuffer;
+import dev.oak3.sbs4j.exception.ValueDeserializationException;
+import dev.oak3.sbs4j.exception.ValueSerializationException;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.io.IOException;
+import java.io.*;
 
 /**
  * Casper Object CLValue implementation
@@ -47,15 +48,31 @@ public class CLValueAny extends AbstractCLValue<Object, CLTypeAny> {
     }
 
     @Override
-    public void encode(CLValueEncoder clve, boolean encodeType) throws IOException, NoSuchTypeException {
-        clve.writeAny(this);
-        if (encodeType) {
-            this.encodeType(clve);
+    public void serialize(SerializerBuffer ser, boolean encodeType) throws ValueSerializationException, NoSuchTypeException {
+        if (this.getValue() == null) return;
+
+        try (ByteArrayOutputStream bos = new ByteArrayOutputStream();
+             ObjectOutputStream oos = new ObjectOutputStream(bos)) {
+            oos.writeObject(this.getValue());
+            byte[] objectByteArray = bos.toByteArray();
+            ser.writeByteArray(objectByteArray);
+
+            if (encodeType) {
+                this.encodeType(ser);
+            }
+        } catch (IOException e) {
+            throw new ValueSerializationException(String.format("Error serializing %s", this.getClass().getSimpleName()), e);
         }
     }
 
     @Override
-    public void decode(CLValueDecoder clvd) throws IOException, CLValueDecodeException {
-        clvd.readAny(this);
+    public void deserialize(DeserializerBuffer deser) throws ValueDeserializationException {
+        int objectByteArrayLength = deser.getBuffer().remaining();
+        try (ByteArrayInputStream bis = new ByteArrayInputStream(deser.readByteArray(objectByteArrayLength));
+             ObjectInputStream ois = new ObjectInputStream(bis)) {
+            this.setValue(ois.readObject());
+        } catch (IOException | ClassNotFoundException e) {
+            throw new ValueDeserializationException(String.format("Error deserializing %s", this.getClass().getSimpleName()), e);
+        }
     }
 }

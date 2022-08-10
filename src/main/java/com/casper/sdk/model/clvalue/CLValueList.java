@@ -1,21 +1,20 @@
 package com.casper.sdk.model.clvalue;
 
+import com.casper.sdk.exception.DynamicInstanceException;
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.cltype.AbstractCLTypeWithChildren;
 import com.casper.sdk.model.clvalue.cltype.CLTypeData;
 import com.casper.sdk.model.clvalue.cltype.CLTypeList;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.casper.sdk.exception.CLValueDecodeException;
-import com.casper.sdk.exception.CLValueEncodeException;
-import com.casper.sdk.exception.DynamicInstanceException;
-import com.casper.sdk.model.clvalue.encdec.CLValueDecoder;
-import com.casper.sdk.model.clvalue.encdec.CLValueEncoder;
+import dev.oak3.sbs4j.DeserializerBuffer;
+import dev.oak3.sbs4j.SerializerBuffer;
+import dev.oak3.sbs4j.exception.ValueDeserializationException;
+import dev.oak3.sbs4j.exception.ValueSerializationException;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -41,46 +40,48 @@ public class CLValueList extends AbstractCLValue<List<? extends AbstractCLValue<
     }
 
     @Override
-    public void encode(CLValueEncoder clve, boolean encodeType) throws IOException, NoSuchTypeException, CLValueEncodeException {
+    public void serialize(SerializerBuffer ser, boolean encodeType) throws ValueSerializationException, NoSuchTypeException {
+        if (this.getValue() == null) return;
+
         setListType();
 
         // List length is written first
         CLValueI32 length = new CLValueI32(getValue().size());
-        length.encode(clve, false);
-        setBytes(length.getBytes());
+        length.serialize(ser);
 
         for (AbstractCLValue<?, ?> child : getValue()) {
-            child.encode(clve, false);
-            setBytes(getBytes() + child.getBytes());
+            child.serialize(ser);
         }
+
         if (encodeType) {
-            this.encodeType(clve);
+            this.encodeType(ser);
         }
     }
 
     @Override
-    public void decode(CLValueDecoder clvd)
-            throws IOException, CLValueDecodeException, DynamicInstanceException, NoSuchTypeException {
-        CLTypeData childrenType = getClType().getListType().getClTypeData();
+    public void deserialize(DeserializerBuffer deser) throws ValueDeserializationException {
+        try {
+            CLTypeData childrenType = getClType().getListType().getClTypeData();
 
-        // List length is sent first
-        CLValueI32 length = new CLValueI32();
-        length.decode(clvd);
-        setBytes(length.getBytes());
+            // List length is sent first
+            CLValueI32 length = new CLValueI32();
+            length.deserialize(deser);
 
-        List<AbstractCLValue<?, ?>> list = new LinkedList<>();
-        for (int i = 0; i < length.getValue(); i++) {
-            AbstractCLValue<?, ?> child = CLTypeData.createCLValueFromCLTypeData(childrenType);
-            if (child.getClType() instanceof AbstractCLTypeWithChildren) {
-                ((AbstractCLTypeWithChildren) child.getClType())
-                        .setChildTypes(((AbstractCLTypeWithChildren) clType.getListType()).getChildTypes());
+            List<AbstractCLValue<?, ?>> list = new LinkedList<>();
+            for (int i = 0; i < length.getValue(); i++) {
+                AbstractCLValue<?, ?> child = CLTypeData.createCLValueFromCLTypeData(childrenType);
+                if (child.getClType() instanceof AbstractCLTypeWithChildren) {
+                    ((AbstractCLTypeWithChildren) child.getClType())
+                            .setChildTypes(((AbstractCLTypeWithChildren) clType.getListType()).getChildTypes());
+                }
+                child.deserialize(deser);
+                list.add(child);
             }
-            child.decode(clvd);
-            setBytes(getBytes() + child.getBytes());
-            list.add(child);
-        }
 
-        setValue(list);
+            setValue(list);
+        } catch (NoSuchTypeException | DynamicInstanceException e) {
+            throw new ValueDeserializationException(String.format("Error deserializing %s", this.getClass().getSimpleName()), e);
+        }
     }
 
     protected void setListType() {

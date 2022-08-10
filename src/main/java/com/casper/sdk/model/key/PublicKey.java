@@ -1,14 +1,13 @@
 package com.casper.sdk.model.key;
 
-import com.casper.sdk.exception.InvalidByteStringException;
 import com.casper.sdk.jackson.deserializer.PublicKeyDeserializer;
-import com.casper.sdk.model.clvalue.encdec.StringByteHelper;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.syntifi.crypto.key.AbstractPublicKey;
 import com.syntifi.crypto.key.Ed25519PublicKey;
 import com.syntifi.crypto.key.Secp256k1PublicKey;
+import dev.oak3.sbs4j.util.ByteUtils;
 import lombok.NoArgsConstructor;
 
 import java.security.NoSuchAlgorithmException;
@@ -26,8 +25,8 @@ import java.util.Arrays;
 public class PublicKey extends AbstractSerializedKeyTaggedHex<AlgorithmTag> {
 
     public static PublicKey fromTaggedHexString(String hex)
-            throws NoSuchAlgorithmException, InvalidByteStringException {
-        byte[] bytes = StringByteHelper.hexStringToByteArray(hex);
+            throws NoSuchAlgorithmException, IllegalArgumentException {
+        byte[] bytes = ByteUtils.parseHexString(hex);
         return PublicKey.fromBytes(bytes);
     }
 
@@ -50,7 +49,7 @@ public class PublicKey extends AbstractSerializedKeyTaggedHex<AlgorithmTag> {
 
 
     @JsonCreator
-    public void createPublicKey(String key) throws NoSuchAlgorithmException, InvalidByteStringException {
+    public void createPublicKey(String key) throws NoSuchAlgorithmException, IllegalArgumentException {
         PublicKey obj = PublicKey.fromTaggedHexString(key);
         this.setTag(obj.getTag());
         this.setKey(obj.getKey());

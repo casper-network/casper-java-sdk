@@ -1,22 +1,14 @@
 package com.casper.sdk.model.deploy;
 
-import com.casper.sdk.exception.CLValueEncodeException;
-import com.casper.sdk.exception.DynamicInstanceException;
-import com.casper.sdk.exception.NoSuchTypeException;
-import com.casper.sdk.model.clvalue.encdec.CLValueEncoder;
-import com.casper.sdk.model.clvalue.encdec.interfaces.EncodableValue;
+import com.casper.sdk.model.clvalue.serde.CasperSerializableObject;
+import com.casper.sdk.model.common.Digest;
+import com.casper.sdk.model.common.Ttl;
 import com.casper.sdk.model.key.PublicKey;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.casper.sdk.model.common.Digest;
-import com.casper.sdk.model.common.Ttl;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import dev.oak3.sbs4j.SerializerBuffer;
+import lombok.*;
 
-import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -32,7 +24,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class DeployHeader implements EncodableValue {
+public class DeployHeader implements CasperSerializableObject {
 
     /**
      * @see PublicKey
@@ -78,18 +70,18 @@ public class DeployHeader implements EncodableValue {
      * Implements DeployHearder encoder
      */
     @Override
-    public void encode(CLValueEncoder clve, boolean encodeType) throws IOException, CLValueEncodeException, DynamicInstanceException, NoSuchTypeException {
-        account.encode(clve, encodeType);
-        clve.writeLong(timeStamp.getTime());
-        ttl.encode(clve, encodeType);
-        clve.writeLong(gasPrice);
-        bodyHash.encode(clve, encodeType);
+    public void serialize(SerializerBuffer ser, boolean encodeType) {
+        account.serialize(ser, encodeType);
+        ser.writeI64(timeStamp.getTime());
+        ttl.serialize(ser, encodeType);
+        ser.writeI64(gasPrice);
+        bodyHash.serialize(ser, encodeType);
         if (dependencies != null) {
-            clve.writeInt(dependencies.size());
+            ser.writeI32(dependencies.size());
             for (Digest dependency : dependencies) {
-                clve.write(dependency.getDigest());
+                ser.writeByteArray(dependency.getDigest());
             }
         }
-        clve.writeString(chainName);
+        ser.writeString(chainName);
     }
 }

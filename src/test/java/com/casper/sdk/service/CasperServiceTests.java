@@ -1,14 +1,7 @@
 package com.casper.sdk.service;
 
-import java.io.IOException;
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import com.casper.sdk.exception.CasperClientException;
 import com.casper.sdk.exception.DynamicInstanceException;
-import com.casper.sdk.exception.InvalidByteStringException;
 import com.casper.sdk.identifier.block.BlockIdentifier;
 import com.casper.sdk.identifier.block.HashBlockIdentifier;
 import com.casper.sdk.identifier.block.HeightBlockIdentifier;
@@ -17,15 +10,19 @@ import com.casper.sdk.identifier.global.GlobalStateIdentifier;
 import com.casper.sdk.model.account.AccountData;
 import com.casper.sdk.model.auction.AuctionData;
 import com.casper.sdk.model.balance.GetBalanceData;
+import com.casper.sdk.model.block.JsonBlock;
+import com.casper.sdk.model.block.JsonBlockData;
 import com.casper.sdk.model.clvalue.CLValueString;
-import com.casper.sdk.model.clvalue.encdec.StringByteHelper;
+import com.casper.sdk.model.deploy.DeployData;
 import com.casper.sdk.model.deploy.executabledeploy.ModuleBytes;
 import com.casper.sdk.model.deploy.executabledeploy.StoredContractByHash;
 import com.casper.sdk.model.deploy.executionresult.Success;
 import com.casper.sdk.model.deploy.transform.WriteCLValue;
 import com.casper.sdk.model.era.EraInfoData;
 import com.casper.sdk.model.globalstate.GlobalStateData;
+import com.casper.sdk.model.key.AlgorithmTag;
 import com.casper.sdk.model.key.PublicKey;
+import com.casper.sdk.model.peer.PeerData;
 import com.casper.sdk.model.stateroothash.StateRootHashData;
 import com.casper.sdk.model.status.StatusData;
 import com.casper.sdk.model.storedvalue.StoredValueAccount;
@@ -33,19 +30,19 @@ import com.casper.sdk.model.storedvalue.StoredValueContract;
 import com.casper.sdk.model.storedvalue.StoredValueData;
 import com.casper.sdk.model.transfer.Transfer;
 import com.casper.sdk.model.transfer.TransferData;
-import com.casper.sdk.model.block.JsonBlock;
-import com.casper.sdk.model.block.JsonBlockData;
-import com.casper.sdk.model.deploy.DeployData;
-import com.casper.sdk.model.key.AlgorithmTag;
-import com.casper.sdk.model.peer.PeerData;
-
 import com.casper.sdk.model.uref.URef;
 import com.casper.sdk.model.validator.ValidatorChangeData;
-import org.json.JSONException;
+import dev.oak3.sbs4j.util.ByteUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -96,7 +93,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
         PublicKey key = result.getBlock().getBody().getProposer();
 
         assertEquals(AlgorithmTag.ED25519, key.getTag());
-        Assertions.assertEquals("2bac1d0ff9240ff0b7b06d555815640497861619ca12583ddef434885416e69b", StringByteHelper.convertBytesToHex(key.getKey()));
+        Assertions.assertEquals("2bac1d0ff9240ff0b7b06d555815640497861619ca12583ddef434885416e69b", ByteUtils.encodeHexString(key.getKey()));
     }
 
     /**
@@ -279,7 +276,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
     }
 
     @Test
-    void getEraInfoBySwitchBlockByHeight() throws JSONException, IOException {
+    void getEraInfoBySwitchBlockByHeight() {
         EraInfoData eraInfoData = casperServiceMainnet.getEraInfoBySwitchBlock(new HeightBlockIdentifier(423571));
 
         assertNotNull(eraInfoData);
@@ -293,7 +290,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
     }
 
     @Test
-    void getEraInfoBySwitchBlockByHash() throws JSONException, IOException {
+    void getEraInfoBySwitchBlockByHash() {
         EraInfoData eraInfoData = casperServiceMainnet.getEraInfoBySwitchBlock(new HashBlockIdentifier("6eee8974bd9df0c2ae5469a239c23ff901c4ca884a1fe8b7b5319b04fac3b484"));
 
         assertNotNull(eraInfoData);
@@ -307,8 +304,8 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
     }
 
     @Test
-    void getBalance() throws InvalidByteStringException, IOException, DynamicInstanceException {
-        GetBalanceData balance= casperServiceMainnet.getBalance("78e5d93246bcf9aa3336c4c80cd9359589cbddceda75e31bb3d65b0c6bda3b59",
+    void getBalance() throws IllegalArgumentException, IOException, DynamicInstanceException {
+        GetBalanceData balance = casperServiceMainnet.getBalance("78e5d93246bcf9aa3336c4c80cd9359589cbddceda75e31bb3d65b0c6bda3b59",
                 URef.fromString("uref-b22bc80d357df47447074e243b4d888de67c1cc7565fa82d0bb2b9b023146748-007"));
 
         assertNotNull(balance);

@@ -10,7 +10,7 @@ plugins {
 }
 
 group = 'com.syntifi.casper'
-version = '0.2.1'
+version = '0.4.0-SNAPSHOT'
 sourceCompatibility = '8'
 
 repositories {
@@ -19,6 +19,7 @@ repositories {
 }
 
 dependencies {
+    implementation "dev.oak3:sbs4j:${sbs4jVersion}"
     implementation "com.github.briandilley.jsonrpc4j:jsonrpc4j:${jsonrpc4jVersion}"
     implementation "com.syntifi.crypto:crypto-key-common:${cryptokeyVersion}"
     implementation "com.syntifi.crypto:crypto-key-ed25519:${cryptokeyVersion}"
@@ -159,7 +160,7 @@ publishing {
 
                 developers {
                     developer {
-                        id = 'oak3'
+                        id = 'oak'
                         name = 'Alexandre Carvalho'
                         email = 'adcarvalho@gmail.com'
                     }
@@ -167,16 +168,6 @@ publishing {
                         id = 'ab3rtz'
                         name = 'Andre Bertolace'
                         email = 'andre@syntifi.com'
-                    }
-                    developer {
-                        id = 'stormeye'
-                        name = 'Carl Norburn'
-                        email = 'carl@stormeye.co.uk'
-                    }
-                    developer {
-                        id = 'meywood'
-                        name = 'Ian Mills'
-                        email = 'ian@meywood.com'
                     }
                 }
             }
