@@ -87,7 +87,7 @@ final class EventBuilder {
         final T event;
         if (this.eventTarget == EventTarget.RAW) {
             //noinspection unchecked
-            event = (T) new RawEvent(eventType, source, data, id);
+            event = (T) new RawEvent(eventType, source, id, data);
         } else if (eventTarget == EventTarget.POJO) {
             //noinspection unchecked
             event = (T) buildPojoEvent();

@@ -24,6 +24,13 @@ public interface Event<T> {
     EventType getEventType();
 
     /**
+     * The key name of the data field.
+     *
+     * @return the key name of the data field
+     */
+    DataType getDataType();
+
+    /**
      * The event payload a JSON string or Pojo
      *
      * @return the event payload
