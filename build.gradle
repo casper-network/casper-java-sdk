@@ -11,8 +11,9 @@ plugins {
 }
 
 group = 'network.casper'
-version = '0.5.0-SNAPSHOT'
-sourceCompatibility = '8'
+version='0.5.2-SNAPSHOT'
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 repositories {
 	mavenCentral()
@@ -51,7 +52,7 @@ java {
 
 task casperJar(type: Jar) {
     archiveBaseName = 'casper-java-sdk'
-    archiveVersion = "$version"
+    archiveVersion = "0.5.2-SNAPSHOT"
     from { configurations.compileClasspath.findAll { it.isDirectory() ? it : zipTree(it) } }
     with jar
 }
