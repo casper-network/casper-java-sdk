@@ -27,7 +27,7 @@ public enum DataType {
     SHUTDOWN(Shutdown.class),
     STEP(Step.class);
 
-
+    /** The EventData class for the data type */
     private Class<? extends EventData> dataType;
 
     DataType(Class<? extends EventData> dataType) {

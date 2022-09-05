@@ -11,6 +11,7 @@ import com.casper.sdk.test.MockNode;
 import com.casper.sdk.test.PathMatchingResourceDispatcher;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -21,6 +22,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.Is.is;
 
+@Disabled
 class EventServiceIntegrationTest {
 
     private static final String MAIN_EVENTS = "/event-samples/main-events.txt";

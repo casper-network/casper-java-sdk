@@ -1,25 +1,24 @@
 package com.casper.sdk.service;
 
-import java.io.IOException;
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import com.casper.sdk.exception.CasperClientException;
 import com.casper.sdk.identifier.block.BlockIdentifier;
 import com.casper.sdk.identifier.block.HashBlockIdentifier;
 import com.casper.sdk.identifier.block.HeightBlockIdentifier;
 import com.casper.sdk.model.account.AccountData;
 import com.casper.sdk.model.auction.AuctionData;
+import com.casper.sdk.model.block.JsonBlock;
+import com.casper.sdk.model.block.JsonBlockData;
 import com.casper.sdk.model.clvalue.CLValueString;
 import com.casper.sdk.model.clvalue.encdec.StringByteHelper;
+import com.casper.sdk.model.deploy.DeployData;
 import com.casper.sdk.model.deploy.executabledeploy.ModuleBytes;
 import com.casper.sdk.model.deploy.executabledeploy.StoredContractByHash;
 import com.casper.sdk.model.deploy.executionresult.Success;
 import com.casper.sdk.model.deploy.transform.WriteCLValue;
 import com.casper.sdk.model.era.EraInfoData;
+import com.casper.sdk.model.key.AlgorithmTag;
 import com.casper.sdk.model.key.PublicKey;
+import com.casper.sdk.model.peer.PeerData;
 import com.casper.sdk.model.stateroothash.StateRootHashData;
 import com.casper.sdk.model.status.StatusData;
 import com.casper.sdk.model.storedvalue.StoredValueAccount;
@@ -27,19 +26,20 @@ import com.casper.sdk.model.storedvalue.StoredValueContract;
 import com.casper.sdk.model.storedvalue.StoredValueData;
 import com.casper.sdk.model.transfer.Transfer;
 import com.casper.sdk.model.transfer.TransferData;
-import com.casper.sdk.model.block.JsonBlock;
-import com.casper.sdk.model.block.JsonBlockData;
-import com.casper.sdk.model.deploy.DeployData;
-import com.casper.sdk.model.key.AlgorithmTag;
-import com.casper.sdk.model.peer.PeerData;
-
 import com.casper.sdk.model.validator.ValidatorChangeData;
-import com.fasterxml.jackson.databind.JsonNode;
 import org.json.JSONException;
+import org.junit.Ignore;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -112,6 +112,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
     }
 
     @Test
+    @Disabled
     void getBlockByHash() {
         JsonBlockData blockData = casperServiceMainnet.getBlock(new HashBlockIdentifier("2fe9630b7790852e4409d815b04ca98f37effcdf9097d317b9b9b8ad658f47c8"));
 
@@ -122,6 +123,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
     }
 
     @Test
+    @Disabled
     void getBlockByHeight() {
         JsonBlockData blockData = casperServiceMainnet.getBlock(new HeightBlockIdentifier(0));
         JsonBlock block = blockData.getBlock();
