@@ -2,8 +2,6 @@ package com.casper.sdk;
 
 import com.casper.sdk.how_to.HowToUtils;
 import com.casper.sdk.service.hash.HashService;
-import com.casper.sdk.service.serialization.cltypes.CLValueBuilder;
-import com.casper.sdk.service.serialization.util.CollectionUtils;
 import com.casper.sdk.types.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -17,7 +15,6 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.KeyPair;
-import java.security.PublicKey;
 import java.time.Instant;
 
 import static com.casper.sdk.how_to.HowToUtils.getUserKeyPairStreams;
@@ -28,7 +25,7 @@ import static org.hamcrest.core.Is.is;
 
 /**
  * Casper SDK integration tests. The NCTL test nodes must be running for these tests to execute.
- *
+ * <p>
  * Path the nctl folder can be overridden with -Dnctl.home=some-path
  */
 @Disabled // Remove this comment to test against a network
