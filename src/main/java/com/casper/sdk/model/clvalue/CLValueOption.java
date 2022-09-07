@@ -1,21 +1,20 @@
 package com.casper.sdk.model.clvalue;
 
-import com.casper.sdk.exception.CLValueDecodeException;
-import com.casper.sdk.exception.CLValueEncodeException;
+import com.casper.sdk.exception.DynamicInstanceException;
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.cltype.AbstractCLTypeWithChildren;
 import com.casper.sdk.model.clvalue.cltype.CLTypeData;
 import com.casper.sdk.model.clvalue.cltype.CLTypeOption;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.casper.sdk.exception.DynamicInstanceException;
-import com.casper.sdk.model.clvalue.encdec.CLValueDecoder;
-import com.casper.sdk.model.clvalue.encdec.CLValueEncoder;
+import dev.oak3.sbs4j.DeserializerBuffer;
+import dev.oak3.sbs4j.SerializerBuffer;
+import dev.oak3.sbs4j.exception.ValueDeserializationException;
+import dev.oak3.sbs4j.exception.ValueSerializationException;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.io.IOException;
 import java.util.Optional;
 
 /**
@@ -44,12 +43,13 @@ public class CLValueOption extends AbstractCLValue<Optional<AbstractCLValue<?, ?
     }
 
     @Override
-    public void encode(CLValueEncoder clve, boolean encodeType) throws IOException, NoSuchTypeException, CLValueEncodeException {
+    public void serialize(SerializerBuffer ser, boolean encodeType) throws ValueSerializationException, NoSuchTypeException {
+        if (this.getValue() == null) return;
+
         Optional<AbstractCLValue<?, ?>> value = getValue();
 
         CLValueBool isPresent = new CLValueBool(value.isPresent() && value.get().getValue() != null);
-        isPresent.encode(clve, false);
-        setBytes(isPresent.getBytes());
+        isPresent.serialize(ser);
 
         Optional<AbstractCLValue<?, ?>> child = getValue();
 
@@ -58,39 +58,39 @@ public class CLValueOption extends AbstractCLValue<Optional<AbstractCLValue<?, ?
                     .setChildTypes(((AbstractCLTypeWithChildren) clType.getChildType()).getChildTypes());
         }
         if (child.isPresent() && isPresent.getValue().equals(Boolean.TRUE)) {
-            child.get().encode(clve, false);
-            setBytes(getBytes() + child.get().getBytes());
+            child.get().serialize(ser);
         }
+
         if (encodeType) {
-            this.encodeType(clve);
+            this.encodeType(ser);
             if (child.isPresent() && isPresent.getValue().equals(Boolean.TRUE)) {
-                child.get().encodeType(clve);
+                child.get().encodeType(ser);
             }
         }
     }
 
     @Override
-    public void decode(CLValueDecoder clvd)
-            throws IOException, CLValueDecodeException, DynamicInstanceException, NoSuchTypeException {
-        CLValueBool isPresent = new CLValueBool();
-        isPresent.decode(clvd);
-        setBytes(isPresent.getBytes());
+    public void deserialize(DeserializerBuffer deser) throws ValueDeserializationException {
+        try {
+            CLValueBool isPresent = new CLValueBool();
+            isPresent.deserialize(deser);
 
-        CLTypeData childTypeData = clType.getChildType().getClTypeData();
+            CLTypeData childTypeData = clType.getChildType().getClTypeData();
 
-        AbstractCLValue<?, ?> child = CLTypeData.createCLValueFromCLTypeData(childTypeData);
+            AbstractCLValue<?, ?> child = CLTypeData.createCLValueFromCLTypeData(childTypeData);
 
-        if (child.getClType() instanceof AbstractCLTypeWithChildren) {
-            ((AbstractCLTypeWithChildren) child.getClType())
-                    .setChildTypes(((AbstractCLTypeWithChildren) clType.getChildType()).getChildTypes());
-        }
+            if (child.getClType() instanceof AbstractCLTypeWithChildren) {
+                ((AbstractCLTypeWithChildren) child.getClType())
+                        .setChildTypes(((AbstractCLTypeWithChildren) clType.getChildType()).getChildTypes());
+            }
 
-        setValue(Optional.of(child));
+            setValue(Optional.of(child));
 
-        if (isPresent.getValue().equals(Boolean.TRUE)) {
-            child.decode(clvd);
-
-            setBytes(getBytes() + child.getBytes());
+            if (isPresent.getValue().equals(Boolean.TRUE)) {
+                child.deserialize(deser);
+            }
+        } catch (NoSuchTypeException | DynamicInstanceException e) {
+            throw new ValueDeserializationException(String.format("Error deserializing %s", this.getClass().getSimpleName()), e);
         }
     }
 }

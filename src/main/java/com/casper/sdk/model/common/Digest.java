@@ -1,15 +1,15 @@
 package com.casper.sdk.model.common;
 
-import com.casper.sdk.exception.CLValueEncodeException;
-import com.casper.sdk.exception.DynamicInstanceException;
-import com.casper.sdk.exception.NoSuchTypeException;
-import com.casper.sdk.model.clvalue.encdec.CLValueEncoder;
-import com.casper.sdk.model.clvalue.encdec.interfaces.EncodableValue;
+import com.casper.sdk.model.clvalue.serde.CasperSerializableObject;
 import com.fasterxml.jackson.annotation.JsonValue;
-import lombok.*;
+import dev.oak3.sbs4j.SerializerBuffer;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.bouncycastle.util.encoders.Hex;
-
-import java.io.IOException;
 
 /**
  * Digest for Hex String
@@ -24,7 +24,7 @@ import java.io.IOException;
 @AllArgsConstructor
 @EqualsAndHashCode(of = "digest")
 @Builder
-public class Digest implements EncodableValue {
+public class Digest implements CasperSerializableObject {
     @JsonValue
     private String digest;
 
@@ -46,9 +46,8 @@ public class Digest implements EncodableValue {
      * Implements Digest encoder
      */
     @Override
-    public void encode(CLValueEncoder clve, boolean encodeType)
-            throws IOException, CLValueEncodeException, DynamicInstanceException, NoSuchTypeException {
-        clve.write(getDigest());
+    public void serialize(SerializerBuffer ser, boolean encodeType) {
+        ser.writeByteArray(getDigest());
     }
 
     @Override

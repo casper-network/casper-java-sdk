@@ -1,17 +1,16 @@
 package com.casper.sdk.model.clvalue;
 
 import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
-import com.casper.sdk.exception.CLValueDecodeException;
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.cltype.CLTypeByteArray;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.casper.sdk.model.clvalue.encdec.CLValueDecoder;
-import com.casper.sdk.model.clvalue.encdec.CLValueEncoder;
+import dev.oak3.sbs4j.DeserializerBuffer;
+import dev.oak3.sbs4j.SerializerBuffer;
+import dev.oak3.sbs4j.exception.ValueDeserializationException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -36,16 +35,19 @@ public class CLValueByteArray extends AbstractCLValue<byte[], CLTypeByteArray> {
     }
 
     @Override
-    public void encode(CLValueEncoder clve, boolean encodeType) throws IOException, NoSuchTypeException {
-        clve.writeByteArray(this);
+    public void serialize(SerializerBuffer ser, boolean encodeType) throws NoSuchTypeException {
+        if (this.getValue() == null) return;
+
+        ser.writeByteArray(this.getValue());
+
         if (encodeType) {
-            this.encodeType(clve);
+            this.encodeType(ser);
         }
     }
 
     @Override
-    public void decode(CLValueDecoder clvd) throws IOException, CLValueDecodeException {
-        clvd.readByteArray(this, this.getClType().getLength());
+    public void deserialize(DeserializerBuffer deser) throws ValueDeserializationException {
+        this.setValue(deser.readByteArray(this.getClType().getLength()));
     }
 
     @Override

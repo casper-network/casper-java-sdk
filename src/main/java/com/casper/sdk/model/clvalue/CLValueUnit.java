@@ -1,19 +1,15 @@
 package com.casper.sdk.model.clvalue;
 
+import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.cltype.CLTypeUnit;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonSetter;
-import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
-import com.casper.sdk.exception.CLValueDecodeException;
-import com.casper.sdk.exception.CLValueEncodeException;
-import com.casper.sdk.model.clvalue.encdec.CLValueDecoder;
-import com.casper.sdk.model.clvalue.encdec.CLValueEncoder;
+import dev.oak3.sbs4j.DeserializerBuffer;
+import dev.oak3.sbs4j.SerializerBuffer;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.io.IOException;
 
 /**
  * Casper Unit CLValue implementation
@@ -51,15 +47,18 @@ public class CLValueUnit extends AbstractCLValue<Object, CLTypeUnit> {
     }
 
     @Override
-    public void encode(CLValueEncoder clve, boolean encodeType) throws IOException, NoSuchTypeException, CLValueEncodeException {
+    public void serialize(SerializerBuffer ser, boolean encodeType) throws NoSuchTypeException {
+        if (this.getValue() == null) return;
+
         setBytes(UNITY_EMPTY_VALUE);
+
         if (encodeType) {
-            this.encodeType(clve);
+            this.encodeType(ser);
         }
     }
 
     @Override
-    public void decode(CLValueDecoder clvd) throws IOException, CLValueDecodeException {
+    public void deserialize(DeserializerBuffer deser) {
         setBytes(UNITY_EMPTY_VALUE);
     }
 }

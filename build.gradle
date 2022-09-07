@@ -10,7 +10,7 @@ plugins {
 }
 
 group = 'com.syntifi.casper'
-version = '0.2.1'
+version = '0.4.0-SNAPSHOT'
 sourceCompatibility = '8'
 
 repositories {
@@ -19,6 +19,7 @@ repositories {
 }
 
 dependencies {
+    implementation "dev.oak3:sbs4j:${sbs4jVersion}"
     implementation "com.github.briandilley.jsonrpc4j:jsonrpc4j:${jsonrpc4jVersion}"
     implementation "com.syntifi.crypto:crypto-key-common:${cryptokeyVersion}"
     implementation "com.syntifi.crypto:crypto-key-ed25519:${cryptokeyVersion}"
@@ -118,7 +119,7 @@ publishing {
         }
         maven {
             name = "GitHubPackages"
-            url = "https://maven.pkg.github.com/syntifi/casper-sdk"
+            url = "https://maven.pkg.github.com/casper-network/casper-java-sdk"
             credentials {
                 username = System.getenv("GITHUB_ACTOR")
                 password = System.getenv("GITHUB_TOKEN")
@@ -128,28 +129,28 @@ publishing {
 
     publications {
         mavenJava(MavenPublication) {
-            artifactId = 'casper-sdk'
+            artifactId = 'casper-java-sdk'
             from components.java
             pom {
                 name = 'Java 8+ Casper RPC Client SDK'
                 packaging = 'jar'
                 description = 'This project implements the SDK to interact with a Casper Node. It wraps the Json-RPC requests and maps the results to Java objects.'
-                url = 'https://github.com/syntifi/casper-sdk'
+                url = 'https://github.com/casper-network/casper-java-sdk'
 
                 scm {
-                    connection = 'scm:git:https://github.com/syntifi/casper-sdk.git'
-                    developerConnection = 'git@github.com:syntifi/casper-sdk.git'
-                    url = 'https://github.com/syntifi/casper-sdk'
+                    connection = 'scm:git:https://github.com/casper-network/casper-java-sdk.git'
+                    developerConnection = 'git@github.com:casper-network/casper-java-sdk.git'
+                    url = 'https://github.com/casper-network/casper-java-sdk'
                 }
 
                 issueManagement {
                     system = 'GitHub'
-                    url = 'https://github.com/syntifi/casper-sdk/issues'
+                    url = 'https://github.com/casper-network/casper-java-sdk/issues'
                 }
 
                 ciManagement {
                     system = 'Github Actions'
-                    url = 'https://github.com/syntifi/casper-sdk/actions'
+                    url = 'https://github.com/casper-network/casper-java-sdk/actions'
                 }
 
                 licenses {
@@ -161,7 +162,7 @@ publishing {
 
                 developers {
                     developer {
-                        id = 'syntifi'
+                        id = 'oak'
                         name = 'Alexandre Carvalho'
                         email = 'adcarvalho@gmail.com'
                     }

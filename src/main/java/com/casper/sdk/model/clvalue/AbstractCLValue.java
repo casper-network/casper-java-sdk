@@ -1,30 +1,21 @@
 package com.casper.sdk.model.clvalue;
 
 import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
-import com.casper.sdk.exception.CLValueDecodeException;
-import com.casper.sdk.exception.CLValueEncodeException;
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.jackson.resolver.CLValueResolver;
 import com.casper.sdk.model.clvalue.cltype.AbstractCLType;
 import com.casper.sdk.model.clvalue.cltype.CLTypeData;
-import com.casper.sdk.model.clvalue.encdec.interfaces.DecodableValue;
-import com.fasterxml.jackson.annotation.JsonGetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.casper.sdk.model.clvalue.serde.CasperSerializableObject;
+import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonSetter;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonTypeResolver;
-import com.casper.sdk.exception.DynamicInstanceException;
-import com.casper.sdk.model.clvalue.encdec.CLValueDecoder;
-import com.casper.sdk.model.clvalue.encdec.CLValueEncoder;
-import com.casper.sdk.model.clvalue.encdec.interfaces.EncodableValue;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-
-import java.io.IOException;
+import dev.oak3.sbs4j.DeserializerBuffer;
+import dev.oak3.sbs4j.SerializerBuffer;
+import dev.oak3.sbs4j.exception.ValueDeserializationException;
+import dev.oak3.sbs4j.exception.ValueSerializationException;
+import dev.oak3.sbs4j.interfaces.DeserializableObject;
+import dev.oak3.sbs4j.util.ByteUtils;
+import lombok.*;
 
 /**
  * Base class for CLValues
@@ -35,41 +26,43 @@ import java.io.IOException;
  * @since 0.0.1
  */
 @Getter
-@Setter
 @EqualsAndHashCode(of = {"bytes", "value"})
 @JsonTypeInfo(use = JsonTypeInfo.Id.NONE)
 @JsonTypeResolver(CLValueResolver.class)
-public abstract class AbstractCLValue<T, P extends AbstractCLType> implements EncodableValue, DecodableValue {
+public abstract class AbstractCLValue<T, P extends AbstractCLType> implements CasperSerializableObject, DeserializableObject {
 
+    @Setter(AccessLevel.PROTECTED)
     private String bytes = "";
 
+    @Setter
     @JsonProperty("parsed")
     @JsonInclude(Include.NON_NULL)
     private String parsed;
 
+    @Setter
     @JsonIgnore
     private T value;
 
+    @SneakyThrows({ValueSerializationException.class})
     @JsonGetter(value = "bytes")
     @ExcludeFromJacocoGeneratedReport
-    protected String getJsonBytes()
-            throws IOException, CLValueEncodeException, NoSuchTypeException {
-        try (CLValueEncoder clve = new CLValueEncoder()) {
-            this.encode(clve, false);
-        }
+    public String getBytes() {
+        SerializerBuffer ser = new SerializerBuffer();
+        this.serialize(ser);
+
+        this.bytes = ByteUtils.encodeHexString(ser.toByteArray());
 
         return this.bytes;
     }
 
+    @SneakyThrows({ValueDeserializationException.class})
     @JsonSetter(value = "bytes")
     @ExcludeFromJacocoGeneratedReport
-    protected void setJsonBytes(String bytes)
-            throws IOException, CLValueDecodeException, DynamicInstanceException, NoSuchTypeException {
+    protected void setJsonBytes(String bytes) {
         this.bytes = bytes;
 
-        try (CLValueDecoder clvd = new CLValueDecoder(this.bytes)) {
-            this.decode(clvd);
-        }
+        DeserializerBuffer deser = new DeserializerBuffer(this.bytes);
+        this.deserialize(deser);
     }
 
     @JsonIgnore
@@ -77,10 +70,12 @@ public abstract class AbstractCLValue<T, P extends AbstractCLType> implements En
 
     public abstract void setClType(P value);
 
-    public abstract void encode(CLValueEncoder clve, boolean encodeType) throws IOException, NoSuchTypeException, CLValueEncodeException;
+    public abstract void serialize(SerializerBuffer ser, boolean encodeType) throws ValueSerializationException, NoSuchTypeException;
 
-    public void encodeType(CLValueEncoder clve) throws NoSuchTypeException {
+    public abstract void deserialize(DeserializerBuffer deserializerBuffer) throws ValueDeserializationException;
+
+    public void encodeType(SerializerBuffer ser) throws NoSuchTypeException {
         byte val = (getClType().getClTypeData().getSerializationTag());
-        clve.write(val);
+        ser.writeU8(val);
     }
 }

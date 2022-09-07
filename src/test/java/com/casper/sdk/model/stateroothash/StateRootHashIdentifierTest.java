@@ -17,7 +17,7 @@ import java.io.IOException;
  * @author Andre Bertolace
  * @since 0.0.1
  */
-public class StateRootHashTest extends AbstractJsonTests {
+public class StateRootHashIdentifierTest extends AbstractJsonTests {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(StatusDataTests.class);
 

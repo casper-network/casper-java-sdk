@@ -1,20 +1,20 @@
 package com.casper.sdk.model.clvalue;
 
+import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.cltype.CLTypePublicKey;
+import com.casper.sdk.model.key.PublicKey;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonSetter;
-import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
-import com.casper.sdk.exception.CLValueDecodeException;
-import com.casper.sdk.model.clvalue.encdec.CLValueDecoder;
-import com.casper.sdk.model.clvalue.encdec.CLValueEncoder;
-import com.casper.sdk.model.key.PublicKey;
+import dev.oak3.sbs4j.DeserializerBuffer;
+import dev.oak3.sbs4j.SerializerBuffer;
+import dev.oak3.sbs4j.exception.ValueDeserializationException;
+import dev.oak3.sbs4j.util.ByteUtils;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 
 /**
@@ -49,19 +49,23 @@ public class CLValuePublicKey extends AbstractCLValue<PublicKey, CLTypePublicKey
     }
 
     @Override
-    public void encode(CLValueEncoder clve, boolean encodeType) throws IOException, NoSuchTypeException {
-        clve.writePublicKey(this);
+    public void serialize(SerializerBuffer ser, boolean encodeType) throws NoSuchTypeException {
+        if (this.getValue() == null) return;
+
+        ser.writeU8(this.getValue().getTag().getByteTag());
+        ser.writeByteArray(this.getValue().getKey());
+
         if (encodeType) {
-            this.encodeType(clve);
+            this.encodeType(ser);
         }
     }
 
     @Override
-    public void decode(CLValueDecoder clvd) throws IOException, CLValueDecodeException {
+    public void deserialize(DeserializerBuffer deser) throws ValueDeserializationException {
         try {
-            clvd.readPublicKey(this);
-        } catch (NoSuchAlgorithmException e) {
-            throw new CLValueDecodeException("Error decoding CLValuePublicKey", e);
+            this.setValue(PublicKey.fromTaggedHexString(ByteUtils.encodeHexString(deser.readByteArray(33))));
+        } catch (NoSuchAlgorithmException | IllegalArgumentException e) {
+            throw new ValueDeserializationException("Error decoding CLValuePublicKey", e);
         }
     }
 }

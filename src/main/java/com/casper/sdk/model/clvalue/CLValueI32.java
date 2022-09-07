@@ -1,20 +1,14 @@
 package com.casper.sdk.model.clvalue;
 
 import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
-import com.casper.sdk.exception.CLValueDecodeException;
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.cltype.CLTypeI32;
-import com.casper.sdk.model.clvalue.encdec.CLValueDecoder;
-import com.casper.sdk.model.clvalue.encdec.CLValueEncoder;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonSetter;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-import java.io.IOException;
+import dev.oak3.sbs4j.DeserializerBuffer;
+import dev.oak3.sbs4j.SerializerBuffer;
+import dev.oak3.sbs4j.exception.ValueDeserializationException;
+import lombok.*;
 
 /**
  * Casper I32 CLValue implementation
@@ -49,15 +43,18 @@ public class CLValueI32 extends AbstractCLValue<Integer, CLTypeI32> {
     }
 
     @Override
-    public void encode(CLValueEncoder clve, boolean encodeType) throws IOException, NoSuchTypeException {
-        clve.writeI32(this);
+    public void serialize(SerializerBuffer ser, boolean encodeType) throws NoSuchTypeException {
+        if (this.getValue() == null) return;
+
+        ser.writeI32(this.getValue());
+
         if (encodeType) {
-            this.encodeType(clve);
+            this.encodeType(ser);
         }
     }
 
     @Override
-    public void decode(CLValueDecoder clvd) throws IOException, CLValueDecodeException {
-        clvd.readI32(this);
+    public void deserialize(DeserializerBuffer deser) throws ValueDeserializationException {
+        this.setValue(deser.readI32());
     }
 }

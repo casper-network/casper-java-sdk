@@ -1,18 +1,12 @@
 package com.casper.sdk.model.deploy.executabledeploy;
 
-import com.casper.sdk.exception.CLValueEncodeException;
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.deploy.NamedArg;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.casper.sdk.exception.DynamicInstanceException;
-import com.casper.sdk.model.clvalue.encdec.CLValueEncoder;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import dev.oak3.sbs4j.SerializerBuffer;
+import dev.oak3.sbs4j.exception.ValueSerializationException;
+import lombok.*;
 
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -48,12 +42,11 @@ public class Transfer implements ExecutableDeployItem {
      * Implements the Transfer encoder
      */
     @Override
-    public void encode(CLValueEncoder clve, boolean encodeType)
-            throws IOException, CLValueEncodeException, DynamicInstanceException, NoSuchTypeException {
-        clve.write(getOrder());
-        clve.writeInt(args.size());
+    public void serialize(SerializerBuffer ser, boolean encodeType) throws ValueSerializationException, NoSuchTypeException {
+        ser.writeU8(getOrder());
+        ser.writeI32(args.size());
         for (NamedArg<?> namedArg : args) {
-            namedArg.encode(clve, true);
+            namedArg.serialize(ser, true);
         }
     }
 }

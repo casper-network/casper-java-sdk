@@ -1,19 +1,10 @@
 package com.casper.sdk.model.deploy;
 
-import com.casper.sdk.exception.CLValueEncodeException;
-import com.casper.sdk.exception.DynamicInstanceException;
-import com.casper.sdk.exception.NoSuchTypeException;
-import com.casper.sdk.model.clvalue.encdec.CLValueEncoder;
-import com.casper.sdk.model.clvalue.encdec.interfaces.EncodableValue;
+import com.casper.sdk.model.clvalue.serde.CasperSerializableObject;
 import com.casper.sdk.model.key.PublicKey;
 import com.casper.sdk.model.key.Signature;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-import java.io.IOException;
+import dev.oak3.sbs4j.SerializerBuffer;
+import lombok.*;
 
 /**
  * A struct containing a signature and the public key of the signer
@@ -27,7 +18,7 @@ import java.io.IOException;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Approval implements EncodableValue {
+public class Approval implements CasperSerializableObject {
 
     /**
      * @see PublicKey
@@ -43,8 +34,8 @@ public class Approval implements EncodableValue {
      * Implements Approval encoder
      */
     @Override
-    public void encode(CLValueEncoder clve, boolean encodeType) throws IOException, CLValueEncodeException, DynamicInstanceException, NoSuchTypeException {
-        signer.encode(clve, encodeType);
-        signature.encode(clve, encodeType);
+    public void serialize(SerializerBuffer ser, boolean encodeType) {
+        signer.serialize(ser, encodeType);
+        signature.serialize(ser, encodeType);
     }
 }

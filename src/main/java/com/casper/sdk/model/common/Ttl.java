@@ -1,22 +1,13 @@
 package com.casper.sdk.model.common;
 
 
-import com.casper.sdk.exception.CLValueEncodeException;
-import com.casper.sdk.exception.DynamicInstanceException;
-import com.casper.sdk.exception.NoSuchTypeException;
-import com.casper.sdk.model.clvalue.encdec.CLValueEncoder;
-import com.casper.sdk.model.clvalue.encdec.interfaces.EncodableValue;
+import com.casper.sdk.model.clvalue.serde.CasperSerializableObject;
 import com.fasterxml.jackson.annotation.JsonValue;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import dev.oak3.sbs4j.SerializerBuffer;
+import lombok.*;
 import org.joda.time.Period;
 import org.joda.time.format.PeriodFormatter;
 import org.joda.time.format.PeriodFormatterBuilder;
-
-import java.io.IOException;
 
 /**
  * TTL wrapper
@@ -30,7 +21,7 @@ import java.io.IOException;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Ttl implements EncodableValue {
+public class Ttl implements CasperSerializableObject {
     @JsonValue
     private String ttl;
 
@@ -46,11 +37,10 @@ public class Ttl implements EncodableValue {
     }
 
     /**
-     * Implements EncodableValue
+     * implements SerializableObject
      */
     @Override
-    public void encode(CLValueEncoder clve, boolean encodeType)
-            throws IOException, CLValueEncodeException, DynamicInstanceException, NoSuchTypeException {
-        clve.writeLong(getTtl());
+    public void serialize(SerializerBuffer ser, boolean encodeType) {
+        ser.writeI64(getTtl());
     }
 }

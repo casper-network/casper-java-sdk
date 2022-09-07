@@ -1,22 +1,21 @@
 package com.casper.sdk.model.clvalue;
 
-import com.casper.sdk.exception.CLValueDecodeException;
-import com.casper.sdk.exception.CLValueEncodeException;
+import com.casper.sdk.exception.DynamicInstanceException;
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.cltype.AbstractCLTypeWithChildren;
 import com.casper.sdk.model.clvalue.cltype.CLTypeData;
 import com.casper.sdk.model.clvalue.cltype.CLTypeTuple1;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.casper.sdk.exception.DynamicInstanceException;
-import com.casper.sdk.model.clvalue.encdec.CLValueDecoder;
-import com.casper.sdk.model.clvalue.encdec.CLValueEncoder;
+import dev.oak3.sbs4j.DeserializerBuffer;
+import dev.oak3.sbs4j.SerializerBuffer;
+import dev.oak3.sbs4j.exception.ValueDeserializationException;
+import dev.oak3.sbs4j.exception.ValueSerializationException;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.javatuples.Unit;
 
-import java.io.IOException;
 import java.util.Arrays;
 
 /**
@@ -41,29 +40,33 @@ public class CLValueTuple1 extends AbstractCLValueWithChildren<Unit<? extends Ab
     }
 
     @Override
-    public void encode(CLValueEncoder clve, boolean encodeType) throws IOException, NoSuchTypeException, CLValueEncodeException {
+    public void serialize(SerializerBuffer ser, boolean encodeType) throws NoSuchTypeException, ValueSerializationException {
+        if (this.getValue() == null) return;
+
         setChildTypes();
-        getValue().getValue0().encode(clve, false);
-        setBytes(getValue().getValue0().getBytes());
+        getValue().getValue0().serialize(ser);
+
         if (encodeType) {
-            this.encodeType(clve);
+            this.encodeType(ser);
         }
     }
 
     @Override
-    public void decode(CLValueDecoder clvd)
-            throws IOException, CLValueDecodeException, DynamicInstanceException, NoSuchTypeException {
-        CLTypeData childTypeData1 = clType.getChildClTypeData(0);
+    public void deserialize(DeserializerBuffer deser) throws ValueDeserializationException {
+        try {
+            CLTypeData childTypeData1 = clType.getChildClTypeData(0);
 
-        AbstractCLValue<?, ?> child1 = CLTypeData.createCLValueFromCLTypeData(childTypeData1);
-        if (child1.getClType() instanceof AbstractCLTypeWithChildren) {
-            ((AbstractCLTypeWithChildren) child1.getClType())
-                    .setChildTypes(((AbstractCLTypeWithChildren) clType.getChildTypes().get(0)).getChildTypes());
+            AbstractCLValue<?, ?> child1 = CLTypeData.createCLValueFromCLTypeData(childTypeData1);
+            if (child1.getClType() instanceof AbstractCLTypeWithChildren) {
+                ((AbstractCLTypeWithChildren) child1.getClType())
+                        .setChildTypes(((AbstractCLTypeWithChildren) clType.getChildTypes().get(0)).getChildTypes());
+            }
+            child1.deserialize(deser);
+
+            setValue(new Unit<>(child1));
+        } catch (NoSuchTypeException | DynamicInstanceException e) {
+            throw new ValueDeserializationException(String.format("Error deserializing %s", this.getClass().getSimpleName()), e);
         }
-        child1.decode(clvd);
-
-        setValue(new Unit<>(child1));
-        setBytes(getValue().getValue0().getBytes());
     }
 
     @Override

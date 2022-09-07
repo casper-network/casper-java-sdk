@@ -1,23 +1,21 @@
 package com.casper.sdk.model.clvalue;
 
 import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
-import com.casper.sdk.exception.CLValueDecodeException;
-import com.casper.sdk.exception.CLValueEncodeException;
+import com.casper.sdk.exception.DynamicInstanceException;
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.cltype.CLTypeURef;
-import com.casper.sdk.model.clvalue.encdec.StringByteHelper;
-import com.fasterxml.jackson.annotation.JsonGetter;
-import com.fasterxml.jackson.annotation.JsonSetter;
-import com.casper.sdk.exception.DynamicInstanceException;
-import com.casper.sdk.model.clvalue.encdec.CLValueDecoder;
-import com.casper.sdk.model.clvalue.encdec.CLValueEncoder;
 import com.casper.sdk.model.uref.URef;
 import com.casper.sdk.model.uref.URefAccessRight;
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonSetter;
+import dev.oak3.sbs4j.DeserializerBuffer;
+import dev.oak3.sbs4j.SerializerBuffer;
+import dev.oak3.sbs4j.exception.ValueDeserializationException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.io.IOException;
+import java.util.Objects;
 
 /**
  * Casper Boolean CLURef implementation URef is a tuple that contains the
@@ -55,27 +53,34 @@ public class CLValueURef extends AbstractCLValue<URef, CLTypeURef> {
     }
 
     @Override
-    public void encode(CLValueEncoder clve, boolean encodeType) throws IOException, NoSuchTypeException, CLValueEncodeException {
+    public void serialize(SerializerBuffer ser, boolean encodeType) throws NoSuchTypeException {
+        if (this.getValue() == null) return;
+
         URef uref = this.getValue();
         byte[] urefByte = new byte[uref.getAddress().length + 1];
         System.arraycopy(uref.getAddress(), 0, urefByte, 0, uref.getAddress().length);
         urefByte[32] = uref.getAccessRight().serializationTag;
-        setBytes(StringByteHelper.convertBytesToHex(urefByte));
+        ser.writeByteArray(urefByte);
+
         if (encodeType) {
-            this.encodeType(clve);
+            this.encodeType(ser);
         }
     }
 
     @Override
-    public void decode(CLValueDecoder clvd) throws IOException, CLValueDecodeException, DynamicInstanceException {
-        URef uref = new URef();
-        CLValueByteArray clValueByteArray = new CLValueByteArray(new byte[32]);
-        clValueByteArray.decode(clvd);
-        uref.setAddress(clValueByteArray.getValue());
-        CLValueU8 serializationTag = new CLValueU8((byte) 0);
-        serializationTag.decode(clvd);
-        uref.setAccessRight(URefAccessRight.getTypeBySerializationTag(serializationTag.getValue()));
-        setValue(uref);
+    public void deserialize(DeserializerBuffer deser) throws ValueDeserializationException {
+        try {
+            URef uref = new URef();
+            CLValueByteArray clValueByteArray = new CLValueByteArray(new byte[32]);
+            clValueByteArray.deserialize(deser);
+            uref.setAddress(clValueByteArray.getValue());
+            CLValueU8 serializationTag = new CLValueU8((byte) 0);
+            serializationTag.deserialize(deser);
+            uref.setAccessRight(URefAccessRight.getTypeBySerializationTag(serializationTag.getValue()));
+            setValue(uref);
+        } catch (DynamicInstanceException e) {
+            throw new ValueDeserializationException(String.format("Error deserializing %s", this.getClass().getSimpleName()), e);
+        }
     }
 
     @ExcludeFromJacocoGeneratedReport
@@ -90,15 +95,15 @@ public class CLValueURef extends AbstractCLValue<URef, CLTypeURef> {
             return false;
         final Object thisBytes = this.getBytes();
         final Object otherBytes = other.getBytes();
-        if (thisBytes == null ? otherBytes != null : !thisBytes.equals(otherBytes))
+        if (!Objects.equals(thisBytes, otherBytes))
             return false;
         final URef thisValue = this.getValue();
         final URef otherValue = other.getValue();
-        if (thisValue == null ? otherValue != null : !(thisValue.equals(otherValue)))
+        if (!Objects.equals(thisValue, otherValue))
             return false;
         final Object thisClType = this.getClType();
         final Object otherClType = other.getClType();
-        return thisClType == null ? otherClType == null : thisClType.equals(otherClType);
+        return Objects.equals(thisClType, otherClType);
     }
 
     @ExcludeFromJacocoGeneratedReport

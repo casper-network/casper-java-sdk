@@ -1,6 +1,6 @@
 package com.casper.sdk.model.deploy.executabledeploy;
 
-import com.casper.sdk.model.clvalue.encdec.interfaces.EncodableValue;
+import com.casper.sdk.model.clvalue.serde.CasperSerializableObject;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -26,7 +26,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @JsonSubTypes.Type(value = StoredVersionedContractByHash.class, name = "StoredVersionedContractByHash"),
         @JsonSubTypes.Type(value = StoredVersionedContractByName.class, name = "StoredVersionedContractByName"),
         @JsonSubTypes.Type(value = Transfer.class, name = "Transfer")})
-public interface ExecutableDeployItem extends EncodableValue {
+public interface ExecutableDeployItem extends CasperSerializableObject {
     @JsonIgnore
     byte getOrder();
 }
