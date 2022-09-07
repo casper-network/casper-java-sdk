@@ -1,7 +1,6 @@
 package com.casper.sdk.service.impl.event;
 
 
-import com.casper.sdk.exception.InvalidByteStringException;
 import com.casper.sdk.model.common.Digest;
 import com.casper.sdk.model.event.Event;
 import com.casper.sdk.model.event.EventTarget;
@@ -88,7 +87,7 @@ class EventBuilderTest {
     }
 
     @Test
-    void buildPojoBlockAddedMainEvent() throws IOException, InvalidByteStringException, NoSuchAlgorithmException {
+    void buildPojoBlockAddedMainEvent() throws IOException, NoSuchAlgorithmException {
 
         final AbstractEvent<BlockAdded> abstractEvent = getEvent(EventType.MAIN, EventTarget.POJO, BLOCK_ADDED_EVENT);
 
@@ -123,7 +122,7 @@ class EventBuilderTest {
     }
 
     @Test
-    void buildFinalitySignatureSigEvent() throws IOException, InvalidByteStringException, NoSuchAlgorithmException {
+    void buildFinalitySignatureSigEvent() throws IOException, NoSuchAlgorithmException {
 
         final PojoEvent<FinalitySignature> abstractEvent = getEvent(EventType.SIGS, EventTarget.POJO, FINALITY_SIGNATURE_EVENT);
         assertThat(abstractEvent.getData(), instanceOf(FinalitySignature.class));
@@ -176,7 +175,7 @@ class EventBuilderTest {
     }
 
     @Test
-    void buildFaultEvent() throws IOException, InvalidByteStringException, NoSuchAlgorithmException {
+    void buildFaultEvent() throws IOException, NoSuchAlgorithmException {
 
         final PojoEvent<Fault> faultPojoEvent = getEvent(EventType.MAIN, EventTarget.POJO, FAULT_EVENT);
         assertThat(faultPojoEvent, is(notNullValue()));

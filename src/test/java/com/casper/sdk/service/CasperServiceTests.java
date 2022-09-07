@@ -44,7 +44,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Unit tests for {@link CasperService}
@@ -120,7 +124,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
 
         assertNotNull(blockData);
         JsonBlock block = blockData.getBlock();
-        assertEquals("0000000000000000000000000000000000000000000000000000000000000000", block.getHeader().getParentHash());
+        assertEquals("0000000000000000000000000000000000000000000000000000000000000000", block.getHeader().getParentHash().toString());
         assertEquals(0, block.getHeader().getHeight());
     }
 
@@ -128,8 +132,8 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
     void getBlockByHeight() {
         JsonBlockData blockData = casperServiceMainnet.getBlock(new HeightBlockIdentifier(0));
         JsonBlock block = blockData.getBlock();
-        assertEquals("0000000000000000000000000000000000000000000000000000000000000000", block.getHeader().getParentHash());
-        assertEquals("2fe9630b7790852e4409d815b04ca98f37effcdf9097d317b9b9b8ad658f47c8", block.getHash());
+        assertEquals("0000000000000000000000000000000000000000000000000000000000000000", block.getHeader().getParentHash().toString());
+        assertEquals("2fe9630b7790852e4409d815b04ca98f37effcdf9097d317b9b9b8ad658f47c8", block.getHash().toString());
         assertNotNull(blockData);
     }
 
