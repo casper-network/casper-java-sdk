@@ -80,7 +80,11 @@ public class CLValueMap extends
                 key.deserialize(deser);
 
                 AbstractCLValue<?, ?> val = CLTypeData.createCLValueFromCLTypeData(valType);
-                if (val.getClType() instanceof AbstractCLTypeWithChildren) {
+
+                if (val.getClType() instanceof CLTypeMap) {
+                    ((CLTypeMap) val.getClType())
+                            .setKeyValueTypes(((CLTypeMap) clType.getKeyValueTypes().getValueType()).getKeyValueTypes());
+                } else if (val.getClType() instanceof AbstractCLTypeWithChildren) {
                     ((AbstractCLTypeWithChildren) val.getClType())
                             .setChildTypes(((AbstractCLTypeWithChildren) clType.getKeyValueTypes().getValueType())
                                     .getChildTypes());
