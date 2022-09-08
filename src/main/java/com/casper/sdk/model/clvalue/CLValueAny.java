@@ -14,7 +14,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 /**
  * Casper Object CLValue implementation
@@ -55,6 +59,7 @@ public class CLValueAny extends AbstractCLValue<Object, CLTypeAny> {
              ObjectOutputStream oos = new ObjectOutputStream(bos)) {
             oos.writeObject(this.getValue());
             byte[] objectByteArray = bos.toByteArray();
+            ser.writeI32(objectByteArray.length);
             ser.writeByteArray(objectByteArray);
 
             if (encodeType) {
@@ -67,7 +72,7 @@ public class CLValueAny extends AbstractCLValue<Object, CLTypeAny> {
 
     @Override
     public void deserialize(DeserializerBuffer deser) throws ValueDeserializationException {
-        int objectByteArrayLength = deser.getBuffer().remaining();
+        int objectByteArrayLength = deser.readI32();
         try (ByteArrayInputStream bis = new ByteArrayInputStream(deser.readByteArray(objectByteArrayLength));
              ObjectInputStream ois = new ObjectInputStream(bis)) {
             this.setValue(ois.readObject());
