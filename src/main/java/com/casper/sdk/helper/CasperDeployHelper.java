@@ -1,4 +1,4 @@
-package com.casper.sdk.service;
+package com.casper.sdk.helper;
 
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.CLValueOption;
@@ -22,6 +22,8 @@ import com.syntifi.crypto.key.AbstractPrivateKey;
 import com.syntifi.crypto.key.hash.Blake2b;
 import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 import java.math.BigInteger;
 import java.security.GeneralSecurityException;
@@ -34,7 +36,8 @@ import java.util.*;
  * @author Andre Bertolace
  * @since 0.2.0
  */
-public class CasperDeployService {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public class CasperDeployHelper {
 
     /**
      * Method to generate a Transfer deploy
@@ -57,7 +60,7 @@ public class CasperDeployService {
                 .builder()
                 .ttl("30m")
                 .build();
-        return CasperDeployService.buildTransferDeploy(fromPrivateKey,
+        return CasperDeployHelper.buildTransferDeploy(fromPrivateKey,
                 toPublicKey, amount, chainName, id, paymentAmount,
                 gasPrice, ttl, new Date(), new ArrayList<>());
     }

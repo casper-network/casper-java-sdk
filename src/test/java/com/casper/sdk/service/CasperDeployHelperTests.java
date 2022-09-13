@@ -1,6 +1,7 @@
 package com.casper.sdk.service;
 
 import com.casper.sdk.exception.NoSuchTypeException;
+import com.casper.sdk.helper.CasperDeployHelper;
 import com.casper.sdk.model.common.Ttl;
 import com.casper.sdk.model.deploy.Deploy;
 import com.casper.sdk.model.deploy.DeployResult;
@@ -30,8 +31,8 @@ import java.util.Random;
  * @author Andre Bertolace
  * @since 0.2.0
  */
-public class CasperDeployServiceTests extends AbstractJsonRpcTests {
-    private static final Logger LOGGER = LoggerFactory.getLogger(CasperDeployService.class);
+public class CasperDeployHelperTests extends AbstractJsonRpcTests {
+    private static final Logger LOGGER = LoggerFactory.getLogger(CasperDeployHelper.class);
 
     /**
      * Loads test key file from resources
@@ -68,7 +69,7 @@ public class CasperDeployServiceTests extends AbstractJsonRpcTests {
             to = PublicKey.fromAbstractPublicKey(alice.derivePublicKey());
         }
 
-        Deploy deploy = CasperDeployService.buildTransferDeploy(from, to,
+        Deploy deploy = CasperDeployHelper.buildTransferDeploy(from, to,
                 BigInteger.valueOf(2500000000L), "casper-test",
                 id, BigInteger.valueOf(100000000L), 1L, ttl, new Date(),
                 new ArrayList<>());
