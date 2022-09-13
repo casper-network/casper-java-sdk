@@ -9,9 +9,10 @@ fi
 
 SOURCE_TEMPLATES_LOCATION=./templates
 TARGET_PAGES_LOCATION=./pages
-TARGET_VERSIONS_FILE=./.data/versions.csv
+TARGET_DATA_LOCATION=./.data
+TARGET_VERSIONS_FILE=./$TARGET_DATA_LOCATION/versions.csv
 
-mkdir _data
+mkdir $TARGET_DATA_LOCATION
 mkdir -p $TARGET_PAGES_LOCATION/versions
 
 rm $TARGET_PAGES_LOCATION/*
@@ -19,7 +20,6 @@ rm $TARGET_PAGES_LOCATION/*
 # Copy base files
 echo "Checking out $SOURCE_INDEX_FILE from $MASTER_BRANCH_NAME"
 git checkout $MASTER_BRANCH_NAME -- $SOURCE_INDEX_FILE
-cp -f $SOURCE_TEMPLATES_LOCATION/.gitignore .
 cp -f $SOURCE_TEMPLATES_LOCATION/_config.yml .
 cp -f $SOURCE_TEMPLATES_LOCATION/Gemfile .
 cp -f $SOURCE_TEMPLATES_LOCATION/pages/index.md .
