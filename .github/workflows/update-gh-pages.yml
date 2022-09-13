@@ -37,8 +37,8 @@ jobs:
         with:
           branch: gh-pages
           clean: true
-          folder: target/site
-          target-folder: docs/${{ env.PROJECT_VERSION }}/site
+          folder: build/docs/javadoc
+          target-folder: docs/${{ env.PROJECT_VERSION }}/javadoc
 
       - name: Deploy tests results to GitHub Pages for current version
         uses: JamesIves/github-pages-deploy-action@v4.2.2
