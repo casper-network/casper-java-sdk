@@ -43,6 +43,7 @@ import org.javatuples.Pair;
 import org.javatuples.Triplet;
 import org.javatuples.Unit;
 import org.json.JSONException;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.slf4j.Logger;
@@ -76,6 +77,7 @@ public class StoredValueTests extends AbstractJsonTests {
 
 
     @Test
+    @Disabled("CLValuesAny deser is not well understood yet")
     void validate_CLValueAny_Mapping() throws IOException, JSONException, ValueSerializationException {
         String inputJson = getPrettyJson(loadJsonFromFile("stored-value-samples/stored-value-any.json"));
 
@@ -615,6 +617,7 @@ public class StoredValueTests extends AbstractJsonTests {
     }
 
     @Test
+    @Disabled("CLValuesAny deser is not well understood yet")
     void validate_CLValueMap_Mapping_with_Map_i32_Any() throws IOException,
             JSONException, ValueSerializationException {
         String inputJson = getPrettyJson(
