@@ -1,0 +1,13 @@
+# Configurations
+title: Casper Java SDK
+longtitle: Java library for interacting with a CSPR node
+author: Alexandre Carvalho
+email: adcarvalho@gmail.com
+description: >
+  Java library for interacting with a CSPR node
+
+baseurl: '/casper-java-sdk'
+
+exclude: [ templates, generate-pages.sh ]
+
+remote_theme: oak/architect
