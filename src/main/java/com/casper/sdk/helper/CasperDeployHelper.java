@@ -1,29 +1,22 @@
 package com.casper.sdk.helper;
 
 import com.casper.sdk.exception.NoSuchTypeException;
-import com.casper.sdk.model.clvalue.CLValueOption;
-import com.casper.sdk.model.clvalue.CLValuePublicKey;
+
+import com.casper.sdk.model.clvalue.CLValueByteArray;
 import com.casper.sdk.model.clvalue.CLValueU512;
-import com.casper.sdk.model.clvalue.CLValueU64;
-import com.casper.sdk.model.clvalue.cltype.CLTypeOption;
-import com.casper.sdk.model.clvalue.cltype.CLTypePublicKey;
 import com.casper.sdk.model.clvalue.cltype.CLTypeU512;
 import com.casper.sdk.model.common.Digest;
 import com.casper.sdk.model.common.Ttl;
-import com.casper.sdk.model.deploy.Approval;
-import com.casper.sdk.model.deploy.Deploy;
-import com.casper.sdk.model.deploy.DeployHeader;
-import com.casper.sdk.model.deploy.NamedArg;
+import com.casper.sdk.model.deploy.*;
+import com.casper.sdk.model.deploy.executabledeploy.ExecutableDeployItem;
 import com.casper.sdk.model.deploy.executabledeploy.ModuleBytes;
-import com.casper.sdk.model.deploy.executabledeploy.Transfer;
 import com.casper.sdk.model.key.PublicKey;
 import com.casper.sdk.model.key.Signature;
 import com.syntifi.crypto.key.AbstractPrivateKey;
 import com.syntifi.crypto.key.hash.Blake2b;
 import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigInteger;
 import java.security.GeneralSecurityException;
@@ -39,113 +32,101 @@ import java.util.*;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CasperDeployHelper {
 
-    /**
-     * Method to generate a Transfer deploy
-     *
-     * @param fromPrivateKey sender private Key
-     * @param toPublicKey    receiver public key
-     * @param amount         amount to transfer
-     * @param chainName      network name
-     * @return Deploy
-     * @throws NoSuchTypeException      thrown if type not found
-     * @throws GeneralSecurityException thrown when an error occurs with cryptographic keys
-     */
-    public static Deploy buildTransferDeploy(AbstractPrivateKey fromPrivateKey,
-                                             PublicKey toPublicKey, BigInteger amount, String chainName)
-            throws NoSuchTypeException, GeneralSecurityException, ValueSerializationException {
-        long id = Math.abs(new Random().nextInt());
-        BigInteger paymentAmount = BigInteger.valueOf(25000000000L);
-        long gasPrice = 1L;
-        Ttl ttl = Ttl
-                .builder()
-                .ttl("30m")
-                .build();
-        return CasperDeployHelper.buildTransferDeploy(fromPrivateKey,
-                toPublicKey, amount, chainName, id, paymentAmount,
-                gasPrice, ttl, new Date(), new ArrayList<>());
-    }
-
-
-    /**
-     * @param fromPrivateKey private key of the sender
-     * @param toPublicKey    public key of the receiver
-     * @param amount         amount to transfer
-     * @param id             id field in the request to tag the transaction
-     * @param paymentAmount, the number of motes paying to the execution engine
-     * @param gasPrice       gasPrice for native transfers can be set to 1
-     * @param ttl            time to live in milliseconds (default value is 1800000
-     *                       ms (30 minutes))
-     * @return Deploy
-     * @throws NoSuchTypeException      thrown if type not found
-     * @throws GeneralSecurityException thrown when an error occurs with cryptographic keys
-     */
-    public static Deploy buildTransferDeploy(AbstractPrivateKey fromPrivateKey, PublicKey toPublicKey,
-                                             BigInteger amount, String chainName, Long id, BigInteger paymentAmount,
-                                             Long gasPrice, Ttl ttl, Date date, List<Digest> dependencies)
-            throws NoSuchTypeException, GeneralSecurityException, ValueSerializationException {
-
-        List<NamedArg<?>> transferArgs = new LinkedList<>();
-        NamedArg<CLTypeU512> amountNamedArg = new NamedArg<>("amount",
-                new CLValueU512(amount));
-        transferArgs.add(amountNamedArg);
-        NamedArg<CLTypePublicKey> publicKeyNamedArg = new NamedArg<>("target",
-                new CLValuePublicKey(toPublicKey));
-        transferArgs.add(publicKeyNamedArg);
-        CLValueOption idArg = new CLValueOption(Optional.of(
-                new CLValueU64(BigInteger.valueOf(682008))));
-        NamedArg<CLTypeOption> idNamedArg = new NamedArg<>("id", idArg);
-        transferArgs.add(idNamedArg);
-
-        Transfer session = Transfer
-                .builder()
-                .args(transferArgs)
-                .build();
-        List<NamedArg<?>> paymentArgs = new LinkedList<>();
-        NamedArg<CLTypeU512> paymentArg = new NamedArg<>("amount",
-                new CLValueU512(paymentAmount));
-        paymentArgs.add(paymentArg);
-
-        ModuleBytes payment = ModuleBytes
-                .builder()
-                .args(paymentArgs)
-                .bytes("")
-                .build();
-        SerializerBuffer ser = new SerializerBuffer();
-        payment.serialize(ser, true);
-        session.serialize(ser, true);
-        byte[] sessionAnPaymentHash = Blake2b.digest(ser.toByteArray(), 32);
-        ser.getBuffer().reset();
-
-        PublicKey fromPublicKey = PublicKey.fromAbstractPublicKey(fromPrivateKey.derivePublicKey());
-
-        DeployHeader deployHeader = DeployHeader
+    public static DeployHeader buildDeployHeader(PublicKey fromPublicKey, String chainName,
+                                                 Long gasPrice, Ttl ttl, Date date,
+                                                 List<Digest> dependencies, byte[] bodyHash) {
+        return DeployHeader
                 .builder()
                 .account(fromPublicKey)
                 .ttl(ttl)
                 .timeStamp(date)
                 .gasPrice(gasPrice)
-                .bodyHash(Digest.digestFromBytes(sessionAnPaymentHash))
+                .bodyHash(Digest.digestFromBytes(bodyHash))
                 .chainName(chainName)
                 .dependencies(dependencies)
                 .build();
-        deployHeader.serialize(ser, true);
-        byte[] headerHash = Blake2b.digest(ser.toByteArray(), 32);
+    }
 
-        Signature signature = Signature.sign(fromPrivateKey, headerHash);
+    public static HashAndSignature signDeployHeader(AbstractPrivateKey privateKey, DeployHeader deployHeader)
+            throws GeneralSecurityException {
+        SerializerBuffer serializerBuffer = new SerializerBuffer();
+
+        deployHeader.serialize(serializerBuffer, true);
+        byte[] headerHash = Blake2b.digest(serializerBuffer.toByteArray(), 32);
+        Signature signature = Signature.sign(privateKey, headerHash);
+        return new HashAndSignature(headerHash, signature);
+    }
+
+    public static byte[] getDeployItemAndModuleBytesHash(ExecutableDeployItem deployItem, ModuleBytes moduleBytes)
+            throws NoSuchTypeException, ValueSerializationException {
+        SerializerBuffer ser = new SerializerBuffer();
+        moduleBytes.serialize(ser, true);
+        deployItem.serialize(ser, true);
+        return Blake2b.digest(ser.toByteArray(), 32);
+    }
+
+    public static ModuleBytes getPaymentModuleBytes(BigInteger paymentAmount) {
+        List<NamedArg<?>> paymentArgs = new LinkedList<>();
+        NamedArg<CLTypeU512> paymentArg = new NamedArg<>("amount",
+                new CLValueU512(paymentAmount));
+        paymentArgs.add(paymentArg);
+        return ModuleBytes
+                .builder()
+                .args(paymentArgs)
+                .bytes(new byte[]{})
+                .build();
+    }
+
+    /**
+     * Core method to fully build a deploy
+     *
+     * @param fromPrivateKey private key of the sender
+     * @param chainName      name of chain
+     * @param session        item to deploy ExecutableDeployItems
+     * @param payment        Module bytes as another ExecuteDeployItems
+     * @param gasPrice       gasPrice for native transfers can be set to 1
+     * @param ttl            time to live in milliseconds (default value is 1800000
+     *                       ms (30 minutes))
+     * @param date           deploy date
+     * @param dependencies   list of digest dependencies
+     * @return
+     * @throws NoSuchTypeException
+     * @throws GeneralSecurityException
+     * @throws ValueSerializationException
+     */
+    public static Deploy buildDeploy(AbstractPrivateKey fromPrivateKey, String chainName,
+                                     ExecutableDeployItem session, ModuleBytes payment,
+                                     Long gasPrice, Ttl ttl, Date date, List<Digest> dependencies)
+            throws NoSuchTypeException, GeneralSecurityException, ValueSerializationException {
+
+        byte[] sessionAnPaymentHash = getDeployItemAndModuleBytesHash(session, payment);
+
+        PublicKey fromPublicKey = PublicKey.fromAbstractPublicKey(fromPrivateKey.derivePublicKey());
+
+        DeployHeader deployHeader = buildDeployHeader(fromPublicKey, chainName, gasPrice, ttl,
+                date, dependencies, sessionAnPaymentHash);
+
+        HashAndSignature hashAndSignature = signDeployHeader(fromPrivateKey, deployHeader);
 
         List<Approval> approvals = new LinkedList<>();
         approvals.add(Approval.builder()
                 .signer(PublicKey.fromAbstractPublicKey(fromPrivateKey.derivePublicKey()))
-                .signature(signature)
+                .signature(hashAndSignature.getSignature())
                 .build());
 
         return Deploy.builder()
-                .hash(Digest.digestFromBytes(headerHash))
+                .hash(Digest.digestFromBytes(hashAndSignature.getHash()))
                 .header(deployHeader)
                 .payment(payment)
                 .session(session)
                 .approvals(approvals)
                 .build();
+    }
 
+    @Getter
+    @AllArgsConstructor
+    private static class HashAndSignature {
+        byte[] hash;
+        Signature signature;
     }
 }

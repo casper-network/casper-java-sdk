@@ -1,6 +1,5 @@
 package com.casper.sdk.helper;
 
-import com.casper.sdk.model.key.AlgorithmTag;
 import com.syntifi.crypto.key.*;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -8,7 +7,7 @@ import lombok.NoArgsConstructor;
 import java.io.IOException;
 
 /**
- * Key service provides methods to easily work with private and public keys
+ * Key helper provides methods to easily work with private and public keys
  *
  * @author Alexandre Carvalho
  * @author Andre Bertolace

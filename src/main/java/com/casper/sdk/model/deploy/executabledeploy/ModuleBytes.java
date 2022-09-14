@@ -30,7 +30,7 @@ public class ModuleBytes implements ExecutableDeployItem {
      * Module bytes
      */
     @JsonProperty("module_bytes")
-    private String bytes;
+    private byte[] bytes;
 
     /**
      * @see NamedArg
@@ -52,7 +52,8 @@ public class ModuleBytes implements ExecutableDeployItem {
     @Override
     public void serialize(SerializerBuffer ser, boolean encodeType) throws ValueSerializationException, NoSuchTypeException {
         ser.writeU8(getOrder());
-        ser.writeString(getBytes());
+        ser.writeI32(getBytes().length);
+        ser.writeByteArray(getBytes());
         ser.writeI32(args.size());
         for (NamedArg<?> namedArg : args) {
             namedArg.serialize(ser, encodeType);

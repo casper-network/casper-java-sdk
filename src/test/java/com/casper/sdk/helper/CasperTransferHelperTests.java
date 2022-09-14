@@ -1,11 +1,11 @@
-package com.casper.sdk.service;
+package com.casper.sdk.helper;
 
 import com.casper.sdk.exception.NoSuchTypeException;
-import com.casper.sdk.helper.CasperDeployHelper;
 import com.casper.sdk.model.common.Ttl;
 import com.casper.sdk.model.deploy.Deploy;
 import com.casper.sdk.model.deploy.DeployResult;
 import com.casper.sdk.model.key.PublicKey;
+import com.casper.sdk.service.AbstractJsonRpcTests;
 import com.syntifi.crypto.key.Ed25519PrivateKey;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
 import org.bouncycastle.util.encoders.Hex;
@@ -31,7 +31,7 @@ import java.util.Random;
  * @author Andre Bertolace
  * @since 0.2.0
  */
-public class CasperDeployHelperTests extends AbstractJsonRpcTests {
+public class CasperTransferHelperTests extends AbstractJsonRpcTests {
     private static final Logger LOGGER = LoggerFactory.getLogger(CasperDeployHelper.class);
 
     /**
@@ -46,7 +46,7 @@ public class CasperDeployHelperTests extends AbstractJsonRpcTests {
     }
 
     @Test
-    void testDeployTransferOnTestnet() throws IOException, NoSuchTypeException, GeneralSecurityException, URISyntaxException, ValueSerializationException {
+    void testTransferOnTestnet() throws IOException, NoSuchTypeException, GeneralSecurityException, URISyntaxException, ValueSerializationException {
         Ed25519PrivateKey alice = new Ed25519PrivateKey();
         Ed25519PrivateKey bob = new Ed25519PrivateKey();
         alice.readPrivateKey(getResourcesKeyPath("deploy-accounts/Alice_SyntiFi_secret_key.pem"));
@@ -69,7 +69,7 @@ public class CasperDeployHelperTests extends AbstractJsonRpcTests {
             to = PublicKey.fromAbstractPublicKey(alice.derivePublicKey());
         }
 
-        Deploy deploy = CasperDeployHelper.buildTransferDeploy(from, to,
+        Deploy deploy = CasperTransferHelper.buildTransferDeploy(from, to,
                 BigInteger.valueOf(2500000000L), "casper-test",
                 id, BigInteger.valueOf(100000000L), 1L, ttl, new Date(),
                 new ArrayList<>());
