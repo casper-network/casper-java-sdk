@@ -10,7 +10,8 @@ import org.junit.jupiter.api.Test;
 import java.io.InputStream;
 import java.security.KeyPair;
 
-import static com.casper.sdk.how_to.HowToUtils.*;
+import static com.casper.sdk.how_to.HowToUtils.getFaucetKeyPair;
+import static com.casper.sdk.how_to.HowToUtils.getWasmIn;
 
 /**
  * Integration tests for installing a contract

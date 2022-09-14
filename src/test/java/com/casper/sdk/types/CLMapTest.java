@@ -1,6 +1,7 @@
 package com.casper.sdk.types;
 
 import com.casper.sdk.service.serialization.cltypes.CLValueBuilder;
+import com.casper.sdk.service.serialization.types.ByteSerializerFactory;
 import com.casper.sdk.service.serialization.util.ByteUtils;
 import com.casper.sdk.service.serialization.util.CollectionUtils;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,6 +25,8 @@ class CLMapTest {
     private CLValue key2;
     private CLValue value2;
     private CLMap clMap;
+
+    private final ByteSerializerFactory serializerFactory = new ByteSerializerFactory();
 
     @BeforeEach
     void setUp() {
@@ -161,5 +164,53 @@ class CLMapTest {
         final CLValue value1 = clMap.values().iterator().next();
         assertThat(value1.getParsed(), is("400000"));
         assertThat(value1.getBytes(), is(ByteUtils.decodeHex("03801a06")));
+    }
+
+    @Test
+    void clMapByteSerializationTest() {
+
+        byte[] keyBytes = ByteUtils.decodeHex("e07cA98F1b5C15bC9ce75e8adB8a3b4D334A1B1Fa14DD16CfD3320bf77Cc3aAb");
+        byte[] rawBytes = {-32, 124, -87, -113, 27, 92, 21, -68, -100, -25, 94, -118, -37, -118, 59, 77, 51, 74, 27, 31, -95, 77, -47, 108, -3, 51, 32, -65, 119, -52, 58, -85};
+        assertThat(keyBytes, is(rawBytes));
+
+        final CLValue clKey = CLValueBuilder.byteArray(keyBytes);
+        final CLValue clValue = CLValueBuilder.u256(0.4e6);
+
+        byte[] expectedKeyBytes = {
+                32, 0, 0, 0, (byte) 224, 124, (byte) 169, (byte) 143, 27, 92, 21, (byte) 188, (byte) 156, (byte) 231,
+                94, (byte) 138, (byte) 219, (byte) 138, 59, 77, 51, 74, 27, 31, (byte) 161, 77, (byte) 209, 108,
+                (byte) 253, 51, 32, (byte) 191, 119, (byte) 204, 58, (byte) 171, 15, 32, 0, 0, 0
+        };
+        //assertThat(clKey.getBytes(), is(expectedKeyBytes));
+
+        byte[] expectedValueBytes = {3, (byte) 128, 26, 6};
+        assertThat(clValue.getBytes(), is(expectedValueBytes));
+
+        byte[] expectedValueBytesWithType = {4, 0, 0, 0, 3, (byte) 128, 26, 6, 7};
+        byte[] clValueBytes = serializerFactory.getByteSerializer(clValue).toBytes(clValue);
+        assertThat(clValueBytes, is(expectedValueBytesWithType));
+
+
+        byte[] clKeyBytes = serializerFactory.getByteSerializer(clKey).toBytes(clKey);
+        assertThat(clKeyBytes, is(expectedKeyBytes));
+
+        final CLMap clMap = CLValueBuilder.map(CollectionUtils.Map.of(clKey, clValue));
+        byte[] clMapBytes = serializerFactory.getByteSerializer(clMap).toBytes(clMap);
+
+        // The expected bytes for the serialized CLMap
+        byte[] expectedClMapBytes = {
+                40, 0, 0, 0, // length of CLMap bytes from this point onwards..... (whole byte array written as toBytesArrayU8(bytes)
+                1, 0, 0, 0, // number of key-value pairs in the map
+                (byte) 224, 124, (byte) 169, (byte) 143, 27, 92, 21, (byte) 188, (byte) 156,
+                (byte) 231, 94, (byte) 138, (byte) 219, (byte) 138, 59, 77, 51, 74, 27, 31, (byte) 161, 77, (byte) 209,
+                108, (byte) 253, 51, 32, (byte) 191, 119, (byte) 204, 58, (byte) 171, // Key bytes
+                3, (byte) 128, 26, 6, // value bytes
+                17, // CLMap type
+                15, // key type - Byte array
+                32, 0, 0, 0, // Byte array length U32
+                7  // value type U256
+        };
+
+        assertThat(clMapBytes, is(expectedClMapBytes));
     }
 }

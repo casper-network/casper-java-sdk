@@ -11,7 +11,11 @@ public class DeployNamedArgBuilder {
     private final List<DeployNamedArg> argList = new ArrayList<>();
 
     public DeployNamedArgBuilder add(final String name, final CLValue value) {
-        argList.add(new DeployNamedArg(name, value));
+        return add(new DeployNamedArg(name, value));
+    }
+
+    public DeployNamedArgBuilder add(final DeployNamedArg deployNamedArg) {
+        argList.add(deployNamedArg);
         return this;
     }
 
