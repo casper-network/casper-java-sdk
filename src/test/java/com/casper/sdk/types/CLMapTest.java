@@ -166,8 +166,11 @@ class CLMapTest {
         assertThat(value1.getBytes(), is(ByteUtils.decodeHex("03801a06")));
     }
 
+    /**
+     * Tests that a CLMap containing a byte array key can correctly serialize to bytes
+     */
     @Test
-    void clMapByteSerializationTest() {
+    void clMapWithByteArrayKeySerializationTest() {
 
         byte[] keyBytes = ByteUtils.decodeHex("e07cA98F1b5C15bC9ce75e8adB8a3b4D334A1B1Fa14DD16CfD3320bf77Cc3aAb");
         byte[] rawBytes = {-32, 124, -87, -113, 27, 92, 21, -68, -100, -25, 94, -118, -37, -118, 59, 77, 51, 74, 27, 31, -95, 77, -47, 108, -3, 51, 32, -65, 119, -52, 58, -85};
@@ -190,7 +193,6 @@ class CLMapTest {
         byte[] clValueBytes = serializerFactory.getByteSerializer(clValue).toBytes(clValue);
         assertThat(clValueBytes, is(expectedValueBytesWithType));
 
-
         byte[] clKeyBytes = serializerFactory.getByteSerializer(clKey).toBytes(clKey);
         assertThat(clKeyBytes, is(expectedKeyBytes));
 
@@ -212,5 +214,72 @@ class CLMapTest {
         };
 
         assertThat(clMapBytes, is(expectedClMapBytes));
+    }
+
+    /**
+     * Tests that a CLMap containing a CLMap value can correctly serialize to bytes
+     */
+    @Test
+    void nestedCLMapByteSerialization() {
+
+        final byte[] expectedBytes = {
+                30, 0, 0, 0, 1, 0, 0, 0, 6, 0, 0, 0, 112, 97, 114, 101, 110, 116, 1, 0, 0, 0, 6, 0, 0, 0, 110, 101,
+                115, 116, 101, 100, 1, 1, 17, 10, 17, 10, 7
+        };
+
+        final CLValue clValue = CLValueBuilder.u256(1);
+        final CLValue nestedClKey = CLValueBuilder.string("nested");
+        final CLValue nestedMap = CLValueBuilder.map(CollectionUtils.Map.of(nestedClKey, clValue));
+
+        final CLValue key = CLValueBuilder.string("parent");
+        CLMap map = CLValueBuilder.map(CollectionUtils.Map.of(key, nestedMap));
+
+        byte[] clMapBytes = serializerFactory.getByteSerializer(map).toBytes(map);
+
+        assertThat(clMapBytes, is(expectedBytes));
+    }
+
+    @Test
+    void nestedMapWithByteArrayKeySerialization() {
+
+        final byte[] expectedBytes = {
+                52, 0, 0, 0, // map length
+                1, 0, 0, 0, // map elements size
+                6, 0, 0, 0, // key length
+                112, 97, 114, 101, 110, 116, // key bytes
+                1, 0, 0, 0, // map elements size
+                (byte) 224, 124, (byte) 169, (byte) 143, 27, 92, 21, (byte) 188, (byte) 156, (byte) 231, 94, (byte) 138,
+                (byte) 219, (byte) 138, 59, 77, 51, 74, 27, 31, (byte) 161, 77, (byte) 209, 108, (byte) 253, 51, 32,
+                (byte) 191, 119, (byte) 204, 58, (byte) 171, 1, 1, 17, 10, 17, 15, 32, 0, 0, 0, 7
+        };
+
+
+        final byte[] expectedNestedBytes = {
+                38, 0, 0, 0, // length
+                1, 0, 0, 0,  // size
+                (byte) 224, 124, (byte) 169, (byte) 143, 27, 92, 21, (byte) 188, (byte) 156,
+                (byte) 231, 94, (byte) 138, (byte) 219, (byte) 138, 59, 77, 51, 74, 27, 31, (byte) 161, 77, (byte) 209,
+                108, (byte) 253, 51, 32, (byte) 191, 119, (byte) 204, 58, (byte) 171, 1, 1, 17, 15, 32, 0, 0, 0, 7
+        };
+
+        byte[] keyBytes = {-32, 124, -87, -113, 27, 92, 21, -68, -100, -25, 94, -118, -37, -118, 59, 77, 51, 74, 27, 31,
+                -95, 77, -47, 108, -3, 51, 32, -65, 119, -52, 58, -85};
+
+        assertThat(keyBytes.length, is(32));
+
+        // Build a map to nest within another map
+        final CLValue nestedKey = CLValueBuilder.byteArray(keyBytes);
+        final CLValue nestedValue = CLValueBuilder.u256(1);
+        final CLValue nestedMap = CLValueBuilder.map(CollectionUtils.Map.of(nestedKey, nestedValue));
+
+        final byte[] nestedMapBytes = serializerFactory.getByteSerializer(nestedMap).toBytes(nestedMap);
+        assertThat(nestedMapBytes, is(expectedNestedBytes));
+
+        // Build the map that contains another map
+        final CLValue key = CLValueBuilder.string("parent");
+        CLMap map = CLValueBuilder.map(CollectionUtils.Map.of(key, nestedMap));
+
+        byte[] clMapBytes = serializerFactory.getByteSerializer(map).toBytes(map);
+        assertThat(clMapBytes, is(expectedBytes));
     }
 }
