@@ -48,8 +48,8 @@ abstract class AbstractByteSerializer<T> implements ByteSerializer<T> {
     private byte[] getMapType(final CLMapTypeInfo typeInfo) {
         return new ByteArrayBuilder()
                 .append(getTypeBytes(typeInfo))
-                .append(getTypeBytes(typeInfo.getKeyType()))
-                .append(getTypeBytes(typeInfo.getValueType()))
+                .append(toBytesForCLTypeInfo(typeInfo.getKeyType()))
+                .append(toBytesForCLTypeInfo(typeInfo.getValueType()))
                 .toByteArray();
     }
 
