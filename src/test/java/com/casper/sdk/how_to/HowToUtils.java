@@ -39,7 +39,7 @@ public final class HowToUtils {
         );
     }
 
-    static KeyPairStreams getFaucetKeyPair() throws IOException {
+    public static KeyPairStreams getFaucetKeyPair() throws IOException {
         return new KeyPairStreams(
                 Files.newInputStream(new File(getNctlHome() + "/assets/net-1/faucet", "public_key.pem").toPath()),
                 Files.newInputStream(new File(getNctlHome() + "/assets/net-1/faucet", "secret_key.pem").toPath())

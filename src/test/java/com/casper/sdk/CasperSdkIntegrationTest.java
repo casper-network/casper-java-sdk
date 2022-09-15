@@ -2,6 +2,8 @@ package com.casper.sdk;
 
 import com.casper.sdk.how_to.HowToUtils;
 import com.casper.sdk.service.hash.HashService;
+import com.casper.sdk.service.serialization.cltypes.CLValueBuilder;
+import com.casper.sdk.service.serialization.types.ByteSerializerFactory;
 import com.casper.sdk.types.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -13,11 +15,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigInteger;
 import java.security.KeyPair;
 import java.time.Instant;
+import java.util.List;
 
-import static com.casper.sdk.how_to.HowToUtils.getUserKeyPairStreams;
+import static com.casper.sdk.how_to.HowToUtils.*;
 import static com.jayway.jsonpath.matchers.JsonPathMatchers.hasJsonPath;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -58,6 +62,8 @@ class CasperSdkIntegrationTest {
      * The SDK under test the NCTL test nodes must be running for these tests to execute
      */
     private CasperSdk casperSdk;
+
+    private final ByteSerializerFactory serializerFactory = new ByteSerializerFactory();
 
     @BeforeEach
     void setUp() {
@@ -203,6 +209,99 @@ class CasperSdkIntegrationTest {
 
         final String blockTransfersByHash = casperSdk.getBlockTransfers(blockHash);
         assertThat(blockTransfersByHash, hasJsonPath("$.transfers"));
+    }
+
+    /**
+     * Tests that the Instrument state update call does not give error:
+     * <pre>
+     * [org.springframework.web.util.NestedServletException: Handler dispatch failed; nested exception is
+     * java.lang.NoSuchMethodError: okhttp3.RequestBody.create([BLokhttp3/MediaType;)Lokhttp3/RequestBody;]
+     * </pre>
+     * <p>
+     * DOES NOT WORK NEED TO GET INPUT ON HOW TO CONFIGURE TEST
+     */
+    @Test
+    @Disabled
+    void testIssue130() throws IOException {
+
+        final InputStream erc20wasmIn = getWasmIn("/com/casper/sdk/how_to/erc20.wasm");
+        final String chainName = "casper-net-1";
+        final Number payment = 50e9;
+        final int tokenDecimals = 11;
+        final String tokenName = "Acme Token";
+        final Number tokenTotalSupply = 1e15;
+        final String tokenSymbol = "ACME";
+
+        // Get contract operator.
+        final KeyPairStreams faucetKeyPair = getFaucetKeyPair();
+        final KeyPair operatorKeyPair = casperSdk.loadKeyPair(faucetKeyPair.getPublicKeyIn(), faucetKeyPair.getPrivateKeyIn());
+        final KeyPair nodeKeyPair = getNodeKeyPair(1);
+
+        // Set deploy.
+        final Deploy installContractDeploy = casperSdk.makeInstallContract(
+                new DeployParams(
+                        operatorKeyPair.getPublic(),
+                        chainName,
+                        null,
+                        null,
+                        null,
+                        null
+                ),
+                payment,
+                erc20wasmIn,
+                tokenDecimals,
+                tokenName,
+                tokenSymbol,
+                tokenTotalSupply
+        );
+
+        // Approve deploy.
+        casperSdk.signDeploy(installContractDeploy, operatorKeyPair);
+
+        // Dispatch deploy to a node.
+        Digest contractHash = casperSdk.putDeploy(installContractDeploy);
+        assertThat(contractHash, is(notNullValue()));
+
+        contractHash = new ContractHash("6b6f1b4a38d94956154d20089842ca69f891ea44322df9d20921015ce711dc34");
+
+        String accountHash = casperSdk.getAccountHash(operatorKeyPair.getPublic());
+
+        System.out.println("ContractHash: " + contractHash);
+
+        final KeyPair platformKeyPair = nodeKeyPair;
+
+        byte[] key = casperSdk.getPublicKeyBytes(nodeKeyPair.getPublic());
+        final List<DeployNamedArg> namedArgs = new DeployNamedArgBuilder()
+                // TODO Where do these values come from?
+                .add("instrument", CLValueBuilder.string("c9536033-386a-4bed-9b57-fd67c3d49dc1"))
+                .add("instrument_state_hash", CLValueBuilder.byteArray("52eb6c9d9d5e1c63a2320b6e964ec08a241fa49fee23350f170713f24462a474"))
+                .build();
+
+
+        final Deploy deploy = casperSdk.makeDeploy(
+                new DeployParams(
+                        platformKeyPair.getPublic(), "casper-net-1",
+                        1,
+                        Instant.now().toEpochMilli(),
+                        DeployParams.DEFAULT_TTL,
+                        null
+                ),
+                new StoredContractByHash(
+                        new ContractHash(contractHash.getHash()),
+                        "set_state",
+                        namedArgs),
+                casperSdk.standardPayment(new BigInteger("10000000000"))
+        );
+
+        assertThat(deploy, is(notNullValue()));
+        casperSdk.signDeploy(deploy, nodeKeyPair);
+
+        Digest digest = casperSdk.putDeploy(deploy);
+        assertThat(digest, is(notNullValue()));
+
+        // Assert hash matches expected
+        byte[] expectedIssue2Hash = {};
+        assertThat(digest.getHash(), is(expectedIssue2Hash));
     }
 
     private KeyPair geUserKeyPair(int userNumber) throws IOException {
