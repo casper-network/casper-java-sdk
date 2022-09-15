@@ -2,8 +2,10 @@ package com.casper.sdk.service.http.rpc;
 
 import com.casper.sdk.exceptions.HttpException;
 import com.casper.sdk.service.json.JsonConversionService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import okhttp3.*;
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
@@ -31,24 +33,28 @@ public class HttpMethods {
 
     Optional<String> rpcCallMethod(final Method method) throws HttpException {
 
+
+        final String content;
         try {
+            content = jsonConversionService.writeValueAsString(method);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        final byte[] bytes = content.getBytes(StandardCharsets.UTF_8);
+        //noinspection deprecation
+        final RequestBody body = RequestBody.create(JSON, bytes);
 
-            final String content = jsonConversionService.writeValueAsString(method);
-            final byte[] bytes = content.getBytes(StandardCharsets.UTF_8);
-            final RequestBody body = RequestBody.create(bytes, JSON);
+        final Request request = new Request.Builder()
+                .url(buildRpcUrl())
+                .header(ACCEPT, APPLICATION_JSON)
+                .header(CONTENT_TYPE, APPLICATION_JSON)
+                .post(body)
+                .build();
 
-            final Request request = new Request.Builder()
-                    .url(buildRpcUrl())
-                    .header(ACCEPT, APPLICATION_JSON)
-                    .header(CONTENT_TYPE, APPLICATION_JSON)
-                    .post(body)
-                    .build();
-
-            final Response response = client.newCall(request).execute();
+        try (final Response response = client.newCall(request).execute()) {
             //noinspection ConstantConditions
             return Optional.ofNullable(response.body().string());
-
-        } catch (Exception e) {
+        } catch (IOException e) {
             throw new HttpException(e.getMessage());
         }
     }

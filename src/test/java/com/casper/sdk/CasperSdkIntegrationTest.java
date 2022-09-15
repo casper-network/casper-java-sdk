@@ -4,8 +4,6 @@ import com.casper.sdk.how_to.HowToUtils;
 import com.casper.sdk.service.hash.HashService;
 import com.casper.sdk.service.serialization.cltypes.CLValueBuilder;
 import com.casper.sdk.service.serialization.types.ByteSerializerFactory;
-import com.casper.sdk.service.serialization.util.ByteUtils;
-import com.casper.sdk.service.serialization.util.CollectionUtils;
 import com.casper.sdk.types.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -213,10 +211,18 @@ class CasperSdkIntegrationTest {
         assertThat(blockTransfersByHash, hasJsonPath("$.transfers"));
     }
 
+    /**
+     * Tests that the Instrument state update call does not give error:
+     * <pre>
+     * [org.springframework.web.util.NestedServletException: Handler dispatch failed; nested exception is
+     * java.lang.NoSuchMethodError: okhttp3.RequestBody.create([BLokhttp3/MediaType;)Lokhttp3/RequestBody;]
+     * </pre>
+     * <p>
+     * DOES NOT WORK NEED TO GET INPUT ON HOW TO CONFIGURE TEST
+     */
     @Test
     @Disabled
-    void testIssue2() throws IOException {
-
+    void testIssue130() throws IOException {
 
         final InputStream erc20wasmIn = getWasmIn("/com/casper/sdk/how_to/erc20.wasm");
         final String chainName = "casper-net-1";
@@ -229,6 +235,7 @@ class CasperSdkIntegrationTest {
         // Get contract operator.
         final KeyPairStreams faucetKeyPair = getFaucetKeyPair();
         final KeyPair operatorKeyPair = casperSdk.loadKeyPair(faucetKeyPair.getPublicKeyIn(), faucetKeyPair.getPrivateKeyIn());
+        final KeyPair nodeKeyPair = getNodeKeyPair(1);
 
         // Set deploy.
         final Deploy installContractDeploy = casperSdk.makeInstallContract(
@@ -257,56 +264,18 @@ class CasperSdkIntegrationTest {
 
         contractHash = new ContractHash("6b6f1b4a38d94956154d20089842ca69f891ea44322df9d20921015ce711dc34");
 
+        String accountHash = casperSdk.getAccountHash(operatorKeyPair.getPublic());
+
         System.out.println("ContractHash: " + contractHash);
 
-        byte[] k1Bytes = ByteUtils.decodeHex("e07cA98F1b5C15bC9ce75e8adB8a3b4D334A1B1Fa14DD16CfD3320bf77Cc3aAb");
-        final CLValue key1 = CLValueBuilder.byteArray(k1Bytes);
+        final KeyPair platformKeyPair = nodeKeyPair;
 
-
-
-        byte[] k2Bytes = ByteUtils.decodeHex("e3D394334Ce46C6043BCd33E4686D2B7a369C606BfCce4C26ca14d2C73Fac824");
-        final CLValue key2 = CLValueBuilder.byteArray(k2Bytes);
-        final CLValue value = CLValueBuilder.u256(0.4e6);
-
-
-
-        final KeyPair platformKeyPair = getNodeKeyPair(1);
-
-        CLMap map1 = CLValueBuilder.map(CollectionUtils.Map.of(key1, value));
-        CLMap map2 = CLValueBuilder.map(CollectionUtils.Map.of(key2, value));
-
-        byte[] map1Bytes = map1.getBytes();
-        byte[] map2Byte = map2.getBytes();
-
-        final DeployNamedArg assetHolders = new DeployNamedArg("asset_holders", map1);
-        final DeployNamedArg liabilityHolders = new DeployNamedArg("liability_holders", map2);
-
-        // Test the bytes from both CLMap named args
-        byte[] assertHoldersBytes = serializerFactory.getByteSerializer(assetHolders).toBytes(assetHolders);
-
-        // Assert assertHoldersBytes match expected
-        // TODO
-
-        byte[] liabilityHoldersBytes = serializerFactory.getByteSerializer(liabilityHolders).toBytes(liabilityHolders);
-
-        // Assert liabilityHoldersBytes match expected
-        // TODO
-
+        byte[] key = casperSdk.getPublicKeyBytes(nodeKeyPair.getPublic());
         final List<DeployNamedArg> namedArgs = new DeployNamedArgBuilder()
-                .add("token_id", CLValueBuilder.string("token-id"))
-                .add("instrument_id", CLValueBuilder.string("c9536033-386a-4bed-9b57-fd67c3d49dc1"))
-                .add("asset_decimals", CLValueBuilder.u256(1))
-                .add("asset_units", CLValueBuilder.u256(50000))
-                .add(assetHolders)
-                .add("liability_decimals", CLValueBuilder.u256(1))
-                .add("liability_units", CLValueBuilder.u256(40000))
-                .add(liabilityHolders)
+                // TODO Where do these values come from?
+                .add("instrument", CLValueBuilder.string("c9536033-386a-4bed-9b57-fd67c3d49dc1"))
+                .add("instrument_state_hash", CLValueBuilder.byteArray("52eb6c9d9d5e1c63a2320b6e964ec08a241fa49fee23350f170713f24462a474"))
                 .build();
-
-        byte[] namedArgsBytes = serializerFactory.getByteSerializer(namedArgs).toBytes(namedArgs);
-
-        // Assert namedArgsBytes match expected
-        // TODO
 
 
         final Deploy deploy = casperSdk.makeDeploy(
@@ -325,14 +294,13 @@ class CasperSdkIntegrationTest {
         );
 
         assertThat(deploy, is(notNullValue()));
-
-        casperSdk.signDeploy(deploy, operatorKeyPair);
+        casperSdk.signDeploy(deploy, nodeKeyPair);
 
         Digest digest = casperSdk.putDeploy(deploy);
         assertThat(digest, is(notNullValue()));
 
         // Assert hash matches expected
-        byte [] expectedIssue2Hash = {};
+        byte[] expectedIssue2Hash = {};
         assertThat(digest.getHash(), is(expectedIssue2Hash));
     }
 
