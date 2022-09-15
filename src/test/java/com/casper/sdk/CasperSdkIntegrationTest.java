@@ -34,7 +34,7 @@ import static org.hamcrest.core.Is.is;
  * <p>
  * Path the nctl folder can be overridden with -Dnctl.home=some-path
  */
-//@Disabled // Remove this comment to test against a network
+@Disabled // Remove this comment to test against a network
 class CasperSdkIntegrationTest {
 
     private final Logger logger = LoggerFactory.getLogger(CasperSdkIntegrationTest.class);

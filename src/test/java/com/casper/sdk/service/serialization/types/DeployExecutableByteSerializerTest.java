@@ -9,6 +9,7 @@ import com.casper.sdk.service.serialization.util.CollectionUtils;
 import com.casper.sdk.service.signing.SigningService;
 import com.casper.sdk.types.*;
 import org.apache.commons.io.IOUtils;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -27,6 +28,7 @@ import static org.hamcrest.core.Is.is;
 /**
  * Unit tests the {@link AbstractDeployExecutableByteSerializer}.
  */
+@Disabled
 class DeployExecutableByteSerializerTest {
 
     public static final String EXPECTED_BYTES_TXT = "/com/casper/sdk/service/serialization/types/expected-bytes.txt";
