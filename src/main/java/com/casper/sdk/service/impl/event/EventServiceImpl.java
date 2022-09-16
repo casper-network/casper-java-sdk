@@ -17,7 +17,6 @@ import java.io.Reader;
 import java.net.URI;
 import java.time.Duration;
 import java.util.function.Consumer;
-import java.util.stream.Stream;
 
 /**
  * Package local to prevent construction.
@@ -55,27 +54,11 @@ final class EventServiceImpl implements EventService {
                 .build();
     }
 
-    /** {@inheritDoc} */
     @Override
-    public <T, E extends Event<E>> Stream<T> readEvent(final EventType eventType,
-                                                       final EventTarget eventTarget,
-                                                       final Reader reader) {
-
-        final EventBuilder eventBuilder = new EventBuilder(eventType, eventTarget, uri.toString());
-
-        //noinspection unchecked
-        return new BufferedReader(reader)
-                .lines()
-                .filter(eventBuilder::processLine)
-                .map(line -> eventBuilder.buildEvent());
-    }
-
-
-    @Override
-    public <EventT, DataT extends Event<DataT>> void consumeEvents(final EventType eventType,
-                                                                   final EventTarget eventTarget,
-                                                                   final Long startFrom,
-                                                                   final Consumer<EventT> eventTConsumer) {
+    public <EventT extends Event<?>> void consumeEvents(final EventType eventType,
+                                                        final EventTarget eventTarget,
+                                                        final Long startFrom,
+                                                        final Consumer<EventT> eventTConsumer) {
         try {
             //noinspection resource
             final Response response = this.client.newCall(
@@ -119,9 +102,8 @@ final class EventServiceImpl implements EventService {
         }
     }
 
-    private
-    <EventT> boolean throwOnStop(final Consumer<EventT> consumer) {
-        if (consumer instanceof EventConsumer &&  ((EventConsumer<?>) consumer).isStop()) {
+    private <EventT> boolean throwOnStop(final Consumer<EventT> consumer) {
+        if (consumer instanceof EventConsumer && ((EventConsumer<?>) consumer).isStop()) {
             throw new StopException();
         }
         return true;
