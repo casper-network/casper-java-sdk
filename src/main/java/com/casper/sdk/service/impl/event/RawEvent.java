@@ -3,6 +3,7 @@ package com.casper.sdk.service.impl.event;
 import com.casper.sdk.model.event.DataType;
 import com.casper.sdk.model.event.EventTarget;
 import com.casper.sdk.model.event.EventType;
+import lombok.ToString;
 
 /**
  * An event that contains the event data as raw JSON without the 'data:' prefix is returned from the event service when
@@ -10,6 +11,7 @@ import com.casper.sdk.model.event.EventType;
  *
  * @author ian@meywood.com
  */
+@ToString(doNotUseGetters = true, callSuper = true)
 final class RawEvent extends AbstractEvent<String> {
 
     RawEvent(final EventType eventType, final String source, final Long id, final String data) {
