@@ -1,9 +1,0 @@
-{
-  "jsonrpc": "2.0",
-  "id": "1",
-  "result": {
-    "api_version": "1.0.0",
-    "state_root_hash": "1be88786b127b212336d3c817816e5149334c86db156d34b59a78a0e0108b0db"
-  }
-}
-
