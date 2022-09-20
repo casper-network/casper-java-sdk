@@ -40,11 +40,12 @@ final class EventServiceImpl implements EventService {
     /** The HTTP Client to connect to the node with */
     final OkHttpClient client;
 
-    @SuppressWarnings("unused")
-    private EventServiceImpl(final String host) {
-        this(URI.create(host));
-    }
-
+    /**
+     * Constructs a new {@link EventServiceImpl}, is private to prevent API users construction manually. To create the
+     * service user the interface method {@link EventService#usingPeer(URI)}.
+     *
+     * @param uri the URL if the node to connect to must contain protocol, host and port number
+     */
     private EventServiceImpl(final URI uri) {
         this.uri = uri;
 
@@ -107,6 +108,5 @@ final class EventServiceImpl implements EventService {
             throw new StopException();
         }
         return true;
-
     }
 }

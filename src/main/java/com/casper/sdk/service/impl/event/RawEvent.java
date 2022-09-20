@@ -22,7 +22,7 @@ final class RawEvent extends AbstractEvent<String> {
         final int start = data.indexOf(':');
         final int end = data.indexOf(':', start + 1);
         final String dataTypeName = data.substring(start + 3, end - 1);
-        return DataType.of(dataTypeName);
+        return DataType.of(dataTypeName.trim());
     }
 }
 

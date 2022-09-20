@@ -11,12 +11,11 @@ import java.util.function.Consumer;
  * The EventService interface.
  * <p>
  * Is instantiated using the static create methods within the interface eg:
- * <pre>final EventService eventService = EventService.create("<a href="http://localhost:18101">...</a>");</pre>
+ * <pre>final EventService eventService = EventService.usingPeer("<a href="http://localhost:18101">...</a>");</pre>
  *
  * @author ian@meywood.com
  */
 public interface EventService {
-
 
     /**
      * Reads a stream of events from a node
@@ -33,21 +32,10 @@ public interface EventService {
                                                  final Long startFrom,
                                                  final Consumer<EventT> eventConsumer);
 
-
     /**
      * Creates a new EventService for the specified host including protocol and port
      *
-     * @param host the host including protocol and port eg: http:/localhost:18101
-     * @return the event service for the specified host
-     */
-    static EventService usingPeer(final String host) {
-        return EventServiceFactory.create(host);
-    }
-
-    /**
-     * Creates a new EventService for the specified host including protocol and port
-     *
-     * @param uri the uri of the host to connect to
+     * @param uri the uri of the host to connect to must include protocol, hostname, and port number
      * @return the event service for the specified host
      */
     static EventService usingPeer(final URI uri) {

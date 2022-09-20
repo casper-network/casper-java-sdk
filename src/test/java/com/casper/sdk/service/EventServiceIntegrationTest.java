@@ -27,8 +27,14 @@ class EventServiceIntegrationTest {
 
     private static final String MAIN_EVENTS = "/event-samples/main-events.txt";
     private static final String SIGS_EVENTS = "/event-samples/sigs-events.txt";
+
+    private static final String DEPLOYS_EVENTS = "/event-samples/deploys-events.txt";
     private final MockNode mockNode = new MockNode();
-    private final EventService eventService = EventService.usingPeer("http://localhost:28101");
+    private final EventService eventService;
+
+    EventServiceIntegrationTest() throws URISyntaxException {
+        eventService = EventService.usingPeer(new URI("http://localhost:28101"));
+    }
 
     @BeforeEach
     void setUp() throws URISyntaxException, IOException {
@@ -130,53 +136,51 @@ class EventServiceIntegrationTest {
     }
 
     @Test
-    void mainRawEvents() {
+    void deployRawEvents() {
 
         mockNode.setDispatcher(
-                new PathMatchingResourceDispatcher(MAIN_EVENTS, is("/events/main?start_from=0"))
+                new PathMatchingResourceDispatcher(DEPLOYS_EVENTS, is("/events/deploys?start_from=0"))
         );
-
 
         int[] count = {0};
 
-        eventService.consumeEvents(EventType.MAIN, EventTarget.RAW, 0L, new EventConsumer<String>() {
+        eventService.consumeEvents(EventType.DEPLOYS, EventTarget.RAW, 0L, new EventConsumer<String>() {
+
             @Override
             public void accept(Event<String> event) {
-                assertThat(event, instanceOf(Event.class));
 
-                assertThat(event.getEventType(), is(EventType.MAIN));
+                assertThat(event.getEventType(), is(EventType.DEPLOYS));
 
                 if (count[0] == 0) {
                     assertThat(event.getData(), is("data:{\"ApiVersion\":\"1.0.0\"}"));
                     assertThat(event.getId().isPresent(), is(false));
                 } else if (count[0] == 1) {
-                    assertThat(event.getData(), startsWith("data:{\"Step\":{\"era_id\":0,\"execution_effect\":{\"operations\":[],"));
-                    assertThat(event.getData(), endsWith("\"bytes\":\"03f5d62682010000\",\"parsed\":1658508997891}}}]}}}"));
-                    assertThat(event.getId().isPresent(), is(true));
-                    assertThat(event.getId().get(), is(0L));
-                } else if (count[0] == 3) {
                     assertThat(
                             event.getData(),
-                            is("data:{\"BlockAdded\":{\"block_hash\":\"c77080456598933f9b0a68827314f8da3a0b10d1a7532d1737352d9f3a36a534\"," +
-                                    "\"block\":{\"hash\":\"c77080456598933f9b0a68827314f8da3a0b10d1a7532d1737352d9f3a36a534\",\"header\":" +
-                                    "{\"parent_hash\":\"bb878bcf8827649f070c487800a95c35be3eb2e83b5447921675040cea38af1c\"," +
-                                    "\"state_root_hash\":\"fbd89036ca934a53b14ebc99abcf64351008ac073848c0b384771036121a25cc\"," +
-                                    "\"body_hash\":\"980531392fb02fd03d632abaa17f0a59bc788ea5b86ff9ce4630851cf9c2b4cf\"," +
-                                    "\"random_bit\":true,\"accumulated_seed\":\"ab5d756563bf09545590bd95f9a8e7978d51760be95ea8e5c9bab58ba1129186\"," +
-                                    "\"era_end\":null,\"timestamp\":\"2022-07-22T16:56:40.704Z\",\"era_id\":1,\"height\":1," +
-                                    "\"protocol_version\":\"1.0.0\"},\"body\":{\"proposer\":\"010d23984fefcce099679a24496f1d3072a540b95d321f8ba951df0cfe2c0691e5\"," +
-                                    "\"deploy_hashes\":[],\"transfer_hashes\":[]},\"proofs\":[]}}}")
+                            is("data:{\"DeployAccepted\":{\"hash\":\"fb81219f33aa58a2c2f50f7eea20c3065963f61bc3c74810729f10dc21981087\"," +
+                                    "\"header\":{\"account\":\"01959d01aa68197e8cb91aa06bcc920f8d4a245dff60ea726bb89255349107a565\"," +
+                                    "\"timestamp\":\"2022-07-26T14:37:15.150Z\",\"ttl\":\"30m\",\"gas_price\":10," +
+                                    "\"body_hash\":\"c2930c761cdc90241e7bfd2c5bbc5805ec9511845cb4820f997fa57334a33723\"," +
+                                    "\"dependencies\":[],\"chain_name\":\"casper-net-1\"},\"payment\":{\"ModuleBytes\":" +
+                                    "{\"module_bytes\":\"\",\"args\":[[\"amount\",{\"cl_type\":\"U512\"," +
+                                    "\"bytes\":\"0500e40b5402\",\"parsed\":\"10000000000\"}]]}},\"session\":" +
+                                    "{\"Transfer\":{\"args\":[[\"amount\",{\"cl_type\":\"U512\",\"bytes\":\"0400f90295\"," +
+                                    "\"parsed\":\"2500000000\"}],[\"target\",{\"cl_type\":{\"ByteArray\":32},\"bytes\":" +
+                                    "\"a6cdb6f049363f6ab119be0c961c36e4a3c09319589341dd861f405d9836fc67\",\"parsed\":" +
+                                    "\"a6cdb6f049363f6ab119be0c961c36e4a3c09319589341dd861f405d9836fc67\"}]," +
+                                    "[\"id\",{\"cl_type\":{\"Option\":\"U64\"},\"bytes\":\"010100000000000000\",\"parsed\":1}]]}}," +
+                                    "\"approvals\":[{\"signer\":\"01959d01aa68197e8cb91aa06bcc920f8d4a245dff60ea726bb89255349107a565\"," +
+                                    "\"signature\":\"01e57c01fc538fe057eac09d55360c70b6b7830548582c9931832af78149c66a698a41f33ca06904898138bda6767cfc5f60f26a11980ad5f95f489dcccc2fa80d\"}]}}")
                     );
                     assertThat(event.getId().isPresent(), is(true));
-                    assertThat(event.getId().get(), is(7L));
-
+                    assertThat(event.getId().get(), is(2951L));
                 }
                 count[0]++;
             }
         });
 
 
-        assertThat(count[0], is(4));
+        assertThat(count[0], is(2));
     }
 
     @Test
@@ -218,8 +222,7 @@ class EventServiceIntegrationTest {
 
 
     @Test
-    @Disabled
-        // Re-enable once SDK correctly deserializes CLValueMap toy ANY type
+    @Disabled // Re-enable once SDK correctly deserializes CLValueMap toy ANY type
     void mainPojoEvents() {
 
         mockNode.setDispatcher(
