@@ -2,6 +2,7 @@ package com.casper.sdk.model.deploy;
 
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.serde.CasperSerializableObject;
+import com.casper.sdk.model.clvalue.serde.Target;
 import com.casper.sdk.model.common.Digest;
 import com.casper.sdk.model.deploy.executabledeploy.ExecutableDeployItem;
 import dev.oak3.sbs4j.SerializerBuffer;
@@ -54,14 +55,14 @@ public class Deploy implements CasperSerializableObject {
      * Implements Deploy encoder
      */
     @Override
-    public void serialize(SerializerBuffer ser, boolean encodeType) throws NoSuchTypeException, ValueSerializationException {
-        header.serialize(ser, true);
-        hash.serialize(ser, true);
-        payment.serialize(ser, true);
-        session.serialize(ser, true);
+    public void serialize(SerializerBuffer ser, Target target) throws NoSuchTypeException, ValueSerializationException {
+        header.serialize(ser, Target.BYTE);
+        hash.serialize(ser, Target.BYTE);
+        payment.serialize(ser, Target.BYTE);
+        session.serialize(ser, Target.BYTE);
         ser.writeI32(approvals.size());
         for (Approval approval : approvals) {
-            approval.serialize(ser, true);
+            approval.serialize(ser, Target.BYTE);
         }
     }
 }

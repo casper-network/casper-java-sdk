@@ -3,6 +3,7 @@ package com.casper.sdk.model.clvalue;
 import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.cltype.CLTypeBool;
+import com.casper.sdk.model.clvalue.serde.Target;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import dev.oak3.sbs4j.DeserializerBuffer;
@@ -46,12 +47,12 @@ public class CLValueBool extends AbstractCLValue<Boolean, CLTypeBool> {
     }
 
     @Override
-    public void serialize(@NotNull SerializerBuffer ser, boolean encodeType) throws NoSuchTypeException {
+    public void serialize(@NotNull SerializerBuffer ser, Target target) throws NoSuchTypeException {
         if (this.getValue() == null) return;
 
         ser.writeBool(this.getValue());
 
-        if (encodeType) {
+        if (target.equals(Target.BYTE)) {
             this.encodeType(ser);
         }
     }

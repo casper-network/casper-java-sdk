@@ -6,6 +6,7 @@ import com.casper.sdk.jackson.resolver.CLValueResolver;
 import com.casper.sdk.model.clvalue.cltype.AbstractCLType;
 import com.casper.sdk.model.clvalue.cltype.CLTypeData;
 import com.casper.sdk.model.clvalue.serde.CasperSerializableObject;
+import com.casper.sdk.model.clvalue.serde.Target;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.annotation.JsonTypeResolver;
@@ -70,7 +71,7 @@ public abstract class AbstractCLValue<T, P extends AbstractCLType> implements Ca
 
     public abstract void setClType(P value);
 
-    public abstract void serialize(SerializerBuffer ser, boolean encodeType) throws ValueSerializationException, NoSuchTypeException;
+    public abstract void serialize(SerializerBuffer ser, Target target) throws ValueSerializationException, NoSuchTypeException;
 
     public abstract void deserialize(DeserializerBuffer deserializerBuffer) throws ValueDeserializationException;
 

@@ -4,6 +4,7 @@ import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
 import com.casper.sdk.exception.NoSuchKeyTagException;
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.cltype.CLTypeKey;
+import com.casper.sdk.model.clvalue.serde.Target;
 import com.casper.sdk.model.key.Key;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonSetter;
@@ -48,13 +49,13 @@ public class CLValueKey extends AbstractCLValue<Key, CLTypeKey> {
     }
 
     @Override
-    public void serialize(SerializerBuffer ser, boolean encodeType) throws NoSuchTypeException {
+    public void serialize(SerializerBuffer ser, Target target) throws NoSuchTypeException {
         if (this.getValue() == null) return;
 
         ser.writeU8(this.getValue().getTag().getByteTag());
         ser.writeByteArray(this.getValue().getKey());
 
-        if (encodeType) {
+        if (target.equals(Target.BYTE)) {
             this.encodeType(ser);
         }
     }

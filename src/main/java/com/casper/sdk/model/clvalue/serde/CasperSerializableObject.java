@@ -16,11 +16,11 @@ public interface CasperSerializableObject extends SerializableObject {
     /**
      * Called when the object's values must be serialized
      *
-     * @param ser        the encoder to be used
-     * @param encodeType append encoded type?
+     * @param ser    the encoder to be used
+     * @param target target serialization standard
      * @throws ValueSerializationException exception holding information of failure to serialize a value
      */
-    void serialize(SerializerBuffer ser, boolean encodeType) throws ValueSerializationException, NoSuchTypeException;
+    void serialize(SerializerBuffer ser, Target target) throws ValueSerializationException, NoSuchTypeException;
 
     /**
      * Called when the object's values must be serialized
@@ -33,7 +33,7 @@ public interface CasperSerializableObject extends SerializableObject {
     @Override
     default void serialize(SerializerBuffer ser) throws ValueSerializationException {
         try {
-            serialize(ser, false);
+            serialize(ser, Target.JSON);
         } catch (NoSuchTypeException e) {
             throw new ValueSerializationException(String.format("Error serializing %s", this.getClass().getSimpleName()), e);
         }

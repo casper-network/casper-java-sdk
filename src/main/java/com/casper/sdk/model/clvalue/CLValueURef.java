@@ -4,6 +4,7 @@ import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
 import com.casper.sdk.exception.DynamicInstanceException;
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.cltype.CLTypeURef;
+import com.casper.sdk.model.clvalue.serde.Target;
 import com.casper.sdk.model.uref.URef;
 import com.casper.sdk.model.uref.URefAccessRight;
 import com.fasterxml.jackson.annotation.JsonGetter;
@@ -53,7 +54,7 @@ public class CLValueURef extends AbstractCLValue<URef, CLTypeURef> {
     }
 
     @Override
-    public void serialize(SerializerBuffer ser, boolean encodeType) throws NoSuchTypeException {
+    public void serialize(SerializerBuffer ser, Target target) throws NoSuchTypeException {
         if (this.getValue() == null) return;
 
         URef uref = this.getValue();
@@ -62,7 +63,7 @@ public class CLValueURef extends AbstractCLValue<URef, CLTypeURef> {
         urefByte[32] = uref.getAccessRight().serializationTag;
         ser.writeByteArray(urefByte);
 
-        if (encodeType) {
+        if (target.equals(Target.BYTE)) {
             this.encodeType(ser);
         }
     }

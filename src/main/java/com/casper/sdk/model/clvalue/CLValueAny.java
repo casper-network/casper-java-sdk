@@ -3,6 +3,7 @@ package com.casper.sdk.model.clvalue;
 import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.cltype.CLTypeAny;
+import com.casper.sdk.model.clvalue.serde.Target;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import dev.oak3.sbs4j.DeserializerBuffer;
@@ -14,11 +15,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 
 /**
  * Casper Object CLValue implementation
@@ -52,7 +49,7 @@ public class CLValueAny extends AbstractCLValue<Object, CLTypeAny> {
     }
 
     @Override
-    public void serialize(SerializerBuffer ser, boolean encodeType) throws ValueSerializationException, NoSuchTypeException {
+    public void serialize(SerializerBuffer ser, Target target) throws ValueSerializationException, NoSuchTypeException {
         if (this.getValue() == null) return;
 
         try (ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -62,7 +59,7 @@ public class CLValueAny extends AbstractCLValue<Object, CLTypeAny> {
             ser.writeI32(objectByteArray.length);
             ser.writeByteArray(objectByteArray);
 
-            if (encodeType) {
+            if (target.equals(Target.BYTE)) {
                 this.encodeType(ser);
             }
         } catch (IOException e) {

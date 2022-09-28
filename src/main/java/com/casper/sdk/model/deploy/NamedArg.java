@@ -4,6 +4,7 @@ import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.*;
 import com.casper.sdk.model.clvalue.cltype.AbstractCLType;
 import com.casper.sdk.model.clvalue.serde.CasperSerializableObject;
+import com.casper.sdk.model.clvalue.serde.Target;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
@@ -35,7 +36,7 @@ public class NamedArg<P extends AbstractCLType> implements CasperSerializableObj
     private AbstractCLValue<?, P> clValue;
 
     @Override
-    public void serialize(SerializerBuffer ser, boolean encodeType) throws ValueSerializationException, NoSuchTypeException {
+    public void serialize(SerializerBuffer ser, Target target) throws ValueSerializationException, NoSuchTypeException {
         ser.writeString(type);
         if (clValue instanceof CLValueI32 || clValue instanceof CLValueU32) {
             ser.writeI32(32 / 8);
@@ -56,6 +57,6 @@ public class NamedArg<P extends AbstractCLType> implements CasperSerializableObj
             int size = localEncoder.toByteArray().length;
             ser.writeI32(size); //removing the CLValue type byte at the end
         }
-        clValue.serialize(ser, encodeType);
+        clValue.serialize(ser, target);
     }
 }

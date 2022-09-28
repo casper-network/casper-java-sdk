@@ -1,13 +1,15 @@
 package com.casper.sdk.helper;
 
 import com.casper.sdk.exception.NoSuchTypeException;
-
-import com.casper.sdk.model.clvalue.CLValueByteArray;
 import com.casper.sdk.model.clvalue.CLValueU512;
 import com.casper.sdk.model.clvalue.cltype.CLTypeU512;
+import com.casper.sdk.model.clvalue.serde.Target;
 import com.casper.sdk.model.common.Digest;
 import com.casper.sdk.model.common.Ttl;
-import com.casper.sdk.model.deploy.*;
+import com.casper.sdk.model.deploy.Approval;
+import com.casper.sdk.model.deploy.Deploy;
+import com.casper.sdk.model.deploy.DeployHeader;
+import com.casper.sdk.model.deploy.NamedArg;
 import com.casper.sdk.model.deploy.executabledeploy.ExecutableDeployItem;
 import com.casper.sdk.model.deploy.executabledeploy.ModuleBytes;
 import com.casper.sdk.model.key.PublicKey;
@@ -16,11 +18,16 @@ import com.syntifi.crypto.key.AbstractPrivateKey;
 import com.syntifi.crypto.key.hash.Blake2b;
 import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.math.BigInteger;
 import java.security.GeneralSecurityException;
-import java.util.*;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Deploy Service class implementing the process to generate deploys
@@ -48,10 +55,10 @@ public class CasperDeployHelper {
     }
 
     public static HashAndSignature signDeployHeader(AbstractPrivateKey privateKey, DeployHeader deployHeader)
-            throws GeneralSecurityException {
+            throws GeneralSecurityException, NoSuchTypeException, ValueSerializationException {
         SerializerBuffer serializerBuffer = new SerializerBuffer();
 
-        deployHeader.serialize(serializerBuffer, true);
+        deployHeader.serialize(serializerBuffer, Target.BYTE);
         byte[] headerHash = Blake2b.digest(serializerBuffer.toByteArray(), 32);
         Signature signature = Signature.sign(privateKey, headerHash);
         return new HashAndSignature(headerHash, signature);
@@ -60,8 +67,8 @@ public class CasperDeployHelper {
     public static byte[] getDeployItemAndModuleBytesHash(ExecutableDeployItem deployItem, ModuleBytes moduleBytes)
             throws NoSuchTypeException, ValueSerializationException {
         SerializerBuffer ser = new SerializerBuffer();
-        moduleBytes.serialize(ser, true);
-        deployItem.serialize(ser, true);
+        moduleBytes.serialize(ser, Target.BYTE);
+        deployItem.serialize(ser, Target.BYTE);
         return Blake2b.digest(ser.toByteArray(), 32);
     }
 
