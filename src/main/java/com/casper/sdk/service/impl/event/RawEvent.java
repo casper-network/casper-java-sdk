@@ -14,8 +14,8 @@ import lombok.ToString;
 @ToString(doNotUseGetters = true, callSuper = true)
 final class RawEvent extends AbstractEvent<String> {
 
-    RawEvent(final EventType eventType, final String source, final Long id, final String data) {
-        super(eventType, getDataType(data), source, id, data);
+    RawEvent(final EventType eventType, final String source, final Long id, final String data, final String version) {
+        super(eventType, getDataType(data), source, id, data, version);
     }
 
     private static DataType getDataType(final String data) {

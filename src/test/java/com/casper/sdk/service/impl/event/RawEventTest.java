@@ -17,8 +17,9 @@ class RawEventTest {
 
         final String source = "http://localhost:9999";
         final String data = "data:{\"ApiVersion\":\"1.0.0\"}";
+        final String version = "1.2.3";
 
-        final RawEvent rawEvent = new RawEvent(EventType.MAIN, source, 1L, data);
+        final RawEvent rawEvent = new RawEvent(EventType.MAIN, source, 1L, data, version);
 
         assertThat(rawEvent.getEventType(), is(EventType.MAIN));
         assertThat(rawEvent.getSource(), is(source));
@@ -26,5 +27,6 @@ class RawEventTest {
         assertThat(rawEvent.getId().get(), is(1L));
         assertThat(rawEvent.getData(), is(data));
         assertThat(rawEvent.getDataType(), is(DataType.API_VERSION));
+        assertThat(rawEvent.getVersion(), is(version));
     }
 }

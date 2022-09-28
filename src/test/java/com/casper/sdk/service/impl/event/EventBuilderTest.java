@@ -84,6 +84,7 @@ class EventBuilderTest {
 
         assertThat(abstractEvent, instanceOf(PojoEvent.class));
         assertThat(abstractEvent.getData(), instanceOf(ApiVersion.class));
+        assertThat(abstractEvent.getVersion(), is("1.0.0"));
 
         final ApiVersion apiVersion = abstractEvent.getData();
         assertThat(apiVersion.getApiVersion(), is("1.0.0"));

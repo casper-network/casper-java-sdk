@@ -64,6 +64,7 @@ class EventServiceIntegrationTest {
                 assertThat(event.getClass().getSimpleName(), is("RawEvent"));
 
                 assertThat(event.getEventType(), is(EventType.MAIN));
+                assertThat(event.getVersion(), is("1.0.0"));
 
                 if (count[0] == 0) {
                     assertThat(event.getData(), is("data:{\"ApiVersion\":\"1.0.0\"}"));
@@ -73,6 +74,7 @@ class EventServiceIntegrationTest {
                     assertThat(event.getData(), endsWith("\"bytes\":\"03f5d62682010000\",\"parsed\":1658508997891}}}]}}}"));
                     assertThat(event.getId().isPresent(), is(true));
                     assertThat(event.getId().get(), is(0L));
+
                 } else if (count[0] == 3) {
                     assertThat(
                             event.getData(),
@@ -91,9 +93,10 @@ class EventServiceIntegrationTest {
 
                 }
                 count[0]++;
-
             }
         });
+
+        assertThat(count[0], is(greaterThan(3)));
     }
 
     @Test

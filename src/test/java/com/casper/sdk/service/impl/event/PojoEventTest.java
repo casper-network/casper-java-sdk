@@ -18,9 +18,10 @@ class PojoEventTest {
     void pojoEvent() {
 
         final String source = "http://localhost:9999";
+        final String version = "1.0.0";
         final DeployExpired data = new DeployExpired(new Digest("bb878bcf8827649f070c487800a95c35be3eb2e83b5447921675040cea38af1c"));
 
-        final PojoEvent<DeployExpired> rawEvent = new PojoEvent<>(EventType.MAIN, source, 2L, data);
+        final PojoEvent<DeployExpired> rawEvent = new PojoEvent<>(EventType.MAIN, source, 2L, data, version);
 
         assertThat(rawEvent.getEventType(), is(EventType.MAIN));
         assertThat(rawEvent.getSource(), is(source));
@@ -28,6 +29,7 @@ class PojoEventTest {
         assertThat(rawEvent.getId().get(), is(2L));
         assertThat(rawEvent.getData(), is(data));
         assertThat(rawEvent.getDataType(), is(DataType.DEPLOY_EXPIRED));
+        assertThat(rawEvent.getVersion(), is(version));
 
     }
 }

@@ -87,7 +87,6 @@ final class EventServiceImpl implements EventService {
                                                                    final Reader reader,
                                                                    final Consumer<EventT> consumer) {
 
-
         final EventBuilder eventBuilder = new EventBuilder(eventType, eventTarget, uri.toString());
 
         try {

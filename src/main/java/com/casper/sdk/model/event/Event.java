@@ -43,4 +43,10 @@ public interface Event<T> {
      * @return the optional ID
      */
     Optional<Long> getId();
+
+    /**
+     * Obtains the API version of the event
+     * @return the API version
+     */
+    String getVersion();
 }

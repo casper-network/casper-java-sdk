@@ -29,6 +29,8 @@ abstract class AbstractEvent<T> implements Event<T> {
     private final Long id;
     /** The event data */
     private final T data;
+    /** The version of the casper API that generate the event */
+    private final String version;
 
     public Optional<Long> getId() {
         return Optional.ofNullable(id);
