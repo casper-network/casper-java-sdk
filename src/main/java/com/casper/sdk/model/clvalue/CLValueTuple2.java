@@ -15,6 +15,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.bouncycastle.util.encoders.Hex;
 import org.javatuples.Pair;
 
 import java.util.Arrays;
@@ -45,6 +46,10 @@ public class CLValueTuple2
     public void serialize(SerializerBuffer ser, Target target) throws NoSuchTypeException, ValueSerializationException {
         if (this.getValue() == null) return;
 
+        if (target.equals(Target.BYTE)) {
+            super.serializePrefixWithLength(ser);
+        }
+
         setChildTypes();
         getValue().getValue0().serialize(ser);
         getValue().getValue1().serialize(ser);
@@ -52,6 +57,8 @@ public class CLValueTuple2
         if (target.equals(Target.BYTE)) {
             this.encodeType(ser);
         }
+
+        this.setBytes(Hex.toHexString(ser.toByteArray()));
     }
 
     @Override

@@ -15,6 +15,7 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import org.bouncycastle.util.encoders.Hex;
 
 import java.util.Optional;
 
@@ -47,6 +48,10 @@ public class CLValueOption extends AbstractCLValue<Optional<AbstractCLValue<?, ?
     public void serialize(SerializerBuffer ser, Target target) throws ValueSerializationException, NoSuchTypeException {
         if (!this.getValue().isPresent()) return;
 
+        if (target.equals(Target.BYTE)) {
+            super.serializePrefixWithLength(ser);
+        }
+
         Optional<AbstractCLValue<?, ?>> value = getValue();
 
         CLValueBool isPresent = new CLValueBool(value.isPresent() && value.get().getValue() != null);
@@ -68,6 +73,8 @@ public class CLValueOption extends AbstractCLValue<Optional<AbstractCLValue<?, ?
                 child.get().encodeType(ser);
             }
         }
+
+        this.setBytes(Hex.toHexString(ser.toByteArray()));
     }
 
     @Override

@@ -15,6 +15,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.bouncycastle.util.encoders.Hex;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -44,6 +45,10 @@ public class CLValueFixedList extends AbstractCLValue<List<? extends AbstractCLV
     public void serialize(SerializerBuffer ser, Target target) throws ValueSerializationException, NoSuchTypeException {
         if (this.getValue() == null) return;
 
+        if (target.equals(Target.BYTE)) {
+            super.serializePrefixWithLength(ser);
+        }
+
         setListType();
 
         for (AbstractCLValue<?, ?> child : getValue()) {
@@ -53,6 +58,8 @@ public class CLValueFixedList extends AbstractCLValue<List<? extends AbstractCLV
         if (target.equals(Target.BYTE)) {
             this.encodeType(ser);
         }
+
+        this.setBytes(Hex.toHexString(ser.toByteArray()));
     }
 
     @Override

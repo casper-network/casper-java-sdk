@@ -14,6 +14,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.bouncycastle.util.encoders.Hex;
 
 import java.io.*;
 
@@ -51,9 +52,13 @@ public class CLValueAny extends AbstractCLValue<Object, CLTypeAny> {
     @Override
     public void serialize(SerializerBuffer ser, Target target) throws ValueSerializationException, NoSuchTypeException {
         if (this.getValue() == null) return;
-
         try (ByteArrayOutputStream bos = new ByteArrayOutputStream();
              ObjectOutputStream oos = new ObjectOutputStream(bos)) {
+
+            if (target.equals(Target.BYTE)) {
+                super.serializePrefixWithLength(ser);
+            }
+
             oos.writeObject(this.getValue());
             byte[] objectByteArray = bos.toByteArray();
             ser.writeI32(objectByteArray.length);
@@ -65,6 +70,8 @@ public class CLValueAny extends AbstractCLValue<Object, CLTypeAny> {
         } catch (IOException e) {
             throw new ValueSerializationException(String.format("Error serializing %s", this.getClass().getSimpleName()), e);
         }
+
+        this.setBytes(Hex.toHexString(ser.toByteArray()));
     }
 
     @Override

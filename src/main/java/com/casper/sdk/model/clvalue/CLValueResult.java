@@ -12,6 +12,7 @@ import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueDeserializationException;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
 import lombok.*;
+import org.bouncycastle.util.encoders.Hex;
 
 /**
  * Casper Result CLValue implementation
@@ -57,6 +58,10 @@ public class CLValueResult extends AbstractCLValue<CLValueResult.Result, CLTypeR
     public void serialize(SerializerBuffer ser, Target target) throws ValueSerializationException, NoSuchTypeException {
         if (this.getValue() == null) return;
 
+        if (target.equals(Target.BYTE)) {
+            super.serializePrefixWithLength(ser);
+        }
+
         setChildTypes();
 
         CLValueBool clValueTrue = new CLValueBool(true);
@@ -72,6 +77,8 @@ public class CLValueResult extends AbstractCLValue<CLValueResult.Result, CLTypeR
         if (target.equals(Target.BYTE)) {
             this.encodeType(ser);
         }
+
+        this.setBytes(Hex.toHexString(ser.toByteArray()));
     }
 
     @Override

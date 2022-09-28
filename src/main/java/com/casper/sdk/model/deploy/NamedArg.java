@@ -1,7 +1,7 @@
 package com.casper.sdk.model.deploy;
 
 import com.casper.sdk.exception.NoSuchTypeException;
-import com.casper.sdk.model.clvalue.*;
+import com.casper.sdk.model.clvalue.AbstractCLValue;
 import com.casper.sdk.model.clvalue.cltype.AbstractCLType;
 import com.casper.sdk.model.clvalue.serde.CasperSerializableObject;
 import com.casper.sdk.model.clvalue.serde.Target;
@@ -38,25 +38,6 @@ public class NamedArg<P extends AbstractCLType> implements CasperSerializableObj
     @Override
     public void serialize(SerializerBuffer ser, Target target) throws ValueSerializationException, NoSuchTypeException {
         ser.writeString(type);
-        if (clValue instanceof CLValueI32 || clValue instanceof CLValueU32) {
-            ser.writeI32(32 / 8);
-        }
-        if (clValue instanceof CLValueI64 || clValue instanceof CLValueU64) {
-            ser.writeI32(64 / 8);
-        }
-        if (clValue instanceof CLValueU128 || clValue instanceof CLValueU256 ||
-                clValue instanceof CLValueU512 || clValue instanceof CLValuePublicKey) {
-            SerializerBuffer localEncoder = new SerializerBuffer();
-            clValue.serialize(localEncoder);
-            int size = localEncoder.toByteArray().length;
-            ser.writeI32(size); //removing the CLValue type byte at the end
-        }
-        if (clValue instanceof CLValueOption) {
-            SerializerBuffer localEncoder = new SerializerBuffer();
-            clValue.serialize(localEncoder);
-            int size = localEncoder.toByteArray().length;
-            ser.writeI32(size); //removing the CLValue type byte at the end
-        }
         clValue.serialize(ser, target);
     }
 }

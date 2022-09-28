@@ -11,6 +11,7 @@ import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueDeserializationException;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
 import lombok.*;
+import org.bouncycastle.util.encoders.Hex;
 
 import java.math.BigInteger;
 
@@ -50,11 +51,17 @@ public class CLValueU64 extends AbstractCLValue<BigInteger, CLTypeU64> {
     public void serialize(SerializerBuffer ser, Target target) throws ValueSerializationException, NoSuchTypeException {
         if (this.getValue() == null) return;
 
+        if (target.equals(Target.BYTE)) {
+            super.serializePrefixWithLength(ser);
+        }
+
         ser.writeU64(this.getValue());
 
         if (target.equals(Target.BYTE)) {
             this.encodeType(ser);
         }
+
+        this.setBytes(Hex.toHexString(ser.toByteArray()));
     }
 
     @Override

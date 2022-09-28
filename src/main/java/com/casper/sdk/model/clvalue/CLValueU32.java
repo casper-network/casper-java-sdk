@@ -9,10 +9,12 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import dev.oak3.sbs4j.DeserializerBuffer;
 import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueDeserializationException;
+import dev.oak3.sbs4j.exception.ValueSerializationException;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.bouncycastle.util.encoders.Hex;
 
 /**
  * Casper U32 CLValue implementation
@@ -46,14 +48,20 @@ public class CLValueU32 extends AbstractCLValue<Long, CLTypeU32> {
     }
 
     @Override
-    public void serialize(SerializerBuffer ser, Target target) throws NoSuchTypeException {
+    public void serialize(SerializerBuffer ser, Target target) throws NoSuchTypeException, ValueSerializationException {
         if (this.getValue() == null) return;
+
+        if (target.equals(Target.BYTE)) {
+            super.serializePrefixWithLength(ser);
+        }
 
         ser.writeU32(this.getValue());
 
         if (target.equals(Target.BYTE)) {
             this.encodeType(ser);
         }
+
+        this.setBytes(Hex.toHexString(ser.toByteArray()));
     }
 
     @Override

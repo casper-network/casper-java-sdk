@@ -10,11 +10,13 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import dev.oak3.sbs4j.DeserializerBuffer;
 import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueDeserializationException;
+import dev.oak3.sbs4j.exception.ValueSerializationException;
 import dev.oak3.sbs4j.util.ByteUtils;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.bouncycastle.util.encoders.Hex;
 
 import java.security.NoSuchAlgorithmException;
 
@@ -50,8 +52,12 @@ public class CLValuePublicKey extends AbstractCLValue<PublicKey, CLTypePublicKey
     }
 
     @Override
-    public void serialize(SerializerBuffer ser, Target target) throws NoSuchTypeException {
+    public void serialize(SerializerBuffer ser, Target target) throws NoSuchTypeException, ValueSerializationException {
         if (this.getValue() == null) return;
+
+        if (target.equals(Target.BYTE)) {
+            super.serializePrefixWithLength(ser);
+        }
 
         ser.writeU8(this.getValue().getTag().getByteTag());
         ser.writeByteArray(this.getValue().getKey());
@@ -59,6 +65,8 @@ public class CLValuePublicKey extends AbstractCLValue<PublicKey, CLTypePublicKey
         if (target.equals(Target.BYTE)) {
             this.encodeType(ser);
         }
+
+        this.setBytes(Hex.toHexString(ser.toByteArray()));
     }
 
     @Override

@@ -16,7 +16,7 @@ public interface CasperSerializableObject extends SerializableObject {
     /**
      * Called when the object's values must be serialized
      *
-     * @param ser    the encoder to be used
+     * @param ser    the serializer to be used
      * @param target target serialization standard
      * @throws ValueSerializationException exception holding information of failure to serialize a value
      */
@@ -27,7 +27,7 @@ public interface CasperSerializableObject extends SerializableObject {
      * <p>
      * Allows to use the default serialize with the custom casper serialize signature, defaulting encodeType to false
      *
-     * @param ser the encoder to be used
+     * @param ser the serializer to be used
      * @throws ValueSerializationException exception holding information of failure to serialize a value
      */
     @Override
