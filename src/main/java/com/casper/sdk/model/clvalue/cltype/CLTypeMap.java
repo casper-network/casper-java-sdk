@@ -30,7 +30,7 @@ public class CLTypeMap extends AbstractCLTypeWithChildren {
      */
     @Getter
     @Setter
-    @EqualsAndHashCode
+    @EqualsAndHashCode(of = {"keyType", "valueType"})
     @NoArgsConstructor
     @AllArgsConstructor
     public static class CLTypeMapEntryType {

@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.bouncycastle.util.encoders.Hex;
 
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -32,7 +32,7 @@ import java.util.Map.Entry;
  */
 @Getter
 @Setter
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = true, of = {"clType"})
 @NoArgsConstructor
 public class CLValueMap extends
         AbstractCLValueWithChildren<Map<? extends AbstractCLValue<?, ?>, ? extends AbstractCLValue<?, ?>>, CLTypeMap> {
@@ -75,7 +75,7 @@ public class CLValueMap extends
             CLTypeData keyType = clType.getKeyValueTypes().getKeyType().getClTypeData();
             CLTypeData valType = clType.getKeyValueTypes().getValueType().getClTypeData();
 
-            Map<AbstractCLValue<?, ?>, AbstractCLValue<?, ?>> map = new LinkedHashMap<>();
+            Map<AbstractCLValue<?, ?>, AbstractCLValue<?, ?>> map = new HashMap<>();
             CLValueI32 mapLength = new CLValueI32(0);
             mapLength.deserialize(deser);
 

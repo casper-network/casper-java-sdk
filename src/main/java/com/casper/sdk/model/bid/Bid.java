@@ -11,7 +11,7 @@ import lombok.*;
 
 import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -45,7 +45,7 @@ public class Bid {
      */
     @JsonIgnore
     @Builder.Default
-    private Map<PublicKey, Delegator> delegators = new LinkedHashMap<>();
+    private Map<PublicKey, Delegator> delegators = new HashMap<>();
 
     /**
      * `true` if validator has been \"evicted\"
@@ -84,7 +84,7 @@ public class Bid {
     @JsonGetter("delegators")
     @ExcludeFromJacocoGeneratedReport
     protected Map<String, Delegator> getJsonDelegators() {
-        Map<String, Delegator> out = new LinkedHashMap<>();
+        Map<String, Delegator> out = new HashMap<>();
         for (Map.Entry<PublicKey, Delegator> entry : this.delegators.entrySet()) {
             out.put(entry.getKey().getAlgoTaggedHex(), entry.getValue());
         }

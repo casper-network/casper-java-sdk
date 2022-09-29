@@ -8,7 +8,7 @@ import lombok.Setter;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -82,7 +82,7 @@ public abstract class AbstractCLTypeWithChildren extends AbstractCLType {
                 addChildType(child, parent);
             }
         } else if (childTypeObject instanceof Map) {
-            Map<?, ?> subChildTypes = (LinkedHashMap<?, ?>) childTypeObject;
+            Map<?, ?> subChildTypes = (HashMap<?, ?>) childTypeObject;
 
             for (Entry<?, ?> entry : subChildTypes.entrySet()) {
                 AbstractCLType nextParent = CLTypeData.getTypeByName(entry.getKey().toString()).getClTypeClass()

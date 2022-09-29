@@ -20,6 +20,9 @@ import dev.oak3.sbs4j.util.ByteUtils;
 import lombok.*;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * Base class for CLValues
@@ -30,7 +33,6 @@ import java.lang.reflect.InvocationTargetException;
  * @since 0.0.1
  */
 @Getter
-@EqualsAndHashCode(of = {"bytes", "value"})
 @JsonTypeInfo(use = JsonTypeInfo.Id.NONE)
 @JsonTypeResolver(CLValueResolver.class)
 public abstract class AbstractCLValue<T, P extends AbstractCLType>
@@ -119,5 +121,27 @@ public abstract class AbstractCLValue<T, P extends AbstractCLType>
     protected void encodeType(SerializerBuffer ser) throws NoSuchTypeException {
         byte val = (getClType().getClTypeData().getSerializationTag());
         ser.writeU8(val);
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (o == this) return true;
+        if (!(o instanceof AbstractCLValue)) return false;
+        final AbstractCLValue<?, ?> other = (AbstractCLValue<?, ?>) o;
+        if (!other.canEqual(this)) return false;
+        final Object this$bytes = this.getBytes();
+        final Object other$bytes = other.getBytes();
+        if (!Objects.equals(this$bytes, other$bytes)) return false;
+        final Object this$value = this.getValue();
+        final Object other$value = other.getValue();
+        if (this$value instanceof Map) {
+            return other$value.equals(other$value);
+        } else {
+            return Objects.equals(this$value, other$value);
+        }
+    }
+
+    protected boolean canEqual(final Object other) {
+        return other instanceof AbstractCLValue;
     }
 }
