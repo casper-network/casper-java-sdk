@@ -38,9 +38,9 @@ public class CLValueMap extends
     @JsonProperty("cl_type")
     private CLTypeMap clType = new CLTypeMap();
 
-    public CLValueMap(Map<? extends AbstractCLValue<?, ?>, ? extends AbstractCLValue<?, ?>> value) {
+    public CLValueMap(Map<? extends AbstractCLValue<?, ?>, ? extends AbstractCLValue<?, ?>> value) throws ValueSerializationException {
+        setChildTypes(value);
         this.setValue(value);
-        setChildTypes();
     }
 
     @Override
@@ -51,7 +51,7 @@ public class CLValueMap extends
             super.serializePrefixWithLength(ser);
         }
 
-        setChildTypes();
+        setChildTypes(this.getValue());
 
         CLValueI32 mapLength = new CLValueI32(getValue().size());
         mapLength.serialize(ser);
@@ -103,14 +103,14 @@ public class CLValueMap extends
             }
 
             setValue(map);
-        } catch (NoSuchTypeException | DynamicInstanceException e) {
+        } catch (NoSuchTypeException | DynamicInstanceException | ValueSerializationException e) {
             throw new ValueDeserializationException(String.format("Error deserializing %s", this.getClass().getSimpleName()), e);
         }
     }
 
     @Override
-    protected void setChildTypes() {
-        Entry<? extends AbstractCLValue<?, ?>, ? extends AbstractCLValue<?, ?>> entry = getValue().entrySet().iterator()
+    protected void setChildTypes(Map<? extends AbstractCLValue<?, ?>, ? extends AbstractCLValue<?, ?>> value) {
+        Entry<? extends AbstractCLValue<?, ?>, ? extends AbstractCLValue<?, ?>> entry = value.entrySet().iterator()
                 .next();
 
         clType.setKeyValueTypes(

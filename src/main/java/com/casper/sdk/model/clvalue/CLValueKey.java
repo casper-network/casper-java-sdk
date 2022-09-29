@@ -46,7 +46,7 @@ public class CLValueKey extends AbstractCLValue<Key, CLTypeKey> {
         return this.getClType().getTypeName();
     }
 
-    public CLValueKey(Key value) {
+    public CLValueKey(Key value) throws ValueSerializationException {
         this.setValue(value);
     }
 
@@ -72,7 +72,7 @@ public class CLValueKey extends AbstractCLValue<Key, CLTypeKey> {
     public void deserialize(DeserializerBuffer deser) throws ValueDeserializationException {
         try {
             this.setValue(Key.fromTaggedHexString(ByteUtils.encodeHexString(deser.readByteArray(33))));
-        } catch (IllegalArgumentException | NoSuchKeyTagException e) {
+        } catch (IllegalArgumentException | NoSuchKeyTagException | ValueSerializationException e) {
             throw new ValueDeserializationException("Error decoding CLValuePublicKey", e);
         }
     }

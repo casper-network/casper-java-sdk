@@ -37,9 +37,9 @@ public class CLValueTuple3 extends
     @JsonProperty("cl_type")
     private CLTypeTuple3 clType = new CLTypeTuple3();
 
-    public CLValueTuple3(Triplet<? extends AbstractCLValue<?, ?>, ? extends AbstractCLValue<?, ?>, ? extends AbstractCLValue<?, ?>> value) {
+    public CLValueTuple3(Triplet<? extends AbstractCLValue<?, ?>, ? extends AbstractCLValue<?, ?>, ? extends AbstractCLValue<?, ?>> value) throws ValueSerializationException {
+        setChildTypes(value);
         this.setValue(value);
-        setChildTypes();
     }
 
     @Override
@@ -50,7 +50,7 @@ public class CLValueTuple3 extends
             super.serializePrefixWithLength(ser);
         }
 
-        setChildTypes();
+        setChildTypes(this.getValue());
 
         getValue().getValue0().serialize(ser);
         getValue().getValue1().serialize(ser);
@@ -92,15 +92,15 @@ public class CLValueTuple3 extends
             child3.deserialize(deser);
 
             setValue(new Triplet<>(child1, child2, child3));
-        } catch (NoSuchTypeException | DynamicInstanceException e) {
+        } catch (NoSuchTypeException | DynamicInstanceException | ValueSerializationException e) {
             throw new ValueDeserializationException(String.format("Error deserializing %s", this.getClass().getSimpleName()), e);
         }
     }
 
     @Override
-    protected void setChildTypes() {
-        clType.setChildTypes(Arrays.asList(getValue().getValue0().getClType(), getValue().getValue1().getClType(),
-                getValue().getValue2().getClType()));
+    protected void setChildTypes(Triplet<? extends AbstractCLValue<?, ?>, ? extends AbstractCLValue<?, ?>, ? extends AbstractCLValue<?, ?>> value) {
+        clType.setChildTypes(Arrays.asList(value.getValue0().getClType(), value.getValue1().getClType(),
+                value.getValue2().getClType()));
 
     }
 }

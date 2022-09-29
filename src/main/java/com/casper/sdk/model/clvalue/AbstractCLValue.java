@@ -19,6 +19,8 @@ import dev.oak3.sbs4j.exception.ValueSerializationException;
 import dev.oak3.sbs4j.util.ByteUtils;
 import lombok.*;
 
+import java.lang.reflect.InvocationTargetException;
+
 /**
  * Base class for CLValues
  *
@@ -35,7 +37,6 @@ public abstract class AbstractCLValue<T, P extends AbstractCLType>
         implements CasperSerializableObject, CasperDeserializableObject {
 
     @Setter(AccessLevel.PROTECTED)
-    @Getter
     private String bytes = "";
 
     @Setter
@@ -43,9 +44,13 @@ public abstract class AbstractCLValue<T, P extends AbstractCLType>
     @JsonInclude(Include.NON_NULL)
     private String parsed;
 
-    @Setter
     @JsonIgnore
     private T value;
+
+    public void setValue(T value) throws ValueSerializationException {
+        this.value = value;
+        this.serialize(new SerializerBuffer());
+    }
 
     @SneakyThrows({ValueDeserializationException.class})
     @JsonSetter(value = "bytes")
@@ -96,10 +101,11 @@ public abstract class AbstractCLValue<T, P extends AbstractCLType>
         byte[] bytes = deser.readByteArray(length);
         byte clType = deser.readU8();
         try {
-            AbstractCLValue<?, ?> clValue = CLTypeData.getTypeBySerializationTag(clType).getClazz().newInstance();
+            AbstractCLValue<?, ?> clValue = CLTypeData.getTypeBySerializationTag(clType).getClazz().getDeclaredConstructor().newInstance();
             clValue.deserialize(new DeserializerBuffer(Hex.encode(bytes)));
             return clValue;
-        } catch (InstantiationException | IllegalAccessException e) {
+        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException |
+                 InvocationTargetException e) {
             throw new ValueDeserializationException("Error while instantiating CLValue", e);
         }
     }

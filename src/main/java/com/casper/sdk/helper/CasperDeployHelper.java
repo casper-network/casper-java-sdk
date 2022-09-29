@@ -72,7 +72,7 @@ public class CasperDeployHelper {
         return Blake2b.digest(ser.toByteArray(), 32);
     }
 
-    public static ModuleBytes getPaymentModuleBytes(BigInteger paymentAmount) {
+    public static ModuleBytes getPaymentModuleBytes(BigInteger paymentAmount) throws ValueSerializationException {
         List<NamedArg<?>> paymentArgs = new LinkedList<>();
         NamedArg<CLTypeU512> paymentArg = new NamedArg<>("amount",
                 new CLValueU512(paymentAmount));

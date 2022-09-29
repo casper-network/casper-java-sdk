@@ -45,7 +45,7 @@ public class CLValueAny extends AbstractCLValue<Object, CLTypeAny> {
         return this.getClType().getTypeName();
     }
 
-    public CLValueAny(Object value) {
+    public CLValueAny(Object value) throws ValueSerializationException {
         this.setValue(value);
     }
 
@@ -80,7 +80,7 @@ public class CLValueAny extends AbstractCLValue<Object, CLTypeAny> {
         try (ByteArrayInputStream bis = new ByteArrayInputStream(deser.readByteArray(objectByteArrayLength));
              ObjectInputStream ois = new ObjectInputStream(bis)) {
             this.setValue(ois.readObject());
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException | ValueSerializationException e) {
             throw new ValueDeserializationException(String.format("Error deserializing %s", this.getClass().getSimpleName()), e);
         }
     }

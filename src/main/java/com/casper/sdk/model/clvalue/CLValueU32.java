@@ -43,7 +43,7 @@ public class CLValueU32 extends AbstractCLValue<Long, CLTypeU32> {
         return this.getClType().getTypeName();
     }
 
-    public CLValueU32(Long value) {
+    public CLValueU32(Long value) throws ValueSerializationException {
         this.setValue(value);
     }
 
@@ -66,6 +66,10 @@ public class CLValueU32 extends AbstractCLValue<Long, CLTypeU32> {
 
     @Override
     public void deserialize(DeserializerBuffer deser) throws ValueDeserializationException {
-        this.setValue(deser.readU32());
+        try {
+            this.setValue(deser.readU32());
+        } catch (ValueSerializationException e) {
+            throw new ValueDeserializationException(String.format("Error deserializing %s", this.getClass().getSimpleName()), e);
+        }
     }
 }

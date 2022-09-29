@@ -49,9 +49,9 @@ public class CLValueResult extends AbstractCLValue<CLValueResult.Result, CLTypeR
     @JsonProperty("cl_type")
     private CLTypeResult clType = new CLTypeResult();
 
-    public CLValueResult(AbstractCLValue<?, ?> ok, AbstractCLValue<?, ?> err) {
+    public CLValueResult(AbstractCLValue<?, ?> ok, AbstractCLValue<?, ?> err) throws ValueSerializationException {
+        setChildTypes(ok, err);
         this.setValue(new Result(ok, err));
-        setChildTypes();
     }
 
     @Override
@@ -62,7 +62,7 @@ public class CLValueResult extends AbstractCLValue<CLValueResult.Result, CLTypeR
             super.serializePrefixWithLength(ser);
         }
 
-        setChildTypes();
+        setChildTypes(this.getValue().getOk(), this.getValue().getErr());
 
         CLValueBool clValueTrue = new CLValueBool(true);
         clValueTrue.serialize(ser);
@@ -108,13 +108,13 @@ public class CLValueResult extends AbstractCLValue<CLValueResult.Result, CLTypeR
             result.setErr(clValueErr);
 
             setValue(result);
-        } catch (NoSuchTypeException | DynamicInstanceException e) {
+        } catch (NoSuchTypeException | DynamicInstanceException | ValueSerializationException e) {
             throw new ValueDeserializationException(String.format("Error deserializing %s", this.getClass().getSimpleName()), e);
         }
     }
 
-    protected void setChildTypes() {
+    protected void setChildTypes(AbstractCLValue<?, ?> ok, AbstractCLValue<?, ?> err) {
         clType.setOkErrTypes(
-                new CLTypeResult.CLTypeResultOkErrTypes(getValue().getOk().getClType(), getValue().getErr().getClType()));
+                new CLTypeResult.CLTypeResultOkErrTypes(ok.getClType(), err.getClType()));
     }
 }

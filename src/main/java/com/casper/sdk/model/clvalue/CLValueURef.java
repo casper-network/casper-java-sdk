@@ -39,7 +39,7 @@ import java.util.Objects;
 public class CLValueURef extends AbstractCLValue<URef, CLTypeURef> {
     private CLTypeURef clType = new CLTypeURef();
 
-    public CLValueURef(URef value) {
+    public CLValueURef(URef value) throws ValueSerializationException {
         this.setValue(value);
     }
 
@@ -87,7 +87,7 @@ public class CLValueURef extends AbstractCLValue<URef, CLTypeURef> {
             serializationTag.deserialize(deser);
             uref.setAccessRight(URefAccessRight.getTypeBySerializationTag(serializationTag.getValue()));
             setValue(uref);
-        } catch (DynamicInstanceException e) {
+        } catch (DynamicInstanceException | ValueSerializationException e) {
             throw new ValueDeserializationException(String.format("Error deserializing %s", this.getClass().getSimpleName()), e);
         }
     }

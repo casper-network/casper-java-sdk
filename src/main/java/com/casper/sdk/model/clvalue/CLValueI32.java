@@ -41,7 +41,7 @@ public class CLValueI32 extends AbstractCLValue<Integer, CLTypeI32> {
         return this.getClType().getTypeName();
     }
 
-    public CLValueI32(Integer value) {
+    public CLValueI32(Integer value) throws ValueSerializationException {
         this.setValue(value);
     }
 
@@ -64,6 +64,10 @@ public class CLValueI32 extends AbstractCLValue<Integer, CLTypeI32> {
 
     @Override
     public void deserialize(DeserializerBuffer deser) throws ValueDeserializationException {
-        this.setValue(deser.readI32());
+        try {
+            this.setValue(deser.readI32());
+        } catch (ValueSerializationException e) {
+            throw new ValueDeserializationException(String.format("Error deserializing %s", this.getClass().getSimpleName()), e);
+        }
     }
 }

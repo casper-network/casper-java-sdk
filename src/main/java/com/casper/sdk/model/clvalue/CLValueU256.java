@@ -45,7 +45,7 @@ public class CLValueU256 extends AbstractCLValue<BigInteger, CLTypeU256> {
         return this.getClType().getTypeName();
     }
 
-    public CLValueU256(BigInteger value) {
+    public CLValueU256(BigInteger value) throws ValueSerializationException {
         this.setValue(value);
     }
 
@@ -68,6 +68,10 @@ public class CLValueU256 extends AbstractCLValue<BigInteger, CLTypeU256> {
 
     @Override
     public void deserialize(DeserializerBuffer deser) throws ValueDeserializationException {
-        this.setValue(deser.readU256());
+        try {
+            this.setValue(deser.readU256());
+        } catch (ValueSerializationException e) {
+            throw new ValueDeserializationException(String.format("Error deserializing %s", this.getClass().getSimpleName()), e);
+        }
     }
 }

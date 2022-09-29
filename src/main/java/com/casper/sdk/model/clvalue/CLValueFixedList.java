@@ -36,9 +36,9 @@ public class CLValueFixedList extends AbstractCLValue<List<? extends AbstractCLV
     @JsonProperty("cl_type")
     private CLTypeFixedList clType = new CLTypeFixedList();
 
-    public CLValueFixedList(List<? extends AbstractCLValue<?, ?>> value) {
+    public CLValueFixedList(List<? extends AbstractCLValue<?, ?>> value) throws ValueSerializationException {
+        setListType(value);
         this.setValue(value);
-        setListType();
     }
 
     @Override
@@ -49,7 +49,7 @@ public class CLValueFixedList extends AbstractCLValue<List<? extends AbstractCLV
             super.serializePrefixWithLength(ser);
         }
 
-        setListType();
+        setListType(this.getValue());
 
         for (AbstractCLValue<?, ?> child : getValue()) {
             child.serialize(ser);
@@ -88,12 +88,12 @@ public class CLValueFixedList extends AbstractCLValue<List<? extends AbstractCLV
             } while (hasMoreItems);
 
             setValue(list);
-        } catch (NoSuchTypeException | DynamicInstanceException e) {
+        } catch (NoSuchTypeException | DynamicInstanceException | ValueSerializationException e) {
             throw new ValueDeserializationException(String.format("Error deserializing %s", this.getClass().getSimpleName()), e);
         }
     }
 
-    protected void setListType() {
-        clType.setListType(getValue().get(0).getClType());
+    protected void setListType(List<? extends AbstractCLValue<?, ?>> value) {
+        clType.setListType(value.get(0).getClType());
     }
 }

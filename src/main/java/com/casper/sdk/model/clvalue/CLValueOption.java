@@ -11,10 +11,7 @@ import dev.oak3.sbs4j.DeserializerBuffer;
 import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueDeserializationException;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.bouncycastle.util.encoders.Hex;
 
 import java.util.Optional;
@@ -30,18 +27,14 @@ import java.util.Optional;
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = true)
-@AllArgsConstructor
-public class CLValueOption extends AbstractCLValue<Optional<AbstractCLValue<?, ?>>, CLTypeOption> {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class CLValueOption extends AbstractCLValueWithChildren<Optional<AbstractCLValue<?, ?>>, CLTypeOption> {
     @JsonProperty("cl_type")
     private CLTypeOption clType = new CLTypeOption();
 
-    public CLValueOption() {
-        this(Optional.of(new CLValueAny(null)));
-    }
-
-    public CLValueOption(Optional<AbstractCLValue<?, ?>> value) {
+    public CLValueOption(Optional<AbstractCLValue<?, ?>> value) throws ValueSerializationException {
+        setChildTypes(value);
         this.setValue(value);
-        this.clType.setChildType(value.isPresent() ? value.get().getClType() : null);
     }
 
     @Override
@@ -92,13 +85,18 @@ public class CLValueOption extends AbstractCLValue<Optional<AbstractCLValue<?, ?
                         .setChildTypes(((AbstractCLTypeWithChildren) clType.getChildType()).getChildTypes());
             }
 
-            setValue(Optional.of(child));
-
             if (isPresent.getValue().equals(Boolean.TRUE)) {
                 child.deserialize(deser);
             }
-        } catch (NoSuchTypeException | DynamicInstanceException e) {
+
+            setValue(Optional.of(child));
+        } catch (NoSuchTypeException | DynamicInstanceException | ValueSerializationException e) {
             throw new ValueDeserializationException(String.format("Error deserializing %s", this.getClass().getSimpleName()), e);
         }
+    }
+
+    @Override
+    protected void setChildTypes(Optional<AbstractCLValue<?, ?>> value) {
+        clType.setChildType(value.isPresent() ? value.get().getClType() : null);
     }
 }

@@ -32,7 +32,7 @@ public class CLValueByteArray extends AbstractCLValue<byte[], CLTypeByteArray> {
     @JsonProperty("cl_type")
     private CLTypeByteArray clType = new CLTypeByteArray();
 
-    public CLValueByteArray(byte[] value) {
+    public CLValueByteArray(byte[] value) throws ValueSerializationException {
         this.setValue(value);
         this.clType.setLength(value.length);
     }
@@ -56,7 +56,11 @@ public class CLValueByteArray extends AbstractCLValue<byte[], CLTypeByteArray> {
 
     @Override
     public void deserialize(DeserializerBuffer deser) throws ValueDeserializationException {
-        this.setValue(deser.readByteArray(this.getClType().getLength()));
+        try {
+            this.setValue(deser.readByteArray(this.getClType().getLength()));
+        } catch (ValueSerializationException e) {
+            throw new ValueDeserializationException(String.format("Error deserializing %s", this.getClass().getSimpleName()), e);
+        }
     }
 
     @Override

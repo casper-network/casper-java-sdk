@@ -43,7 +43,7 @@ public class CLValueString extends AbstractCLValue<String, CLTypeString> {
         return this.getClType().getTypeName();
     }
 
-    public CLValueString(String value) {
+    public CLValueString(String value) throws ValueSerializationException {
         this.setValue(value);
     }
 
@@ -66,6 +66,10 @@ public class CLValueString extends AbstractCLValue<String, CLTypeString> {
 
     @Override
     public void deserialize(DeserializerBuffer deser) throws ValueDeserializationException {
-        this.setValue(deser.readString());
+        try {
+            this.setValue(deser.readString());
+        } catch (ValueSerializationException e) {
+            throw new ValueDeserializationException(String.format("Error deserializing %s", this.getClass().getSimpleName()), e);
+        }
     }
 }

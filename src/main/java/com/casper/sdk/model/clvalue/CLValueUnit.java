@@ -45,7 +45,7 @@ public class CLValueUnit extends AbstractCLValue<Object, CLTypeUnit> {
         return this.getClType().getTypeName();
     }
 
-    public CLValueUnit() {
+    public CLValueUnit() throws ValueSerializationException {
         this.setValue(UNITY_EMPTY_VALUE);
     }
 

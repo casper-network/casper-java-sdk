@@ -43,7 +43,7 @@ public class CLValueU8 extends AbstractCLValue<Byte, CLTypeU8> {
         return this.getClType().getTypeName();
     }
 
-    public CLValueU8(Byte value) {
+    public CLValueU8(Byte value) throws ValueSerializationException {
         this.setValue(value);
     }
 
@@ -66,6 +66,10 @@ public class CLValueU8 extends AbstractCLValue<Byte, CLTypeU8> {
 
     @Override
     public void deserialize(DeserializerBuffer deser) throws ValueDeserializationException {
-        this.setValue(deser.readU8());
+        try {
+            this.setValue(deser.readU8());
+        } catch (ValueSerializationException e) {
+            throw new ValueDeserializationException(String.format("Error deserializing %s", this.getClass().getSimpleName()), e);
+        }
     }
 }

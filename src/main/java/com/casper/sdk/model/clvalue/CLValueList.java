@@ -32,13 +32,13 @@ import java.util.List;
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
-public class CLValueList extends AbstractCLValue<List<? extends AbstractCLValue<?, ?>>, CLTypeList> {
+public class CLValueList extends AbstractCLValueWithChildren<List<? extends AbstractCLValue<?, ?>>, CLTypeList> {
     @JsonProperty("cl_type")
     private CLTypeList clType = new CLTypeList();
 
-    public CLValueList(List<? extends AbstractCLValue<?, ?>> value) {
+    public CLValueList(List<? extends AbstractCLValue<?, ?>> value) throws ValueSerializationException {
         this.setValue(value);
-        setListType();
+        setChildTypes(value);
     }
 
     @Override
@@ -49,7 +49,7 @@ public class CLValueList extends AbstractCLValue<List<? extends AbstractCLValue<
             super.serializePrefixWithLength(ser);
         }
 
-        setListType();
+        setChildTypes(this.getValue());
 
         // List length is written first
         CLValueI32 length = new CLValueI32(getValue().size());
@@ -87,12 +87,13 @@ public class CLValueList extends AbstractCLValue<List<? extends AbstractCLValue<
             }
 
             setValue(list);
-        } catch (NoSuchTypeException | DynamicInstanceException e) {
+        } catch (NoSuchTypeException | DynamicInstanceException | ValueSerializationException e) {
             throw new ValueDeserializationException(String.format("Error deserializing %s", this.getClass().getSimpleName()), e);
         }
     }
 
-    protected void setListType() {
-        clType.setListType(getValue().get(0).getClType());
+    @Override
+    protected void setChildTypes(List<? extends AbstractCLValue<?, ?>> value) {
+        clType.setListType(value.get(0).getClType());
     }
 }
