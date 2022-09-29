@@ -581,13 +581,13 @@ public class StoredValueTests extends AbstractJsonTests {
 
         StoredValueData expected = createAndInitExpectedStoredValueData(expectedClValue);
 
-        assertEquals(expected, sv);
-
         String expectedJson = getPrettyJson(expected);
+
+        JSONAssert.assertEquals(inputJson, expectedJson, false);
 
         LOGGER.debug("Serialized JSON: {}", expectedJson);
 
-        JSONAssert.assertEquals(inputJson, expectedJson, false);
+        assertEquals(expected, sv);
     }
 
     @Test

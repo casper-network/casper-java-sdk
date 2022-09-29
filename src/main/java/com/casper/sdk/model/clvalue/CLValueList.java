@@ -6,6 +6,7 @@ import com.casper.sdk.model.clvalue.cltype.AbstractCLTypeWithChildren;
 import com.casper.sdk.model.clvalue.cltype.CLTypeData;
 import com.casper.sdk.model.clvalue.cltype.CLTypeList;
 import com.casper.sdk.model.clvalue.serde.Target;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dev.oak3.sbs4j.DeserializerBuffer;
 import dev.oak3.sbs4j.SerializerBuffer;
@@ -37,8 +38,8 @@ public class CLValueList extends AbstractCLValueWithChildren<List<? extends Abst
     private CLTypeList clType = new CLTypeList();
 
     public CLValueList(List<? extends AbstractCLValue<?, ?>> value) throws ValueSerializationException {
-        this.setValue(value);
         setChildTypes(value);
+        this.setValue(value);
     }
 
     @Override
