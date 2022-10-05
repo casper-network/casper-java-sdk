@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EntryPoint.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">casper-java-sdk</a> &gt; <a href="index.source.html" class="el_package">com.casper.sdk.model.contract</a> &gt; <span class="el_source">EntryPoint.java</span></div><h1>EntryPoint.java</h1><pre class="source lang-java linenums">package com.casper.sdk.model.contract;
+
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
+import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
+import com.casper.sdk.model.clvalue.cltype.AbstractCLType;
+import com.casper.sdk.model.clvalue.cltype.AbstractCLTypeBasic;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * No description available
+ *
+ * @author Alexandre Carvalho
+ * @author Andre Bertolace
+ * @since 0.0.1
+ */
+@Getter
+<span class="pc" id="L27">@Setter</span>
+<span class="nc" id="L28">@Builder</span>
+<span class="nc" id="L29">@AllArgsConstructor</span>
+<span class="fc" id="L30">@NoArgsConstructor</span>
+public class EntryPoint {
+
+    public interface EntryPointAccess {
+        Object getValue();
+    }
+
+<span class="fc" id="L37">    public enum EntryPointAccessEnum implements EntryPointAccess {</span>
+<span class="fc" id="L38">        @JsonProperty(&quot;Public&quot;)</span>
+        PUBLIC;
+
+        @Override
+        public EntryPointAccessEnum getValue() {
+<span class="fc" id="L43">            return this;</span>
+        }
+    }
+
+<span class="fc" id="L47">    @AllArgsConstructor</span>
+    public static class EntryPointAccessList implements EntryPointAccess {
+
+<span class="nc" id="L50">        @Getter</span>
+        private List&lt;String&gt; groups;
+
+        @Override
+        public List&lt;String&gt; getValue() {
+<span class="fc" id="L55">            return this.groups;</span>
+        }
+    }
+
+    /**
+     * Context of method execution
+     */
+<span class="fc" id="L62">    public enum EntryPointType {</span>
+<span class="fc" id="L63">        @JsonProperty(&quot;Session&quot;)</span>
+<span class="fc" id="L64">        SESSION, @JsonProperty(&quot;Contract&quot;)</span>
+        CONTRACT
+    }
+
+    /**
+     * the {@link EntryPointAccess}
+     */
+    @JsonIgnore
+<span class="nc" id="L72">    private EntryPointAccess access;</span>
+
+    /**
+     * a list of {@link Parameter}
+     */
+    @JsonProperty(&quot;args&quot;)
+<span class="fc" id="L78">    private List&lt;Parameter&gt; args;</span>
+
+    /**
+     * the {@link EntryPointType} Context of method execution
+     */
+    @JsonProperty(&quot;entry_point_type&quot;)
+<span class="fc" id="L84">    private EntryPointType type;</span>
+
+    /**
+     * the name
+     */
+    @JsonProperty(&quot;name&quot;)
+<span class="fc" id="L90">    private String name;</span>
+
+    /**
+     * the return as {@link AbstractCLType}
+     */
+    @JsonIgnore
+<span class="nc" id="L96">    private AbstractCLType ret;</span>
+
+    /**
+     * Accessor for jackson serialization
+     *
+     * @return String if access is enum, List&lt;String&gt; if is list.
+     */
+    @JsonGetter(&quot;access&quot;)
+    private Object getJsonAccess() {
+<span class="fc" id="L105">        return this.access.getValue();</span>
+    }
+
+    /**
+     * Accessor for jackson serialization
+     *
+     * @param access the access type of entry point
+     */
+    @JsonSetter(&quot;access&quot;)
+    @SuppressWarnings(&quot;unchecked&quot;)
+    private void setJsonAccess(Object access) {
+<span class="fc bfc" id="L116" title="All 2 branches covered.">        if (access instanceof String) {</span>
+<span class="fc" id="L117">            this.access = EntryPointAccessEnum.PUBLIC;</span>
+<span class="pc bpc" id="L118" title="1 of 2 branches missed.">        } else if (access instanceof List) {</span>
+<span class="fc" id="L119">            this.access = new EntryPointAccessList((ArrayList&lt;String&gt;) access);</span>
+        }
+<span class="fc" id="L121">    }</span>
+
+    /**
+     * Accessor for jackson serialization
+     *
+     * @param clType the cltype for ret
+     */
+    @JsonSetter(&quot;ret&quot;)
+    @ExcludeFromJacocoGeneratedReport
+    protected void setJsonRet(AbstractCLType clType) {
+        this.ret = clType;
+    }
+
+    /**
+     * Accessor for jackson serialization
+     *
+     * @return String if cl_type is basic type, CLType object if not.
+     */
+    @JsonGetter(&quot;ret&quot;)
+    @ExcludeFromJacocoGeneratedReport
+    protected Object getJsonRet() {
+        if (this.ret instanceof AbstractCLTypeBasic) {
+            return this.ret.getTypeName();
+        } else {
+            return this.ret;
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

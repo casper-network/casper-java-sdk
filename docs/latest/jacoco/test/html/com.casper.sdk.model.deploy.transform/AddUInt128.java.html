@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AddUInt128.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">casper-java-sdk</a> &gt; <a href="index.source.html" class="el_package">com.casper.sdk.model.deploy.transform</a> &gt; <span class="el_source">AddUInt128.java</span></div><h1>AddUInt128.java</h1><pre class="source lang-java linenums">package com.casper.sdk.model.deploy.transform;
+
+import java.math.BigInteger;
+
+import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+/**
+ * An implmentation of Transform that Adds the given `u128`
+ * 
+ * @see Transform
+ * 
+ * @author Alexandre Carvalho
+ * @author Andre Bertolace
+ * @since 0.0.1
+ */
+@Getter
+<span class="nc" id="L26">@Setter</span>
+<span class="nc" id="L27">@Builder</span>
+<span class="nc" id="L28">@AllArgsConstructor</span>
+<span class="nc" id="L29">@NoArgsConstructor</span>
+@JsonTypeName(&quot;AddUInt128&quot;)
+public class AddUInt128 implements Transform {
+
+    /**
+     * u128
+     */
+    @JsonIgnore
+<span class="nc" id="L37">    private BigInteger u128;</span>
+
+    /**
+     * getter for u128 json serialization
+     *
+     * @return cost as expected for json serialization
+     */
+    @JsonProperty(&quot;AddUInt128&quot;)
+    @ExcludeFromJacocoGeneratedReport
+    protected String getJsonU128() {
+        return this.u128.toString(10);
+    }
+
+    /**
+     * setter for u128 from json deserialized value
+     *
+     * @param value the deserialized value
+     */
+    @JsonProperty(&quot;AddUInt128&quot;)
+    @ExcludeFromJacocoGeneratedReport
+    protected void setJsonU128(String value) {
+        this.u128 = new BigInteger(value, 10);
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

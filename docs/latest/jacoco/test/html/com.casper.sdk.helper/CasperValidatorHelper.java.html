@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CasperValidatorHelper.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">casper-java-sdk</a> &gt; <a href="index.source.html" class="el_package">com.casper.sdk.helper</a> &gt; <span class="el_source">CasperValidatorHelper.java</span></div><h1>CasperValidatorHelper.java</h1><pre class="source lang-java linenums">package com.casper.sdk.helper;
+
+import com.casper.sdk.exception.NoSuchTypeException;
+import com.casper.sdk.model.clvalue.CLValuePublicKey;
+import com.casper.sdk.model.clvalue.CLValueU512;
+import com.casper.sdk.model.clvalue.CLValueU8;
+import com.casper.sdk.model.clvalue.CLValueURef;
+import com.casper.sdk.model.clvalue.cltype.CLTypePublicKey;
+import com.casper.sdk.model.clvalue.cltype.CLTypeU512;
+import com.casper.sdk.model.clvalue.cltype.CLTypeU8;
+import com.casper.sdk.model.clvalue.cltype.CLTypeURef;
+import com.casper.sdk.model.common.Digest;
+import com.casper.sdk.model.common.Ttl;
+import com.casper.sdk.model.deploy.Deploy;
+import com.casper.sdk.model.deploy.NamedArg;
+import com.casper.sdk.model.deploy.executabledeploy.ModuleBytes;
+import com.casper.sdk.model.key.PublicKey;
+import com.casper.sdk.model.uref.URef;
+import com.syntifi.crypto.key.AbstractPrivateKey;
+import dev.oak3.sbs4j.exception.ValueSerializationException;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+import java.math.BigInteger;
+import java.security.GeneralSecurityException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+
+
+/**
+ * Validator helper provides methods to easily place auctions and delegate
+ *
+ * @author Alexandre Carvalho
+ * @author Andre Bertolace
+ * @since 0.5.0
+ */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public class CasperValidatorHelper {
+
+    /**
+     * Helper method to create a validator auction bid deploy
+     *
+     * @param signer         private key from sender
+     * @param wasmBytes      bytes of compiled delegate.wasm
+     * @param bidAmount      amount in motes to be submitted as an auction bid.
+     * @param delegationRate Percentage charged to a delegator for provided service.
+     * @param chainName      chain name
+     * @return
+     * @throws NoSuchTypeException
+     * @throws GeneralSecurityException
+     * @throws ValueSerializationException
+     */
+    public static Deploy createValidatorAuctionBid(AbstractPrivateKey signer, byte[] wasmBytes, BigInteger bidAmount,
+                                                   Byte delegationRate, String chainName) throws
+            NoSuchTypeException, GeneralSecurityException, ValueSerializationException {
+        Ttl ttl = Ttl
+<span class="nc" id="L59">                .builder()</span>
+<span class="nc" id="L60">                .ttl(CasperConstants.DEFAULT_DEPLOY_TTL.value / 60 / 1000 + &quot;m&quot;)</span>
+<span class="nc" id="L61">                .build();</span>
+<span class="nc" id="L62">        return createValidatorAuctionBid(signer, wasmBytes, bidAmount, delegationRate,</span>
+<span class="nc" id="L63">                BigInteger.valueOf(CasperConstants.STANDARD_PAYMENT_FOR_AUCTION_BID.value), chainName,</span>
+<span class="nc" id="L64">                CasperConstants.DEFAULT_GAS_PRICE.value, ttl, new Date(), new ArrayList&lt;&gt;());</span>
+    }
+
+    /**
+     * Helper method to create a validator auction bid deploy
+     *
+     * @param signer         private key from sender
+     * @param wasmBytes      bytes of compiled delegate.wasm
+     * @param bidAmount      amount in motes to be submitted as an auction bid.
+     * @param delegationRate Percentage charged to a delegator for provided service.
+     * @param paymentAmount  payment amount for processing transfers
+     * @param chainName      chain name
+     * @param gasPrice       gas price
+     * @param ttl            time to live
+     * @param date           execution date
+     * @param dependencies   List of digest dependencies
+     * @return
+     * @throws NoSuchTypeException
+     * @throws GeneralSecurityException
+     * @throws ValueSerializationException
+     */
+    public static Deploy createValidatorAuctionBid(AbstractPrivateKey signer, byte[] wasmBytes, BigInteger bidAmount,
+                                                   Byte delegationRate, BigInteger paymentAmount, String chainName,
+                                                   Long gasPrice, Ttl ttl, Date date, List&lt;Digest&gt; dependencies)
+            throws NoSuchTypeException, GeneralSecurityException, ValueSerializationException {
+
+<span class="nc" id="L90">        PublicKey validatorKey = PublicKey.fromAbstractPublicKey(signer.derivePublicKey());</span>
+<span class="nc" id="L91">        List&lt;NamedArg&lt;?&gt;&gt; sessionArgs = new LinkedList&lt;&gt;();</span>
+<span class="nc" id="L92">        NamedArg&lt;CLTypeU512&gt; amountArg = new NamedArg&lt;&gt;(&quot;amount&quot;,</span>
+                new CLValueU512(bidAmount));
+<span class="nc" id="L94">        sessionArgs.add(amountArg);</span>
+<span class="nc" id="L95">        NamedArg&lt;CLTypeU8&gt; delegationRateArg = new NamedArg&lt;&gt;(&quot;delegation_rate&quot;,</span>
+                new CLValueU8(delegationRate));
+<span class="nc" id="L97">        sessionArgs.add(delegationRateArg);</span>
+<span class="nc" id="L98">        NamedArg&lt;CLTypePublicKey&gt; pkArg = new NamedArg&lt;&gt;(&quot;public_key&quot;,</span>
+                new CLValuePublicKey(validatorKey));
+<span class="nc" id="L100">        sessionArgs.add(pkArg);</span>
+
+<span class="nc" id="L102">        ModuleBytes session = ModuleBytes.builder()</span>
+<span class="nc" id="L103">                .args(sessionArgs)</span>
+<span class="nc" id="L104">                .bytes(wasmBytes)</span>
+<span class="nc" id="L105">                .build();</span>
+<span class="nc" id="L106">        ModuleBytes payment = CasperDeployHelper.getPaymentModuleBytes(paymentAmount);</span>
+
+<span class="nc" id="L108">        return CasperDeployHelper.buildDeploy(signer, chainName, session, payment, gasPrice, ttl,</span>
+                date, dependencies);
+    }
+
+
+    /**
+     * Helper method to create a withdraw bid deploy
+     *
+     * @param signer         private key from sender
+     * @param wasmBytes      bytes of compiled delegate.wasm
+     * @param withdrawAmount amount in motes to be submitted as an auction bid.
+     * @param unboundPurse   validator's purse unforgeable reference to which to withdraw funds
+     * @param chainName      chain name
+     * @return
+     * @throws NoSuchTypeException
+     * @throws GeneralSecurityException
+     * @throws ValueSerializationException
+     */
+    public static Deploy createValidatorAuctionBidWithdraw(AbstractPrivateKey signer, byte[] wasmBytes, BigInteger withdrawAmount,
+                                                           URef unboundPurse, String chainName) throws
+            NoSuchTypeException, GeneralSecurityException, ValueSerializationException {
+        Ttl ttl = Ttl
+<span class="nc" id="L130">                .builder()</span>
+<span class="nc" id="L131">                .ttl(CasperConstants.DEFAULT_DEPLOY_TTL.value / 60 / 1000 + &quot;m&quot;)</span>
+<span class="nc" id="L132">                .build();</span>
+<span class="nc" id="L133">        return createValidatorAuctionBidWithdraw(signer, wasmBytes, withdrawAmount, unboundPurse,</span>
+<span class="nc" id="L134">                BigInteger.valueOf(CasperConstants.STANDARD_PAYMENT_FOR_AUCTION_BID_WITHDRAWAL.value), chainName,</span>
+<span class="nc" id="L135">                CasperConstants.DEFAULT_GAS_PRICE.value, ttl, new Date(), new ArrayList&lt;&gt;());</span>
+    }
+
+    /**
+     * Helper method to create a withdraw bid deploy
+     *
+     * @param signer         private key from sender
+     * @param wasmBytes      bytes of compiled delegate.wasm
+     * @param withdrawAmount amount in motes to be withdrawn from auction
+     * @param unboundPurse   validator's purse unforgeable reference to which to withdraw funds
+     * @param paymentAmount  payment amount for processing transfers
+     * @param chainName      chain name
+     * @param gasPrice       gas price
+     * @param ttl            time to live
+     * @param date           execution date
+     * @param dependencies   List of digest dependencies
+     * @return
+     * @throws NoSuchTypeException
+     * @throws GeneralSecurityException
+     * @throws ValueSerializationException
+     */
+    public static Deploy createValidatorAuctionBidWithdraw(AbstractPrivateKey signer, byte[] wasmBytes, BigInteger withdrawAmount,
+                                                           URef unboundPurse, BigInteger paymentAmount, String chainName,
+                                                           Long gasPrice, Ttl ttl, Date date, List&lt;Digest&gt; dependencies)
+            throws NoSuchTypeException, GeneralSecurityException, ValueSerializationException {
+
+<span class="nc" id="L161">        PublicKey validatorKey = PublicKey.fromAbstractPublicKey(signer.derivePublicKey());</span>
+<span class="nc" id="L162">        List&lt;NamedArg&lt;?&gt;&gt; sessionArgs = new LinkedList&lt;&gt;();</span>
+<span class="nc" id="L163">        NamedArg&lt;CLTypeU512&gt; amountArg = new NamedArg&lt;&gt;(&quot;amount&quot;,</span>
+                new CLValueU512(withdrawAmount));
+<span class="nc" id="L165">        sessionArgs.add(amountArg);</span>
+<span class="nc" id="L166">        NamedArg&lt;CLTypePublicKey&gt; pkArg = new NamedArg&lt;&gt;(&quot;public_key&quot;,</span>
+                new CLValuePublicKey(validatorKey));
+<span class="nc" id="L168">        sessionArgs.add(pkArg);</span>
+<span class="nc" id="L169">        NamedArg&lt;CLTypeURef&gt; unboundPurseArg = new NamedArg&lt;&gt;(&quot;unbound_purse&quot;,</span>
+                new CLValueURef(unboundPurse));
+<span class="nc" id="L171">        sessionArgs.add(unboundPurseArg);</span>
+
+<span class="nc" id="L173">        ModuleBytes session = ModuleBytes.builder()</span>
+<span class="nc" id="L174">                .args(sessionArgs)</span>
+<span class="nc" id="L175">                .bytes(wasmBytes)</span>
+<span class="nc" id="L176">                .build();</span>
+<span class="nc" id="L177">        ModuleBytes payment = CasperDeployHelper.getPaymentModuleBytes(paymentAmount);</span>
+
+<span class="nc" id="L179">        return CasperDeployHelper.buildDeploy(signer, chainName, session, payment, gasPrice, ttl,</span>
+                date, dependencies);
+    }
+
+    /**
+     * Helper method to create a validator delegation deploy
+     *
+     * @param signer       private key from sender
+     * @param wasmBytes    bytes of compiled delegate.wasm
+     * @param amount       amount in motes to delegate
+     * @param validatorKey validator's public key
+     * @param delegatorKey delegator's public key
+     * @param chainName    chain name
+     * @return
+     * @throws NoSuchTypeException
+     * @throws GeneralSecurityException
+     * @throws ValueSerializationException
+     */
+    public static Deploy createValidatorDelegation(AbstractPrivateKey signer, byte[] wasmBytes, BigInteger amount,
+                                                   PublicKey validatorKey, PublicKey delegatorKey, String chainName) throws
+            NoSuchTypeException, GeneralSecurityException, ValueSerializationException {
+        Ttl ttl = Ttl
+<span class="nc" id="L201">                .builder()</span>
+<span class="nc" id="L202">                .ttl(CasperConstants.DEFAULT_DEPLOY_TTL.value / 60 / 1000 + &quot;m&quot;)</span>
+<span class="nc" id="L203">                .build();</span>
+<span class="nc" id="L204">        return createValidatorDelegation(signer, wasmBytes, amount, validatorKey, delegatorKey,</span>
+<span class="nc" id="L205">                BigInteger.valueOf(CasperConstants.STANDARD_PAYMENT_FOR_DELEGATION.value), chainName,</span>
+<span class="nc" id="L206">                CasperConstants.DEFAULT_GAS_PRICE.value, ttl, new Date(), new ArrayList&lt;&gt;());</span>
+    }
+
+    /**
+     * Helper method to create a validator delegation deploy
+     *
+     * @param signer        private key from sender
+     * @param wasmBytes     bytes of compiled delegate.wasm
+     * @param amount        amount in motes to delegate
+     * @param validatorKey  validator's public key
+     * @param delegatorKey  delegator's public key
+     * @param paymentAmount payment amount for processing transfers
+     * @param chainName     chain name
+     * @param gasPrice      gas price
+     * @param ttl           time to live
+     * @param date          execution date
+     * @param dependencies  List of digest dependencies
+     * @return
+     * @throws NoSuchTypeException
+     * @throws GeneralSecurityException
+     * @throws ValueSerializationException
+     */
+    public static Deploy createValidatorDelegation(AbstractPrivateKey signer, byte[] wasmBytes, BigInteger amount,
+                                                   PublicKey validatorKey, PublicKey delegatorKey,
+                                                   BigInteger paymentAmount, String chainName,
+                                                   Long gasPrice, Ttl ttl, Date date, List&lt;Digest&gt; dependencies)
+            throws NoSuchTypeException, GeneralSecurityException, ValueSerializationException {
+
+<span class="nc" id="L234">        List&lt;NamedArg&lt;?&gt;&gt; sessionArgs = new LinkedList&lt;&gt;();</span>
+<span class="nc" id="L235">        NamedArg&lt;CLTypeU512&gt; amountArg = new NamedArg&lt;&gt;(&quot;amount&quot;,</span>
+                new CLValueU512(amount));
+<span class="nc" id="L237">        sessionArgs.add(amountArg);</span>
+<span class="nc" id="L238">        NamedArg&lt;CLTypePublicKey&gt; delegatorArg = new NamedArg&lt;&gt;(&quot;delegator&quot;,</span>
+                new CLValuePublicKey(delegatorKey));
+<span class="nc" id="L240">        sessionArgs.add(delegatorArg);</span>
+<span class="nc" id="L241">        NamedArg&lt;CLTypePublicKey&gt; validatorArg = new NamedArg&lt;&gt;(&quot;validator&quot;,</span>
+                new CLValuePublicKey(validatorKey));
+<span class="nc" id="L243">        sessionArgs.add(validatorArg);</span>
+
+<span class="nc" id="L245">        ModuleBytes session = ModuleBytes.builder()</span>
+<span class="nc" id="L246">                .args(sessionArgs)</span>
+<span class="nc" id="L247">                .bytes(wasmBytes)</span>
+<span class="nc" id="L248">                .build();</span>
+<span class="nc" id="L249">        ModuleBytes payment = CasperDeployHelper.getPaymentModuleBytes(paymentAmount);</span>
+
+<span class="nc" id="L251">        return CasperDeployHelper.buildDeploy(signer, chainName, session, payment, gasPrice, ttl,</span>
+                date, dependencies);
+    }
+
+    /**
+     * Helper method to create a validator delegation withdraw deploy
+     *
+     * @param signer       private key from sender
+     * @param wasmBytes    bytes of compiled delegate.wasm
+     * @param amount       amount in motes to delegate
+     * @param validatorKey validator's public key
+     * @param delegatorKey delegator's public key
+     * @param chainName    chain name
+     * @return
+     * @throws NoSuchTypeException
+     * @throws GeneralSecurityException
+     * @throws ValueSerializationException
+     */
+    public static Deploy createValidatorDelegationWithdraw(AbstractPrivateKey signer, byte[] wasmBytes, BigInteger amount,
+                                                           PublicKey validatorKey, PublicKey delegatorKey, String chainName) throws
+            NoSuchTypeException, GeneralSecurityException, ValueSerializationException {
+        Ttl ttl = Ttl
+<span class="nc" id="L273">                .builder()</span>
+<span class="nc" id="L274">                .ttl(CasperConstants.DEFAULT_DEPLOY_TTL.value / 60 / 1000 + &quot;m&quot;)</span>
+<span class="nc" id="L275">                .build();</span>
+<span class="nc" id="L276">        return createValidatorDelegationWithdraw(signer, wasmBytes, amount, validatorKey, delegatorKey,</span>
+<span class="nc" id="L277">                BigInteger.valueOf(CasperConstants.STANDARD_PAYMENT_FOR_DELEGATION_WITHDRAWAL.value), chainName,</span>
+<span class="nc" id="L278">                CasperConstants.DEFAULT_GAS_PRICE.value, ttl, new Date(), new ArrayList&lt;&gt;());</span>
+    }
+
+    /**
+     * Helper method to create a validator delegation withdraw deploy
+     *
+     * @param signer        private key from sender
+     * @param wasmBytes     bytes of compiled delegate.wasm
+     * @param amount        amount in motes to withdraw from delegation
+     * @param validatorKey  validator's public key
+     * @param delegatorKey  delegator's public key
+     * @param paymentAmount payment amount for processing transfers
+     * @param chainName     chain name
+     * @param gasPrice      gas price
+     * @param ttl           time to live
+     * @param date          execution date
+     * @param dependencies  List of digest dependencies
+     * @return
+     * @throws NoSuchTypeException
+     * @throws GeneralSecurityException
+     * @throws ValueSerializationException
+     */
+    public static Deploy createValidatorDelegationWithdraw(AbstractPrivateKey signer, byte[] wasmBytes, BigInteger amount,
+                                                           PublicKey validatorKey, PublicKey delegatorKey,
+                                                           BigInteger paymentAmount, String chainName,
+                                                           Long gasPrice, Ttl ttl, Date date, List&lt;Digest&gt; dependencies)
+            throws NoSuchTypeException, GeneralSecurityException, ValueSerializationException {
+
+<span class="nc" id="L306">        List&lt;NamedArg&lt;?&gt;&gt; sessionArgs = new LinkedList&lt;&gt;();</span>
+<span class="nc" id="L307">        NamedArg&lt;CLTypeU512&gt; amountArg = new NamedArg&lt;&gt;(&quot;amount&quot;,</span>
+                new CLValueU512(amount));
+<span class="nc" id="L309">        sessionArgs.add(amountArg);</span>
+<span class="nc" id="L310">        NamedArg&lt;CLTypePublicKey&gt; delegatorArg = new NamedArg&lt;&gt;(&quot;delegator&quot;,</span>
+                new CLValuePublicKey(delegatorKey));
+<span class="nc" id="L312">        sessionArgs.add(delegatorArg);</span>
+<span class="nc" id="L313">        NamedArg&lt;CLTypePublicKey&gt; validatorArg = new NamedArg&lt;&gt;(&quot;validator&quot;,</span>
+                new CLValuePublicKey(validatorKey));
+<span class="nc" id="L315">        sessionArgs.add(validatorArg);</span>
+
+<span class="nc" id="L317">        ModuleBytes session = ModuleBytes.builder()</span>
+<span class="nc" id="L318">                .args(sessionArgs)</span>
+<span class="nc" id="L319">                .bytes(wasmBytes)</span>
+<span class="nc" id="L320">                .build();</span>
+<span class="nc" id="L321">        ModuleBytes payment = CasperDeployHelper.getPaymentModuleBytes(paymentAmount);</span>
+
+<span class="nc" id="L323">        return CasperDeployHelper.buildDeploy(signer, chainName, session, payment, gasPrice, ttl,</span>
+                date, dependencies);
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

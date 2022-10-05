@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CLValueU512.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">casper-java-sdk</a> &gt; <a href="index.source.html" class="el_package">com.casper.sdk.model.clvalue</a> &gt; <span class="el_source">CLValueU512.java</span></div><h1>CLValueU512.java</h1><pre class="source lang-java linenums">package com.casper.sdk.model.clvalue;
+
+import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
+import com.casper.sdk.exception.NoSuchTypeException;
+import com.casper.sdk.model.clvalue.cltype.CLTypeU512;
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonSetter;
+import dev.oak3.sbs4j.DeserializerBuffer;
+import dev.oak3.sbs4j.SerializerBuffer;
+import dev.oak3.sbs4j.exception.ValueDeserializationException;
+import dev.oak3.sbs4j.exception.ValueSerializationException;
+import lombok.*;
+
+import java.math.BigInteger;
+
+/**
+ * Casper U512 CLValue implementation
+ *
+ * @author Alexandre Carvalho
+ * @author Andre Bertolace
+ * @see AbstractCLValue
+ * @since 0.0.1
+ */
+@Getter
+<span class="nc" id="L25">@Setter</span>
+<span class="pc bpc" id="L26" title="10 of 16 branches missed.">@EqualsAndHashCode(callSuper = true)</span>
+<span class="nc" id="L27">@AllArgsConstructor</span>
+<span class="fc" id="L28">@NoArgsConstructor</span>
+public class CLValueU512 extends AbstractCLValue&lt;BigInteger, CLTypeU512&gt; {
+<span class="pc" id="L30">    private CLTypeU512 clType = new CLTypeU512();</span>
+
+    @JsonSetter(&quot;cl_type&quot;)
+    @ExcludeFromJacocoGeneratedReport
+    protected void setJsonClType(CLTypeU512 clType) {
+        this.clType = clType;
+    }
+
+    @JsonGetter(&quot;cl_type&quot;)
+    @ExcludeFromJacocoGeneratedReport
+    protected String getJsonClType() {
+        return this.getClType().getTypeName();
+    }
+
+<span class="fc" id="L44">    public CLValueU512(BigInteger value) {</span>
+<span class="fc" id="L45">        this.setValue(value);</span>
+<span class="fc" id="L46">    }</span>
+
+    @Override
+    public void serialize(SerializerBuffer ser, boolean encodeType) throws ValueSerializationException, NoSuchTypeException {
+<span class="pc bpc" id="L50" title="1 of 2 branches missed.">        if (this.getValue() == null) return;</span>
+
+<span class="fc" id="L52">        ser.writeU512(this.getValue());</span>
+
+<span class="fc bfc" id="L54" title="All 2 branches covered.">        if (encodeType) {</span>
+<span class="fc" id="L55">            this.encodeType(ser);</span>
+        }
+<span class="fc" id="L57">    }</span>
+
+    @Override
+    public void deserialize(DeserializerBuffer deser) throws ValueDeserializationException {
+<span class="fc" id="L61">        this.setValue(deser.readU512());</span>
+<span class="fc" id="L62">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

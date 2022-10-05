@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Deploy.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">casper-java-sdk</a> &gt; <a href="index.source.html" class="el_package">com.casper.sdk.model.deploy</a> &gt; <span class="el_source">Deploy.java</span></div><h1>Deploy.java</h1><pre class="source lang-java linenums">package com.casper.sdk.model.deploy;
+
+import com.casper.sdk.exception.NoSuchTypeException;
+import com.casper.sdk.model.clvalue.serde.CasperSerializableObject;
+import com.casper.sdk.model.common.Digest;
+import com.casper.sdk.model.deploy.executabledeploy.ExecutableDeployItem;
+import dev.oak3.sbs4j.SerializerBuffer;
+import dev.oak3.sbs4j.exception.ValueSerializationException;
+import lombok.*;
+
+import java.util.List;
+
+/**
+ * Deploy an item containing a smart contract along with the requesters'
+ * signature(s)
+ *
+ * @author Alexandre Carvalho
+ * @author Andre Bertolace
+ * @since 0.0.1
+ */
+@Getter
+<span class="fc" id="L22">@Setter</span>
+<span class="pc" id="L23">@Builder</span>
+<span class="fc" id="L24">@AllArgsConstructor</span>
+<span class="fc" id="L25">@NoArgsConstructor</span>
+public class Deploy implements CasperSerializableObject {
+
+    /**
+     * Hex-encoded deploy hash
+     */
+<span class="fc" id="L31">    private Digest hash;</span>
+
+    /**
+     * @see DeployHeader
+     */
+<span class="fc" id="L36">    private DeployHeader header;</span>
+
+    /**
+     * @see Approval
+     */
+<span class="fc" id="L41">    private List&lt;Approval&gt; approvals;</span>
+
+    /**
+     * @see ExecutableDeployItem
+     */
+<span class="fc" id="L46">    private ExecutableDeployItem payment;</span>
+
+    /**
+     * @see ExecutableDeployItem
+     */
+<span class="fc" id="L51">    private ExecutableDeployItem session;</span>
+
+    /**
+     * Implements Deploy encoder
+     */
+    @Override
+    public void serialize(SerializerBuffer ser, boolean encodeType) throws NoSuchTypeException, ValueSerializationException {
+<span class="fc" id="L58">        header.serialize(ser, true);</span>
+<span class="fc" id="L59">        hash.serialize(ser, true);</span>
+<span class="fc" id="L60">        payment.serialize(ser, true);</span>
+<span class="fc" id="L61">        session.serialize(ser, true);</span>
+<span class="fc" id="L62">        ser.writeI32(approvals.size());</span>
+<span class="fc bfc" id="L63" title="All 2 branches covered.">        for (Approval approval : approvals) {</span>
+<span class="fc" id="L64">            approval.serialize(ser, true);</span>
+<span class="fc" id="L65">        }</span>
+<span class="fc" id="L66">    }</span>
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

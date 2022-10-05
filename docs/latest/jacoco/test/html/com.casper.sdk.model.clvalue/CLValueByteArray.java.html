@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CLValueByteArray.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">casper-java-sdk</a> &gt; <a href="index.source.html" class="el_package">com.casper.sdk.model.clvalue</a> &gt; <span class="el_source">CLValueByteArray.java</span></div><h1>CLValueByteArray.java</h1><pre class="source lang-java linenums">package com.casper.sdk.model.clvalue;
+
+import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
+import com.casper.sdk.exception.NoSuchTypeException;
+import com.casper.sdk.model.clvalue.cltype.CLTypeByteArray;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import dev.oak3.sbs4j.DeserializerBuffer;
+import dev.oak3.sbs4j.SerializerBuffer;
+import dev.oak3.sbs4j.exception.ValueDeserializationException;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.util.Arrays;
+import java.util.Objects;
+
+/**
+ * Casper ByteArray CLValue implementation
+ *
+ * @author Alexandre Carvalho
+ * @author Andre Bertolace
+ * @see AbstractCLValue
+ * @since 0.0.1
+ */
+@Getter
+<span class="fc" id="L26">@Setter</span>
+<span class="fc" id="L27">@NoArgsConstructor</span>
+public class CLValueByteArray extends AbstractCLValue&lt;byte[], CLTypeByteArray&gt; {
+<span class="fc" id="L29">    @JsonProperty(&quot;cl_type&quot;)</span>
+<span class="fc" id="L30">    private CLTypeByteArray clType = new CLTypeByteArray();</span>
+
+<span class="fc" id="L32">    public CLValueByteArray(byte[] value) {</span>
+<span class="fc" id="L33">        this.setValue(value);</span>
+<span class="fc" id="L34">        this.clType.setLength(value.length);</span>
+<span class="fc" id="L35">    }</span>
+
+    @Override
+    public void serialize(SerializerBuffer ser, boolean encodeType) throws NoSuchTypeException {
+<span class="pc bpc" id="L39" title="1 of 2 branches missed.">        if (this.getValue() == null) return;</span>
+
+<span class="fc" id="L41">        ser.writeByteArray(this.getValue());</span>
+
+<span class="pc bpc" id="L43" title="1 of 2 branches missed.">        if (encodeType) {</span>
+<span class="nc" id="L44">            this.encodeType(ser);</span>
+        }
+<span class="fc" id="L46">    }</span>
+
+    @Override
+    public void deserialize(DeserializerBuffer deser) throws ValueDeserializationException {
+<span class="fc" id="L50">        this.setValue(deser.readByteArray(this.getClType().getLength()));</span>
+<span class="fc" id="L51">    }</span>
+
+    @Override
+    @ExcludeFromJacocoGeneratedReport
+    public boolean equals(final Object o) {
+        if (o == this)
+            return true;
+        if (!(o instanceof CLValueByteArray))
+            return false;
+        final CLValueByteArray other = (CLValueByteArray) o;
+        if (!other.canEqual(this))
+            return false;
+        final Object thisBytes = this.getBytes();
+        final Object otherBytes = other.getBytes();
+        if (!Objects.equals(thisBytes, otherBytes))
+            return false;
+        final byte[] thisValue = this.getValue();
+        final byte[] otherValue = other.getValue();
+        if (thisValue == null ? otherValue != null : !Arrays.equals(thisValue, otherValue))
+            return false;
+        final Object thisClType = this.getClType();
+        final Object otherClType = other.getClType();
+        return Objects.equals(thisClType, otherClType);
+    }
+
+    @ExcludeFromJacocoGeneratedReport
+    @Override
+    protected boolean canEqual(final Object other) {
+        return other instanceof CLValueByteArray;
+    }
+
+    @Override
+    @ExcludeFromJacocoGeneratedReport
+    public int hashCode() {
+        final int PRIME = 59;
+        int result = super.hashCode();
+        final Object thisClType = this.getClType();
+        result = result * PRIME + (thisClType == null ? 43 : thisClType.hashCode());
+        return result;
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

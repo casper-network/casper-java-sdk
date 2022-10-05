@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>KeyTag.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">casper-java-sdk</a> &gt; <a href="index.source.html" class="el_package">com.casper.sdk.model.key</a> &gt; <span class="el_source">KeyTag.java</span></div><h1>KeyTag.java</h1><pre class="source lang-java linenums">package com.casper.sdk.model.key;
+
+import com.casper.sdk.exception.NoSuchKeyTagException;
+import com.casper.sdk.model.storedvalue.StoredValueData;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+/**
+ * @author Alexandre Carvalho
+ * @author Andre Bertolace
+ * @see StoredValueData
+ * @since 0.0.1
+ */
+<span class="fc" id="L15">@Getter</span>
+<span class="fc" id="L16">@AllArgsConstructor(access = AccessLevel.PRIVATE)</span>
+public enum KeyTag implements Tag {
+<span class="fc" id="L18">    ACCOUNT((byte) 0x00), HASH((byte) 0x01), UREF((byte) 0x02), TRANSFER((byte) 0x03), DEPLOYINFO((byte) 0x04),</span>
+<span class="fc" id="L19">    ERAINFO((byte) 0x05), BALANCE((byte) 0x06), BID((byte) 0x07), WITHDRAW((byte) 0x08);</span>
+
+<span class="fc" id="L21">    private final byte byteTag;</span>
+
+    public static KeyTag getByTag(byte tag) throws NoSuchKeyTagException {
+<span class="pc bpc" id="L24" title="1 of 2 branches missed.">        for (KeyTag a : values()) {</span>
+<span class="fc bfc" id="L25" title="All 2 branches covered.">            if (a.byteTag == tag)</span>
+<span class="fc" id="L26">                return a;</span>
+        }
+<span class="nc" id="L28">        throw new NoSuchKeyTagException();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

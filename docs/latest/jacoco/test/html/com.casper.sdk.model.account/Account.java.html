@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Account.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">casper-java-sdk</a> &gt; <a href="index.source.html" class="el_package">com.casper.sdk.model.account</a> &gt; <span class="el_source">Account.java</span></div><h1>Account.java</h1><pre class="source lang-java linenums">package com.casper.sdk.model.account;
+
+import com.casper.sdk.model.contract.NamedKey;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.util.List;
+
+/**
+ * Structure representing a user's account, stored in global state.
+ *
+ * @author Alexandre Carvalho
+ * @author Andre Bertolace
+ * @since 0.0.1
+ */
+@Getter
+<span class="fc" id="L21">@Setter</span>
+<span class="nc" id="L22">@Builder</span>
+<span class="fc" id="L23">@NoArgsConstructor</span>
+<span class="nc" id="L24">@AllArgsConstructor</span>
+public class Account {
+
+    /**
+     * account_hash(String) Hex-encoded account hash.
+     */
+    @JsonProperty(&quot;account_hash&quot;)
+<span class="fc" id="L31">    private String hash;</span>
+
+    /**
+     * {@link ActionThresholds} that have to be met
+     * when executing an action of a certain type.
+     */
+    @JsonProperty(&quot;action_thresholds&quot;)
+<span class="fc" id="L38">    private ActionThresholds deployment;</span>
+
+    /**
+     * a list of {@link AssociatedKey}
+     */
+    @JsonProperty(&quot;associated_keys&quot;)
+<span class="fc" id="L44">    private List&lt;AssociatedKey&gt; associatedKeys;</span>
+
+    /**
+     * main_purse(String) Hex-encoded, formatted URef.
+     */
+    @JsonProperty(&quot;main_purse&quot;)
+<span class="fc" id="L50">    private String mainPurse;</span>
+
+    /**
+     * named_keys (@link NamedKey)
+     */
+    @JsonProperty(&quot;named_keys&quot;)
+<span class="fc" id="L56">    private List&lt;NamedKey&gt; namedKeys;</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

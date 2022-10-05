@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UnbondingPurse.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">casper-java-sdk</a> &gt; <a href="index.source.html" class="el_package">com.casper.sdk.model.deploy</a> &gt; <span class="el_source">UnbondingPurse.java</span></div><h1>UnbondingPurse.java</h1><pre class="source lang-java linenums">package com.casper.sdk.model.deploy;
+
+import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
+import com.casper.sdk.model.key.PublicKey;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.casper.sdk.model.uref.URef;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.math.BigInteger;
+
+/**
+ * Unbonding Purse
+ *
+ * @author Alexandre Carvalho
+ * @author Andre Bertolace
+ * @since 0.0.1
+ */
+@Getter
+<span class="nc" id="L24">@Setter</span>
+<span class="nc" id="L25">@Builder</span>
+<span class="nc" id="L26">@AllArgsConstructor</span>
+<span class="nc" id="L27">@NoArgsConstructor</span>
+public class UnbondingPurse {
+
+    /**
+     * Unbonding amount
+     */
+    @JsonIgnore
+<span class="nc" id="L34">    private BigInteger unbondingAmount;</span>
+
+    /**
+     * the bondingPurse's {@link URef}
+     */
+    @JsonProperty(&quot;bonding_purse&quot;)
+<span class="nc" id="L40">    private URef bondingPurse;</span>
+
+    /**
+     * Era in which this unbonding request was created.
+     */
+    @JsonProperty(&quot;era_of_creation&quot;)
+<span class="nc" id="L46">    private BigInteger eraOfCreation;</span>
+
+    /**
+     * Unbonders {@link PublicKey}
+     */
+    @JsonProperty(&quot;unbonder_public_key&quot;)
+<span class="nc" id="L52">    private PublicKey unbonderPublicKey;</span>
+
+    /**
+     * Validators {@link PublicKey}
+     */
+    @JsonProperty(&quot;validator_public_key&quot;)
+<span class="nc" id="L58">    private PublicKey validatorPublicKey;</span>
+
+    /**
+     * getter for unbondingAmount json serialization
+     *
+     * @return cost as expected for json serialization
+     */
+    @JsonProperty(&quot;unbonding_amount&quot;)
+    @ExcludeFromJacocoGeneratedReport
+    protected String getJsonUnbondingAmount() {
+        return this.unbondingAmount.toString(10);
+    }
+
+    /**
+     * setter for unbondingAmount from json deserialized value
+     *
+     * @param value the deserialized value
+     */
+    @JsonProperty(&quot;unbonding_amount&quot;)
+    @ExcludeFromJacocoGeneratedReport
+    protected void setJsonUnbondingAmount(String value) {
+        this.unbondingAmount = new BigInteger(value, 10);
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

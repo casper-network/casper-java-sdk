@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CLTypeData.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">casper-java-sdk</a> &gt; <a href="index.source.html" class="el_package">com.casper.sdk.model.clvalue.cltype</a> &gt; <span class="el_source">CLTypeData.java</span></div><h1>CLTypeData.java</h1><pre class="source lang-java linenums">package com.casper.sdk.model.clvalue.cltype;
+
+import com.casper.sdk.exception.NoSuchTypeException;
+import com.casper.sdk.model.storedvalue.StoredValue;
+import com.casper.sdk.exception.DynamicInstanceException;
+import com.casper.sdk.model.clvalue.AbstractCLValue;
+import com.casper.sdk.model.clvalue.CLValueAny;
+import com.casper.sdk.model.clvalue.CLValueBool;
+import com.casper.sdk.model.clvalue.CLValueByteArray;
+import com.casper.sdk.model.clvalue.CLValueFixedList;
+import com.casper.sdk.model.clvalue.CLValueI32;
+import com.casper.sdk.model.clvalue.CLValueI64;
+import com.casper.sdk.model.clvalue.CLValueKey;
+import com.casper.sdk.model.clvalue.CLValueList;
+import com.casper.sdk.model.clvalue.CLValueMap;
+import com.casper.sdk.model.clvalue.CLValueOption;
+import com.casper.sdk.model.clvalue.CLValuePublicKey;
+import com.casper.sdk.model.clvalue.CLValueResult;
+import com.casper.sdk.model.clvalue.CLValueString;
+import com.casper.sdk.model.clvalue.CLValueTuple1;
+import com.casper.sdk.model.clvalue.CLValueTuple2;
+import com.casper.sdk.model.clvalue.CLValueTuple3;
+import com.casper.sdk.model.clvalue.CLValueU128;
+import com.casper.sdk.model.clvalue.CLValueU256;
+import com.casper.sdk.model.clvalue.CLValueU32;
+import com.casper.sdk.model.clvalue.CLValueU512;
+import com.casper.sdk.model.clvalue.CLValueU64;
+import com.casper.sdk.model.clvalue.CLValueU8;
+import com.casper.sdk.model.clvalue.CLValueURef;
+import com.casper.sdk.model.clvalue.CLValueUnit;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+import java.lang.reflect.InvocationTargetException;
+
+/**
+ * Casper CLType definitions and type mappings
+ * &lt;p&gt;
+ * All types must be listed and mapped here.
+ *
+ * @author Alexandre Carvalho
+ * @author Andre Bertolace
+ * @see StoredValue
+ * @since 0.0.1
+ */
+<span class="fc" id="L47">@Getter</span>
+<span class="fc" id="L48">@AllArgsConstructor(access = AccessLevel.PRIVATE)</span>
+public enum CLTypeData {
+<span class="fc" id="L50">    BOOL(AbstractCLType.BOOL, (byte) 0x0, CLValueBool.class, CLTypeBool.class),</span>
+<span class="fc" id="L51">    I32(AbstractCLType.I32, (byte) 0x1, CLValueI32.class, CLTypeI32.class),</span>
+<span class="fc" id="L52">    I64(AbstractCLType.I64, (byte) 0x2, CLValueI64.class, CLTypeI64.class),</span>
+<span class="fc" id="L53">    U8(AbstractCLType.U8, (byte) 0x3, CLValueU8.class, CLTypeU8.class),</span>
+<span class="fc" id="L54">    U32(AbstractCLType.U32, (byte) 0x4, CLValueU32.class, CLTypeU32.class),</span>
+<span class="fc" id="L55">    U64(AbstractCLType.U64, (byte) 0x5, CLValueU64.class, CLTypeU64.class),</span>
+<span class="fc" id="L56">    U128(AbstractCLType.U128, (byte) 0x6, CLValueU128.class, CLTypeU128.class),</span>
+<span class="fc" id="L57">    U256(AbstractCLType.U256, (byte) 0x7, CLValueU256.class, CLTypeU256.class),</span>
+<span class="fc" id="L58">    U512(AbstractCLType.U512, (byte) 0x8, CLValueU512.class, CLTypeU512.class),</span>
+<span class="fc" id="L59">    UNIT(AbstractCLType.UNIT, (byte) 0x9, CLValueUnit.class, CLTypeUnit.class),</span>
+<span class="fc" id="L60">    STRING(AbstractCLType.STRING, (byte) 0xA, CLValueString.class, CLTypeString.class),</span>
+<span class="fc" id="L61">    UREF(AbstractCLType.UREF, (byte) 0xB, CLValueURef.class, CLTypeURef.class),</span>
+<span class="fc" id="L62">    KEY(AbstractCLType.KEY, (byte) 0xC, CLValueKey.class, CLTypeKey.class),</span>
+<span class="fc" id="L63">    OPTION(AbstractCLType.OPTION, (byte) 0xD, CLValueOption.class, CLTypeOption.class),</span>
+<span class="fc" id="L64">    LIST(AbstractCLType.LIST, (byte) 0xE, CLValueList.class, CLTypeList.class),</span>
+<span class="fc" id="L65">    FIXED_LIST(AbstractCLType.FIXED_LIST, (byte) 0xF, CLValueFixedList.class, CLTypeFixedList.class),</span>
+<span class="fc" id="L66">    RESULT(AbstractCLType.RESULT, (byte) 0x10, CLValueResult.class, CLTypeResult.class),</span>
+<span class="fc" id="L67">    MAP(AbstractCLType.MAP, (byte) 0x11, CLValueMap.class, CLTypeMap.class),</span>
+<span class="fc" id="L68">    TUPLE1(AbstractCLType.TUPLE1, (byte) 0x12, CLValueTuple1.class, CLTypeTuple1.class),</span>
+<span class="fc" id="L69">    TUPLE2(AbstractCLType.TUPLE2, (byte) 0x13, CLValueTuple2.class, CLTypeTuple2.class),</span>
+<span class="fc" id="L70">    TUPLE3(AbstractCLType.TUPLE3, (byte) 0x14, CLValueTuple3.class, CLTypeTuple3.class),</span>
+<span class="fc" id="L71">    ANY(AbstractCLType.ANY, (byte) 0x15, CLValueAny.class, CLTypeAny.class),</span>
+<span class="fc" id="L72">    PUBLIC_KEY(AbstractCLType.PUBLIC_KEY, (byte) 0x16, CLValuePublicKey.class, CLTypePublicKey.class),</span>
+<span class="fc" id="L73">    BYTE_ARRAY(AbstractCLType.BYTE_ARRAY, (byte) 0x17, CLValueByteArray.class, CLTypeByteArray.class);</span>
+
+<span class="fc" id="L75">    private final String clTypeName;</span>
+<span class="fc" id="L76">    private final byte serializationTag;</span>
+<span class="fc" id="L77">    private final Class&lt;? extends AbstractCLValue&lt;?, ?&gt;&gt; clazz;</span>
+<span class="fc" id="L78">    private final Class&lt;? extends AbstractCLType&gt; clTypeClass;</span>
+
+    /**
+     * Retrieve CLType by its serialization tag
+     *
+     * @param serializationTag the serialization tag to find
+     * @return the requested {@link CLTypeData}
+     * @throws NoSuchTypeException raised when the clType is not valid/found
+     */
+    public static CLTypeData getTypeBySerializationTag(byte serializationTag) throws NoSuchTypeException {
+<span class="pc bpc" id="L88" title="1 of 2 branches missed.">        for (CLTypeData clType : values()) {</span>
+<span class="fc bfc" id="L89" title="All 2 branches covered.">            if (clType.serializationTag == serializationTag) {</span>
+<span class="fc" id="L90">                return clType;</span>
+            }
+        }
+<span class="nc" id="L93">        throw new NoSuchTypeException();</span>
+    }
+
+    /**
+     * Retrieve CLValue implementation class from CLType name
+     *
+     * @param name the type's name
+     * @return the {@link Class} object holding the requested
+     * {@link AbstractCLValue}
+     * @throws NoSuchTypeException raised when the clType is not valid/found
+     */
+    public static Class&lt;?&gt; getClassByName(String name) throws NoSuchTypeException {
+<span class="fc bfc" id="L105" title="All 2 branches covered.">        for (CLTypeData clType : values()) {</span>
+<span class="fc bfc" id="L106" title="All 2 branches covered.">            if (clType.clTypeName.equals(name)) {</span>
+<span class="fc" id="L107">                return clType.getClazz();</span>
+            }
+        }
+<span class="fc" id="L110">        throw new NoSuchTypeException();</span>
+    }
+
+    /**
+     * Retrieve CLType class from CLType name
+     *
+     * @param name the type's name
+     * @return the {@link Class} object holding the requested {@link AbstractCLType}
+     * @throws NoSuchTypeException raised when the clType is not valid/found
+     */
+    public static Class&lt;?&gt; getCLTypeClassByName(String name) throws NoSuchTypeException {
+<span class="fc bfc" id="L121" title="All 2 branches covered.">        for (CLTypeData clType : values()) {</span>
+<span class="fc bfc" id="L122" title="All 2 branches covered.">            if (clType.clTypeName.equals(name)) {</span>
+<span class="fc" id="L123">                return clType.getClTypeClass();</span>
+            }
+        }
+<span class="fc" id="L126">        throw new NoSuchTypeException();</span>
+    }
+
+    /**
+     * Retrieve CLType from its name
+     *
+     * @param name the type's name
+     * @return the requested {@link CLTypeData}
+     * @throws NoSuchTypeException raised when the clType is not valid/found
+     */
+    public static CLTypeData getTypeByName(String name) throws NoSuchTypeException {
+<span class="fc bfc" id="L137" title="All 2 branches covered.">        for (CLTypeData clType : values()) {</span>
+<span class="fc bfc" id="L138" title="All 2 branches covered.">            if (clType.clTypeName.equals(name)) {</span>
+<span class="fc" id="L139">                return clType;</span>
+            }
+        }
+<span class="fc" id="L142">        throw new NoSuchTypeException();</span>
+    }
+
+    /**
+     * Dynamically instantiate a CLValue when needed for decoding children objects
+     *
+     * @param clValueName the name of the {@link AbstractCLValue} to instantiate
+     * @return the desired {@link AbstractCLValue} implementation
+     * @throws DynamicInstanceException error while dynamically instantiating the
+     *                                  clValue
+     * @throws NoSuchTypeException      raised when the clType is not valid/found
+     */
+    public static AbstractCLValue&lt;?, ?&gt; createCLValueFromCLTypeName(String clValueName)
+            throws DynamicInstanceException, NoSuchTypeException {
+<span class="fc" id="L156">        return CLTypeData.createCLValueFromCLTypeData(CLTypeData.getTypeByName(clValueName));</span>
+    }
+
+    /**
+     * Dynamically instantiate a CLValue when needed for decoding children objects
+     *
+     * @param clTypeData the {@link CLTypeData} to instantiate
+     * @return the desired {@link AbstractCLValue} implementation
+     * @throws DynamicInstanceException error while dynamically instantiating the
+     *                                  clValue
+     */
+    public static AbstractCLValue&lt;?, ?&gt; createCLValueFromCLTypeData(CLTypeData clTypeData)
+            throws DynamicInstanceException {
+<span class="fc" id="L169">        Class&lt;?&gt; clazz = clTypeData.getClazz();</span>
+
+        try {
+<span class="fc" id="L172">            return (AbstractCLValue&lt;?, ?&gt;) clazz.getConstructor().newInstance();</span>
+<span class="nc" id="L173">        } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException</span>
+                | NoSuchMethodException | SecurityException e) {
+<span class="nc" id="L175">            throw new DynamicInstanceException(String.format(&quot;Error while instantiating %s&quot;, clazz.getName()), e);</span>
+        }
+    }
+
+    /**
+     * Dynamically instantiate a CLType when needed for decoding children objects
+     *
+     * @param clTypeName the name of the {@link AbstractCLType} to instantiate
+     * @return the desired {@link AbstractCLType} implementation
+     * @throws DynamicInstanceException error while dynamically instantiating the
+     *                                  clValue
+     * @throws NoSuchTypeException      raised when the clType is not valid/found
+     */
+    public static AbstractCLType createCLTypeFromCLTypeName(String clTypeName)
+            throws DynamicInstanceException, NoSuchTypeException {
+<span class="nc" id="L190">        return CLTypeData.createCLTypeFromCLTypeData(CLTypeData.getTypeByName(clTypeName));</span>
+    }
+
+    /**
+     * Dynamically instantiate a CLType when needed for decoding children objects
+     *
+     * @param clTypeData the {@link CLTypeData} to instantiate
+     * @return the desired {@link AbstractCLType} implementation
+     * @throws DynamicInstanceException error while dynamically instantiating the
+     *                                  clValue
+     */
+    public static AbstractCLType createCLTypeFromCLTypeData(CLTypeData clTypeData) throws DynamicInstanceException {
+<span class="fc" id="L202">        Class&lt;?&gt; clazz = clTypeData.getClTypeClass();</span>
+
+        try {
+<span class="fc" id="L205">            return (AbstractCLType) clazz.getConstructor().newInstance();</span>
+<span class="nc" id="L206">        } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException</span>
+                | NoSuchMethodException | SecurityException e) {
+<span class="nc" id="L208">            throw new DynamicInstanceException(String.format(&quot;Error while instantiating %s&quot;, clazz.getName()), e);</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

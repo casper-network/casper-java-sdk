@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GlobalStateData.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">casper-java-sdk</a> &gt; <a href="index.source.html" class="el_package">com.casper.sdk.model.globalstate</a> &gt; <span class="el_source">GlobalStateData.java</span></div><h1>GlobalStateData.java</h1><pre class="source lang-java linenums">package com.casper.sdk.model.globalstate;
+
+import com.casper.sdk.model.block.JsonBlockHeader;
+import com.casper.sdk.model.storedvalue.StoredValue;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
+
+/**
+ * Holds the header data of a Global State
+ *
+ * @author Alexandre Carvalho
+ * @author Andre Bertolace
+ * @since 0.2.0
+ */
+@Getter
+<span class="fc" id="L16">@Setter</span>
+<span class="nc" id="L17">@Builder</span>
+<span class="nc" id="L18">@AllArgsConstructor</span>
+<span class="fc" id="L19">@NoArgsConstructor</span>
+public class GlobalStateData {
+
+    /**
+     * The RPC API version
+     */
+    @JsonProperty(&quot;api_version&quot;)
+<span class="fc" id="L26">    private String apiVersion;</span>
+
+    /**
+     * {@link JsonBlockHeader}
+     */
+    @JsonProperty(&quot;block_header&quot;)
+<span class="fc" id="L32">    private JsonBlockHeader header;</span>
+
+    /**
+     * Merkle proof
+     */
+    @JsonProperty(&quot;merkle_proof&quot;)
+<span class="fc" id="L38">    private String merkleProof;</span>
+
+    @JsonProperty(&quot;stored_value&quot;)
+<span class="fc" id="L41">    private StoredValue&lt;?&gt; storedValue;</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

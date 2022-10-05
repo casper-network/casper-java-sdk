@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>StoredValueTypeData.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">casper-java-sdk</a> &gt; <a href="index.source.html" class="el_package">com.casper.sdk.model.storedvalue</a> &gt; <span class="el_source">StoredValueTypeData.java</span></div><h1>StoredValueTypeData.java</h1><pre class="source lang-java linenums">package com.casper.sdk.model.storedvalue;
+
+import com.casper.sdk.exception.NoSuchTypeException;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+/**
+ * Stored Value type data and class mapping
+ *
+ * @author Alexandre Carvalho
+ * @author Andre Bertolace
+ * @see StoredValue
+ * @since 0.0.1
+ */
+<span class="fc" id="L16">@Getter</span>
+<span class="fc" id="L17">@AllArgsConstructor(access = AccessLevel.PRIVATE)</span>
+public enum StoredValueTypeData {
+<span class="fc" id="L19">    STORED_VALUE_CLVALUE(&quot;CLValue&quot;, StoredValueCLValue.class),</span>
+<span class="fc" id="L20">    STORED_VALUE_ACCOUNT(&quot;Account&quot;, StoredValueAccount.class),</span>
+<span class="fc" id="L21">    STORED_VALUE_CONTRACT_PACKAGE(&quot;ContractPackage&quot;, StoredValueContractPackage.class),</span>
+<span class="fc" id="L22">    STORED_VALUE_CONTRACT(&quot;Contract&quot;, StoredValueContract.class),</span>
+<span class="fc" id="L23">    STORED_VALUE_TRANSFER(&quot;Transfer&quot;, StoredValueTransfer.class),</span>
+<span class="fc" id="L24">    STORED_VALUE_DEPLOY_INFO(&quot;DeployInfo&quot;, StoredValueDeployInfo.class),</span>
+<span class="fc" id="L25">    STORED_VALUE_ERA_INFO(&quot;EraInfo&quot;, StoredValueEraInfo.class),</span>
+<span class="fc" id="L26">    STORED_VALUE_BID(&quot;Bid&quot;, StoredValueBid.class),</span>
+<span class="fc" id="L27">    STORED_VALUE_WITHDRAW(&quot;Withdraw&quot;, StoredValueWithdraw.class);</span>
+
+<span class="nc" id="L29">    private final String name;</span>
+<span class="fc" id="L30">    private final Class&lt;?&gt; clazz;</span>
+
+    /**
+     * Retrieve Transform implementation class from Transform name
+     *
+     * @param name the name to use for fetching class
+     * @return the class object for given name
+     * @throws NoSuchTypeException thrown if class type not found
+     */
+    public static Class&lt;?&gt; getClassByName(String name) throws NoSuchTypeException {
+<span class="pc bpc" id="L40" title="1 of 2 branches missed.">        for (StoredValueTypeData t : values()) {</span>
+<span class="fc bfc" id="L41" title="All 2 branches covered.">            if (t.name.equals(name)) {</span>
+<span class="fc" id="L42">                return t.getClazz();</span>
+            }
+        }
+<span class="nc" id="L45">        throw new NoSuchTypeException();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

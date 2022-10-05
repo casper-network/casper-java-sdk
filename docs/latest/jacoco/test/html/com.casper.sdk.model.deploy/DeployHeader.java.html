@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DeployHeader.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">casper-java-sdk</a> &gt; <a href="index.source.html" class="el_package">com.casper.sdk.model.deploy</a> &gt; <span class="el_source">DeployHeader.java</span></div><h1>DeployHeader.java</h1><pre class="source lang-java linenums">package com.casper.sdk.model.deploy;
+
+import com.casper.sdk.model.clvalue.serde.CasperSerializableObject;
+import com.casper.sdk.model.common.Digest;
+import com.casper.sdk.model.common.Ttl;
+import com.casper.sdk.model.key.PublicKey;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import dev.oak3.sbs4j.SerializerBuffer;
+import lombok.*;
+
+import java.util.Date;
+import java.util.List;
+
+/**
+ * The header portion of a [`Deploy`](struct.Deploy.html).
+ *
+ * @author Alexandre Carvalho
+ * @author Andre Bertolace
+ * @since 0.0.1
+ */
+@Getter
+<span class="fc" id="L23">@Setter</span>
+<span class="pc" id="L24">@Builder</span>
+<span class="fc" id="L25">@AllArgsConstructor</span>
+<span class="fc" id="L26">@NoArgsConstructor</span>
+public class DeployHeader implements CasperSerializableObject {
+
+    /**
+     * @see PublicKey
+     */
+<span class="fc" id="L32">    private PublicKey account;</span>
+
+    /**
+     * Body hash
+     */
+    @JsonProperty(&quot;body_hash&quot;)
+<span class="fc" id="L38">    private Digest bodyHash;</span>
+
+    /**
+     * Chain name
+     */
+    @JsonProperty(&quot;chain_name&quot;)
+<span class="fc" id="L44">    private String chainName;</span>
+
+    /**
+     * Dependencies
+     */
+<span class="fc" id="L49">    private List&lt;Digest&gt; dependencies;</span>
+
+    /**
+     * Gas price
+     */
+    @JsonProperty(&quot;gas_price&quot;)
+<span class="fc" id="L55">    private Long gasPrice;</span>
+
+    /**
+     * Timestamp formatted as per RFC 3339
+     */
+    @JsonProperty(&quot;timestamp&quot;)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = &quot;yyyy-MM-dd'T'HH:mm:ss.SSS'Z'&quot;)
+<span class="fc" id="L62">    private Date timeStamp;</span>
+
+    /**
+     * Human-readable duration
+     */
+<span class="fc" id="L67">    private Ttl ttl;</span>
+
+    /**
+     * Implements DeployHearder encoder
+     */
+    @Override
+    public void serialize(SerializerBuffer ser, boolean encodeType) {
+<span class="fc" id="L74">        account.serialize(ser, encodeType);</span>
+<span class="fc" id="L75">        ser.writeI64(timeStamp.getTime());</span>
+<span class="fc" id="L76">        ttl.serialize(ser, encodeType);</span>
+<span class="fc" id="L77">        ser.writeI64(gasPrice);</span>
+<span class="fc" id="L78">        bodyHash.serialize(ser, encodeType);</span>
+<span class="pc bpc" id="L79" title="1 of 2 branches missed.">        if (dependencies != null) {</span>
+<span class="fc" id="L80">            ser.writeI32(dependencies.size());</span>
+<span class="fc bfc" id="L81" title="All 2 branches covered.">            for (Digest dependency : dependencies) {</span>
+<span class="fc" id="L82">                ser.writeByteArray(dependency.getDigest());</span>
+<span class="fc" id="L83">            }</span>
+        }
+<span class="fc" id="L85">        ser.writeString(chainName);</span>
+<span class="fc" id="L86">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
