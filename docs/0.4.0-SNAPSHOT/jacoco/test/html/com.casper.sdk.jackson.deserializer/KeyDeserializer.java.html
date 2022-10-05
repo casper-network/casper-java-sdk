@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>KeyDeserializer.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">casper-java-sdk</a> &gt; <a href="index.source.html" class="el_package">com.casper.sdk.jackson.deserializer</a> &gt; <span class="el_source">KeyDeserializer.java</span></div><h1>KeyDeserializer.java</h1><pre class="source lang-java linenums">package com.casper.sdk.jackson.deserializer;
+
+import com.casper.sdk.exception.NoSuchKeyTagException;
+import com.casper.sdk.model.key.Key;
+import com.casper.sdk.model.key.KeyTag;
+
+import java.util.Arrays;
+
+/**
+ * Customize the mapping of Casper's PublicKey
+ *
+ * @author Alexandre Carvalho
+ * @author Andre Bertolace
+ * @since 0.0.1
+ */
+<span class="nc" id="L16">public class KeyDeserializer extends AbstractSerializedKeyTaggedHexDeserializer&lt;Key, KeyTag&gt; {</span>
+
+    @Override
+    protected Key getInstanceOf() {
+<span class="nc" id="L20">        return new Key();</span>
+    }
+
+    @Override
+    protected void loadKey(Key key, byte[] bytes) throws NoSuchKeyTagException {
+<span class="nc" id="L25">        key.setTag(KeyTag.getByTag(bytes[0]));</span>
+<span class="nc" id="L26">        key.setKey(Arrays.copyOfRange(bytes, 1, bytes.length));</span>
+<span class="nc" id="L27">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

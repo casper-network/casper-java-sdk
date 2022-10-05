@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AbstractCLType.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">casper-java-sdk</a> &gt; <a href="index.source.html" class="el_package">com.casper.sdk.model.clvalue.cltype</a> &gt; <span class="el_source">AbstractCLType.java</span></div><h1>AbstractCLType.java</h1><pre class="source lang-java linenums">package com.casper.sdk.model.clvalue.cltype;
+
+import com.casper.sdk.exception.NoSuchTypeException;
+import com.casper.sdk.jackson.resolver.CLTypeResolver;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.databind.annotation.JsonTypeResolver;
+import lombok.Getter;
+import lombok.Setter;
+
+/**
+ * Basic class for CLType implementation
+ *
+ * @author Alexandre Carvalho
+ * @author Andre Bertolace
+ * @see AbstractCLType
+ * @since 0.0.1
+ */
+@Getter
+@Setter
+@JsonTypeInfo(use = JsonTypeInfo.Id.NONE)
+@JsonTypeResolver(CLTypeResolver.class)
+<span class="fc" id="L23">public abstract class AbstractCLType {</span>
+    /**
+     * String constants for all CLTypes as defined by the api spec
+     */
+    public static final String BOOL = &quot;Bool&quot;;
+    public static final String I32 = &quot;I32&quot;;
+    public static final String I64 = &quot;I64&quot;;
+    public static final String U8 = &quot;U8&quot;;
+    public static final String U32 = &quot;U32&quot;;
+    public static final String U64 = &quot;U64&quot;;
+    public static final String U128 = &quot;U128&quot;;
+    public static final String U256 = &quot;U256&quot;;
+    public static final String U512 = &quot;U512&quot;;
+    public static final String UNIT = &quot;Unit&quot;;
+    public static final String STRING = &quot;String&quot;;
+    public static final String KEY = &quot;Key&quot;;
+    public static final String UREF = &quot;URef&quot;;
+    public static final String OPTION = &quot;Option&quot;;
+    public static final String LIST = &quot;List&quot;;
+    public static final String FIXED_LIST = &quot;FixedList&quot;;
+    public static final String RESULT = &quot;Result&quot;;
+    public static final String MAP = &quot;Map&quot;;
+    public static final String TUPLE1 = &quot;Tuple1&quot;;
+    public static final String TUPLE2 = &quot;Tuple2&quot;;
+    public static final String TUPLE3 = &quot;Tuple3&quot;;
+    public static final String ANY = &quot;Any&quot;;
+    public static final String PUBLIC_KEY = &quot;PublicKey&quot;;
+    public static final String BYTE_ARRAY = &quot;ByteArray&quot;;
+
+    /**
+     * Required getter for implementations of CLType
+     *
+     * @return the CLType name
+     */
+    @JsonIgnore
+    public abstract String getTypeName();
+
+    /**
+     * @return the {@link CLTypeData} for the current CLType
+     * @throws NoSuchTypeException thrown if no cl type data found
+     */
+    @JsonIgnore
+    public CLTypeData getClTypeData() throws NoSuchTypeException {
+<span class="fc" id="L66">        return CLTypeData.getTypeByName(getTypeName());</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

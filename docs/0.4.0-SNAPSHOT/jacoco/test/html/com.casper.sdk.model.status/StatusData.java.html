@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>StatusData.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">casper-java-sdk</a> &gt; <a href="index.source.html" class="el_package">com.casper.sdk.model.status</a> &gt; <span class="el_source">StatusData.java</span></div><h1>StatusData.java</h1><pre class="source lang-java linenums">package com.casper.sdk.model.status;
+
+import com.casper.sdk.model.key.PublicKey;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.casper.sdk.model.peer.PeerEntry;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.util.List;
+
+/**
+ * Returns the current status of the node
+ *
+ * @author Alexandre Carvalho
+ * @author Andre Bertolace
+ * @since 0.0.1
+ */
+@Getter
+<span class="fc" id="L22">@Setter</span>
+<span class="nc" id="L23">@Builder</span>
+<span class="nc" id="L24">@AllArgsConstructor</span>
+<span class="fc" id="L25">@NoArgsConstructor</span>
+public class StatusData {
+
+    /**
+     * The RPC API version
+     */
+    @JsonProperty(&quot;api_version&quot;)
+<span class="fc" id="L32">    private String apiVersion;</span>
+
+    /**
+     * The compiled node version
+     */
+    @JsonProperty(&quot;build_version&quot;)
+<span class="fc" id="L38">    private String buildVersion;</span>
+
+    /**
+     * The chainspec name
+     */
+    @JsonProperty(&quot;chainspec_name&quot;)
+<span class="fc" id="L44">    private String chainSpecName;</span>
+
+    /**
+     * @see MinimalBlockInfo
+     */
+    @JsonProperty(&quot;last_added_block_info&quot;)
+<span class="fc" id="L50">    private MinimalBlockInfo lastAddedBlockInfo;</span>
+
+    /**
+     * @see NextUpgrade
+     */
+    @JsonProperty(&quot;next_upgrade&quot;)
+<span class="fc" id="L56">    private NextUpgrade nextUpgrade;</span>
+
+    /**
+     * @see PublicKey
+     */
+    @JsonProperty(&quot;our_public_signing_key&quot;)
+<span class="fc" id="L62">    private PublicKey publicKey;</span>
+
+    /**
+     * List of
+     *
+     * @see PeerEntry
+     */
+<span class="fc" id="L69">    private List&lt;PeerEntry&gt; peers;</span>
+
+    /**
+     * The next round length if this node is a validator
+     */
+    @JsonProperty(&quot;round_length&quot;)
+<span class="fc" id="L75">    private String roundLength;</span>
+
+    /**
+     * Time passed since the node has started
+     */
+<span class="fc" id="L80">    private String uptime;</span>
+
+    /**
+     * The state root hash used at the start of the current session
+     */
+    @JsonProperty(&quot;starting_state_root_hash&quot;)
+<span class="fc" id="L86">    private String startStateRootHash;</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

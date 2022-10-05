@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CLTypeMap.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">casper-java-sdk</a> &gt; <a href="index.source.html" class="el_package">com.casper.sdk.model.clvalue.cltype</a> &gt; <span class="el_source">CLTypeMap.java</span></div><h1>CLTypeMap.java</h1><pre class="source lang-java linenums">package com.casper.sdk.model.clvalue.cltype;
+
+import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+/**
+ * CLType for {@link AbstractCLType#MAP}
+ *
+ * @author Alexandre Carvalho
+ * @author Andre Bertolace
+ * @see AbstractCLType
+ * @since 0.0.1
+ */
+@Getter
+<span class="pc bpc" id="L23" title="15 of 22 branches missed.">@EqualsAndHashCode(callSuper = false, of = {&quot;typeName&quot;, &quot;keyValueTypes&quot;})</span>
+<span class="fc" id="L24">public class CLTypeMap extends AbstractCLTypeWithChildren {</span>
+<span class="fc" id="L25">    private final String typeName = AbstractCLType.MAP;</span>
+
+    /**
+     * Support class for {@link AbstractCLType#MAP} entry types
+     *
+     * @author Alexandre Carvalho
+     * @author Andre Bertolace
+     * @see AbstractCLType
+     * @since 0.0.1
+     */
+    @Getter
+<span class="nc" id="L36">    @Setter</span>
+<span class="pc bpc" id="L37" title="15 of 22 branches missed.">    @EqualsAndHashCode</span>
+<span class="fc" id="L38">    @NoArgsConstructor</span>
+<span class="fc" id="L39">    @AllArgsConstructor</span>
+    public static class CLTypeMapEntryType {
+        @JsonIgnore
+<span class="fc" id="L42">        private AbstractCLType keyType;</span>
+        @JsonIgnore
+<span class="fc" id="L44">        private AbstractCLType valueType;</span>
+
+        @JsonSetter(&quot;key&quot;)
+        @ExcludeFromJacocoGeneratedReport
+        protected void setJsonKey(AbstractCLType clType) {
+            this.keyType = clType;
+        }
+
+        @JsonGetter(&quot;key&quot;)
+        @ExcludeFromJacocoGeneratedReport
+        protected Object getJsonKey() {
+            if (this.keyType instanceof AbstractCLTypeBasic) {
+                return this.keyType.getTypeName();
+            } else {
+                return this.keyType;
+            }
+        }
+
+        @JsonSetter(&quot;value&quot;)
+        @ExcludeFromJacocoGeneratedReport
+        protected void setJsonValue(AbstractCLType clType) {
+            this.valueType = clType;
+        }
+
+        @JsonGetter(&quot;value&quot;)
+        @ExcludeFromJacocoGeneratedReport
+        protected Object getJsonValue() {
+            if (this.valueType instanceof AbstractCLTypeBasic) {
+                return this.valueType.getTypeName();
+            } else {
+                return this.valueType;
+            }
+        }
+    }
+
+<span class="fc" id="L79">    @Setter</span>
+    @JsonProperty(MAP)
+<span class="fc" id="L81">    private CLTypeMapEntryType keyValueTypes;</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

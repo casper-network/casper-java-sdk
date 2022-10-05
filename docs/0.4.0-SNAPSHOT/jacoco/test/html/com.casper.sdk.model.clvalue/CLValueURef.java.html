@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CLValueURef.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">casper-java-sdk</a> &gt; <a href="index.source.html" class="el_package">com.casper.sdk.model.clvalue</a> &gt; <span class="el_source">CLValueURef.java</span></div><h1>CLValueURef.java</h1><pre class="source lang-java linenums">package com.casper.sdk.model.clvalue;
+
+import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
+import com.casper.sdk.exception.DynamicInstanceException;
+import com.casper.sdk.exception.NoSuchTypeException;
+import com.casper.sdk.model.clvalue.cltype.CLTypeURef;
+import com.casper.sdk.model.uref.URef;
+import com.casper.sdk.model.uref.URefAccessRight;
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonSetter;
+import dev.oak3.sbs4j.DeserializerBuffer;
+import dev.oak3.sbs4j.SerializerBuffer;
+import dev.oak3.sbs4j.exception.ValueDeserializationException;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.util.Objects;
+
+/**
+ * Casper Boolean CLURef implementation URef is a tuple that contains the
+ * address of the URef and the access rights to that URef. The serialized
+ * representation of the URef is 33 bytes long. The first 32 bytes are the byte
+ * representation of the URef address, and the last byte contains the bits
+ * corresponding to the access rights of the URef.
+ *
+ * @author Alexandre Carvalho
+ * @author Andre Bertolace
+ * @see AbstractCLValue
+ * @see URef
+ * @since 0.0.1
+ */
+@Getter
+<span class="nc" id="L34">@Setter</span>
+<span class="fc" id="L35">@NoArgsConstructor</span>
+public class CLValueURef extends AbstractCLValue&lt;URef, CLTypeURef&gt; {
+<span class="fc" id="L37">    private CLTypeURef clType = new CLTypeURef();</span>
+
+<span class="fc" id="L39">    public CLValueURef(URef value) {</span>
+<span class="fc" id="L40">        this.setValue(value);</span>
+<span class="fc" id="L41">    }</span>
+
+    @JsonGetter(&quot;cl_type&quot;)
+    @ExcludeFromJacocoGeneratedReport
+    protected String getJsonClType() {
+        return this.getClType().getTypeName();
+    }
+
+    @JsonSetter(&quot;cl_type&quot;)
+    @ExcludeFromJacocoGeneratedReport
+    protected void setJsonClType(CLTypeURef clType) {
+        this.clType = clType;
+    }
+
+    @Override
+    public void serialize(SerializerBuffer ser, boolean encodeType) throws NoSuchTypeException {
+<span class="pc bpc" id="L57" title="1 of 2 branches missed.">        if (this.getValue() == null) return;</span>
+
+<span class="fc" id="L59">        URef uref = this.getValue();</span>
+<span class="fc" id="L60">        byte[] urefByte = new byte[uref.getAddress().length + 1];</span>
+<span class="fc" id="L61">        System.arraycopy(uref.getAddress(), 0, urefByte, 0, uref.getAddress().length);</span>
+<span class="fc" id="L62">        urefByte[32] = uref.getAccessRight().serializationTag;</span>
+<span class="fc" id="L63">        ser.writeByteArray(urefByte);</span>
+
+<span class="pc bpc" id="L65" title="1 of 2 branches missed.">        if (encodeType) {</span>
+<span class="nc" id="L66">            this.encodeType(ser);</span>
+        }
+<span class="fc" id="L68">    }</span>
+
+    @Override
+    public void deserialize(DeserializerBuffer deser) throws ValueDeserializationException {
+        try {
+<span class="fc" id="L73">            URef uref = new URef();</span>
+<span class="fc" id="L74">            CLValueByteArray clValueByteArray = new CLValueByteArray(new byte[32]);</span>
+<span class="fc" id="L75">            clValueByteArray.deserialize(deser);</span>
+<span class="fc" id="L76">            uref.setAddress(clValueByteArray.getValue());</span>
+<span class="fc" id="L77">            CLValueU8 serializationTag = new CLValueU8((byte) 0);</span>
+<span class="fc" id="L78">            serializationTag.deserialize(deser);</span>
+<span class="fc" id="L79">            uref.setAccessRight(URefAccessRight.getTypeBySerializationTag(serializationTag.getValue()));</span>
+<span class="fc" id="L80">            setValue(uref);</span>
+<span class="nc" id="L81">        } catch (DynamicInstanceException e) {</span>
+<span class="nc" id="L82">            throw new ValueDeserializationException(String.format(&quot;Error deserializing %s&quot;, this.getClass().getSimpleName()), e);</span>
+<span class="fc" id="L83">        }</span>
+<span class="fc" id="L84">    }</span>
+
+    @ExcludeFromJacocoGeneratedReport
+    @Override
+    public boolean equals(final Object o) {
+        if (o == this)
+            return true;
+        if (!(o instanceof CLValueURef))
+            return false;
+        final CLValueURef other = (CLValueURef) o;
+        if (!other.canEqual(this))
+            return false;
+        final Object thisBytes = this.getBytes();
+        final Object otherBytes = other.getBytes();
+        if (!Objects.equals(thisBytes, otherBytes))
+            return false;
+        final URef thisValue = this.getValue();
+        final URef otherValue = other.getValue();
+        if (!Objects.equals(thisValue, otherValue))
+            return false;
+        final Object thisClType = this.getClType();
+        final Object otherClType = other.getClType();
+        return Objects.equals(thisClType, otherClType);
+    }
+
+    @ExcludeFromJacocoGeneratedReport
+    @Override
+    protected boolean canEqual(final Object other) {
+        return other instanceof CLValueURef;
+    }
+
+    @ExcludeFromJacocoGeneratedReport
+    @Override
+    public int hashCode() {
+        final int PRIME = 59;
+        int result = super.hashCode();
+        final Object thisClType = this.getClType();
+        result = result * PRIME + (thisClType == null ? 43 : thisClType.hashCode());
+        return result;
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

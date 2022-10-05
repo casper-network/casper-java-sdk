@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Bid.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">casper-java-sdk</a> &gt; <a href="index.source.html" class="el_package">com.casper.sdk.model.bid</a> &gt; <span class="el_source">Bid.java</span></div><h1>Bid.java</h1><pre class="source lang-java linenums">package com.casper.sdk.model.bid;
+
+import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
+import com.casper.sdk.model.key.PublicKey;
+import com.casper.sdk.model.uref.URef;
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
+import lombok.*;
+
+import java.math.BigInteger;
+import java.security.NoSuchAlgorithmException;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+/**
+ * An entry in the validator map.
+ *
+ * @author Alexandre Carvalho
+ * @author Andre Bertolace
+ * @since 0.0.1
+ */
+@Getter
+<span class="pc" id="L25">@Setter</span>
+<span class="pc bnc" id="L26" title="All 2 branches missed.">@Builder</span>
+<span class="nc" id="L27">@AllArgsConstructor</span>
+<span class="fc" id="L28">@NoArgsConstructor</span>
+public class Bid {
+
+    /**
+     * The purse that was used for bonding.
+     */
+    @JsonProperty(&quot;bonding_purse&quot;)
+<span class="fc" id="L35">    private URef bondingPurse;</span>
+
+    /**
+     * Delegation rate
+     */
+    @JsonProperty(&quot;delegation_rate&quot;)
+<span class="fc" id="L41">    private int delegationRate;</span>
+
+    /**
+     * This validator's delegators, indexed by their public keys
+     */
+    @JsonIgnore
+    @Builder.Default
+<span class="nc" id="L48">    private Map&lt;PublicKey, Delegator&gt; delegators = new LinkedHashMap&lt;&gt;();</span>
+
+    /**
+     * `true` if validator has been \&quot;evicted\&quot;
+     */
+<span class="fc" id="L53">    private boolean inactive;</span>
+
+    /**
+     * The amount of tokens staked by a validator (not including delegators).
+     */
+    @JsonIgnore
+<span class="nc" id="L59">    private BigInteger stakedAmount;</span>
+
+    /**
+     * Validator PublicKey
+     */
+    @JsonProperty(&quot;validator_public_key&quot;)
+<span class="fc" id="L65">    private PublicKey validatorPublicKey;</span>
+
+    /**
+     * Vesting schedule for a genesis validator. `None` if non-genesis validator.
+     */
+    @JsonProperty(&quot;vesting_schedule&quot;)
+<span class="fc" id="L71">    private VestingSchedule vestingSchedule;</span>
+
+    @JsonSetter(&quot;delegators&quot;)
+    @ExcludeFromJacocoGeneratedReport
+    protected void setJsonDelegators(Map&lt;String, Delegator&gt; node)
+            throws NoSuchAlgorithmException, IllegalArgumentException {
+        for (Map.Entry&lt;String, Delegator&gt; entry : node.entrySet()) {
+            PublicKey publicKey = PublicKey.fromTaggedHexString(entry.getKey());
+            Delegator delegator = entry.getValue();
+            this.delegators.put(publicKey, delegator);
+        }
+    }
+
+    @JsonGetter(&quot;delegators&quot;)
+    @ExcludeFromJacocoGeneratedReport
+    protected Map&lt;String, Delegator&gt; getJsonDelegators() {
+        Map&lt;String, Delegator&gt; out = new LinkedHashMap&lt;&gt;();
+        for (Map.Entry&lt;PublicKey, Delegator&gt; entry : this.delegators.entrySet()) {
+            out.put(entry.getKey().getAlgoTaggedHex(), entry.getValue());
+        }
+        return out;
+    }
+
+    @JsonProperty(&quot;staked_amount&quot;)
+    @ExcludeFromJacocoGeneratedReport
+    protected String getJsonStakedAmount() {
+        return this.stakedAmount.toString(10);
+    }
+
+    @JsonProperty(&quot;staked_amount&quot;)
+    @ExcludeFromJacocoGeneratedReport
+    protected void setJsonStakedAmount(String value) {
+        this.stakedAmount = new BigInteger(value, 10);
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

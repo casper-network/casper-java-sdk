@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CLValueKey.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">casper-java-sdk</a> &gt; <a href="index.source.html" class="el_package">com.casper.sdk.model.clvalue</a> &gt; <span class="el_source">CLValueKey.java</span></div><h1>CLValueKey.java</h1><pre class="source lang-java linenums">package com.casper.sdk.model.clvalue;
+
+import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
+import com.casper.sdk.exception.NoSuchKeyTagException;
+import com.casper.sdk.exception.NoSuchTypeException;
+import com.casper.sdk.model.clvalue.cltype.CLTypeKey;
+import com.casper.sdk.model.key.Key;
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonSetter;
+import dev.oak3.sbs4j.DeserializerBuffer;
+import dev.oak3.sbs4j.SerializerBuffer;
+import dev.oak3.sbs4j.exception.ValueDeserializationException;
+import dev.oak3.sbs4j.util.ByteUtils;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+/**
+ * Casper Key CLValue implementation
+ *
+ * @author Alexandre Carvalho
+ * @author Andre Bertolace
+ * @see AbstractCLValue
+ * @since 0.0.1
+ */
+@Getter
+<span class="nc" id="L28">@Setter</span>
+<span class="pc bpc" id="L29" title="10 of 16 branches missed.">@EqualsAndHashCode(callSuper = true)</span>
+<span class="fc" id="L30">@NoArgsConstructor</span>
+public class CLValueKey extends AbstractCLValue&lt;Key, CLTypeKey&gt; {
+<span class="fc" id="L32">    private CLTypeKey clType = new CLTypeKey();</span>
+
+    @JsonSetter(&quot;cl_type&quot;)
+    @ExcludeFromJacocoGeneratedReport
+    protected void setJsonClType(CLTypeKey clType) {
+        this.clType = clType;
+    }
+
+    @JsonGetter(&quot;cl_type&quot;)
+    @ExcludeFromJacocoGeneratedReport
+    protected String getJsonClType() {
+        return this.getClType().getTypeName();
+    }
+
+<span class="fc" id="L46">    public CLValueKey(Key value) {</span>
+<span class="fc" id="L47">        this.setValue(value);</span>
+<span class="fc" id="L48">    }</span>
+
+    @Override
+    public void serialize(SerializerBuffer ser, boolean encodeType) throws NoSuchTypeException {
+<span class="pc bpc" id="L52" title="1 of 2 branches missed.">        if (this.getValue() == null) return;</span>
+
+<span class="fc" id="L54">        ser.writeU8(this.getValue().getTag().getByteTag());</span>
+<span class="fc" id="L55">        ser.writeByteArray(this.getValue().getKey());</span>
+
+<span class="pc bpc" id="L57" title="1 of 2 branches missed.">        if (encodeType) {</span>
+<span class="nc" id="L58">            this.encodeType(ser);</span>
+        }
+<span class="fc" id="L60">    }</span>
+
+    @Override
+    public void deserialize(DeserializerBuffer deser) throws ValueDeserializationException {
+        try {
+<span class="fc" id="L65">            this.setValue(Key.fromTaggedHexString(ByteUtils.encodeHexString(deser.readByteArray(33))));</span>
+<span class="nc" id="L66">        } catch (IllegalArgumentException | NoSuchKeyTagException e) {</span>
+<span class="nc" id="L67">            throw new ValueDeserializationException(&quot;Error decoding CLValuePublicKey&quot;, e);</span>
+<span class="fc" id="L68">        }</span>
+<span class="fc" id="L69">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

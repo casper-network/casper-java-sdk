@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MinimalBlockInfo.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">casper-java-sdk</a> &gt; <a href="index.source.html" class="el_package">com.casper.sdk.model.status</a> &gt; <span class="el_source">MinimalBlockInfo.java</span></div><h1>MinimalBlockInfo.java</h1><pre class="source lang-java linenums">package com.casper.sdk.model.status;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.casper.sdk.model.key.PublicKey;
+import com.casper.sdk.model.peer.PeerData;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.math.BigInteger;
+import java.sql.Date;
+
+/**
+ * Minimal info of a `Block`
+ *
+ * @author Alexandre Carvalho
+ * @author Andre Bertolace
+ * @see PeerData
+ * @since 0.0.1
+ */
+@Getter
+<span class="fc" id="L25">@Setter</span>
+<span class="nc" id="L26">@Builder</span>
+<span class="nc" id="L27">@AllArgsConstructor</span>
+<span class="fc" id="L28">@NoArgsConstructor</span>
+public class MinimalBlockInfo {
+
+    /**
+     * @see PublicKey
+     */
+<span class="fc" id="L34">    private PublicKey creator;</span>
+
+    /**
+     * Era ID
+     */
+    @JsonProperty(&quot;era_id&quot;)
+<span class="fc" id="L40">    private BigInteger eraId;</span>
+
+    /**
+     * Block Hash
+     */
+<span class="fc" id="L45">    private String hash;</span>
+
+    /**
+     * Block Height
+     */
+<span class="fc" id="L50">    private BigInteger height;</span>
+
+    /**
+     * Hex-encoded hash digest
+     */
+    @JsonProperty(&quot;state_root_hash&quot;)
+<span class="fc" id="L56">    private String stateRootHash;</span>
+
+    /**
+     * Timestamp formatted as per RFC 3339
+     */
+    @JsonProperty(&quot;timestamp&quot;)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = &quot;yyyy-MM-dd'T'HH:mm:ss.SSS'Z'&quot;)
+<span class="fc" id="L63">    private Date timeStamp;</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

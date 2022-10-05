@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>NamedArg.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">casper-java-sdk</a> &gt; <a href="index.source.html" class="el_package">com.casper.sdk.model.deploy</a> &gt; <span class="el_source">NamedArg.java</span></div><h1>NamedArg.java</h1><pre class="source lang-java linenums">package com.casper.sdk.model.deploy;
+
+import com.casper.sdk.exception.NoSuchTypeException;
+import com.casper.sdk.model.clvalue.*;
+import com.casper.sdk.model.clvalue.cltype.AbstractCLType;
+import com.casper.sdk.model.clvalue.serde.CasperSerializableObject;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import dev.oak3.sbs4j.SerializerBuffer;
+import dev.oak3.sbs4j.exception.ValueSerializationException;
+import lombok.*;
+
+/**
+ * Named arguments to a contract
+ *
+ * @author Alexandre Carvalho
+ * @author Andre Bertolace
+ * @since 0.0.1
+ */
+@Getter
+<span class="fc" id="L20">@Setter</span>
+<span class="nc" id="L21">@Builder</span>
+<span class="fc" id="L22">@NoArgsConstructor</span>
+<span class="fc" id="L23">@AllArgsConstructor</span>
+@JsonFormat(shape = JsonFormat.Shape.ARRAY)
+public class NamedArg&lt;P extends AbstractCLType&gt; implements CasperSerializableObject {
+
+    /**
+     * The first value in the array is the type of the arg
+     */
+<span class="fc" id="L30">    private String type;</span>
+
+    /**
+     * The second value in the array is a CLValue type
+     */
+<span class="fc" id="L35">    private AbstractCLValue&lt;?, P&gt; clValue;</span>
+
+    @Override
+    public void serialize(SerializerBuffer ser, boolean encodeType) throws ValueSerializationException, NoSuchTypeException {
+<span class="fc" id="L39">        ser.writeString(type);</span>
+<span class="pc bpc" id="L40" title="1 of 4 branches missed.">        if (clValue instanceof CLValueI32 || clValue instanceof CLValueU32) {</span>
+<span class="fc" id="L41">            ser.writeI32(32 / 8);</span>
+        }
+<span class="pc bpc" id="L43" title="2 of 4 branches missed.">        if (clValue instanceof CLValueI64 || clValue instanceof CLValueU64) {</span>
+<span class="nc" id="L44">            ser.writeI32(64 / 8);</span>
+        }
+<span class="pc bpc" id="L46" title="2 of 8 branches missed.">        if (clValue instanceof CLValueU128 || clValue instanceof CLValueU256 ||</span>
+                clValue instanceof CLValueU512 || clValue instanceof CLValuePublicKey) {
+<span class="fc" id="L48">            SerializerBuffer localEncoder = new SerializerBuffer();</span>
+<span class="fc" id="L49">            clValue.serialize(localEncoder);</span>
+<span class="fc" id="L50">            int size = localEncoder.toByteArray().length;</span>
+<span class="fc" id="L51">            ser.writeI32(size); //removing the CLValue type byte at the end</span>
+        }
+<span class="fc bfc" id="L53" title="All 2 branches covered.">        if (clValue instanceof CLValueOption) {</span>
+<span class="fc" id="L54">            SerializerBuffer localEncoder = new SerializerBuffer();</span>
+<span class="fc" id="L55">            clValue.serialize(localEncoder);</span>
+<span class="fc" id="L56">            int size = localEncoder.toByteArray().length;</span>
+<span class="fc" id="L57">            ser.writeI32(size); //removing the CLValue type byte at the end</span>
+        }
+<span class="fc" id="L59">        clValue.serialize(ser, encodeType);</span>
+<span class="fc" id="L60">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>QueryBalanceData.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">casper-java-sdk</a> &gt; <a href="index.source.html" class="el_package">com.casper.sdk.model.balance</a> &gt; <span class="el_source">QueryBalanceData.java</span></div><h1>QueryBalanceData.java</h1><pre class="source lang-java linenums">package com.casper.sdk.model.balance;
+
+import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.math.BigInteger;
+
+/**
+ * Root class for a Casper balance data request Result for &quot;query_balance&quot;
+ * RPC response
+ *
+ * @author Alexandre Carvalho
+ * @author Andre Bertolace
+ * @since 0.2.0
+ */
+@Getter
+<span class="pc" id="L24">@Setter</span>
+<span class="nc" id="L25">@Builder</span>
+<span class="nc" id="L26">@AllArgsConstructor</span>
+<span class="fc" id="L27">@NoArgsConstructor</span>
+public class QueryBalanceData {
+
+    /**
+     * The RPC API version
+     */
+    @JsonProperty(&quot;api_version&quot;)
+<span class="fc" id="L34">    private String apiVersion;</span>
+
+    /**
+     * The balance value
+     */
+    @JsonIgnore
+<span class="fc" id="L40">    private BigInteger balance;</span>
+
+    @JsonProperty(&quot;balance&quot;)
+    @ExcludeFromJacocoGeneratedReport
+    protected String getJsonValue() {
+        return this.balance.toString(10);
+    }
+
+    @JsonProperty(&quot;balance&quot;)
+    @ExcludeFromJacocoGeneratedReport
+    protected void setJsonValue(String value) {
+        this.balance = new BigInteger(value, 10);
+    }
+   
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

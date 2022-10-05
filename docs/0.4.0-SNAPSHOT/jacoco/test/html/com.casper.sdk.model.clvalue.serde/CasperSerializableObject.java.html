@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CasperSerializableObject.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">casper-java-sdk</a> &gt; <a href="index.source.html" class="el_package">com.casper.sdk.model.clvalue.serde</a> &gt; <span class="el_source">CasperSerializableObject.java</span></div><h1>CasperSerializableObject.java</h1><pre class="source lang-java linenums">package com.casper.sdk.model.clvalue.serde;
+
+import com.casper.sdk.exception.NoSuchTypeException;
+import dev.oak3.sbs4j.SerializerBuffer;
+import dev.oak3.sbs4j.exception.ValueSerializationException;
+import dev.oak3.sbs4j.interfaces.SerializableObject;
+
+/**
+ * Defines an object as being capable of encoding with {@link SerializerBuffer}
+ *
+ * @author Alexandre Carvalho
+ * @author Andre Bertolace
+ * @since 0.2.2
+ */
+public interface CasperSerializableObject extends SerializableObject {
+    /**
+     * Called when the object's values must be serialized
+     *
+     * @param ser        the encoder to be used
+     * @param encodeType append encoded type?
+     * @throws ValueSerializationException exception holding information of failure to serialize a value
+     */
+    void serialize(SerializerBuffer ser, boolean encodeType) throws ValueSerializationException, NoSuchTypeException;
+
+    /**
+     * Called when the object's values must be serialized
+     * &lt;p&gt;
+     * Allows to use the default serialize with the custom casper serialize signature, defaulting encodeType to false
+     *
+     * @param ser the encoder to be used
+     * @throws ValueSerializationException exception holding information of failure to serialize a value
+     */
+    @Override
+    default void serialize(SerializerBuffer ser) throws ValueSerializationException {
+        try {
+<span class="fc" id="L36">            serialize(ser, false);</span>
+<span class="nc" id="L37">        } catch (NoSuchTypeException e) {</span>
+<span class="nc" id="L38">            throw new ValueSerializationException(String.format(&quot;Error serializing %s&quot;, this.getClass().getSimpleName()), e);</span>
+<span class="fc" id="L39">        }</span>
+<span class="fc" id="L40">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

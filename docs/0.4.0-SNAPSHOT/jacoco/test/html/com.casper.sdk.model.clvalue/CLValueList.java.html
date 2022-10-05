@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CLValueList.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">casper-java-sdk</a> &gt; <a href="index.source.html" class="el_package">com.casper.sdk.model.clvalue</a> &gt; <span class="el_source">CLValueList.java</span></div><h1>CLValueList.java</h1><pre class="source lang-java linenums">package com.casper.sdk.model.clvalue;
+
+import com.casper.sdk.exception.DynamicInstanceException;
+import com.casper.sdk.exception.NoSuchTypeException;
+import com.casper.sdk.model.clvalue.cltype.AbstractCLTypeWithChildren;
+import com.casper.sdk.model.clvalue.cltype.CLTypeData;
+import com.casper.sdk.model.clvalue.cltype.CLTypeList;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import dev.oak3.sbs4j.DeserializerBuffer;
+import dev.oak3.sbs4j.SerializerBuffer;
+import dev.oak3.sbs4j.exception.ValueDeserializationException;
+import dev.oak3.sbs4j.exception.ValueSerializationException;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.util.LinkedList;
+import java.util.List;
+
+/**
+ * Casper List CLValue implementation
+ *
+ * @author Alexandre Carvalho
+ * @author Andre Bertolace
+ * @see AbstractCLValue
+ * @since 0.0.1
+ */
+@Getter
+<span class="fc" id="L30">@Setter</span>
+<span class="pc bpc" id="L31" title="10 of 16 branches missed.">@EqualsAndHashCode(callSuper = true)</span>
+<span class="fc" id="L32">@NoArgsConstructor</span>
+public class CLValueList extends AbstractCLValue&lt;List&lt;? extends AbstractCLValue&lt;?, ?&gt;&gt;, CLTypeList&gt; {
+<span class="fc" id="L34">    @JsonProperty(&quot;cl_type&quot;)</span>
+<span class="fc" id="L35">    private CLTypeList clType = new CLTypeList();</span>
+
+<span class="fc" id="L37">    public CLValueList(List&lt;? extends AbstractCLValue&lt;?, ?&gt;&gt; value) {</span>
+<span class="fc" id="L38">        this.setValue(value);</span>
+<span class="fc" id="L39">        setListType();</span>
+<span class="fc" id="L40">    }</span>
+
+    @Override
+    public void serialize(SerializerBuffer ser, boolean encodeType) throws ValueSerializationException, NoSuchTypeException {
+<span class="pc bpc" id="L44" title="1 of 2 branches missed.">        if (this.getValue() == null) return;</span>
+
+<span class="fc" id="L46">        setListType();</span>
+
+        // List length is written first
+<span class="fc" id="L49">        CLValueI32 length = new CLValueI32(getValue().size());</span>
+<span class="fc" id="L50">        length.serialize(ser);</span>
+
+<span class="fc bfc" id="L52" title="All 2 branches covered.">        for (AbstractCLValue&lt;?, ?&gt; child : getValue()) {</span>
+<span class="fc" id="L53">            child.serialize(ser);</span>
+<span class="fc" id="L54">        }</span>
+
+<span class="pc bpc" id="L56" title="1 of 2 branches missed.">        if (encodeType) {</span>
+<span class="nc" id="L57">            this.encodeType(ser);</span>
+        }
+<span class="fc" id="L59">    }</span>
+
+    @Override
+    public void deserialize(DeserializerBuffer deser) throws ValueDeserializationException {
+        try {
+<span class="fc" id="L64">            CLTypeData childrenType = getClType().getListType().getClTypeData();</span>
+
+            // List length is sent first
+<span class="fc" id="L67">            CLValueI32 length = new CLValueI32();</span>
+<span class="fc" id="L68">            length.deserialize(deser);</span>
+
+<span class="fc" id="L70">            List&lt;AbstractCLValue&lt;?, ?&gt;&gt; list = new LinkedList&lt;&gt;();</span>
+<span class="fc bfc" id="L71" title="All 2 branches covered.">            for (int i = 0; i &lt; length.getValue(); i++) {</span>
+<span class="fc" id="L72">                AbstractCLValue&lt;?, ?&gt; child = CLTypeData.createCLValueFromCLTypeData(childrenType);</span>
+<span class="fc bfc" id="L73" title="All 2 branches covered.">                if (child.getClType() instanceof AbstractCLTypeWithChildren) {</span>
+<span class="fc" id="L74">                    ((AbstractCLTypeWithChildren) child.getClType())</span>
+<span class="fc" id="L75">                            .setChildTypes(((AbstractCLTypeWithChildren) clType.getListType()).getChildTypes());</span>
+                }
+<span class="fc" id="L77">                child.deserialize(deser);</span>
+<span class="fc" id="L78">                list.add(child);</span>
+            }
+
+<span class="fc" id="L81">            setValue(list);</span>
+<span class="nc" id="L82">        } catch (NoSuchTypeException | DynamicInstanceException e) {</span>
+<span class="nc" id="L83">            throw new ValueDeserializationException(String.format(&quot;Error deserializing %s&quot;, this.getClass().getSimpleName()), e);</span>
+<span class="fc" id="L84">        }</span>
+<span class="fc" id="L85">    }</span>
+
+    protected void setListType() {
+<span class="fc" id="L88">        clType.setListType(getValue().get(0).getClType());</span>
+<span class="fc" id="L89">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
