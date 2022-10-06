@@ -1,7 +1,16 @@
 package com.casper.sdk.model.clvalue.serde;
 
 import com.casper.sdk.exception.NoSuchTypeException;
-import com.casper.sdk.model.clvalue.*;
+import com.casper.sdk.model.clvalue.CLValueBool;
+import com.casper.sdk.model.clvalue.CLValueI32;
+import com.casper.sdk.model.clvalue.CLValueI64;
+import com.casper.sdk.model.clvalue.CLValueString;
+import com.casper.sdk.model.clvalue.CLValueU128;
+import com.casper.sdk.model.clvalue.CLValueU256;
+import com.casper.sdk.model.clvalue.CLValueU32;
+import com.casper.sdk.model.clvalue.CLValueU512;
+import com.casper.sdk.model.clvalue.CLValueU64;
+import com.casper.sdk.model.clvalue.CLValueU8;
 import com.casper.sdk.model.clvalue.cltype.AbstractCLType;
 import dev.oak3.sbs4j.DeserializerBuffer;
 import dev.oak3.sbs4j.SerializerBuffer;
@@ -17,7 +26,9 @@ import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Unit tests for {@link SerializerBuffer} and {@link DeserializerBuffer}
@@ -74,7 +85,7 @@ public class SerializerDeserializerTests {
             new TestData<>(AbstractCLType.U512, SerializerBuffer.MAX_U512.add(SerializerBuffer.ONE), null, null, Target.JSON));
 
     @Test
-    void validateDeserialize_with_SampleData() throws ValueDeserializationException, NoSuchTypeException {
+    void validateDeserialize_with_SampleData() throws ValueDeserializationException {
         for (TestData<?> testData : successTestDataList) {
             DeserializerBuffer deser = new DeserializerBuffer(testData.getHexEncodedValue());
             switch (testData.getName()) {
@@ -273,7 +284,6 @@ public class SerializerDeserializerTests {
 
     @Test
     void dataWithWrongInputLength_should_throw_IllegalArgumentException_or_ValueDeserializationException() {
-
         assertThrows(IllegalArgumentException.class, () -> new DeserializerBuffer("0"));
 
         final DeserializerBuffer deser2 = new DeserializerBuffer("01");

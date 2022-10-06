@@ -7,7 +7,6 @@ import com.casper.sdk.model.clvalue.serde.Target;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dev.oak3.sbs4j.DeserializerBuffer;
 import dev.oak3.sbs4j.SerializerBuffer;
-import dev.oak3.sbs4j.exception.ValueDeserializationException;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -55,12 +54,8 @@ public class CLValueByteArray extends AbstractCLValue<byte[], CLTypeByteArray> {
     }
 
     @Override
-    public void deserialize(DeserializerBuffer deser) throws ValueDeserializationException {
-        try {
-            this.setValue(deser.readByteArray(this.getClType().getLength()));
-        } catch (ValueSerializationException e) {
-            throw new ValueDeserializationException(String.format("Error deserializing %s", this.getClass().getSimpleName()), e);
-        }
+    public void deserializeCustom(DeserializerBuffer deser) throws Exception {
+        this.setValue(deser.readByteArray(this.getClType().getLength()));
     }
 
     @Override

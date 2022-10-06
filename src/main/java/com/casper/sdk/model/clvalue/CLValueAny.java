@@ -8,7 +8,6 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import dev.oak3.sbs4j.DeserializerBuffer;
 import dev.oak3.sbs4j.SerializerBuffer;
-import dev.oak3.sbs4j.exception.ValueDeserializationException;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -16,7 +15,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.bouncycastle.util.encoders.Hex;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 /**
  * Casper Object CLValue implementation
@@ -75,13 +78,12 @@ public class CLValueAny extends AbstractCLValue<Object, CLTypeAny> {
     }
 
     @Override
-    public void deserialize(DeserializerBuffer deser) throws ValueDeserializationException {
+    public void deserializeCustom(DeserializerBuffer deser)
+            throws Exception {
         int objectByteArrayLength = deser.readI32();
         try (ByteArrayInputStream bis = new ByteArrayInputStream(deser.readByteArray(objectByteArrayLength));
              ObjectInputStream ois = new ObjectInputStream(bis)) {
             this.setValue(ois.readObject());
-        } catch (IOException | ClassNotFoundException | ValueSerializationException e) {
-            throw new ValueDeserializationException(String.format("Error deserializing %s", this.getClass().getSimpleName()), e);
         }
     }
 }

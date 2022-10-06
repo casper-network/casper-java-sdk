@@ -1,6 +1,5 @@
 package com.casper.sdk.model.clvalue;
 
-import com.casper.sdk.exception.DynamicInstanceException;
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.cltype.AbstractCLTypeWithChildren;
 import com.casper.sdk.model.clvalue.cltype.CLTypeData;
@@ -63,34 +62,30 @@ public class CLValueFixedList extends AbstractCLValue<List<? extends AbstractCLV
     }
 
     @Override
-    public void deserialize(DeserializerBuffer deser) throws ValueDeserializationException {
-        try {
-            CLTypeData childrenType = getClType().getListType().getClTypeData();
+    public void deserializeCustom(DeserializerBuffer deser) throws Exception {
+        CLTypeData childrenType = getClType().getListType().getClTypeData();
 
-            List<AbstractCLValue<?, ?>> list = new LinkedList<>();
+        List<AbstractCLValue<?, ?>> list = new LinkedList<>();
 
-            boolean hasMoreItems = true;
-            do {
-                AbstractCLValue<?, ?> child = CLTypeData.createCLValueFromCLTypeData(childrenType);
-                if (child.getClType() instanceof AbstractCLTypeWithChildren) {
-                    ((AbstractCLTypeWithChildren) child.getClType())
-                            .setChildTypes(((AbstractCLTypeWithChildren) clType.getListType()).getChildTypes());
+        boolean hasMoreItems = true;
+        do {
+            AbstractCLValue<?, ?> child = CLTypeData.createCLValueFromCLTypeData(childrenType);
+            if (child.getClType() instanceof AbstractCLTypeWithChildren) {
+                ((AbstractCLTypeWithChildren) child.getClType())
+                        .setChildTypes(((AbstractCLTypeWithChildren) clType.getListType()).getChildTypes());
+            }
+            try {
+                child.deserializeCustom(deser);
+                list.add(child);
+            } catch (ValueDeserializationException valueDeserializationException) {
+                hasMoreItems = false;
+                if (deser.getBuffer().hasRemaining()) {
+                    throw valueDeserializationException;
                 }
-                try {
-                    child.deserialize(deser);
-                    list.add(child);
-                } catch (ValueDeserializationException valueDeserializationException) {
-                    hasMoreItems = false;
-                    if (deser.getBuffer().hasRemaining()) {
-                        throw valueDeserializationException;
-                    }
-                }
-            } while (hasMoreItems);
+            }
+        } while (hasMoreItems);
 
-            setValue(list);
-        } catch (NoSuchTypeException | DynamicInstanceException | ValueSerializationException e) {
-            throw new ValueDeserializationException(String.format("Error deserializing %s", this.getClass().getSimpleName()), e);
-        }
+        setValue(list);
     }
 
     protected void setListType(List<? extends AbstractCLValue<?, ?>> value) {

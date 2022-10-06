@@ -1,6 +1,5 @@
 package com.casper.sdk.model.clvalue;
 
-import com.casper.sdk.exception.DynamicInstanceException;
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.cltype.AbstractCLTypeWithChildren;
 import com.casper.sdk.model.clvalue.cltype.CLTypeData;
@@ -9,7 +8,6 @@ import com.casper.sdk.model.clvalue.serde.Target;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dev.oak3.sbs4j.DeserializerBuffer;
 import dev.oak3.sbs4j.SerializerBuffer;
-import dev.oak3.sbs4j.exception.ValueDeserializationException;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -74,28 +72,24 @@ public class CLValueOption extends AbstractCLValueWithChildren<Optional<Abstract
     }
 
     @Override
-    public void deserialize(DeserializerBuffer deser) throws ValueDeserializationException {
-        try {
-            CLValueBool isPresent = new CLValueBool();
-            isPresent.deserialize(deser);
+    public void deserializeCustom(DeserializerBuffer deser) throws Exception {
+        CLValueBool isPresent = new CLValueBool();
+        isPresent.deserializeCustom(deser);
 
-            CLTypeData childTypeData = clType.getChildType().getClTypeData();
+        CLTypeData childTypeData = clType.getChildType().getClTypeData();
 
-            AbstractCLValue<?, ?> child = CLTypeData.createCLValueFromCLTypeData(childTypeData);
+        AbstractCLValue<?, ?> child = CLTypeData.createCLValueFromCLTypeData(childTypeData);
 
-            if (child.getClType() instanceof AbstractCLTypeWithChildren) {
-                ((AbstractCLTypeWithChildren) child.getClType())
-                        .setChildTypes(((AbstractCLTypeWithChildren) clType.getChildType()).getChildTypes());
-            }
-
-            if (isPresent.getValue().equals(Boolean.TRUE)) {
-                child.deserialize(deser);
-            }
-
-            setValue(Optional.of(child));
-        } catch (NoSuchTypeException | DynamicInstanceException | ValueSerializationException e) {
-            throw new ValueDeserializationException(String.format("Error deserializing %s", this.getClass().getSimpleName()), e);
+        if (child.getClType() instanceof AbstractCLTypeWithChildren) {
+            ((AbstractCLTypeWithChildren) child.getClType())
+                    .setChildTypes(((AbstractCLTypeWithChildren) clType.getChildType()).getChildTypes());
         }
+
+        if (isPresent.getValue().equals(Boolean.TRUE)) {
+            child.deserializeCustom(deser);
+        }
+
+        setValue(Optional.of(child));
     }
 
     @Override

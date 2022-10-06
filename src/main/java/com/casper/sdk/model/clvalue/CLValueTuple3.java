@@ -1,6 +1,5 @@
 package com.casper.sdk.model.clvalue;
 
-import com.casper.sdk.exception.DynamicInstanceException;
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.cltype.AbstractCLTypeWithChildren;
 import com.casper.sdk.model.clvalue.cltype.CLTypeData;
@@ -9,7 +8,6 @@ import com.casper.sdk.model.clvalue.serde.Target;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dev.oak3.sbs4j.DeserializerBuffer;
 import dev.oak3.sbs4j.SerializerBuffer;
-import dev.oak3.sbs4j.exception.ValueDeserializationException;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -64,37 +62,33 @@ public class CLValueTuple3 extends
     }
 
     @Override
-    public void deserialize(DeserializerBuffer deser) throws ValueDeserializationException {
-        try {
-            CLTypeData childTypeData1 = clType.getChildClTypeData(0);
-            CLTypeData childTypeData2 = clType.getChildClTypeData(1);
-            CLTypeData childTypeData3 = clType.getChildClTypeData(2);
+    public void deserializeCustom(DeserializerBuffer deser) throws Exception {
+        CLTypeData childTypeData1 = clType.getChildClTypeData(0);
+        CLTypeData childTypeData2 = clType.getChildClTypeData(1);
+        CLTypeData childTypeData3 = clType.getChildClTypeData(2);
 
-            AbstractCLValue<?, ?> child1 = CLTypeData.createCLValueFromCLTypeData(childTypeData1);
-            if (child1.getClType() instanceof AbstractCLTypeWithChildren) {
-                ((AbstractCLTypeWithChildren) child1.getClType())
-                        .setChildTypes(((AbstractCLTypeWithChildren) clType.getChildTypes().get(0)).getChildTypes());
-            }
-            child1.deserialize(deser);
-
-            AbstractCLValue<?, ?> child2 = CLTypeData.createCLValueFromCLTypeData(childTypeData2);
-            if (child2.getClType() instanceof AbstractCLTypeWithChildren) {
-                ((AbstractCLTypeWithChildren) child2.getClType())
-                        .setChildTypes(((AbstractCLTypeWithChildren) clType.getChildTypes().get(1)).getChildTypes());
-            }
-            child2.deserialize(deser);
-
-            AbstractCLValue<?, ?> child3 = CLTypeData.createCLValueFromCLTypeData(childTypeData3);
-            if (child3.getClType() instanceof AbstractCLTypeWithChildren) {
-                ((AbstractCLTypeWithChildren) child3.getClType())
-                        .setChildTypes(((AbstractCLTypeWithChildren) clType.getChildTypes().get(2)).getChildTypes());
-            }
-            child3.deserialize(deser);
-
-            setValue(new Triplet<>(child1, child2, child3));
-        } catch (NoSuchTypeException | DynamicInstanceException | ValueSerializationException e) {
-            throw new ValueDeserializationException(String.format("Error deserializing %s", this.getClass().getSimpleName()), e);
+        AbstractCLValue<?, ?> child1 = CLTypeData.createCLValueFromCLTypeData(childTypeData1);
+        if (child1.getClType() instanceof AbstractCLTypeWithChildren) {
+            ((AbstractCLTypeWithChildren) child1.getClType())
+                    .setChildTypes(((AbstractCLTypeWithChildren) clType.getChildTypes().get(0)).getChildTypes());
         }
+        child1.deserializeCustom(deser);
+
+        AbstractCLValue<?, ?> child2 = CLTypeData.createCLValueFromCLTypeData(childTypeData2);
+        if (child2.getClType() instanceof AbstractCLTypeWithChildren) {
+            ((AbstractCLTypeWithChildren) child2.getClType())
+                    .setChildTypes(((AbstractCLTypeWithChildren) clType.getChildTypes().get(1)).getChildTypes());
+        }
+        child2.deserializeCustom(deser);
+
+        AbstractCLValue<?, ?> child3 = CLTypeData.createCLValueFromCLTypeData(childTypeData3);
+        if (child3.getClType() instanceof AbstractCLTypeWithChildren) {
+            ((AbstractCLTypeWithChildren) child3.getClType())
+                    .setChildTypes(((AbstractCLTypeWithChildren) clType.getChildTypes().get(2)).getChildTypes());
+        }
+        child3.deserializeCustom(deser);
+
+        setValue(new Triplet<>(child1, child2, child3));
     }
 
     @Override

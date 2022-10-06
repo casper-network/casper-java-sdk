@@ -28,8 +28,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
 
-import java.lang.reflect.InvocationTargetException;
-
 /**
  * Base class for CLValues
  *
@@ -61,14 +59,17 @@ public abstract class AbstractCLValue<T, P extends AbstractCLType>
         this.serialize(new SerializerBuffer());
     }
 
-    @SneakyThrows({ValueDeserializationException.class})
-    @JsonSetter(value = "bytes")
-    @ExcludeFromJacocoGeneratedReport
-    protected void setJsonBytes(String bytes) {
-        this.bytes = bytes;
-
-        DeserializerBuffer deser = new DeserializerBuffer(this.bytes);
-        this.deserialize(deser);
+    public static AbstractCLValue<?, ?> createInstanceFromBytes(DeserializerBuffer deser) throws ValueDeserializationException {
+        int length = deser.readI32();
+        byte[] bytes = deser.readByteArray(length);
+        byte clType = deser.readU8();
+        try {
+            AbstractCLValue<?, ?> clValue = CLTypeData.getTypeBySerializationTag(clType).getClazz().getDeclaredConstructor().newInstance();
+            clValue.deserializeCustom(new DeserializerBuffer(Hex.encode(bytes)));
+            return clValue;
+        } catch (Exception e) {
+            throw new ValueDeserializationException("Error while instantiating CLValue", e);
+        }
     }
 
     @SneakyThrows({ValueSerializationException.class, NoSuchTypeException.class})
@@ -95,8 +96,19 @@ public abstract class AbstractCLValue<T, P extends AbstractCLType>
         ser.writeI32(size);
     }
 
+    @SneakyThrows({ValueDeserializationException.class})
+    @JsonSetter(value = "bytes")
+    @ExcludeFromJacocoGeneratedReport
+    protected void setJsonBytes(String bytes) {
+        this.bytes = bytes;
+
+        DeserializerBuffer deser = new DeserializerBuffer(this.bytes);
+
+        this.deserialize(deser);
+    }
+
     @Override
-    public AbstractCLValue<?, ?> deserialize(DeserializerBuffer deser, Target target) throws ValueDeserializationException, NoSuchTypeException {
+    public AbstractCLValue<?, ?> deserialize(DeserializerBuffer deser, Target target) throws ValueDeserializationException {
         if (target.equals(Target.BYTE)) {
             return AbstractCLValue.createInstanceFromBytes(deser);
         } else {
@@ -105,25 +117,19 @@ public abstract class AbstractCLValue<T, P extends AbstractCLType>
         }
     }
 
-    public static AbstractCLValue<?, ?> createInstanceFromBytes(DeserializerBuffer deser) throws ValueDeserializationException, NoSuchTypeException {
-        int length = deser.readI32();
-        byte[] bytes = deser.readByteArray(length);
-        byte clType = deser.readU8();
-        try {
-            AbstractCLValue<?, ?> clValue = CLTypeData.getTypeBySerializationTag(clType).getClazz().getDeclaredConstructor().newInstance();
-            clValue.deserialize(new DeserializerBuffer(Hex.encode(bytes)));
-            return clValue;
-        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException |
-                 InvocationTargetException e) {
-            throw new ValueDeserializationException("Error while instantiating CLValue", e);
-        }
-    }
-
     @Override
     public abstract void serialize(SerializerBuffer ser, Target target) throws ValueSerializationException, NoSuchTypeException;
 
+    public abstract void deserializeCustom(DeserializerBuffer deserializerBuffer) throws Exception;
+
     @Override
-    public abstract void deserialize(DeserializerBuffer deserializerBuffer) throws ValueDeserializationException;
+    public void deserialize(DeserializerBuffer deserializerBuffer) throws ValueDeserializationException {
+        try {
+            this.deserializeCustom(deserializerBuffer);
+        } catch (Exception e) {
+            throw new ValueDeserializationException("Error serializing value", e);
+        }
+    }
 
     protected void encodeType(SerializerBuffer ser) throws NoSuchTypeException {
         byte val = (getClType().getClTypeData().getSerializationTag());

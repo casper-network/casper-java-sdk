@@ -1,6 +1,5 @@
 package com.casper.sdk.model.clvalue;
 
-import com.casper.sdk.exception.DynamicInstanceException;
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.cltype.AbstractCLTypeWithChildren;
 import com.casper.sdk.model.clvalue.cltype.CLTypeData;
@@ -9,7 +8,6 @@ import com.casper.sdk.model.clvalue.serde.Target;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dev.oak3.sbs4j.DeserializerBuffer;
 import dev.oak3.sbs4j.SerializerBuffer;
-import dev.oak3.sbs4j.exception.ValueDeserializationException;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -67,29 +65,25 @@ public class CLValueList extends AbstractCLValueWithChildren<List<? extends Abst
     }
 
     @Override
-    public void deserialize(DeserializerBuffer deser) throws ValueDeserializationException {
-        try {
-            CLTypeData childrenType = getClType().getListType().getClTypeData();
+    public void deserializeCustom(DeserializerBuffer deser) throws Exception {
+        CLTypeData childrenType = getClType().getListType().getClTypeData();
 
-            // List length is sent first
-            CLValueI32 length = new CLValueI32();
-            length.deserialize(deser);
+        // List length is sent first
+        CLValueI32 length = new CLValueI32();
+        length.deserializeCustom(deser);
 
-            List<AbstractCLValue<?, ?>> list = new LinkedList<>();
-            for (int i = 0; i < length.getValue(); i++) {
-                AbstractCLValue<?, ?> child = CLTypeData.createCLValueFromCLTypeData(childrenType);
-                if (child.getClType() instanceof AbstractCLTypeWithChildren) {
-                    ((AbstractCLTypeWithChildren) child.getClType())
-                            .setChildTypes(((AbstractCLTypeWithChildren) clType.getListType()).getChildTypes());
-                }
-                child.deserialize(deser);
-                list.add(child);
+        List<AbstractCLValue<?, ?>> list = new LinkedList<>();
+        for (int i = 0; i < length.getValue(); i++) {
+            AbstractCLValue<?, ?> child = CLTypeData.createCLValueFromCLTypeData(childrenType);
+            if (child.getClType() instanceof AbstractCLTypeWithChildren) {
+                ((AbstractCLTypeWithChildren) child.getClType())
+                        .setChildTypes(((AbstractCLTypeWithChildren) clType.getListType()).getChildTypes());
             }
-
-            setValue(list);
-        } catch (NoSuchTypeException | DynamicInstanceException | ValueSerializationException e) {
-            throw new ValueDeserializationException(String.format("Error deserializing %s", this.getClass().getSimpleName()), e);
+            child.deserializeCustom(deser);
+            list.add(child);
         }
+
+        setValue(list);
     }
 
     @Override

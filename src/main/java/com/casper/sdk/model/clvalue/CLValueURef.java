@@ -1,7 +1,6 @@
 package com.casper.sdk.model.clvalue;
 
 import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
-import com.casper.sdk.exception.DynamicInstanceException;
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.cltype.CLTypeURef;
 import com.casper.sdk.model.clvalue.serde.Target;
@@ -11,7 +10,6 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import dev.oak3.sbs4j.DeserializerBuffer;
 import dev.oak3.sbs4j.SerializerBuffer;
-import dev.oak3.sbs4j.exception.ValueDeserializationException;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -77,19 +75,15 @@ public class CLValueURef extends AbstractCLValue<URef, CLTypeURef> {
     }
 
     @Override
-    public void deserialize(DeserializerBuffer deser) throws ValueDeserializationException {
-        try {
-            URef uref = new URef();
-            CLValueByteArray clValueByteArray = new CLValueByteArray(new byte[32]);
-            clValueByteArray.deserialize(deser);
-            uref.setAddress(clValueByteArray.getValue());
-            CLValueU8 serializationTag = new CLValueU8((byte) 0);
-            serializationTag.deserialize(deser);
-            uref.setAccessRight(URefAccessRight.getTypeBySerializationTag(serializationTag.getValue()));
-            setValue(uref);
-        } catch (DynamicInstanceException | ValueSerializationException e) {
-            throw new ValueDeserializationException(String.format("Error deserializing %s", this.getClass().getSimpleName()), e);
-        }
+    public void deserializeCustom(DeserializerBuffer deser) throws Exception {
+        URef uref = new URef();
+        CLValueByteArray clValueByteArray = new CLValueByteArray(new byte[32]);
+        clValueByteArray.deserializeCustom(deser);
+        uref.setAddress(clValueByteArray.getValue());
+        CLValueU8 serializationTag = new CLValueU8((byte) 0);
+        serializationTag.deserializeCustom(deser);
+        uref.setAccessRight(URefAccessRight.getTypeBySerializationTag(serializationTag.getValue()));
+        setValue(uref);
     }
 
     @ExcludeFromJacocoGeneratedReport

@@ -8,9 +8,11 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import dev.oak3.sbs4j.DeserializerBuffer;
 import dev.oak3.sbs4j.SerializerBuffer;
-import dev.oak3.sbs4j.exception.ValueDeserializationException;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
-import lombok.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.bouncycastle.util.encoders.Hex;
 import org.jetbrains.annotations.NotNull;
 
@@ -63,11 +65,7 @@ public class CLValueBool extends AbstractCLValue<Boolean, CLTypeBool> {
     }
 
     @Override
-    public void deserialize(DeserializerBuffer deser) throws ValueDeserializationException {
-        try {
-            this.setValue(deser.readBool());
-        } catch (ValueSerializationException e) {
-            throw new ValueDeserializationException("Error serializing value", e);
-        }
+    public void deserializeCustom(DeserializerBuffer deser) throws Exception {
+        this.setValue(deser.readBool());
     }
 }

@@ -1,6 +1,5 @@
 package com.casper.sdk.model.clvalue;
 
-import com.casper.sdk.exception.DynamicInstanceException;
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.cltype.AbstractCLTypeWithChildren;
 import com.casper.sdk.model.clvalue.cltype.CLTypeData;
@@ -9,9 +8,13 @@ import com.casper.sdk.model.clvalue.serde.Target;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dev.oak3.sbs4j.DeserializerBuffer;
 import dev.oak3.sbs4j.SerializerBuffer;
-import dev.oak3.sbs4j.exception.ValueDeserializationException;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.bouncycastle.util.encoders.Hex;
 
 /**
@@ -82,35 +85,31 @@ public class CLValueResult extends AbstractCLValue<CLValueResult.Result, CLTypeR
     }
 
     @Override
-    public void deserialize(DeserializerBuffer deser) throws ValueDeserializationException {
-        try {
-            Result result = new Result();
-            CLValueBool bool = new CLValueBool();
-            bool.setValue(deser.readBool());
-            CLTypeData typeOk = clType.getOkErrTypes().getOkClType().getClTypeData();
-            AbstractCLValue<?, ?> clValueOk = CLTypeData.createCLValueFromCLTypeData(typeOk);
-            if (clValueOk.getClType() instanceof AbstractCLTypeWithChildren) {
-                ((AbstractCLTypeWithChildren) clValueOk.getClType()).getChildTypes()
-                        .addAll(((AbstractCLTypeWithChildren) clType.getOkErrTypes().getOkClType()).getChildTypes());
-            }
-            clValueOk.deserialize(deser);
-            result.setOk(clValueOk);
-
-            bool = new CLValueBool();
-            bool.deserialize(deser);
-            CLTypeData typeErr = clType.getOkErrTypes().getErrClType().getClTypeData();
-            AbstractCLValue<?, ?> clValueErr = CLTypeData.createCLValueFromCLTypeData(typeErr);
-            if (clValueErr.getClType() instanceof AbstractCLTypeWithChildren) {
-                ((AbstractCLTypeWithChildren) clValueErr.getClType()).getChildTypes()
-                        .addAll(((AbstractCLTypeWithChildren) clType.getOkErrTypes().getErrClType()).getChildTypes());
-            }
-            clValueErr.deserialize(deser);
-            result.setErr(clValueErr);
-
-            setValue(result);
-        } catch (NoSuchTypeException | DynamicInstanceException | ValueSerializationException e) {
-            throw new ValueDeserializationException(String.format("Error deserializing %s", this.getClass().getSimpleName()), e);
+    public void deserializeCustom(DeserializerBuffer deser) throws Exception {
+        Result result = new Result();
+        CLValueBool bool = new CLValueBool();
+        bool.setValue(deser.readBool());
+        CLTypeData typeOk = clType.getOkErrTypes().getOkClType().getClTypeData();
+        AbstractCLValue<?, ?> clValueOk = CLTypeData.createCLValueFromCLTypeData(typeOk);
+        if (clValueOk.getClType() instanceof AbstractCLTypeWithChildren) {
+            ((AbstractCLTypeWithChildren) clValueOk.getClType()).getChildTypes()
+                    .addAll(((AbstractCLTypeWithChildren) clType.getOkErrTypes().getOkClType()).getChildTypes());
         }
+        clValueOk.deserializeCustom(deser);
+        result.setOk(clValueOk);
+
+        bool = new CLValueBool();
+        bool.deserializeCustom(deser);
+        CLTypeData typeErr = clType.getOkErrTypes().getErrClType().getClTypeData();
+        AbstractCLValue<?, ?> clValueErr = CLTypeData.createCLValueFromCLTypeData(typeErr);
+        if (clValueErr.getClType() instanceof AbstractCLTypeWithChildren) {
+            ((AbstractCLTypeWithChildren) clValueErr.getClType()).getChildTypes()
+                    .addAll(((AbstractCLTypeWithChildren) clType.getOkErrTypes().getErrClType()).getChildTypes());
+        }
+        clValueErr.deserializeCustom(deser);
+        result.setErr(clValueErr);
+
+        setValue(result);
     }
 
     protected void setChildTypes(AbstractCLValue<?, ?> ok, AbstractCLValue<?, ?> err) {
