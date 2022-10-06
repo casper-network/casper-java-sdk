@@ -7,11 +7,15 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -45,7 +49,7 @@ public class Bid {
      */
     @JsonIgnore
     @Builder.Default
-    private Map<PublicKey, Delegator> delegators = new HashMap<>();
+    private Map<PublicKey, Delegator> delegators = new LinkedHashMap<>();
 
     /**
      * `true` if validator has been \"evicted\"
@@ -84,7 +88,7 @@ public class Bid {
     @JsonGetter("delegators")
     @ExcludeFromJacocoGeneratedReport
     protected Map<String, Delegator> getJsonDelegators() {
-        Map<String, Delegator> out = new HashMap<>();
+        Map<String, Delegator> out = new LinkedHashMap<>();
         for (Map.Entry<PublicKey, Delegator> entry : this.delegators.entrySet()) {
             out.put(entry.getKey().getAlgoTaggedHex(), entry.getValue());
         }

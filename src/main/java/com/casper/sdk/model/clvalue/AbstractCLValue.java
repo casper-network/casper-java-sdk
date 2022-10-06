@@ -8,8 +8,13 @@ import com.casper.sdk.model.clvalue.cltype.CLTypeData;
 import com.casper.sdk.model.clvalue.serde.CasperDeserializableObject;
 import com.casper.sdk.model.clvalue.serde.CasperSerializableObject;
 import com.casper.sdk.model.clvalue.serde.Target;
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonTypeResolver;
 import com.syntifi.crypto.key.encdec.Hex;
 import dev.oak3.sbs4j.DeserializerBuffer;
@@ -17,12 +22,13 @@ import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueDeserializationException;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
 import dev.oak3.sbs4j.util.ByteUtils;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.SneakyThrows;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
 
 /**
  * Base class for CLValues
@@ -35,6 +41,7 @@ import java.util.Objects;
 @Getter
 @JsonTypeInfo(use = JsonTypeInfo.Id.NONE)
 @JsonTypeResolver(CLValueResolver.class)
+@EqualsAndHashCode(of = {"bytes", "value"})
 public abstract class AbstractCLValue<T, P extends AbstractCLType>
         implements CasperSerializableObject, CasperDeserializableObject {
 
@@ -121,27 +128,5 @@ public abstract class AbstractCLValue<T, P extends AbstractCLType>
     protected void encodeType(SerializerBuffer ser) throws NoSuchTypeException {
         byte val = (getClType().getClTypeData().getSerializationTag());
         ser.writeU8(val);
-    }
-
-    @Override
-    public boolean equals(final Object o) {
-        if (o == this) return true;
-        if (!(o instanceof AbstractCLValue)) return false;
-        final AbstractCLValue<?, ?> other = (AbstractCLValue<?, ?>) o;
-        if (!other.canEqual(this)) return false;
-        final Object this$bytes = this.getBytes();
-        final Object other$bytes = other.getBytes();
-        if (!Objects.equals(this$bytes, other$bytes)) return false;
-        final Object this$value = this.getValue();
-        final Object other$value = other.getValue();
-        if (this$value instanceof Map) {
-            return other$value.equals(other$value);
-        } else {
-            return Objects.equals(this$value, other$value);
-        }
-    }
-
-    protected boolean canEqual(final Object other) {
-        return other instanceof AbstractCLValue;
     }
 }

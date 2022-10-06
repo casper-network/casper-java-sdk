@@ -12,15 +12,15 @@ import dev.oak3.sbs4j.DeserializerBuffer;
 import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueDeserializationException;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.bouncycastle.util.encoders.Hex;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 
 /**
  * Casper Map CLValue implementation
@@ -32,7 +32,6 @@ import java.util.Map.Entry;
  */
 @Getter
 @Setter
-@EqualsAndHashCode(callSuper = true, of = {"clType"})
 @NoArgsConstructor
 public class CLValueMap extends
         AbstractCLValueWithChildren<Map<? extends AbstractCLValue<?, ?>, ? extends AbstractCLValue<?, ?>>, CLTypeMap> {
@@ -75,7 +74,7 @@ public class CLValueMap extends
             CLTypeData keyType = clType.getKeyValueTypes().getKeyType().getClTypeData();
             CLTypeData valType = clType.getKeyValueTypes().getValueType().getClTypeData();
 
-            Map<AbstractCLValue<?, ?>, AbstractCLValue<?, ?>> map = new HashMap<>();
+            Map<AbstractCLValue<?, ?>, AbstractCLValue<?, ?>> map = new LinkedHashMap<>();
             CLValueI32 mapLength = new CLValueI32(0);
             mapLength.deserialize(deser);
 
@@ -112,10 +111,59 @@ public class CLValueMap extends
     @Override
     @JsonIgnore
     protected void setChildTypes(Map<? extends AbstractCLValue<?, ?>, ? extends AbstractCLValue<?, ?>> value) {
-        Entry<? extends AbstractCLValue<?, ?>, ? extends AbstractCLValue<?, ?>> entry = value.entrySet().iterator()
-                .next();
+        Entry<? extends AbstractCLValue<?, ?>, ? extends AbstractCLValue<?, ?>> entry = value.entrySet().iterator().next();
 
-        clType.setKeyValueTypes(
-                new CLTypeMap.CLTypeMapEntryType(entry.getKey().getClType(), entry.getValue().getClType()));
+        clType.setKeyValueTypes(new CLTypeMap.CLTypeMapEntryType(entry.getKey().getClType(), entry.getValue().getClType()));
+    }
+
+    // This needed to be customized to ensure equality is being checked correctly.
+    // The java Map equals method tries to get the "other" map entry's value by using "this" key object,
+    // which then fails to find the object since they are "different" and returns always null.
+    @Override
+    public boolean equals(final Object o) {
+        if (o == this) return true;
+        if (!(o instanceof CLValueMap)) return false;
+        final CLValueMap other = (CLValueMap) o;
+        if (!other.canEqual(this)) return false;
+
+        final Object this$clType = this.getClType();
+        final Object other$clType = other.getClType();
+        if (!Objects.equals(this$clType, other$clType)) return false;
+
+        final Object this$bytes = this.getBytes();
+        final Object other$bytes = other.getBytes();
+        if (!Objects.equals(this$bytes, other$bytes)) return false;
+        final Map<? extends AbstractCLValue<?, ?>, ? extends AbstractCLValue<?, ?>> this$value = this.getValue();
+        final Map<? extends AbstractCLValue<?, ?>, ? extends AbstractCLValue<?, ?>> other$value = other.getValue();
+
+        for (Entry<? extends AbstractCLValue<?, ?>, ? extends AbstractCLValue<?, ?>> this$entry : this$value.entrySet()) {
+            AbstractCLValue<?, ?> this$entryKey = this$entry.getKey();
+            AbstractCLValue<?, ?> this$entryValue = this$entry.getValue();
+            boolean found = false;
+            for (Entry<? extends AbstractCLValue<?, ?>, ? extends AbstractCLValue<?, ?>> other$entry : other$value.entrySet()) {
+                AbstractCLValue<?, ?> other$entryKey = other$entry.getKey();
+                AbstractCLValue<?, ?> other$entryValue = other$entry.getValue();
+                if (this$entryKey.equals(other$entryKey) && this$entryValue.equals(other$entryValue)) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) return false;
+        }
+
+        return true;
+    }
+
+    protected boolean canEqual(final Object other) {
+        return other instanceof CLValueMap;
+    }
+
+    @Override
+    public int hashCode() {
+        final int PRIME = 59;
+        int result = super.hashCode();
+        final Object $clType = this.getClType();
+        result = result * PRIME + ($clType == null ? 43 : $clType.hashCode());
+        return result;
     }
 }
