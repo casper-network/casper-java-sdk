@@ -1,12 +1,15 @@
 package com.casper.sdk.model.deploy;
 
+import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.serde.CasperSerializableObject;
+import com.casper.sdk.model.clvalue.serde.Target;
 import com.casper.sdk.model.common.Digest;
 import com.casper.sdk.model.common.Ttl;
 import com.casper.sdk.model.key.PublicKey;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dev.oak3.sbs4j.SerializerBuffer;
+import dev.oak3.sbs4j.exception.ValueSerializationException;
 import lombok.*;
 
 import java.util.Date;
@@ -70,12 +73,12 @@ public class DeployHeader implements CasperSerializableObject {
      * Implements DeployHearder encoder
      */
     @Override
-    public void serialize(SerializerBuffer ser, boolean encodeType) {
-        account.serialize(ser, encodeType);
+    public void serialize(SerializerBuffer ser, Target target) throws NoSuchTypeException, ValueSerializationException {
+        account.serialize(ser, target);
         ser.writeI64(timeStamp.getTime());
-        ttl.serialize(ser, encodeType);
+        ttl.serialize(ser, target);
         ser.writeI64(gasPrice);
-        bodyHash.serialize(ser, encodeType);
+        bodyHash.serialize(ser, target);
         if (dependencies != null) {
             ser.writeI32(dependencies.size());
             for (Digest dependency : dependencies) {

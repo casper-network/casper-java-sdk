@@ -1,6 +1,7 @@
 package com.casper.sdk.model.key;
 
 import com.casper.sdk.model.clvalue.serde.CasperSerializableObject;
+import com.casper.sdk.model.clvalue.serde.Target;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonValue;
 import dev.oak3.sbs4j.SerializerBuffer;
@@ -43,7 +44,7 @@ public abstract class AbstractSerializedKeyTaggedHex<T extends Tag> implements C
      * Implements TaggedHEx encoder
      */
     @Override
-    public void serialize(SerializerBuffer ser, boolean encodeType) {
+    public void serialize(SerializerBuffer ser, Target target) {
         ser.writeU8(getTag().getByteTag());
         ser.writeByteArray(getKey());
     }

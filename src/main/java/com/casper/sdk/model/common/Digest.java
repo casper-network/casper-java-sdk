@@ -1,6 +1,7 @@
 package com.casper.sdk.model.common;
 
 import com.casper.sdk.model.clvalue.serde.CasperSerializableObject;
+import com.casper.sdk.model.clvalue.serde.Target;
 import com.fasterxml.jackson.annotation.JsonValue;
 import dev.oak3.sbs4j.SerializerBuffer;
 import lombok.*;
@@ -40,7 +41,7 @@ public class Digest implements CasperSerializableObject {
      * Implements Digest encoder
      */
     @Override
-    public void serialize(SerializerBuffer ser, boolean encodeType) {
+    public void serialize(SerializerBuffer ser, Target target) {
         ser.writeByteArray(getDigest());
     }
 }
