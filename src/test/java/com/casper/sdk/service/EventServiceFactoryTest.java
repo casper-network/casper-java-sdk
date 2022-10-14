@@ -18,8 +18,8 @@ import static org.hamcrest.core.IsNull.notNullValue;
 class EventServiceFactoryTest {
 
     @Test
-    void createUsingHostString() {
-        final EventService eventService = EventServiceFactory.create("http://localhost:18101");
+    void createUsingHostString() throws URISyntaxException {
+        final EventService eventService = EventServiceFactory.create(new URI("http://localhost:18101"));
         assertEventServiceProxied(eventService);
 
     }

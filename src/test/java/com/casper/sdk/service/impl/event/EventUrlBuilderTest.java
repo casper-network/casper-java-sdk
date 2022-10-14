@@ -11,8 +11,8 @@ import static org.hamcrest.core.Is.is;
 
 /**
  * Unit tests for the EventUrlBuilder
- * 
- * @author ian@meywood.com 
+ *
+ * @author ian@meywood.com
  */
 class EventUrlBuilderTest {
 

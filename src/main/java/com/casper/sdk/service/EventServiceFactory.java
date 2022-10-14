@@ -22,16 +22,8 @@ final class EventServiceFactory {
     private static final String IMPLEMENTATION_CLASS = "com.casper.sdk.service.impl.event.EventServiceImpl";
     /** The map of service method names to log */
     private static final Map<Method, List<String>> methodParamMap = new HashMap<>();
-
-    /**
-     * Creates a new EventService for the specified host
-     *
-     * @param host the host to connect to including protocol and port eg: <pre>http://localhost:18101</pre>
-     * @return a newly created event service
-     */
-    static EventService create(final String host) {
-        return proxy(createEventService(host));
-    }
+    /** The logger that logs all event service calls at debug level */
+    private static final Logger logger = LoggerFactory.getLogger(EventService.class);
 
     /**
      * Creates a new EventService for the specified host
@@ -44,8 +36,6 @@ final class EventServiceFactory {
     }
 
     private static EventService proxy(final EventService eventService) {
-
-        final Logger logger = LoggerFactory.getLogger(EventService.class);
 
         return (EventService) Proxy.newProxyInstance(
                 EventServiceFactory.class.getClassLoader(),
@@ -66,6 +56,7 @@ final class EventServiceFactory {
     private static EventService createEventService(final Object param) {
 
         try {
+            //noinspection JavaReflectionMemberAccess
             final Constructor<?> constructor = Class.forName(IMPLEMENTATION_CLASS)
                     .getDeclaredConstructor(param.getClass());
             constructor.setAccessible(true);

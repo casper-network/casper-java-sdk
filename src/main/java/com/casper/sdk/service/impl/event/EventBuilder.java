@@ -35,6 +35,8 @@ final class EventBuilder {
     private boolean idExpected = true;
     /** Used to build the pojo model objects from the JSON in the data line */
     private final ObjectMapper mapper;
+    /** The version of the node the event was generated with */
+    private String version;
 
     EventBuilder(final EventType eventType, final EventTarget eventTarget, final String source) {
         this.eventType = eventType;
@@ -50,19 +52,30 @@ final class EventBuilder {
     boolean processLine(final String line) {
         try {
 
+            // Remove any leading or trailing whitespace
+            final String trimmed = line.trim();
+
             if (line.startsWith(DATA)) {
-                this.data = line;
-                idExpected = isIdExpected(line);
+                this.data = trimmed;
+                idExpected = isIdExpected(trimmed);
             }
 
-            if (isId(line)) {
-                this.id = getId(line);
+            if (isId(trimmed)) {
+                this.id = getId(trimmed);
+            } else if (isApiVersion(trimmed)) {
+                this.version = getVersion(trimmed);
             }
 
             return isComplete();
         } catch (Exception e) {
             throw new CasperClientException(e.getMessage(), e);
         }
+    }
+
+    private String getVersion(final String line) {
+        // remove all but version number from: data:{"ApiVersion":"1.0.0"}
+        return line.replace("data:{\"ApiVersion\":\"", "")
+                .replace("\"}","");
     }
 
     private boolean isIdExpected(String line) {
@@ -87,7 +100,7 @@ final class EventBuilder {
         final T event;
         if (this.eventTarget == EventTarget.RAW) {
             //noinspection unchecked
-            event = (T) new RawEvent(eventType, source, data, id);
+            event = (T) new RawEvent(eventType, source, id, data, version);
         } else if (eventTarget == EventTarget.POJO) {
             //noinspection unchecked
             event = (T) buildPojoEvent();
@@ -114,7 +127,7 @@ final class EventBuilder {
                 //noinspection unchecked
                 root = mapper.readValue(value, EventRoot.class);
             }
-            event = new PojoEvent<>(eventType, source, id, EventRoot.getData(root));
+            event = new PojoEvent<>(eventType, source, id, EventRoot.getData(root), version);
         } catch (JsonProcessingException e) {
             throw new CasperClientException("Error building POJO event for: " + data, e);
         }

@@ -1,9 +1,10 @@
 package com.casper.sdk.service.impl.event;
 
+import com.casper.sdk.exception.CasperClientException;
 import com.casper.sdk.model.event.Event;
 import com.casper.sdk.model.event.EventTarget;
 import com.casper.sdk.model.event.EventType;
-import com.casper.sdk.exception.CasperClientException;
+import com.casper.sdk.service.EventConsumer;
 import com.casper.sdk.service.EventService;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -15,12 +16,12 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URI;
 import java.time.Duration;
-import java.util.stream.Stream;
+import java.util.function.Consumer;
 
 /**
  * Package local to prevent construction.
- * 
- * @author ian@meywood.com 
+ *
+ * @author ian@meywood.com
  */
 @SuppressWarnings("unused")
 final class EventServiceImpl implements EventService {
@@ -39,11 +40,12 @@ final class EventServiceImpl implements EventService {
     /** The HTTP Client to connect to the node with */
     final OkHttpClient client;
 
-    @SuppressWarnings("unused")
-    private EventServiceImpl(final String host) {
-        this(URI.create(host));
-    }
-
+    /**
+     * Constructs a new {@link EventServiceImpl}, is private to prevent API users construction manually. To create the
+     * service user the interface method {@link EventService#usingPeer(URI)}.
+     *
+     * @param uri the URL if the node to connect to must contain protocol, host and port number
+     */
     private EventServiceImpl(final URI uri) {
         this.uri = uri;
 
@@ -53,11 +55,11 @@ final class EventServiceImpl implements EventService {
                 .build();
     }
 
-    /** {@inheritDoc} */
     @Override
-    public <T, E extends Event<E>> Stream<T> readEventStream(final EventType eventType,
-                                                             final EventTarget eventTarget,
-                                                             final Long startFrom) {
+    public <EventT extends Event<?>> void consumeEvents(final EventType eventType,
+                                                        final EventTarget eventTarget,
+                                                        final Long startFrom,
+                                                        final Consumer<EventT> eventTConsumer) {
         try {
             //noinspection resource
             final Response response = this.client.newCall(
@@ -71,7 +73,7 @@ final class EventServiceImpl implements EventService {
 
             if (response.isSuccessful() && response.body() != null) {
                 //noinspection ConstantConditions
-                return readEvent(eventType, eventTarget, new InputStreamReader(response.body().byteStream()));
+                consumeEvent(eventType, eventTarget, new InputStreamReader(response.body().byteStream()), eventTConsumer);
             } else {
                 throw new CasperClientException("No response from node " + this.uri);
             }
@@ -80,18 +82,30 @@ final class EventServiceImpl implements EventService {
         }
     }
 
-    /** {@inheritDoc} */
-    @Override
-    public <T, E extends Event<E>> Stream<T> readEvent(final EventType eventType,
-                                                       final EventTarget eventTarget,
-                                                       final Reader reader) {
+    private <EventT, DataT extends Event<DataT>> void consumeEvent(final EventType eventType,
+                                                                   final EventTarget eventTarget,
+                                                                   final Reader reader,
+                                                                   final Consumer<EventT> consumer) {
 
         final EventBuilder eventBuilder = new EventBuilder(eventType, eventTarget, uri.toString());
 
-        //noinspection unchecked
-        return new BufferedReader(reader)
-                .lines()
-                .filter(eventBuilder::processLine)
-                .map(line -> eventBuilder.buildEvent());
+        try {
+            //noinspection unchecked
+            new BufferedReader(reader)
+                    .lines()
+                    .filter(line -> throwOnStop(consumer))
+                    .filter(eventBuilder::processLine)
+                    .forEach(line -> consumer.accept(eventBuilder.buildEvent()));
+
+        } catch (StopException e) {
+            // The consumer asked to stop reading events
+        }
+    }
+
+    private <EventT> boolean throwOnStop(final Consumer<EventT> consumer) {
+        if (consumer instanceof EventConsumer && ((EventConsumer<?>) consumer).isStop()) {
+            throw new StopException();
+        }
+        return true;
     }
 }

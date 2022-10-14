@@ -12,7 +12,11 @@ import com.casper.sdk.model.auction.AuctionData;
 import com.casper.sdk.model.balance.GetBalanceData;
 import com.casper.sdk.model.block.JsonBlock;
 import com.casper.sdk.model.block.JsonBlockData;
+import com.casper.sdk.model.block.JsonBlock;
+import com.casper.sdk.model.block.JsonBlockData;
 import com.casper.sdk.model.clvalue.CLValueString;
+import com.casper.sdk.model.deploy.DeployData;
+import com.casper.sdk.model.clvalue.encdec.StringByteHelper;
 import com.casper.sdk.model.deploy.DeployData;
 import com.casper.sdk.model.deploy.executabledeploy.ModuleBytes;
 import com.casper.sdk.model.deploy.executabledeploy.StoredContractByHash;
@@ -20,6 +24,7 @@ import com.casper.sdk.model.deploy.executionresult.Success;
 import com.casper.sdk.model.deploy.transform.WriteCLValue;
 import com.casper.sdk.model.era.EraInfoData;
 import com.casper.sdk.model.globalstate.GlobalStateData;
+import com.casper.sdk.model.key.AlgorithmTag;
 import com.casper.sdk.model.key.AlgorithmTag;
 import com.casper.sdk.model.key.PublicKey;
 import com.casper.sdk.model.peer.PeerData;
@@ -33,7 +38,10 @@ import com.casper.sdk.model.transfer.TransferData;
 import com.casper.sdk.model.uref.URef;
 import com.casper.sdk.model.validator.ValidatorChangeData;
 import dev.oak3.sbs4j.util.ByteUtils;
+import org.json.JSONException;
+import org.junit.Ignore;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,6 +57,13 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import java.io.IOException;
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit tests for {@link CasperService}
@@ -119,6 +134,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
     }
 
     @Test
+    @Disabled
     void getBlockByHash() {
         JsonBlockData blockData = casperServiceMainnet.getBlock(new HashBlockIdentifier("2fe9630b7790852e4409d815b04ca98f37effcdf9097d317b9b9b8ad658f47c8"));
 
@@ -129,6 +145,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
     }
 
     @Test
+    @Disabled
     void getBlockByHeight() {
         JsonBlockData blockData = casperServiceMainnet.getBlock(new HeightBlockIdentifier(0));
         JsonBlock block = blockData.getBlock();

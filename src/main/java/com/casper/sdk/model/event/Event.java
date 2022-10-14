@@ -24,6 +24,13 @@ public interface Event<T> {
     EventType getEventType();
 
     /**
+     * The key name of the data field.
+     *
+     * @return the key name of the data field
+     */
+    DataType getDataType();
+
+    /**
      * The event payload a JSON string or Pojo
      *
      * @return the event payload
@@ -36,4 +43,10 @@ public interface Event<T> {
      * @return the optional ID
      */
     Optional<Long> getId();
+
+    /**
+     * Obtains the API version of the event
+     * @return the API version
+     */
+    String getVersion();
 }
