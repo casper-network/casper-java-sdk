@@ -1,9 +1,9 @@
 package com.casper.sdk.model.clvalue.cltype;
 
+import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
-import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;

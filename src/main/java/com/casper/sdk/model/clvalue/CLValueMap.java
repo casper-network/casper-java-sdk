@@ -1,23 +1,24 @@
 package com.casper.sdk.model.clvalue;
 
-import com.casper.sdk.exception.DynamicInstanceException;
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.cltype.AbstractCLTypeWithChildren;
 import com.casper.sdk.model.clvalue.cltype.CLTypeData;
 import com.casper.sdk.model.clvalue.cltype.CLTypeMap;
+import com.casper.sdk.model.clvalue.serde.Target;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dev.oak3.sbs4j.DeserializerBuffer;
 import dev.oak3.sbs4j.SerializerBuffer;
-import dev.oak3.sbs4j.exception.ValueDeserializationException;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.bouncycastle.util.encoders.Hex;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 
 /**
  * Casper Map CLValue implementation
@@ -29,23 +30,26 @@ import java.util.Map.Entry;
  */
 @Getter
 @Setter
-@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 public class CLValueMap extends
         AbstractCLValueWithChildren<Map<? extends AbstractCLValue<?, ?>, ? extends AbstractCLValue<?, ?>>, CLTypeMap> {
     @JsonProperty("cl_type")
     private CLTypeMap clType = new CLTypeMap();
 
-    public CLValueMap(Map<? extends AbstractCLValue<?, ?>, ? extends AbstractCLValue<?, ?>> value) {
+    public CLValueMap(Map<? extends AbstractCLValue<?, ?>, ? extends AbstractCLValue<?, ?>> value) throws ValueSerializationException {
+        setChildTypes(value);
         this.setValue(value);
-        setChildTypes();
     }
 
     @Override
-    public void serialize(SerializerBuffer ser, boolean encodeType) throws ValueSerializationException, NoSuchTypeException {
+    public void serialize(SerializerBuffer ser, Target target) throws ValueSerializationException, NoSuchTypeException {
         if (this.getValue() == null) return;
 
-        setChildTypes();
+        if (target.equals(Target.BYTE)) {
+            super.serializePrefixWithLength(ser);
+        }
+
+        setChildTypes(this.getValue());
 
         CLValueI32 mapLength = new CLValueI32(getValue().size());
         mapLength.serialize(ser);
@@ -55,57 +59,105 @@ public class CLValueMap extends
             entry.getValue().serialize(ser);
         }
 
-        if (encodeType) {
+        if (target.equals(Target.BYTE)) {
             this.encodeType(ser);
         }
+
+        this.setBytes(Hex.toHexString(ser.toByteArray()));
     }
 
     @Override
-    public void deserialize(DeserializerBuffer deser) throws ValueDeserializationException {
-        try {
-            CLTypeData keyType = clType.getKeyValueTypes().getKeyType().getClTypeData();
-            CLTypeData valType = clType.getKeyValueTypes().getValueType().getClTypeData();
+    public void deserializeCustom(DeserializerBuffer deser) throws Exception {
+        CLTypeData keyType = clType.getKeyValueTypes().getKeyType().getClTypeData();
+        CLTypeData valType = clType.getKeyValueTypes().getValueType().getClTypeData();
 
-            Map<AbstractCLValue<?, ?>, AbstractCLValue<?, ?>> map = new LinkedHashMap<>();
-            CLValueI32 mapLength = new CLValueI32(0);
-            mapLength.deserialize(deser);
+        Map<AbstractCLValue<?, ?>, AbstractCLValue<?, ?>> map = new LinkedHashMap<>();
+        CLValueI32 mapLength = new CLValueI32(0);
+        mapLength.deserializeCustom(deser);
 
-            for (int i = 0; i < mapLength.getValue(); i++) {
-                AbstractCLValue<?, ?> key = CLTypeData.createCLValueFromCLTypeData(keyType);
-                if (key.getClType() instanceof AbstractCLTypeWithChildren) {
-                    ((AbstractCLTypeWithChildren) key.getClType())
-                            .setChildTypes(
-                                    ((AbstractCLTypeWithChildren) clType.getKeyValueTypes().getKeyType()).getChildTypes());
-                }
-                key.deserialize(deser);
-
-                AbstractCLValue<?, ?> val = CLTypeData.createCLValueFromCLTypeData(valType);
-
-                if (val.getClType() instanceof CLTypeMap) {
-                    ((CLTypeMap) val.getClType())
-                            .setKeyValueTypes(((CLTypeMap) clType.getKeyValueTypes().getValueType()).getKeyValueTypes());
-                } else if (val.getClType() instanceof AbstractCLTypeWithChildren) {
-                    ((AbstractCLTypeWithChildren) val.getClType())
-                            .setChildTypes(((AbstractCLTypeWithChildren) clType.getKeyValueTypes().getValueType())
-                                    .getChildTypes());
-                }
-                val.deserialize(deser);
-
-                map.put(key, val);
+        for (int i = 0; i < mapLength.getValue(); i++) {
+            AbstractCLValue<?, ?> key = CLTypeData.createCLValueFromCLTypeData(keyType);
+            if (key.getClType() instanceof AbstractCLTypeWithChildren) {
+                ((AbstractCLTypeWithChildren) key.getClType())
+                        .setChildTypes(
+                                ((AbstractCLTypeWithChildren) clType.getKeyValueTypes().getKeyType()).getChildTypes());
             }
+            key.deserializeCustom(deser);
 
-            setValue(map);
-        } catch (NoSuchTypeException | DynamicInstanceException e) {
-            throw new ValueDeserializationException(String.format("Error deserializing %s", this.getClass().getSimpleName()), e);
+            AbstractCLValue<?, ?> val = CLTypeData.createCLValueFromCLTypeData(valType);
+
+            if (val.getClType() instanceof CLTypeMap) {
+                ((CLTypeMap) val.getClType())
+                        .setKeyValueTypes(((CLTypeMap) clType.getKeyValueTypes().getValueType()).getKeyValueTypes());
+            } else if (val.getClType() instanceof AbstractCLTypeWithChildren) {
+                ((AbstractCLTypeWithChildren) val.getClType())
+                        .setChildTypes(((AbstractCLTypeWithChildren) clType.getKeyValueTypes().getValueType())
+                                .getChildTypes());
+            }
+            val.deserializeCustom(deser);
+
+            map.put(key, val);
         }
+
+        setValue(map);
     }
 
     @Override
-    protected void setChildTypes() {
-        Entry<? extends AbstractCLValue<?, ?>, ? extends AbstractCLValue<?, ?>> entry = getValue().entrySet().iterator()
-                .next();
+    @JsonIgnore
+    protected void setChildTypes(Map<? extends AbstractCLValue<?, ?>, ? extends AbstractCLValue<?, ?>> value) {
+        Entry<? extends AbstractCLValue<?, ?>, ? extends AbstractCLValue<?, ?>> entry = value.entrySet().iterator().next();
 
-        clType.setKeyValueTypes(
-                new CLTypeMap.CLTypeMapEntryType(entry.getKey().getClType(), entry.getValue().getClType()));
+        clType.setKeyValueTypes(new CLTypeMap.CLTypeMapEntryType(entry.getKey().getClType(), entry.getValue().getClType()));
+    }
+
+    // This needed to be customized to ensure equality is being checked correctly.
+    // The java Map equals method tries to get the "other" map entry's value by using "this" key object,
+    // which then fails to find the object since they are "different" and returns always null.
+    @Override
+    public boolean equals(final Object o) {
+        if (o == this) return true;
+        if (!(o instanceof CLValueMap)) return false;
+        final CLValueMap other = (CLValueMap) o;
+        if (!other.canEqual(this)) return false;
+
+        final Object this$clType = this.getClType();
+        final Object other$clType = other.getClType();
+        if (!Objects.equals(this$clType, other$clType)) return false;
+
+        final Object this$bytes = this.getBytes();
+        final Object other$bytes = other.getBytes();
+        if (!Objects.equals(this$bytes, other$bytes)) return false;
+        final Map<? extends AbstractCLValue<?, ?>, ? extends AbstractCLValue<?, ?>> this$value = this.getValue();
+        final Map<? extends AbstractCLValue<?, ?>, ? extends AbstractCLValue<?, ?>> other$value = other.getValue();
+
+        for (Entry<? extends AbstractCLValue<?, ?>, ? extends AbstractCLValue<?, ?>> this$entry : this$value.entrySet()) {
+            AbstractCLValue<?, ?> this$entryKey = this$entry.getKey();
+            AbstractCLValue<?, ?> this$entryValue = this$entry.getValue();
+            boolean found = false;
+            for (Entry<? extends AbstractCLValue<?, ?>, ? extends AbstractCLValue<?, ?>> other$entry : other$value.entrySet()) {
+                AbstractCLValue<?, ?> other$entryKey = other$entry.getKey();
+                AbstractCLValue<?, ?> other$entryValue = other$entry.getValue();
+                if (this$entryKey.equals(other$entryKey) && this$entryValue.equals(other$entryValue)) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) return false;
+        }
+
+        return true;
+    }
+
+    protected boolean canEqual(final Object other) {
+        return other instanceof CLValueMap;
+    }
+
+    @Override
+    public int hashCode() {
+        final int PRIME = 59;
+        int result = super.hashCode();
+        final Object $clType = this.getClType();
+        result = result * PRIME + ($clType == null ? 43 : $clType.hashCode());
+        return result;
     }
 }

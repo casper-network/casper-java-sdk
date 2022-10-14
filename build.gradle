@@ -24,7 +24,7 @@ repositories {
 
 dependencies {
     implementation "dev.oak3:sbs4j:${sbs4jVersion}"
-    implementation "com.github.briandilley.jsonrpc4j:jsonrpc4j:${jsonrpc4jVersion}"
+    implementation "io.github.oak:jsonrpc4j:${jsonrpc4jVersion}"
     implementation "com.syntifi.crypto:crypto-key-common:${cryptokeyVersion}"
     implementation "com.syntifi.crypto:crypto-key-ed25519:${cryptokeyVersion}"
     implementation "com.syntifi.crypto:crypto-key-secp256k1:${cryptokeyVersion}"

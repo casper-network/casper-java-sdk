@@ -5,11 +5,7 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 /**
  * CLType for {@link AbstractCLType#MAP}
@@ -34,7 +30,7 @@ public class CLTypeMap extends AbstractCLTypeWithChildren {
      */
     @Getter
     @Setter
-    @EqualsAndHashCode
+    @EqualsAndHashCode(of = {"keyType", "valueType"})
     @NoArgsConstructor
     @AllArgsConstructor
     public static class CLTypeMapEntryType {

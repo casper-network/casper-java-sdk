@@ -3,13 +3,15 @@ package com.casper.sdk.model.clvalue;
 import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.cltype.CLTypeByteArray;
+import com.casper.sdk.model.clvalue.serde.Target;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dev.oak3.sbs4j.DeserializerBuffer;
 import dev.oak3.sbs4j.SerializerBuffer;
-import dev.oak3.sbs4j.exception.ValueDeserializationException;
+import dev.oak3.sbs4j.exception.ValueSerializationException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.bouncycastle.util.encoders.Hex;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -29,24 +31,30 @@ public class CLValueByteArray extends AbstractCLValue<byte[], CLTypeByteArray> {
     @JsonProperty("cl_type")
     private CLTypeByteArray clType = new CLTypeByteArray();
 
-    public CLValueByteArray(byte[] value) {
+    public CLValueByteArray(byte[] value) throws ValueSerializationException {
         this.setValue(value);
         this.clType.setLength(value.length);
     }
 
     @Override
-    public void serialize(SerializerBuffer ser, boolean encodeType) throws NoSuchTypeException {
+    public void serialize(SerializerBuffer ser, Target target) throws NoSuchTypeException, ValueSerializationException {
         if (this.getValue() == null) return;
+
+        if (target.equals(Target.BYTE)) {
+            super.serializePrefixWithLength(ser);
+        }
 
         ser.writeByteArray(this.getValue());
 
-        if (encodeType) {
+        if (target.equals(Target.BYTE)) {
             this.encodeType(ser);
         }
+
+        this.setBytes(Hex.toHexString(ser.toByteArray()));
     }
 
     @Override
-    public void deserialize(DeserializerBuffer deser) throws ValueDeserializationException {
+    public void deserializeCustom(DeserializerBuffer deser) throws Exception {
         this.setValue(deser.readByteArray(this.getClType().getLength()));
     }
 
