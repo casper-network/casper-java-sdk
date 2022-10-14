@@ -15,7 +15,6 @@ import com.casper.sdk.model.event.shutdown.Shutdown;
 import com.casper.sdk.model.event.step.Step;
 import com.casper.sdk.model.event.version.ApiVersion;
 import com.casper.sdk.model.key.PublicKey;
-
 import org.joda.time.DateTime;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -153,15 +152,18 @@ class EventBuilderTest {
     }
 
     @Test
-    @Disabled
     void buildDeployProcessedEvent() throws IOException {
 
         final PojoEvent<DeployProcessed> deployProcessedEvent = getEvent(EventType.MAIN, EventTarget.POJO, DEPLOY_PROCESSED_EVENT);
         assertThat(deployProcessedEvent, is(notNullValue()));
-        assertThat(deployProcessedEvent.getData(), is(instanceOf(DeployAccepted.class)));
+        // TODO: Shouldn't this be a DeployProcessed?
+        //assertThat(deployProcessedEvent.getData(), is(instanceOf(DeployAccepted.class)));
+        assertThat(deployProcessedEvent.getData(), is(instanceOf(DeployProcessed.class)));
 
         final DeployProcessed deployProcessed = deployProcessedEvent.getData();
-        assertThat(deployProcessed.getBlockHash(), is(new Digest("fb81219f33aa58a2c2f50f7eea20c3065963f61bc3c74810729f10dc21981087")));
+        // TODO: Shouldn't this be getDeployHash?
+        //assertThat(deployProcessed.getBlockHash(), is(new Digest("fb81219f33aa58a2c2f50f7eea20c3065963f61bc3c74810729f10dc21981087")));
+        assertThat(deployProcessed.getDeployHash(), is(new Digest("fb81219f33aa58a2c2f50f7eea20c3065963f61bc3c74810729f10dc21981087")));
         assertThat(deployProcessed.getAccount(), is(new Digest("01959d01aa68197e8cb91aa06bcc920f8d4a245dff60ea726bb89255349107a565")));
 
         // TODO rest of fields
