@@ -24,7 +24,7 @@ import java.math.BigInteger;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class BalanceData {
+public class GetBalanceData {
 
     /**
      * The RPC API version

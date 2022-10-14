@@ -1,21 +1,25 @@
 package com.casper.sdk.service;
 
 import com.casper.sdk.exception.CasperClientException;
+import com.casper.sdk.exception.DynamicInstanceException;
 import com.casper.sdk.identifier.block.BlockIdentifier;
 import com.casper.sdk.identifier.block.HashBlockIdentifier;
 import com.casper.sdk.identifier.block.HeightBlockIdentifier;
+import com.casper.sdk.identifier.global.BlockHashIdentifier;
+import com.casper.sdk.identifier.global.GlobalStateIdentifier;
 import com.casper.sdk.model.account.AccountData;
 import com.casper.sdk.model.auction.AuctionData;
+import com.casper.sdk.model.balance.GetBalanceData;
 import com.casper.sdk.model.block.JsonBlock;
 import com.casper.sdk.model.block.JsonBlockData;
 import com.casper.sdk.model.clvalue.CLValueString;
-import com.casper.sdk.model.clvalue.encdec.StringByteHelper;
 import com.casper.sdk.model.deploy.DeployData;
 import com.casper.sdk.model.deploy.executabledeploy.ModuleBytes;
 import com.casper.sdk.model.deploy.executabledeploy.StoredContractByHash;
 import com.casper.sdk.model.deploy.executionresult.Success;
 import com.casper.sdk.model.deploy.transform.WriteCLValue;
 import com.casper.sdk.model.era.EraInfoData;
+import com.casper.sdk.model.globalstate.GlobalStateData;
 import com.casper.sdk.model.key.AlgorithmTag;
 import com.casper.sdk.model.key.PublicKey;
 import com.casper.sdk.model.peer.PeerData;
@@ -26,9 +30,9 @@ import com.casper.sdk.model.storedvalue.StoredValueContract;
 import com.casper.sdk.model.storedvalue.StoredValueData;
 import com.casper.sdk.model.transfer.Transfer;
 import com.casper.sdk.model.transfer.TransferData;
+import com.casper.sdk.model.uref.URef;
 import com.casper.sdk.model.validator.ValidatorChangeData;
-import org.json.JSONException;
-import org.junit.Ignore;
+import dev.oak3.sbs4j.util.ByteUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -41,7 +45,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Unit tests for {@link CasperService}
@@ -90,7 +98,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
         PublicKey key = result.getBlock().getBody().getProposer();
 
         assertEquals(AlgorithmTag.ED25519, key.getTag());
-        Assertions.assertEquals("2bac1d0ff9240ff0b7b06d555815640497861619ca12583ddef434885416e69b", StringByteHelper.convertBytesToHex(key.getKey()));
+        Assertions.assertEquals("2bac1d0ff9240ff0b7b06d555815640497861619ca12583ddef434885416e69b", ByteUtils.encodeHexString(key.getKey()));
     }
 
     /**
@@ -118,7 +126,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
 
         assertNotNull(blockData);
         JsonBlock block = blockData.getBlock();
-        assertEquals("0000000000000000000000000000000000000000000000000000000000000000", block.getHeader().getParentHash());
+        assertEquals("0000000000000000000000000000000000000000000000000000000000000000", block.getHeader().getParentHash().toString());
         assertEquals(0, block.getHeader().getHeight());
     }
 
@@ -127,8 +135,8 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
     void getBlockByHeight() {
         JsonBlockData blockData = casperServiceMainnet.getBlock(new HeightBlockIdentifier(0));
         JsonBlock block = blockData.getBlock();
-        assertEquals("0000000000000000000000000000000000000000000000000000000000000000", block.getHeader().getParentHash());
-        assertEquals("2fe9630b7790852e4409d815b04ca98f37effcdf9097d317b9b9b8ad658f47c8", block.getHash());
+        assertEquals("0000000000000000000000000000000000000000000000000000000000000000", block.getHeader().getParentHash().toString());
+        assertEquals("2fe9630b7790852e4409d815b04ca98f37effcdf9097d317b9b9b8ad658f47c8", block.getHash().toString());
         assertNotNull(blockData);
     }
 
@@ -239,7 +247,8 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
 
     @Test
     void getAccountStateInfoByBlockHash() {
-        AccountData account = casperServiceMainnet.getStateAccountInfo("012dbde8cac6493c07c5548edc89ab7803c376278ec91757475867324d99f5f4dd", new HashBlockIdentifier("721767b0bcf867ccab81b3a47b1443bbef38b2ee9e2b791288f6e2a427181931"));
+        AccountData account = casperServiceMainnet.getStateAccountInfo("012dbde8cac6493c07c5548edc89ab7803c376278ec91757475867324d99f5f4dd",
+                new HashBlockIdentifier("721767b0bcf867ccab81b3a47b1443bbef38b2ee9e2b791288f6e2a427181931"));
 
         assertNotNull(account);
         assertNotNull(account.getAccount());
@@ -274,7 +283,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
     }
 
     @Test
-    void getEraInfoBySwitchBlockByHeight() throws JSONException, IOException {
+    void getEraInfoBySwitchBlockByHeight() {
         EraInfoData eraInfoData = casperServiceMainnet.getEraInfoBySwitchBlock(new HeightBlockIdentifier(423571));
 
         assertNotNull(eraInfoData);
@@ -288,7 +297,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
     }
 
     @Test
-    void getEraInfoBySwitchBlockByHash() throws JSONException, IOException {
+    void getEraInfoBySwitchBlockByHash() {
         EraInfoData eraInfoData = casperServiceMainnet.getEraInfoBySwitchBlock(new HashBlockIdentifier("6eee8974bd9df0c2ae5469a239c23ff901c4ca884a1fe8b7b5319b04fac3b484"));
 
         assertNotNull(eraInfoData);
@@ -301,13 +310,22 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
         // JSONAssert.assertEquals(inputJson, getPrettyJson(eraInfoData), false);
     }
 
-    /*@Test
+    @Test
+    void getBalance() throws IllegalArgumentException, IOException, DynamicInstanceException {
+        GetBalanceData balance = casperServiceMainnet.getBalance("78e5d93246bcf9aa3336c4c80cd9359589cbddceda75e31bb3d65b0c6bda3b59",
+                URef.fromString("uref-b22bc80d357df47447074e243b4d888de67c1cc7565fa82d0bb2b9b023146748-007"));
+
+        assertNotNull(balance);
+        assertEquals(balance.getValue(), BigInteger.valueOf(26636848765718L));
+    }
+
+    @Test
     void queryGlobalState() {
-        BlockIdentifier blockIdentifier = new HashBlockIdentifier("13C2D7a68ECDD4b74BF4393C88915C836c863fC4bf11d7f2Bd930A1bBCcACdcb");
-        String key = "deploy-af684263911154d26fa05be9963171802801a0b6aff8f199b7391eacb8edc9e1";
-        JsonNode globalState = casperServiceTestnet.queryGlobalState(blockIdentifier, key, new String[0]);
+        GlobalStateIdentifier blockIdentifier = new BlockHashIdentifier("5f7b36ae101036c40922373f059b8764be10b6d69e568a47974a4ba6a4dad6db");
+        String key = "deploy-46c75f79954218942a05c0efdc5c40031db3b5b1e43b95135d43874e21fabdae";
+        GlobalStateData globalState = casperServiceMainnet.queryGlobalState(blockIdentifier, key, new String[0]);
         assertNotNull(globalState);
-    }*/
+    }
 
     @Test
     void queryValidatorChanges() {

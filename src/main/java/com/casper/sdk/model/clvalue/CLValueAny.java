@@ -1,19 +1,25 @@
 package com.casper.sdk.model.clvalue;
 
+import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.cltype.CLTypeAny;
+import com.casper.sdk.model.clvalue.serde.Target;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonSetter;
-import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
-import com.casper.sdk.exception.CLValueDecodeException;
-import com.casper.sdk.model.clvalue.encdec.CLValueDecoder;
-import com.casper.sdk.model.clvalue.encdec.CLValueEncoder;
+import dev.oak3.sbs4j.DeserializerBuffer;
+import dev.oak3.sbs4j.SerializerBuffer;
+import dev.oak3.sbs4j.exception.ValueSerializationException;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.bouncycastle.util.encoders.Hex;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 /**
  * Casper Object CLValue implementation
@@ -42,20 +48,42 @@ public class CLValueAny extends AbstractCLValue<Object, CLTypeAny> {
         return this.getClType().getTypeName();
     }
 
-    public CLValueAny(Object value) {
+    public CLValueAny(Object value) throws ValueSerializationException {
         this.setValue(value);
     }
 
     @Override
-    public void encode(CLValueEncoder clve, boolean encodeType) throws IOException, NoSuchTypeException {
-        clve.writeAny(this);
-        if (encodeType) {
-            this.encodeType(clve);
+    public void serialize(SerializerBuffer ser, Target target) throws ValueSerializationException, NoSuchTypeException {
+        if (this.getValue() == null) return;
+        try (ByteArrayOutputStream bos = new ByteArrayOutputStream();
+             ObjectOutputStream oos = new ObjectOutputStream(bos)) {
+
+            if (target.equals(Target.BYTE)) {
+                super.serializePrefixWithLength(ser);
+            }
+
+            oos.writeObject(this.getValue());
+            byte[] objectByteArray = bos.toByteArray();
+            ser.writeI32(objectByteArray.length);
+            ser.writeByteArray(objectByteArray);
+
+            if (target.equals(Target.BYTE)) {
+                this.encodeType(ser);
+            }
+        } catch (IOException e) {
+            throw new ValueSerializationException(String.format("Error serializing %s", this.getClass().getSimpleName()), e);
         }
+
+        this.setBytes(Hex.toHexString(ser.toByteArray()));
     }
 
     @Override
-    public void decode(CLValueDecoder clvd) throws IOException, CLValueDecodeException {
-        clvd.readAny(this);
+    public void deserializeCustom(DeserializerBuffer deser)
+            throws Exception {
+        int objectByteArrayLength = deser.readI32();
+        try (ByteArrayInputStream bis = new ByteArrayInputStream(deser.readByteArray(objectByteArrayLength));
+             ObjectInputStream ois = new ObjectInputStream(bis)) {
+            this.setValue(ois.readObject());
+        }
     }
 }

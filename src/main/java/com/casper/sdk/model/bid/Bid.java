@@ -1,13 +1,12 @@
 package com.casper.sdk.model.bid;
 
-import com.casper.sdk.exception.InvalidByteStringException;
+import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
+import com.casper.sdk.model.key.PublicKey;
+import com.casper.sdk.model.uref.URef;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
-import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
-import com.casper.sdk.model.key.PublicKey;
-import com.casper.sdk.model.uref.URef;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -78,7 +77,7 @@ public class Bid {
     @JsonSetter("delegators")
     @ExcludeFromJacocoGeneratedReport
     protected void setJsonDelegators(Map<String, Delegator> node)
-            throws NoSuchAlgorithmException, InvalidByteStringException {
+            throws NoSuchAlgorithmException, IllegalArgumentException {
         for (Map.Entry<String, Delegator> entry : node.entrySet()) {
             PublicKey publicKey = PublicKey.fromTaggedHexString(entry.getKey());
             Delegator delegator = entry.getValue();

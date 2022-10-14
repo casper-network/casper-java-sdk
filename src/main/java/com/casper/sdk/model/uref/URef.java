@@ -2,18 +2,12 @@ package com.casper.sdk.model.uref;
 
 import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
 import com.casper.sdk.exception.DynamicInstanceException;
-import com.casper.sdk.exception.InvalidByteStringException;
 import com.casper.sdk.model.clvalue.CLValueURef;
-import com.casper.sdk.model.clvalue.encdec.StringByteHelper;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonValue;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import dev.oak3.sbs4j.util.ByteUtils;
+import lombok.*;
 
 import java.io.IOException;
 
@@ -43,13 +37,13 @@ public class URef {
     URefAccessRight accessRight;
 
     public static URef fromString(String uref)
-            throws IOException, DynamicInstanceException, InvalidByteStringException {
+            throws IOException, DynamicInstanceException, IllegalArgumentException {
         String[] urefParts = uref.split("-");
         if (!urefParts[0].equals("uref") || urefParts.length != 3) {
             throw new IOException("Not a valid Uref");
         }
-        byte[] address = StringByteHelper.hexStringToByteArray(urefParts[1]);
-        byte[] accessRightByte = StringByteHelper.hexStringToByteArray(urefParts[2].substring(1));
+        byte[] address = ByteUtils.parseHexString(urefParts[1]);
+        byte[] accessRightByte = ByteUtils.parseHexString(urefParts[2].substring(1));
         URefAccessRight accessRight = URefAccessRight
                 .getTypeBySerializationTag(accessRightByte[accessRightByte.length - 1]);
         return new URef(address, accessRight);
@@ -57,7 +51,7 @@ public class URef {
     }
 
     @JsonCreator
-    public void createURef(String uref) throws IOException, DynamicInstanceException, InvalidByteStringException {
+    public void createURef(String uref) throws IOException, DynamicInstanceException, IllegalArgumentException {
         URef obj = URef.fromString(uref);
         this.accessRight = obj.getAccessRight();
         this.address = obj.getAddress();
@@ -66,7 +60,7 @@ public class URef {
     @JsonValue
     @ExcludeFromJacocoGeneratedReport
     protected String getJsonURef() {
-        return "uref-" + StringByteHelper.convertBytesToHex(this.address) + "-0"
-                + StringByteHelper.convertBytesToHex(new byte[]{this.accessRight.serializationTag});
+        return "uref-" + ByteUtils.encodeHexString(this.address) + "-0"
+                + ByteUtils.encodeHexString(new byte[]{this.accessRight.serializationTag});
     }
 }

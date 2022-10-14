@@ -1,20 +1,12 @@
 package com.casper.sdk.model.key;
 
-import com.casper.sdk.exception.CLValueEncodeException;
-import com.casper.sdk.exception.DynamicInstanceException;
-import com.casper.sdk.exception.NoSuchTypeException;
-import com.casper.sdk.model.clvalue.encdec.CLValueEncoder;
-import com.casper.sdk.model.clvalue.encdec.StringByteHelper;
-import com.casper.sdk.model.clvalue.encdec.interfaces.EncodableValue;
+import com.casper.sdk.model.clvalue.serde.CasperSerializableObject;
+import com.casper.sdk.model.clvalue.serde.Target;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonValue;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-import java.io.IOException;
+import dev.oak3.sbs4j.SerializerBuffer;
+import dev.oak3.sbs4j.util.ByteUtils;
+import lombok.*;
 
 /**
  * Hex-encoded key, including the tag byte.
@@ -28,7 +20,7 @@ import java.io.IOException;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of = {"tag", "key"})
-public abstract class AbstractSerializedKeyTaggedHex<T extends Tag> implements EncodableValue {
+public abstract class AbstractSerializedKeyTaggedHex<T extends Tag> implements CasperSerializableObject {
 
     /**
      * @see Tag
@@ -44,17 +36,16 @@ public abstract class AbstractSerializedKeyTaggedHex<T extends Tag> implements E
 
     @JsonValue
     public String getAlgoTaggedHex() {
-        return StringByteHelper.convertBytesToHex(new byte[]{this.tag.getByteTag()})
-                + StringByteHelper.convertBytesToHex(this.getKey());
+        return ByteUtils.encodeHexString(new byte[]{this.tag.getByteTag()})
+                + ByteUtils.encodeHexString(this.getKey());
     }
 
     /**
      * Implements TaggedHEx encoder
      */
     @Override
-    public void encode(CLValueEncoder clve, boolean encodeType)
-            throws IOException, CLValueEncodeException, DynamicInstanceException, NoSuchTypeException {
-        clve.write(getTag().getByteTag());
-        clve.write(getKey());
+    public void serialize(SerializerBuffer ser, Target target) {
+        ser.writeU8(getTag().getByteTag());
+        ser.writeByteArray(getKey());
     }
 }

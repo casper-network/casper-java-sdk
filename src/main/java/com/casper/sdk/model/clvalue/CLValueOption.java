@@ -1,21 +1,20 @@
 package com.casper.sdk.model.clvalue;
 
-import com.casper.sdk.exception.CLValueDecodeException;
-import com.casper.sdk.exception.CLValueEncodeException;
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.cltype.AbstractCLTypeWithChildren;
 import com.casper.sdk.model.clvalue.cltype.CLTypeData;
 import com.casper.sdk.model.clvalue.cltype.CLTypeOption;
+import com.casper.sdk.model.clvalue.serde.Target;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.casper.sdk.exception.DynamicInstanceException;
-import com.casper.sdk.model.clvalue.encdec.CLValueDecoder;
-import com.casper.sdk.model.clvalue.encdec.CLValueEncoder;
-import lombok.AllArgsConstructor;
+import dev.oak3.sbs4j.DeserializerBuffer;
+import dev.oak3.sbs4j.SerializerBuffer;
+import dev.oak3.sbs4j.exception.ValueSerializationException;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.bouncycastle.util.encoders.Hex;
 
-import java.io.IOException;
 import java.util.Optional;
 
 /**
@@ -29,27 +28,28 @@ import java.util.Optional;
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = true)
-@AllArgsConstructor
-public class CLValueOption extends AbstractCLValue<Optional<AbstractCLValue<?, ?>>, CLTypeOption> {
+@NoArgsConstructor
+public class CLValueOption extends AbstractCLValueWithChildren<Optional<AbstractCLValue<?, ?>>, CLTypeOption> {
     @JsonProperty("cl_type")
     private CLTypeOption clType = new CLTypeOption();
 
-    public CLValueOption() {
-        this(Optional.of(new CLValueAny(null)));
-    }
-
-    public CLValueOption(Optional<AbstractCLValue<?, ?>> value) {
+    public CLValueOption(Optional<AbstractCLValue<?, ?>> value) throws ValueSerializationException {
+        setChildTypes(value);
         this.setValue(value);
-        this.clType.setChildType(value.isPresent() ? value.get().getClType() : null);
     }
 
     @Override
-    public void encode(CLValueEncoder clve, boolean encodeType) throws IOException, NoSuchTypeException, CLValueEncodeException {
+    public void serialize(SerializerBuffer ser, Target target) throws ValueSerializationException, NoSuchTypeException {
+        if (!this.getValue().isPresent()) return;
+
+        if (target.equals(Target.BYTE)) {
+            super.serializePrefixWithLength(ser);
+        }
+
         Optional<AbstractCLValue<?, ?>> value = getValue();
 
         CLValueBool isPresent = new CLValueBool(value.isPresent() && value.get().getValue() != null);
-        isPresent.encode(clve, false);
-        setBytes(isPresent.getBytes());
+        isPresent.serialize(ser);
 
         Optional<AbstractCLValue<?, ?>> child = getValue();
 
@@ -58,23 +58,23 @@ public class CLValueOption extends AbstractCLValue<Optional<AbstractCLValue<?, ?
                     .setChildTypes(((AbstractCLTypeWithChildren) clType.getChildType()).getChildTypes());
         }
         if (child.isPresent() && isPresent.getValue().equals(Boolean.TRUE)) {
-            child.get().encode(clve, false);
-            setBytes(getBytes() + child.get().getBytes());
+            child.get().serialize(ser);
         }
-        if (encodeType) {
-            this.encodeType(clve);
+
+        if (target.equals(Target.BYTE)) {
+            this.encodeType(ser);
             if (child.isPresent() && isPresent.getValue().equals(Boolean.TRUE)) {
-                child.get().encodeType(clve);
+                child.get().encodeType(ser);
             }
         }
+
+        this.setBytes(Hex.toHexString(ser.toByteArray()));
     }
 
     @Override
-    public void decode(CLValueDecoder clvd)
-            throws IOException, CLValueDecodeException, DynamicInstanceException, NoSuchTypeException {
+    public void deserializeCustom(DeserializerBuffer deser) throws Exception {
         CLValueBool isPresent = new CLValueBool();
-        isPresent.decode(clvd);
-        setBytes(isPresent.getBytes());
+        isPresent.deserializeCustom(deser);
 
         CLTypeData childTypeData = clType.getChildType().getClTypeData();
 
@@ -85,12 +85,15 @@ public class CLValueOption extends AbstractCLValue<Optional<AbstractCLValue<?, ?
                     .setChildTypes(((AbstractCLTypeWithChildren) clType.getChildType()).getChildTypes());
         }
 
-        setValue(Optional.of(child));
-
         if (isPresent.getValue().equals(Boolean.TRUE)) {
-            child.decode(clvd);
-
-            setBytes(getBytes() + child.getBytes());
+            child.deserializeCustom(deser);
         }
+
+        setValue(Optional.of(child));
+    }
+
+    @Override
+    protected void setChildTypes(Optional<AbstractCLValue<?, ?>> value) {
+        clType.setChildType(value.isPresent() ? value.get().getClType() : null);
     }
 }

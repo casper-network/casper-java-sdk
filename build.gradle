@@ -23,7 +23,8 @@ repositories {
 }
 
 dependencies {
-    implementation "com.github.briandilley.jsonrpc4j:jsonrpc4j:${jsonrpc4jVersion}"
+    implementation "dev.oak3:sbs4j:${sbs4jVersion}"
+    implementation "io.github.oak:jsonrpc4j:${jsonrpc4jVersion}"
     implementation "com.syntifi.crypto:crypto-key-common:${cryptokeyVersion}"
     implementation "com.syntifi.crypto:crypto-key-ed25519:${cryptokeyVersion}"
     implementation "com.syntifi.crypto:crypto-key-secp256k1:${cryptokeyVersion}"
@@ -137,7 +138,7 @@ publishing {
                 username = System.getenv('MAVEN_USERNAME')
                 password = System.getenv('MAVEN_PASSWORD')
             }
-        }    
+        }
         maven {
             name = "GitHubPackages"
             url = "https://maven.pkg.github.com/casper-network/casper-java-sdk"
@@ -177,13 +178,13 @@ publishing {
                 licenses {
                     license {
                         name = 'The Apache License, Version 2.0'
-                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        url = 'https://www.apache.org/licenses/LICENSE-2.0.txt'
                     }
                 }
 
                 developers {
                     developer {
-                        id = 'syntifi'
+                        id = 'oak'
                         name = 'Alexandre Carvalho'
                         email = 'adcarvalho@gmail.com'
                     }

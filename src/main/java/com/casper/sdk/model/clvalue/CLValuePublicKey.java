@@ -1,21 +1,21 @@
 package com.casper.sdk.model.clvalue;
 
+import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.cltype.CLTypePublicKey;
+import com.casper.sdk.model.clvalue.serde.Target;
+import com.casper.sdk.model.key.PublicKey;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonSetter;
-import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
-import com.casper.sdk.exception.CLValueDecodeException;
-import com.casper.sdk.model.clvalue.encdec.CLValueDecoder;
-import com.casper.sdk.model.clvalue.encdec.CLValueEncoder;
-import com.casper.sdk.model.key.PublicKey;
+import dev.oak3.sbs4j.DeserializerBuffer;
+import dev.oak3.sbs4j.SerializerBuffer;
+import dev.oak3.sbs4j.exception.ValueSerializationException;
+import dev.oak3.sbs4j.util.ByteUtils;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
+import org.bouncycastle.util.encoders.Hex;
 
 /**
  * Casper PublicKey CLValue implementation
@@ -44,24 +44,30 @@ public class CLValuePublicKey extends AbstractCLValue<PublicKey, CLTypePublicKey
         return this.getClType().getTypeName();
     }
 
-    public CLValuePublicKey(PublicKey value) {
+    public CLValuePublicKey(PublicKey value) throws ValueSerializationException {
         this.setValue(value);
     }
 
     @Override
-    public void encode(CLValueEncoder clve, boolean encodeType) throws IOException, NoSuchTypeException {
-        clve.writePublicKey(this);
-        if (encodeType) {
-            this.encodeType(clve);
+    public void serialize(SerializerBuffer ser, Target target) throws NoSuchTypeException, ValueSerializationException {
+        if (this.getValue() == null) return;
+
+        if (target.equals(Target.BYTE)) {
+            super.serializePrefixWithLength(ser);
         }
+
+        ser.writeU8(this.getValue().getTag().getByteTag());
+        ser.writeByteArray(this.getValue().getKey());
+
+        if (target.equals(Target.BYTE)) {
+            this.encodeType(ser);
+        }
+
+        this.setBytes(Hex.toHexString(ser.toByteArray()));
     }
 
     @Override
-    public void decode(CLValueDecoder clvd) throws IOException, CLValueDecodeException {
-        try {
-            clvd.readPublicKey(this);
-        } catch (NoSuchAlgorithmException e) {
-            throw new CLValueDecodeException("Error decoding CLValuePublicKey", e);
-        }
+    public void deserializeCustom(DeserializerBuffer deser) throws Exception {
+        this.setValue(PublicKey.fromTaggedHexString(ByteUtils.encodeHexString(deser.readByteArray(33))));
     }
 }

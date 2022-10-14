@@ -1,19 +1,14 @@
 package com.casper.sdk.model.deploy;
 
-import com.casper.sdk.exception.CLValueEncodeException;
-import com.casper.sdk.exception.DynamicInstanceException;
 import com.casper.sdk.exception.NoSuchTypeException;
-import com.casper.sdk.model.clvalue.encdec.CLValueEncoder;
-import com.casper.sdk.model.clvalue.encdec.interfaces.EncodableValue;
-import com.casper.sdk.model.deploy.executabledeploy.ExecutableDeployItem;
+import com.casper.sdk.model.clvalue.serde.CasperSerializableObject;
+import com.casper.sdk.model.clvalue.serde.Target;
 import com.casper.sdk.model.common.Digest;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.casper.sdk.model.deploy.executabledeploy.ExecutableDeployItem;
+import dev.oak3.sbs4j.SerializerBuffer;
+import dev.oak3.sbs4j.exception.ValueSerializationException;
+import lombok.*;
 
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -29,7 +24,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Deploy implements EncodableValue {
+public class Deploy implements CasperSerializableObject {
 
     /**
      * Hex-encoded deploy hash
@@ -60,14 +55,14 @@ public class Deploy implements EncodableValue {
      * Implements Deploy encoder
      */
     @Override
-    public void encode(CLValueEncoder clve, boolean encodeType) throws IOException, CLValueEncodeException, DynamicInstanceException, NoSuchTypeException {
-        header.encode(clve, true);
-        hash.encode(clve, true);
-        payment.encode(clve, true);
-        session.encode(clve, true);
-        clve.writeInt(approvals.size());
+    public void serialize(SerializerBuffer ser, Target target) throws NoSuchTypeException, ValueSerializationException {
+        header.serialize(ser, Target.BYTE);
+        hash.serialize(ser, Target.BYTE);
+        payment.serialize(ser, Target.BYTE);
+        session.serialize(ser, Target.BYTE);
+        ser.writeI32(approvals.size());
         for (Approval approval : approvals) {
-            approval.encode(clve, true);
+            approval.serialize(ser, Target.BYTE);
         }
     }
 }

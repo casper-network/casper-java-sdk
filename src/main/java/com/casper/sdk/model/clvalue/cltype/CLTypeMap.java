@@ -1,15 +1,11 @@
 package com.casper.sdk.model.clvalue.cltype;
 
+import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
-import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 /**
  * CLType for {@link AbstractCLType#MAP}
@@ -21,7 +17,9 @@ import lombok.Setter;
  */
 @Getter
 @EqualsAndHashCode(callSuper = false, of = {"typeName", "keyValueTypes"})
-public class CLTypeMap extends AbstractCLType {
+public class CLTypeMap extends AbstractCLTypeWithChildren {
+    private final String typeName = AbstractCLType.MAP;
+
     /**
      * Support class for {@link AbstractCLType#MAP} entry types
      *
@@ -32,7 +30,7 @@ public class CLTypeMap extends AbstractCLType {
      */
     @Getter
     @Setter
-    @EqualsAndHashCode
+    @EqualsAndHashCode(of = {"keyType", "valueType"})
     @NoArgsConstructor
     @AllArgsConstructor
     public static class CLTypeMapEntryType {
@@ -74,9 +72,7 @@ public class CLTypeMap extends AbstractCLType {
         }
     }
 
-    private final String typeName = AbstractCLType.MAP;
-
     @Setter
-    @JsonProperty(AbstractCLType.MAP)
+    @JsonProperty(MAP)
     private CLTypeMapEntryType keyValueTypes;
 }
