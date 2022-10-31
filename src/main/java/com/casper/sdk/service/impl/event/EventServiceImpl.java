@@ -50,8 +50,9 @@ final class EventServiceImpl implements EventService {
         this.uri = uri;
 
         this.client = new OkHttpClient.Builder()
-                .connectTimeout(Duration.ofDays(1))
-                .readTimeout(Duration.ofDays(1))
+                .connectTimeout(Duration.ofSeconds(10))
+                // The node issues an empty event every 10 seconds if no new events so give 30 seconds for read
+                .readTimeout(Duration.ofSeconds(30))
                 .build();
     }
 
