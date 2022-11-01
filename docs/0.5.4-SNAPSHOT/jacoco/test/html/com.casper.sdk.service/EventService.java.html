@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EventService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">casper-java-sdk</a> &gt; <a href="index.source.html" class="el_package">com.casper.sdk.service</a> &gt; <span class="el_source">EventService.java</span></div><h1>EventService.java</h1><pre class="source lang-java linenums">package com.casper.sdk.service;
+
+import com.casper.sdk.model.event.Event;
+import com.casper.sdk.model.event.EventTarget;
+import com.casper.sdk.model.event.EventType;
+
+import java.net.URI;
+import java.util.function.Consumer;
+
+/**
+ * The EventService interface.
+ * &lt;p&gt;
+ * Is instantiated using the static create methods within the interface eg:
+ * &lt;pre&gt;final EventService eventService = EventService.usingPeer(&quot;&lt;a href=&quot;http://localhost:18101&quot;&gt;...&lt;/a&gt;&quot;);&lt;/pre&gt;
+ *
+ * @author ian@meywood.com
+ */
+public interface EventService {
+
+    /**
+     * Reads a stream of events from a node
+     * *
+     *
+     * @param eventType     the type of event to read
+     * @param eventTarget   the target of the event JSON string or POJO
+     * @param startFrom     the optional event to start streaming from, if not present only obtains new events
+     * @param eventConsumer the consumer of the events
+     * @param &lt;EventT&gt;      the type of the event
+     */
+    &lt;EventT extends Event&lt;?&gt;&gt; void consumeEvents(final EventType eventType,
+                                                 final EventTarget eventTarget,
+                                                 final Long startFrom,
+                                                 final Consumer&lt;EventT&gt; eventConsumer);
+
+    /**
+     * Creates a new EventService for the specified host including protocol and port
+     *
+     * @param uri the uri of the host to connect to must include protocol, hostname, and port number
+     * @return the event service for the specified host
+     */
+    static EventService usingPeer(final URI uri) {
+<span class="fc" id="L42">        return EventServiceFactory.create(uri);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
