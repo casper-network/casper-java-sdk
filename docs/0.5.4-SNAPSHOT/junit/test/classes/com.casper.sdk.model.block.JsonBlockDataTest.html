@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="x-ua-compatible" content="IE=edge"/>
+<title>Test results - JsonBlockDataTest</title>
+<link href="../css/base-style.css" rel="stylesheet" type="text/css"/>
+<link href="../css/style.css" rel="stylesheet" type="text/css"/>
+<script src="../js/report.js" type="text/javascript"></script>
+</head>
+<body>
+<div id="content">
+<h1>JsonBlockDataTest</h1>
+<div class="breadcrumbs">
+<a href="../index.html">all</a> &gt; 
+<a href="../packages/com.casper.sdk.model.block.html">com.casper.sdk.model.block</a> &gt; JsonBlockDataTest</div>
+<div id="summary">
+<table>
+<tr>
+<td>
+<div class="summaryGroup">
+<table>
+<tr>
+<td>
+<div class="infoBox" id="tests">
+<div class="counter">1</div>
+<p>tests</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="failures">
+<div class="counter">0</div>
+<p>failures</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="ignored">
+<div class="counter">0</div>
+<p>ignored</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="duration">
+<div class="counter">0.071s</div>
+<p>duration</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</td>
+<td>
+<div class="infoBox success" id="successRate">
+<div class="percent">100%</div>
+<p>successful</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div id="tabs">
+<ul class="tabLinks">
+<li>
+<a href="#tab0">Tests</a>
+</li>
+<li>
+<a href="#tab1">Standard output</a>
+</li>
+</ul>
+<div id="tab0" class="tab">
+<h2>Tests</h2>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>Duration</th>
+<th>Result</th>
+</tr>
+</thead>
+<tr>
+<td class="success">validateJsonBlock_EraEndBlock()</td>
+<td class="success">0.071s</td>
+<td class="success">passed</td>
+</tr>
+</table>
+</div>
+<div id="tab1" class="tab">
+<h2>Standard output</h2>
+<span class="code">
+<pre>Original JSON: {
+  &quot;api_version&quot; : &quot;1.3.2&quot;,
+  &quot;block&quot; : {
+    &quot;hash&quot; : &quot;f21dfd6c290d4e3fc6a9fc16471fd734c18d38c2fe5c7c305255f99acb2e3fa3&quot;,
+    &quot;header&quot; : {
+      &quot;height&quot; : 239119,
+      &quot;state_root_hash&quot; : &quot;2c6af39cb8bcda66763047ddd424ee2b98f3506af02e2fc3cf5cae2357c8574b&quot;,
+      &quot;random_bit&quot; : true,
+      &quot;era_end&quot; : {
+        &quot;era_report&quot; : {
+          &quot;equivocators&quot; : [ ],
+          &quot;rewards&quot; : [ {
+            &quot;validator&quot; : &quot;01026ca707c348ed8012ac6a1f28db031fadd6eb67203501a353b867a08c8b9a80&quot;,
+            &quot;amount&quot; : 2426183451049
+          }, {
+            &quot;validator&quot; : &quot;01031cdce87d5fe53246492f9262932f9eb7421ea54b30da1eca06874fd2a7df60&quot;,
+            &quot;amount&quot; : 265833229
+          } ],
+          &quot;inactive_validators&quot; : [ ]
+        },
+        &quot;next_era_validator_weights&quot; : [ {
+          &quot;validator&quot; : &quot;01026ca707c348ed8012ac6a1f28db031fadd6eb67203501a353b867a08c8b9a80&quot;,
+          &quot;weight&quot; : &quot;160318940675942026&quot;
+        }, {
+          &quot;validator&quot; : &quot;01031cdce87d5fe53246492f9262932f9eb7421ea54b30da1eca06874fd2a7df60&quot;,
+          &quot;weight&quot; : &quot;17565906011961&quot;
+        } ]
+      },
+      &quot;body_hash&quot; : &quot;a35904b9316aa35b30a303077a2a55800d5413d30fb29489a2ad3a16c6fcb268&quot;,
+      &quot;parent_hash&quot; : &quot;f8a21a93b2e51fc3833473fede8d353230c7f820b07e9eb7b0617b82576f3d95&quot;,
+      &quot;accumulated_seed&quot; : &quot;0d4adfd35e846c6a567e99b6b926aca1d9ec3ee3a7bec961edf900a636b17ccb&quot;,
+      &quot;timestamp&quot; : &quot;2021-09-30T14:43:26.336Z&quot;,
+      &quot;era_id&quot; : 2192,
+      &quot;protocol_version&quot; : &quot;1.3.2&quot;
+    },
+    &quot;body&quot; : {
+      &quot;proposer&quot; : &quot;011117189c666f81c5160cd610ee383dc9b2d0361f004934754d39752eedc64957&quot;,
+      &quot;deploy_hashes&quot; : [ ],
+      &quot;transfer_hashes&quot; : [ &quot;82c794e4310eda0a39af3f5099c8a533e0b4f9142bd614ee725b6b261e3d9579&quot; ]
+    },
+    &quot;proofs&quot; : [ {
+      &quot;signature&quot; : &quot;0110ef8f863dbaed2ce67709e694eb29a14866ad9aff5c55c98948248bd0526b2455941490764c3dfa83052680d552fe8a26e0714b7958bcec219ca75b3d325802&quot;,
+      &quot;public_key&quot; : &quot;01026ca707c348ed8012ac6a1f28db031fadd6eb67203501a353b867a08c8b9a80&quot;
+    }, {
+      &quot;signature&quot; : &quot;013383fa1a734a7edd24b10a944ed69dd97ac528ca1d6559bd69570fa2bad15a5262878eaf4324a67aea47eea8aba5e26661a0f81cc11a4134e3ebaee96c76580d&quot;,
+      &quot;public_key&quot; : &quot;01031cdce87d5fe53246492f9262932f9eb7421ea54b30da1eca06874fd2a7df60&quot;
+    }, {
+      &quot;signature&quot; : &quot;01dfbb12768fc71bc13a792626fc3e5c0ce744bcf2174f55e6a5a5e33d0f6f4e7256bc3c9c09fd9f4dc7b237295842cd10dc5219a1bd662cad157cf7d051364407&quot;,
+      &quot;public_key&quot; : &quot;0103dd8b2b18ef0b9fd5b7c8e340b104ee4d966f2a167eb1a938963f8c8f699a45&quot;
+    }, {
+      &quot;signature&quot; : &quot;01503f8ac5391cbd5900807b46821e0caa7faba18dfdb6cb931625dc2f9b3b3574df84b68aedc3b7b3d7457c47d909c70f8112d41bb2bf816fc6909df07bcd7b01&quot;,
+      &quot;public_key&quot; : &quot;010427c1d1227c9d2aafe8c06c6e6b276da8dcd8fd170ca848b8e3e8e1038a6dc8&quot;
+    } ]
+  }
+}
+Serialized JSON: {
+  &quot;api_version&quot; : &quot;1.3.2&quot;,
+  &quot;block&quot; : {
+    &quot;hash&quot; : &quot;f21dfd6c290d4e3fc6a9fc16471fd734c18d38c2fe5c7c305255f99acb2e3fa3&quot;,
+    &quot;header&quot; : {
+      &quot;height&quot; : 239119,
+      &quot;state_root_hash&quot; : &quot;2c6af39cb8bcda66763047ddd424ee2b98f3506af02e2fc3cf5cae2357c8574b&quot;,
+      &quot;random_bit&quot; : true,
+      &quot;era_end&quot; : {
+        &quot;era_report&quot; : {
+          &quot;equivocators&quot; : [ ],
+          &quot;rewards&quot; : [ {
+            &quot;validator&quot; : &quot;01026ca707c348ed8012ac6a1f28db031fadd6eb67203501a353b867a08c8b9a80&quot;,
+            &quot;amount&quot; : 2426183451049
+          }, {
+            &quot;validator&quot; : &quot;01031cdce87d5fe53246492f9262932f9eb7421ea54b30da1eca06874fd2a7df60&quot;,
+            &quot;amount&quot; : 265833229
+          } ],
+          &quot;inactive_validators&quot; : [ ]
+        },
+        &quot;next_era_validator_weights&quot; : [ {
+          &quot;validator&quot; : &quot;01026ca707c348ed8012ac6a1f28db031fadd6eb67203501a353b867a08c8b9a80&quot;,
+          &quot;weight&quot; : &quot;160318940675942026&quot;
+        }, {
+          &quot;validator&quot; : &quot;01031cdce87d5fe53246492f9262932f9eb7421ea54b30da1eca06874fd2a7df60&quot;,
+          &quot;weight&quot; : &quot;17565906011961&quot;
+        } ]
+      },
+      &quot;body_hash&quot; : &quot;a35904b9316aa35b30a303077a2a55800d5413d30fb29489a2ad3a16c6fcb268&quot;,
+      &quot;parent_hash&quot; : &quot;f8a21a93b2e51fc3833473fede8d353230c7f820b07e9eb7b0617b82576f3d95&quot;,
+      &quot;accumulated_seed&quot; : &quot;0d4adfd35e846c6a567e99b6b926aca1d9ec3ee3a7bec961edf900a636b17ccb&quot;,
+      &quot;timestamp&quot; : &quot;2021-09-30T14:43:26.336Z&quot;,
+      &quot;era_id&quot; : 2192,
+      &quot;protocol_version&quot; : &quot;1.3.2&quot;
+    },
+    &quot;body&quot; : {
+      &quot;proposer&quot; : &quot;011117189c666f81c5160cd610ee383dc9b2d0361f004934754d39752eedc64957&quot;,
+      &quot;deploy_hashes&quot; : [ ],
+      &quot;transfer_hashes&quot; : [ &quot;82c794e4310eda0a39af3f5099c8a533e0b4f9142bd614ee725b6b261e3d9579&quot; ]
+    },
+    &quot;proofs&quot; : [ {
+      &quot;signature&quot; : &quot;0110ef8f863dbaed2ce67709e694eb29a14866ad9aff5c55c98948248bd0526b2455941490764c3dfa83052680d552fe8a26e0714b7958bcec219ca75b3d325802&quot;,
+      &quot;public_key&quot; : &quot;01026ca707c348ed8012ac6a1f28db031fadd6eb67203501a353b867a08c8b9a80&quot;
+    }, {
+      &quot;signature&quot; : &quot;013383fa1a734a7edd24b10a944ed69dd97ac528ca1d6559bd69570fa2bad15a5262878eaf4324a67aea47eea8aba5e26661a0f81cc11a4134e3ebaee96c76580d&quot;,
+      &quot;public_key&quot; : &quot;01031cdce87d5fe53246492f9262932f9eb7421ea54b30da1eca06874fd2a7df60&quot;
+    }, {
+      &quot;signature&quot; : &quot;01dfbb12768fc71bc13a792626fc3e5c0ce744bcf2174f55e6a5a5e33d0f6f4e7256bc3c9c09fd9f4dc7b237295842cd10dc5219a1bd662cad157cf7d051364407&quot;,
+      &quot;public_key&quot; : &quot;0103dd8b2b18ef0b9fd5b7c8e340b104ee4d966f2a167eb1a938963f8c8f699a45&quot;
+    }, {
+      &quot;signature&quot; : &quot;01503f8ac5391cbd5900807b46821e0caa7faba18dfdb6cb931625dc2f9b3b3574df84b68aedc3b7b3d7457c47d909c70f8112d41bb2bf816fc6909df07bcd7b01&quot;,
+      &quot;public_key&quot; : &quot;010427c1d1227c9d2aafe8c06c6e6b276da8dcd8fd170ca848b8e3e8e1038a6dc8&quot;
+    } ]
+  }
+}
+</pre>
+</span>
+</div>
+</div>
+<div id="footer">
+<p>
+<div>
+<label class="hidden" id="label-for-line-wrapping-toggle" for="line-wrapping-toggle">Wrap lines
+<input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
+</label>
+</div>Generated by 
+<a href="http://www.gradle.org">Gradle 7.5.1</a> at Nov 1, 2022, 10:51:23 AM</p>
+</div>
+</div>
+</body>
+</html>
