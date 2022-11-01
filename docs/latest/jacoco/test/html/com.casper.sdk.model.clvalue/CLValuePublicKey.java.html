@@ -3,19 +3,19 @@
 import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.cltype.CLTypePublicKey;
+import com.casper.sdk.model.clvalue.serde.Target;
 import com.casper.sdk.model.key.PublicKey;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import dev.oak3.sbs4j.DeserializerBuffer;
 import dev.oak3.sbs4j.SerializerBuffer;
-import dev.oak3.sbs4j.exception.ValueDeserializationException;
+import dev.oak3.sbs4j.exception.ValueSerializationException;
 import dev.oak3.sbs4j.util.ByteUtils;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.security.NoSuchAlgorithmException;
+import org.bouncycastle.util.encoders.Hex;
 
 /**
  * Casper PublicKey CLValue implementation
@@ -44,29 +44,31 @@ public class CLValuePublicKey extends AbstractCLValue&lt;PublicKey, CLTypePublic
         return this.getClType().getTypeName();
     }
 
-<span class="fc" id="L47">    public CLValuePublicKey(PublicKey value) {</span>
+<span class="fc" id="L47">    public CLValuePublicKey(PublicKey value) throws ValueSerializationException {</span>
 <span class="fc" id="L48">        this.setValue(value);</span>
 <span class="fc" id="L49">    }</span>
 
     @Override
-    public void serialize(SerializerBuffer ser, boolean encodeType) throws NoSuchTypeException {
+    public void serialize(SerializerBuffer ser, Target target) throws NoSuchTypeException, ValueSerializationException {
 <span class="pc bpc" id="L53" title="1 of 2 branches missed.">        if (this.getValue() == null) return;</span>
 
-<span class="fc" id="L55">        ser.writeU8(this.getValue().getTag().getByteTag());</span>
-<span class="fc" id="L56">        ser.writeByteArray(this.getValue().getKey());</span>
-
-<span class="fc bfc" id="L58" title="All 2 branches covered.">        if (encodeType) {</span>
-<span class="fc" id="L59">            this.encodeType(ser);</span>
+<span class="fc bfc" id="L55" title="All 2 branches covered.">        if (target.equals(Target.BYTE)) {</span>
+<span class="fc" id="L56">            super.serializePrefixWithLength(ser);</span>
         }
-<span class="fc" id="L61">    }</span>
+
+<span class="fc" id="L59">        ser.writeU8(this.getValue().getTag().getByteTag());</span>
+<span class="fc" id="L60">        ser.writeByteArray(this.getValue().getKey());</span>
+
+<span class="fc bfc" id="L62" title="All 2 branches covered.">        if (target.equals(Target.BYTE)) {</span>
+<span class="fc" id="L63">            this.encodeType(ser);</span>
+        }
+
+<span class="fc" id="L66">        this.setBytes(Hex.toHexString(ser.toByteArray()));</span>
+<span class="fc" id="L67">    }</span>
 
     @Override
-    public void deserialize(DeserializerBuffer deser) throws ValueDeserializationException {
-        try {
-<span class="fc" id="L66">            this.setValue(PublicKey.fromTaggedHexString(ByteUtils.encodeHexString(deser.readByteArray(33))));</span>
-<span class="nc" id="L67">        } catch (NoSuchAlgorithmException | IllegalArgumentException e) {</span>
-<span class="nc" id="L68">            throw new ValueDeserializationException(&quot;Error decoding CLValuePublicKey&quot;, e);</span>
-<span class="fc" id="L69">        }</span>
-<span class="fc" id="L70">    }</span>
+    public void deserializeCustom(DeserializerBuffer deser) throws Exception {
+<span class="fc" id="L71">        this.setValue(PublicKey.fromTaggedHexString(ByteUtils.encodeHexString(deser.readByteArray(33))));</span>
+<span class="fc" id="L72">    }</span>
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

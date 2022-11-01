@@ -3,13 +3,16 @@
 import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.cltype.CLTypeUnit;
+import com.casper.sdk.model.clvalue.serde.Target;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import dev.oak3.sbs4j.DeserializerBuffer;
 import dev.oak3.sbs4j.SerializerBuffer;
+import dev.oak3.sbs4j.exception.ValueSerializationException;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import org.bouncycastle.util.encoders.Hex;
 
 /**
  * Casper Unit CLValue implementation
@@ -23,12 +26,12 @@ import lombok.Setter;
  * @since 0.0.1
  */
 @Getter
-<span class="nc" id="L26">@Setter</span>
-<span class="pc bpc" id="L27" title="10 of 16 branches missed.">@EqualsAndHashCode(callSuper = true)</span>
+<span class="nc" id="L29">@Setter</span>
+<span class="pc bpc" id="L30" title="10 of 16 branches missed.">@EqualsAndHashCode(callSuper = true)</span>
 public class CLValueUnit extends AbstractCLValue&lt;Object, CLTypeUnit&gt; {
     private static final String UNITY_EMPTY_VALUE = &quot;&quot;;
 
-<span class="fc" id="L31">    private CLTypeUnit clType = new CLTypeUnit();</span>
+<span class="fc" id="L34">    private CLTypeUnit clType = new CLTypeUnit();</span>
 
     @JsonSetter(&quot;cl_type&quot;)
     @ExcludeFromJacocoGeneratedReport
@@ -42,24 +45,30 @@ public class CLValueUnit extends AbstractCLValue&lt;Object, CLTypeUnit&gt; {
         return this.getClType().getTypeName();
     }
 
-<span class="fc" id="L45">    public CLValueUnit() {</span>
-<span class="fc" id="L46">        this.setValue(UNITY_EMPTY_VALUE);</span>
-<span class="fc" id="L47">    }</span>
+<span class="fc" id="L48">    public CLValueUnit() throws ValueSerializationException {</span>
+<span class="fc" id="L49">        this.setValue(UNITY_EMPTY_VALUE);</span>
+<span class="fc" id="L50">    }</span>
 
     @Override
-    public void serialize(SerializerBuffer ser, boolean encodeType) throws NoSuchTypeException {
-<span class="pc bpc" id="L51" title="1 of 2 branches missed.">        if (this.getValue() == null) return;</span>
+    public void serialize(SerializerBuffer ser, Target target) throws NoSuchTypeException, ValueSerializationException {
+<span class="pc bpc" id="L54" title="1 of 2 branches missed.">        if (this.getValue() == null) return;</span>
 
-<span class="fc" id="L53">        setBytes(UNITY_EMPTY_VALUE);</span>
-
-<span class="pc bpc" id="L55" title="1 of 2 branches missed.">        if (encodeType) {</span>
-<span class="nc" id="L56">            this.encodeType(ser);</span>
+<span class="pc bpc" id="L56" title="1 of 2 branches missed.">        if (target.equals(Target.BYTE)) {</span>
+<span class="nc" id="L57">            super.serializePrefixWithLength(ser);</span>
         }
-<span class="fc" id="L58">    }</span>
+
+<span class="fc" id="L60">        setBytes(UNITY_EMPTY_VALUE);</span>
+
+<span class="pc bpc" id="L62" title="1 of 2 branches missed.">        if (target.equals(Target.BYTE)) {</span>
+<span class="nc" id="L63">            this.encodeType(ser);</span>
+        }
+
+<span class="fc" id="L66">        this.setBytes(Hex.toHexString(ser.toByteArray()));</span>
+<span class="fc" id="L67">    }</span>
 
     @Override
-    public void deserialize(DeserializerBuffer deser) {
-<span class="fc" id="L62">        setBytes(UNITY_EMPTY_VALUE);</span>
-<span class="fc" id="L63">    }</span>
+    public void deserializeCustom(DeserializerBuffer deser) throws Exception {
+<span class="fc" id="L71">        setBytes(UNITY_EMPTY_VALUE);</span>
+<span class="fc" id="L72">    }</span>
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

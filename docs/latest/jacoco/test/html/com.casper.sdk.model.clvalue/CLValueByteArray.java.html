@@ -3,13 +3,15 @@
 import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.cltype.CLTypeByteArray;
+import com.casper.sdk.model.clvalue.serde.Target;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dev.oak3.sbs4j.DeserializerBuffer;
 import dev.oak3.sbs4j.SerializerBuffer;
-import dev.oak3.sbs4j.exception.ValueDeserializationException;
+import dev.oak3.sbs4j.exception.ValueSerializationException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.bouncycastle.util.encoders.Hex;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -23,32 +25,38 @@ import java.util.Objects;
  * @since 0.0.1
  */
 @Getter
-<span class="fc" id="L26">@Setter</span>
-<span class="fc" id="L27">@NoArgsConstructor</span>
+<span class="fc" id="L28">@Setter</span>
+<span class="fc" id="L29">@NoArgsConstructor</span>
 public class CLValueByteArray extends AbstractCLValue&lt;byte[], CLTypeByteArray&gt; {
-<span class="fc" id="L29">    @JsonProperty(&quot;cl_type&quot;)</span>
-<span class="fc" id="L30">    private CLTypeByteArray clType = new CLTypeByteArray();</span>
+<span class="fc" id="L31">    @JsonProperty(&quot;cl_type&quot;)</span>
+<span class="fc" id="L32">    private CLTypeByteArray clType = new CLTypeByteArray();</span>
 
-<span class="fc" id="L32">    public CLValueByteArray(byte[] value) {</span>
-<span class="fc" id="L33">        this.setValue(value);</span>
-<span class="fc" id="L34">        this.clType.setLength(value.length);</span>
-<span class="fc" id="L35">    }</span>
+<span class="fc" id="L34">    public CLValueByteArray(byte[] value) throws ValueSerializationException {</span>
+<span class="fc" id="L35">        this.setValue(value);</span>
+<span class="fc" id="L36">        this.clType.setLength(value.length);</span>
+<span class="fc" id="L37">    }</span>
 
     @Override
-    public void serialize(SerializerBuffer ser, boolean encodeType) throws NoSuchTypeException {
-<span class="pc bpc" id="L39" title="1 of 2 branches missed.">        if (this.getValue() == null) return;</span>
+    public void serialize(SerializerBuffer ser, Target target) throws NoSuchTypeException, ValueSerializationException {
+<span class="pc bpc" id="L41" title="1 of 2 branches missed.">        if (this.getValue() == null) return;</span>
 
-<span class="fc" id="L41">        ser.writeByteArray(this.getValue());</span>
-
-<span class="pc bpc" id="L43" title="1 of 2 branches missed.">        if (encodeType) {</span>
-<span class="nc" id="L44">            this.encodeType(ser);</span>
+<span class="pc bpc" id="L43" title="1 of 2 branches missed.">        if (target.equals(Target.BYTE)) {</span>
+<span class="nc" id="L44">            super.serializePrefixWithLength(ser);</span>
         }
-<span class="fc" id="L46">    }</span>
+
+<span class="fc" id="L47">        ser.writeByteArray(this.getValue());</span>
+
+<span class="pc bpc" id="L49" title="1 of 2 branches missed.">        if (target.equals(Target.BYTE)) {</span>
+<span class="nc" id="L50">            this.encodeType(ser);</span>
+        }
+
+<span class="fc" id="L53">        this.setBytes(Hex.toHexString(ser.toByteArray()));</span>
+<span class="fc" id="L54">    }</span>
 
     @Override
-    public void deserialize(DeserializerBuffer deser) throws ValueDeserializationException {
-<span class="fc" id="L50">        this.setValue(deser.readByteArray(this.getClType().getLength()));</span>
-<span class="fc" id="L51">    }</span>
+    public void deserializeCustom(DeserializerBuffer deser) throws Exception {
+<span class="fc" id="L58">        this.setValue(deser.readByteArray(this.getClType().getLength()));</span>
+<span class="fc" id="L59">    }</span>
 
     @Override
     @ExcludeFromJacocoGeneratedReport
@@ -89,4 +97,4 @@ public class CLValueByteArray extends AbstractCLValue&lt;byte[], CLTypeByteArray
         return result;
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

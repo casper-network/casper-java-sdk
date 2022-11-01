@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FinalitySignature.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">casper-java-sdk</a> &gt; <a href="index.source.html" class="el_package">com.casper.sdk.model.event.finalitysignature</a> &gt; <span class="el_source">FinalitySignature.java</span></div><h1>FinalitySignature.java</h1><pre class="source lang-java linenums">package com.casper.sdk.model.event.finalitysignature;
+
+import com.casper.sdk.model.common.Digest;
+import com.casper.sdk.model.event.EventData;
+import com.casper.sdk.model.key.PublicKey;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import lombok.*;
+
+/**
+ * A validator's signature of a block, to confirm it is finalized. Clients and joining nodes should wait until the
+ * signers' combined weight exceeds their fault tolerance threshold before accepting the block as finalized.
+ */
+@Getter
+<span class="fc" id="L15">@Setter</span>
+<span class="nc" id="L16">@Builder</span>
+<span class="nc" id="L17">@AllArgsConstructor</span>
+<span class="fc" id="L18">@NoArgsConstructor</span>
+@JsonTypeName(&quot;FinalitySignature&quot;)
+public class FinalitySignature implements EventData {
+
+    @JsonProperty(&quot;block_hash&quot;)
+<span class="fc" id="L23">    private Digest blockHash;</span>
+
+    @JsonProperty(&quot;era_id&quot;)
+<span class="fc" id="L26">    private long eraId;</span>
+
+    @JsonProperty(&quot;public_key&quot;)
+<span class="fc" id="L29">    private PublicKey publicKey;</span>
+
+    @JsonProperty(&quot;signature&quot;)
+<span class="fc" id="L32">    private String signature;</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

@@ -2,6 +2,7 @@
 
 
 import com.casper.sdk.model.clvalue.serde.CasperSerializableObject;
+import com.casper.sdk.model.clvalue.serde.Target;
 import com.fasterxml.jackson.annotation.JsonValue;
 import dev.oak3.sbs4j.SerializerBuffer;
 import lombok.*;
@@ -17,31 +18,31 @@ import org.joda.time.format.PeriodFormatterBuilder;
  * @since 0.0.1
  */
 @Getter
-<span class="nc" id="L20">@Setter</span>
-<span class="nc" id="L21">@NoArgsConstructor</span>
-<span class="fc" id="L22">@AllArgsConstructor</span>
-<span class="pc" id="L23">@Builder</span>
+<span class="nc" id="L21">@Setter</span>
+<span class="nc" id="L22">@NoArgsConstructor</span>
+<span class="fc" id="L23">@AllArgsConstructor</span>
+<span class="pc" id="L24">@Builder</span>
 public class Ttl implements CasperSerializableObject {
     @JsonValue
     private String ttl;
 
     public Long getTtl() {
-<span class="fc" id="L29">        PeriodFormatter formatter = new PeriodFormatterBuilder()</span>
-<span class="fc" id="L30">                .appendDays().appendSuffix(&quot;d&quot;)</span>
-<span class="fc" id="L31">                .appendHours().appendSuffix(&quot;h&quot;)</span>
-<span class="fc" id="L32">                .appendMinutes().appendSuffix(&quot;m&quot;)</span>
-<span class="fc" id="L33">                .toFormatter();</span>
+<span class="fc" id="L30">        PeriodFormatter formatter = new PeriodFormatterBuilder()</span>
+<span class="fc" id="L31">                .appendDays().appendSuffix(&quot;d&quot;)</span>
+<span class="fc" id="L32">                .appendHours().appendSuffix(&quot;h&quot;)</span>
+<span class="fc" id="L33">                .appendMinutes().appendSuffix(&quot;m&quot;)</span>
+<span class="fc" id="L34">                .toFormatter();</span>
 
-<span class="fc" id="L35">        Period p = formatter.parsePeriod(ttl);</span>
-<span class="fc" id="L36">        return p.toStandardDuration().getMillis();</span>
+<span class="fc" id="L36">        Period p = formatter.parsePeriod(ttl);</span>
+<span class="fc" id="L37">        return p.toStandardDuration().getMillis();</span>
     }
 
     /**
      * implements SerializableObject
      */
     @Override
-    public void serialize(SerializerBuffer ser, boolean encodeType) {
-<span class="fc" id="L44">        ser.writeI64(getTtl());</span>
-<span class="fc" id="L45">    }</span>
+    public void serialize(SerializerBuffer ser, Target target) {
+<span class="fc" id="L45">        ser.writeI64(getTtl());</span>
+<span class="fc" id="L46">    }</span>
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

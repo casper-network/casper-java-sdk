@@ -2,6 +2,7 @@
 
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.serde.CasperSerializableObject;
+import com.casper.sdk.model.clvalue.serde.Target;
 import com.casper.sdk.model.common.Digest;
 import com.casper.sdk.model.deploy.executabledeploy.ExecutableDeployItem;
 import dev.oak3.sbs4j.SerializerBuffer;
@@ -19,51 +20,51 @@ import java.util.List;
  * @since 0.0.1
  */
 @Getter
-<span class="fc" id="L22">@Setter</span>
-<span class="pc" id="L23">@Builder</span>
-<span class="fc" id="L24">@AllArgsConstructor</span>
-<span class="fc" id="L25">@NoArgsConstructor</span>
+<span class="fc" id="L23">@Setter</span>
+<span class="pc" id="L24">@Builder</span>
+<span class="fc" id="L25">@AllArgsConstructor</span>
+<span class="fc" id="L26">@NoArgsConstructor</span>
 public class Deploy implements CasperSerializableObject {
 
     /**
      * Hex-encoded deploy hash
      */
-<span class="fc" id="L31">    private Digest hash;</span>
+<span class="fc" id="L32">    private Digest hash;</span>
 
     /**
      * @see DeployHeader
      */
-<span class="fc" id="L36">    private DeployHeader header;</span>
+<span class="fc" id="L37">    private DeployHeader header;</span>
 
     /**
      * @see Approval
      */
-<span class="fc" id="L41">    private List&lt;Approval&gt; approvals;</span>
+<span class="fc" id="L42">    private List&lt;Approval&gt; approvals;</span>
 
     /**
      * @see ExecutableDeployItem
      */
-<span class="fc" id="L46">    private ExecutableDeployItem payment;</span>
+<span class="fc" id="L47">    private ExecutableDeployItem payment;</span>
 
     /**
      * @see ExecutableDeployItem
      */
-<span class="fc" id="L51">    private ExecutableDeployItem session;</span>
+<span class="fc" id="L52">    private ExecutableDeployItem session;</span>
 
     /**
      * Implements Deploy encoder
      */
     @Override
-    public void serialize(SerializerBuffer ser, boolean encodeType) throws NoSuchTypeException, ValueSerializationException {
-<span class="fc" id="L58">        header.serialize(ser, true);</span>
-<span class="fc" id="L59">        hash.serialize(ser, true);</span>
-<span class="fc" id="L60">        payment.serialize(ser, true);</span>
-<span class="fc" id="L61">        session.serialize(ser, true);</span>
-<span class="fc" id="L62">        ser.writeI32(approvals.size());</span>
-<span class="fc bfc" id="L63" title="All 2 branches covered.">        for (Approval approval : approvals) {</span>
-<span class="fc" id="L64">            approval.serialize(ser, true);</span>
-<span class="fc" id="L65">        }</span>
-<span class="fc" id="L66">    }</span>
+    public void serialize(SerializerBuffer ser, Target target) throws NoSuchTypeException, ValueSerializationException {
+<span class="fc" id="L59">        header.serialize(ser, Target.BYTE);</span>
+<span class="fc" id="L60">        hash.serialize(ser, Target.BYTE);</span>
+<span class="fc" id="L61">        payment.serialize(ser, Target.BYTE);</span>
+<span class="fc" id="L62">        session.serialize(ser, Target.BYTE);</span>
+<span class="fc" id="L63">        ser.writeI32(approvals.size());</span>
+<span class="fc bfc" id="L64" title="All 2 branches covered.">        for (Approval approval : approvals) {</span>
+<span class="fc" id="L65">            approval.serialize(ser, Target.BYTE);</span>
+<span class="fc" id="L66">        }</span>
+<span class="fc" id="L67">    }</span>
 }
 
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

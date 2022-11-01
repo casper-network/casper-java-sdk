@@ -7,7 +7,11 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
@@ -22,53 +26,53 @@ import java.util.Map;
  * @since 0.0.1
  */
 @Getter
-<span class="pc" id="L25">@Setter</span>
-<span class="pc bnc" id="L26" title="All 2 branches missed.">@Builder</span>
-<span class="nc" id="L27">@AllArgsConstructor</span>
-<span class="fc" id="L28">@NoArgsConstructor</span>
+<span class="pc" id="L29">@Setter</span>
+<span class="pc bnc" id="L30" title="All 2 branches missed.">@Builder</span>
+<span class="nc" id="L31">@AllArgsConstructor</span>
+<span class="fc" id="L32">@NoArgsConstructor</span>
 public class Bid {
 
     /**
      * The purse that was used for bonding.
      */
     @JsonProperty(&quot;bonding_purse&quot;)
-<span class="fc" id="L35">    private URef bondingPurse;</span>
+<span class="fc" id="L39">    private URef bondingPurse;</span>
 
     /**
      * Delegation rate
      */
     @JsonProperty(&quot;delegation_rate&quot;)
-<span class="fc" id="L41">    private int delegationRate;</span>
+<span class="fc" id="L45">    private int delegationRate;</span>
 
     /**
      * This validator's delegators, indexed by their public keys
      */
     @JsonIgnore
     @Builder.Default
-<span class="nc" id="L48">    private Map&lt;PublicKey, Delegator&gt; delegators = new LinkedHashMap&lt;&gt;();</span>
+<span class="nc" id="L52">    private Map&lt;PublicKey, Delegator&gt; delegators = new LinkedHashMap&lt;&gt;();</span>
 
     /**
      * `true` if validator has been \&quot;evicted\&quot;
      */
-<span class="fc" id="L53">    private boolean inactive;</span>
+<span class="fc" id="L57">    private boolean inactive;</span>
 
     /**
      * The amount of tokens staked by a validator (not including delegators).
      */
     @JsonIgnore
-<span class="nc" id="L59">    private BigInteger stakedAmount;</span>
+<span class="nc" id="L63">    private BigInteger stakedAmount;</span>
 
     /**
      * Validator PublicKey
      */
     @JsonProperty(&quot;validator_public_key&quot;)
-<span class="fc" id="L65">    private PublicKey validatorPublicKey;</span>
+<span class="fc" id="L69">    private PublicKey validatorPublicKey;</span>
 
     /**
      * Vesting schedule for a genesis validator. `None` if non-genesis validator.
      */
     @JsonProperty(&quot;vesting_schedule&quot;)
-<span class="fc" id="L71">    private VestingSchedule vestingSchedule;</span>
+<span class="fc" id="L75">    private VestingSchedule vestingSchedule;</span>
 
     @JsonSetter(&quot;delegators&quot;)
     @ExcludeFromJacocoGeneratedReport
@@ -103,4 +107,4 @@ public class Bid {
         this.stakedAmount = new BigInteger(value, 10);
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

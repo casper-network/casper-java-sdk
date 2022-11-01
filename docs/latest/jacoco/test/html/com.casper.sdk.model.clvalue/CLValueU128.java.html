@@ -3,16 +3,17 @@
 import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.cltype.CLTypeU128;
+import com.casper.sdk.model.clvalue.serde.Target;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import dev.oak3.sbs4j.DeserializerBuffer;
 import dev.oak3.sbs4j.SerializerBuffer;
-import dev.oak3.sbs4j.exception.ValueDeserializationException;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.bouncycastle.util.encoders.Hex;
 
 import java.math.BigInteger;
 
@@ -25,11 +26,11 @@ import java.math.BigInteger;
  * @since 0.0.1
  */
 @Getter
-<span class="nc" id="L28">@Setter</span>
-<span class="pc bpc" id="L29" title="10 of 16 branches missed.">@EqualsAndHashCode(callSuper = true)</span>
-<span class="fc" id="L30">@NoArgsConstructor</span>
+<span class="nc" id="L29">@Setter</span>
+<span class="pc bpc" id="L30" title="10 of 16 branches missed.">@EqualsAndHashCode(callSuper = true)</span>
+<span class="fc" id="L31">@NoArgsConstructor</span>
 public class CLValueU128 extends AbstractCLValue&lt;BigInteger, CLTypeU128&gt; {
-<span class="fc" id="L32">    private CLTypeU128 clType = new CLTypeU128();</span>
+<span class="fc" id="L33">    private CLTypeU128 clType = new CLTypeU128();</span>
 
     @JsonSetter(&quot;cl_type&quot;)
     @ExcludeFromJacocoGeneratedReport
@@ -43,24 +44,30 @@ public class CLValueU128 extends AbstractCLValue&lt;BigInteger, CLTypeU128&gt; {
         return this.getClType().getTypeName();
     }
 
-<span class="fc" id="L46">    public CLValueU128(BigInteger value) {</span>
-<span class="fc" id="L47">        this.setValue(value);</span>
-<span class="fc" id="L48">    }</span>
+<span class="fc" id="L47">    public CLValueU128(BigInteger value) throws ValueSerializationException {</span>
+<span class="fc" id="L48">        this.setValue(value);</span>
+<span class="fc" id="L49">    }</span>
 
     @Override
-    public void serialize(SerializerBuffer ser, boolean encodeType) throws ValueSerializationException, NoSuchTypeException {
-<span class="pc bpc" id="L52" title="1 of 2 branches missed.">        if (this.getValue() == null) return;</span>
+    public void serialize(SerializerBuffer ser, Target target) throws ValueSerializationException, NoSuchTypeException {
+<span class="pc bpc" id="L53" title="1 of 2 branches missed.">        if (this.getValue() == null) return;</span>
 
-<span class="fc" id="L54">        ser.writeU128(this.getValue());</span>
-
-<span class="pc bpc" id="L56" title="1 of 2 branches missed.">        if (encodeType) {</span>
-<span class="nc" id="L57">            this.encodeType(ser);</span>
+<span class="pc bpc" id="L55" title="1 of 2 branches missed.">        if (target.equals(Target.BYTE)) {</span>
+<span class="nc" id="L56">            super.serializePrefixWithLength(ser);</span>
         }
-<span class="fc" id="L59">    }</span>
+
+<span class="fc" id="L59">        ser.writeU128(this.getValue());</span>
+
+<span class="pc bpc" id="L61" title="1 of 2 branches missed.">        if (target.equals(Target.BYTE)) {</span>
+<span class="nc" id="L62">            this.encodeType(ser);</span>
+        }
+
+<span class="fc" id="L65">        this.setBytes(Hex.toHexString(ser.toByteArray()));</span>
+<span class="fc" id="L66">    }</span>
 
     @Override
-    public void deserialize(DeserializerBuffer deser) throws ValueDeserializationException {
-<span class="fc" id="L63">        this.setValue(deser.readU128());</span>
-<span class="fc" id="L64">    }</span>
+    public void deserializeCustom(DeserializerBuffer deser) throws Exception {
+<span class="fc" id="L70">        this.setValue(deser.readU128());</span>
+<span class="fc" id="L71">    }</span>
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
