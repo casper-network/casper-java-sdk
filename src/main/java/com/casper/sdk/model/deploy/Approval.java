@@ -1,9 +1,12 @@
 package com.casper.sdk.model.deploy;
 
+import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.serde.CasperSerializableObject;
+import com.casper.sdk.model.clvalue.serde.Target;
 import com.casper.sdk.model.key.PublicKey;
 import com.casper.sdk.model.key.Signature;
 import dev.oak3.sbs4j.SerializerBuffer;
+import dev.oak3.sbs4j.exception.ValueSerializationException;
 import lombok.*;
 
 /**
@@ -34,8 +37,8 @@ public class Approval implements CasperSerializableObject {
      * Implements Approval encoder
      */
     @Override
-    public void serialize(SerializerBuffer ser, boolean encodeType) {
-        signer.serialize(ser, encodeType);
-        signature.serialize(ser, encodeType);
+    public void serialize(SerializerBuffer ser, Target target) throws NoSuchTypeException, ValueSerializationException {
+        signer.serialize(ser, target);
+        signature.serialize(ser, target);
     }
 }

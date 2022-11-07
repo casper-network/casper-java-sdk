@@ -1,6 +1,7 @@
 package com.casper.sdk.model.deploy.executabledeploy;
 
 import com.casper.sdk.exception.NoSuchTypeException;
+import com.casper.sdk.model.clvalue.serde.Target;
 import com.casper.sdk.model.deploy.NamedArg;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import dev.oak3.sbs4j.SerializerBuffer;
@@ -42,11 +43,11 @@ public class Transfer implements ExecutableDeployItem {
      * Implements the Transfer encoder
      */
     @Override
-    public void serialize(SerializerBuffer ser, boolean encodeType) throws ValueSerializationException, NoSuchTypeException {
+    public void serialize(SerializerBuffer ser, Target target) throws ValueSerializationException, NoSuchTypeException {
         ser.writeU8(getOrder());
         ser.writeI32(args.size());
         for (NamedArg<?> namedArg : args) {
-            namedArg.serialize(ser, true);
+            namedArg.serialize(ser, Target.BYTE);
         }
     }
 }

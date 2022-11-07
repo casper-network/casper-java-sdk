@@ -7,11 +7,15 @@ plugins {
     id 'jacoco'
     id 'signing'
     id 'maven-publish'
+    id('io.github.gradle-nexus.publish-plugin') version '1.1.0'
 }
 
-group = 'com.syntifi.casper'
-version = '0.4.0-SNAPSHOT'
-sourceCompatibility = '8'
+apply plugin: 'java'
+
+group = 'network.casper'
+version='0.5.4-SNAPSHOT'
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 repositories {
 	mavenCentral()
@@ -20,7 +24,7 @@ repositories {
 
 dependencies {
     implementation "dev.oak3:sbs4j:${sbs4jVersion}"
-    implementation "com.github.briandilley.jsonrpc4j:jsonrpc4j:${jsonrpc4jVersion}"
+    implementation "io.github.oak:jsonrpc4j:${jsonrpc4jVersion}"
     implementation "com.syntifi.crypto:crypto-key-common:${cryptokeyVersion}"
     implementation "com.syntifi.crypto:crypto-key-ed25519:${cryptokeyVersion}"
     implementation "com.syntifi.crypto:crypto-key-secp256k1:${cryptokeyVersion}"
@@ -35,6 +39,8 @@ dependencies {
     testImplementation "org.apache.logging.log4j:log4j-api:${log4jVersion}"
     testImplementation "org.apache.logging.log4j:log4j-core:${log4jVersion}"
     testImplementation "org.apache.logging.log4j:log4j-slf4j-impl:${log4jVersion}"
+    testImplementation "com.jayway.jsonpath:json-path-assert:${jsonPathAssertVersion}"
+    testImplementation "com.squareup.okhttp3:mockwebserver:${mockwebserverVersion}"
 
     // Use JUnit Jupiter for testing.
     testImplementation "org.junit.jupiter:junit-jupiter:${jupiterVersion}"
@@ -47,9 +53,27 @@ java {
     withSourcesJar()
 }
 
+task casperJar(type: Jar) {
+    archiveBaseName = 'casper-java-sdk'
+    archiveVersion = "0.5.2-SNAPSHOT"
+    from { configurations.compileClasspath.findAll { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
 javadoc {
     if (JavaVersion.current().isJava9Compatible()) {
         options.addBooleanOption('html5', true)
+    }
+}
+
+nexusPublishing {
+    repositories {
+        sonatype {  //only for users registered in Sonatype after 24 Feb 2021
+            nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/"))
+            snapshotRepositoryUrl.set(uri("https://s01.oss.sonatype.org/content/repositories/snapshots/"))
+            username.set(System.getenv('MAVEN_USERNAME'))
+            password.set(System.getenv('MAVEN_PASSWORD'))
+        }
     }
 }
 
@@ -130,9 +154,9 @@ publishing {
             artifactId = 'casper-java-sdk'
             from components.java
             pom {
-                name = 'Java 8+ Casper RPC Client SDK'
+                name = 'Casper Java SDK'
                 packaging = 'jar'
-                description = 'This project implements the SDK to interact with a Casper Node. It wraps the Json-RPC requests and maps the results to Java objects.'
+                description = 'SDK to streamline the 3rd party Java client integration processes. Such 3rd parties include exchanges & app developers.'
                 url = 'https://github.com/casper-network/casper-java-sdk'
 
                 scm {
@@ -169,16 +193,31 @@ publishing {
                         name = 'Andre Bertolace'
                         email = 'andre@syntifi.com'
                     }
+                    developer {
+                        id = 'meywood'
+                        name = 'Ian Mills'
+                        email = 'ian@meywood.com'
+                    }
+                    developer {
+                        id = 'stormeye'
+                        name = 'Carl Norburn'
+                        email = 'carl@stormeye.co.uk'
+                    }
                 }
             }
         }
     }
-}
 
-// Reference at https://docs.gradle.org/current/userguide/signing_plugin.html#sec:in-memory-keys
-signing {
-    def signingKey = System.getenv('GPG_SIGNING_KEY') ?: findProperty('GPG_SIGNING_KEY')
-    def signingKeyPassword = System.getenv('GPG_SIGNING_KEY_PASSWORD') ?: findProperty('GPG_SIGNING_KEY_PASSWORD')
-    useInMemoryPgpKeys(signingKey, signingKeyPassword)
-    sign publishing.publications.mavenJava
+    jar {
+        archiveClassifier = ''
+    }
+
+    // Reference at https://docs.gradle.org/current/userguide/signing_plugin.html#sec:in-memory-keys
+    signing {
+        def signingKey = System.getenv('GPG_SIGNING_KEY') ?: findProperty('GPG_SIGNING_KEY')
+        def signingKeyPassword = System.getenv('GPG_SIGNING_KEY_PASSWORD') ?: findProperty('GPG_SIGNING_KEY_PASSWORD')
+
+        useInMemoryPgpKeys(signingKey, signingKeyPassword)
+        sign publishing.publications.mavenJava
+    }
 }

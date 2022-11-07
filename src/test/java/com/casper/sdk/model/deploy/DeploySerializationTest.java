@@ -2,6 +2,7 @@ package com.casper.sdk.model.deploy;
 
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.AbstractJsonTests;
+import com.casper.sdk.model.clvalue.serde.Target;
 import com.casper.sdk.model.common.Digest;
 import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
@@ -39,7 +40,7 @@ public class DeploySerializationTest extends AbstractJsonTests {
         assertNotNull(deploy);
 
         SerializerBuffer ser = new SerializerBuffer();
-        deploy.serialize(ser, true);
+        deploy.serialize(ser, Target.BYTE);
         byte[] deployBytes = ser.toByteArray();
         String val = Hex.toHexString(deployBytes);
         assertEquals(Hex.toHexString(digest.getDigest()), val);

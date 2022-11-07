@@ -1,5 +1,6 @@
 package com.casper.sdk.model.block;
 
+import com.casper.sdk.model.common.Digest;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,7 +29,7 @@ public class JsonBlock {
      * The block's hash.
      */
     @JsonProperty("hash")
-    private String hash;
+    private Digest hash;
 
     /**
      * {@link JsonBlockHeader}
