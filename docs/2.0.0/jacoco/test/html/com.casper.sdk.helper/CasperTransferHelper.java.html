@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CasperTransferHelper.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">casper-java-sdk</a> &gt; <a href="index.source.html" class="el_package">com.casper.sdk.helper</a> &gt; <span class="el_source">CasperTransferHelper.java</span></div><h1>CasperTransferHelper.java</h1><pre class="source lang-java linenums">package com.casper.sdk.helper;
+
+import com.casper.sdk.exception.NoSuchTypeException;
+import com.casper.sdk.model.clvalue.CLValueOption;
+import com.casper.sdk.model.clvalue.CLValuePublicKey;
+import com.casper.sdk.model.clvalue.CLValueU512;
+import com.casper.sdk.model.clvalue.CLValueU64;
+import com.casper.sdk.model.clvalue.cltype.CLTypeOption;
+import com.casper.sdk.model.clvalue.cltype.CLTypePublicKey;
+import com.casper.sdk.model.clvalue.cltype.CLTypeU512;
+import com.casper.sdk.model.common.Digest;
+import com.casper.sdk.model.common.Ttl;
+import com.casper.sdk.model.deploy.Deploy;
+import com.casper.sdk.model.deploy.NamedArg;
+import com.casper.sdk.model.deploy.executabledeploy.ModuleBytes;
+import com.casper.sdk.model.deploy.executabledeploy.Transfer;
+import com.casper.sdk.model.key.PublicKey;
+import com.syntifi.crypto.key.AbstractPrivateKey;
+import dev.oak3.sbs4j.exception.ValueSerializationException;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+import java.math.BigInteger;
+import java.security.GeneralSecurityException;
+import java.util.*;
+
+/**
+ * Transfer helper provides methods to easily transfer from/to purses
+ *
+ * @author Alexandre Carvalho
+ * @author Andre Bertolace
+ * @since 0.5.0
+ */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public class CasperTransferHelper {
+    /**
+     * Helper method to create a Deploy for a Transfer
+     *
+     * @param from      private key from sender
+     * @param to        public key from signer
+     * @param amount    amount to transfer
+     * @param chainName chain name
+     * @return a transfer deploy
+     * @throws NoSuchTypeException
+     * @throws GeneralSecurityException
+     * @throws ValueSerializationException
+     */
+    public static Deploy buildTransferDeploy(AbstractPrivateKey from, PublicKey to,
+                                             BigInteger amount, String chainName)
+            throws NoSuchTypeException, GeneralSecurityException, ValueSerializationException {
+<span class="nc" id="L51">        long id = Math.abs(new Random().nextInt());</span>
+        Ttl ttl = Ttl
+<span class="nc" id="L53">                .builder()</span>
+<span class="nc" id="L54">                .ttl(CasperConstants.DEFAULT_DEPLOY_TTL.value / 60 / 1000 + &quot;m&quot;)</span>
+<span class="nc" id="L55">                .build();</span>
+<span class="nc" id="L56">        BigInteger paymentAmount = BigInteger.valueOf(CasperConstants.STANDARD_PAYMENT_FOR_NATIVE_TRANSFERS.value);</span>
+<span class="nc" id="L57">        return buildTransferDeploy(from, to, amount, chainName, id, paymentAmount,</span>
+<span class="nc" id="L58">                CasperConstants.DEFAULT_GAS_PRICE.value, ttl, new Date(), new ArrayList&lt;&gt;());</span>
+    }
+
+    /**
+     * Helper method to create a Deploy for a Transfer
+     *
+     * @param signer        private key from sender
+     * @param to            public key from signer
+     * @param amount        amount to transfer
+     * @param chainName     chain name
+     * @param id            deploy id
+     * @param paymentAmount payment amount for processing transfers
+     * @param gasPrice      gas price
+     * @param ttl           time to live
+     * @param date          execution date
+     * @param dependencies  List of digest dependencies
+     * @return a transfer deploy
+     * @throws NoSuchTypeException
+     * @throws GeneralSecurityException
+     * @throws ValueSerializationException
+     */
+    public static Deploy buildTransferDeploy(AbstractPrivateKey signer, PublicKey to, BigInteger amount,
+                                             String chainName, Long id, BigInteger paymentAmount,
+                                             Long gasPrice, Ttl ttl, Date date, List&lt;Digest&gt; dependencies)
+            throws NoSuchTypeException, GeneralSecurityException, ValueSerializationException {
+<span class="fc" id="L83">        List&lt;NamedArg&lt;?&gt;&gt; transferArgs = new LinkedList&lt;&gt;();</span>
+<span class="fc" id="L84">        NamedArg&lt;CLTypeU512&gt; amountNamedArg = new NamedArg&lt;&gt;(&quot;amount&quot;,</span>
+                new CLValueU512(amount));
+<span class="fc" id="L86">        transferArgs.add(amountNamedArg);</span>
+<span class="fc" id="L87">        NamedArg&lt;CLTypePublicKey&gt; publicKeyNamedArg = new NamedArg&lt;&gt;(&quot;target&quot;,</span>
+                new CLValuePublicKey(to));
+<span class="fc" id="L89">        transferArgs.add(publicKeyNamedArg);</span>
+<span class="fc" id="L90">        CLValueOption idArg = new CLValueOption(Optional.of(</span>
+<span class="fc" id="L91">                new CLValueU64(BigInteger.valueOf(id))));</span>
+<span class="fc" id="L92">        NamedArg&lt;CLTypeOption&gt; idNamedArg = new NamedArg&lt;&gt;(&quot;id&quot;, idArg);</span>
+<span class="fc" id="L93">        transferArgs.add(idNamedArg);</span>
+
+        Transfer session = Transfer
+<span class="fc" id="L96">                .builder()</span>
+<span class="fc" id="L97">                .args(transferArgs)</span>
+<span class="fc" id="L98">                .build();</span>
+<span class="fc" id="L99">        ModuleBytes payment = CasperDeployHelper.getPaymentModuleBytes(paymentAmount);</span>
+
+<span class="fc" id="L101">        return CasperDeployHelper.buildDeploy(signer, chainName, session, payment, gasPrice, ttl,</span>
+                date, dependencies);
+    }
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

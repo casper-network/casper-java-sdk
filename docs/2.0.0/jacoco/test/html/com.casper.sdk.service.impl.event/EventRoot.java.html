@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EventRoot.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">casper-java-sdk</a> &gt; <a href="index.source.html" class="el_package">com.casper.sdk.service.impl.event</a> &gt; <span class="el_source">EventRoot.java</span></div><h1>EventRoot.java</h1><pre class="source lang-java linenums">package com.casper.sdk.service.impl.event;
+
+
+import com.casper.sdk.model.event.EventData;
+import com.casper.sdk.model.event.blockadded.BlockAdded;
+import com.casper.sdk.model.event.deployaccepted.DeployAccepted;
+import com.casper.sdk.model.event.deployexpired.DeployExpired;
+import com.casper.sdk.model.event.deployprocessed.DeployProcessed;
+import com.casper.sdk.model.event.fault.Fault;
+import com.casper.sdk.model.event.finalitysignature.FinalitySignature;
+import com.casper.sdk.model.event.shutdown.Shutdown;
+import com.casper.sdk.model.event.step.Step;
+import com.casper.sdk.model.event.version.ApiVersion;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+/**
+ * A root holder to allow parsing of the Pojo data as the top level element contains the actual data as a named element eg:
+ *
+ * &lt;pre&gt;{ BlockAdded: { block_hash: &quot;6fa8d0ad18289e9a0f45993b9201560820b70d92521c5670b02dc2cf7d512ab8&quot;}}&lt;/pre&gt;
+ *
+ * @param &lt;T&gt; the type of the data
+ *           
+ * @author ian@meywood.com 
+ */
+final class EventRoot&lt;T extends EventData&gt; {
+
+    public T data;
+
+    @SuppressWarnings(&quot;unused&quot;)
+<span class="fc" id="L30">    public EventRoot() {</span>
+        // Default constructor needed for Jackson deserialization
+<span class="fc" id="L32">    }</span>
+
+<span class="fc" id="L34">    public EventRoot(final T data) {</span>
+<span class="fc" id="L35">        this.data = data;</span>
+<span class="fc" id="L36">    }</span>
+
+    /**
+     * Setter for ApiVersion due to @JsonAlias not working as expected
+     *
+     * @param apiVersion the apiVersion to set as data
+     */
+    @JsonProperty(&quot;ApiVersion&quot;)
+    public void setApiVersion(final ApiVersion apiVersion) {
+        //noinspection unchecked
+<span class="fc" id="L46">        this.data = (T) apiVersion;</span>
+<span class="fc" id="L47">    }</span>
+
+    /**
+     * Setter for BlockAdded due to @JsonAlias not working as expected
+     *
+     * @param blockAdded the blockAdded to set as data
+     */
+    @JsonProperty(&quot;BlockAdded&quot;)
+    public void setBlockAdded(final BlockAdded blockAdded) {
+        //noinspection unchecked
+<span class="fc" id="L57">        this.data = (T) blockAdded;</span>
+<span class="fc" id="L58">    }</span>
+
+    /**
+     * Setter for FinalitySignature due to @JsonAlias not working as expected
+     *
+     * @param finalitySignature the blockAdded to set as data
+     */
+    @JsonProperty(&quot;FinalitySignature&quot;)
+    public void setFinalitySignature(final FinalitySignature finalitySignature) {
+        //noinspection unchecked
+<span class="fc" id="L68">        this.data = (T) finalitySignature;</span>
+<span class="fc" id="L69">    }</span>
+
+    /**
+     * Setter for DeployAccepted due to @JsonAlias not working as expected
+     *
+     * @param deployAccepted the deployAccepted to set as data
+     */
+    @JsonProperty(&quot;DeployAccepted&quot;)
+    public void setDeployAccepted(final DeployAccepted deployAccepted) {
+        //noinspection unchecked
+<span class="fc" id="L79">        this.data = (T) deployAccepted;</span>
+<span class="fc" id="L80">    }</span>
+
+    /**
+     * Setter for DeployProcessed due to @JsonAlias not working as expected
+     *
+     * @param deployProcessed the deployProcessed to set as data
+     */
+    @JsonProperty(&quot;DeployProcessed&quot;)
+    public void setDeployProcessed(final DeployProcessed deployProcessed) {
+        //noinspection unchecked
+<span class="fc" id="L90">        this.data = (T) deployProcessed;</span>
+<span class="fc" id="L91">    }</span>
+
+    /**
+     * Setter for DeployExpired due to @JsonAlias not working as expected
+     *
+     * @param deployExpired the deployExpired to set as data
+     */
+    @JsonProperty(&quot;DeployExpired&quot;)
+    public void setDeployExpired(final DeployExpired deployExpired) {
+        //noinspection unchecked
+<span class="fc" id="L101">        this.data = (T) deployExpired;</span>
+<span class="fc" id="L102">    }</span>
+
+    /**
+     * Setter for Fault due to @JsonAlias not working as expected
+     *
+     * @param fault the fault to set as data
+     */
+    @JsonProperty(&quot;Fault&quot;)
+    public void setFault(final Fault fault) {
+        //noinspection unchecked
+<span class="fc" id="L112">        this.data = (T) fault;</span>
+<span class="fc" id="L113">    }</span>
+
+    /**
+     * Setter for Shutdown due to @JsonAlias not working as expected
+     *
+     * @param shutdown the shutdown to set as data
+     */
+    @JsonProperty(&quot;Shutdown&quot;)
+    public void setShutdown(final Shutdown shutdown) {
+        //noinspection unchecked
+<span class="nc" id="L123">        this.data = (T) shutdown;</span>
+<span class="nc" id="L124">    }</span>
+
+    /**
+     * Setter for Step due to @JsonAlias not working as expected
+     *
+     * @param step the step to set as data
+     */
+    @JsonProperty(&quot;Step&quot;)
+    public void setStep(final Step step) {
+        //noinspection unchecked
+<span class="nc" id="L134">        this.data = (T) step;</span>
+<span class="nc" id="L135">    }</span>
+
+
+    public static &lt;E extends EventData&gt; E getData(@SuppressWarnings(&quot;rawtypes&quot;) final EventRoot pojoData) {
+        //noinspection unchecked
+<span class="pc bpc" id="L140" title="1 of 2 branches missed.">        return pojoData != null ? (E) pojoData.data : null;</span>
+    }
+
+    public T getData() {
+<span class="nc" id="L144">        return data;</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="nc" id="L149">        return &quot;{&quot; +</span>
+                &quot;data=&quot; + data +
+                '}';
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
