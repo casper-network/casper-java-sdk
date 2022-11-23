@@ -2,6 +2,7 @@ package com.casper.sdk.model.common;
 
 import com.casper.sdk.model.clvalue.serde.CasperSerializableObject;
 import com.casper.sdk.model.clvalue.serde.Target;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonValue;
 import dev.oak3.sbs4j.SerializerBuffer;
 import lombok.AllArgsConstructor;
@@ -10,6 +11,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import org.bouncycastle.util.encoders.DecoderException;
 import org.bouncycastle.util.encoders.Hex;
 
 /**
@@ -54,5 +57,15 @@ public class Digest implements CasperSerializableObject {
     @Override
     public String toString() {
         return digest;
+    }
+
+    @JsonIgnore
+    public boolean isValid(){
+        try {
+            Hex.decode(this.digest);
+            return true;
+        } catch (DecoderException e){
+            return false;
+        }
     }
 }
