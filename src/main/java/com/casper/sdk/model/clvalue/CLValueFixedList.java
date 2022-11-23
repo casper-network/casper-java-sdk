@@ -1,10 +1,10 @@
 package com.casper.sdk.model.clvalue;
 
-import com.casper.sdk.exception.DynamicInstanceException;
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.cltype.AbstractCLTypeWithChildren;
 import com.casper.sdk.model.clvalue.cltype.CLTypeData;
 import com.casper.sdk.model.clvalue.cltype.CLTypeFixedList;
+import com.casper.sdk.model.clvalue.serde.Target;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dev.oak3.sbs4j.DeserializerBuffer;
 import dev.oak3.sbs4j.SerializerBuffer;
@@ -14,6 +14,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.bouncycastle.util.encoders.Hex;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -34,58 +35,60 @@ public class CLValueFixedList extends AbstractCLValue<List<? extends AbstractCLV
     @JsonProperty("cl_type")
     private CLTypeFixedList clType = new CLTypeFixedList();
 
-    public CLValueFixedList(List<? extends AbstractCLValue<?, ?>> value) {
+    public CLValueFixedList(List<? extends AbstractCLValue<?, ?>> value) throws ValueSerializationException {
+        setListType(value);
         this.setValue(value);
-        setListType();
     }
 
     @Override
-    public void serialize(SerializerBuffer ser, boolean encodeType) throws ValueSerializationException, NoSuchTypeException {
+    public void serialize(SerializerBuffer ser, Target target) throws ValueSerializationException, NoSuchTypeException {
         if (this.getValue() == null) return;
 
-        setListType();
+        if (target.equals(Target.BYTE)) {
+            super.serializePrefixWithLength(ser);
+        }
+
+        setListType(this.getValue());
 
         for (AbstractCLValue<?, ?> child : getValue()) {
             child.serialize(ser);
         }
 
-        if (encodeType) {
+        if (target.equals(Target.BYTE)) {
             this.encodeType(ser);
         }
+
+        this.setBytes(Hex.toHexString(ser.toByteArray()));
     }
 
     @Override
-    public void deserialize(DeserializerBuffer deser) throws ValueDeserializationException {
-        try {
-            CLTypeData childrenType = getClType().getListType().getClTypeData();
+    public void deserializeCustom(DeserializerBuffer deser) throws Exception {
+        CLTypeData childrenType = getClType().getListType().getClTypeData();
 
-            List<AbstractCLValue<?, ?>> list = new LinkedList<>();
+        List<AbstractCLValue<?, ?>> list = new LinkedList<>();
 
-            boolean hasMoreItems = true;
-            do {
-                AbstractCLValue<?, ?> child = CLTypeData.createCLValueFromCLTypeData(childrenType);
-                if (child.getClType() instanceof AbstractCLTypeWithChildren) {
-                    ((AbstractCLTypeWithChildren) child.getClType())
-                            .setChildTypes(((AbstractCLTypeWithChildren) clType.getListType()).getChildTypes());
+        boolean hasMoreItems = true;
+        do {
+            AbstractCLValue<?, ?> child = CLTypeData.createCLValueFromCLTypeData(childrenType);
+            if (child.getClType() instanceof AbstractCLTypeWithChildren) {
+                ((AbstractCLTypeWithChildren) child.getClType())
+                        .setChildTypes(((AbstractCLTypeWithChildren) clType.getListType()).getChildTypes());
+            }
+            try {
+                child.deserializeCustom(deser);
+                list.add(child);
+            } catch (ValueDeserializationException valueDeserializationException) {
+                hasMoreItems = false;
+                if (deser.getBuffer().hasRemaining()) {
+                    throw valueDeserializationException;
                 }
-                try {
-                    child.deserialize(deser);
-                    list.add(child);
-                } catch (ValueDeserializationException valueDeserializationException) {
-                    hasMoreItems = false;
-                    if (deser.getBuffer().hasRemaining()) {
-                        throw valueDeserializationException;
-                    }
-                }
-            } while (hasMoreItems);
+            }
+        } while (hasMoreItems);
 
-            setValue(list);
-        } catch (NoSuchTypeException | DynamicInstanceException e) {
-            throw new ValueDeserializationException(String.format("Error deserializing %s", this.getClass().getSimpleName()), e);
-        }
+        setValue(list);
     }
 
-    protected void setListType() {
-        clType.setListType(getValue().get(0).getClType());
+    protected void setListType(List<? extends AbstractCLValue<?, ?>> value) {
+        clType.setListType(value.get(0).getClType());
     }
 }

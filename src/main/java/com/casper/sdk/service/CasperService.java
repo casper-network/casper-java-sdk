@@ -278,5 +278,4 @@ public interface CasperService {
     StoredValueData getStateItem(@JsonRpcParam("state_root_hash") String stateRootHash,
                                  @JsonRpcParam("key") String key, @JsonRpcParam("path") List<String> path);
 
-
 }

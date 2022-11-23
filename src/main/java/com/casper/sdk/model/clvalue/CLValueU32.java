@@ -3,15 +3,17 @@ package com.casper.sdk.model.clvalue;
 import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.cltype.CLTypeU32;
+import com.casper.sdk.model.clvalue.serde.Target;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import dev.oak3.sbs4j.DeserializerBuffer;
 import dev.oak3.sbs4j.SerializerBuffer;
-import dev.oak3.sbs4j.exception.ValueDeserializationException;
+import dev.oak3.sbs4j.exception.ValueSerializationException;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.bouncycastle.util.encoders.Hex;
 
 /**
  * Casper U32 CLValue implementation
@@ -40,23 +42,29 @@ public class CLValueU32 extends AbstractCLValue<Long, CLTypeU32> {
         return this.getClType().getTypeName();
     }
 
-    public CLValueU32(Long value) {
+    public CLValueU32(Long value) throws ValueSerializationException {
         this.setValue(value);
     }
 
     @Override
-    public void serialize(SerializerBuffer ser, boolean encodeType) throws NoSuchTypeException {
+    public void serialize(SerializerBuffer ser, Target target) throws NoSuchTypeException, ValueSerializationException {
         if (this.getValue() == null) return;
+
+        if (target.equals(Target.BYTE)) {
+            super.serializePrefixWithLength(ser);
+        }
 
         ser.writeU32(this.getValue());
 
-        if (encodeType) {
+        if (target.equals(Target.BYTE)) {
             this.encodeType(ser);
         }
+
+        this.setBytes(Hex.toHexString(ser.toByteArray()));
     }
 
     @Override
-    public void deserialize(DeserializerBuffer deser) throws ValueDeserializationException {
+    public void deserializeCustom(DeserializerBuffer deser) throws Exception {
         this.setValue(deser.readU32());
     }
 }

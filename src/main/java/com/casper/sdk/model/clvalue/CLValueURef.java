@@ -1,19 +1,20 @@
 package com.casper.sdk.model.clvalue;
 
 import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
-import com.casper.sdk.exception.DynamicInstanceException;
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.cltype.CLTypeURef;
+import com.casper.sdk.model.clvalue.serde.Target;
 import com.casper.sdk.model.uref.URef;
 import com.casper.sdk.model.uref.URefAccessRight;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import dev.oak3.sbs4j.DeserializerBuffer;
 import dev.oak3.sbs4j.SerializerBuffer;
-import dev.oak3.sbs4j.exception.ValueDeserializationException;
+import dev.oak3.sbs4j.exception.ValueSerializationException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.bouncycastle.util.encoders.Hex;
 
 import java.util.Objects;
 
@@ -36,7 +37,7 @@ import java.util.Objects;
 public class CLValueURef extends AbstractCLValue<URef, CLTypeURef> {
     private CLTypeURef clType = new CLTypeURef();
 
-    public CLValueURef(URef value) {
+    public CLValueURef(URef value) throws ValueSerializationException {
         this.setValue(value);
     }
 
@@ -53,8 +54,12 @@ public class CLValueURef extends AbstractCLValue<URef, CLTypeURef> {
     }
 
     @Override
-    public void serialize(SerializerBuffer ser, boolean encodeType) throws NoSuchTypeException {
+    public void serialize(SerializerBuffer ser, Target target) throws NoSuchTypeException, ValueSerializationException {
         if (this.getValue() == null) return;
+
+        if (target.equals(Target.BYTE)) {
+            super.serializePrefixWithLength(ser);
+        }
 
         URef uref = this.getValue();
         byte[] urefByte = new byte[uref.getAddress().length + 1];
@@ -62,25 +67,23 @@ public class CLValueURef extends AbstractCLValue<URef, CLTypeURef> {
         urefByte[32] = uref.getAccessRight().serializationTag;
         ser.writeByteArray(urefByte);
 
-        if (encodeType) {
+        if (target.equals(Target.BYTE)) {
             this.encodeType(ser);
         }
+
+        this.setBytes(Hex.toHexString(ser.toByteArray()));
     }
 
     @Override
-    public void deserialize(DeserializerBuffer deser) throws ValueDeserializationException {
-        try {
-            URef uref = new URef();
-            CLValueByteArray clValueByteArray = new CLValueByteArray(new byte[32]);
-            clValueByteArray.deserialize(deser);
-            uref.setAddress(clValueByteArray.getValue());
-            CLValueU8 serializationTag = new CLValueU8((byte) 0);
-            serializationTag.deserialize(deser);
-            uref.setAccessRight(URefAccessRight.getTypeBySerializationTag(serializationTag.getValue()));
-            setValue(uref);
-        } catch (DynamicInstanceException e) {
-            throw new ValueDeserializationException(String.format("Error deserializing %s", this.getClass().getSimpleName()), e);
-        }
+    public void deserializeCustom(DeserializerBuffer deser) throws Exception {
+        URef uref = new URef();
+        CLValueByteArray clValueByteArray = new CLValueByteArray(new byte[32]);
+        clValueByteArray.deserializeCustom(deser);
+        uref.setAddress(clValueByteArray.getValue());
+        CLValueU8 serializationTag = new CLValueU8((byte) 0);
+        serializationTag.deserializeCustom(deser);
+        uref.setAccessRight(URefAccessRight.getTypeBySerializationTag(serializationTag.getValue()));
+        setValue(uref);
     }
 
     @ExcludeFromJacocoGeneratedReport

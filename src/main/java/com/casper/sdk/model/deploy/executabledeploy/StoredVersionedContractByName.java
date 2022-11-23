@@ -1,6 +1,7 @@
 package com.casper.sdk.model.deploy.executabledeploy;
 
 import com.casper.sdk.exception.NoSuchTypeException;
+import com.casper.sdk.model.clvalue.serde.Target;
 import com.casper.sdk.model.deploy.NamedArg;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
@@ -59,14 +60,14 @@ public class StoredVersionedContractByName implements ExecutableDeployItem {
      * Implements the StoredVersionedContractName encoder
      */
     @Override
-    public void serialize(SerializerBuffer ser, boolean encodeType) throws ValueSerializationException, NoSuchTypeException {
+    public void serialize(SerializerBuffer ser, Target target) throws ValueSerializationException, NoSuchTypeException {
         ser.writeU8(getOrder());
         ser.writeString(getName());
         ser.writeI64(getVersion());
         ser.writeString(getEntryPoint());
         ser.writeI32(args.size());
         for (NamedArg<?> namedArg : args) {
-            namedArg.serialize(ser, true);
+            namedArg.serialize(ser, Target.BYTE);
         }
     }
 

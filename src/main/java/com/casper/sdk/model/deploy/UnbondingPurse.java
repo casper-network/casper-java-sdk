@@ -30,8 +30,11 @@ public class UnbondingPurse {
     /**
      * Unbonding amount
      */
-    @JsonIgnore
+    @JsonProperty("amount")
     private BigInteger unbondingAmount;
+
+    @JsonIgnore
+    private BigInteger amount;
 
     /**
      * the bondingPurse's {@link URef}
