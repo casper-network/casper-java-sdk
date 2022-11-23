@@ -26,7 +26,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build with Gradle
-        run: ./gradlew build
+        run: ./gradlew clean build
 
   publish-docs-reports:
     needs: build
@@ -49,7 +49,7 @@ jobs:
         run: echo "PROJECT_VERSION=$(./gradlew properties -q | grep "version:" | awk '{print $2}')" >> $GITHUB_ENV
 
       - name: Generate Javadoc
-        run: ./gradlew javadoc
+        run: ./gradlew clean javadoc
 
       - name: Run tests and generate reports
         run: ./gradlew test
