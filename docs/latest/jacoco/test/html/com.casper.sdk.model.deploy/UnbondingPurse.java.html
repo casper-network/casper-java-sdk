@@ -30,32 +30,35 @@ public class UnbondingPurse {
     /**
      * Unbonding amount
      */
-    @JsonIgnore
+    @JsonProperty(&quot;amount&quot;)
 <span class="nc" id="L34">    private BigInteger unbondingAmount;</span>
+
+    @JsonIgnore
+<span class="nc" id="L37">    private BigInteger amount;</span>
 
     /**
      * the bondingPurse's {@link URef}
      */
     @JsonProperty(&quot;bonding_purse&quot;)
-<span class="nc" id="L40">    private URef bondingPurse;</span>
+<span class="nc" id="L43">    private URef bondingPurse;</span>
 
     /**
      * Era in which this unbonding request was created.
      */
     @JsonProperty(&quot;era_of_creation&quot;)
-<span class="nc" id="L46">    private BigInteger eraOfCreation;</span>
+<span class="nc" id="L49">    private BigInteger eraOfCreation;</span>
 
     /**
      * Unbonders {@link PublicKey}
      */
     @JsonProperty(&quot;unbonder_public_key&quot;)
-<span class="nc" id="L52">    private PublicKey unbonderPublicKey;</span>
+<span class="nc" id="L55">    private PublicKey unbonderPublicKey;</span>
 
     /**
      * Validators {@link PublicKey}
      */
     @JsonProperty(&quot;validator_public_key&quot;)
-<span class="nc" id="L58">    private PublicKey validatorPublicKey;</span>
+<span class="nc" id="L61">    private PublicKey validatorPublicKey;</span>
 
     /**
      * getter for unbondingAmount json serialization

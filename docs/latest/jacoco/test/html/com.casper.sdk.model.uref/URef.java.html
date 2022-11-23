@@ -59,7 +59,7 @@ public class URef {
 
     @JsonValue
     @ExcludeFromJacocoGeneratedReport
-    protected String getJsonURef() {
+    public String getJsonURef() {
         return &quot;uref-&quot; + ByteUtils.encodeHexString(this.address) + &quot;-0&quot;
                 + ByteUtils.encodeHexString(new byte[]{this.accessRight.serializationTag});
     }

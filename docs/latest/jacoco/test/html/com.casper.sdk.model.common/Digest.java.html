@@ -2,6 +2,7 @@
 
 import com.casper.sdk.model.clvalue.serde.CasperSerializableObject;
 import com.casper.sdk.model.clvalue.serde.Target;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonValue;
 import dev.oak3.sbs4j.SerializerBuffer;
 import lombok.AllArgsConstructor;
@@ -10,6 +11,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import org.bouncycastle.util.encoders.DecoderException;
 import org.bouncycastle.util.encoders.Hex;
 
 /**
@@ -21,26 +24,26 @@ import org.bouncycastle.util.encoders.Hex;
  */
 @Getter
 @Setter
-<span class="fc" id="L24">@NoArgsConstructor</span>
-<span class="fc" id="L25">@AllArgsConstructor</span>
-<span class="pc bpc" id="L26" title="4 of 8 branches missed.">@EqualsAndHashCode(of = &quot;digest&quot;)</span>
-<span class="pc" id="L27">@Builder</span>
+<span class="fc" id="L27">@NoArgsConstructor</span>
+<span class="fc" id="L28">@AllArgsConstructor</span>
+<span class="pc bpc" id="L29" title="4 of 8 branches missed.">@EqualsAndHashCode(of = &quot;digest&quot;)</span>
+<span class="pc" id="L30">@Builder</span>
 public class Digest implements CasperSerializableObject {
     @JsonValue
     private String digest;
 
     public byte[] getDigest() {
-<span class="fc" id="L33">        return Hex.decode(this.digest);</span>
+<span class="fc" id="L36">        return Hex.decode(this.digest);</span>
     }
 
     public void setDigest(byte[] hash) {
-<span class="fc" id="L37">        this.digest = Hex.toHexString(hash);</span>
-<span class="fc" id="L38">    }</span>
+<span class="fc" id="L40">        this.digest = Hex.toHexString(hash);</span>
+<span class="fc" id="L41">    }</span>
 
     public static Digest digestFromBytes(byte[] bytes) {
-<span class="fc" id="L41">        Digest digest = new Digest();</span>
-<span class="fc" id="L42">        digest.setDigest(bytes);</span>
-<span class="fc" id="L43">        return digest;</span>
+<span class="fc" id="L44">        Digest digest = new Digest();</span>
+<span class="fc" id="L45">        digest.setDigest(bytes);</span>
+<span class="fc" id="L46">        return digest;</span>
     }
 
     /**
@@ -48,12 +51,22 @@ public class Digest implements CasperSerializableObject {
      */
     @Override
     public void serialize(SerializerBuffer ser, Target target) {
-<span class="fc" id="L51">        ser.writeByteArray(getDigest());</span>
-<span class="fc" id="L52">    }</span>
+<span class="fc" id="L54">        ser.writeByteArray(getDigest());</span>
+<span class="fc" id="L55">    }</span>
 
     @Override
     public String toString() {
-<span class="fc" id="L56">        return digest;</span>
+<span class="fc" id="L59">        return digest;</span>
+    }
+
+    @JsonIgnore
+    public boolean isValid(){
+        try {
+<span class="fc" id="L65">            Hex.decode(this.digest);</span>
+<span class="fc" id="L66">            return true;</span>
+<span class="fc" id="L67">        } catch (DecoderException e){</span>
+<span class="fc" id="L68">            return false;</span>
+        }
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
