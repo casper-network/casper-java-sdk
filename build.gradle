@@ -13,7 +13,7 @@ plugins {
 apply plugin: 'java'
 
 group = 'network.casper'
-version='0.5.5-SNAPSHOT'
+version='2.0.0'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
@@ -55,7 +55,7 @@ java {
 
 task casperJar(type: Jar) {
     archiveBaseName = 'casper-java-sdk'
-    archiveVersion = "0.5.2-SNAPSHOT"
+    archiveVersion = "${version}"
     from { configurations.compileClasspath.findAll { it.isDirectory() ? it : zipTree(it) } }
     with jar
 }
