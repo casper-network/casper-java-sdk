@@ -194,6 +194,7 @@ class EventBuilderTest {
     }
 
     @Test
+    @Disabled
     void buildStepEvent() throws IOException {
 
         final PojoEvent<Step> stepEvent = getEvent(EventType.MAIN, EventTarget.POJO, STEP_EVENT);
