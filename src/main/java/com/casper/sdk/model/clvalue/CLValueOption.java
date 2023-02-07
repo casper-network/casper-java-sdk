@@ -63,7 +63,7 @@ public class CLValueOption extends AbstractCLValueWithChildren<Optional<Abstract
 
         if (target.equals(Target.BYTE)) {
             this.encodeType(ser);
-            if (child.isPresent() && isPresent.getValue().equals(Boolean.TRUE)) {
+            if (child.isPresent()) {
                 child.get().encodeType(ser);
             }
         }

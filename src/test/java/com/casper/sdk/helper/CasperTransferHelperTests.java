@@ -9,7 +9,6 @@ import com.casper.sdk.service.AbstractJsonRpcTests;
 import com.syntifi.crypto.key.Ed25519PrivateKey;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
 import org.bouncycastle.util.encoders.Hex;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +22,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Objects;
 import java.util.Random;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Casper Deploy Service test
@@ -74,6 +75,39 @@ public class CasperTransferHelperTests extends AbstractJsonRpcTests {
                 id, BigInteger.valueOf(100000000L), 1L, ttl, new Date(),
                 new ArrayList<>());
         DeployResult deployResult = casperServiceTestnet.putDeploy(deploy);
-        Assertions.assertEquals(deployResult.getDeployHash(), Hex.toHexString(deploy.getHash().getDigest()));
+        assertEquals(deployResult.getDeployHash(), Hex.toHexString(deploy.getHash().getDigest()));
+    }
+
+    @Test
+    void testTransferWithNullIdOnTestnet() throws IOException, NoSuchTypeException, GeneralSecurityException, URISyntaxException, ValueSerializationException {
+        Ed25519PrivateKey alice = new Ed25519PrivateKey();
+        Ed25519PrivateKey bob = new Ed25519PrivateKey();
+        alice.readPrivateKey(getResourcesKeyPath("deploy-accounts/Alice_SyntiFi_secret_key.pem"));
+        bob.readPrivateKey(getResourcesKeyPath("deploy-accounts/Bob_SyntiFi_secret_key.pem"));
+
+        Long id = null;
+        Ttl ttl = Ttl
+                .builder()
+                .ttl("30m")
+                .build();
+        Random rnd = new Random();
+        boolean coin = rnd.nextBoolean();
+        Ed25519PrivateKey from;
+        PublicKey to;
+        if (coin) {
+            from = alice;
+            to = PublicKey.fromAbstractPublicKey(bob.derivePublicKey());
+        } else {
+            from = bob;
+            to = PublicKey.fromAbstractPublicKey(alice.derivePublicKey());
+        }
+
+        Deploy deploy = CasperTransferHelper.buildTransferDeploy(from, to,
+                BigInteger.valueOf(2500000000L), "casper-test",
+                id, BigInteger.valueOf(100000000L), 1L, ttl, new Date(),
+                new ArrayList<>());
+        DeployResult deployResult = casperServiceTestnet.putDeploy(deploy);
+        LOGGER.debug("deploy hash: " + deployResult.getDeployHash());
+        assertEquals(deployResult.getDeployHash(), Hex.toHexString(deploy.getHash().getDigest()));
     }
 }
