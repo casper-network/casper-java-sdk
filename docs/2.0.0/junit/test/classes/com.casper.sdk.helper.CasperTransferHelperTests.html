@@ -23,7 +23,7 @@
 <tr>
 <td>
 <div class="infoBox" id="tests">
-<div class="counter">1</div>
+<div class="counter">2</div>
 <p>tests</p>
 </div>
 </td>
@@ -41,7 +41,7 @@
 </td>
 <td>
 <div class="infoBox" id="duration">
-<div class="counter">0.997s</div>
+<div class="counter">1.237s</div>
 <p>duration</p>
 </div>
 </td>
@@ -79,7 +79,12 @@
 </thead>
 <tr>
 <td class="success">testTransferOnTestnet()</td>
-<td class="success">0.997s</td>
+<td class="success">1.020s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testTransferWithNullIdOnTestnet()</td>
+<td class="success">0.217s</td>
 <td class="success">passed</td>
 </tr>
 </table>
@@ -92,10 +97,10 @@ Reversing [-107, 2, -7, 0]
 Reversed [0, -7, 2, -107]
 Writing type Byte with value: 1
 Writing type byte[] with value: [-21, -112, -109, 94, 38, -76, -41, 92, 75, 6, -53, -92, 3, 82, -72, -4, -104, 102, 121, 59, 14, -74, -29, -18, 33, 56, -106, -69, -85, 39, 38, 97]
-Writing type BigInteger with value: 910153268
+Writing type BigInteger with value: 396118776
 Writing type Boolean with value: true
 Writing type Boolean with value: true
-Writing type BigInteger with value: 910153268
+Writing type BigInteger with value: 396118776
 Writing type BigInteger with value: 100000000
 Reversing [5, -11, -31, 0]
 Reversed [0, -31, -11, 5]
@@ -133,19 +138,19 @@ Writing type Byte with value: 22
 Writing type String with value: id
 Writing type Boolean with value: true
 Writing type Boolean with value: true
-Writing type BigInteger with value: 910153268
+Writing type BigInteger with value: 396118776
 Writing type Integer with value: 9
 Writing type Boolean with value: true
 Writing type Boolean with value: true
-Writing type BigInteger with value: 910153268
+Writing type BigInteger with value: 396118776
 Writing type Byte with value: 13
 Writing type Byte with value: 5
 Writing type Byte with value: 1
 Writing type byte[] with value: [111, -81, 99, -40, -99, 17, -77, 122, -72, 41, -128, 126, 103, 83, -100, -59, 75, 107, 124, -102, 60, -10, -80, -117, -121, 103, -33, -117, 73, -20, -105, -42]
-Writing type Long with value: 1669198994078
+Writing type Long with value: 1675798509575
 Writing type Long with value: 1800000
 Writing type Long with value: 1
-Writing type byte[] with value: [45, -127, -56, -61, 118, 19, 113, 107, -18, 94, 94, 47, -72, 106, 41, 25, 78, -63, 13, -90, 83, 66, 98, -108, -11, 46, 53, 17, 103, 113, 75, 33]
+Writing type byte[] with value: [-2, -121, -49, 3, -122, -33, -117, 28, -98, -19, 15, -118, 56, 124, 26, -76, 55, 76, 12, -51, -72, 2, -66, -74, 16, -126, 91, -2, 96, -10, -35, -88]
 Writing type Integer with value: 0
 Writing type String with value: casper-test
 Writing type BigInteger with value: 100000000
@@ -158,9 +163,79 @@ Writing type Byte with value: 1
 Writing type byte[] with value: [-21, -112, -109, 94, 38, -76, -41, 92, 75, 6, -53, -92, 3, 82, -72, -4, -104, 102, 121, 59, 14, -74, -29, -18, 33, 56, -106, -69, -85, 39, 38, 97]
 Writing type Boolean with value: true
 Writing type Boolean with value: true
-Writing type BigInteger with value: 910153268
-Request {&quot;id&quot;:&quot;1871874337&quot;,&quot;jsonrpc&quot;:&quot;2.0&quot;,&quot;method&quot;:&quot;account_put_deploy&quot;,&quot;params&quot;:[{&quot;hash&quot;:&quot;62eac025d67f787df5ac3869c94ce08d7565b8e6c6ec45dcb2ad0267477c03d9&quot;,&quot;header&quot;:{&quot;account&quot;:&quot;016faf63d89d11b37ab829807e67539cc54b6b7c9a3cf6b08b8767df8b49ec97d6&quot;,&quot;dependencies&quot;:[],&quot;ttl&quot;:&quot;30m&quot;,&quot;body_hash&quot;:&quot;2d81c8c37613716bee5e5e2fb86a29194ec10da653426294f52e351167714b21&quot;,&quot;chain_name&quot;:&quot;casper-test&quot;,&quot;gas_price&quot;:1,&quot;timestamp&quot;:&quot;2022-11-23T10:23:14.078Z&quot;},&quot;approvals&quot;:[{&quot;signer&quot;:&quot;016faf63d89d11b37ab829807e67539cc54b6b7c9a3cf6b08b8767df8b49ec97d6&quot;,&quot;signature&quot;:&quot;0123a95aa89d96e86587f293ebb54838c9e3d4104cdc4a41f50d3c5212ca62dea6052473dbe5d44fc7ee3657789ccfcf3a2705bfccfe51b10b7b1461fbc527af00&quot;}],&quot;payment&quot;:{&quot;ModuleBytes&quot;:{&quot;args&quot;:[[&quot;amount&quot;,{&quot;bytes&quot;:&quot;0400e1f505&quot;,&quot;cl_type&quot;:&quot;U512&quot;}]],&quot;module_bytes&quot;:&quot;&quot;}},&quot;session&quot;:{&quot;Transfer&quot;:{&quot;args&quot;:[[&quot;amount&quot;,{&quot;bytes&quot;:&quot;0400f90295&quot;,&quot;cl_type&quot;:&quot;U512&quot;}],[&quot;target&quot;,{&quot;bytes&quot;:&quot;01eb90935e26b4d75c4b06cba40352b8fc9866793b0eb6e3ee213896bbab272661&quot;,&quot;cl_type&quot;:&quot;PublicKey&quot;}],[&quot;id&quot;,{&quot;bytes&quot;:&quot;0134d63f3600000000&quot;,&quot;cl_type&quot;:{&quot;Option&quot;:&quot;U64&quot;}}]]}}}]}
-JSON-RPC Response: {&quot;jsonrpc&quot;:&quot;2.0&quot;,&quot;id&quot;:&quot;1871874337&quot;,&quot;result&quot;:{&quot;api_version&quot;:&quot;1.4.8&quot;,&quot;deploy_hash&quot;:&quot;62eac025d67f787df5ac3869c94ce08d7565b8e6c6ec45dcb2ad0267477c03d9&quot;}}
+Writing type BigInteger with value: 396118776
+Request {&quot;id&quot;:&quot;1050387537&quot;,&quot;jsonrpc&quot;:&quot;2.0&quot;,&quot;method&quot;:&quot;account_put_deploy&quot;,&quot;params&quot;:[{&quot;hash&quot;:&quot;1e768db0c41c9ea7bb72f1603ed25700d81f7f13a05691376cb5a2ae6655520b&quot;,&quot;header&quot;:{&quot;account&quot;:&quot;016faf63d89d11b37ab829807e67539cc54b6b7c9a3cf6b08b8767df8b49ec97d6&quot;,&quot;dependencies&quot;:[],&quot;ttl&quot;:&quot;30m&quot;,&quot;body_hash&quot;:&quot;fe87cf0386df8b1c9eed0f8a387c1ab4374c0ccdb802beb610825bfe60f6dda8&quot;,&quot;chain_name&quot;:&quot;casper-test&quot;,&quot;gas_price&quot;:1,&quot;timestamp&quot;:&quot;2023-02-07T19:35:09.575Z&quot;},&quot;approvals&quot;:[{&quot;signer&quot;:&quot;016faf63d89d11b37ab829807e67539cc54b6b7c9a3cf6b08b8767df8b49ec97d6&quot;,&quot;signature&quot;:&quot;0132cb4eb18e12d09c5b7edab59e3657c9739620d5c44f7191ee7e932573e48f486c3e13feb397ca4113451ca5bf6b87dee165946d48d701d036e7109f2176d204&quot;}],&quot;payment&quot;:{&quot;ModuleBytes&quot;:{&quot;args&quot;:[[&quot;amount&quot;,{&quot;bytes&quot;:&quot;0400e1f505&quot;,&quot;cl_type&quot;:&quot;U512&quot;}]],&quot;module_bytes&quot;:&quot;&quot;}},&quot;session&quot;:{&quot;Transfer&quot;:{&quot;args&quot;:[[&quot;amount&quot;,{&quot;bytes&quot;:&quot;0400f90295&quot;,&quot;cl_type&quot;:&quot;U512&quot;}],[&quot;target&quot;,{&quot;bytes&quot;:&quot;01eb90935e26b4d75c4b06cba40352b8fc9866793b0eb6e3ee213896bbab272661&quot;,&quot;cl_type&quot;:&quot;PublicKey&quot;}],[&quot;id&quot;,{&quot;bytes&quot;:&quot;01f84a9c1700000000&quot;,&quot;cl_type&quot;:{&quot;Option&quot;:&quot;U64&quot;}}]]}}}]}
+JSON-RPC Response: {&quot;jsonrpc&quot;:&quot;2.0&quot;,&quot;id&quot;:&quot;1050387537&quot;,&quot;result&quot;:{&quot;api_version&quot;:&quot;1.4.10&quot;,&quot;deploy_hash&quot;:&quot;1e768db0c41c9ea7bb72f1603ed25700d81f7f13a05691376cb5a2ae6655520b&quot;}}
+Writing type BigInteger with value: 2500000000
+Reversing [-107, 2, -7, 0]
+Reversed [0, -7, 2, -107]
+Writing type Byte with value: 1
+Writing type byte[] with value: [-21, -112, -109, 94, 38, -76, -41, 92, 75, 6, -53, -92, 3, 82, -72, -4, -104, 102, 121, 59, 14, -74, -29, -18, 33, 56, -106, -69, -85, 39, 38, 97]
+Writing type Boolean with value: false
+Writing type Boolean with value: false
+Writing type BigInteger with value: 100000000
+Reversing [5, -11, -31, 0]
+Reversed [0, -31, -11, 5]
+Writing type Byte with value: 0
+Writing type Integer with value: 0
+Writing type byte[] with value: []
+Writing type Integer with value: 1
+Writing type String with value: amount
+Writing type BigInteger with value: 100000000
+Reversing [5, -11, -31, 0]
+Reversed [0, -31, -11, 5]
+Writing type Integer with value: 5
+Writing type BigInteger with value: 100000000
+Reversing [5, -11, -31, 0]
+Reversed [0, -31, -11, 5]
+Writing type Byte with value: 8
+Writing type Byte with value: 5
+Writing type Integer with value: 3
+Writing type String with value: amount
+Writing type BigInteger with value: 2500000000
+Reversing [-107, 2, -7, 0]
+Reversed [0, -7, 2, -107]
+Writing type Integer with value: 5
+Writing type BigInteger with value: 2500000000
+Reversing [-107, 2, -7, 0]
+Reversed [0, -7, 2, -107]
+Writing type Byte with value: 8
+Writing type String with value: target
+Writing type Byte with value: 1
+Writing type byte[] with value: [-21, -112, -109, 94, 38, -76, -41, 92, 75, 6, -53, -92, 3, 82, -72, -4, -104, 102, 121, 59, 14, -74, -29, -18, 33, 56, -106, -69, -85, 39, 38, 97]
+Writing type Integer with value: 33
+Writing type Byte with value: 1
+Writing type byte[] with value: [-21, -112, -109, 94, 38, -76, -41, 92, 75, 6, -53, -92, 3, 82, -72, -4, -104, 102, 121, 59, 14, -74, -29, -18, 33, 56, -106, -69, -85, 39, 38, 97]
+Writing type Byte with value: 22
+Writing type String with value: id
+Writing type Boolean with value: false
+Writing type Boolean with value: false
+Writing type Integer with value: 1
+Writing type Boolean with value: false
+Writing type Boolean with value: false
+Writing type Byte with value: 13
+Writing type Byte with value: 5
+Writing type Byte with value: 1
+Writing type byte[] with value: [111, -81, 99, -40, -99, 17, -77, 122, -72, 41, -128, 126, 103, 83, -100, -59, 75, 107, 124, -102, 60, -10, -80, -117, -121, 103, -33, -117, 73, -20, -105, -42]
+Writing type Long with value: 1675798510556
+Writing type Long with value: 1800000
+Writing type Long with value: 1
+Writing type byte[] with value: [41, 47, 84, 13, -75, 31, -79, 76, -121, -104, 124, -13, 117, -49, 7, -59, 48, 35, -116, -80, -84, -123, -85, -95, -70, -105, 21, 99, -6, -59, 87, -5]
+Writing type Integer with value: 0
+Writing type String with value: casper-test
+Writing type BigInteger with value: 100000000
+Reversing [5, -11, -31, 0]
+Reversed [0, -31, -11, 5]
+Writing type BigInteger with value: 2500000000
+Reversing [-107, 2, -7, 0]
+Reversed [0, -7, 2, -107]
+Writing type Byte with value: 1
+Writing type byte[] with value: [-21, -112, -109, 94, 38, -76, -41, 92, 75, 6, -53, -92, 3, 82, -72, -4, -104, 102, 121, 59, 14, -74, -29, -18, 33, 56, -106, -69, -85, 39, 38, 97]
+Writing type Boolean with value: false
+Writing type Boolean with value: false
+Request {&quot;id&quot;:&quot;333511304&quot;,&quot;jsonrpc&quot;:&quot;2.0&quot;,&quot;method&quot;:&quot;account_put_deploy&quot;,&quot;params&quot;:[{&quot;hash&quot;:&quot;68513fe58ae5aa3aaef5bd2d776ae4b79f2b6971bf6a4174bcbf1ab45e907cea&quot;,&quot;header&quot;:{&quot;account&quot;:&quot;016faf63d89d11b37ab829807e67539cc54b6b7c9a3cf6b08b8767df8b49ec97d6&quot;,&quot;dependencies&quot;:[],&quot;ttl&quot;:&quot;30m&quot;,&quot;body_hash&quot;:&quot;292f540db51fb14c87987cf375cf07c530238cb0ac85aba1ba971563fac557fb&quot;,&quot;chain_name&quot;:&quot;casper-test&quot;,&quot;gas_price&quot;:1,&quot;timestamp&quot;:&quot;2023-02-07T19:35:10.556Z&quot;},&quot;approvals&quot;:[{&quot;signer&quot;:&quot;016faf63d89d11b37ab829807e67539cc54b6b7c9a3cf6b08b8767df8b49ec97d6&quot;,&quot;signature&quot;:&quot;016878a68471ca131d1e49514003d7692d074bee63cdb4548a0f4feb465b8f5fd5faabde70bdd66751ff3e4014630aa7bb97103610d43d56929f8516e8f118cb0f&quot;}],&quot;payment&quot;:{&quot;ModuleBytes&quot;:{&quot;args&quot;:[[&quot;amount&quot;,{&quot;bytes&quot;:&quot;0400e1f505&quot;,&quot;cl_type&quot;:&quot;U512&quot;}]],&quot;module_bytes&quot;:&quot;&quot;}},&quot;session&quot;:{&quot;Transfer&quot;:{&quot;args&quot;:[[&quot;amount&quot;,{&quot;bytes&quot;:&quot;0400f90295&quot;,&quot;cl_type&quot;:&quot;U512&quot;}],[&quot;target&quot;,{&quot;bytes&quot;:&quot;01eb90935e26b4d75c4b06cba40352b8fc9866793b0eb6e3ee213896bbab272661&quot;,&quot;cl_type&quot;:&quot;PublicKey&quot;}],[&quot;id&quot;,{&quot;bytes&quot;:&quot;00&quot;,&quot;cl_type&quot;:{&quot;Option&quot;:&quot;U64&quot;}}]]}}}]}
+JSON-RPC Response: {&quot;jsonrpc&quot;:&quot;2.0&quot;,&quot;id&quot;:&quot;333511304&quot;,&quot;result&quot;:{&quot;api_version&quot;:&quot;1.4.10&quot;,&quot;deploy_hash&quot;:&quot;68513fe58ae5aa3aaef5bd2d776ae4b79f2b6971bf6a4174bcbf1ab45e907cea&quot;}}
+deploy hash: 68513fe58ae5aa3aaef5bd2d776ae4b79f2b6971bf6a4174bcbf1ab45e907cea
 </pre>
 </span>
 </div>
@@ -172,7 +247,7 @@ JSON-RPC Response: {&quot;jsonrpc&quot;:&quot;2.0&quot;,&quot;id&quot;:&quot;187
 <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
 </label>
 </div>Generated by 
-<a href="http://www.gradle.org">Gradle 7.5.1</a> at Nov 23, 2022, 10:23:30 AM</p>
+<a href="http://www.gradle.org">Gradle 7.5.1</a> at Feb 7, 2023, 7:35:30 PM</p>
 </div>
 </div>
 </body>
