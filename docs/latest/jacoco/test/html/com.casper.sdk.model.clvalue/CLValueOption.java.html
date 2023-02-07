@@ -63,7 +63,7 @@ public class CLValueOption extends AbstractCLValueWithChildren&lt;Optional&lt;Ab
 
 <span class="fc bfc" id="L64" title="All 2 branches covered.">        if (target.equals(Target.BYTE)) {</span>
 <span class="fc" id="L65">            this.encodeType(ser);</span>
-<span class="pc bpc" id="L66" title="1 of 2 branches missed.">            if (child.isPresent()) {</span>
+<span class="pc bpc" id="L66" title="2 of 4 branches missed.">            if (child.isPresent() &amp;&amp; isPresent.getValue().equals(Boolean.TRUE)) {</span>
 <span class="fc" id="L67">                child.get().encodeType(ser);</span>
             }
         }

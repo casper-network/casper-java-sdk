@@ -87,21 +87,18 @@ public class CasperTransferHelper {
 <span class="fc" id="L87">        NamedArg&lt;CLTypePublicKey&gt; publicKeyNamedArg = new NamedArg&lt;&gt;(&quot;target&quot;,</span>
                 new CLValuePublicKey(to));
 <span class="fc" id="L89">        transferArgs.add(publicKeyNamedArg);</span>
-
-<span class="fc bfc" id="L91" title="All 2 branches covered.">        CLValueOption idArg = (id == null) ?</span>
-<span class="fc" id="L92">                new CLValueOption(Optional.of(new CLValueU64())) :</span>
-<span class="fc" id="L93">                new CLValueOption(Optional.of(new CLValueU64(BigInteger.valueOf(id))));</span>
-
-<span class="fc" id="L95">        NamedArg&lt;CLTypeOption&gt; idNamedArg = new NamedArg&lt;&gt;(&quot;id&quot;, idArg);</span>
-<span class="fc" id="L96">        transferArgs.add(idNamedArg);</span>
+<span class="fc" id="L90">        CLValueOption idArg = new CLValueOption(Optional.of(</span>
+<span class="fc" id="L91">                new CLValueU64(BigInteger.valueOf(id))));</span>
+<span class="fc" id="L92">        NamedArg&lt;CLTypeOption&gt; idNamedArg = new NamedArg&lt;&gt;(&quot;id&quot;, idArg);</span>
+<span class="fc" id="L93">        transferArgs.add(idNamedArg);</span>
 
         Transfer session = Transfer
-<span class="fc" id="L99">                .builder()</span>
-<span class="fc" id="L100">                .args(transferArgs)</span>
-<span class="fc" id="L101">                .build();</span>
-<span class="fc" id="L102">        ModuleBytes payment = CasperDeployHelper.getPaymentModuleBytes(paymentAmount);</span>
+<span class="fc" id="L96">                .builder()</span>
+<span class="fc" id="L97">                .args(transferArgs)</span>
+<span class="fc" id="L98">                .build();</span>
+<span class="fc" id="L99">        ModuleBytes payment = CasperDeployHelper.getPaymentModuleBytes(paymentAmount);</span>
 
-<span class="fc" id="L104">        return CasperDeployHelper.buildDeploy(signer, chainName, session, payment, gasPrice, ttl,</span>
+<span class="fc" id="L101">        return CasperDeployHelper.buildDeploy(signer, chainName, session, payment, gasPrice, ttl,</span>
                 date, dependencies);
     }
 
