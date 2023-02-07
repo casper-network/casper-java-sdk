@@ -9,17 +9,13 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import dev.oak3.sbs4j.DeserializerBuffer;
 import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.bouncycastle.util.encoders.Hex;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * Casper Object CLValue implementation
@@ -32,8 +28,8 @@ import java.io.ObjectOutputStream;
 @Getter
 @Setter
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = true)
-public class CLValueAny extends AbstractCLValue<Object, CLTypeAny> {
+//@EqualsAndHashCode(callSuper = true)
+public class CLValueAny extends AbstractCLValue<byte[], CLTypeAny> {
     private CLTypeAny clType = new CLTypeAny();
 
     @JsonSetter("cl_type")
@@ -48,42 +44,59 @@ public class CLValueAny extends AbstractCLValue<Object, CLTypeAny> {
         return this.getClType().getTypeName();
     }
 
-    public CLValueAny(Object value) throws ValueSerializationException {
+    public CLValueAny(byte[] value) throws ValueSerializationException {
         this.setValue(value);
     }
 
     @Override
     public void serialize(SerializerBuffer ser, Target target) throws ValueSerializationException, NoSuchTypeException {
         if (this.getValue() == null) return;
-        try (ByteArrayOutputStream bos = new ByteArrayOutputStream();
-             ObjectOutputStream oos = new ObjectOutputStream(bos)) {
-
-            if (target.equals(Target.BYTE)) {
-                super.serializePrefixWithLength(ser);
-            }
-
-            oos.writeObject(this.getValue());
-            byte[] objectByteArray = bos.toByteArray();
-            ser.writeI32(objectByteArray.length);
-            ser.writeByteArray(objectByteArray);
-
-            if (target.equals(Target.BYTE)) {
-                this.encodeType(ser);
-            }
-        } catch (IOException e) {
-            throw new ValueSerializationException(String.format("Error serializing %s", this.getClass().getSimpleName()), e);
-        }
-
+        ser.writeByteArray(this.getValue());
         this.setBytes(Hex.toHexString(ser.toByteArray()));
     }
 
     @Override
     public void deserializeCustom(DeserializerBuffer deser)
             throws Exception {
-        int objectByteArrayLength = deser.readI32();
-        try (ByteArrayInputStream bis = new ByteArrayInputStream(deser.readByteArray(objectByteArrayLength));
-             ObjectInputStream ois = new ObjectInputStream(bis)) {
-            this.setValue(ois.readObject());
-        }
+        this.setValue(deser.readByteArray(deser.getBuffer().remaining()));
+    }
+
+    @Override
+    @ExcludeFromJacocoGeneratedReport
+    public boolean equals(final Object o) {
+        if (o == this)
+            return true;
+        if (!(o instanceof CLValueAny))
+            return false;
+        final CLValueAny other = (CLValueAny) o;
+        if (!other.canEqual(this))
+            return false;
+        final Object thisBytes = this.getBytes();
+        final Object otherBytes = other.getBytes();
+        if (!Objects.equals(thisBytes, otherBytes))
+            return false;
+        final byte[] thisValue = this.getValue();
+        final byte[] otherValue = other.getValue();
+        if (thisValue == null ? otherValue != null : !Arrays.equals(thisValue, otherValue))
+            return false;
+        final Object thisClType = this.getClType();
+        final Object otherClType = other.getClType();
+        return Objects.equals(thisClType, otherClType);
+    }
+
+    @ExcludeFromJacocoGeneratedReport
+    @Override
+    protected boolean canEqual(final Object other) {
+        return other instanceof CLValueAny;
+    }
+
+    @Override
+    @ExcludeFromJacocoGeneratedReport
+    public int hashCode() {
+        final int PRIME = 59;
+        int result = super.hashCode();
+        final Object thisClType = this.getClType();
+        result = result * PRIME + (thisClType == null ? 43 : thisClType.hashCode());
+        return result;
     }
 }
