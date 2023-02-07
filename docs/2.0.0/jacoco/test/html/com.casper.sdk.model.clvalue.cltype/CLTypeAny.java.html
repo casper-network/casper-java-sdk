@@ -15,13 +15,13 @@ import lombok.NoArgsConstructor;
  */
 @Getter
 <span class="fc" id="L17">@NoArgsConstructor</span>
-<span class="nc bnc" id="L18" title="All 14 branches missed.">@EqualsAndHashCode(callSuper = false, of = {&quot;typeName&quot;})</span>
+<span class="pc bpc" id="L18" title="9 of 14 branches missed.">@EqualsAndHashCode(callSuper = false, of = {&quot;typeName&quot;})</span>
 public class CLTypeAny extends AbstractCLTypeBasic {
-<span class="pc" id="L20">    private final String typeName = AbstractCLType.ANY;</span>
+<span class="fc" id="L20">    private final String typeName = AbstractCLType.ANY;</span>
 
     @JsonCreator
     protected CLTypeAny(String typeName) {
-<span class="nc" id="L24">        super(typeName);</span>
-<span class="nc" id="L25">    }</span>
+<span class="fc" id="L24">        super(typeName);</span>
+<span class="fc" id="L25">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
