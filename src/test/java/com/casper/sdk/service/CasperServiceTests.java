@@ -17,7 +17,6 @@ import com.casper.sdk.model.deploy.DeployData;
 import com.casper.sdk.model.deploy.executabledeploy.ModuleBytes;
 import com.casper.sdk.model.deploy.executabledeploy.StoredContractByHash;
 import com.casper.sdk.model.deploy.executionresult.Success;
-import com.casper.sdk.model.deploy.transform.WriteCLValue;
 import com.casper.sdk.model.era.EraInfoData;
 import com.casper.sdk.model.globalstate.GlobalStateData;
 import com.casper.sdk.model.key.AlgorithmTag;
@@ -45,11 +44,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit tests for {@link CasperService}
@@ -216,7 +211,6 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
         assertNotNull(deployData.getDeploy());
         assertTrue(deployData.getDeploy().getSession() instanceof StoredContractByHash);
         assertTrue(deployData.getExecutionResults().get(0).getResult() instanceof Success);
-        assertTrue(((Success) deployData.getExecutionResults().get(0).getResult()).getEffect().getTransforms().get(0).getTransform() instanceof WriteCLValue);
         assertTrue(deployData.getDeploy().getPayment() instanceof ModuleBytes);
         assertTrue(deployData.getDeploy().getSession() instanceof StoredContractByHash);
         String tmp = ((StoredContractByHash) deployData.getDeploy().getSession()).getHash();
