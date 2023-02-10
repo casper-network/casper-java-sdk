@@ -49,7 +49,7 @@ public abstract class AbstractCLValue<T, P extends AbstractCLType>
     @Setter
     @JsonProperty("parsed")
     @JsonInclude(Include.NON_NULL)
-    private String parsed;
+    private Object parsed;
 
     @JsonIgnore
     private T value;
