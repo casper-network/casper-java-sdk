@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CasperDeployHelper.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">casper-java-sdk</a> &gt; <a href="index.source.html" class="el_package">com.casper.sdk.helper</a> &gt; <span class="el_source">CasperDeployHelper.java</span></div><h1>CasperDeployHelper.java</h1><pre class="source lang-java linenums">package com.casper.sdk.helper;
+
+import com.casper.sdk.exception.NoSuchTypeException;
+import com.casper.sdk.model.clvalue.CLValueU512;
+import com.casper.sdk.model.clvalue.cltype.CLTypeU512;
+import com.casper.sdk.model.clvalue.serde.Target;
+import com.casper.sdk.model.common.Digest;
+import com.casper.sdk.model.common.Ttl;
+import com.casper.sdk.model.deploy.Approval;
+import com.casper.sdk.model.deploy.Deploy;
+import com.casper.sdk.model.deploy.DeployHeader;
+import com.casper.sdk.model.deploy.NamedArg;
+import com.casper.sdk.model.deploy.executabledeploy.ExecutableDeployItem;
+import com.casper.sdk.model.deploy.executabledeploy.ModuleBytes;
+import com.casper.sdk.model.key.PublicKey;
+import com.casper.sdk.model.key.Signature;
+import com.syntifi.crypto.key.AbstractPrivateKey;
+import com.syntifi.crypto.key.hash.Blake2b;
+import dev.oak3.sbs4j.SerializerBuffer;
+import dev.oak3.sbs4j.exception.ValueSerializationException;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import java.math.BigInteger;
+import java.security.GeneralSecurityException;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+
+/**
+ * Deploy Service class implementing the process to generate deploys
+ *
+ * @author Alexandre Carvalho
+ * @author Andre Bertolace
+ * @since 0.2.0
+ */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public class CasperDeployHelper {
+
+    public static DeployHeader buildDeployHeader(PublicKey fromPublicKey, String chainName,
+                                                 Long gasPrice, Ttl ttl, Date date,
+                                                 List&lt;Digest&gt; dependencies, byte[] bodyHash) {
+<span class="fc" id="L45">        return DeployHeader</span>
+<span class="fc" id="L46">                .builder()</span>
+<span class="fc" id="L47">                .account(fromPublicKey)</span>
+<span class="fc" id="L48">                .ttl(ttl)</span>
+<span class="fc" id="L49">                .timeStamp(date)</span>
+<span class="fc" id="L50">                .gasPrice(gasPrice)</span>
+<span class="fc" id="L51">                .bodyHash(Digest.digestFromBytes(bodyHash))</span>
+<span class="fc" id="L52">                .chainName(chainName)</span>
+<span class="fc" id="L53">                .dependencies(dependencies)</span>
+<span class="fc" id="L54">                .build();</span>
+    }
+
+    public static HashAndSignature signDeployHeader(AbstractPrivateKey privateKey, DeployHeader deployHeader)
+            throws GeneralSecurityException, NoSuchTypeException, ValueSerializationException {
+<span class="fc" id="L59">        SerializerBuffer serializerBuffer = new SerializerBuffer();</span>
+
+<span class="fc" id="L61">        deployHeader.serialize(serializerBuffer, Target.BYTE);</span>
+<span class="fc" id="L62">        byte[] headerHash = Blake2b.digest(serializerBuffer.toByteArray(), 32);</span>
+<span class="fc" id="L63">        Signature signature = Signature.sign(privateKey, headerHash);</span>
+<span class="fc" id="L64">        return new HashAndSignature(headerHash, signature);</span>
+    }
+
+    public static byte[] getDeployItemAndModuleBytesHash(ExecutableDeployItem deployItem, ModuleBytes moduleBytes)
+            throws NoSuchTypeException, ValueSerializationException {
+<span class="fc" id="L69">        SerializerBuffer ser = new SerializerBuffer();</span>
+<span class="fc" id="L70">        moduleBytes.serialize(ser, Target.BYTE);</span>
+<span class="fc" id="L71">        deployItem.serialize(ser, Target.BYTE);</span>
+<span class="fc" id="L72">        return Blake2b.digest(ser.toByteArray(), 32);</span>
+    }
+
+    public static ModuleBytes getPaymentModuleBytes(BigInteger paymentAmount) throws ValueSerializationException {
+<span class="fc" id="L76">        List&lt;NamedArg&lt;?&gt;&gt; paymentArgs = new LinkedList&lt;&gt;();</span>
+<span class="fc" id="L77">        NamedArg&lt;CLTypeU512&gt; paymentArg = new NamedArg&lt;&gt;(&quot;amount&quot;,</span>
+                new CLValueU512(paymentAmount));
+<span class="fc" id="L79">        paymentArgs.add(paymentArg);</span>
+<span class="fc" id="L80">        return ModuleBytes</span>
+<span class="fc" id="L81">                .builder()</span>
+<span class="fc" id="L82">                .args(paymentArgs)</span>
+<span class="fc" id="L83">                .bytes(new byte[]{})</span>
+<span class="fc" id="L84">                .build();</span>
+    }
+
+    /**
+     * Core method to fully build a deploy
+     *
+     * @param fromPrivateKey private key of the sender
+     * @param chainName      name of chain
+     * @param session        item to deploy ExecutableDeployItems
+     * @param payment        Module bytes as another ExecuteDeployItems
+     * @param gasPrice       gasPrice for native transfers can be set to 1
+     * @param ttl            time to live in milliseconds (default value is 1800000
+     *                       ms (30 minutes))
+     * @param date           deploy date
+     * @param dependencies   list of digest dependencies
+     * @return
+     * @throws NoSuchTypeException
+     * @throws GeneralSecurityException
+     * @throws ValueSerializationException
+     */
+    public static Deploy buildDeploy(AbstractPrivateKey fromPrivateKey, String chainName,
+                                     ExecutableDeployItem session, ModuleBytes payment,
+                                     Long gasPrice, Ttl ttl, Date date, List&lt;Digest&gt; dependencies)
+            throws NoSuchTypeException, GeneralSecurityException, ValueSerializationException {
+
+<span class="fc" id="L109">        byte[] sessionAnPaymentHash = getDeployItemAndModuleBytesHash(session, payment);</span>
+
+<span class="fc" id="L111">        PublicKey fromPublicKey = PublicKey.fromAbstractPublicKey(fromPrivateKey.derivePublicKey());</span>
+
+<span class="fc" id="L113">        DeployHeader deployHeader = buildDeployHeader(fromPublicKey, chainName, gasPrice, ttl,</span>
+                date, dependencies, sessionAnPaymentHash);
+
+<span class="fc" id="L116">        HashAndSignature hashAndSignature = signDeployHeader(fromPrivateKey, deployHeader);</span>
+
+<span class="fc" id="L118">        List&lt;Approval&gt; approvals = new LinkedList&lt;&gt;();</span>
+<span class="fc" id="L119">        approvals.add(Approval.builder()</span>
+<span class="fc" id="L120">                .signer(PublicKey.fromAbstractPublicKey(fromPrivateKey.derivePublicKey()))</span>
+<span class="fc" id="L121">                .signature(hashAndSignature.getSignature())</span>
+<span class="fc" id="L122">                .build());</span>
+
+<span class="fc" id="L124">        return Deploy.builder()</span>
+<span class="fc" id="L125">                .hash(Digest.digestFromBytes(hashAndSignature.getHash()))</span>
+<span class="fc" id="L126">                .header(deployHeader)</span>
+<span class="fc" id="L127">                .payment(payment)</span>
+<span class="fc" id="L128">                .session(session)</span>
+<span class="fc" id="L129">                .approvals(approvals)</span>
+<span class="fc" id="L130">                .build();</span>
+    }
+
+    @Getter
+<span class="fc" id="L134">    @AllArgsConstructor</span>
+    private static class HashAndSignature {
+<span class="fc" id="L136">        byte[] hash;</span>
+<span class="fc" id="L137">        Signature signature;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

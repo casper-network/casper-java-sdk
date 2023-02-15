@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EventServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">casper-java-sdk</a> &gt; <a href="index.source.html" class="el_package">com.casper.sdk.service.impl.event</a> &gt; <span class="el_source">EventServiceImpl.java</span></div><h1>EventServiceImpl.java</h1><pre class="source lang-java linenums">package com.casper.sdk.service.impl.event;
+
+import com.casper.sdk.exception.CasperClientException;
+import com.casper.sdk.model.event.Event;
+import com.casper.sdk.model.event.EventTarget;
+import com.casper.sdk.model.event.EventType;
+import com.casper.sdk.service.EventConsumer;
+import com.casper.sdk.service.EventService;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.net.URI;
+import java.time.Duration;
+import java.util.function.Consumer;
+
+/**
+ * Package local to prevent construction.
+ *
+ * @author ian@meywood.com
+ */
+@SuppressWarnings(&quot;unused&quot;)
+final class EventServiceImpl implements EventService {
+
+    /** The mime type for JSON */
+    private static final String APPLICATION_JSON = &quot;application/json&quot;;
+    public static final String ACCEPT = &quot;Accept&quot;;
+    public static final String CONTENT_TYPE = &quot;Content-Type&quot;;
+
+    /** Build the URLs for event get requests */
+<span class="fc" id="L35">    private final EventUrlBuilder urlBuilder = new EventUrlBuilder();</span>
+
+    /** The URI of the node to request events from */
+    private final URI uri;
+
+    /** The HTTP Client to connect to the node with */
+    final OkHttpClient client;
+
+    /**
+     * Constructs a new {@link EventServiceImpl}, is private to prevent API users construction manually. To create the
+     * service user the interface method {@link EventService#usingPeer(URI)}.
+     *
+     * @param uri the URL if the node to connect to must contain protocol, host and port number
+     */
+<span class="fc" id="L49">    private EventServiceImpl(final URI uri) {</span>
+<span class="fc" id="L50">        this.uri = uri;</span>
+
+<span class="fc" id="L52">        this.client = new OkHttpClient.Builder()</span>
+<span class="fc" id="L53">                .connectTimeout(Duration.ofSeconds(10))</span>
+                // The node issues an empty event every 10 seconds if no new events so give 30 seconds for read
+<span class="fc" id="L55">                .readTimeout(Duration.ofSeconds(30))</span>
+<span class="fc" id="L56">                .build();</span>
+<span class="fc" id="L57">    }</span>
+
+    @Override
+    public &lt;EventT extends Event&lt;?&gt;&gt; void consumeEvents(final EventType eventType,
+                                                        final EventTarget eventTarget,
+                                                        final Long startFrom,
+                                                        final Consumer&lt;EventT&gt; eventTConsumer) {
+        try {
+            //noinspection resource
+<span class="fc" id="L66">            final Response response = this.client.newCall(</span>
+                    new Request.Builder()
+<span class="fc" id="L68">                            .url(urlBuilder.buildUrl(uri, eventType, startFrom))</span>
+<span class="fc" id="L69">                            .header(ACCEPT, APPLICATION_JSON)</span>
+<span class="fc" id="L70">                            .header(CONTENT_TYPE, APPLICATION_JSON)</span>
+<span class="fc" id="L71">                            .get()</span>
+<span class="fc" id="L72">                            .build()</span>
+<span class="fc" id="L73">            ).execute();</span>
+
+<span class="pc bpc" id="L75" title="2 of 4 branches missed.">            if (response.isSuccessful() &amp;&amp; response.body() != null) {</span>
+                //noinspection ConstantConditions
+<span class="fc" id="L77">                consumeEvent(eventType, eventTarget, new InputStreamReader(response.body().byteStream()), eventTConsumer);</span>
+            } else {
+<span class="nc" id="L79">                throw new CasperClientException(&quot;No response from node &quot; + this.uri);</span>
+            }
+<span class="nc" id="L81">        } catch (IOException e) {</span>
+<span class="nc" id="L82">            throw new CasperClientException(&quot;Error executing request against node&quot; + this.uri, e);</span>
+<span class="fc" id="L83">        }</span>
+<span class="fc" id="L84">    }</span>
+
+    private &lt;EventT, DataT extends Event&lt;DataT&gt;&gt; void consumeEvent(final EventType eventType,
+                                                                   final EventTarget eventTarget,
+                                                                   final Reader reader,
+                                                                   final Consumer&lt;EventT&gt; consumer) {
+
+<span class="fc" id="L91">        final EventBuilder eventBuilder = new EventBuilder(eventType, eventTarget, uri.toString());</span>
+
+        try {
+            //noinspection unchecked
+<span class="fc" id="L95">            new BufferedReader(reader)</span>
+<span class="fc" id="L96">                    .lines()</span>
+<span class="fc" id="L97">                    .filter(line -&gt; throwOnStop(consumer))</span>
+<span class="fc" id="L98">                    .filter(eventBuilder::processLine)</span>
+<span class="fc" id="L99">                    .forEach(line -&gt; consumer.accept(eventBuilder.buildEvent()));</span>
+
+<span class="fc" id="L101">        } catch (StopException e) {</span>
+            // The consumer asked to stop reading events
+<span class="fc" id="L103">        }</span>
+<span class="fc" id="L104">    }</span>
+
+    private &lt;EventT&gt; boolean throwOnStop(final Consumer&lt;EventT&gt; consumer) {
+<span class="pc bpc" id="L107" title="1 of 4 branches missed.">        if (consumer instanceof EventConsumer &amp;&amp; ((EventConsumer&lt;?&gt;) consumer).isStop()) {</span>
+<span class="fc" id="L108">            throw new StopException();</span>
+        }
+<span class="fc" id="L110">        return true;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
