@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="x-ua-compatible" content="IE=edge"/>
+<title>Test results - DeploySerializationTest</title>
+<link href="../css/base-style.css" rel="stylesheet" type="text/css"/>
+<link href="../css/style.css" rel="stylesheet" type="text/css"/>
+<script src="../js/report.js" type="text/javascript"></script>
+</head>
+<body>
+<div id="content">
+<h1>DeploySerializationTest</h1>
+<div class="breadcrumbs">
+<a href="../index.html">all</a> &gt; 
+<a href="../packages/com.casper.sdk.model.deploy.html">com.casper.sdk.model.deploy</a> &gt; DeploySerializationTest</div>
+<div id="summary">
+<table>
+<tr>
+<td>
+<div class="summaryGroup">
+<table>
+<tr>
+<td>
+<div class="infoBox" id="tests">
+<div class="counter">1</div>
+<p>tests</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="failures">
+<div class="counter">0</div>
+<p>failures</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="ignored">
+<div class="counter">0</div>
+<p>ignored</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="duration">
+<div class="counter">0.023s</div>
+<p>duration</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</td>
+<td>
+<div class="infoBox success" id="successRate">
+<div class="percent">100%</div>
+<p>successful</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div id="tabs">
+<ul class="tabLinks">
+<li>
+<a href="#tab0">Tests</a>
+</li>
+<li>
+<a href="#tab1">Standard output</a>
+</li>
+</ul>
+<div id="tab0" class="tab">
+<h2>Tests</h2>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>Duration</th>
+<th>Result</th>
+</tr>
+</thead>
+<tr>
+<td class="success">deploySerialization()</td>
+<td class="success">0.023s</td>
+<td class="success">passed</td>
+</tr>
+</table>
+</div>
+<div id="tab1" class="tab">
+<h2>Standard output</h2>
+<span class="code">
+<pre>Original JSON: {
+  &quot;hash&quot; : &quot;01da3c604f71e0e7df83ff1ab4ef15bb04de64ca02e3d2b78de6950e8b5ee187&quot;,
+  &quot;header&quot; : {
+    &quot;account&quot; : &quot;01d9bf2148748a85c89da5aad8ee0b0fc2d105fd39d41a4c796536354f0ae2900c&quot;,
+    &quot;timestamp&quot; : &quot;2020-11-17T00:39:24.072Z&quot;,
+    &quot;ttl&quot; : &quot;1h&quot;,
+    &quot;gas_price&quot; : 1,
+    &quot;body_hash&quot; : &quot;4811966d37fe5674a8af4001884ea0d9042d1c06668da0c963769c3a01ebd08f&quot;,
+    &quot;dependencies&quot; : [ &quot;0101010101010101010101010101010101010101010101010101010101010101&quot; ],
+    &quot;chain_name&quot; : &quot;casper-example&quot;
+  },
+  &quot;payment&quot; : {
+    &quot;StoredContractByName&quot; : {
+      &quot;name&quot; : &quot;casper-example&quot;,
+      &quot;entry_point&quot; : &quot;example-entry-point&quot;,
+      &quot;args&quot; : [ [ &quot;quantity&quot;, {
+        &quot;cl_type&quot; : &quot;I32&quot;,
+        &quot;bytes&quot; : &quot;e8030000&quot;,
+        &quot;parsed&quot; : 1000
+      } ] ]
+    }
+  },
+  &quot;session&quot; : {
+    &quot;Transfer&quot; : {
+      &quot;args&quot; : [ [ &quot;amount&quot;, {
+        &quot;cl_type&quot; : &quot;I32&quot;,
+        &quot;bytes&quot; : &quot;e8030000&quot;,
+        &quot;parsed&quot; : 1000
+      } ] ]
+    }
+  },
+  &quot;approvals&quot; : [ {
+    &quot;signer&quot; : &quot;01d9bf2148748a85c89da5aad8ee0b0fc2d105fd39d41a4c796536354f0ae2900c&quot;,
+    &quot;signature&quot; : &quot;012dbf03817a51794a8e19e0724884075e6d1fbec326b766ecfa6658b41f81290da85e23b24e88b1c8d9761185c961daee1adab0649912a6477bcd2e69bd91bd08&quot;
+  } ]
+}
+Initializing DeserializerBuffer with bytes: [-24, 3, 0, 0] and byte order LITTLE_ENDIAN
+Deserialized value for Long: 1000
+Writing type Integer with value: 1000
+Initializing DeserializerBuffer with bytes: [-24, 3, 0, 0] and byte order LITTLE_ENDIAN
+Deserialized value for Long: 1000
+Writing type Integer with value: 1000
+Writing type Byte with value: 1
+Writing type byte[] with value: [-39, -65, 33, 72, 116, -118, -123, -56, -99, -91, -86, -40, -18, 11, 15, -62, -47, 5, -3, 57, -44, 26, 76, 121, 101, 54, 53, 79, 10, -30, -112, 12]
+Writing type Long with value: 1605573564072
+Writing type Long with value: 3600000
+Writing type Long with value: 1
+Writing type byte[] with value: [72, 17, -106, 109, 55, -2, 86, 116, -88, -81, 64, 1, -120, 78, -96, -39, 4, 45, 28, 6, 102, -115, -96, -55, 99, 118, -100, 58, 1, -21, -48, -113]
+Writing type Integer with value: 1
+Writing type byte[] with value: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+Writing type String with value: casper-example
+Writing type byte[] with value: [1, -38, 60, 96, 79, 113, -32, -25, -33, -125, -1, 26, -76, -17, 21, -69, 4, -34, 100, -54, 2, -29, -46, -73, -115, -26, -107, 14, -117, 94, -31, -121]
+Writing type Byte with value: 2
+Writing type String with value: casper-example
+Writing type String with value: example-entry-point
+Writing type Integer with value: 1
+Writing type String with value: quantity
+Writing type Integer with value: 1000
+Writing type Integer with value: 4
+Writing type Integer with value: 1000
+Writing type Byte with value: 1
+Writing type Byte with value: 5
+Writing type Integer with value: 1
+Writing type String with value: amount
+Writing type Integer with value: 1000
+Writing type Integer with value: 4
+Writing type Integer with value: 1000
+Writing type Byte with value: 1
+Writing type Integer with value: 1
+Writing type Byte with value: 1
+Writing type byte[] with value: [-39, -65, 33, 72, 116, -118, -123, -56, -99, -91, -86, -40, -18, 11, 15, -62, -47, 5, -3, 57, -44, 26, 76, 121, 101, 54, 53, 79, 10, -30, -112, 12]
+Writing type Byte with value: 1
+Writing type byte[] with value: [45, -65, 3, -127, 122, 81, 121, 74, -114, 25, -32, 114, 72, -124, 7, 94, 109, 31, -66, -61, 38, -73, 102, -20, -6, 102, 88, -76, 31, -127, 41, 13, -88, 94, 35, -78, 78, -120, -79, -56, -39, 118, 17, -123, -55, 97, -38, -18, 26, -38, -80, 100, -103, 18, -90, 71, 123, -51, 46, 105, -67, -111, -67, 8]
+</pre>
+</span>
+</div>
+</div>
+<div id="footer">
+<p>
+<div>
+<label class="hidden" id="label-for-line-wrapping-toggle" for="line-wrapping-toggle">Wrap lines
+<input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
+</label>
+</div>Generated by 
+<a href="http://www.gradle.org">Gradle 7.5.1</a> at Feb 15, 2023, 9:33:02 AM</p>
+</div>
+</div>
+</body>
+</html>
