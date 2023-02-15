@@ -2,31 +2,7 @@ package com.casper.sdk.model.storedvalue;
 
 import com.casper.sdk.model.AbstractJsonTests;
 import com.casper.sdk.model.account.Account;
-import com.casper.sdk.model.clvalue.AbstractCLValue;
-import com.casper.sdk.model.clvalue.CLValueAny;
-import com.casper.sdk.model.clvalue.CLValueBool;
-import com.casper.sdk.model.clvalue.CLValueByteArray;
-import com.casper.sdk.model.clvalue.CLValueFixedList;
-import com.casper.sdk.model.clvalue.CLValueI32;
-import com.casper.sdk.model.clvalue.CLValueI64;
-import com.casper.sdk.model.clvalue.CLValueKey;
-import com.casper.sdk.model.clvalue.CLValueList;
-import com.casper.sdk.model.clvalue.CLValueMap;
-import com.casper.sdk.model.clvalue.CLValueOption;
-import com.casper.sdk.model.clvalue.CLValuePublicKey;
-import com.casper.sdk.model.clvalue.CLValueResult;
-import com.casper.sdk.model.clvalue.CLValueString;
-import com.casper.sdk.model.clvalue.CLValueTuple1;
-import com.casper.sdk.model.clvalue.CLValueTuple2;
-import com.casper.sdk.model.clvalue.CLValueTuple3;
-import com.casper.sdk.model.clvalue.CLValueU128;
-import com.casper.sdk.model.clvalue.CLValueU256;
-import com.casper.sdk.model.clvalue.CLValueU32;
-import com.casper.sdk.model.clvalue.CLValueU512;
-import com.casper.sdk.model.clvalue.CLValueU64;
-import com.casper.sdk.model.clvalue.CLValueU8;
-import com.casper.sdk.model.clvalue.CLValueURef;
-import com.casper.sdk.model.clvalue.CLValueUnit;
+import com.casper.sdk.model.clvalue.*;
 import com.casper.sdk.model.contract.Contract;
 import com.casper.sdk.model.key.AlgorithmTag;
 import com.casper.sdk.model.key.Key;
@@ -39,11 +15,11 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
 import dev.oak3.sbs4j.util.ByteUtils;
+import org.bouncycastle.util.encoders.Hex;
 import org.javatuples.Pair;
 import org.javatuples.Triplet;
 import org.javatuples.Unit;
 import org.json.JSONException;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.slf4j.Logger;
@@ -57,9 +33,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit tests for {@link StoredValueData}
@@ -77,7 +51,6 @@ public class StoredValueTests extends AbstractJsonTests {
 
 
     @Test
-    @Disabled("CLValuesAny deser is not well understood yet")
     void validate_CLValueAny_Mapping() throws IOException, JSONException, ValueSerializationException {
         String inputJson = getPrettyJson(loadJsonFromFile("stored-value-samples/stored-value-any.json"));
 
@@ -87,11 +60,11 @@ public class StoredValueTests extends AbstractJsonTests {
         // Should be CLValueAny
         assertTrue(sv.getStoredValue().getValue() instanceof CLValueAny);
 
-        CLValueAny expectedClValue = new CLValueAny("Any Object Test");
+        CLValueAny expectedClValue = new CLValueAny(Hex.decode("aced000574000f416e79204f626a6563742054657374"));
 
         StoredValueData expected = createAndInitExpectedStoredValueData(expectedClValue);
 
-        // assertEquals(expected, sv);
+        assertEquals(expected, sv);
 
         String expectedJson = getPrettyJson(expected);
 
@@ -603,37 +576,6 @@ public class StoredValueTests extends AbstractJsonTests {
         assertTrue(sv.getStoredValue().getValue() instanceof CLValueMap);
         Map<CLValueString, CLValueTuple1> map = new LinkedHashMap<>();
         map.put(new CLValueString("ABC"), new CLValueTuple1(new Unit<>(new CLValueI32(10))));
-        CLValueMap expectedClValue = new CLValueMap(map);
-
-        StoredValueData expected = createAndInitExpectedStoredValueData(expectedClValue);
-
-        assertEquals(expected, sv);
-
-        String expectedJson = getPrettyJson(expected);
-
-        LOGGER.debug("Serialized JSON: {}", expectedJson);
-
-        JSONAssert.assertEquals(inputJson, expectedJson, false);
-    }
-
-    @Test
-    @Disabled("CLValuesAny deser is not well understood yet")
-    void validate_CLValueMap_Mapping_with_Map_i32_Any() throws IOException,
-            JSONException, ValueSerializationException {
-        String inputJson = getPrettyJson(
-                loadJsonFromFile("stored-value-samples/stored-value-map-u64-map-i32-any.json"));
-
-        LOGGER.debug("Original JSON: {}", inputJson);
-
-        StoredValueData sv = OBJECT_MAPPER.readValue(inputJson, StoredValueData.class);
-        // Should be CLValueMap
-        assertTrue(sv.getStoredValue().getValue() instanceof CLValueMap);
-
-        Map<CLValueU64, CLValueMap> map = new LinkedHashMap<>();
-        Map<CLValueI32, CLValueAny> childMap = new LinkedHashMap<>();
-        childMap.put(new CLValueI32(1), new CLValueAny(DummyClass.builder().name("One").value(1).build()));
-        childMap.put(new CLValueI32(2), new CLValueAny(DummyClass.builder().name("Two").value(2).build()));
-        map.put(new CLValueU64(BigInteger.ONE), new CLValueMap(childMap));
         CLValueMap expectedClValue = new CLValueMap(map);
 
         StoredValueData expected = createAndInitExpectedStoredValueData(expectedClValue);

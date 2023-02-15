@@ -87,8 +87,11 @@ public class CasperTransferHelper {
         NamedArg<CLTypePublicKey> publicKeyNamedArg = new NamedArg<>("target",
                 new CLValuePublicKey(to));
         transferArgs.add(publicKeyNamedArg);
-        CLValueOption idArg = new CLValueOption(Optional.of(
-                new CLValueU64(BigInteger.valueOf(id))));
+
+        CLValueOption idArg = (id == null) ?
+                new CLValueOption(Optional.of(new CLValueU64())) :
+                new CLValueOption(Optional.of(new CLValueU64(BigInteger.valueOf(id))));
+
         NamedArg<CLTypeOption> idNamedArg = new NamedArg<>("id", idArg);
         transferArgs.add(idNamedArg);
 

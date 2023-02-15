@@ -157,3 +157,53 @@ Deploy deploy = CasperDeployService.buildTransferDeploy(from, to,
 
 DeployResult deployResult =  casperServiceTestnet.putDeploy(deploy);
 ```
+
+### 12. Consuming Events
+
+The Java SDK supports the consumption of casper events using the event service API. This API allows the consumer to 
+choose the events to be provided as Pojos or as raw JSON via the EventTarget enum values. Each event stream is consumed 
+individually by providing the required stream (main, sigs, and deploys) using the EventType parameter to the consumeEvents method.
+
+For more information on events see: [Monitoring and Consuming Events](https://docs.casperlabs.io/dapp-dev-guide/building-dapps/monitoring-events/).
+
+#### Consuming Raw JSON Event Strings
+```Java
+// Construct an events service
+final EventService eventService = EventService.usingPeer(new URI("http://localhost:28101"));
+
+// Consume the main events as raw JSON
+eventService.consumeEvents(EventType.MAIN, EventTarget.RAW, 0L, new EventConsumer<String>(){
+    
+    @Override
+    public void accept(final Event<String> event) {
+        // Obtain the raw JSON event as a String
+        final String json = event.getData();
+        // Obtain the optional event ID
+        final long id = event.getId().orElse(0L);
+    }
+});
+```
+
+#### Consuming Pojo Events
+
+```Java
+// Construct an events service
+final EventService eventService = EventService.usingPeer(new URI("http://localhost:28101"));
+
+// Consume the main events as Casper Java SDK Pojos
+eventService.consumeEvents(EventType.MAIN, EventTarget.POJO, 0L, new EventConsumer<EventData>() {
+    
+    @Override
+    public void accept(final Event<EventData> event) {
+
+        switch (event.getDataType()) {
+
+            case BLOCK_ADDED:
+                handleBlockAdded(event.getId().get(), ((BlockAdded) event.getData()));
+                break;
+                
+            // And so on...    
+        }
+    }
+});
+```
