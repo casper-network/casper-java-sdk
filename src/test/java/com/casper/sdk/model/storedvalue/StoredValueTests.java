@@ -539,6 +539,32 @@ public class StoredValueTests extends AbstractJsonTests {
     }
 
     @Test
+    void validate_CLValueList_Mapping_with_map_string_string() throws IOException {
+        String inputJson = getPrettyJson(
+                loadJsonFromFile("stored-value-samples/stored-value-list-map-string-string.json"));
+
+        LOGGER.debug("Original JSON: {}", inputJson);
+
+        StoredValueData sv = OBJECT_MAPPER.readValue(inputJson, StoredValueData.class);
+        // Should be CLValueList
+        assertTrue(sv.getStoredValue().getValue() instanceof CLValueList);
+//        CLValueList expectedClValue = new CLValueList(
+//                Arrays.asList(new CLValueTuple2(new Pair<>(new CLValueI32(1), new CLValueI32(1))),
+//                        new CLValueTuple2(new Pair<>(new CLValueI32(2), new CLValueI32(2))),
+//                        new CLValueTuple2(new Pair<>(new CLValueI32(3), new CLValueI32(3)))));
+
+//        StoredValueData expected = createAndInitExpectedStoredValueData(expectedClValue);
+
+//        assertEquals(expected, sv);
+
+//        String expectedJson = getPrettyJson(expected);
+
+//        LOGGER.debug("Serialized JSON: {}", expectedJson);
+
+//        JSONAssert.assertEquals(inputJson, expectedJson, false);
+    }
+
+    @Test
     void validate_CLValueMap_Mapping_with_string_i32() throws IOException,
             JSONException, ValueSerializationException {
         String inputJson = getPrettyJson(loadJsonFromFile("stored-value-samples/stored-value-map-string-i32.json"));
@@ -729,6 +755,30 @@ public class StoredValueTests extends AbstractJsonTests {
         LOGGER.debug("Serialized JSON: {}", expectedJson);
 
         JSONAssert.assertEquals(inputJson, expectedJson, false);
+    }
+
+    @Test
+    void validate_CLValueOption_Mapping_with_list_string() throws IOException {
+        String inputJson = getPrettyJson(
+                loadJsonFromFile("stored-value-samples/stored-value-option-list-string.json"));
+
+        LOGGER.debug("Original JSON: {}", inputJson);
+
+        StoredValueData sv = OBJECT_MAPPER.readValue(inputJson, StoredValueData.class);
+        // Should be CLValueOption
+        assertTrue(sv.getStoredValue().getValue() instanceof CLValueOption);
+//        CLValueOption expectedClValue = new CLValueOption(
+//                Optional.of(new CLValueTuple2(new Pair<>(new CLValueI32(1), new CLValueString("Hello, World!")))));
+//
+//        StoredValueData expected = createAndInitExpectedStoredValueData(expectedClValue);
+//
+//        assertEquals(expected, sv);
+//
+//        String expectedJson = getPrettyJson(expected);
+//
+//        LOGGER.debug("Serialized JSON: {}", expectedJson);
+//
+//        JSONAssert.assertEquals(inputJson, expectedJson, false);
     }
 
     @Test

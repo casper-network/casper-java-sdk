@@ -18,12 +18,18 @@ import java.util.*;
  */
 final class EventServiceFactory {
 
-    /** The name of the class that implements the {@link com.casper.sdk.service.EventService} */
+    /**
+     * The name of the class that implements the {@link com.casper.sdk.service.EventService}
+     */
     private static final String IMPLEMENTATION_CLASS = "com.casper.sdk.service.impl.event.EventServiceImpl";
-    /** The map of service method names to log */
+    /**
+     * The map of service method names to log
+     */
     private static final Map<Method, List<String>> methodParamMap = new HashMap<>();
-    /** The logger that logs all event service calls at debug level */
-    private static final Logger logger = LoggerFactory.getLogger(EventService.class);
+    /**
+     * The logger that logs all event service calls at debug level
+     */
+    private static final Logger logger = LoggerFactory.getLogger(EventServiceFactory.class);
 
     /**
      * Creates a new EventService for the specified host
@@ -72,7 +78,7 @@ final class EventServiceFactory {
 
         final StringBuilder builder = new StringBuilder();
 
-        if (args != null && args.length > 0) {
+        if (args != null) {
             for (Object arg : args) {
 
                 if (builder.length() > 0) {

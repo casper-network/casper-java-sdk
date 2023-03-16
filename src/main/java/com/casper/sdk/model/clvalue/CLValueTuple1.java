@@ -75,4 +75,9 @@ public class CLValueTuple1 extends AbstractCLValueWithChildren<Unit<? extends Ab
     protected void setChildTypes(Unit<? extends AbstractCLValue<?, ?>> value) {
         clType.setChildTypes(Arrays.asList(value.getValue0().getClType()));
     }
+
+    @Override
+    public String toString() {
+        return getValue() != null ? getValue().toString() : null;
+    }
 }

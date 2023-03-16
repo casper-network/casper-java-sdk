@@ -4,10 +4,13 @@ import com.casper.sdk.exception.NoSuchKeyTagException;
 import com.casper.sdk.jackson.deserializer.KeyDeserializer;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.syntifi.crypto.key.hash.Blake2b;
 import dev.oak3.sbs4j.util.ByteUtils;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.Arrays;
 
 /**
@@ -28,6 +31,15 @@ public class Key extends AbstractSerializedKeyTaggedHex<KeyTag> {
         object.setTag(KeyTag.getByTag(bytes[0]));
         object.setKey(Arrays.copyOfRange(bytes, 1, bytes.length));
         return object;
+    }
+
+    public String generateAccountHash(boolean includePrefix) throws IOException {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        byteArrayOutputStream.write(getTag().toString().toLowerCase().getBytes("UTF-8"));
+        byteArrayOutputStream.write(0);
+        byteArrayOutputStream.write(getKey());
+
+        return (includePrefix ? "account-hash-" : "") + ByteUtils.encodeHexString(Blake2b.digest(byteArrayOutputStream.toByteArray(), 32));
     }
 
     @JsonCreator

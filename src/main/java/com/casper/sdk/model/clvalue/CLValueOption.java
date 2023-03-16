@@ -3,6 +3,7 @@ package com.casper.sdk.model.clvalue;
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.cltype.AbstractCLTypeWithChildren;
 import com.casper.sdk.model.clvalue.cltype.CLTypeData;
+import com.casper.sdk.model.clvalue.cltype.CLTypeList;
 import com.casper.sdk.model.clvalue.cltype.CLTypeOption;
 import com.casper.sdk.model.clvalue.serde.Target;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -80,7 +81,10 @@ public class CLValueOption extends AbstractCLValueWithChildren<Optional<Abstract
 
         AbstractCLValue<?, ?> child = CLTypeData.createCLValueFromCLTypeData(childTypeData);
 
-        if (child.getClType() instanceof AbstractCLTypeWithChildren) {
+        if (child.getClType() instanceof CLTypeList) {
+            ((CLTypeList) child.getClType())
+                    .setListType(((CLTypeList) clType.getChildType()).getListType());
+        } else if (child.getClType() instanceof AbstractCLTypeWithChildren) {
             ((AbstractCLTypeWithChildren) child.getClType())
                     .setChildTypes(((AbstractCLTypeWithChildren) clType.getChildType()).getChildTypes());
         }
@@ -95,5 +99,10 @@ public class CLValueOption extends AbstractCLValueWithChildren<Optional<Abstract
     @Override
     protected void setChildTypes(Optional<AbstractCLValue<?, ?>> value) {
         clType.setChildType(value.isPresent() ? value.get().getClType() : null);
+    }
+
+    @Override
+    public String toString() {
+        return getValue() != null && getValue().isPresent() && getValue().get().getValue() != null ? getValue().get().toString() : "None";
     }
 }

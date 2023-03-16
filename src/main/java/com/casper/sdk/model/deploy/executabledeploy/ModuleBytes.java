@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
+import dev.oak3.sbs4j.util.ByteUtils;
 import lombok.*;
 
 import java.util.List;
@@ -30,7 +31,6 @@ public class ModuleBytes implements ExecutableDeployItem {
     /**
      * Module bytes
      */
-    @JsonProperty("module_bytes")
     private byte[] bytes;
 
     /**
@@ -38,6 +38,15 @@ public class ModuleBytes implements ExecutableDeployItem {
      */
     private List<NamedArg<?>> args;
 
+    @JsonProperty("module_bytes")
+    public String getJsonBytes() {
+        return ByteUtils.encodeHexString(bytes);
+    }
+
+    @JsonProperty("module_bytes")
+    public void setJsonBytes(String byteContent) {
+        this.bytes = ByteUtils.parseHexString(byteContent);
+    }
 
     /**
      * {@link ExecutableDeployItem} order 0

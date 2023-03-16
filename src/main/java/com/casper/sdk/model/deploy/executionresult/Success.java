@@ -1,15 +1,9 @@
 package com.casper.sdk.model.deploy.executionresult;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
 import com.casper.sdk.model.deploy.ExecutionEffect;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import lombok.*;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -46,26 +40,4 @@ public class Success implements ExecutionResult {
      * List of Hex-encoded transfer address.
      */
     private List<String> transfers;
-
-    /**
-     * getter for cost json serialization
-     *
-     * @return cost as expected for json serialization
-     */
-    @JsonProperty("cost")
-    @ExcludeFromJacocoGeneratedReport
-    protected String getJsonCost() {
-        return this.cost.toString(10);
-    }
-
-    /**
-     * setter for cost from json deserialized value
-     *
-     * @param value the deserialized value
-     */
-    @JsonProperty("cost")
-    @ExcludeFromJacocoGeneratedReport
-    protected void setJsonCost(String value) {
-        this.cost = new BigInteger(value, 10);
-    }
 }

@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import dev.oak3.sbs4j.DeserializerBuffer;
 import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
+import dev.oak3.sbs4j.util.ByteUtils;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -28,7 +29,6 @@ import java.util.Objects;
 @Getter
 @Setter
 @NoArgsConstructor
-//@EqualsAndHashCode(callSuper = true)
 public class CLValueAny extends AbstractCLValue<byte[], CLTypeAny> {
     private CLTypeAny clType = new CLTypeAny();
 
@@ -98,5 +98,10 @@ public class CLValueAny extends AbstractCLValue<byte[], CLTypeAny> {
         final Object thisClType = this.getClType();
         result = result * PRIME + (thisClType == null ? 43 : thisClType.hashCode());
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return getValue() != null ? ByteUtils.encodeHexString(getValue()) : null;
     }
 }

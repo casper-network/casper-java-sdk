@@ -72,7 +72,10 @@ public class CLTypeMap extends AbstractCLTypeWithChildren {
         }
     }
 
-    @Setter
-    @JsonProperty(MAP)
     private CLTypeMapEntryType keyValueTypes;
+
+    @JsonProperty(MAP)
+    public void setKeyValueTypes(CLTypeMapEntryType keyValueTypes) {
+        this.keyValueTypes = keyValueTypes;
+    }
 }

@@ -13,7 +13,7 @@ plugins {
 apply plugin: 'java'
 
 group = 'network.casper'
-version='2.0.0'
+version = '2.0.0-oak'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
@@ -127,97 +127,104 @@ jacocoTestReport {
     }
 }
 
+//publishing {
+//    repositories {
+//        maven {
+//            name = 'OSSRH'
+//            def releasesRepoUrl = 'https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/'
+//            def snapshotsRepoUrl = 'https://s01.oss.sonatype.org/content/repositories/snapshots/'
+//            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+//            credentials {
+//                username = System.getenv('MAVEN_USERNAME')
+//                password = System.getenv('MAVEN_PASSWORD')
+//            }
+//        }
+//        maven {
+//            name = "GitHubPackages"
+//            url = "https://maven.pkg.github.com/casper-network/casper-java-sdk"
+//            credentials {
+//                username = System.getenv("GITHUB_ACTOR")
+//                password = System.getenv("GITHUB_TOKEN")
+//            }
+//        }
+//    }
+//
+//    publications {
+//        mavenJava(MavenPublication) {
+//            artifactId = 'casper-java-sdk'
+//            from components.java
+//            pom {
+//                name = 'Casper Java SDK'
+//                packaging = 'jar'
+//                description = 'SDK to streamline the 3rd party Java client integration processes. Such 3rd parties include exchanges & app developers.'
+//                url = 'https://github.com/casper-network/casper-java-sdk'
+//
+//                scm {
+//                    connection = 'scm:git:https://github.com/casper-network/casper-java-sdk.git'
+//                    developerConnection = 'git@github.com:casper-network/casper-java-sdk.git'
+//                    url = 'https://github.com/casper-network/casper-java-sdk'
+//                }
+//
+//                issueManagement {
+//                    system = 'GitHub'
+//                    url = 'https://github.com/casper-network/casper-java-sdk/issues'
+//                }
+//
+//                ciManagement {
+//                    system = 'Github Actions'
+//                    url = 'https://github.com/casper-network/casper-java-sdk/actions'
+//                }
+//
+//                licenses {
+//                    license {
+//                        name = 'The Apache License, Version 2.0'
+//                        url = 'https://www.apache.org/licenses/LICENSE-2.0.txt'
+//                    }
+//                }
+//
+//                developers {
+//                    developer {
+//                        id = 'oak'
+//                        name = 'Alexandre Carvalho'
+//                        email = 'adcarvalho@gmail.com'
+//                    }
+//                    developer {
+//                        id = 'ab3rtz'
+//                        name = 'Andre Bertolace'
+//                        email = 'andre@syntifi.com'
+//                    }
+//                    developer {
+//                        id = 'meywood'
+//                        name = 'Ian Mills'
+//                        email = 'ian@meywood.com'
+//                    }
+//                    developer {
+//                        id = 'stormeye'
+//                        name = 'Carl Norburn'
+//                        email = 'carl@stormeye.co.uk'
+//                    }
+//                }
+//            }
+//        }
+//    }
+//
+//    jar {
+//        archiveClassifier = ''
+//    }
+//
+//    // Reference at https://docs.gradle.org/current/userguide/signing_plugin.html#sec:in-memory-keys
+//    signing {
+//        def signingKey = System.getenv('GPG_SIGNING_KEY') ?: findProperty('GPG_SIGNING_KEY')
+//        def signingKeyPassword = System.getenv('GPG_SIGNING_KEY_PASSWORD') ?: findProperty('GPG_SIGNING_KEY_PASSWORD')
+//
+//        useInMemoryPgpKeys(signingKey, signingKeyPassword)
+//        sign publishing.publications.mavenJava
+//    }
+//}
 publishing {
-    repositories {
-        maven {
-            name = 'OSSRH'
-            def releasesRepoUrl = 'https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/'
-            def snapshotsRepoUrl = 'https://s01.oss.sonatype.org/content/repositories/snapshots/'
-            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
-            credentials {
-                username = System.getenv('MAVEN_USERNAME')
-                password = System.getenv('MAVEN_PASSWORD')
-            }
-        }
-        maven {
-            name = "GitHubPackages"
-            url = "https://maven.pkg.github.com/casper-network/casper-java-sdk"
-            credentials {
-                username = System.getenv("GITHUB_ACTOR")
-                password = System.getenv("GITHUB_TOKEN")
-            }
-        }
-    }
-
     publications {
-        mavenJava(MavenPublication) {
-            artifactId = 'casper-java-sdk'
+        maven(MavenPublication) {
             from components.java
-            pom {
-                name = 'Casper Java SDK'
-                packaging = 'jar'
-                description = 'SDK to streamline the 3rd party Java client integration processes. Such 3rd parties include exchanges & app developers.'
-                url = 'https://github.com/casper-network/casper-java-sdk'
-
-                scm {
-                    connection = 'scm:git:https://github.com/casper-network/casper-java-sdk.git'
-                    developerConnection = 'git@github.com:casper-network/casper-java-sdk.git'
-                    url = 'https://github.com/casper-network/casper-java-sdk'
-                }
-
-                issueManagement {
-                    system = 'GitHub'
-                    url = 'https://github.com/casper-network/casper-java-sdk/issues'
-                }
-
-                ciManagement {
-                    system = 'Github Actions'
-                    url = 'https://github.com/casper-network/casper-java-sdk/actions'
-                }
-
-                licenses {
-                    license {
-                        name = 'The Apache License, Version 2.0'
-                        url = 'https://www.apache.org/licenses/LICENSE-2.0.txt'
-                    }
-                }
-
-                developers {
-                    developer {
-                        id = 'oak'
-                        name = 'Alexandre Carvalho'
-                        email = 'adcarvalho@gmail.com'
-                    }
-                    developer {
-                        id = 'ab3rtz'
-                        name = 'Andre Bertolace'
-                        email = 'andre@syntifi.com'
-                    }
-                    developer {
-                        id = 'meywood'
-                        name = 'Ian Mills'
-                        email = 'ian@meywood.com'
-                    }
-                    developer {
-                        id = 'stormeye'
-                        name = 'Carl Norburn'
-                        email = 'carl@stormeye.co.uk'
-                    }
-                }
-            }
         }
-    }
-
-    jar {
-        archiveClassifier = ''
-    }
-
-    // Reference at https://docs.gradle.org/current/userguide/signing_plugin.html#sec:in-memory-keys
-    signing {
-        def signingKey = System.getenv('GPG_SIGNING_KEY') ?: findProperty('GPG_SIGNING_KEY')
-        def signingKeyPassword = System.getenv('GPG_SIGNING_KEY_PASSWORD') ?: findProperty('GPG_SIGNING_KEY_PASSWORD')
-
-        useInMemoryPgpKeys(signingKey, signingKeyPassword)
-        sign publishing.publications.mavenJava
     }
 }

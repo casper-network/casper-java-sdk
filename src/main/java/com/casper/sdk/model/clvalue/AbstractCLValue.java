@@ -8,13 +8,8 @@ import com.casper.sdk.model.clvalue.cltype.CLTypeData;
 import com.casper.sdk.model.clvalue.serde.CasperDeserializableObject;
 import com.casper.sdk.model.clvalue.serde.CasperSerializableObject;
 import com.casper.sdk.model.clvalue.serde.Target;
-import com.fasterxml.jackson.annotation.JsonGetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonSetter;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonTypeResolver;
 import com.syntifi.crypto.key.encdec.Hex;
 import dev.oak3.sbs4j.DeserializerBuffer;
@@ -22,11 +17,7 @@ import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueDeserializationException;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
 import dev.oak3.sbs4j.util.ByteUtils;
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.SneakyThrows;
+import lombok.*;
 
 /**
  * Base class for CLValues
@@ -43,6 +34,9 @@ import lombok.SneakyThrows;
 public abstract class AbstractCLValue<T, P extends AbstractCLType>
         implements CasperSerializableObject, CasperDeserializableObject {
 
+    @JsonIgnore
+    private boolean valid = false;
+
     @Setter(AccessLevel.PROTECTED)
     private String bytes = "";
 
@@ -54,9 +48,35 @@ public abstract class AbstractCLValue<T, P extends AbstractCLType>
     @JsonIgnore
     private T value;
 
+    public boolean isValid() {
+        tryDeserializeIfNeeded();
+
+        return valid;
+    }
+
+    public T getValue() {
+        tryDeserializeIfNeeded();
+
+        return this.value;
+    }
+
     public void setValue(T value) throws ValueSerializationException {
         this.value = value;
         this.serialize(new SerializerBuffer());
+    }
+
+    private void tryDeserializeIfNeeded() {
+        if (value == null && bytes.length() > 0) {
+            try {
+                DeserializerBuffer deser = new DeserializerBuffer(this.bytes);
+
+                this.deserialize(deser);
+
+                valid = true;
+            } catch (ValueDeserializationException e) {
+                valid = false;
+            }
+        }
     }
 
     public static AbstractCLValue<?, ?> createInstanceFromBytes(DeserializerBuffer deser) throws ValueDeserializationException {
@@ -84,6 +104,12 @@ public abstract class AbstractCLValue<T, P extends AbstractCLType>
         return this.bytes;
     }
 
+    @JsonSetter(value = "bytes")
+    @ExcludeFromJacocoGeneratedReport
+    protected void setJsonBytes(String bytes) {
+        this.bytes = bytes;
+    }
+
     @JsonIgnore
     public abstract P getClType();
 
@@ -94,17 +120,6 @@ public abstract class AbstractCLValue<T, P extends AbstractCLType>
         serialize(localSer);
         int size = localSer.toByteArray().length;
         ser.writeI32(size);
-    }
-
-    @SneakyThrows({ValueDeserializationException.class})
-    @JsonSetter(value = "bytes")
-    @ExcludeFromJacocoGeneratedReport
-    protected void setJsonBytes(String bytes) {
-        this.bytes = bytes;
-
-        DeserializerBuffer deser = new DeserializerBuffer(this.bytes);
-
-        this.deserialize(deser);
     }
 
     @Override

@@ -124,4 +124,9 @@ public class CLValueURef extends AbstractCLValue<URef, CLTypeURef> {
         result = result * PRIME + (thisClType == null ? 43 : thisClType.hashCode());
         return result;
     }
+
+    @Override
+    public String toString() {
+        return getValue() != null ? getValue().getJsonURef() : null;
+    }
 }

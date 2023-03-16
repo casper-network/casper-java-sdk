@@ -1,7 +1,6 @@
 package com.casper.sdk.model.stateroothash;
 
 import com.casper.sdk.model.AbstractJsonTests;
-import com.casper.sdk.model.status.StatusDataTests;
 import org.json.JSONException;
 import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
@@ -19,7 +18,7 @@ import java.io.IOException;
  */
 public class StateRootHashIdentifierTest extends AbstractJsonTests {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(StatusDataTests.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(StateRootHashIdentifierTest.class);
 
     @Test
     void validateStateRootHashMapping() throws IOException, JSONException {

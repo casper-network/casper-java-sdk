@@ -79,6 +79,40 @@ public class DeployDataTests extends AbstractJsonTests {
     }
 
     @Test
+    void validateDeployDataMapping_4() throws IOException, JSONException {
+        final String inputJson = getPrettyJson(loadJsonFromFile("deploy-samples/deploy-v4.json"));
+
+        LOGGER.debug("Original JSON: {}", inputJson);
+
+        final DeployData dd = OBJECT_MAPPER.readValue(inputJson, DeployData.class);
+
+        assertNotNull(dd.getDeploy());
+
+        final String expectedJson = getPrettyJson(dd);
+
+        LOGGER.debug("Serialized JSON: {}", expectedJson);
+
+        JSONAssert.assertEquals(inputJson, expectedJson, false);
+    }
+
+    @Test
+    void validateDeployDataMapping_5() throws IOException, JSONException {
+        final String inputJson = getPrettyJson(loadJsonFromFile("deploy-samples/deploy-v5.json"));
+
+        LOGGER.debug("Original JSON: {}", inputJson);
+
+        final DeployData dd = OBJECT_MAPPER.readValue(inputJson, DeployData.class);
+
+        assertNotNull(dd.getDeploy());
+
+        final String expectedJson = getPrettyJson(dd);
+
+        LOGGER.debug("Serialized JSON: {}", expectedJson);
+
+        JSONAssert.assertEquals(inputJson, expectedJson, false);
+    }
+
+    @Test
     void validateDeployResultMapping() throws IOException, JSONException {
         final String inputJson = getPrettyJson(loadJsonFromFile("deploy-samples/deploy-result.json"));
 

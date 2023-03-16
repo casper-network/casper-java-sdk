@@ -69,4 +69,9 @@ public class CLValueU128 extends AbstractCLValue<BigInteger, CLTypeU128> {
     public void deserializeCustom(DeserializerBuffer deser) throws Exception {
         this.setValue(deser.readU128());
     }
+
+    @Override
+    public String toString() {
+        return getValue() != null ? getValue().toString() : null;
+    }
 }

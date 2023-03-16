@@ -9,12 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import dev.oak3.sbs4j.DeserializerBuffer;
 import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.bouncycastle.util.encoders.Hex;
 
 /**
@@ -115,5 +110,10 @@ public class CLValueResult extends AbstractCLValue<CLValueResult.Result, CLTypeR
     protected void setChildTypes(AbstractCLValue<?, ?> ok, AbstractCLValue<?, ?> err) {
         clType.setOkErrTypes(
                 new CLTypeResult.CLTypeResultOkErrTypes(ok.getClType(), err.getClType()));
+    }
+
+    @Override
+    public String toString() {
+        return getValue() != null ? "Ok: " + getValue().getOk().getValue().toString() + ", " + "Err: " + getValue().getErr().getValue().toString() : null;
     }
 }
