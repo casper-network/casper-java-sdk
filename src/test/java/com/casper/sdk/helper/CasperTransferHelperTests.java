@@ -33,7 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @since 0.2.0
  */
 public class CasperTransferHelperTests extends AbstractJsonRpcTests {
-    private static final Logger LOGGER = LoggerFactory.getLogger(CasperDeployHelper.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CasperTransferHelperTests.class);
 
     /**
      * Loads test key file from resources
@@ -85,7 +85,6 @@ public class CasperTransferHelperTests extends AbstractJsonRpcTests {
         alice.readPrivateKey(getResourcesKeyPath("deploy-accounts/Alice_SyntiFi_secret_key.pem"));
         bob.readPrivateKey(getResourcesKeyPath("deploy-accounts/Bob_SyntiFi_secret_key.pem"));
 
-        Long id = null;
         Ttl ttl = Ttl
                 .builder()
                 .ttl("30m")
@@ -104,7 +103,7 @@ public class CasperTransferHelperTests extends AbstractJsonRpcTests {
 
         Deploy deploy = CasperTransferHelper.buildTransferDeploy(from, to,
                 BigInteger.valueOf(2500000000L), "casper-test",
-                id, BigInteger.valueOf(100000000L), 1L, ttl, new Date(),
+                null, BigInteger.valueOf(100000000L), 1L, ttl, new Date(),
                 new ArrayList<>());
         DeployResult deployResult = casperServiceTestnet.putDeploy(deploy);
         LOGGER.debug("deploy hash: " + deployResult.getDeployHash());

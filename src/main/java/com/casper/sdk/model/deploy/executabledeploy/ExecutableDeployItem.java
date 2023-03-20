@@ -1,9 +1,12 @@
 package com.casper.sdk.model.deploy.executabledeploy;
 
 import com.casper.sdk.model.clvalue.serde.CasperSerializableObject;
+import com.casper.sdk.model.deploy.NamedArg;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
+import java.util.List;
 
 /**
  * Abstract Executable Deploy Item containing the runtime args of the contract.
@@ -27,6 +30,9 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @JsonSubTypes.Type(value = StoredVersionedContractByName.class, name = "StoredVersionedContractByName"),
         @JsonSubTypes.Type(value = Transfer.class, name = "Transfer")})
 public interface ExecutableDeployItem extends CasperSerializableObject {
+
+    List<NamedArg<?>> getArgs();
+
     @JsonIgnore
     byte getOrder();
 }

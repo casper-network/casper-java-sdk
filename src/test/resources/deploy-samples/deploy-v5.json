@@ -1,0 +1,58 @@
+{
+  "api_version": "1.3.2",
+  "deploy": {
+    "hash": "a479d236882b382f912a320a800aed5c3f6fbeb07c7306c49cbe2eabd58f1f7e",
+    "header": {
+      "ttl": "30m",
+      "account": "016ecbdc24a17aec45b8a125d7f5df0b7f03a15ac7d2e41f353c90339a383b26ca",
+      "body_hash": "bfd8a70007c6710eeadf2f45117186a63a2889ffe821785b71e7f8a8a82d3b0f",
+      "gas_price": 1,
+      "timestamp": "2022-12-06T14:04:10.196Z",
+      "chain_name": "casper",
+      "dependencies": []
+    },
+    "payment": {
+      "ModuleBytes": {
+        "args": [
+          [
+            "amount",
+            {
+              "bytes": "0500f2052a01",
+              "parsed": "5000000000",
+              "cl_type": "U512"
+            }
+          ]
+        ],
+        "module_bytes": ""
+      }
+    },
+    "session": {
+      "StoredContractByHash": {
+        "args": [
+          [
+            "token_ids",
+            {
+              "bytes": "010100000018000000363337626266383166313933343065323531396636376538",
+              "parsed": [
+                "637bbf81f19340e2519f67e8"
+              ],
+              "cl_type": {
+                "Option": {
+                  "List": "String"
+                }
+              }
+            }
+          ]
+        ],
+        "hash": "d9694ff70acbfe728c1db68c76f7ac2cb685de25ab1d1d21125a4e594e277be4",
+        "entry_point": "mint"
+      }
+    },
+    "approvals": [
+      {
+        "signer": "016ecbdc24a17aec45b8a125d7f5df0b7f03a15ac7d2e41f353c90339a383b26ca",
+        "signature": "01e13731a4782abd9f6c954b012fd1276b37598493fa686875f4707ae5696c433a2b719793801d7db60bd81c9bcf3a9b96f59dbd5f11219a56a0a058946f5c6002"
+      }
+    ]
+  }
+}

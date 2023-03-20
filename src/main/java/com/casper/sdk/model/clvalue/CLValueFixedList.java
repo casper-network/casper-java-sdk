@@ -18,6 +18,7 @@ import org.bouncycastle.util.encoders.Hex;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Casper List CLValue implementation
@@ -90,5 +91,10 @@ public class CLValueFixedList extends AbstractCLValue<List<? extends AbstractCLV
 
     protected void setListType(List<? extends AbstractCLValue<?, ?>> value) {
         clType.setListType(value.get(0).getClType());
+    }
+
+    @Override
+    public String toString() {
+        return getValue() != null ? getValue().stream().map(item -> item.getValue().toString()).collect(Collectors.joining(", ")) : null;
     }
 }

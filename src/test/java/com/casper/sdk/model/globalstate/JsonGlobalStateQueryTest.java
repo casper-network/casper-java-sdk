@@ -1,7 +1,6 @@
 package com.casper.sdk.model.globalstate;
 
 import com.casper.sdk.model.AbstractJsonTests;
-import com.casper.sdk.model.status.StatusDataTests;
 import org.json.JSONException;
 import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
@@ -20,7 +19,7 @@ import java.io.IOException;
  */
 public class JsonGlobalStateQueryTest extends AbstractJsonTests {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(StatusDataTests.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(JsonGlobalStateQueryTest.class);
 
     @Test
     void validateJsonGlobalState() throws IOException, JSONException {

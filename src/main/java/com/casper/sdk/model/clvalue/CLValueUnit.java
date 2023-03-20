@@ -70,4 +70,9 @@ public class CLValueUnit extends AbstractCLValue<Object, CLTypeUnit> {
     public void deserializeCustom(DeserializerBuffer deser) throws Exception {
         setBytes(UNITY_EMPTY_VALUE);
     }
+
+    @Override
+    public String toString() {
+        return UNITY_EMPTY_VALUE;
+    }
 }

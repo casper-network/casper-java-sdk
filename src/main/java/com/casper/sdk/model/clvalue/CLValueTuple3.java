@@ -97,4 +97,9 @@ public class CLValueTuple3 extends
                 value.getValue2().getClType()));
 
     }
+
+    @Override
+    public String toString() {
+        return getValue() != null ? getValue().toString() : null;
+    }
 }

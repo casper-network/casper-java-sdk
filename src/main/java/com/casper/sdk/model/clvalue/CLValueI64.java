@@ -67,4 +67,9 @@ public class CLValueI64 extends AbstractCLValue<Long, CLTypeI64> {
     public void deserializeCustom(DeserializerBuffer deser) throws Exception {
         this.setValue(deser.readI64());
     }
+
+    @Override
+    public String toString() {
+        return getValue() != null ? getValue().toString() : null;
+    }
 }

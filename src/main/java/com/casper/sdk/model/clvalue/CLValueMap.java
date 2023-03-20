@@ -19,6 +19,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * Casper Map CLValue implementation
@@ -159,5 +160,10 @@ public class CLValueMap extends
         final Object $clType = this.getClType();
         result = result * PRIME + ($clType == null ? 43 : $clType.hashCode());
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return getValue() != null ? getValue().keySet().stream().map(key -> key.getValue().toString() + "=" + key.getValue().toString()).collect(Collectors.joining(", ")) : null;
     }
 }

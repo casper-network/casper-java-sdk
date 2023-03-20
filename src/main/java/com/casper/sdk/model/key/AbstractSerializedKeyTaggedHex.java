@@ -48,4 +48,9 @@ public abstract class AbstractSerializedKeyTaggedHex<T extends Tag> implements C
         ser.writeU8(getTag().getByteTag());
         ser.writeByteArray(getKey());
     }
+
+    @Override
+    public String toString() {
+        return getAlgoTaggedHex();
+    }
 }

@@ -9,11 +9,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import dev.oak3.sbs4j.DeserializerBuffer;
 import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.bouncycastle.util.encoders.Hex;
 
 import java.math.BigInteger;
@@ -70,5 +66,10 @@ public class CLValueU64 extends AbstractCLValue<BigInteger, CLTypeU64> {
     @Override
     public void deserializeCustom(DeserializerBuffer deser) throws Exception {
         this.setValue(deser.readU64());
+    }
+
+    @Override
+    public String toString() {
+        return getValue() != null ? getValue().toString() : null;
     }
 }

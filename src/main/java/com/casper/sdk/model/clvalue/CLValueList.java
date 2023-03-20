@@ -4,8 +4,10 @@ import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.cltype.AbstractCLTypeWithChildren;
 import com.casper.sdk.model.clvalue.cltype.CLTypeData;
 import com.casper.sdk.model.clvalue.cltype.CLTypeList;
+import com.casper.sdk.model.clvalue.cltype.CLTypeMap;
 import com.casper.sdk.model.clvalue.serde.Target;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import dev.oak3.sbs4j.DeserializerBuffer;
 import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
@@ -15,8 +17,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.bouncycastle.util.encoders.Hex;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Casper List CLValue implementation
@@ -30,6 +33,7 @@ import java.util.List;
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
+@JsonPropertyOrder({"cl_type", "bytes", "parsed"})
 public class CLValueList extends AbstractCLValueWithChildren<List<? extends AbstractCLValue<?, ?>>, CLTypeList> {
     @JsonProperty("cl_type")
     private CLTypeList clType = new CLTypeList();
@@ -72,10 +76,13 @@ public class CLValueList extends AbstractCLValueWithChildren<List<? extends Abst
         CLValueI32 length = new CLValueI32();
         length.deserializeCustom(deser);
 
-        List<AbstractCLValue<?, ?>> list = new LinkedList<>();
+        List<AbstractCLValue<?, ?>> list = new ArrayList<>();
         for (int i = 0; i < length.getValue(); i++) {
             AbstractCLValue<?, ?> child = CLTypeData.createCLValueFromCLTypeData(childrenType);
-            if (child.getClType() instanceof AbstractCLTypeWithChildren) {
+            if (child.getClType() instanceof CLTypeMap) {
+                ((CLTypeMap) child.getClType())
+                        .setKeyValueTypes(((CLTypeMap) clType.getListType()).getKeyValueTypes());
+            } else if (child.getClType() instanceof AbstractCLTypeWithChildren) {
                 ((AbstractCLTypeWithChildren) child.getClType())
                         .setChildTypes(((AbstractCLTypeWithChildren) clType.getListType()).getChildTypes());
             }
@@ -89,5 +96,10 @@ public class CLValueList extends AbstractCLValueWithChildren<List<? extends Abst
     @Override
     protected void setChildTypes(List<? extends AbstractCLValue<?, ?>> value) {
         clType.setListType(value.get(0).getClType());
+    }
+
+    @Override
+    public String toString() {
+        return getValue() != null ? getValue().stream().map(item -> item.getValue().toString()).collect(Collectors.joining(", ")) : null;
     }
 }

@@ -67,4 +67,9 @@ public class CLValueString extends AbstractCLValue<String, CLTypeString> {
     public void deserializeCustom(DeserializerBuffer deser) throws Exception {
         this.setValue(deser.readString());
     }
+
+    @Override
+    public String toString() {
+        return getValue() != null ? getValue() : null;
+    }
 }

@@ -67,4 +67,9 @@ public class CLValueU8 extends AbstractCLValue<Byte, CLTypeU8> {
     public void deserializeCustom(DeserializerBuffer deser) throws Exception {
         this.setValue(deser.readU8());
     }
+
+    @Override
+    public String toString() {
+        return getValue() != null ? getValue().toString() : null;
+    }
 }

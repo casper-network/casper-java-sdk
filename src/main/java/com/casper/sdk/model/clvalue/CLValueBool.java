@@ -68,4 +68,9 @@ public class CLValueBool extends AbstractCLValue<Boolean, CLTypeBool> {
     public void deserializeCustom(DeserializerBuffer deser) throws Exception {
         this.setValue(deser.readBool());
     }
+
+    @Override
+    public String toString() {
+        return getValue() != null ? getValue().toString() : null;
+    }
 }

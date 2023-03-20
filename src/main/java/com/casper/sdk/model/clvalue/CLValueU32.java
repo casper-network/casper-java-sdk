@@ -67,4 +67,9 @@ public class CLValueU32 extends AbstractCLValue<Long, CLTypeU32> {
     public void deserializeCustom(DeserializerBuffer deser) throws Exception {
         this.setValue(deser.readU32());
     }
+
+    @Override
+    public String toString() {
+        return getValue() != null ? getValue().toString() : null;
+    }
 }

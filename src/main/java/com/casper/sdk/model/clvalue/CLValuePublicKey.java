@@ -70,4 +70,9 @@ public class CLValuePublicKey extends AbstractCLValue<PublicKey, CLTypePublicKey
     public void deserializeCustom(DeserializerBuffer deser) throws Exception {
         this.setValue(PublicKey.fromTaggedHexString(ByteUtils.encodeHexString(deser.readByteArray(33))));
     }
+
+    @Override
+    public String toString() {
+        return getValue() != null ? getValue().getAlgoTaggedHex() : null;
+    }
 }

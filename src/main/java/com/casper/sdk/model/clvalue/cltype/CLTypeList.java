@@ -18,7 +18,7 @@ import lombok.Setter;
  */
 @Getter
 @EqualsAndHashCode(callSuper = false, of = {"typeName", "listType"})
-public class CLTypeList extends AbstractCLType {
+public class CLTypeList extends AbstractCLTypeWithChildren {
     private final String typeName = AbstractCLType.LIST;
 
     @Setter

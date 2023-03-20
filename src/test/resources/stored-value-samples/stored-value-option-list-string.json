@@ -1,0 +1,17 @@
+{
+  "api_version": "1.3.2",
+  "stored_value": {
+    "CLValue": {
+      "bytes": "010100000018000000363337626266383166313933343065323531396636376538",
+      "parsed": [
+        "637bbf81f19340e2519f67e8"
+      ],
+      "cl_type": {
+        "Option": {
+          "List": "String"
+        }
+      }
+    }
+  },
+  "merkle_proof": "-- erased --"
+}

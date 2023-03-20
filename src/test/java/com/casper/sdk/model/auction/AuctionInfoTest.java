@@ -1,7 +1,6 @@
 package com.casper.sdk.model.auction;
 
 import com.casper.sdk.model.AbstractJsonTests;
-import com.casper.sdk.model.status.StatusDataTests;
 import org.json.JSONException;
 import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
@@ -21,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  */
 public class AuctionInfoTest extends AbstractJsonTests {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(StatusDataTests.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AuctionInfoTest.class);
 
     @Test
     void validateAuctionInfoMapping() throws IOException, JSONException {
