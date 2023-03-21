@@ -4,10 +4,13 @@ import com.casper.sdk.exception.NoSuchKeyTagException;
 import com.casper.sdk.jackson.deserializer.KeyDeserializer;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.syntifi.crypto.key.hash.Blake2b;
 import dev.oak3.sbs4j.util.ByteUtils;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.Arrays;
 
 /**
@@ -18,23 +21,32 @@ import java.util.Arrays;
  * @since 0.0.1
  */
 @JsonDeserialize(using = KeyDeserializer.class)
-<span class="fc" id="L21">@NoArgsConstructor</span>
-<span class="pc bpc" id="L22" title="4 of 8 branches missed.">@EqualsAndHashCode(callSuper = true)</span>
+<span class="fc" id="L24">@NoArgsConstructor</span>
+<span class="pc bpc" id="L25" title="4 of 8 branches missed.">@EqualsAndHashCode(callSuper = true)</span>
 public class Key extends AbstractSerializedKeyTaggedHex&lt;KeyTag&gt; {
 
     public static Key fromTaggedHexString(String hex) throws NoSuchKeyTagException {
-<span class="fc" id="L26">        Key object = new Key();</span>
-<span class="fc" id="L27">        byte[] bytes = ByteUtils.parseHexString(hex);</span>
-<span class="fc" id="L28">        object.setTag(KeyTag.getByTag(bytes[0]));</span>
-<span class="fc" id="L29">        object.setKey(Arrays.copyOfRange(bytes, 1, bytes.length));</span>
-<span class="fc" id="L30">        return object;</span>
+<span class="fc" id="L29">        Key object = new Key();</span>
+<span class="fc" id="L30">        byte[] bytes = ByteUtils.parseHexString(hex);</span>
+<span class="fc" id="L31">        object.setTag(KeyTag.getByTag(bytes[0]));</span>
+<span class="fc" id="L32">        object.setKey(Arrays.copyOfRange(bytes, 1, bytes.length));</span>
+<span class="fc" id="L33">        return object;</span>
+    }
+
+    public String generateAccountHash(boolean includePrefix) throws IOException {
+<span class="nc" id="L37">        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();</span>
+<span class="nc" id="L38">        byteArrayOutputStream.write(getTag().toString().toLowerCase().getBytes(&quot;UTF-8&quot;));</span>
+<span class="nc" id="L39">        byteArrayOutputStream.write(0);</span>
+<span class="nc" id="L40">        byteArrayOutputStream.write(getKey());</span>
+
+<span class="nc bnc" id="L42" title="All 2 branches missed.">        return (includePrefix ? &quot;account-hash-&quot; : &quot;&quot;) + ByteUtils.encodeHexString(Blake2b.digest(byteArrayOutputStream.toByteArray(), 32));</span>
     }
 
     @JsonCreator
     public void createKey(String key) throws NoSuchKeyTagException {
-<span class="nc" id="L35">        Key obj = Key.fromTaggedHexString(key);</span>
-<span class="nc" id="L36">        this.setTag(obj.getTag());</span>
-<span class="nc" id="L37">        this.setKey(obj.getKey());</span>
-<span class="nc" id="L38">    }</span>
+<span class="nc" id="L47">        Key obj = Key.fromTaggedHexString(key);</span>
+<span class="nc" id="L48">        this.setTag(obj.getTag());</span>
+<span class="nc" id="L49">        this.setKey(obj.getKey());</span>
+<span class="nc" id="L50">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.Setter;
 
 /**
  * CLType for {@link AbstractCLType#LIST}
@@ -17,28 +16,39 @@ import lombok.Setter;
  * @since 0.0.1
  */
 @Getter
-<span class="pc bpc" id="L20" title="15 of 22 branches missed.">@EqualsAndHashCode(callSuper = false, of = {&quot;typeName&quot;, &quot;listType&quot;})</span>
-<span class="fc" id="L21">public class CLTypeList extends AbstractCLType {</span>
-<span class="fc" id="L22">    private final String typeName = AbstractCLType.LIST;</span>
-
-<span class="fc" id="L24">    @Setter</span>
-    @JsonIgnore
-<span class="fc" id="L26">    private AbstractCLType listType;</span>
-
-    @JsonSetter(AbstractCLType.LIST)
-    @ExcludeFromJacocoGeneratedReport
-    protected void setJsonValue(AbstractCLType clType) {
-        this.listType = clType;
-    }
+<span class="pc bpc" id="L19" title="10 of 16 branches missed.">@EqualsAndHashCode(callSuper = true, of = {&quot;typeName&quot;})</span>
+<span class="fc" id="L20">public class CLTypeList extends AbstractCLTypeWithChildren {</span>
+<span class="fc" id="L21">    private final String typeName = AbstractCLType.LIST;</span>
 
     @JsonGetter(AbstractCLType.LIST)
     @ExcludeFromJacocoGeneratedReport
     protected Object getJsonValue() {
-        if (this.listType instanceof AbstractCLTypeBasic) {
-            return this.listType.getTypeName();
+        if (getListType() instanceof AbstractCLTypeBasic) {
+            return getListType().getTypeName();
         } else {
-            return this.listType;
+            return getListType();
         }
     }
+
+    @JsonSetter(AbstractCLType.LIST)
+    @ExcludeFromJacocoGeneratedReport
+    protected void setJsonValue(AbstractCLType clType) {
+        getChildTypes().add(clType);
+    }
+
+    @JsonIgnore
+    public AbstractCLType getListType() {
+<span class="pc bpc" id="L41" title="1 of 2 branches missed.">        if (getChildTypes().size() &gt; 0) {</span>
+<span class="fc" id="L42">            return getChildTypes().get(0);</span>
+        }
+
+<span class="nc" id="L45">        return null;</span>
+    }
+
+    @JsonIgnore
+    public void setListType(AbstractCLType listType) {
+<span class="fc" id="L50">        getChildTypes().clear();</span>
+<span class="fc" id="L51">        getChildTypes().add(listType);</span>
+<span class="fc" id="L52">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

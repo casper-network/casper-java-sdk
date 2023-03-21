@@ -70,5 +70,10 @@ public class CLValueKey extends AbstractCLValue&lt;Key, CLTypeKey&gt; {
     public void deserializeCustom(DeserializerBuffer deser) throws Exception {
 <span class="fc" id="L71">        this.setValue(Key.fromTaggedHexString(ByteUtils.encodeHexString(deser.readByteArray(33))));</span>
 <span class="fc" id="L72">    }</span>
+
+    @Override
+    public String toString() {
+<span class="nc bnc" id="L76" title="All 2 branches missed.">        return getValue() != null ? getValue().toString() : null;</span>
+    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
