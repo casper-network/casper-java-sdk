@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EventBuilder.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">casper-java-sdk</a> &gt; <a href="index.source.html" class="el_package">com.casper.sdk.service.impl.event</a> &gt; <span class="el_source">EventBuilder.java</span></div><h1>EventBuilder.java</h1><pre class="source lang-java linenums">package com.casper.sdk.service.impl.event;
+
+
+import com.casper.sdk.exception.CasperClientException;
+import com.casper.sdk.model.event.Event;
+import com.casper.sdk.model.event.EventData;
+import com.casper.sdk.model.event.EventTarget;
+import com.casper.sdk.model.event.EventType;
+import com.casper.sdk.model.event.shutdown.Shutdown;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.jetbrains.annotations.NotNull;
+
+/**
+ * Builds events from the lines read from a node
+ *
+ * @author ian@meywood.com
+ */
+final class EventBuilder {
+
+    public static final String DATA = &quot;data:&quot;;
+    public static final String ID = &quot;id:&quot;;
+    public static final String API_VERSION = &quot;ApiVersion&quot;;
+    public static final String SHUTDOWN = &quot;\&quot;Shutdown\&quot;&quot;;
+    /** The most recent ID read from an event stream */
+    private Long id;
+    /** The line of data read from an event stream */
+    private String data;
+    /** The type of data being read */
+    private final EventType eventType;
+    /** The target type of the event to build */
+    private final EventTarget eventTarget;
+    private final String source;
+    /** Indicates if an ID line is expected for the current data line */
+<span class="fc" id="L35">    private boolean idExpected = true;</span>
+    /** Used to build the pojo model objects from the JSON in the data line */
+    private final ObjectMapper mapper;
+    /** The version of the node the event was generated with */
+    private String version;
+
+<span class="fc" id="L41">    EventBuilder(final EventType eventType, final EventTarget eventTarget, final String source) {</span>
+<span class="fc" id="L42">        this.eventType = eventType;</span>
+<span class="fc" id="L43">        this.eventTarget = eventTarget;</span>
+<span class="fc" id="L44">        this.source = source;</span>
+<span class="fc" id="L45">        mapper = new ObjectMapper();</span>
+<span class="fc" id="L46">    }</span>
+
+    boolean isComplete() {
+<span class="pc bpc" id="L49" title="1 of 6 branches missed.">        return (id != null || !idExpected) &amp;&amp; data != null;</span>
+    }
+
+    boolean processLine(final String line) {
+        try {
+
+            // Remove any leading or trailing whitespace
+<span class="fc" id="L56">            final String trimmed = line.trim();</span>
+
+<span class="fc bfc" id="L58" title="All 2 branches covered.">            if (line.startsWith(DATA)) {</span>
+<span class="fc" id="L59">                this.data = trimmed;</span>
+<span class="fc" id="L60">                idExpected = isIdExpected(trimmed);</span>
+            }
+
+<span class="fc bfc" id="L63" title="All 2 branches covered.">            if (isId(trimmed)) {</span>
+<span class="fc" id="L64">                this.id = getId(trimmed);</span>
+<span class="fc bfc" id="L65" title="All 2 branches covered.">            } else if (isApiVersion(trimmed)) {</span>
+<span class="fc" id="L66">                this.version = getVersion(trimmed);</span>
+            }
+
+<span class="fc" id="L69">            return isComplete();</span>
+<span class="nc" id="L70">        } catch (Exception e) {</span>
+<span class="nc" id="L71">            throw new CasperClientException(e.getMessage(), e);</span>
+        }
+    }
+
+    private String getVersion(final String line) {
+        // remove all but version number from: data:{&quot;ApiVersion&quot;:&quot;1.0.0&quot;}
+<span class="fc" id="L77">        return line.replace(&quot;data:{\&quot;ApiVersion\&quot;:\&quot;&quot;, &quot;&quot;)</span>
+<span class="fc" id="L78">                .replace(&quot;\&quot;}&quot;,&quot;&quot;);</span>
+    }
+
+    private boolean isIdExpected(String line) {
+<span class="fc bfc" id="L82" title="All 2 branches covered.">        return !isApiVersion(line);</span>
+    }
+
+    private boolean isId(final String line) {
+<span class="fc" id="L86">        return line.startsWith(ID);</span>
+    }
+
+    private Long getId(final String line) {
+<span class="fc" id="L90">        return Long.valueOf(line.substring(ID.length()));</span>
+    }
+
+    private boolean isApiVersion(final String line) {
+<span class="fc" id="L94">        return line.contains(API_VERSION);</span>
+    }
+
+    @SuppressWarnings(&quot;rawtypes&quot;)
+    &lt;T extends Event&gt; T buildEvent() {
+
+        final T event;
+<span class="fc bfc" id="L101" title="All 2 branches covered.">        if (this.eventTarget == EventTarget.RAW) {</span>
+            //noinspection unchecked
+<span class="fc" id="L103">            event = (T) new RawEvent(eventType, source, id, data, version);</span>
+<span class="pc bpc" id="L104" title="1 of 2 branches missed.">        } else if (eventTarget == EventTarget.POJO) {</span>
+            //noinspection unchecked
+<span class="fc" id="L106">            event = (T) buildPojoEvent();</span>
+        } else {
+<span class="nc" id="L108">            throw new IllegalArgumentException(&quot;Unsupported eventTarget: &quot; + eventTarget);</span>
+        }
+<span class="fc" id="L110">        reset();</span>
+<span class="fc" id="L111">        return event;</span>
+    }
+
+    @NotNull
+    private &lt;T extends EventData&gt; PojoEvent&lt;T&gt; buildPojoEvent() {
+        final PojoEvent&lt;T&gt; event;
+        try {
+            // Remove the &quot;data:&quot; prefix from the line
+<span class="fc" id="L119">            final String value = data.substring(DATA.length()).trim();</span>
+
+            final EventRoot&lt;T&gt; root;
+<span class="fc bfc" id="L122" title="All 2 branches covered.">            if (SHUTDOWN.equals(value)) {</span>
+                // Shutdown is text value, so we need to manually convert
+                //noinspection unchecked
+<span class="fc" id="L125">                root = new EventRoot&lt;&gt;((T) new Shutdown());</span>
+            } else {
+                //noinspection unchecked
+<span class="fc" id="L128">                root = mapper.readValue(value, EventRoot.class);</span>
+            }
+<span class="fc" id="L130">            event = new PojoEvent&lt;&gt;(eventType, source, id, EventRoot.getData(root), version);</span>
+<span class="nc" id="L131">        } catch (JsonProcessingException e) {</span>
+<span class="nc" id="L132">            throw new CasperClientException(&quot;Error building POJO event for: &quot; + data, e);</span>
+<span class="fc" id="L133">        }</span>
+<span class="fc" id="L134">        return event;</span>
+    }
+
+    private void reset() {
+<span class="fc" id="L138">        this.data = null;</span>
+<span class="fc" id="L139">        this.id = null;</span>
+<span class="fc" id="L140">        this.idExpected = true;</span>
+<span class="fc" id="L141">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

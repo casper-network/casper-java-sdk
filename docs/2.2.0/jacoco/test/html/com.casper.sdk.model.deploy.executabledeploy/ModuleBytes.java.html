@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ModuleBytes.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">casper-java-sdk</a> &gt; <a href="index.source.html" class="el_package">com.casper.sdk.model.deploy.executabledeploy</a> &gt; <span class="el_source">ModuleBytes.java</span></div><h1>ModuleBytes.java</h1><pre class="source lang-java linenums">package com.casper.sdk.model.deploy.executabledeploy;
+
+import com.casper.sdk.exception.NoSuchTypeException;
+import com.casper.sdk.model.clvalue.serde.Target;
+import com.casper.sdk.model.deploy.NamedArg;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import dev.oak3.sbs4j.SerializerBuffer;
+import dev.oak3.sbs4j.exception.ValueSerializationException;
+import dev.oak3.sbs4j.util.ByteUtils;
+import lombok.*;
+
+import java.util.List;
+
+/**
+ * Abstract Executable Deploy Item containing the ModuleBytes of the contract.
+ *
+ * @author Alexandre Carvalho
+ * @author Andre Bertolace
+ * @see ExecutableDeployItem
+ * @since 0.0.1
+ */
+@Getter
+<span class="pc" id="L25">@Setter</span>
+<span class="pc" id="L26">@Builder</span>
+<span class="fc" id="L27">@AllArgsConstructor</span>
+<span class="fc" id="L28">@NoArgsConstructor</span>
+@JsonTypeName(&quot;ModuleBytes&quot;)
+public class ModuleBytes implements ExecutableDeployItem {
+
+    /**
+     * Module bytes
+     */
+    @JsonIgnore
+<span class="fc" id="L36">    private byte[] bytes;</span>
+
+    /**
+     * @see NamedArg
+     */
+<span class="fc" id="L41">    private List&lt;NamedArg&lt;?&gt;&gt; args;</span>
+
+    @JsonProperty(&quot;module_bytes&quot;)
+    public String getJsonBytes() {
+<span class="fc" id="L45">        return ByteUtils.encodeHexString(bytes);</span>
+    }
+
+    @JsonProperty(&quot;module_bytes&quot;)
+    public void setJsonBytes(String byteContent) {
+<span class="fc" id="L50">        this.bytes = ByteUtils.parseHexString(byteContent);</span>
+<span class="fc" id="L51">    }</span>
+
+    /**
+     * {@link ExecutableDeployItem} order 0
+     */
+    @Override
+    public byte getOrder() {
+<span class="fc" id="L58">        return 0x0;</span>
+    }
+
+    /**
+     * Implements the ModuleBytes encoder
+     */
+    @Override
+    public void serialize(SerializerBuffer ser, Target target) throws ValueSerializationException, NoSuchTypeException {
+<span class="fc" id="L66">        ser.writeU8(getOrder());</span>
+<span class="fc" id="L67">        ser.writeI32(getBytes().length);</span>
+<span class="fc" id="L68">        ser.writeByteArray(getBytes());</span>
+<span class="fc" id="L69">        ser.writeI32(args.size());</span>
+<span class="fc bfc" id="L70" title="All 2 branches covered.">        for (NamedArg&lt;?&gt; namedArg : args) {</span>
+<span class="fc" id="L71">            namedArg.serialize(ser, target);</span>
+<span class="fc" id="L72">        }</span>
+<span class="fc" id="L73">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
