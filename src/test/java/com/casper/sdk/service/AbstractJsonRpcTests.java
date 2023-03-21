@@ -1,14 +1,12 @@
 package com.casper.sdk.service;
 
-import java.net.MalformedURLException;
-
 import com.casper.sdk.model.AbstractJsonTests;
-
-import org.junit.jupiter.api.BeforeAll;
-
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.junit.jupiter.api.BeforeAll;
+
+import java.net.MalformedURLException;
 
 /**
  * Abstract class for testing json rpc methods
@@ -21,7 +19,7 @@ public abstract class AbstractJsonRpcTests extends AbstractJsonTests {
     @Getter
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     public enum CasperNetwork {
-        MAIN_NET("63.33.251.206", 7777), TEST_NET("95.214.55.138", 7777);
+        MAIN_NET("209.145.55.218", 7777), TEST_NET("85.114.132.133", 7777);
 
         private final String ip;
         private final int port;
