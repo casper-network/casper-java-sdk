@@ -124,5 +124,10 @@ public class CLValueURef extends AbstractCLValue&lt;URef, CLTypeURef&gt; {
         result = result * PRIME + (thisClType == null ? 43 : thisClType.hashCode());
         return result;
     }
+
+    @Override
+    public String toString() {
+<span class="nc bnc" id="L130" title="All 2 branches missed.">        return getValue() != null ? getValue().getJsonURef() : null;</span>
+    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

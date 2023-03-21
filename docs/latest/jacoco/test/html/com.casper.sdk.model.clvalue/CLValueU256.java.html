@@ -69,5 +69,10 @@ public class CLValueU256 extends AbstractCLValue&lt;BigInteger, CLTypeU256&gt; {
     public void deserializeCustom(DeserializerBuffer deser) throws Exception {
 <span class="fc" id="L70">        this.setValue(deser.readU256());</span>
 <span class="fc" id="L71">    }</span>
+
+    @Override
+    public String toString() {
+<span class="nc bnc" id="L75" title="All 2 branches missed.">        return getValue() != null ? getValue().toString() : null;</span>
+    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

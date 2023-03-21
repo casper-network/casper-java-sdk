@@ -8,13 +8,8 @@ import com.casper.sdk.model.clvalue.cltype.CLTypeData;
 import com.casper.sdk.model.clvalue.serde.CasperDeserializableObject;
 import com.casper.sdk.model.clvalue.serde.CasperSerializableObject;
 import com.casper.sdk.model.clvalue.serde.Target;
-import com.fasterxml.jackson.annotation.JsonGetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonSetter;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonTypeResolver;
 import com.syntifi.crypto.key.encdec.Hex;
 import dev.oak3.sbs4j.DeserializerBuffer;
@@ -22,11 +17,7 @@ import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueDeserializationException;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
 import dev.oak3.sbs4j.util.ByteUtils;
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.SneakyThrows;
+import lombok.*;
 
 /**
  * Base class for CLValues
@@ -39,36 +30,40 @@ import lombok.SneakyThrows;
 @Getter
 @JsonTypeInfo(use = JsonTypeInfo.Id.NONE)
 @JsonTypeResolver(CLValueResolver.class)
-<span class="pc bpc" id="L42" title="11 of 22 branches missed.">@EqualsAndHashCode(of = {&quot;bytes&quot;, &quot;value&quot;})</span>
-<span class="fc" id="L43">public abstract class AbstractCLValue&lt;T, P extends AbstractCLType&gt;</span>
+<span class="pc bpc" id="L33" title="11 of 22 branches missed.">@EqualsAndHashCode(of = {&quot;bytes&quot;, &quot;value&quot;})</span>
+<span class="fc" id="L34">public abstract class AbstractCLValue&lt;T, P extends AbstractCLType&gt;</span>
         implements CasperSerializableObject, CasperDeserializableObject {
 
-<span class="fc" id="L46">    @Setter(AccessLevel.PROTECTED)</span>
-<span class="fc" id="L47">    private String bytes = &quot;&quot;;</span>
+<span class="fc" id="L37">    @Setter(AccessLevel.PROTECTED)</span>
+<span class="fc" id="L38">    private String bytes = &quot;&quot;;</span>
 
-<span class="fc" id="L49">    @Setter</span>
+<span class="fc" id="L40">    @Setter</span>
     @JsonProperty(&quot;parsed&quot;)
     @JsonInclude(Include.NON_NULL)
-<span class="fc" id="L52">    private Object parsed;</span>
+<span class="fc" id="L43">    private Object parsed;</span>
 
     @JsonIgnore
-<span class="fc" id="L55">    private T value;</span>
+    private T value;
+
+    public T getValue() {
+<span class="fc" id="L49">        return this.value;</span>
+    }
 
     public void setValue(T value) throws ValueSerializationException {
-<span class="fc" id="L58">        this.value = value;</span>
-<span class="fc" id="L59">        this.serialize(new SerializerBuffer());</span>
-<span class="fc" id="L60">    }</span>
+<span class="fc" id="L53">        this.value = value;</span>
+<span class="fc" id="L54">        this.serialize(new SerializerBuffer());</span>
+<span class="fc" id="L55">    }</span>
 
     public static AbstractCLValue&lt;?, ?&gt; createInstanceFromBytes(DeserializerBuffer deser) throws ValueDeserializationException {
-<span class="fc" id="L63">        int length = deser.readI32();</span>
-<span class="fc" id="L64">        byte[] bytes = deser.readByteArray(length);</span>
-<span class="fc" id="L65">        byte clType = deser.readU8();</span>
+<span class="fc" id="L58">        int length = deser.readI32();</span>
+<span class="fc" id="L59">        byte[] bytes = deser.readByteArray(length);</span>
+<span class="fc" id="L60">        byte clType = deser.readU8();</span>
         try {
-<span class="fc" id="L67">            AbstractCLValue&lt;?, ?&gt; clValue = CLTypeData.getTypeBySerializationTag(clType).getClazz().getDeclaredConstructor().newInstance();</span>
-<span class="fc" id="L68">            clValue.deserializeCustom(new DeserializerBuffer(Hex.encode(bytes)));</span>
-<span class="fc" id="L69">            return clValue;</span>
-<span class="nc" id="L70">        } catch (Exception e) {</span>
-<span class="nc" id="L71">            throw new ValueDeserializationException(&quot;Error while instantiating CLValue&quot;, e);</span>
+<span class="fc" id="L62">            AbstractCLValue&lt;?, ?&gt; clValue = CLTypeData.getTypeBySerializationTag(clType).getClazz().getDeclaredConstructor().newInstance();</span>
+<span class="fc" id="L63">            clValue.deserializeCustom(new DeserializerBuffer(Hex.encode(bytes)));</span>
+<span class="fc" id="L64">            return clValue;</span>
+<span class="nc" id="L65">        } catch (Exception e) {</span>
+<span class="nc" id="L66">            throw new ValueDeserializationException(&quot;Error while instantiating CLValue&quot;, e);</span>
         }
     }
 
@@ -84,18 +79,6 @@ import lombok.SneakyThrows;
         return this.bytes;
     }
 
-    @JsonIgnore
-    public abstract P getClType();
-
-    public abstract void setClType(P value);
-
-    protected void serializePrefixWithLength(SerializerBuffer ser) throws ValueSerializationException {
-<span class="fc" id="L93">        SerializerBuffer localSer = new SerializerBuffer();</span>
-<span class="fc" id="L94">        serialize(localSer);</span>
-<span class="fc" id="L95">        int size = localSer.toByteArray().length;</span>
-<span class="fc" id="L96">        ser.writeI32(size);</span>
-<span class="fc" id="L97">    }</span>
-
     @SneakyThrows({ValueDeserializationException.class})
     @JsonSetter(value = &quot;bytes&quot;)
     @ExcludeFromJacocoGeneratedReport
@@ -107,13 +90,26 @@ import lombok.SneakyThrows;
         this.deserialize(deser);
     }
 
+    @JsonIgnore
+    public abstract P getClType();
+
+    public abstract void setClType(P value);
+
+
+    protected void serializePrefixWithLength(SerializerBuffer ser) throws ValueSerializationException {
+<span class="fc" id="L100">        SerializerBuffer localSer = new SerializerBuffer();</span>
+<span class="fc" id="L101">        serialize(localSer);</span>
+<span class="fc" id="L102">        int size = localSer.toByteArray().length;</span>
+<span class="fc" id="L103">        ser.writeI32(size);</span>
+<span class="fc" id="L104">    }</span>
+
     @Override
     public AbstractCLValue&lt;?, ?&gt; deserialize(DeserializerBuffer deser, Target target) throws ValueDeserializationException {
-<span class="fc bfc" id="L112" title="All 2 branches covered.">        if (target.equals(Target.BYTE)) {</span>
-<span class="fc" id="L113">            return AbstractCLValue.createInstanceFromBytes(deser);</span>
+<span class="fc bfc" id="L108" title="All 2 branches covered.">        if (target.equals(Target.BYTE)) {</span>
+<span class="fc" id="L109">            return AbstractCLValue.createInstanceFromBytes(deser);</span>
         } else {
-<span class="fc" id="L115">            deserialize(deser);</span>
-<span class="fc" id="L116">            return this;</span>
+<span class="fc" id="L111">            deserialize(deser);</span>
+<span class="fc" id="L112">            return this;</span>
         }
     }
 
@@ -125,15 +121,15 @@ import lombok.SneakyThrows;
     @Override
     public void deserialize(DeserializerBuffer deserializerBuffer) throws ValueDeserializationException {
         try {
-<span class="fc" id="L128">            this.deserializeCustom(deserializerBuffer);</span>
-<span class="fc" id="L129">        } catch (Exception e) {</span>
-<span class="fc" id="L130">            throw new ValueDeserializationException(&quot;Error serializing value&quot;, e);</span>
-<span class="fc" id="L131">        }</span>
-<span class="fc" id="L132">    }</span>
+<span class="fc" id="L124">            this.deserializeCustom(deserializerBuffer);</span>
+<span class="fc" id="L125">        } catch (Exception e) {</span>
+<span class="fc" id="L126">            throw new ValueDeserializationException(&quot;Error deserializing value&quot;, e);</span>
+<span class="fc" id="L127">        }</span>
+<span class="fc" id="L128">    }</span>
 
     protected void encodeType(SerializerBuffer ser) throws NoSuchTypeException {
-<span class="fc" id="L135">        byte val = (getClType().getClTypeData().getSerializationTag());</span>
-<span class="fc" id="L136">        ser.writeU8(val);</span>
-<span class="fc" id="L137">    }</span>
+<span class="fc" id="L131">        byte val = (getClType().getClTypeData().getSerializationTag());</span>
+<span class="fc" id="L132">        ser.writeU8(val);</span>
+<span class="fc" id="L133">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

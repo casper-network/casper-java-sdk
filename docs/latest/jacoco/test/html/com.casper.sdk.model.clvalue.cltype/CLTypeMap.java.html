@@ -20,6 +20,15 @@ import lombok.*;
 <span class="fc" id="L20">public class CLTypeMap extends AbstractCLTypeWithChildren {</span>
 <span class="fc" id="L21">    private final String typeName = AbstractCLType.MAP;</span>
 
+    @JsonProperty(MAP)
+    public void setKeyValueTypes(CLTypeMapEntryType keyValueTypes) {
+<span class="fc" id="L25">        this.keyValueTypes = keyValueTypes;</span>
+<span class="fc" id="L26">        getChildTypes().add(this.keyValueTypes.getKeyType());</span>
+<span class="fc" id="L27">        getChildTypes().add(this.keyValueTypes.getValueType());</span>
+<span class="fc" id="L28">    }</span>
+
+<span class="fc" id="L30">    private CLTypeMapEntryType keyValueTypes;</span>
+
     /**
      * Support class for {@link AbstractCLType#MAP} entry types
      *
@@ -29,15 +38,15 @@ import lombok.*;
      * @since 0.0.1
      */
     @Getter
-<span class="nc" id="L32">    @Setter</span>
-<span class="pc bpc" id="L33" title="15 of 22 branches missed.">    @EqualsAndHashCode(of = {&quot;keyType&quot;, &quot;valueType&quot;})</span>
-<span class="fc" id="L34">    @NoArgsConstructor</span>
-<span class="fc" id="L35">    @AllArgsConstructor</span>
+<span class="nc" id="L41">    @Setter</span>
+<span class="pc bpc" id="L42" title="15 of 22 branches missed.">    @EqualsAndHashCode(callSuper = false, of = {&quot;keyType&quot;, &quot;valueType&quot;})</span>
+<span class="fc" id="L43">    @NoArgsConstructor</span>
+<span class="fc" id="L44">    @AllArgsConstructor</span>
     public static class CLTypeMapEntryType {
         @JsonIgnore
-<span class="fc" id="L38">        private AbstractCLType keyType;</span>
+<span class="fc" id="L47">        private AbstractCLType keyType;</span>
         @JsonIgnore
-<span class="fc" id="L40">        private AbstractCLType valueType;</span>
+<span class="fc" id="L49">        private AbstractCLType valueType;</span>
 
         @JsonSetter(&quot;key&quot;)
         @ExcludeFromJacocoGeneratedReport
@@ -71,9 +80,5 @@ import lombok.*;
             }
         }
     }
-
-<span class="fc" id="L75">    @Setter</span>
-    @JsonProperty(MAP)
-<span class="fc" id="L77">    private CLTypeMapEntryType keyValueTypes;</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

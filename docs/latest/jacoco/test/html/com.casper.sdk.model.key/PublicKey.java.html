@@ -7,9 +7,12 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.syntifi.crypto.key.AbstractPublicKey;
 import com.syntifi.crypto.key.Ed25519PublicKey;
 import com.syntifi.crypto.key.Secp256k1PublicKey;
+import com.syntifi.crypto.key.hash.Blake2b;
 import dev.oak3.sbs4j.util.ByteUtils;
 import lombok.NoArgsConstructor;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
@@ -21,48 +24,56 @@ import java.util.Arrays;
  * @since 0.0.1
  */
 @JsonDeserialize(using = PublicKeyDeserializer.class)
-<span class="fc" id="L24">@NoArgsConstructor</span>
+<span class="fc" id="L27">@NoArgsConstructor</span>
 public class PublicKey extends AbstractSerializedKeyTaggedHex&lt;AlgorithmTag&gt; {
 
     public static PublicKey fromTaggedHexString(String hex)
             throws NoSuchAlgorithmException, IllegalArgumentException {
-<span class="fc" id="L29">        byte[] bytes = ByteUtils.parseHexString(hex);</span>
-<span class="fc" id="L30">        return PublicKey.fromBytes(bytes);</span>
+<span class="fc" id="L32">        byte[] bytes = ByteUtils.parseHexString(hex);</span>
+<span class="fc" id="L33">        return PublicKey.fromBytes(bytes);</span>
     }
 
     public static PublicKey fromBytes(byte[] bytes) throws NoSuchAlgorithmException {
-<span class="fc" id="L34">        PublicKey object = new PublicKey();</span>
-<span class="fc" id="L35">        object.setTag(AlgorithmTag.getByTag(bytes[0]));</span>
-<span class="fc" id="L36">        object.setKey(Arrays.copyOfRange(bytes, 1, bytes.length));</span>
+<span class="fc" id="L37">        PublicKey object = new PublicKey();</span>
+<span class="fc" id="L38">        object.setTag(AlgorithmTag.getByTag(bytes[0]));</span>
+<span class="fc" id="L39">        object.setKey(Arrays.copyOfRange(bytes, 1, bytes.length));</span>
 
-<span class="fc" id="L38">        return object;</span>
+<span class="fc" id="L41">        return object;</span>
     }
 
     public static PublicKey fromAbstractPublicKey(AbstractPublicKey key) {
-<span class="fc" id="L42">        PublicKey object = new PublicKey();</span>
-<span class="pc bpc" id="L43" title="1 of 2 branches missed.">        object.setTag((key instanceof Secp256k1PublicKey)</span>
-<span class="nc" id="L44">                ? AlgorithmTag.SECP256K1</span>
-<span class="fc" id="L45">                : AlgorithmTag.ED25519);</span>
-<span class="fc" id="L46">        object.setKey(key.getKey());</span>
-<span class="fc" id="L47">        return object;</span>
+<span class="fc" id="L45">        PublicKey object = new PublicKey();</span>
+<span class="pc bpc" id="L46" title="1 of 2 branches missed.">        object.setTag((key instanceof Secp256k1PublicKey)</span>
+<span class="nc" id="L47">                ? AlgorithmTag.SECP256K1</span>
+<span class="fc" id="L48">                : AlgorithmTag.ED25519);</span>
+<span class="fc" id="L49">        object.setKey(key.getKey());</span>
+<span class="fc" id="L50">        return object;</span>
     }
 
+    public String generateAccountHash(boolean includePrefix) throws IOException {
+<span class="nc" id="L54">        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();</span>
+<span class="nc" id="L55">        byteArrayOutputStream.write(getTag().toString().toLowerCase().getBytes(&quot;UTF-8&quot;));</span>
+<span class="nc" id="L56">        byteArrayOutputStream.write(0);</span>
+<span class="nc" id="L57">        byteArrayOutputStream.write(getKey());</span>
+
+<span class="nc bnc" id="L59" title="All 2 branches missed.">        return (includePrefix ? &quot;account-hash-&quot; : &quot;&quot;) + ByteUtils.encodeHexString(Blake2b.digest(byteArrayOutputStream.toByteArray(), 32));</span>
+    }
 
     @JsonCreator
     public void createPublicKey(String key) throws NoSuchAlgorithmException, IllegalArgumentException {
-<span class="nc" id="L53">        PublicKey obj = PublicKey.fromTaggedHexString(key);</span>
-<span class="nc" id="L54">        this.setTag(obj.getTag());</span>
-<span class="nc" id="L55">        this.setKey(obj.getKey());</span>
-<span class="nc" id="L56">    }</span>
+<span class="nc" id="L64">        PublicKey obj = PublicKey.fromTaggedHexString(key);</span>
+<span class="nc" id="L65">        this.setTag(obj.getTag());</span>
+<span class="nc" id="L66">        this.setKey(obj.getKey());</span>
+<span class="nc" id="L67">    }</span>
 
     @JsonIgnore
     public AbstractPublicKey getPubKey() throws NoSuchAlgorithmException {
-<span class="nc bnc" id="L60" title="All 2 branches missed.">        if (getTag().equals(AlgorithmTag.ED25519)) {</span>
-<span class="nc" id="L61">            return new Ed25519PublicKey(getKey());</span>
-<span class="nc bnc" id="L62" title="All 2 branches missed.">        } else if (getTag().equals(AlgorithmTag.SECP256K1)) {</span>
-<span class="nc" id="L63">            return new Secp256k1PublicKey(getKey());</span>
+<span class="nc bnc" id="L71" title="All 2 branches missed.">        if (getTag().equals(AlgorithmTag.ED25519)) {</span>
+<span class="nc" id="L72">            return new Ed25519PublicKey(getKey());</span>
+<span class="nc bnc" id="L73" title="All 2 branches missed.">        } else if (getTag().equals(AlgorithmTag.SECP256K1)) {</span>
+<span class="nc" id="L74">            return new Secp256k1PublicKey(getKey());</span>
         } else {
-<span class="nc" id="L65">            throw new NoSuchAlgorithmException();</span>
+<span class="nc" id="L76">            throw new NoSuchAlgorithmException();</span>
         }
     }
 }

@@ -3,10 +3,12 @@
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.serde.Target;
 import com.casper.sdk.model.deploy.NamedArg;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
+import dev.oak3.sbs4j.util.ByteUtils;
 import lombok.*;
 
 import java.util.List;
@@ -20,31 +22,40 @@ import java.util.List;
  * @since 0.0.1
  */
 @Getter
-<span class="fc" id="L23">@Setter</span>
-<span class="pc" id="L24">@Builder</span>
-<span class="fc" id="L25">@AllArgsConstructor</span>
-<span class="fc" id="L26">@NoArgsConstructor</span>
+<span class="pc" id="L25">@Setter</span>
+<span class="pc" id="L26">@Builder</span>
+<span class="fc" id="L27">@AllArgsConstructor</span>
+<span class="fc" id="L28">@NoArgsConstructor</span>
 @JsonTypeName(&quot;ModuleBytes&quot;)
 public class ModuleBytes implements ExecutableDeployItem {
 
     /**
      * Module bytes
      */
-    @JsonProperty(&quot;module_bytes&quot;)
-<span class="fc" id="L34">    private byte[] bytes;</span>
+    @JsonIgnore
+<span class="fc" id="L36">    private byte[] bytes;</span>
 
     /**
      * @see NamedArg
      */
-<span class="fc" id="L39">    private List&lt;NamedArg&lt;?&gt;&gt; args;</span>
+<span class="fc" id="L41">    private List&lt;NamedArg&lt;?&gt;&gt; args;</span>
 
+    @JsonProperty(&quot;module_bytes&quot;)
+    public String getJsonBytes() {
+<span class="fc" id="L45">        return ByteUtils.encodeHexString(bytes);</span>
+    }
+
+    @JsonProperty(&quot;module_bytes&quot;)
+    public void setJsonBytes(String byteContent) {
+<span class="fc" id="L50">        this.bytes = ByteUtils.parseHexString(byteContent);</span>
+<span class="fc" id="L51">    }</span>
 
     /**
      * {@link ExecutableDeployItem} order 0
      */
     @Override
     public byte getOrder() {
-<span class="fc" id="L47">        return 0x0;</span>
+<span class="fc" id="L58">        return 0x0;</span>
     }
 
     /**
@@ -52,13 +63,13 @@ public class ModuleBytes implements ExecutableDeployItem {
      */
     @Override
     public void serialize(SerializerBuffer ser, Target target) throws ValueSerializationException, NoSuchTypeException {
-<span class="fc" id="L55">        ser.writeU8(getOrder());</span>
-<span class="fc" id="L56">        ser.writeI32(getBytes().length);</span>
-<span class="fc" id="L57">        ser.writeByteArray(getBytes());</span>
-<span class="fc" id="L58">        ser.writeI32(args.size());</span>
-<span class="fc bfc" id="L59" title="All 2 branches covered.">        for (NamedArg&lt;?&gt; namedArg : args) {</span>
-<span class="fc" id="L60">            namedArg.serialize(ser, target);</span>
-<span class="fc" id="L61">        }</span>
-<span class="fc" id="L62">    }</span>
+<span class="fc" id="L66">        ser.writeU8(getOrder());</span>
+<span class="fc" id="L67">        ser.writeI32(getBytes().length);</span>
+<span class="fc" id="L68">        ser.writeByteArray(getBytes());</span>
+<span class="fc" id="L69">        ser.writeI32(args.size());</span>
+<span class="fc bfc" id="L70" title="All 2 branches covered.">        for (NamedArg&lt;?&gt; namedArg : args) {</span>
+<span class="fc" id="L71">            namedArg.serialize(ser, target);</span>
+<span class="fc" id="L72">        }</span>
+<span class="fc" id="L73">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

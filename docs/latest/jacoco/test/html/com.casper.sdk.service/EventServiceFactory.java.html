@@ -18,12 +18,18 @@ import java.util.*;
  */
 <span class="nc" id="L19">final class EventServiceFactory {</span>
 
-    /** The name of the class that implements the {@link com.casper.sdk.service.EventService} */
+    /**
+     * The name of the class that implements the {@link com.casper.sdk.service.EventService}
+     */
     private static final String IMPLEMENTATION_CLASS = &quot;com.casper.sdk.service.impl.event.EventServiceImpl&quot;;
-    /** The map of service method names to log */
-<span class="fc" id="L24">    private static final Map&lt;Method, List&lt;String&gt;&gt; methodParamMap = new HashMap&lt;&gt;();</span>
-    /** The logger that logs all event service calls at debug level */
-<span class="fc" id="L26">    private static final Logger logger = LoggerFactory.getLogger(EventService.class);</span>
+    /**
+     * The map of service method names to log
+     */
+<span class="fc" id="L28">    private static final Map&lt;Method, List&lt;String&gt;&gt; methodParamMap = new HashMap&lt;&gt;();</span>
+    /**
+     * The logger that logs all event service calls at debug level
+     */
+<span class="fc" id="L32">    private static final Logger logger = LoggerFactory.getLogger(EventServiceFactory.class);</span>
 
     /**
      * Creates a new EventService for the specified host
@@ -32,70 +38,70 @@ import java.util.*;
      * @return a newly created event service
      */
     static EventService create(final URI uri) {
-<span class="fc" id="L35">        return proxy(createEventService(uri));</span>
+<span class="fc" id="L41">        return proxy(createEventService(uri));</span>
     }
 
     private static EventService proxy(final EventService eventService) {
 
-<span class="fc" id="L40">        return (EventService) Proxy.newProxyInstance(</span>
-<span class="fc" id="L41">                EventServiceFactory.class.getClassLoader(),</span>
+<span class="fc" id="L46">        return (EventService) Proxy.newProxyInstance(</span>
+<span class="fc" id="L47">                EventServiceFactory.class.getClassLoader(),</span>
                 new Class[]{EventService.class},
                 (proxy, method, args) -&gt; {
-<span class="pc bpc" id="L44" title="2 of 4 branches missed.">                    if (logger.isDebugEnabled() &amp;&amp; isServiceMethod(method)) {</span>
-<span class="fc" id="L45">                        logger.debug(&quot;{}({})&quot;, method.getName(), argsToString(method, args));</span>
+<span class="pc bpc" id="L50" title="2 of 4 branches missed.">                    if (logger.isDebugEnabled() &amp;&amp; isServiceMethod(method)) {</span>
+<span class="fc" id="L51">                        logger.debug(&quot;{}({})&quot;, method.getName(), argsToString(method, args));</span>
                     }
-<span class="fc" id="L47">                    return method.invoke(eventService, args);</span>
+<span class="fc" id="L53">                    return method.invoke(eventService, args);</span>
                 }
         );
     }
 
     private static boolean isServiceMethod(final Method method) {
-<span class="fc" id="L53">        return Arrays.asList(EventService.class.getDeclaredMethods()).contains(method);</span>
+<span class="fc" id="L59">        return Arrays.asList(EventService.class.getDeclaredMethods()).contains(method);</span>
     }
 
     private static EventService createEventService(final Object param) {
 
         try {
             //noinspection JavaReflectionMemberAccess
-<span class="fc" id="L60">            final Constructor&lt;?&gt; constructor = Class.forName(IMPLEMENTATION_CLASS)</span>
-<span class="fc" id="L61">                    .getDeclaredConstructor(param.getClass());</span>
-<span class="fc" id="L62">            constructor.setAccessible(true);</span>
-<span class="fc" id="L63">            return (EventService) constructor.newInstance(param);</span>
-<span class="nc" id="L64">        } catch (Exception e) {</span>
-<span class="nc" id="L65">            throw new RuntimeException(e);</span>
+<span class="fc" id="L66">            final Constructor&lt;?&gt; constructor = Class.forName(IMPLEMENTATION_CLASS)</span>
+<span class="fc" id="L67">                    .getDeclaredConstructor(param.getClass());</span>
+<span class="fc" id="L68">            constructor.setAccessible(true);</span>
+<span class="fc" id="L69">            return (EventService) constructor.newInstance(param);</span>
+<span class="nc" id="L70">        } catch (Exception e) {</span>
+<span class="nc" id="L71">            throw new RuntimeException(e);</span>
         }
     }
 
     private static String argsToString(final Method method, final Object[] args) {
 
-<span class="fc" id="L71">        final Iterator&lt;String&gt; parameterNames = getParameterNames(method).iterator();</span>
+<span class="fc" id="L77">        final Iterator&lt;String&gt; parameterNames = getParameterNames(method).iterator();</span>
 
-<span class="fc" id="L73">        final StringBuilder builder = new StringBuilder();</span>
+<span class="fc" id="L79">        final StringBuilder builder = new StringBuilder();</span>
 
-<span class="pc bpc" id="L75" title="2 of 4 branches missed.">        if (args != null &amp;&amp; args.length &gt; 0) {</span>
-<span class="fc bfc" id="L76" title="All 2 branches covered.">            for (Object arg : args) {</span>
+<span class="pc bpc" id="L81" title="1 of 2 branches missed.">        if (args != null) {</span>
+<span class="fc bfc" id="L82" title="All 2 branches covered.">            for (Object arg : args) {</span>
 
-<span class="fc bfc" id="L78" title="All 2 branches covered.">                if (builder.length() &gt; 0) {</span>
-<span class="fc" id="L79">                    builder.append(&quot;, &quot;);</span>
+<span class="fc bfc" id="L84" title="All 2 branches covered.">                if (builder.length() &gt; 0) {</span>
+<span class="fc" id="L85">                    builder.append(&quot;, &quot;);</span>
                 }
-<span class="fc" id="L81">                builder.append(parameterNames.next());</span>
-<span class="fc" id="L82">                builder.append('=');</span>
-<span class="fc" id="L83">                builder.append(arg);</span>
+<span class="fc" id="L87">                builder.append(parameterNames.next());</span>
+<span class="fc" id="L88">                builder.append('=');</span>
+<span class="fc" id="L89">                builder.append(arg);</span>
 
             }
         }
-<span class="fc" id="L87">        return builder.toString();</span>
+<span class="fc" id="L93">        return builder.toString();</span>
     }
 
     private static List&lt;String&gt; getParameterNames(final Method method) {
 
-<span class="fc" id="L92">        return methodParamMap.computeIfAbsent(method, method1 -&gt; {</span>
-<span class="fc" id="L93">            final Parameter[] parameters = method1.getParameters();</span>
-<span class="fc" id="L94">            final List&lt;String&gt; parameterNames = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L95" title="All 2 branches covered.">            for (Parameter parameter : parameters) {</span>
-<span class="fc" id="L96">                parameterNames.add(parameter.getName());</span>
+<span class="fc" id="L98">        return methodParamMap.computeIfAbsent(method, method1 -&gt; {</span>
+<span class="fc" id="L99">            final Parameter[] parameters = method1.getParameters();</span>
+<span class="fc" id="L100">            final List&lt;String&gt; parameterNames = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L101" title="All 2 branches covered.">            for (Parameter parameter : parameters) {</span>
+<span class="fc" id="L102">                parameterNames.add(parameter.getName());</span>
             }
-<span class="fc" id="L98">            return parameterNames;</span>
+<span class="fc" id="L104">            return parameterNames;</span>
         });
     }
 }

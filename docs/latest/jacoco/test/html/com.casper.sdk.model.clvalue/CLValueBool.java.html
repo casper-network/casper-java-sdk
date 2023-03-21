@@ -68,5 +68,10 @@ public class CLValueBool extends AbstractCLValue&lt;Boolean, CLTypeBool&gt; {
     public void deserializeCustom(DeserializerBuffer deser) throws Exception {
 <span class="fc" id="L69">        this.setValue(deser.readBool());</span>
 <span class="fc" id="L70">    }</span>
+
+    @Override
+    public String toString() {
+<span class="nc bnc" id="L74" title="All 2 branches missed.">        return getValue() != null ? getValue().toString() : null;</span>
+    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

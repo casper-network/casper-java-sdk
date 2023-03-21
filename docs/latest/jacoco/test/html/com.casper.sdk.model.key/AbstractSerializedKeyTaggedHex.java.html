@@ -48,5 +48,10 @@ public abstract class AbstractSerializedKeyTaggedHex&lt;T extends Tag&gt; implem
 <span class="fc" id="L48">        ser.writeU8(getTag().getByteTag());</span>
 <span class="fc" id="L49">        ser.writeByteArray(getKey());</span>
 <span class="fc" id="L50">    }</span>
+
+    @Override
+    public String toString() {
+<span class="nc" id="L54">        return getAlgoTaggedHex();</span>
+    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
