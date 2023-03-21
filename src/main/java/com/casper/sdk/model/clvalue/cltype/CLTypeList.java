@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.Setter;
 
 /**
  * CLType for {@link AbstractCLType#LIST}
@@ -17,27 +16,38 @@ import lombok.Setter;
  * @since 0.0.1
  */
 @Getter
-@EqualsAndHashCode(callSuper = false, of = {"typeName", "listType"})
+@EqualsAndHashCode(callSuper = true, of = {"typeName"})
 public class CLTypeList extends AbstractCLTypeWithChildren {
     private final String typeName = AbstractCLType.LIST;
-
-    @Setter
-    @JsonIgnore
-    private AbstractCLType listType;
-
-    @JsonSetter(AbstractCLType.LIST)
-    @ExcludeFromJacocoGeneratedReport
-    protected void setJsonValue(AbstractCLType clType) {
-        this.listType = clType;
-    }
 
     @JsonGetter(AbstractCLType.LIST)
     @ExcludeFromJacocoGeneratedReport
     protected Object getJsonValue() {
-        if (this.listType instanceof AbstractCLTypeBasic) {
-            return this.listType.getTypeName();
+        if (getListType() instanceof AbstractCLTypeBasic) {
+            return getListType().getTypeName();
         } else {
-            return this.listType;
+            return getListType();
         }
+    }
+
+    @JsonSetter(AbstractCLType.LIST)
+    @ExcludeFromJacocoGeneratedReport
+    protected void setJsonValue(AbstractCLType clType) {
+        getChildTypes().add(clType);
+    }
+
+    @JsonIgnore
+    public AbstractCLType getListType() {
+        if (getChildTypes().size() > 0) {
+            return getChildTypes().get(0);
+        }
+
+        return null;
+    }
+
+    @JsonIgnore
+    public void setListType(AbstractCLType listType) {
+        getChildTypes().clear();
+        getChildTypes().add(listType);
     }
 }

@@ -7,6 +7,7 @@ import com.casper.sdk.model.clvalue.cltype.CLTypeList;
 import com.casper.sdk.model.clvalue.cltype.CLTypeOption;
 import com.casper.sdk.model.clvalue.serde.Target;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import dev.oak3.sbs4j.DeserializerBuffer;
 import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
@@ -34,6 +35,12 @@ public class CLValueOption extends AbstractCLValueWithChildren<Optional<Abstract
     @JsonProperty("cl_type")
     private CLTypeOption clType = new CLTypeOption();
 
+    @JsonSetter("cl_type")
+    public void setClType(CLTypeOption clType) {
+        this.clType = clType;
+        childTypesSet();
+    }
+
     public CLValueOption(Optional<AbstractCLValue<?, ?>> value) throws ValueSerializationException {
         setChildTypes(value);
         this.setValue(value);
@@ -56,7 +63,7 @@ public class CLValueOption extends AbstractCLValueWithChildren<Optional<Abstract
 
         if (child.isPresent() && child.get().getClType() instanceof AbstractCLTypeWithChildren) {
             ((AbstractCLTypeWithChildren) child.get().getClType())
-                    .setChildTypes(((AbstractCLTypeWithChildren) clType.getChildType()).getChildTypes());
+                    .setChildTypes(((AbstractCLTypeWithChildren) clType.getOptionType()).getChildTypes());
         }
         if (child.isPresent() && isPresent.getValue().equals(Boolean.TRUE)) {
             child.get().serialize(ser);
@@ -77,16 +84,16 @@ public class CLValueOption extends AbstractCLValueWithChildren<Optional<Abstract
         CLValueBool isPresent = new CLValueBool();
         isPresent.deserializeCustom(deser);
 
-        CLTypeData childTypeData = clType.getChildType().getClTypeData();
+        CLTypeData childTypeData = clType.getOptionType().getClTypeData();
 
         AbstractCLValue<?, ?> child = CLTypeData.createCLValueFromCLTypeData(childTypeData);
 
         if (child.getClType() instanceof CLTypeList) {
             ((CLTypeList) child.getClType())
-                    .setListType(((CLTypeList) clType.getChildType()).getListType());
+                    .setListType(((CLTypeList) clType.getOptionType()).getListType());
         } else if (child.getClType() instanceof AbstractCLTypeWithChildren) {
             ((AbstractCLTypeWithChildren) child.getClType())
-                    .setChildTypes(((AbstractCLTypeWithChildren) clType.getChildType()).getChildTypes());
+                    .setChildTypes(((AbstractCLTypeWithChildren) clType.getOptionType()).getChildTypes());
         }
 
         if (isPresent.getValue().equals(Boolean.TRUE)) {
@@ -98,7 +105,7 @@ public class CLValueOption extends AbstractCLValueWithChildren<Optional<Abstract
 
     @Override
     protected void setChildTypes(Optional<AbstractCLValue<?, ?>> value) {
-        clType.setChildType(value.isPresent() ? value.get().getClType() : null);
+        clType.setOptionType(value.isPresent() ? value.get().getClType() : null);
     }
 
     @Override

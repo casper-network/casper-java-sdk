@@ -20,6 +20,15 @@ import lombok.*;
 public class CLTypeMap extends AbstractCLTypeWithChildren {
     private final String typeName = AbstractCLType.MAP;
 
+    @JsonProperty(MAP)
+    public void setKeyValueTypes(CLTypeMapEntryType keyValueTypes) {
+        this.keyValueTypes = keyValueTypes;
+        getChildTypes().add(this.keyValueTypes.getKeyType());
+        getChildTypes().add(this.keyValueTypes.getValueType());
+    }
+
+    private CLTypeMapEntryType keyValueTypes;
+
     /**
      * Support class for {@link AbstractCLType#MAP} entry types
      *
@@ -30,7 +39,7 @@ public class CLTypeMap extends AbstractCLTypeWithChildren {
      */
     @Getter
     @Setter
-    @EqualsAndHashCode(of = {"keyType", "valueType"})
+    @EqualsAndHashCode(callSuper = false, of = {"keyType", "valueType"})
     @NoArgsConstructor
     @AllArgsConstructor
     public static class CLTypeMapEntryType {
@@ -70,12 +79,5 @@ public class CLTypeMap extends AbstractCLTypeWithChildren {
                 return this.valueType;
             }
         }
-    }
-
-    private CLTypeMapEntryType keyValueTypes;
-
-    @JsonProperty(MAP)
-    public void setKeyValueTypes(CLTypeMapEntryType keyValueTypes) {
-        this.keyValueTypes = keyValueTypes;
     }
 }
