@@ -126,7 +126,12 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li><a href="AbstractCLType.html" title="class in com.casper.sdk.model.clvalue.cltype">com.casper.sdk.model.clvalue.cltype.AbstractCLType</a></li>
 <li>
 <ul class="inheritance">
+<li><a href="AbstractCLTypeWithChildren.html" title="class in com.casper.sdk.model.clvalue.cltype">com.casper.sdk.model.clvalue.cltype.AbstractCLTypeWithChildren</a></li>
+<li>
+<ul class="inheritance">
 <li>com.casper.sdk.model.clvalue.cltype.CLTypeList</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -137,7 +142,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <hr>
 <pre>public class <span class="typeNameLabel">CLTypeList</span>
-extends <a href="AbstractCLType.html" title="class in com.casper.sdk.model.clvalue.cltype">AbstractCLType</a></pre>
+extends <a href="AbstractCLTypeWithChildren.html" title="class in com.casper.sdk.model.clvalue.cltype">AbstractCLTypeWithChildren</a></pre>
 <div class="block">CLType for <a href="AbstractCLType.html#LIST"><code>AbstractCLType.LIST</code></a></div>
 <dl>
 <dt><span class="simpleTagLabel">Since:</span></dt>
@@ -247,6 +252,13 @@ extends <a href="AbstractCLType.html" title="class in com.casper.sdk.model.clval
 </tr>
 </table>
 <ul class="blockList">
+<li class="blockList"><a id="methods.inherited.from.class.com.casper.sdk.model.clvalue.cltype.AbstractCLTypeWithChildren">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;com.casper.sdk.model.clvalue.cltype.<a href="AbstractCLTypeWithChildren.html" title="class in com.casper.sdk.model.clvalue.cltype">AbstractCLTypeWithChildren</a></h3>
+<code><a href="AbstractCLTypeWithChildren.html#getChildClTypeData(int)">getChildClTypeData</a>, <a href="AbstractCLTypeWithChildren.html#getChildTypeObjects()">getChildTypeObjects</a>, <a href="AbstractCLTypeWithChildren.html#getChildTypes()">getChildTypes</a>, <a href="AbstractCLTypeWithChildren.html#loadCLTypes(java.util.List)">loadCLTypes</a>, <a href="AbstractCLTypeWithChildren.html#setChildTypeObjects(java.util.List)">setChildTypeObjects</a>, <a href="AbstractCLTypeWithChildren.html#setChildTypes(java.util.List)">setChildTypes</a></code></li>
+</ul>
+<ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.com.casper.sdk.model.clvalue.cltype.AbstractCLType">
 <!--   -->
 </a>
@@ -295,6 +307,16 @@ extends <a href="AbstractCLType.html" title="class in com.casper.sdk.model.clval
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a id="getJsonValue()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getJsonValue</h4>
+<pre class="methodSignature"><a href="../../../annotation/ExcludeFromJacocoGeneratedReport.html" title="annotation in com.casper.sdk.annotation">@ExcludeFromJacocoGeneratedReport</a>
+protected&nbsp;java.lang.Object&nbsp;getJsonValue()</pre>
+</li>
+</ul>
 <a id="setJsonValue(com.casper.sdk.model.clvalue.cltype.AbstractCLType)">
 <!--   -->
 </a>
@@ -305,14 +327,22 @@ extends <a href="AbstractCLType.html" title="class in com.casper.sdk.model.clval
 protected&nbsp;void&nbsp;setJsonValue&#8203;(<a href="AbstractCLType.html" title="class in com.casper.sdk.model.clvalue.cltype">AbstractCLType</a>&nbsp;clType)</pre>
 </li>
 </ul>
-<a id="getJsonValue()">
+<a id="getListType()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getJsonValue</h4>
-<pre class="methodSignature"><a href="../../../annotation/ExcludeFromJacocoGeneratedReport.html" title="annotation in com.casper.sdk.annotation">@ExcludeFromJacocoGeneratedReport</a>
-protected&nbsp;java.lang.Object&nbsp;getJsonValue()</pre>
+<h4>getListType</h4>
+<pre class="methodSignature">public&nbsp;<a href="AbstractCLType.html" title="class in com.casper.sdk.model.clvalue.cltype">AbstractCLType</a>&nbsp;getListType()</pre>
+</li>
+</ul>
+<a id="setListType(com.casper.sdk.model.clvalue.cltype.AbstractCLType)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setListType</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setListType&#8203;(<a href="AbstractCLType.html" title="class in com.casper.sdk.model.clvalue.cltype">AbstractCLType</a>&nbsp;listType)</pre>
 </li>
 </ul>
 <a id="getTypeName()">
@@ -332,15 +362,6 @@ protected&nbsp;java.lang.Object&nbsp;getJsonValue()</pre>
 </dl>
 </li>
 </ul>
-<a id="getListType()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getListType</h4>
-<pre class="methodSignature">public&nbsp;<a href="AbstractCLType.html" title="class in com.casper.sdk.model.clvalue.cltype">AbstractCLType</a>&nbsp;getListType()</pre>
-</li>
-</ul>
 <a id="equals(java.lang.Object)">
 <!--   -->
 </a>
@@ -350,7 +371,7 @@ protected&nbsp;java.lang.Object&nbsp;getJsonValue()</pre>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;equals&#8203;(java.lang.Object&nbsp;o)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code>equals</code>&nbsp;in class&nbsp;<code>java.lang.Object</code></dd>
+<dd><code><a href="AbstractCLTypeWithChildren.html#equals(java.lang.Object)">equals</a></code>&nbsp;in class&nbsp;<code><a href="AbstractCLTypeWithChildren.html" title="class in com.casper.sdk.model.clvalue.cltype">AbstractCLTypeWithChildren</a></code></dd>
 </dl>
 </li>
 </ul>
@@ -361,28 +382,23 @@ protected&nbsp;java.lang.Object&nbsp;getJsonValue()</pre>
 <li class="blockList">
 <h4>canEqual</h4>
 <pre class="methodSignature">protected&nbsp;boolean&nbsp;canEqual&#8203;(java.lang.Object&nbsp;other)</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code><a href="AbstractCLTypeWithChildren.html#canEqual(java.lang.Object)">canEqual</a></code>&nbsp;in class&nbsp;<code><a href="AbstractCLTypeWithChildren.html" title="class in com.casper.sdk.model.clvalue.cltype">AbstractCLTypeWithChildren</a></code></dd>
+</dl>
 </li>
 </ul>
 <a id="hashCode()">
 <!--   -->
 </a>
-<ul class="blockList">
+<ul class="blockListLast">
 <li class="blockList">
 <h4>hashCode</h4>
 <pre class="methodSignature">public&nbsp;int&nbsp;hashCode()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code>hashCode</code>&nbsp;in class&nbsp;<code>java.lang.Object</code></dd>
+<dd><code><a href="AbstractCLTypeWithChildren.html#hashCode()">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="AbstractCLTypeWithChildren.html" title="class in com.casper.sdk.model.clvalue.cltype">AbstractCLTypeWithChildren</a></code></dd>
 </dl>
-</li>
-</ul>
-<a id="setListType(com.casper.sdk.model.clvalue.cltype.AbstractCLType)">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>setListType</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;setListType&#8203;(<a href="AbstractCLType.html" title="class in com.casper.sdk.model.clvalue.cltype">AbstractCLType</a>&nbsp;listType)</pre>
 </li>
 </ul>
 </li>

@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":9,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10};
+var data = {"i0":9,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -234,39 +234,25 @@ implements <a href="ExecutionResult.html" title="interface in com.casper.sdk.mod
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code>protected java.lang.String</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getJsonCost()">getJsonCost</a></span>()</code></th>
-<td class="colLast">
-<div class="block">getter for cost json serialization</div>
-</td>
-</tr>
-<tr id="i4" class="altColor">
 <td class="colFirst"><code>java.util.List&lt;java.lang.String&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getTransfers()">getTransfers</a></span>()</code></th>
 <td class="colLast">
 <div class="block">List of Hex-encoded transfer address.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setCost(java.math.BigInteger)">setCost</a></span>&#8203;(java.math.BigInteger&nbsp;cost)</code></th>
 <td class="colLast">
 <div class="block">The cost of executing the deploy.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setEffect(com.casper.sdk.model.deploy.ExecutionEffect)">setEffect</a></span>&#8203;(<a href="../ExecutionEffect.html" title="class in com.casper.sdk.model.deploy">ExecutionEffect</a>&nbsp;effect)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i7" class="rowColor">
-<td class="colFirst"><code>protected void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setJsonCost(java.lang.String)">setJsonCost</a></span>&#8203;(java.lang.String&nbsp;value)</code></th>
-<td class="colLast">
-<div class="block">setter for cost from json deserialized value</div>
-</td>
-</tr>
-<tr id="i8" class="altColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setTransfers(java.util.List)">setTransfers</a></span>&#8203;(java.util.List&lt;java.lang.String&gt;&nbsp;transfers)</code></th>
 <td class="colLast">
@@ -280,6 +266,13 @@ implements <a href="ExecutionResult.html" title="interface in com.casper.sdk.mod
 </a>
 <h3>Methods inherited from class&nbsp;java.lang.Object</h3>
 <code>clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait</code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a id="methods.inherited.from.class.com.casper.sdk.model.deploy.executionresult.ExecutionResult">
+<!--   -->
+</a>
+<h3>Methods inherited from interface&nbsp;com.casper.sdk.model.deploy.executionresult.<a href="ExecutionResult.html" title="interface in com.casper.sdk.model.deploy.executionresult">ExecutionResult</a></h3>
+<code><a href="ExecutionResult.html#getJsonCost()">getJsonCost</a>, <a href="ExecutionResult.html#setJsonCost(java.lang.String)">setJsonCost</a></code></li>
 </ul>
 </li>
 </ul>
@@ -327,36 +320,6 @@ implements <a href="ExecutionResult.html" title="interface in com.casper.sdk.mod
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a id="getJsonCost()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getJsonCost</h4>
-<pre class="methodSignature"><a href="../../../annotation/ExcludeFromJacocoGeneratedReport.html" title="annotation in com.casper.sdk.annotation">@ExcludeFromJacocoGeneratedReport</a>
-protected&nbsp;java.lang.String&nbsp;getJsonCost()</pre>
-<div class="block">getter for cost json serialization</div>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>cost as expected for json serialization</dd>
-</dl>
-</li>
-</ul>
-<a id="setJsonCost(java.lang.String)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setJsonCost</h4>
-<pre class="methodSignature"><a href="../../../annotation/ExcludeFromJacocoGeneratedReport.html" title="annotation in com.casper.sdk.annotation">@ExcludeFromJacocoGeneratedReport</a>
-protected&nbsp;void&nbsp;setJsonCost&#8203;(java.lang.String&nbsp;value)</pre>
-<div class="block">setter for cost from json deserialized value</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>value</code> - the deserialized value</dd>
-</dl>
-</li>
-</ul>
 <a id="builder()">
 <!--   -->
 </a>
@@ -374,6 +337,10 @@ protected&nbsp;void&nbsp;setJsonCost&#8203;(java.lang.String&nbsp;value)</pre>
 <h4>getCost</h4>
 <pre class="methodSignature">public&nbsp;java.math.BigInteger&nbsp;getCost()</pre>
 <div class="block">The cost of executing the deploy.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="ExecutionResult.html#getCost()">getCost</a></code>&nbsp;in interface&nbsp;<code><a href="ExecutionResult.html" title="interface in com.casper.sdk.model.deploy.executionresult">ExecutionResult</a></code></dd>
+</dl>
 </li>
 </ul>
 <a id="getEffect()">
@@ -384,6 +351,8 @@ protected&nbsp;void&nbsp;setJsonCost&#8203;(java.lang.String&nbsp;value)</pre>
 <h4>getEffect</h4>
 <pre class="methodSignature">public&nbsp;<a href="../ExecutionEffect.html" title="class in com.casper.sdk.model.deploy">ExecutionEffect</a>&nbsp;getEffect()</pre>
 <dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="ExecutionResult.html#getEffect()">getEffect</a></code>&nbsp;in interface&nbsp;<code><a href="ExecutionResult.html" title="interface in com.casper.sdk.model.deploy.executionresult">ExecutionResult</a></code></dd>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../ExecutionEffect.html" title="class in com.casper.sdk.model.deploy"><code>ExecutionEffect</code></a></dd>
 </dl>
@@ -407,6 +376,10 @@ protected&nbsp;void&nbsp;setJsonCost&#8203;(java.lang.String&nbsp;value)</pre>
 <h4>setCost</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setCost&#8203;(java.math.BigInteger&nbsp;cost)</pre>
 <div class="block">The cost of executing the deploy.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="ExecutionResult.html#setCost(java.math.BigInteger)">setCost</a></code>&nbsp;in interface&nbsp;<code><a href="ExecutionResult.html" title="interface in com.casper.sdk.model.deploy.executionresult">ExecutionResult</a></code></dd>
+</dl>
 </li>
 </ul>
 <a id="setEffect(com.casper.sdk.model.deploy.ExecutionEffect)">
@@ -417,6 +390,8 @@ protected&nbsp;void&nbsp;setJsonCost&#8203;(java.lang.String&nbsp;value)</pre>
 <h4>setEffect</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setEffect&#8203;(<a href="../ExecutionEffect.html" title="class in com.casper.sdk.model.deploy">ExecutionEffect</a>&nbsp;effect)</pre>
 <dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="ExecutionResult.html#setEffect(com.casper.sdk.model.deploy.ExecutionEffect)">setEffect</a></code>&nbsp;in interface&nbsp;<code><a href="ExecutionResult.html" title="interface in com.casper.sdk.model.deploy.executionresult">ExecutionResult</a></code></dd>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../ExecutionEffect.html" title="class in com.casper.sdk.model.deploy"><code>ExecutionEffect</code></a></dd>
 </dl>

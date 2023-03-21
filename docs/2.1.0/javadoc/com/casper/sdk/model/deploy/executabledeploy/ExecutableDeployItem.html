@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":6};
+var data = {"i0":6,"i1":6};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -127,6 +127,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><code><a href="../../clvalue/serde/CasperSerializableObject.html" title="interface in com.casper.sdk.model.clvalue.serde">CasperSerializableObject</a></code>, <code>dev.oak3.sbs4j.interfaces.SerializableObject</code></dd>
 </dl>
 <dl>
+<dt>All Known Subinterfaces:</dt>
+<dd><code><a href="ExecutableDeployItemWithEntryPoint.html" title="interface in com.casper.sdk.model.deploy.executabledeploy">ExecutableDeployItemWithEntryPoint</a></code></dd>
+</dl>
+<dl>
 <dt>All Known Implementing Classes:</dt>
 <dd><code><a href="ModuleBytes.html" title="class in com.casper.sdk.model.deploy.executabledeploy">ModuleBytes</a></code>, <code><a href="StoredContractByHash.html" title="class in com.casper.sdk.model.deploy.executabledeploy">StoredContractByHash</a></code>, <code><a href="StoredContractByName.html" title="class in com.casper.sdk.model.deploy.executabledeploy">StoredContractByName</a></code>, <code><a href="StoredVersionedContractByHash.html" title="class in com.casper.sdk.model.deploy.executabledeploy">StoredVersionedContractByHash</a></code>, <code><a href="StoredVersionedContractByName.html" title="class in com.casper.sdk.model.deploy.executabledeploy">StoredVersionedContractByName</a></code>, <code><a href="Transfer.html" title="class in com.casper.sdk.model.deploy.executabledeploy">Transfer</a></code></dd>
 </dl>
@@ -167,6 +171,11 @@ extends <a href="../../clvalue/serde/CasperSerializableObject.html" title="inter
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code>java.util.List&lt;<a href="../NamedArg.html" title="class in com.casper.sdk.model.deploy">NamedArg</a>&lt;?&gt;&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getArgs()">getArgs</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code>byte</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getOrder()">getOrder</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
@@ -195,6 +204,15 @@ extends <a href="../../clvalue/serde/CasperSerializableObject.html" title="inter
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a id="getArgs()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getArgs</h4>
+<pre class="methodSignature">java.util.List&lt;<a href="../NamedArg.html" title="class in com.casper.sdk.model.deploy">NamedArg</a>&lt;?&gt;&gt;&nbsp;getArgs()</pre>
+</li>
+</ul>
 <a id="getOrder()">
 <!--   -->
 </a>
