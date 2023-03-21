@@ -131,7 +131,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dd>
 <dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/AbstractCLValue.html#%3Cinit%3E()">AbstractCLValue()</a></span> - Constructor for class com.casper.sdk.model.clvalue.<a href="com/casper/sdk/model/clvalue/AbstractCLValue.html" title="class in com.casper.sdk.model.clvalue">AbstractCLValue</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/casper/sdk/model/clvalue/AbstractCLValueWithChildren.html" title="class in com.casper.sdk.model.clvalue"><span class="typeNameLink">AbstractCLValueWithChildren</span></a>&lt;<a href="com/casper/sdk/model/clvalue/AbstractCLValueWithChildren.html" title="type parameter in AbstractCLValueWithChildren">T</a>,&#8203;<a href="com/casper/sdk/model/clvalue/AbstractCLValueWithChildren.html" title="type parameter in AbstractCLValueWithChildren">P</a> extends <a href="com/casper/sdk/model/clvalue/cltype/AbstractCLType.html" title="class in com.casper.sdk.model.clvalue.cltype">AbstractCLType</a>&gt; - Class in <a href="com/casper/sdk/model/clvalue/package-summary.html">com.casper.sdk.model.clvalue</a></dt>
+<dt><a href="com/casper/sdk/model/clvalue/AbstractCLValueWithChildren.html" title="class in com.casper.sdk.model.clvalue"><span class="typeNameLink">AbstractCLValueWithChildren</span></a>&lt;<a href="com/casper/sdk/model/clvalue/AbstractCLValueWithChildren.html" title="type parameter in AbstractCLValueWithChildren">T</a>,&#8203;<a href="com/casper/sdk/model/clvalue/AbstractCLValueWithChildren.html" title="type parameter in AbstractCLValueWithChildren">P</a> extends <a href="com/casper/sdk/model/clvalue/cltype/AbstractCLTypeWithChildren.html" title="class in com.casper.sdk.model.clvalue.cltype">AbstractCLTypeWithChildren</a>&gt; - Class in <a href="com/casper/sdk/model/clvalue/package-summary.html">com.casper.sdk.model.clvalue</a></dt>
 <dd>
 <div class="block">Abstract class for those CLValues which have a child collection</div>
 </dd>
@@ -1370,6 +1370,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dd>
 <dt><span class="memberNameLink"><a href="com/casper/sdk/model/validator/ValidatorChangeData.ValidatorChangeDataBuilder.html#changes(java.util.List)">changes(List&lt;JsonValidatorChanges&gt;)</a></span> - Method in class com.casper.sdk.model.validator.<a href="com/casper/sdk/model/validator/ValidatorChangeData.ValidatorChangeDataBuilder.html" title="class in com.casper.sdk.model.validator">ValidatorChangeData.ValidatorChangeDataBuilder</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/AbstractCLValueWithChildren.html#childTypesSet()">childTypesSet()</a></span> - Method in class com.casper.sdk.model.clvalue.<a href="com/casper/sdk/model/clvalue/AbstractCLValueWithChildren.html" title="class in com.casper.sdk.model.clvalue">AbstractCLValueWithChildren</a></dt>
+<dd>
+<div class="block">This fires deserialization in case the json/jackson mapped bytes before CLType
+ This only happens when whe have CLTypes with children types.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/casper/sdk/model/contract/Parameter.ParameterBuilder.html#clType(com.casper.sdk.model.clvalue.cltype.AbstractCLType)">clType(AbstractCLType)</a></span> - Method in class com.casper.sdk.model.contract.<a href="com/casper/sdk/model/contract/Parameter.ParameterBuilder.html" title="class in com.casper.sdk.model.contract">Parameter.ParameterBuilder</a></dt>
 <dd>
 <div class="block">cl_type(CLType) The value of the entry: a casper `Key` type.</div>
@@ -2712,6 +2717,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Abstract Executable Deploy Item containing the runtime args of the contract.</div>
 </dd>
+<dt><a href="com/casper/sdk/model/deploy/executabledeploy/ExecutableDeployItemWithEntryPoint.html" title="interface in com.casper.sdk.model.deploy.executabledeploy"><span class="typeNameLink">ExecutableDeployItemWithEntryPoint</span></a> - Interface in <a href="com/casper/sdk/model/deploy/executabledeploy/package-summary.html">com.casper.sdk.model.deploy.executabledeploy</a></dt>
+<dd>
+<div class="block">Abstract Executable Deploy Item containing the runtime args of the contract.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/casper/sdk/model/event/step/Step.StepBuilder.html#executionEffect(com.casper.sdk.model.deploy.ExecutionEffect)">executionEffect(ExecutionEffect)</a></span> - Method in class com.casper.sdk.model.event.step.<a href="com/casper/sdk/model/event/step/Step.StepBuilder.html" title="class in com.casper.sdk.model.event.step">Step.StepBuilder</a></dt>
 <dd>
 <div class="block">The journal of execution transforms from a single deploy.</div>
@@ -2847,6 +2856,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Gas price</div>
 </dd>
+<dt><span class="memberNameLink"><a href="com/casper/sdk/model/key/Key.html#generateAccountHash(boolean)">generateAccountHash(boolean)</a></span> - Method in class com.casper.sdk.model.key.<a href="com/casper/sdk/model/key/Key.html" title="class in com.casper.sdk.model.key">Key</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/casper/sdk/model/key/PublicKey.html#generateAccountHash(boolean)">generateAccountHash(boolean)</a></span> - Method in class com.casper.sdk.model.key.<a href="com/casper/sdk/model/key/PublicKey.html" title="class in com.casper.sdk.model.key">PublicKey</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/casper/sdk/model/contract/EntryPoint.html#getAccess()">getAccess()</a></span> - Method in class com.casper.sdk.model.contract.<a href="com/casper/sdk/model/contract/EntryPoint.html" title="class in com.casper.sdk.model.contract">EntryPoint</a></dt>
 <dd>
 <div class="block">the <a href="com/casper/sdk/model/contract/EntryPoint.EntryPointAccess.html" title="interface in com.casper.sdk.model.contract"><code>EntryPoint.EntryPointAccess</code></a></div>
@@ -2983,6 +2996,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">a list of <a href="com/casper/sdk/model/contract/Parameter.html" title="class in com.casper.sdk.model.contract"><code>Parameter</code></a></div>
 </dd>
+<dt><span class="memberNameLink"><a href="com/casper/sdk/model/deploy/executabledeploy/ExecutableDeployItem.html#getArgs()">getArgs()</a></span> - Method in interface com.casper.sdk.model.deploy.executabledeploy.<a href="com/casper/sdk/model/deploy/executabledeploy/ExecutableDeployItem.html" title="interface in com.casper.sdk.model.deploy.executabledeploy">ExecutableDeployItem</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/casper/sdk/model/deploy/executabledeploy/ModuleBytes.html#getArgs()">getArgs()</a></span> - Method in class com.casper.sdk.model.deploy.executabledeploy.<a href="com/casper/sdk/model/deploy/executabledeploy/ModuleBytes.html" title="class in com.casper.sdk.model.deploy.executabledeploy">ModuleBytes</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/casper/sdk/model/deploy/executabledeploy/StoredContractByHash.html#getArgs()">getArgs()</a></span> - Method in class com.casper.sdk.model.deploy.executabledeploy.<a href="com/casper/sdk/model/deploy/executabledeploy/StoredContractByHash.html" title="class in com.casper.sdk.model.deploy.executabledeploy">StoredContractByHash</a></dt>
@@ -3140,8 +3155,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/cltype/AbstractCLTypeWithChildren.html#getChildClTypeData(int)">getChildClTypeData(int)</a></span> - Method in class com.casper.sdk.model.clvalue.cltype.<a href="com/casper/sdk/model/clvalue/cltype/AbstractCLTypeWithChildren.html" title="class in com.casper.sdk.model.clvalue.cltype">AbstractCLTypeWithChildren</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/cltype/CLTypeOption.html#getChildType()">getChildType()</a></span> - Method in class com.casper.sdk.model.clvalue.cltype.<a href="com/casper/sdk/model/clvalue/cltype/CLTypeOption.html" title="class in com.casper.sdk.model.clvalue.cltype">CLTypeOption</a></dt>
-<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/cltype/AbstractCLTypeWithChildren.html#getChildTypeObjects()">getChildTypeObjects()</a></span> - Method in class com.casper.sdk.model.clvalue.cltype.<a href="com/casper/sdk/model/clvalue/cltype/AbstractCLTypeWithChildren.html" title="class in com.casper.sdk.model.clvalue.cltype">AbstractCLTypeWithChildren</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/cltype/CLTypeTuple1.html#getChildTypeObjects()">getChildTypeObjects()</a></span> - Method in class com.casper.sdk.model.clvalue.cltype.<a href="com/casper/sdk/model/clvalue/cltype/CLTypeTuple1.html" title="class in com.casper.sdk.model.clvalue.cltype">CLTypeTuple1</a></dt>
@@ -3255,6 +3268,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="com/casper/sdk/exception/CasperClientErrorData.html#getCode()">getCode()</a></span> - Method in class com.casper.sdk.exception.<a href="com/casper/sdk/exception/CasperClientErrorData.html" title="class in com.casper.sdk.exception">CasperClientErrorData</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/casper/sdk/identifier/dictionary/ContractNamedKeyDictionaryIdentifier.html#getContractNamedKey()">getContractNamedKey()</a></span> - Method in class com.casper.sdk.identifier.dictionary.<a href="com/casper/sdk/identifier/dictionary/ContractNamedKeyDictionaryIdentifier.html" title="class in com.casper.sdk.identifier.dictionary">ContractNamedKeyDictionaryIdentifier</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/casper/sdk/model/deploy/executionresult/ExecutionResult.html#getCost()">getCost()</a></span> - Method in interface com.casper.sdk.model.deploy.executionresult.<a href="com/casper/sdk/model/deploy/executionresult/ExecutionResult.html" title="interface in com.casper.sdk.model.deploy.executionresult">ExecutionResult</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/casper/sdk/model/deploy/executionresult/Failure.html#getCost()">getCost()</a></span> - Method in class com.casper.sdk.model.deploy.executionresult.<a href="com/casper/sdk/model/deploy/executionresult/Failure.html" title="class in com.casper.sdk.model.deploy.executionresult">Failure</a></dt>
 <dd>
@@ -3385,9 +3400,13 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">disabled_versions(Array/DisabledVersion)</div>
 </dd>
+<dt><span class="memberNameLink"><a href="com/casper/sdk/model/deploy/executionresult/ExecutionResult.html#getEffect()">getEffect()</a></span> - Method in interface com.casper.sdk.model.deploy.executionresult.<a href="com/casper/sdk/model/deploy/executionresult/ExecutionResult.html" title="interface in com.casper.sdk.model.deploy.executionresult">ExecutionResult</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/casper/sdk/model/deploy/executionresult/Failure.html#getEffect()">getEffect()</a></span> - Method in class com.casper.sdk.model.deploy.executionresult.<a href="com/casper/sdk/model/deploy/executionresult/Failure.html" title="class in com.casper.sdk.model.deploy.executionresult">Failure</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/casper/sdk/model/deploy/executionresult/Success.html#getEffect()">getEffect()</a></span> - Method in class com.casper.sdk.model.deploy.executionresult.<a href="com/casper/sdk/model/deploy/executionresult/Success.html" title="class in com.casper.sdk.model.deploy.executionresult">Success</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/casper/sdk/model/deploy/executabledeploy/ExecutableDeployItemWithEntryPoint.html#getEntryPoint()">getEntryPoint()</a></span> - Method in interface com.casper.sdk.model.deploy.executabledeploy.<a href="com/casper/sdk/model/deploy/executabledeploy/ExecutableDeployItemWithEntryPoint.html" title="interface in com.casper.sdk.model.deploy.executabledeploy">ExecutableDeployItemWithEntryPoint</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/casper/sdk/model/deploy/executabledeploy/StoredContractByHash.html#getEntryPoint()">getEntryPoint()</a></span> - Method in class com.casper.sdk.model.deploy.executabledeploy.<a href="com/casper/sdk/model/deploy/executabledeploy/StoredContractByHash.html" title="class in com.casper.sdk.model.deploy.executabledeploy">StoredContractByHash</a></dt>
 <dd>
@@ -3617,6 +3636,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/AbstractCLValue.html#getJsonBytes()">getJsonBytes()</a></span> - Method in class com.casper.sdk.model.clvalue.<a href="com/casper/sdk/model/clvalue/AbstractCLValue.html" title="class in com.casper.sdk.model.clvalue">AbstractCLValue</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/casper/sdk/model/deploy/executabledeploy/ModuleBytes.html#getJsonBytes()">getJsonBytes()</a></span> - Method in class com.casper.sdk.model.deploy.executabledeploy.<a href="com/casper/sdk/model/deploy/executabledeploy/ModuleBytes.html" title="class in com.casper.sdk.model.deploy.executabledeploy">ModuleBytes</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/cltype/CLTypeOption.html#getJsonClType()">getJsonClType()</a></span> - Method in class com.casper.sdk.model.clvalue.cltype.<a href="com/casper/sdk/model/clvalue/cltype/CLTypeOption.html" title="class in com.casper.sdk.model.clvalue.cltype">CLTypeOption</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/CLValueAny.html#getJsonClType()">getJsonClType()</a></span> - Method in class com.casper.sdk.model.clvalue.<a href="com/casper/sdk/model/clvalue/CLValueAny.html" title="class in com.casper.sdk.model.clvalue">CLValueAny</a></dt>
@@ -3653,11 +3674,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">The accessor for jackson serialization</div>
 </dd>
-<dt><span class="memberNameLink"><a href="com/casper/sdk/model/deploy/executionresult/Failure.html#getJsonCost()">getJsonCost()</a></span> - Method in class com.casper.sdk.model.deploy.executionresult.<a href="com/casper/sdk/model/deploy/executionresult/Failure.html" title="class in com.casper.sdk.model.deploy.executionresult">Failure</a></dt>
-<dd>
-<div class="block">getter for cost json serialization</div>
-</dd>
-<dt><span class="memberNameLink"><a href="com/casper/sdk/model/deploy/executionresult/Success.html#getJsonCost()">getJsonCost()</a></span> - Method in class com.casper.sdk.model.deploy.executionresult.<a href="com/casper/sdk/model/deploy/executionresult/Success.html" title="class in com.casper.sdk.model.deploy.executionresult">Success</a></dt>
+<dt><span class="memberNameLink"><a href="com/casper/sdk/model/deploy/executionresult/ExecutionResult.html#getJsonCost()">getJsonCost()</a></span> - Method in interface com.casper.sdk.model.deploy.executionresult.<a href="com/casper/sdk/model/deploy/executionresult/ExecutionResult.html" title="interface in com.casper.sdk.model.deploy.executionresult">ExecutionResult</a></dt>
 <dd>
 <div class="block">getter for cost json serialization</div>
 </dd>
@@ -3862,6 +3879,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">a list of <a href="com/casper/sdk/model/deploy/Operation.html" title="class in com.casper.sdk.model.deploy"><code>Operation</code></a></div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/casper/sdk/model/event/deployprocessed/ExecutionEffect.html#getOperations()">getOperations()</a></span> - Method in class com.casper.sdk.model.event.deployprocessed.<a href="com/casper/sdk/model/event/deployprocessed/ExecutionEffect.html" title="class in com.casper.sdk.model.event.deployprocessed">ExecutionEffect</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/cltype/CLTypeOption.html#getOptionType()">getOptionType()</a></span> - Method in class com.casper.sdk.model.clvalue.cltype.<a href="com/casper/sdk/model/clvalue/cltype/CLTypeOption.html" title="class in com.casper.sdk.model.clvalue.cltype">CLTypeOption</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/casper/sdk/model/deploy/executabledeploy/ExecutableDeployItem.html#getOrder()">getOrder()</a></span> - Method in interface com.casper.sdk.model.deploy.executabledeploy.<a href="com/casper/sdk/model/deploy/executabledeploy/ExecutableDeployItem.html" title="interface in com.casper.sdk.model.deploy.executabledeploy">ExecutableDeployItem</a></dt>
 <dd>&nbsp;</dd>
@@ -5806,8 +5825,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dd>
 <dt><span class="memberNameLink"><a href="com/casper/sdk/model/validator/ValidatorChangeData.html#setChanges(java.util.List)">setChanges(List&lt;JsonValidatorChanges&gt;)</a></span> - Method in class com.casper.sdk.model.validator.<a href="com/casper/sdk/model/validator/ValidatorChangeData.html" title="class in com.casper.sdk.model.validator">ValidatorChangeData</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/cltype/CLTypeOption.html#setChildType(com.casper.sdk.model.clvalue.cltype.AbstractCLType)">setChildType(AbstractCLType)</a></span> - Method in class com.casper.sdk.model.clvalue.cltype.<a href="com/casper/sdk/model/clvalue/cltype/CLTypeOption.html" title="class in com.casper.sdk.model.clvalue.cltype">CLTypeOption</a></dt>
-<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/cltype/AbstractCLTypeWithChildren.html#setChildTypeObjects(java.util.List)">setChildTypeObjects(List&lt;Object&gt;)</a></span> - Method in class com.casper.sdk.model.clvalue.cltype.<a href="com/casper/sdk/model/clvalue/cltype/AbstractCLTypeWithChildren.html" title="class in com.casper.sdk.model.clvalue.cltype">AbstractCLTypeWithChildren</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/cltype/CLTypeTuple1.html#setChildTypeObjects(java.util.List)">setChildTypeObjects(List&lt;Object&gt;)</a></span> - Method in class com.casper.sdk.model.clvalue.cltype.<a href="com/casper/sdk/model/clvalue/cltype/CLTypeTuple1.html" title="class in com.casper.sdk.model.clvalue.cltype">CLTypeTuple1</a></dt>
@@ -5897,6 +5914,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="com/casper/sdk/exception/CasperClientErrorData.html#setCode(int)">setCode(int)</a></span> - Method in class com.casper.sdk.exception.<a href="com/casper/sdk/exception/CasperClientErrorData.html" title="class in com.casper.sdk.exception">CasperClientErrorData</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/casper/sdk/identifier/dictionary/ContractNamedKeyDictionaryIdentifier.html#setContractNamedKey(com.casper.sdk.identifier.dictionary.ContractNamedKey)">setContractNamedKey(ContractNamedKey)</a></span> - Method in class com.casper.sdk.identifier.dictionary.<a href="com/casper/sdk/identifier/dictionary/ContractNamedKeyDictionaryIdentifier.html" title="class in com.casper.sdk.identifier.dictionary">ContractNamedKeyDictionaryIdentifier</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/casper/sdk/model/deploy/executionresult/ExecutionResult.html#setCost(java.math.BigInteger)">setCost(BigInteger)</a></span> - Method in interface com.casper.sdk.model.deploy.executionresult.<a href="com/casper/sdk/model/deploy/executionresult/ExecutionResult.html" title="interface in com.casper.sdk.model.deploy.executionresult">ExecutionResult</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/casper/sdk/model/deploy/executionresult/Failure.html#setCost(java.math.BigInteger)">setCost(BigInteger)</a></span> - Method in class com.casper.sdk.model.deploy.executionresult.<a href="com/casper/sdk/model/deploy/executionresult/Failure.html" title="class in com.casper.sdk.model.deploy.executionresult">Failure</a></dt>
 <dd>
@@ -6011,6 +6030,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">disabled_versions(Array/DisabledVersion)</div>
 </dd>
+<dt><span class="memberNameLink"><a href="com/casper/sdk/model/deploy/executionresult/ExecutionResult.html#setEffect(com.casper.sdk.model.deploy.ExecutionEffect)">setEffect(ExecutionEffect)</a></span> - Method in interface com.casper.sdk.model.deploy.executionresult.<a href="com/casper/sdk/model/deploy/executionresult/ExecutionResult.html" title="interface in com.casper.sdk.model.deploy.executionresult">ExecutionResult</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/casper/sdk/model/deploy/executionresult/Failure.html#setEffect(com.casper.sdk.model.deploy.ExecutionEffect)">setEffect(ExecutionEffect)</a></span> - Method in class com.casper.sdk.model.deploy.executionresult.<a href="com/casper/sdk/model/deploy/executionresult/Failure.html" title="class in com.casper.sdk.model.deploy.executionresult">Failure</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/casper/sdk/model/deploy/executionresult/Success.html#setEffect(com.casper.sdk.model.deploy.ExecutionEffect)">setEffect(ExecutionEffect)</a></span> - Method in class com.casper.sdk.model.deploy.executionresult.<a href="com/casper/sdk/model/deploy/executionresult/Success.html" title="class in com.casper.sdk.model.deploy.executionresult">Success</a></dt>
@@ -6229,6 +6250,12 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/AbstractCLValue.html#setJsonBytes(java.lang.String)">setJsonBytes(String)</a></span> - Method in class com.casper.sdk.model.clvalue.<a href="com/casper/sdk/model/clvalue/AbstractCLValue.html" title="class in com.casper.sdk.model.clvalue">AbstractCLValue</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/AbstractCLValueWithChildren.html#setJsonBytes(java.lang.String)">setJsonBytes(String)</a></span> - Method in class com.casper.sdk.model.clvalue.<a href="com/casper/sdk/model/clvalue/AbstractCLValueWithChildren.html" title="class in com.casper.sdk.model.clvalue">AbstractCLValueWithChildren</a></dt>
+<dd>
+<div class="block">Sets the bytes and if the CLType is already set, fires bytes deserialization</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/casper/sdk/model/deploy/executabledeploy/ModuleBytes.html#setJsonBytes(java.lang.String)">setJsonBytes(String)</a></span> - Method in class com.casper.sdk.model.deploy.executabledeploy.<a href="com/casper/sdk/model/deploy/executabledeploy/ModuleBytes.html" title="class in com.casper.sdk.model.deploy.executabledeploy">ModuleBytes</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/cltype/CLTypeOption.html#setJsonClType(com.casper.sdk.model.clvalue.cltype.AbstractCLType)">setJsonClType(AbstractCLType)</a></span> - Method in class com.casper.sdk.model.clvalue.cltype.<a href="com/casper/sdk/model/clvalue/cltype/CLTypeOption.html" title="class in com.casper.sdk.model.clvalue.cltype">CLTypeOption</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/casper/sdk/model/contract/Parameter.html#setJsonClType(com.casper.sdk.model.clvalue.cltype.AbstractCLType)">setJsonClType(AbstractCLType)</a></span> - Method in class com.casper.sdk.model.contract.<a href="com/casper/sdk/model/contract/Parameter.html" title="class in com.casper.sdk.model.contract">Parameter</a></dt>
@@ -6263,11 +6290,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/CLValueURef.html#setJsonClType(com.casper.sdk.model.clvalue.cltype.CLTypeURef)">setJsonClType(CLTypeURef)</a></span> - Method in class com.casper.sdk.model.clvalue.<a href="com/casper/sdk/model/clvalue/CLValueURef.html" title="class in com.casper.sdk.model.clvalue">CLValueURef</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="com/casper/sdk/model/deploy/executionresult/Failure.html#setJsonCost(java.lang.String)">setJsonCost(String)</a></span> - Method in class com.casper.sdk.model.deploy.executionresult.<a href="com/casper/sdk/model/deploy/executionresult/Failure.html" title="class in com.casper.sdk.model.deploy.executionresult">Failure</a></dt>
-<dd>
-<div class="block">setter for cost from json deserialized value</div>
-</dd>
-<dt><span class="memberNameLink"><a href="com/casper/sdk/model/deploy/executionresult/Success.html#setJsonCost(java.lang.String)">setJsonCost(String)</a></span> - Method in class com.casper.sdk.model.deploy.executionresult.<a href="com/casper/sdk/model/deploy/executionresult/Success.html" title="class in com.casper.sdk.model.deploy.executionresult">Success</a></dt>
+<dt><span class="memberNameLink"><a href="com/casper/sdk/model/deploy/executionresult/ExecutionResult.html#setJsonCost(java.lang.String)">setJsonCost(String)</a></span> - Method in interface com.casper.sdk.model.deploy.executionresult.<a href="com/casper/sdk/model/deploy/executionresult/ExecutionResult.html" title="interface in com.casper.sdk.model.deploy.executionresult">ExecutionResult</a></dt>
 <dd>
 <div class="block">setter for cost from json deserialized value</div>
 </dd>
@@ -6468,6 +6491,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">a list of <a href="com/casper/sdk/model/deploy/Operation.html" title="class in com.casper.sdk.model.deploy"><code>Operation</code></a></div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/casper/sdk/model/event/deployprocessed/ExecutionEffect.html#setOperations(java.util.List)">setOperations(List&lt;Operation&gt;)</a></span> - Method in class com.casper.sdk.model.event.deployprocessed.<a href="com/casper/sdk/model/event/deployprocessed/ExecutionEffect.html" title="class in com.casper.sdk.model.event.deployprocessed">ExecutionEffect</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/cltype/CLTypeOption.html#setOptionType(com.casper.sdk.model.clvalue.cltype.AbstractCLType)">setOptionType(AbstractCLType)</a></span> - Method in class com.casper.sdk.model.clvalue.cltype.<a href="com/casper/sdk/model/clvalue/cltype/CLTypeOption.html" title="class in com.casper.sdk.model.clvalue.cltype">CLTypeOption</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/casper/sdk/model/contract/Contract.html#setPackageHash(java.lang.String)">setPackageHash(String)</a></span> - Method in class com.casper.sdk.model.contract.<a href="com/casper/sdk/model/contract/Contract.html" title="class in com.casper.sdk.model.contract">Contract</a></dt>
 <dd>
@@ -7334,6 +7359,54 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/casper/sdk/model/block/JsonProof.JsonProofBuilder.html#toString()">toString()</a></span> - Method in class com.casper.sdk.model.block.<a href="com/casper/sdk/model/block/JsonProof.JsonProofBuilder.html" title="class in com.casper.sdk.model.block">JsonProof.JsonProofBuilder</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/CLValueAny.html#toString()">toString()</a></span> - Method in class com.casper.sdk.model.clvalue.<a href="com/casper/sdk/model/clvalue/CLValueAny.html" title="class in com.casper.sdk.model.clvalue">CLValueAny</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/CLValueBool.html#toString()">toString()</a></span> - Method in class com.casper.sdk.model.clvalue.<a href="com/casper/sdk/model/clvalue/CLValueBool.html" title="class in com.casper.sdk.model.clvalue">CLValueBool</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/CLValueByteArray.html#toString()">toString()</a></span> - Method in class com.casper.sdk.model.clvalue.<a href="com/casper/sdk/model/clvalue/CLValueByteArray.html" title="class in com.casper.sdk.model.clvalue">CLValueByteArray</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/CLValueFixedList.html#toString()">toString()</a></span> - Method in class com.casper.sdk.model.clvalue.<a href="com/casper/sdk/model/clvalue/CLValueFixedList.html" title="class in com.casper.sdk.model.clvalue">CLValueFixedList</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/CLValueI32.html#toString()">toString()</a></span> - Method in class com.casper.sdk.model.clvalue.<a href="com/casper/sdk/model/clvalue/CLValueI32.html" title="class in com.casper.sdk.model.clvalue">CLValueI32</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/CLValueI64.html#toString()">toString()</a></span> - Method in class com.casper.sdk.model.clvalue.<a href="com/casper/sdk/model/clvalue/CLValueI64.html" title="class in com.casper.sdk.model.clvalue">CLValueI64</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/CLValueKey.html#toString()">toString()</a></span> - Method in class com.casper.sdk.model.clvalue.<a href="com/casper/sdk/model/clvalue/CLValueKey.html" title="class in com.casper.sdk.model.clvalue">CLValueKey</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/CLValueList.html#toString()">toString()</a></span> - Method in class com.casper.sdk.model.clvalue.<a href="com/casper/sdk/model/clvalue/CLValueList.html" title="class in com.casper.sdk.model.clvalue">CLValueList</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/CLValueMap.html#toString()">toString()</a></span> - Method in class com.casper.sdk.model.clvalue.<a href="com/casper/sdk/model/clvalue/CLValueMap.html" title="class in com.casper.sdk.model.clvalue">CLValueMap</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/CLValueOption.html#toString()">toString()</a></span> - Method in class com.casper.sdk.model.clvalue.<a href="com/casper/sdk/model/clvalue/CLValueOption.html" title="class in com.casper.sdk.model.clvalue">CLValueOption</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/CLValuePublicKey.html#toString()">toString()</a></span> - Method in class com.casper.sdk.model.clvalue.<a href="com/casper/sdk/model/clvalue/CLValuePublicKey.html" title="class in com.casper.sdk.model.clvalue">CLValuePublicKey</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/CLValueResult.html#toString()">toString()</a></span> - Method in class com.casper.sdk.model.clvalue.<a href="com/casper/sdk/model/clvalue/CLValueResult.html" title="class in com.casper.sdk.model.clvalue">CLValueResult</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/CLValueString.html#toString()">toString()</a></span> - Method in class com.casper.sdk.model.clvalue.<a href="com/casper/sdk/model/clvalue/CLValueString.html" title="class in com.casper.sdk.model.clvalue">CLValueString</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/CLValueTuple1.html#toString()">toString()</a></span> - Method in class com.casper.sdk.model.clvalue.<a href="com/casper/sdk/model/clvalue/CLValueTuple1.html" title="class in com.casper.sdk.model.clvalue">CLValueTuple1</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/CLValueTuple2.html#toString()">toString()</a></span> - Method in class com.casper.sdk.model.clvalue.<a href="com/casper/sdk/model/clvalue/CLValueTuple2.html" title="class in com.casper.sdk.model.clvalue">CLValueTuple2</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/CLValueTuple3.html#toString()">toString()</a></span> - Method in class com.casper.sdk.model.clvalue.<a href="com/casper/sdk/model/clvalue/CLValueTuple3.html" title="class in com.casper.sdk.model.clvalue">CLValueTuple3</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/CLValueU128.html#toString()">toString()</a></span> - Method in class com.casper.sdk.model.clvalue.<a href="com/casper/sdk/model/clvalue/CLValueU128.html" title="class in com.casper.sdk.model.clvalue">CLValueU128</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/CLValueU256.html#toString()">toString()</a></span> - Method in class com.casper.sdk.model.clvalue.<a href="com/casper/sdk/model/clvalue/CLValueU256.html" title="class in com.casper.sdk.model.clvalue">CLValueU256</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/CLValueU32.html#toString()">toString()</a></span> - Method in class com.casper.sdk.model.clvalue.<a href="com/casper/sdk/model/clvalue/CLValueU32.html" title="class in com.casper.sdk.model.clvalue">CLValueU32</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/CLValueU512.html#toString()">toString()</a></span> - Method in class com.casper.sdk.model.clvalue.<a href="com/casper/sdk/model/clvalue/CLValueU512.html" title="class in com.casper.sdk.model.clvalue">CLValueU512</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/CLValueU64.html#toString()">toString()</a></span> - Method in class com.casper.sdk.model.clvalue.<a href="com/casper/sdk/model/clvalue/CLValueU64.html" title="class in com.casper.sdk.model.clvalue">CLValueU64</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/CLValueU8.html#toString()">toString()</a></span> - Method in class com.casper.sdk.model.clvalue.<a href="com/casper/sdk/model/clvalue/CLValueU8.html" title="class in com.casper.sdk.model.clvalue">CLValueU8</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/CLValueUnit.html#toString()">toString()</a></span> - Method in class com.casper.sdk.model.clvalue.<a href="com/casper/sdk/model/clvalue/CLValueUnit.html" title="class in com.casper.sdk.model.clvalue">CLValueUnit</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/CLValueURef.html#toString()">toString()</a></span> - Method in class com.casper.sdk.model.clvalue.<a href="com/casper/sdk/model/clvalue/CLValueURef.html" title="class in com.casper.sdk.model.clvalue">CLValueURef</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/casper/sdk/model/common/Digest.DigestBuilder.html#toString()">toString()</a></span> - Method in class com.casper.sdk.model.common.<a href="com/casper/sdk/model/common/Digest.DigestBuilder.html" title="class in com.casper.sdk.model.common">Digest.DigestBuilder</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/casper/sdk/model/common/Digest.html#toString()">toString()</a></span> - Method in class com.casper.sdk.model.common.<a href="com/casper/sdk/model/common/Digest.html" title="class in com.casper.sdk.model.common">Digest</a></dt>
@@ -7465,6 +7538,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="com/casper/sdk/model/event/version/ApiVersion.ApiVersionBuilder.html#toString()">toString()</a></span> - Method in class com.casper.sdk.model.event.version.<a href="com/casper/sdk/model/event/version/ApiVersion.ApiVersionBuilder.html" title="class in com.casper.sdk.model.event.version">ApiVersion.ApiVersionBuilder</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/casper/sdk/model/globalstate/GlobalStateData.GlobalStateDataBuilder.html#toString()">toString()</a></span> - Method in class com.casper.sdk.model.globalstate.<a href="com/casper/sdk/model/globalstate/GlobalStateData.GlobalStateDataBuilder.html" title="class in com.casper.sdk.model.globalstate">GlobalStateData.GlobalStateDataBuilder</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/casper/sdk/model/key/AbstractSerializedKeyTaggedHex.html#toString()">toString()</a></span> - Method in class com.casper.sdk.model.key.<a href="com/casper/sdk/model/key/AbstractSerializedKeyTaggedHex.html" title="class in com.casper.sdk.model.key">AbstractSerializedKeyTaggedHex</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/casper/sdk/model/key/Signature.SignatureBuilder.html#toString()">toString()</a></span> - Method in class com.casper.sdk.model.key.<a href="com/casper/sdk/model/key/Signature.SignatureBuilder.html" title="class in com.casper.sdk.model.key">Signature.SignatureBuilder</a></dt>
 <dd>&nbsp;</dd>

@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":9,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10};
+var data = {"i0":9,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -232,13 +232,18 @@ implements <a href="ExecutableDeployItem.html" title="interface in com.casper.sd
 </td>
 </tr>
 <tr id="i3" class="rowColor">
+<td class="colFirst"><code>java.lang.String</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getJsonBytes()">getJsonBytes</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>byte</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getOrder()">getOrder</a></span>()</code></th>
 <td class="colLast">
 <div class="block"><a href="ExecutableDeployItem.html" title="interface in com.casper.sdk.model.deploy.executabledeploy"><code>ExecutableDeployItem</code></a> order 0</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#serialize(dev.oak3.sbs4j.SerializerBuffer,com.casper.sdk.model.clvalue.serde.Target)">serialize</a></span>&#8203;(dev.oak3.sbs4j.SerializerBuffer&nbsp;ser,
          <a href="../../clvalue/serde/Target.html" title="enum in com.casper.sdk.model.clvalue.serde">Target</a>&nbsp;target)</code></th>
@@ -246,17 +251,22 @@ implements <a href="ExecutableDeployItem.html" title="interface in com.casper.sd
 <div class="block">Implements the ModuleBytes encoder</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setArgs(java.util.List)">setArgs</a></span>&#8203;(java.util.List&lt;<a href="../NamedArg.html" title="class in com.casper.sdk.model.deploy">NamedArg</a>&lt;?&gt;&gt;&nbsp;args)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setBytes(byte%5B%5D)">setBytes</a></span>&#8203;(byte[]&nbsp;bytes)</code></th>
 <td class="colLast">
 <div class="block">Module bytes</div>
 </td>
+</tr>
+<tr id="i8" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setJsonBytes(java.lang.String)">setJsonBytes</a></span>&#8203;(java.lang.String&nbsp;byteContent)</code></th>
+<td class="colLast">&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -318,6 +328,24 @@ implements <a href="ExecutableDeployItem.html" title="interface in com.casper.sd
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a id="getJsonBytes()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getJsonBytes</h4>
+<pre class="methodSignature">public&nbsp;java.lang.String&nbsp;getJsonBytes()</pre>
+</li>
+</ul>
+<a id="setJsonBytes(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setJsonBytes</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setJsonBytes&#8203;(java.lang.String&nbsp;byteContent)</pre>
+</li>
+</ul>
 <a id="getOrder()">
 <!--   -->
 </a>
@@ -382,6 +410,8 @@ implements <a href="ExecutableDeployItem.html" title="interface in com.casper.sd
 <h4>getArgs</h4>
 <pre class="methodSignature">public&nbsp;java.util.List&lt;<a href="../NamedArg.html" title="class in com.casper.sdk.model.deploy">NamedArg</a>&lt;?&gt;&gt;&nbsp;getArgs()</pre>
 <dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="ExecutableDeployItem.html#getArgs()">getArgs</a></code>&nbsp;in interface&nbsp;<code><a href="ExecutableDeployItem.html" title="interface in com.casper.sdk.model.deploy.executabledeploy">ExecutableDeployItem</a></code></dd>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../NamedArg.html" title="class in com.casper.sdk.model.deploy"><code>NamedArg</code></a></dd>
 </dl>
