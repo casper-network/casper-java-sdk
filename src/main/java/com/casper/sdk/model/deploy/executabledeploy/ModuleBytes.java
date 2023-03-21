@@ -3,6 +3,7 @@ package com.casper.sdk.model.deploy.executabledeploy;
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.serde.Target;
 import com.casper.sdk.model.deploy.NamedArg;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import dev.oak3.sbs4j.SerializerBuffer;
@@ -31,6 +32,7 @@ public class ModuleBytes implements ExecutableDeployItem {
     /**
      * Module bytes
      */
+    @JsonIgnore
     private byte[] bytes;
 
     /**
