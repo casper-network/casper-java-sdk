@@ -22,6 +22,7 @@ import org.javatuples.Unit;
 import org.json.JSONException;
 import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
+import org.skyscreamer.jsonassert.JSONCompareMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -70,7 +71,7 @@ public class StoredValueTests extends AbstractJsonTests {
 
         LOGGER.debug("Serialized JSON: {}", expectedJson);
 
-        JSONAssert.assertEquals(inputJson, expectedJson, false);
+        JSONAssert.assertEquals(inputJson, expectedJson, JSONCompareMode.NON_EXTENSIBLE);
     }
 
     @Test
@@ -93,7 +94,7 @@ public class StoredValueTests extends AbstractJsonTests {
 
         LOGGER.debug("Serialized JSON: {}", expectedJson);
 
-        JSONAssert.assertEquals(inputJson, expectedJson, false);
+        JSONAssert.assertEquals(inputJson, expectedJson, JSONCompareMode.NON_EXTENSIBLE);
     }
 
     @Test
@@ -117,7 +118,7 @@ public class StoredValueTests extends AbstractJsonTests {
 
         LOGGER.debug("Serialized JSON: {}", expectedJson);
 
-        JSONAssert.assertEquals(inputJson, expectedJson, false);
+        JSONAssert.assertEquals(inputJson, expectedJson, JSONCompareMode.NON_EXTENSIBLE);
     }
 
     @Test
@@ -140,7 +141,7 @@ public class StoredValueTests extends AbstractJsonTests {
 
         LOGGER.debug("Serialized JSON: {}", expectedJson);
 
-        JSONAssert.assertEquals(inputJson, expectedJson, false);
+        JSONAssert.assertEquals(inputJson, expectedJson, JSONCompareMode.NON_EXTENSIBLE);
     }
 
     @Test
@@ -163,7 +164,7 @@ public class StoredValueTests extends AbstractJsonTests {
 
         LOGGER.debug("Serialized JSON: {}", expectedJson);
 
-        JSONAssert.assertEquals(inputJson, expectedJson, false);
+        JSONAssert.assertEquals(inputJson, expectedJson, JSONCompareMode.NON_EXTENSIBLE);
     }
 
     @Test
@@ -187,7 +188,7 @@ public class StoredValueTests extends AbstractJsonTests {
 
         LOGGER.debug("Serialized JSON: {}", expectedJson);
 
-        JSONAssert.assertEquals(inputJson, expectedJson, false);
+        JSONAssert.assertEquals(inputJson, expectedJson, JSONCompareMode.NON_EXTENSIBLE);
     }
 
     @Test
@@ -210,7 +211,7 @@ public class StoredValueTests extends AbstractJsonTests {
 
         LOGGER.debug("Serialized JSON: {}", expectedJson);
 
-        JSONAssert.assertEquals(inputJson, expectedJson, false);
+        JSONAssert.assertEquals(inputJson, expectedJson, JSONCompareMode.NON_EXTENSIBLE);
     }
 
     @Test
@@ -232,7 +233,7 @@ public class StoredValueTests extends AbstractJsonTests {
 
         LOGGER.debug("Serialized JSON: {}", expectedJson);
 
-        JSONAssert.assertEquals(inputJson, expectedJson, false);
+        JSONAssert.assertEquals(inputJson, expectedJson, JSONCompareMode.NON_EXTENSIBLE);
     }
 
     @Test
@@ -255,7 +256,7 @@ public class StoredValueTests extends AbstractJsonTests {
 
         LOGGER.debug("Serialized JSON: {}", expectedJson);
 
-        JSONAssert.assertEquals(inputJson, expectedJson, false);
+        JSONAssert.assertEquals(inputJson, expectedJson, JSONCompareMode.NON_EXTENSIBLE);
     }
 
     @Test
@@ -279,7 +280,7 @@ public class StoredValueTests extends AbstractJsonTests {
 
         LOGGER.debug("Serialized JSON: {}", expectedJson);
 
-        JSONAssert.assertEquals(inputJson, expectedJson, false);
+        JSONAssert.assertEquals(inputJson, expectedJson, JSONCompareMode.NON_EXTENSIBLE);
     }
 
     @Test
@@ -304,7 +305,7 @@ public class StoredValueTests extends AbstractJsonTests {
 
         LOGGER.debug("Serialized JSON: {}", expectedJson);
 
-        JSONAssert.assertEquals(inputJson, expectedJson, false);
+        JSONAssert.assertEquals(inputJson, expectedJson, JSONCompareMode.NON_EXTENSIBLE);
     }
 
     @Test
@@ -329,7 +330,7 @@ public class StoredValueTests extends AbstractJsonTests {
 
         LOGGER.debug("Serialized JSON: {}", expectedJson);
 
-        JSONAssert.assertEquals(inputJson, expectedJson, false);
+        JSONAssert.assertEquals(inputJson, expectedJson, JSONCompareMode.NON_EXTENSIBLE);
     }
 
     @Test
@@ -354,7 +355,7 @@ public class StoredValueTests extends AbstractJsonTests {
 
         LOGGER.debug("Serialized JSON: {}", expectedJson);
 
-        JSONAssert.assertEquals(inputJson, expectedJson, false);
+        JSONAssert.assertEquals(inputJson, expectedJson, JSONCompareMode.NON_EXTENSIBLE);
     }
 
     @Test
@@ -384,7 +385,7 @@ public class StoredValueTests extends AbstractJsonTests {
 
         LOGGER.debug("Serialized JSON: {}", expectedJson);
 
-        JSONAssert.assertEquals(inputJson, expectedJson, false);
+        JSONAssert.assertEquals(inputJson, expectedJson, JSONCompareMode.NON_EXTENSIBLE);
     }
 
     @Test
@@ -411,7 +412,7 @@ public class StoredValueTests extends AbstractJsonTests {
         LOGGER.debug("Serialized JSON: {}", expectedJson);
         LOGGER.debug("Serialized Expected JSON: {}", serializedExpected);
 
-        JSONAssert.assertEquals(inputJson, expectedJson, false);
+        JSONAssert.assertEquals(inputJson, expectedJson, JSONCompareMode.NON_EXTENSIBLE);
     }
 
     @Test
@@ -435,7 +436,7 @@ public class StoredValueTests extends AbstractJsonTests {
 
         LOGGER.debug("Serialized JSON: {}", expectedJson);
 
-        JSONAssert.assertEquals(inputJson, expectedJson, false);
+        JSONAssert.assertEquals(inputJson, expectedJson, JSONCompareMode.NON_EXTENSIBLE);
     }
 
     @Test
@@ -459,7 +460,7 @@ public class StoredValueTests extends AbstractJsonTests {
 
         LOGGER.debug("Serialized JSON: {}", expectedJson);
 
-        JSONAssert.assertEquals(inputJson, expectedJson, false);
+        JSONAssert.assertEquals(inputJson, expectedJson, JSONCompareMode.NON_EXTENSIBLE);
     }
 
     @Test
@@ -484,7 +485,7 @@ public class StoredValueTests extends AbstractJsonTests {
 
         LOGGER.debug("Serialized JSON: {}", expectedJson);
 
-        JSONAssert.assertEquals(inputJson, expectedJson, false);
+        JSONAssert.assertEquals(inputJson, expectedJson, JSONCompareMode.NON_EXTENSIBLE);
     }
 
     @Test
@@ -535,7 +536,7 @@ public class StoredValueTests extends AbstractJsonTests {
 
         LOGGER.debug("Serialized JSON: {}", expectedJson);
 
-        JSONAssert.assertEquals(inputJson, expectedJson, false);
+        JSONAssert.assertEquals(inputJson, expectedJson, JSONCompareMode.NON_EXTENSIBLE);
     }
 
     @Test
@@ -561,7 +562,7 @@ public class StoredValueTests extends AbstractJsonTests {
 
 //        LOGGER.debug("Serialized JSON: {}", expectedJson);
 
-//        JSONAssert.assertEquals(inputJson, expectedJson, false);
+//        JSONAssert.assertEquals(inputJson, expectedJson, JSONCompareMode.NON_EXTENSIBLE);
     }
 
     @Test
@@ -586,7 +587,7 @@ public class StoredValueTests extends AbstractJsonTests {
 
         LOGGER.debug("Serialized JSON: {}", expectedJson);
 
-        JSONAssert.assertEquals(inputJson, expectedJson, false);
+        JSONAssert.assertEquals(inputJson, expectedJson, JSONCompareMode.NON_EXTENSIBLE);
     }
 
     @Test
@@ -612,7 +613,7 @@ public class StoredValueTests extends AbstractJsonTests {
 
         LOGGER.debug("Serialized JSON: {}", expectedJson);
 
-        JSONAssert.assertEquals(inputJson, expectedJson, false);
+        JSONAssert.assertEquals(inputJson, expectedJson, JSONCompareMode.NON_EXTENSIBLE);
     }
 
     @Test
@@ -635,7 +636,7 @@ public class StoredValueTests extends AbstractJsonTests {
 
         LOGGER.debug("Serialized JSON: {}", expectedJson);
 
-        JSONAssert.assertEquals(inputJson, expectedJson, false);
+        JSONAssert.assertEquals(inputJson, expectedJson, JSONCompareMode.NON_EXTENSIBLE);
     }
 
     @Test
@@ -660,7 +661,7 @@ public class StoredValueTests extends AbstractJsonTests {
 
         LOGGER.debug("Serialized JSON: {}", expectedJson);
 
-        JSONAssert.assertEquals(inputJson, expectedJson, false);
+        JSONAssert.assertEquals(inputJson, expectedJson, JSONCompareMode.NON_EXTENSIBLE);
     }
 
     @Test
@@ -683,7 +684,7 @@ public class StoredValueTests extends AbstractJsonTests {
 
         LOGGER.debug("Serialized JSON: {}", expectedJson);
 
-        JSONAssert.assertEquals(inputJson, expectedJson, false);
+        JSONAssert.assertEquals(inputJson, expectedJson, JSONCompareMode.NON_EXTENSIBLE);
     }
 
     @Test
@@ -706,7 +707,7 @@ public class StoredValueTests extends AbstractJsonTests {
 
         LOGGER.debug("Serialized JSON: {}", expectedJson);
 
-        JSONAssert.assertEquals(inputJson, expectedJson, false);
+        JSONAssert.assertEquals(inputJson, expectedJson, JSONCompareMode.NON_EXTENSIBLE);
     }
 
     @Test
@@ -729,7 +730,7 @@ public class StoredValueTests extends AbstractJsonTests {
 
         LOGGER.debug("Serialized JSON: {}", expectedJson);
 
-        JSONAssert.assertEquals(inputJson, expectedJson, false);
+        JSONAssert.assertEquals(inputJson, expectedJson, JSONCompareMode.NON_EXTENSIBLE);
     }
 
     @Test
@@ -754,7 +755,7 @@ public class StoredValueTests extends AbstractJsonTests {
 
         LOGGER.debug("Serialized JSON: {}", expectedJson);
 
-        JSONAssert.assertEquals(inputJson, expectedJson, false);
+        JSONAssert.assertEquals(inputJson, expectedJson, JSONCompareMode.NON_EXTENSIBLE);
     }
 
     @Test
@@ -778,7 +779,7 @@ public class StoredValueTests extends AbstractJsonTests {
 //
 //        LOGGER.debug("Serialized JSON: {}", expectedJson);
 //
-//        JSONAssert.assertEquals(inputJson, expectedJson, false);
+//        JSONAssert.assertEquals(inputJson, expectedJson, JSONCompareMode.NON_EXTENSIBLE);
     }
 
     @Test
@@ -801,7 +802,7 @@ public class StoredValueTests extends AbstractJsonTests {
 
         LOGGER.debug("Serialized JSON: {}", expectedJson);
 
-        JSONAssert.assertEquals(inputJson, expectedJson, false);
+        JSONAssert.assertEquals(inputJson, expectedJson, JSONCompareMode.NON_EXTENSIBLE);
     }
 
     @Test
@@ -828,7 +829,7 @@ public class StoredValueTests extends AbstractJsonTests {
 
         LOGGER.debug("Serialized JSON: {}", expectedJson);
 
-        JSONAssert.assertEquals(inputJson, expectedJson, false);
+        JSONAssert.assertEquals(inputJson, expectedJson, JSONCompareMode.NON_EXTENSIBLE);
     }
 
     @Test
@@ -854,7 +855,7 @@ public class StoredValueTests extends AbstractJsonTests {
 
         LOGGER.debug("Serialized JSON: {}", expectedJson);
 
-        JSONAssert.assertEquals(inputJson, expectedJson, false);
+        JSONAssert.assertEquals(inputJson, expectedJson, JSONCompareMode.NON_EXTENSIBLE);
     }
 
     @Test
@@ -880,7 +881,7 @@ public class StoredValueTests extends AbstractJsonTests {
 
         LOGGER.debug("Serialized JSON: {}", expectedJson);
 
-        JSONAssert.assertEquals(inputJson, expectedJson, false);
+        JSONAssert.assertEquals(inputJson, expectedJson, JSONCompareMode.NON_EXTENSIBLE);
     }
 
     @Test
@@ -906,7 +907,7 @@ public class StoredValueTests extends AbstractJsonTests {
 
         LOGGER.debug("Serialized JSON: {}", expectedJson);
 
-        JSONAssert.assertEquals(inputJson, expectedJson, false);
+        JSONAssert.assertEquals(inputJson, expectedJson, JSONCompareMode.NON_EXTENSIBLE);
     }
 
     @Test
@@ -931,7 +932,7 @@ public class StoredValueTests extends AbstractJsonTests {
 
         LOGGER.debug("Serialized JSON: {}", expectedJson);
 
-        JSONAssert.assertEquals(inputJson, expectedJson, false);
+        JSONAssert.assertEquals(inputJson, expectedJson, JSONCompareMode.NON_EXTENSIBLE);
     }
 
     @Test
@@ -956,7 +957,7 @@ public class StoredValueTests extends AbstractJsonTests {
 
         LOGGER.debug("Serialized JSON: {}", expectedJson);
 
-        JSONAssert.assertEquals(inputJson, expectedJson, false);
+        JSONAssert.assertEquals(inputJson, expectedJson, JSONCompareMode.NON_EXTENSIBLE);
     }
 
     @Test
@@ -981,7 +982,7 @@ public class StoredValueTests extends AbstractJsonTests {
 
         LOGGER.debug("Serialized JSON: {}", expectedJson);
 
-        JSONAssert.assertEquals(inputJson, expectedJson, false);
+        JSONAssert.assertEquals(inputJson, expectedJson, JSONCompareMode.NON_EXTENSIBLE);
     }
 
     @Test
@@ -1000,7 +1001,7 @@ public class StoredValueTests extends AbstractJsonTests {
 
         LOGGER.debug("Serialized JSON: {}", expectedJson);
 
-        JSONAssert.assertEquals(inputJson, expectedJson, false);
+        JSONAssert.assertEquals(inputJson, expectedJson, JSONCompareMode.NON_EXTENSIBLE);
     }
 
     @Test
@@ -1017,7 +1018,7 @@ public class StoredValueTests extends AbstractJsonTests {
 
         LOGGER.debug("Serialized JSON: {}", expectedJson);
 
-        JSONAssert.assertEquals(inputJson, expectedJson, false);
+        JSONAssert.assertEquals(inputJson, expectedJson, JSONCompareMode.NON_EXTENSIBLE);
     }
 
     private StoredValueData createAndInitExpectedStoredValueData(AbstractCLValue<?, ?> expectedClValue)

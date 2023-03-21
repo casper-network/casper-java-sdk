@@ -7,7 +7,7 @@ import com.casper.sdk.model.clvalue.cltype.CLTypeList;
 import com.casper.sdk.model.clvalue.cltype.CLTypeMap;
 import com.casper.sdk.model.clvalue.serde.Target;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import dev.oak3.sbs4j.DeserializerBuffer;
 import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
@@ -33,10 +33,15 @@ import java.util.stream.Collectors;
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
-@JsonPropertyOrder({"cl_type", "bytes", "parsed"})
 public class CLValueList extends AbstractCLValueWithChildren<List<? extends AbstractCLValue<?, ?>>, CLTypeList> {
     @JsonProperty("cl_type")
     private CLTypeList clType = new CLTypeList();
+
+    @JsonSetter("cl_type")
+    public void setClType(CLTypeList clType) {
+        this.clType = clType;
+        childTypesSet();
+    }
 
     public CLValueList(List<? extends AbstractCLValue<?, ?>> value) throws ValueSerializationException {
         setChildTypes(value);

@@ -34,9 +34,6 @@ import lombok.*;
 public abstract class AbstractCLValue<T, P extends AbstractCLType>
         implements CasperSerializableObject, CasperDeserializableObject {
 
-    @JsonIgnore
-    private boolean valid = false;
-
     @Setter(AccessLevel.PROTECTED)
     private String bytes = "";
 
@@ -48,35 +45,13 @@ public abstract class AbstractCLValue<T, P extends AbstractCLType>
     @JsonIgnore
     private T value;
 
-    public boolean isValid() {
-        tryDeserializeIfNeeded();
-
-        return valid;
-    }
-
     public T getValue() {
-        tryDeserializeIfNeeded();
-
         return this.value;
     }
 
     public void setValue(T value) throws ValueSerializationException {
         this.value = value;
         this.serialize(new SerializerBuffer());
-    }
-
-    private void tryDeserializeIfNeeded() {
-        if (value == null && bytes.length() > 0) {
-            try {
-                DeserializerBuffer deser = new DeserializerBuffer(this.bytes);
-
-                this.deserialize(deser);
-
-                valid = true;
-            } catch (ValueDeserializationException e) {
-                valid = false;
-            }
-        }
     }
 
     public static AbstractCLValue<?, ?> createInstanceFromBytes(DeserializerBuffer deser) throws ValueDeserializationException {
@@ -104,16 +79,22 @@ public abstract class AbstractCLValue<T, P extends AbstractCLType>
         return this.bytes;
     }
 
+    @SneakyThrows({ValueDeserializationException.class})
     @JsonSetter(value = "bytes")
     @ExcludeFromJacocoGeneratedReport
     protected void setJsonBytes(String bytes) {
         this.bytes = bytes;
+
+        DeserializerBuffer deser = new DeserializerBuffer(this.bytes);
+
+        this.deserialize(deser);
     }
 
     @JsonIgnore
     public abstract P getClType();
 
     public abstract void setClType(P value);
+
 
     protected void serializePrefixWithLength(SerializerBuffer ser) throws ValueSerializationException {
         SerializerBuffer localSer = new SerializerBuffer();
@@ -142,7 +123,7 @@ public abstract class AbstractCLValue<T, P extends AbstractCLType>
         try {
             this.deserializeCustom(deserializerBuffer);
         } catch (Exception e) {
-            throw new ValueDeserializationException("Error serializing value", e);
+            throw new ValueDeserializationException("Error deserializing value", e);
         }
     }
 

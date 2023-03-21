@@ -1,13 +1,10 @@
 package com.casper.sdk.model.status;
 
 import com.casper.sdk.model.key.PublicKey;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.casper.sdk.model.peer.PeerEntry;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
 
 import java.util.List;
 
@@ -77,6 +74,7 @@ public class StatusData {
     /**
      * Time passed since the node has started
      */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String uptime;
 
     /**
