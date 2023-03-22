@@ -25,7 +25,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonTypeName("StoredContractByHash")
-public class StoredContractByHash implements ExecutableDeployItem {
+public class StoredContractByHash implements ExecutableDeployItemWithEntryPoint {
 
     /**
      * Hex-encoded Hash

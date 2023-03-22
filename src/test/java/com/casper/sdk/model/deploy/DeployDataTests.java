@@ -4,6 +4,7 @@ import com.casper.sdk.model.AbstractJsonTests;
 import org.json.JSONException;
 import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
+import org.skyscreamer.jsonassert.JSONCompareMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,7 +42,7 @@ public class DeployDataTests extends AbstractJsonTests {
 
         LOGGER.debug("Serialized JSON: {}", expectedJson);
 
-        JSONAssert.assertEquals(inputJson, expectedJson, false);
+        JSONAssert.assertEquals(inputJson, expectedJson, JSONCompareMode.NON_EXTENSIBLE);
     }
 
     @Test
@@ -58,7 +59,7 @@ public class DeployDataTests extends AbstractJsonTests {
 
         LOGGER.debug("Serialized JSON: {}", expectedJson);
 
-        JSONAssert.assertEquals(inputJson, expectedJson, false);
+        JSONAssert.assertEquals(inputJson, expectedJson, JSONCompareMode.NON_EXTENSIBLE);
     }
 
     @Test
@@ -75,7 +76,41 @@ public class DeployDataTests extends AbstractJsonTests {
 
         LOGGER.debug("Serialized JSON: {}", expectedJson);
 
-        JSONAssert.assertEquals(inputJson, expectedJson, false);
+        JSONAssert.assertEquals(inputJson, expectedJson, JSONCompareMode.NON_EXTENSIBLE);
+    }
+
+    @Test
+    void validateDeployDataMapping_4() throws IOException, JSONException {
+        final String inputJson = getPrettyJson(loadJsonFromFile("deploy-samples/deploy-v4.json"));
+
+        LOGGER.debug("Original JSON: {}", inputJson);
+
+        final DeployData dd = OBJECT_MAPPER.readValue(inputJson, DeployData.class);
+
+        assertNotNull(dd.getDeploy());
+
+        final String expectedJson = getPrettyJson(dd);
+
+        LOGGER.debug("Serialized JSON: {}", expectedJson);
+
+        JSONAssert.assertEquals(inputJson, expectedJson, JSONCompareMode.NON_EXTENSIBLE);
+    }
+
+    @Test
+    void validateDeployDataMapping_5() throws IOException, JSONException {
+        final String inputJson = getPrettyJson(loadJsonFromFile("deploy-samples/deploy-v5.json"));
+
+        LOGGER.debug("Original JSON: {}", inputJson);
+
+        final DeployData dd = OBJECT_MAPPER.readValue(inputJson, DeployData.class);
+
+        assertNotNull(dd.getDeploy());
+
+        final String expectedJson = getPrettyJson(dd);
+
+        LOGGER.debug("Serialized JSON: {}", expectedJson);
+
+        JSONAssert.assertEquals(inputJson, expectedJson, JSONCompareMode.NON_EXTENSIBLE);
     }
 
     @Test
@@ -90,6 +125,6 @@ public class DeployDataTests extends AbstractJsonTests {
 
         LOGGER.debug("Serialized JSON: {}", expectedJson);
 
-        JSONAssert.assertEquals(inputJson, expectedJson, false);
+        JSONAssert.assertEquals(inputJson, expectedJson, JSONCompareMode.NON_EXTENSIBLE);
     }
 }

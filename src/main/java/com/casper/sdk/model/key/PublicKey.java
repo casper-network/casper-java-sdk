@@ -7,9 +7,12 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.syntifi.crypto.key.AbstractPublicKey;
 import com.syntifi.crypto.key.Ed25519PublicKey;
 import com.syntifi.crypto.key.Secp256k1PublicKey;
+import com.syntifi.crypto.key.hash.Blake2b;
 import dev.oak3.sbs4j.util.ByteUtils;
 import lombok.NoArgsConstructor;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
@@ -47,6 +50,14 @@ public class PublicKey extends AbstractSerializedKeyTaggedHex<AlgorithmTag> {
         return object;
     }
 
+    public String generateAccountHash(boolean includePrefix) throws IOException {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        byteArrayOutputStream.write(getTag().toString().toLowerCase().getBytes("UTF-8"));
+        byteArrayOutputStream.write(0);
+        byteArrayOutputStream.write(getKey());
+
+        return (includePrefix ? "account-hash-" : "") + ByteUtils.encodeHexString(Blake2b.digest(byteArrayOutputStream.toByteArray(), 32));
+    }
 
     @JsonCreator
     public void createPublicKey(String key) throws NoSuchAlgorithmException, IllegalArgumentException {

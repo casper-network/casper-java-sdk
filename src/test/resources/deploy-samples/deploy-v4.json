@@ -1,0 +1,96 @@
+{
+  "api_version": "1.3.2",
+  "deploy": {
+    "hash": "d36e424c80b36b019988f925a3ea7fc318cb4063a141575cd2d2278940d852ce",
+    "header": {
+      "ttl": "3m",
+      "account": "0135ef6e3a5f623a6bb5212d985b1ca8c6d3277c7f2bd04ecb0c9aa5dc24755c77",
+      "body_hash": "1f6add4b3fd409e248175d2bdb0e10fc29fd0bdd1d7c036897b946bd0ed2a5c3",
+      "gas_price": 1,
+      "timestamp": "2023-02-14T01:05:42.106Z",
+      "chain_name": "casper",
+      "dependencies": []
+    },
+    "payment": {
+      "ModuleBytes": {
+        "args": [
+          [
+            "amount",
+            {
+              "bytes": "0500e40b5402",
+              "parsed": "10000000000",
+              "cl_type": "U512"
+            }
+          ]
+        ],
+        "module_bytes": ""
+      }
+    },
+    "session": {
+      "StoredContractByHash": {
+        "args": [
+          [
+            "recipient",
+            {
+              "bytes": "00ebd8942522cd017ee7debe652f3e0a8369a70e48c09759aea045ac283921517c",
+              "parsed": {
+                "Account": "account-hash-ebd8942522cd017ee7debe652f3e0a8369a70e48c09759aea045ac283921517c"
+              },
+              "cl_type": "Key"
+            }
+          ],
+          [
+            "token_metas",
+            {
+              "bytes": "0100000006000000040000006e616d6512000000456767666f7263652057686974656c6973740b0000006465736372697074696f6e12000000456767666f7263652057686974656c697374080000004d6174657269616c1200000053656c76796ee2809973206e6f64756c65731000000059656172206f66206372656174696f6e04000000323032320b0000005574696c697a6174696f6e1d000000427265616b2077686974656c69737465642047656e657369732045676705000000696d6167652c00000068747470733a2f2f6173736574732e656767666f7263652e696f2f73656c76796e2d68616d6d65722e706e67",
+              "parsed": [
+                [
+                  {
+                    "key": "name",
+                    "value": "Eggforce Whitelist"
+                  },
+                  {
+                    "key": "description",
+                    "value": "Eggforce Whitelist"
+                  },
+                  {
+                    "key": "Material",
+                    "value": "Selvyn's nodules"
+                  },
+                  {
+                    "key": "Year of creation",
+                    "value": "2022"
+                  },
+                  {
+                    "key": "Utilization",
+                    "value": "Break whitelisted Genesis Egg"
+                  },
+                  {
+                    "key": "image",
+                    "value": "https://assets.eggforce.io/selvyn-hammer.png"
+                  }
+                ]
+              ],
+              "cl_type": {
+                "List": {
+                  "Map": {
+                    "key": "String",
+                    "value": "String"
+                  }
+                }
+              }
+            }
+          ]
+        ],
+        "hash": "16fdc5d5cdda91e1d84e62a3d6135ca8f7f2fad44e928fed004b6ad9a73d7b9b",
+        "entry_point": "mint"
+      }
+    },
+    "approvals": [
+      {
+        "signer": "0135ef6e3a5f623a6bb5212d985b1ca8c6d3277c7f2bd04ecb0c9aa5dc24755c77",
+        "signature": "01ad9172d374d6bfd2b8a149b1cc7d731f8a1ace21255000372c0b814aaab8b9ce6b1d2ad71cf5b3b99df6438fe9d6a5f28d7f65c0d537e95e88464c8a9fe91307"
+      }
+    ]
+  }
+}

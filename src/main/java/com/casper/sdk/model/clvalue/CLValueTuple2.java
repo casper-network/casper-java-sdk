@@ -6,6 +6,7 @@ import com.casper.sdk.model.clvalue.cltype.CLTypeData;
 import com.casper.sdk.model.clvalue.cltype.CLTypeTuple2;
 import com.casper.sdk.model.clvalue.serde.Target;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import dev.oak3.sbs4j.DeserializerBuffer;
 import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
@@ -34,6 +35,12 @@ public class CLValueTuple2
         extends AbstractCLValueWithChildren<Pair<? extends AbstractCLValue<?, ?>, ? extends AbstractCLValue<?, ?>>, CLTypeTuple2> {
     @JsonProperty("cl_type")
     private CLTypeTuple2 clType = new CLTypeTuple2();
+
+    @JsonSetter("cl_type")
+    public void setClType(CLTypeTuple2 clType) {
+        this.clType = clType;
+        childTypesSet();
+    }
 
     public CLValueTuple2(Pair<? extends AbstractCLValue<?, ?>, ? extends AbstractCLValue<?, ?>> value) throws ValueSerializationException {
         setChildTypes(value);
@@ -84,5 +91,10 @@ public class CLValueTuple2
     @Override
     protected void setChildTypes(Pair<? extends AbstractCLValue<?, ?>, ? extends AbstractCLValue<?, ?>> value) {
         clType.setChildTypes(Arrays.asList(value.getValue0().getClType(), value.getValue1().getClType()));
+    }
+
+    @Override
+    public String toString() {
+        return getValue() != null ? getValue().toString() : null;
     }
 }

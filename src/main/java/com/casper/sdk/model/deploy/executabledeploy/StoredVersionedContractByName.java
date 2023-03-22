@@ -25,7 +25,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonTypeName("StoredVersionedContractByName")
-public class StoredVersionedContractByName implements ExecutableDeployItem {
+public class StoredVersionedContractByName implements ExecutableDeployItemWithEntryPoint {
 
     /**
      * Contract Name

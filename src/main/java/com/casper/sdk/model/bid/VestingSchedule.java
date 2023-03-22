@@ -1,13 +1,9 @@
 package com.casper.sdk.model.bid;
 
+import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigInteger;
 import java.util.LinkedList;
@@ -43,8 +39,10 @@ public class VestingSchedule {
     @ExcludeFromJacocoGeneratedReport
     protected void setJsonLockedAmounts(final List<String> lockedAmounts) {
         List<BigInteger> list = new LinkedList<>();
-        for (String string : lockedAmounts) {
-            list.add(new BigInteger(string, 10));
+        if (lockedAmounts != null) {
+            for (String string : lockedAmounts) {
+                list.add(new BigInteger(string, 10));
+            }
         }
         this.lockedAmounts = list;
     }

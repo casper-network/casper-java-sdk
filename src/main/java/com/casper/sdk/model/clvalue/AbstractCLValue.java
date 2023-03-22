@@ -8,13 +8,8 @@ import com.casper.sdk.model.clvalue.cltype.CLTypeData;
 import com.casper.sdk.model.clvalue.serde.CasperDeserializableObject;
 import com.casper.sdk.model.clvalue.serde.CasperSerializableObject;
 import com.casper.sdk.model.clvalue.serde.Target;
-import com.fasterxml.jackson.annotation.JsonGetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonSetter;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonTypeResolver;
 import com.syntifi.crypto.key.encdec.Hex;
 import dev.oak3.sbs4j.DeserializerBuffer;
@@ -22,11 +17,7 @@ import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueDeserializationException;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
 import dev.oak3.sbs4j.util.ByteUtils;
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.SneakyThrows;
+import lombok.*;
 
 /**
  * Base class for CLValues
@@ -53,6 +44,10 @@ public abstract class AbstractCLValue<T, P extends AbstractCLType>
 
     @JsonIgnore
     private T value;
+
+    public T getValue() {
+        return this.value;
+    }
 
     public void setValue(T value) throws ValueSerializationException {
         this.value = value;
@@ -84,18 +79,6 @@ public abstract class AbstractCLValue<T, P extends AbstractCLType>
         return this.bytes;
     }
 
-    @JsonIgnore
-    public abstract P getClType();
-
-    public abstract void setClType(P value);
-
-    protected void serializePrefixWithLength(SerializerBuffer ser) throws ValueSerializationException {
-        SerializerBuffer localSer = new SerializerBuffer();
-        serialize(localSer);
-        int size = localSer.toByteArray().length;
-        ser.writeI32(size);
-    }
-
     @SneakyThrows({ValueDeserializationException.class})
     @JsonSetter(value = "bytes")
     @ExcludeFromJacocoGeneratedReport
@@ -105,6 +88,19 @@ public abstract class AbstractCLValue<T, P extends AbstractCLType>
         DeserializerBuffer deser = new DeserializerBuffer(this.bytes);
 
         this.deserialize(deser);
+    }
+
+    @JsonIgnore
+    public abstract P getClType();
+
+    public abstract void setClType(P value);
+
+
+    protected void serializePrefixWithLength(SerializerBuffer ser) throws ValueSerializationException {
+        SerializerBuffer localSer = new SerializerBuffer();
+        serialize(localSer);
+        int size = localSer.toByteArray().length;
+        ser.writeI32(size);
     }
 
     @Override
@@ -127,7 +123,7 @@ public abstract class AbstractCLValue<T, P extends AbstractCLType>
         try {
             this.deserializeCustom(deserializerBuffer);
         } catch (Exception e) {
-            throw new ValueDeserializationException("Error serializing value", e);
+            throw new ValueDeserializationException("Error deserializing value", e);
         }
     }
 

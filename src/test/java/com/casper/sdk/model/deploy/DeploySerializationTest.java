@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class DeploySerializationTest extends AbstractJsonTests {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DeployDataTests.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DeploySerializationTest.class);
 
     @Test
     void deploySerialization() throws IOException, NoSuchTypeException, ValueSerializationException {

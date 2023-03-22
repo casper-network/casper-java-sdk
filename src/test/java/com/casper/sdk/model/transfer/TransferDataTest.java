@@ -1,10 +1,10 @@
 package com.casper.sdk.model.transfer;
 
 import com.casper.sdk.model.AbstractJsonTests;
-import com.casper.sdk.model.status.StatusDataTests;
 import org.json.JSONException;
 import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
+import org.skyscreamer.jsonassert.JSONCompareMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  */
 public class TransferDataTest extends AbstractJsonTests {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(StatusDataTests.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(TransferDataTest.class);
 
     @Test
     void validateDictionaryMapping() throws IOException, JSONException {
@@ -40,6 +40,6 @@ public class TransferDataTest extends AbstractJsonTests {
 
         LOGGER.debug("Serialized JSON: {}", expectedJson);
 
-        JSONAssert.assertEquals(inputJson, expectedJson, false);
+        JSONAssert.assertEquals(inputJson, expectedJson, JSONCompareMode.NON_EXTENSIBLE);
     }
 }

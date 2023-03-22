@@ -1,10 +1,10 @@
 package com.casper.sdk.model.stateroothash;
 
 import com.casper.sdk.model.AbstractJsonTests;
-import com.casper.sdk.model.status.StatusDataTests;
 import org.json.JSONException;
 import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
+import org.skyscreamer.jsonassert.JSONCompareMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,14 +12,14 @@ import java.io.IOException;
 
 /**
  * Unit tests for {@link StateRootHashData}
- * 
+ *
  * @author Alexandre Carvalho
  * @author Andre Bertolace
  * @since 0.0.1
  */
 public class StateRootHashIdentifierTest extends AbstractJsonTests {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(StatusDataTests.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(StateRootHashIdentifierTest.class);
 
     @Test
     void validateStateRootHashMapping() throws IOException, JSONException {
@@ -36,6 +36,6 @@ public class StateRootHashIdentifierTest extends AbstractJsonTests {
 
         LOGGER.debug("Serialized JSON: {}", expectedJson);
 
-        JSONAssert.assertEquals(inputJson, expectedJson, false);
+        JSONAssert.assertEquals(inputJson, expectedJson, JSONCompareMode.NON_EXTENSIBLE);
     }
 }
