@@ -66,7 +66,7 @@ final class EventServiceImpl implements EventService {
 
         source.register((inboundSseEvent) -> {
             if (inboundSseEvent.readData() != null) {
-                logger.info("SSE event id: {}, data: {}" + inboundSseEvent.getId(), inboundSseEvent.readData());
+                logger.info("SSE event id: {}, data: {}", inboundSseEvent.getId(), inboundSseEvent.readData());
                 try {
                     consumeEvent(eventBuilder, inboundSseEvent, consumer);
                 } catch (Exception e) {
