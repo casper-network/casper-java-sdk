@@ -27,10 +27,10 @@ public interface EventService {
      * @param eventConsumer the consumer of the events
      * @param <EventT>      the type of the event
      */
-    <EventT extends Event<?>> void consumeEvents(final EventType eventType,
-                                                 final EventTarget eventTarget,
-                                                 final Long startFrom,
-                                                 final Consumer<EventT> eventConsumer);
+    <EventT extends Event<?>> AutoCloseable consumeEvents(final EventType eventType,
+                                                          final EventTarget eventTarget,
+                                                          final Long startFrom,
+                                                          final Consumer<EventT> eventConsumer);
 
     /**
      * Creates a new EventService for the specified host including protocol and port

@@ -16,6 +16,7 @@ public class PathMatchingResourceDispatcher extends Dispatcher {
     private final String resourcePath;
     /** The matcher for the URL request path */
     private final Matcher<String> pathMatcher;
+    private String contentType =  "application/json";
 
     public PathMatchingResourceDispatcher(final String resourcePath, final Matcher<String> pathMatcher) {
         this.resourcePath = resourcePath;
@@ -33,7 +34,7 @@ public class PathMatchingResourceDispatcher extends Dispatcher {
                  final Buffer buffer = new Buffer().readFrom(in)) {
 
                 return new MockResponse().setResponseCode(200)
-                        .addHeader("Content-Type", "application/json")
+                        .addHeader("Content-Type", contentType)
                         .setBody(buffer);
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -42,5 +43,10 @@ public class PathMatchingResourceDispatcher extends Dispatcher {
             // return not found if no match
             return new MockResponse().setResponseCode(404);
         }
+    }
+
+    public Dispatcher setContentType(String contentType) {
+        this.contentType = contentType;
+        return this;
     }
 }
