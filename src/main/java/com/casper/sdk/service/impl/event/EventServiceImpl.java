@@ -54,7 +54,8 @@ final class EventServiceImpl implements EventService {
     public <EventT extends Event<?>> AutoCloseable consumeEvents(final EventType eventType,
                                                                  final EventTarget eventTarget,
                                                                  final Long startFrom,
-                                                                 final Consumer<EventT> consumer) {
+                                                                 final Consumer<EventT> onEvent,
+                                                                 final Consumer<Throwable> onFailure) {
 
         final URL url = urlBuilder.buildUrl(uri, eventType, startFrom);
         logger.info("Targeting SSE URL {}", url);
@@ -68,15 +69,15 @@ final class EventServiceImpl implements EventService {
             if (inboundSseEvent.readData() != null) {
                 logger.info("SSE event id: {}, data: {}", inboundSseEvent.getId(), inboundSseEvent.readData());
                 try {
-                    consumeEvent(eventBuilder, inboundSseEvent, consumer);
+                    consumeEvent(eventBuilder, inboundSseEvent, onEvent);
                 } catch (Exception e) {
                     logger.error("error in consumeEvent", e);
-                    throw e;
+                   onFailure.accept(e);
                 }
             }
         }, throwable -> {
             logger.error("SSE Event Error", throwable);
-            throw new CasperClientException("SSE Event Error", throwable);
+            onFailure.accept(throwable);
         });
         source.open();
 

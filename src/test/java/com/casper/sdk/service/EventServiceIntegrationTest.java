@@ -10,6 +10,7 @@ import com.casper.sdk.model.event.version.ApiVersion;
 import com.casper.sdk.test.MockNode;
 import com.casper.sdk.test.PathMatchingResourceDispatcher;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -95,7 +96,7 @@ class EventServiceIntegrationTest {
             }
             count[0]++;
 
-        })) {
+        }, Assertions::fail)) {
             Thread.sleep(4000L);
 
             assertThat(count[0], is(greaterThan(2)));
@@ -142,7 +143,7 @@ class EventServiceIntegrationTest {
                 assertThat(event.getId().get(), is(2951L));
             }
             count[0]++;
-        })) {
+        }, Assertions::fail)) {
             Thread.sleep(4000L);
             assertThat(count[0], is(2));
         }
@@ -178,7 +179,7 @@ class EventServiceIntegrationTest {
             }
             count[0]++;
 
-        })) {
+        }, Assertions::fail)) {
             Thread.sleep(5000L);
             assertThat(count[0], is(5));
         }
@@ -216,7 +217,7 @@ class EventServiceIntegrationTest {
             }
 
             count[0]++;
-        })) {
+        }, Assertions::fail)) {
             Thread.sleep(2000L);
 
             assertThat(count[0], is(greaterThan(1)));
