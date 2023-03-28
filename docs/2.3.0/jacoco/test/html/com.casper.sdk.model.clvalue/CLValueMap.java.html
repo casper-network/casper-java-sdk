@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CLValueMap.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">casper-java-sdk</a> &gt; <a href="index.source.html" class="el_package">com.casper.sdk.model.clvalue</a> &gt; <span class="el_source">CLValueMap.java</span></div><h1>CLValueMap.java</h1><pre class="source lang-java linenums">package com.casper.sdk.model.clvalue;
+
+import com.casper.sdk.exception.NoSuchTypeException;
+import com.casper.sdk.model.clvalue.cltype.AbstractCLTypeWithChildren;
+import com.casper.sdk.model.clvalue.cltype.CLTypeData;
+import com.casper.sdk.model.clvalue.cltype.CLTypeMap;
+import com.casper.sdk.model.clvalue.serde.Target;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
+import dev.oak3.sbs4j.DeserializerBuffer;
+import dev.oak3.sbs4j.SerializerBuffer;
+import dev.oak3.sbs4j.exception.ValueSerializationException;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.bouncycastle.util.encoders.Hex;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
+/**
+ * Casper Map CLValue implementation
+ *
+ * @author Alexandre Carvalho
+ * @author Andre Bertolace
+ * @see AbstractCLValue
+ * @since 0.0.1
+ */
+@Getter
+@Setter
+<span class="fc" id="L35">@NoArgsConstructor</span>
+public class CLValueMap extends
+        AbstractCLValueWithChildren&lt;Map&lt;? extends AbstractCLValue&lt;?, ?&gt;, ? extends AbstractCLValue&lt;?, ?&gt;&gt;, CLTypeMap&gt; {
+<span class="fc" id="L38">    @JsonProperty(&quot;cl_type&quot;)</span>
+<span class="fc" id="L39">    private CLTypeMap clType = new CLTypeMap();</span>
+
+    @JsonSetter(&quot;cl_type&quot;)
+    public void setClType(CLTypeMap clType) {
+<span class="fc" id="L43">        this.clType = clType;</span>
+<span class="fc" id="L44">        childTypesSet();</span>
+<span class="fc" id="L45">    }</span>
+
+<span class="fc" id="L47">    public CLValueMap(Map&lt;? extends AbstractCLValue&lt;?, ?&gt;, ? extends AbstractCLValue&lt;?, ?&gt;&gt; value) throws ValueSerializationException {</span>
+<span class="fc" id="L48">        setChildTypes(value);</span>
+<span class="fc" id="L49">        this.setValue(value);</span>
+<span class="fc" id="L50">    }</span>
+
+    @Override
+    public void serialize(SerializerBuffer ser, Target target) throws ValueSerializationException, NoSuchTypeException {
+<span class="pc bpc" id="L54" title="1 of 2 branches missed.">        if (this.getValue() == null) return;</span>
+
+<span class="pc bpc" id="L56" title="1 of 2 branches missed.">        if (target.equals(Target.BYTE)) {</span>
+<span class="nc" id="L57">            super.serializePrefixWithLength(ser);</span>
+        }
+
+<span class="fc" id="L60">        setChildTypes(this.getValue());</span>
+
+<span class="fc" id="L62">        CLValueI32 mapLength = new CLValueI32(getValue().size());</span>
+<span class="fc" id="L63">        mapLength.serialize(ser);</span>
+
+<span class="fc bfc" id="L65" title="All 2 branches covered.">        for (Entry&lt;? extends AbstractCLValue&lt;?, ?&gt;, ? extends AbstractCLValue&lt;?, ?&gt;&gt; entry : getValue().entrySet()) {</span>
+<span class="fc" id="L66">            entry.getKey().serialize(ser);</span>
+<span class="fc" id="L67">            entry.getValue().serialize(ser);</span>
+<span class="fc" id="L68">        }</span>
+
+<span class="pc bpc" id="L70" title="1 of 2 branches missed.">        if (target.equals(Target.BYTE)) {</span>
+<span class="nc" id="L71">            this.encodeType(ser);</span>
+        }
+
+<span class="fc" id="L74">        this.setBytes(Hex.toHexString(ser.toByteArray()));</span>
+<span class="fc" id="L75">    }</span>
+
+    @Override
+    public void deserializeCustom(DeserializerBuffer deser) throws Exception {
+<span class="fc" id="L79">        CLTypeData keyType = clType.getKeyValueTypes().getKeyType().getClTypeData();</span>
+<span class="fc" id="L80">        CLTypeData valType = clType.getKeyValueTypes().getValueType().getClTypeData();</span>
+
+<span class="fc" id="L82">        Map&lt;AbstractCLValue&lt;?, ?&gt;, AbstractCLValue&lt;?, ?&gt;&gt; map = new LinkedHashMap&lt;&gt;();</span>
+<span class="fc" id="L83">        CLValueI32 mapLength = new CLValueI32(0);</span>
+<span class="fc" id="L84">        mapLength.deserializeCustom(deser);</span>
+
+<span class="fc bfc" id="L86" title="All 2 branches covered.">        for (int i = 0; i &lt; mapLength.getValue(); i++) {</span>
+<span class="fc" id="L87">            AbstractCLValue&lt;?, ?&gt; key = CLTypeData.createCLValueFromCLTypeData(keyType);</span>
+<span class="pc bpc" id="L88" title="1 of 2 branches missed.">            if (key.getClType() instanceof AbstractCLTypeWithChildren) {</span>
+<span class="nc" id="L89">                ((AbstractCLTypeWithChildren) key.getClType())</span>
+<span class="nc" id="L90">                        .setChildTypes(</span>
+<span class="nc" id="L91">                                ((AbstractCLTypeWithChildren) clType.getKeyValueTypes().getKeyType()).getChildTypes());</span>
+            }
+<span class="fc" id="L93">            key.deserializeCustom(deser);</span>
+
+<span class="fc" id="L95">            AbstractCLValue&lt;?, ?&gt; val = CLTypeData.createCLValueFromCLTypeData(valType);</span>
+
+<span class="pc bpc" id="L97" title="1 of 2 branches missed.">            if (val.getClType() instanceof CLTypeMap) {</span>
+<span class="nc" id="L98">                ((CLTypeMap) val.getClType())</span>
+<span class="nc" id="L99">                        .setKeyValueTypes(((CLTypeMap) clType.getKeyValueTypes().getValueType()).getKeyValueTypes());</span>
+<span class="fc bfc" id="L100" title="All 2 branches covered.">            } else if (val.getClType() instanceof AbstractCLTypeWithChildren) {</span>
+<span class="fc" id="L101">                ((AbstractCLTypeWithChildren) val.getClType())</span>
+<span class="fc" id="L102">                        .setChildTypes(((AbstractCLTypeWithChildren) clType.getKeyValueTypes().getValueType())</span>
+<span class="fc" id="L103">                                .getChildTypes());</span>
+            }
+<span class="fc" id="L105">            val.deserializeCustom(deser);</span>
+
+<span class="fc" id="L107">            map.put(key, val);</span>
+        }
+
+<span class="fc" id="L110">        setValue(map);</span>
+<span class="fc" id="L111">    }</span>
+
+    @Override
+    @JsonIgnore
+    protected void setChildTypes(Map&lt;? extends AbstractCLValue&lt;?, ?&gt;, ? extends AbstractCLValue&lt;?, ?&gt;&gt; value) {
+<span class="fc" id="L116">        Entry&lt;? extends AbstractCLValue&lt;?, ?&gt;, ? extends AbstractCLValue&lt;?, ?&gt;&gt; entry = value.entrySet().iterator().next();</span>
+<span class="fc" id="L117">        clType.setKeyValueTypes(new CLTypeMap.CLTypeMapEntryType(entry.getKey().getClType(), entry.getValue().getClType()));</span>
+<span class="fc" id="L118">    }</span>
+
+    // This needed to be customized to ensure equality is being checked correctly.
+    // The java Map equals method tries to get the &quot;other&quot; map entry's value by using &quot;this&quot; key object,
+    // which then fails to find the object since they are &quot;different&quot; and returns always null.
+    @Override
+    public boolean equals(final Object o) {
+<span class="pc bpc" id="L125" title="1 of 2 branches missed.">        if (o == this) return true;</span>
+<span class="pc bpc" id="L126" title="1 of 2 branches missed.">        if (!(o instanceof CLValueMap)) return false;</span>
+<span class="fc" id="L127">        final CLValueMap other = (CLValueMap) o;</span>
+<span class="pc bpc" id="L128" title="1 of 2 branches missed.">        if (!other.canEqual(this)) return false;</span>
+
+<span class="fc" id="L130">        final Object this$clType = this.getClType();</span>
+<span class="fc" id="L131">        final Object other$clType = other.getClType();</span>
+<span class="pc bpc" id="L132" title="1 of 2 branches missed.">        if (!Objects.equals(this$clType, other$clType)) return false;</span>
+
+<span class="fc" id="L134">        final Object this$bytes = this.getBytes();</span>
+<span class="fc" id="L135">        final Object other$bytes = other.getBytes();</span>
+<span class="pc bpc" id="L136" title="1 of 2 branches missed.">        if (!Objects.equals(this$bytes, other$bytes)) return false;</span>
+<span class="fc" id="L137">        final Map&lt;? extends AbstractCLValue&lt;?, ?&gt;, ? extends AbstractCLValue&lt;?, ?&gt;&gt; this$value = this.getValue();</span>
+<span class="fc" id="L138">        final Map&lt;? extends AbstractCLValue&lt;?, ?&gt;, ? extends AbstractCLValue&lt;?, ?&gt;&gt; other$value = other.getValue();</span>
+
+<span class="fc bfc" id="L140" title="All 2 branches covered.">        for (Entry&lt;? extends AbstractCLValue&lt;?, ?&gt;, ? extends AbstractCLValue&lt;?, ?&gt;&gt; this$entry : this$value.entrySet()) {</span>
+<span class="fc" id="L141">            AbstractCLValue&lt;?, ?&gt; this$entryKey = this$entry.getKey();</span>
+<span class="fc" id="L142">            AbstractCLValue&lt;?, ?&gt; this$entryValue = this$entry.getValue();</span>
+<span class="fc" id="L143">            boolean found = false;</span>
+<span class="pc bpc" id="L144" title="1 of 2 branches missed.">            for (Entry&lt;? extends AbstractCLValue&lt;?, ?&gt;, ? extends AbstractCLValue&lt;?, ?&gt;&gt; other$entry : other$value.entrySet()) {</span>
+<span class="fc" id="L145">                AbstractCLValue&lt;?, ?&gt; other$entryKey = other$entry.getKey();</span>
+<span class="fc" id="L146">                AbstractCLValue&lt;?, ?&gt; other$entryValue = other$entry.getValue();</span>
+<span class="pc bpc" id="L147" title="2 of 4 branches missed.">                if (this$entryKey.equals(other$entryKey) &amp;&amp; this$entryValue.equals(other$entryValue)) {</span>
+<span class="fc" id="L148">                    found = true;</span>
+<span class="fc" id="L149">                    break;</span>
+                }
+<span class="nc" id="L151">            }</span>
+<span class="pc bpc" id="L152" title="1 of 2 branches missed.">            if (!found) return false;</span>
+<span class="fc" id="L153">        }</span>
+
+<span class="fc" id="L155">        return true;</span>
+    }
+
+    protected boolean canEqual(final Object other) {
+<span class="fc" id="L159">        return other instanceof CLValueMap;</span>
+    }
+
+    @Override
+    public int hashCode() {
+<span class="nc" id="L164">        final int PRIME = 59;</span>
+<span class="nc" id="L165">        int result = super.hashCode();</span>
+<span class="nc" id="L166">        final Object $clType = this.getClType();</span>
+<span class="nc bnc" id="L167" title="All 2 branches missed.">        result = result * PRIME + ($clType == null ? 43 : $clType.hashCode());</span>
+<span class="nc" id="L168">        return result;</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="nc bnc" id="L173" title="All 2 branches missed.">        return getValue() != null ? getValue().keySet().stream().map(key -&gt; key.getValue().toString() + &quot;=&quot; + key.getValue().toString()).collect(Collectors.joining(&quot;, &quot;)) : null;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

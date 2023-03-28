@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CLValueResult.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">casper-java-sdk</a> &gt; <a href="index.source.html" class="el_package">com.casper.sdk.model.clvalue</a> &gt; <span class="el_source">CLValueResult.java</span></div><h1>CLValueResult.java</h1><pre class="source lang-java linenums">package com.casper.sdk.model.clvalue;
+
+import com.casper.sdk.exception.NoSuchTypeException;
+import com.casper.sdk.model.clvalue.cltype.AbstractCLTypeWithChildren;
+import com.casper.sdk.model.clvalue.cltype.CLTypeData;
+import com.casper.sdk.model.clvalue.cltype.CLTypeResult;
+import com.casper.sdk.model.clvalue.serde.Target;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import dev.oak3.sbs4j.DeserializerBuffer;
+import dev.oak3.sbs4j.SerializerBuffer;
+import dev.oak3.sbs4j.exception.ValueSerializationException;
+import lombok.*;
+import org.bouncycastle.util.encoders.Hex;
+
+/**
+ * Casper Result CLValue implementation
+ *
+ * @author Alexandre Carvalho
+ * @author Andre Bertolace
+ * @see AbstractCLValue
+ * @since 0.0.1
+ */
+@Getter
+<span class="fc" id="L24">@Setter</span>
+<span class="pc bpc" id="L25" title="10 of 16 branches missed.">@EqualsAndHashCode(callSuper = true)</span>
+<span class="fc" id="L26">@NoArgsConstructor</span>
+public class CLValueResult extends AbstractCLValue&lt;CLValueResult.Result, CLTypeResult&gt; {
+    /**
+     * `Result` with `Ok` and `Err` variants of `CLType`s.
+     *
+     * @author Alexandre Carvalho
+     * @author Andre Bertolace
+     * @see CLTypeData
+     * @since 0.0.1
+     */
+    @Getter
+<span class="fc" id="L37">    @Setter</span>
+<span class="pc bpc" id="L38" title="15 of 22 branches missed.">    @EqualsAndHashCode</span>
+<span class="fc" id="L39">    @NoArgsConstructor(access = AccessLevel.PROTECTED)</span>
+<span class="fc" id="L40">    @AllArgsConstructor(access = AccessLevel.PROTECTED)</span>
+    protected static class Result {
+<span class="fc" id="L42">        private AbstractCLValue&lt;?, ?&gt; ok;</span>
+
+<span class="fc" id="L44">        private AbstractCLValue&lt;?, ?&gt; err;</span>
+    }
+
+<span class="fc" id="L47">    @JsonProperty(&quot;cl_type&quot;)</span>
+<span class="fc" id="L48">    private CLTypeResult clType = new CLTypeResult();</span>
+
+<span class="fc" id="L50">    public CLValueResult(AbstractCLValue&lt;?, ?&gt; ok, AbstractCLValue&lt;?, ?&gt; err) throws ValueSerializationException {</span>
+<span class="fc" id="L51">        setChildTypes(ok, err);</span>
+<span class="fc" id="L52">        this.setValue(new Result(ok, err));</span>
+<span class="fc" id="L53">    }</span>
+
+    @Override
+    public void serialize(SerializerBuffer ser, Target target) throws ValueSerializationException, NoSuchTypeException {
+<span class="pc bpc" id="L57" title="1 of 2 branches missed.">        if (this.getValue() == null) return;</span>
+
+<span class="pc bpc" id="L59" title="1 of 2 branches missed.">        if (target.equals(Target.BYTE)) {</span>
+<span class="nc" id="L60">            super.serializePrefixWithLength(ser);</span>
+        }
+
+<span class="fc" id="L63">        setChildTypes(this.getValue().getOk(), this.getValue().getErr());</span>
+
+<span class="fc" id="L65">        CLValueBool clValueTrue = new CLValueBool(true);</span>
+<span class="fc" id="L66">        clValueTrue.serialize(ser);</span>
+
+<span class="fc" id="L68">        getValue().getOk().serialize(ser);</span>
+
+<span class="fc" id="L70">        CLValueBool clValueFalse = new CLValueBool(false);</span>
+<span class="fc" id="L71">        clValueFalse.serialize(ser);</span>
+
+<span class="fc" id="L73">        getValue().getErr().serialize(ser);</span>
+
+<span class="pc bpc" id="L75" title="1 of 2 branches missed.">        if (target.equals(Target.BYTE)) {</span>
+<span class="nc" id="L76">            this.encodeType(ser);</span>
+        }
+
+<span class="fc" id="L79">        this.setBytes(Hex.toHexString(ser.toByteArray()));</span>
+<span class="fc" id="L80">    }</span>
+
+    @Override
+    public void deserializeCustom(DeserializerBuffer deser) throws Exception {
+<span class="fc" id="L84">        Result result = new Result();</span>
+<span class="fc" id="L85">        CLValueBool bool = new CLValueBool();</span>
+<span class="fc" id="L86">        bool.setValue(deser.readBool());</span>
+<span class="fc" id="L87">        CLTypeData typeOk = clType.getOkErrTypes().getOkClType().getClTypeData();</span>
+<span class="fc" id="L88">        AbstractCLValue&lt;?, ?&gt; clValueOk = CLTypeData.createCLValueFromCLTypeData(typeOk);</span>
+<span class="pc bpc" id="L89" title="1 of 2 branches missed.">        if (clValueOk.getClType() instanceof AbstractCLTypeWithChildren) {</span>
+<span class="nc" id="L90">            ((AbstractCLTypeWithChildren) clValueOk.getClType()).getChildTypes()</span>
+<span class="nc" id="L91">                    .addAll(((AbstractCLTypeWithChildren) clType.getOkErrTypes().getOkClType()).getChildTypes());</span>
+        }
+<span class="fc" id="L93">        clValueOk.deserializeCustom(deser);</span>
+<span class="fc" id="L94">        result.setOk(clValueOk);</span>
+
+<span class="fc" id="L96">        bool = new CLValueBool();</span>
+<span class="fc" id="L97">        bool.deserializeCustom(deser);</span>
+<span class="fc" id="L98">        CLTypeData typeErr = clType.getOkErrTypes().getErrClType().getClTypeData();</span>
+<span class="fc" id="L99">        AbstractCLValue&lt;?, ?&gt; clValueErr = CLTypeData.createCLValueFromCLTypeData(typeErr);</span>
+<span class="fc bfc" id="L100" title="All 2 branches covered.">        if (clValueErr.getClType() instanceof AbstractCLTypeWithChildren) {</span>
+<span class="fc" id="L101">            ((AbstractCLTypeWithChildren) clValueErr.getClType()).getChildTypes()</span>
+<span class="fc" id="L102">                    .addAll(((AbstractCLTypeWithChildren) clType.getOkErrTypes().getErrClType()).getChildTypes());</span>
+        }
+<span class="fc" id="L104">        clValueErr.deserializeCustom(deser);</span>
+<span class="fc" id="L105">        result.setErr(clValueErr);</span>
+
+<span class="fc" id="L107">        setValue(result);</span>
+<span class="fc" id="L108">    }</span>
+
+    protected void setChildTypes(AbstractCLValue&lt;?, ?&gt; ok, AbstractCLValue&lt;?, ?&gt; err) {
+<span class="fc" id="L111">        clType.setOkErrTypes(</span>
+<span class="fc" id="L112">                new CLTypeResult.CLTypeResultOkErrTypes(ok.getClType(), err.getClType()));</span>
+<span class="fc" id="L113">    }</span>
+
+    @Override
+    public String toString() {
+<span class="nc bnc" id="L117" title="All 2 branches missed.">        return getValue() != null ? &quot;Ok: &quot; + getValue().getOk().getValue().toString() + &quot;, &quot; + &quot;Err: &quot; + getValue().getErr().getValue().toString() : null;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
