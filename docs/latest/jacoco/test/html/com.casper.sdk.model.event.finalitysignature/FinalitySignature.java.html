@@ -12,23 +12,23 @@ import lombok.*;
  * signers' combined weight exceeds their fault tolerance threshold before accepting the block as finalized.
  */
 @Getter
-<span class="fc" id="L15">@Setter</span>
+<span class="nc" id="L15">@Setter</span>
 <span class="nc" id="L16">@Builder</span>
 <span class="nc" id="L17">@AllArgsConstructor</span>
-<span class="fc" id="L18">@NoArgsConstructor</span>
+<span class="nc" id="L18">@NoArgsConstructor</span>
 @JsonTypeName(&quot;FinalitySignature&quot;)
 public class FinalitySignature implements EventData {
 
     @JsonProperty(&quot;block_hash&quot;)
-<span class="fc" id="L23">    private Digest blockHash;</span>
+<span class="nc" id="L23">    private Digest blockHash;</span>
 
     @JsonProperty(&quot;era_id&quot;)
-<span class="fc" id="L26">    private long eraId;</span>
+<span class="nc" id="L26">    private long eraId;</span>
 
     @JsonProperty(&quot;public_key&quot;)
-<span class="fc" id="L29">    private PublicKey publicKey;</span>
+<span class="nc" id="L29">    private PublicKey publicKey;</span>
 
     @JsonProperty(&quot;signature&quot;)
-<span class="fc" id="L32">    private String signature;</span>
+<span class="nc" id="L32">    private String signature;</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

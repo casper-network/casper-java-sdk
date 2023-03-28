@@ -10,22 +10,22 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
-<span class="fc" id="L13">@Setter</span>
+<span class="nc" id="L13">@Setter</span>
 <span class="nc" id="L14">@AllArgsConstructor</span>
-<span class="fc" id="L15">@NoArgsConstructor</span>
+<span class="nc" id="L15">@NoArgsConstructor</span>
 @JsonTypeName(&quot;Fault&quot;)
 public class Fault implements EventData {
 
     /** The period of time used to specify when specific events in a blockchain network occur. */
     @JsonProperty(&quot;era_id&quot;)
-<span class="fc" id="L21">    private Long eraId;</span>
+<span class="nc" id="L21">    private Long eraId;</span>
 
     /** A unique personal address that is shared in the network. */
     @JsonProperty(&quot;public_key&quot;)
-<span class="fc" id="L25">    private PublicKey publicKey;</span>
+<span class="nc" id="L25">    private PublicKey publicKey;</span>
 
     /** A timestamp type, representing a concrete moment in time of the fault. */
     @JsonProperty(&quot;timestamp&quot;)
-<span class="fc" id="L29">    private String timestamp; // TODO convert to data</span>
+<span class="nc" id="L29">    private String timestamp; // TODO convert to data</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

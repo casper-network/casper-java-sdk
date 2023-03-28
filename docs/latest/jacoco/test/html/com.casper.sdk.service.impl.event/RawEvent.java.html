@@ -19,10 +19,11 @@ final class RawEvent extends AbstractEvent&lt;String&gt; {
 <span class="fc" id="L19">    }</span>
 
     private static DataType getDataType(final String data) {
-<span class="fc" id="L22">        final int start = data.indexOf(':');</span>
-<span class="fc" id="L23">        final int end = data.indexOf(':', start + 1);</span>
-<span class="fc" id="L24">        final String dataTypeName = data.substring(start + 3, end - 1);</span>
-<span class="fc" id="L25">        return DataType.of(dataTypeName.trim());</span>
+
+<span class="fc" id="L23">        final String replace = data.substring(2);</span>
+<span class="fc" id="L24">        final String[] split = replace.split(&quot;:&quot;);</span>
+<span class="fc" id="L25">        final String dataTypeName = split[0].substring(0, split[0].length() - 1);</span>
+<span class="fc" id="L26">        return DataType.of(dataTypeName.trim());</span>
     }
 }
 

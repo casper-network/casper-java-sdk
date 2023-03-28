@@ -21,16 +21,18 @@ public interface EventService {
      * Reads a stream of events from a node
      * *
      *
-     * @param eventType     the type of event to read
-     * @param eventTarget   the target of the event JSON string or POJO
-     * @param startFrom     the optional event to start streaming from, if not present only obtains new events
-     * @param eventConsumer the consumer of the events
-     * @param &lt;EventT&gt;      the type of the event
+     * @param eventType   the type of event to read
+     * @param eventTarget the target of the event JSON string or POJO
+     * @param startFrom   the optional event to start streaming from, if not present only obtains new events
+     * @param onSuccess   the consumer of the successful events
+     * @param onFailure   the consumer of  failures
+     * @param &lt;EventT&gt;    the type of the event
      */
-    &lt;EventT extends Event&lt;?&gt;&gt; void consumeEvents(final EventType eventType,
-                                                 final EventTarget eventTarget,
-                                                 final Long startFrom,
-                                                 final Consumer&lt;EventT&gt; eventConsumer);
+    &lt;EventT extends Event&lt;?&gt;&gt; AutoCloseable consumeEvents(final EventType eventType,
+                                                          final EventTarget eventTarget,
+                                                          final Long startFrom,
+                                                          final Consumer&lt;EventT&gt; onSuccess,
+                                                          final Consumer&lt;Throwable&gt; onFailure);
 
     /**
      * Creates a new EventService for the specified host including protocol and port
@@ -39,7 +41,7 @@ public interface EventService {
      * @return the event service for the specified host
      */
     static EventService usingPeer(final URI uri) {
-<span class="fc" id="L42">        return EventServiceFactory.create(uri);</span>
+<span class="fc" id="L44">        return EventServiceFactory.create(uri);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

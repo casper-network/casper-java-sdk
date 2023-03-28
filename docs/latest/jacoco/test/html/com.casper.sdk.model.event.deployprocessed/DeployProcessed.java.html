@@ -19,18 +19,18 @@ import java.util.List;
  * @author ian@meywood.com 
  */
 @Getter
-<span class="fc" id="L22">@Setter</span>
+<span class="nc" id="L22">@Setter</span>
 <span class="nc" id="L23">@Builder</span>
 <span class="nc" id="L24">@AllArgsConstructor</span>
-<span class="fc" id="L25">@NoArgsConstructor</span>
+<span class="nc" id="L25">@NoArgsConstructor</span>
 @JsonTypeName(&quot;DeployProcessed&quot;)
 public class DeployProcessed implements EventData {
 
     @JsonProperty(&quot;deploy_hash&quot;)
-<span class="fc" id="L30">    private Digest deployHash;</span>
+<span class="nc" id="L30">    private Digest deployHash;</span>
 
     @JsonProperty(&quot;account&quot;)
-<span class="fc" id="L33">    private Digest account;</span>
+<span class="nc" id="L33">    private Digest account;</span>
 
     @JsonProperty(&quot;timestamp&quot;)
 <span class="nc" id="L36">    private String timestamp; // TODO convert to data</span>

@@ -31,9 +31,9 @@ final class EventRoot&lt;T extends EventData&gt; {
         // Default constructor needed for Jackson deserialization
 <span class="fc" id="L32">    }</span>
 
-<span class="fc" id="L34">    public EventRoot(final T data) {</span>
-<span class="fc" id="L35">        this.data = data;</span>
-<span class="fc" id="L36">    }</span>
+<span class="nc" id="L34">    public EventRoot(final T data) {</span>
+<span class="nc" id="L35">        this.data = data;</span>
+<span class="nc" id="L36">    }</span>
 
     /**
      * Setter for ApiVersion due to @JsonAlias not working as expected
@@ -65,8 +65,8 @@ final class EventRoot&lt;T extends EventData&gt; {
     @JsonProperty(&quot;FinalitySignature&quot;)
     public void setFinalitySignature(final FinalitySignature finalitySignature) {
         //noinspection unchecked
-<span class="fc" id="L68">        this.data = (T) finalitySignature;</span>
-<span class="fc" id="L69">    }</span>
+<span class="nc" id="L68">        this.data = (T) finalitySignature;</span>
+<span class="nc" id="L69">    }</span>
 
     /**
      * Setter for DeployAccepted due to @JsonAlias not working as expected
@@ -76,8 +76,8 @@ final class EventRoot&lt;T extends EventData&gt; {
     @JsonProperty(&quot;DeployAccepted&quot;)
     public void setDeployAccepted(final DeployAccepted deployAccepted) {
         //noinspection unchecked
-<span class="fc" id="L79">        this.data = (T) deployAccepted;</span>
-<span class="fc" id="L80">    }</span>
+<span class="nc" id="L79">        this.data = (T) deployAccepted;</span>
+<span class="nc" id="L80">    }</span>
 
     /**
      * Setter for DeployProcessed due to @JsonAlias not working as expected
@@ -87,8 +87,8 @@ final class EventRoot&lt;T extends EventData&gt; {
     @JsonProperty(&quot;DeployProcessed&quot;)
     public void setDeployProcessed(final DeployProcessed deployProcessed) {
         //noinspection unchecked
-<span class="fc" id="L90">        this.data = (T) deployProcessed;</span>
-<span class="fc" id="L91">    }</span>
+<span class="nc" id="L90">        this.data = (T) deployProcessed;</span>
+<span class="nc" id="L91">    }</span>
 
     /**
      * Setter for DeployExpired due to @JsonAlias not working as expected
@@ -98,8 +98,8 @@ final class EventRoot&lt;T extends EventData&gt; {
     @JsonProperty(&quot;DeployExpired&quot;)
     public void setDeployExpired(final DeployExpired deployExpired) {
         //noinspection unchecked
-<span class="fc" id="L101">        this.data = (T) deployExpired;</span>
-<span class="fc" id="L102">    }</span>
+<span class="nc" id="L101">        this.data = (T) deployExpired;</span>
+<span class="nc" id="L102">    }</span>
 
     /**
      * Setter for Fault due to @JsonAlias not working as expected
@@ -109,8 +109,8 @@ final class EventRoot&lt;T extends EventData&gt; {
     @JsonProperty(&quot;Fault&quot;)
     public void setFault(final Fault fault) {
         //noinspection unchecked
-<span class="fc" id="L112">        this.data = (T) fault;</span>
-<span class="fc" id="L113">    }</span>
+<span class="nc" id="L112">        this.data = (T) fault;</span>
+<span class="nc" id="L113">    }</span>
 
     /**
      * Setter for Shutdown due to @JsonAlias not working as expected
