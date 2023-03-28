@@ -1,6 +1,6 @@
 package com.casper.sdk.service.impl.event;
 
-import com.casper.sdk.exception.CasperClientException;
+import com.casper.sdk.exception.CasperSseProcessingException;
 import com.casper.sdk.model.event.Event;
 import com.casper.sdk.model.event.EventTarget;
 import com.casper.sdk.model.event.EventType;
@@ -65,6 +65,7 @@ final class EventServiceImpl implements EventService {
 
         final SseEventSource source = SseEventSource.target(target).build();
 
+
         source.register((inboundSseEvent) -> {
             if (inboundSseEvent.readData() != null) {
                 logger.info("SSE event id: {}, data: {}", inboundSseEvent.getId(), inboundSseEvent.readData());
@@ -72,7 +73,7 @@ final class EventServiceImpl implements EventService {
                     consumeEvent(eventBuilder, inboundSseEvent, onEvent);
                 } catch (Exception e) {
                     logger.error("error in consumeEvent", e);
-                   onFailure.accept(e);
+                    onFailure.accept(new CasperSseProcessingException(e, inboundSseEvent));
                 }
             }
         }, throwable -> {
