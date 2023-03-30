@@ -21,16 +21,18 @@ public interface EventService {
      * Reads a stream of events from a node
      * *
      *
-     * @param eventType     the type of event to read
-     * @param eventTarget   the target of the event JSON string or POJO
-     * @param startFrom     the optional event to start streaming from, if not present only obtains new events
-     * @param eventConsumer the consumer of the events
-     * @param <EventT>      the type of the event
+     * @param eventType   the type of event to read
+     * @param eventTarget the target of the event JSON string or POJO
+     * @param startFrom   the optional event to start streaming from, if not present only obtains new events
+     * @param onSuccess   the consumer of the successful events
+     * @param onFailure   the consumer of  failures
+     * @param <EventT>    the type of the event
      */
-    <EventT extends Event<?>> void consumeEvents(final EventType eventType,
-                                                 final EventTarget eventTarget,
-                                                 final Long startFrom,
-                                                 final Consumer<EventT> eventConsumer);
+    <EventT extends Event<?>> AutoCloseable consumeEvents(final EventType eventType,
+                                                          final EventTarget eventTarget,
+                                                          final Long startFrom,
+                                                          final Consumer<EventT> onSuccess,
+                                                          final Consumer<Throwable> onFailure);
 
     /**
      * Creates a new EventService for the specified host including protocol and port
