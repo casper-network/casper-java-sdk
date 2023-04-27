@@ -11,11 +11,13 @@ import com.casper.sdk.model.deploy.executabledeploy.ModuleBytes;
 import com.casper.sdk.service.CasperService;
 import com.syntifi.crypto.key.Ed25519PrivateKey;
 import org.apache.commons.io.IOUtils;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -53,6 +55,7 @@ public class DeployWasmTest {
 
         // Load faucet private key
         final URL faucetPrivateKeyUrl = getClass().getResource(FAUCET_SECRET_KEY_PATH);
+        Assertions.assertNotNull(faucetPrivateKeyUrl);
         final Ed25519PrivateKey privateKey = new Ed25519PrivateKey();
         privateKey.readPrivateKey(faucetPrivateKeyUrl.getFile());
 
@@ -73,7 +76,7 @@ public class DeployWasmTest {
                 CasperConstants.DEFAULT_GAS_PRICE.value,
                 Ttl.builder().ttl("30m").build(),
                 new Date(),
-                null
+                new ArrayList<>()
         );
 
         final CasperService casperService = CasperService.usingPeer("localhost", 11101);
