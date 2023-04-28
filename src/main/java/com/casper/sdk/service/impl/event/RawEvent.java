@@ -19,9 +19,10 @@ final class RawEvent extends AbstractEvent<String> {
     }
 
     private static DataType getDataType(final String data) {
-        final int start = data.indexOf(':');
-        final int end = data.indexOf(':', start + 1);
-        final String dataTypeName = data.substring(start + 3, end - 1);
+
+        final String replace = data.substring(2);
+        final String[] split = replace.split(":");
+        final String dataTypeName = split[0].substring(0, split[0].length() - 1);
         return DataType.of(dataTypeName.trim());
     }
 }
