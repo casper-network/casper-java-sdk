@@ -18,8 +18,6 @@ import org.jetbrains.annotations.NotNull;
  */
 final class EventBuilder {
 
-    public static final String DATA = "data:";
-    public static final String ID = "id:";
     public static final String API_VERSION = "ApiVersion";
     public static final String SHUTDOWN = "\"Shutdown\"";
     /** The most recent ID read from an event stream */
@@ -49,20 +47,19 @@ final class EventBuilder {
         return (id != null || !idExpected) && data != null;
     }
 
-    boolean processLine(final String line) {
+    boolean processLine(final String id, final String data) {
         try {
 
             // Remove any leading or trailing whitespace
-            final String trimmed = line.trim();
+            final String trimmed = data.trim();
 
-            if (line.startsWith(DATA)) {
+            if (data.startsWith("{")) {
                 this.data = trimmed;
+                this.id = getId(id);
                 idExpected = isIdExpected(trimmed);
             }
 
-            if (isId(trimmed)) {
-                this.id = getId(trimmed);
-            } else if (isApiVersion(trimmed)) {
+            if (isApiVersion(trimmed)) {
                 this.version = getVersion(trimmed);
             }
 
@@ -72,22 +69,19 @@ final class EventBuilder {
         }
     }
 
+
     private String getVersion(final String line) {
         // remove all but version number from: data:{"ApiVersion":"1.0.0"}
-        return line.replace("data:{\"ApiVersion\":\"", "")
-                .replace("\"}","");
+        return line.replace("{\"ApiVersion\":\"", "")
+                .replace("\"}", "");
     }
 
     private boolean isIdExpected(String line) {
         return !isApiVersion(line);
     }
 
-    private boolean isId(final String line) {
-        return line.startsWith(ID);
-    }
-
-    private Long getId(final String line) {
-        return Long.valueOf(line.substring(ID.length()));
+    private Long getId(final String id) {
+        return id != null ? Long.valueOf(id): null;
     }
 
     private boolean isApiVersion(final String line) {
@@ -115,8 +109,7 @@ final class EventBuilder {
     private <T extends EventData> PojoEvent<T> buildPojoEvent() {
         final PojoEvent<T> event;
         try {
-            // Remove the "data:" prefix from the line
-            final String value = data.substring(DATA.length()).trim();
+            final String value = data.trim();
 
             final EventRoot<T> root;
             if (SHUTDOWN.equals(value)) {

@@ -16,7 +16,7 @@ class RawEventTest {
     void rawEvent() {
 
         final String source = "http://localhost:9999";
-        final String data = "data:{\"ApiVersion\":\"1.0.0\"}";
+        final String data = "{\"ApiVersion\":\"1.0.0\"}";
         final String version = "1.2.3";
 
         final RawEvent rawEvent = new RawEvent(EventType.MAIN, source, 1L, data, version);

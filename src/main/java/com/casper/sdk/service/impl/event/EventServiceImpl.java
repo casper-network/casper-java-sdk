@@ -1,21 +1,21 @@
 package com.casper.sdk.service.impl.event;
 
-import com.casper.sdk.exception.CasperClientException;
+import com.casper.sdk.exception.CasperSseProcessingException;
 import com.casper.sdk.model.event.Event;
 import com.casper.sdk.model.event.EventTarget;
 import com.casper.sdk.model.event.EventType;
-import com.casper.sdk.service.EventConsumer;
 import com.casper.sdk.service.EventService;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.sse.InboundSseEvent;
+import javax.ws.rs.sse.SseEventSource;
 import java.net.URI;
-import java.time.Duration;
+import java.net.URL;
 import java.util.function.Consumer;
 
 /**
@@ -30,15 +30,13 @@ final class EventServiceImpl implements EventService {
     private static final String APPLICATION_JSON = "application/json";
     public static final String ACCEPT = "Accept";
     public static final String CONTENT_TYPE = "Content-Type";
-
     /** Build the URLs for event get requests */
     private final EventUrlBuilder urlBuilder = new EventUrlBuilder();
-
     /** The URI of the node to request events from */
     private final URI uri;
-
-    /** The HTTP Client to connect to the node with */
-    final OkHttpClient client;
+    /** The SSE Client */
+    private final Client sssClient = ClientBuilder.newClient();
+    private final Logger logger = LoggerFactory.getLogger(EventServiceImpl.class);
 
     /**
      * Constructs a new {@link EventServiceImpl}, is private to prevent API users construction manually. To create the
@@ -48,65 +46,47 @@ final class EventServiceImpl implements EventService {
      */
     private EventServiceImpl(final URI uri) {
         this.uri = uri;
-
-        this.client = new OkHttpClient.Builder()
-                .connectTimeout(Duration.ofSeconds(10))
-                // The node issues an empty event every 10 seconds if no new events so give 30 seconds for read
-                .readTimeout(Duration.ofSeconds(30))
-                .build();
     }
 
     @Override
-    public <EventT extends Event<?>> void consumeEvents(final EventType eventType,
-                                                        final EventTarget eventTarget,
-                                                        final Long startFrom,
-                                                        final Consumer<EventT> eventTConsumer) {
-        try {
-            //noinspection resource
-            final Response response = this.client.newCall(
-                    new Request.Builder()
-                            .url(urlBuilder.buildUrl(uri, eventType, startFrom))
-                            .header(ACCEPT, APPLICATION_JSON)
-                            .header(CONTENT_TYPE, APPLICATION_JSON)
-                            .get()
-                            .build()
-            ).execute();
+    public <EventT extends Event<?>> AutoCloseable consumeEvents(final EventType eventType,
+                                                                 final EventTarget eventTarget,
+                                                                 final Long startFrom,
+                                                                 final Consumer<EventT> onEvent,
+                                                                 final Consumer<Throwable> onFailure) {
 
-            if (response.isSuccessful() && response.body() != null) {
-                //noinspection ConstantConditions
-                consumeEvent(eventType, eventTarget, new InputStreamReader(response.body().byteStream()), eventTConsumer);
-            } else {
-                throw new CasperClientException("No response from node " + this.uri);
+        final URL url = urlBuilder.buildUrl(uri, eventType, startFrom);
+        logger.info("Targeting SSE URL {}", url);
+        final WebTarget target = sssClient.target(url.toString());
+        final Response response = target.request("text/plain", "text/event-stream").get();
+        final EventBuilder eventBuilder = new EventBuilder(eventType, eventTarget, target.getUri().toString());
+        final SseEventSource source = SseEventSource.target(target).build();
+
+        source.register((inboundSseEvent) -> {
+            if (inboundSseEvent.readData() != null) {
+                logger.debug("SSE event id: {}, data: {}", inboundSseEvent.getId(), inboundSseEvent.readData());
+                try {
+                    consumeEvent(eventBuilder, inboundSseEvent, onEvent);
+                } catch (Exception e) {
+                    logger.error("error in consumeEvent", e);
+                    onFailure.accept(new CasperSseProcessingException(e, inboundSseEvent));
+                }
             }
-        } catch (IOException e) {
-            throw new CasperClientException("Error executing request against node" + this.uri, e);
-        }
+        }, throwable -> {
+            logger.error("SSE Event Error on {}", url, throwable);
+            onFailure.accept(throwable);
+        });
+
+        source.open();
+        return source;
     }
 
-    private <EventT, DataT extends Event<DataT>> void consumeEvent(final EventType eventType,
-                                                                   final EventTarget eventTarget,
-                                                                   final Reader reader,
-                                                                   final Consumer<EventT> consumer) {
+    private <EventT extends Event<?>> void consumeEvent(final EventBuilder builder,
+                                                        final InboundSseEvent event,
+                                                        final Consumer<EventT> consumer) {
 
-        final EventBuilder eventBuilder = new EventBuilder(eventType, eventTarget, uri.toString());
-
-        try {
-            //noinspection unchecked
-            new BufferedReader(reader)
-                    .lines()
-                    .filter(line -> throwOnStop(consumer))
-                    .filter(eventBuilder::processLine)
-                    .forEach(line -> consumer.accept(eventBuilder.buildEvent()));
-
-        } catch (StopException e) {
-            // The consumer asked to stop reading events
+        if (builder.processLine(event.getId(), event.readData())) {
+            consumer.accept(builder.buildEvent());
         }
-    }
-
-    private <EventT> boolean throwOnStop(final Consumer<EventT> consumer) {
-        if (consumer instanceof EventConsumer && ((EventConsumer<?>) consumer).isStop()) {
-            throw new StopException();
-        }
-        return true;
     }
 }
