@@ -60,7 +60,7 @@ public class DeployWasmTest {
         privateKey.readPrivateKey(faucetPrivateKeyUrl.getFile());
 
         final List<NamedArg<?>> paymentArgs = new LinkedList<>();
-        paymentArgs.add(new NamedArg<>("amount", new CLValueU512(payment)));
+//        paymentArgs.add(new NamedArg<>("amount", new CLValueU512(payment)));
         paymentArgs.add(new NamedArg<>("token_decimals", new CLValueU8(tokenDecimals)));
         paymentArgs.add(new NamedArg<>("token_name", new CLValueString(tokenName)));
         paymentArgs.add(new NamedArg<>("token_symbol", new CLValueString(tokenSymbol)));
