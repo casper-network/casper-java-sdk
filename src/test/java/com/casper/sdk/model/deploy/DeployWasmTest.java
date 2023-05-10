@@ -4,11 +4,11 @@ import com.casper.sdk.helper.CasperConstants;
 import com.casper.sdk.helper.CasperDeployHelper;
 import com.casper.sdk.model.clvalue.CLValueString;
 import com.casper.sdk.model.clvalue.CLValueU256;
-import com.casper.sdk.model.clvalue.CLValueU512;
 import com.casper.sdk.model.clvalue.CLValueU8;
 import com.casper.sdk.model.common.Ttl;
 import com.casper.sdk.model.deploy.executabledeploy.ModuleBytes;
 import com.casper.sdk.service.CasperService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.syntifi.crypto.key.Ed25519PrivateKey;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Assertions;
@@ -24,8 +24,8 @@ import java.util.List;
 
 import static com.casper.sdk.helper.CasperDeployHelper.getPaymentModuleBytes;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsNull.notNullValue;
 
 /**
  * Test that a smart contract can be deployed to a node.
@@ -79,7 +79,11 @@ public class DeployWasmTest {
                 new ArrayList<>()
         );
 
+
         final CasperService casperService = CasperService.usingPeer("localhost", 11101);
+
+        String json = new ObjectMapper().writeValueAsString(deploy);
+        System.out.println(json);
 
         final DeployResult deployResult = casperService.putDeploy(deploy);
         assertThat(deployResult, is(notNullValue()));
