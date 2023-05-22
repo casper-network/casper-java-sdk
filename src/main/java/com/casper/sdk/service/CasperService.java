@@ -9,10 +9,14 @@ import com.casper.sdk.model.account.AccountData;
 import com.casper.sdk.model.auction.AuctionData;
 import com.casper.sdk.model.balance.GetBalanceData;
 import com.casper.sdk.model.balance.QueryBalanceData;
+import com.casper.sdk.model.block.JsonBlockData;
 import com.casper.sdk.model.deploy.Deploy;
+import com.casper.sdk.model.deploy.DeployData;
+import com.casper.sdk.model.deploy.DeployResult;
 import com.casper.sdk.model.dictionary.DictionaryData;
 import com.casper.sdk.model.era.EraInfoData;
 import com.casper.sdk.model.globalstate.GlobalStateData;
+import com.casper.sdk.model.peer.PeerData;
 import com.casper.sdk.model.stateroothash.StateRootHashData;
 import com.casper.sdk.model.status.StatusData;
 import com.casper.sdk.model.storedvalue.StoredValueData;
@@ -20,16 +24,7 @@ import com.casper.sdk.model.transfer.TransferData;
 import com.casper.sdk.model.uref.URef;
 import com.casper.sdk.model.validator.ValidatorChangeData;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.googlecode.jsonrpc4j.ExceptionResolver;
-import com.googlecode.jsonrpc4j.JsonRpcHttpClient;
-import com.googlecode.jsonrpc4j.JsonRpcMethod;
-import com.googlecode.jsonrpc4j.JsonRpcParam;
-import com.googlecode.jsonrpc4j.JsonRpcParamsPassMode;
-import com.googlecode.jsonrpc4j.ProxyUtil;
-import com.casper.sdk.model.block.JsonBlockData;
-import com.casper.sdk.model.deploy.DeployData;
-import com.casper.sdk.model.deploy.DeployResult;
-import com.casper.sdk.model.peer.PeerData;
+import com.googlecode.jsonrpc4j.*;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -45,8 +40,6 @@ import java.util.Map;
  * @since 0.0.1
  */
 public interface CasperService {
-
-    /* NODE INFORMATIONAL METHODS */
 
     /**
      * Builds a CasperService for the node ip/port pair
@@ -69,25 +62,7 @@ public interface CasperService {
         return ProxyUtil.createClientProxy(CasperService.class.getClassLoader(), CasperService.class, client);
     }
 
-    /**
-     * Get network peers data
-     *
-     * @return Object holding the api version and peer list
-     */
-    @JsonRpcMethod("info_get_peers")
-    PeerData getPeerData();
-
-    /* INFORMATIONAL METHODS */
-
-    /**
-     * Returns the current status of the node
-     *
-     * @return Object holding the apiversion, minimal block information, build
-     * version and other properties
-     */
-    @JsonRpcMethod("info_get_status")
-    StatusData getStatus();
-
+    //region INFORMATIONAL METHODS
     /**
      * Get the latest block info
      *
@@ -131,6 +106,15 @@ public interface CasperService {
     StateRootHashData getStateRootHash();
 
     /**
+     * Returns a state root hash at a given a {@link BlockIdentifier}
+     *
+     * @param blockIdentifier BlockIdentifier data
+     * @return Object holding the api version and state root hash data
+     */
+    @JsonRpcMethod("chain_get_state_root_hash")
+    StateRootHashData getStateRootHash(@JsonRpcParam("block_identifier") BlockIdentifier blockIdentifier);
+
+    /**
      * Returns a Deploy from the network
      *
      * @param deployHash The deploy hash
@@ -139,15 +123,6 @@ public interface CasperService {
      */
     @JsonRpcMethod("info_get_deploy")
     DeployData getDeploy(@JsonRpcParam("deploy_hash") String deployHash);
-
-    /**
-     * Returns a state root hash at a given a {@link BlockIdentifier}
-     *
-     * @param blockIdentifier BlockIdentifier data
-     * @return Object holding the api version and state root hash data
-     */
-    @JsonRpcMethod("chain_get_state_root_hash")
-    StateRootHashData getStateRootHash(@JsonRpcParam("block_identifier") BlockIdentifier blockIdentifier);
 
     /**
      * Returns the global state data given a {@link GlobalStateIdentifier}, key and paths
@@ -176,17 +151,6 @@ public interface CasperService {
     /**
      * Fetches balance value
      *
-     * @param stateIdentifier GlobalStateIndentifier: block hash or state root hash
-     * @param purseIdentifier The identifier to obtain the purse corresponding to balance query.
-     * @return Result for "query_balance" RPC response
-     */
-    @JsonRpcMethod("query_balance")
-    QueryBalanceData queryBalance(@JsonRpcParam("state_identifier") GlobalStateIdentifier stateIdentifier,
-                                  @JsonRpcParam("purse_identifier") PurseIdentifier purseIdentifier);
-
-    /**
-     * Fetches balance value
-     *
      * @param stateRootHash the hash of state root
      * @param purseUref     formatted URef
      * @return Result for "state_get_balance" RPC response
@@ -208,8 +172,25 @@ public interface CasperService {
     DictionaryData getStateDictionaryItem(@JsonRpcParam("state_root_hash") String stateRootHash,
                                           @JsonRpcParam("dictionary_identifier") DictionaryIdentifier dictionaryIdentifier);
 
-    /* TRANSACTIONAL METHODS */
+    /**
+     * Get network peers data
+     *
+     * @return Object holding the api version and peer list
+     */
+    @JsonRpcMethod("info_get_peers")
+    PeerData getPeerData();
 
+    /**
+     * Returns the current status of the node
+     *
+     * @return Object holding the apiversion, minimal block information, build
+     * version and other properties
+     */
+    @JsonRpcMethod("info_get_status")
+    StatusData getStatus();
+    //endregion
+
+    //region TRANSACTIONAL METHODS
     /**
      * Sends a deploy to be received by the network
      *
@@ -218,24 +199,9 @@ public interface CasperService {
      */
     @JsonRpcMethod(value = "account_put_deploy", paramsPassMode = JsonRpcParamsPassMode.ARRAY)
     DeployResult putDeploy(Deploy deploy);
+    //endregion
 
-    //TODO
-
-    /**
-     * TO BE IMPLEMENTED
-     * The speculative_exec endpoint provides a method to execute a Deploy
-     * without committing it to global state
-     *
-     * @param blockIdentifier BlockIdentifier data
-     * @param deploy          the deploy object to send to the network
-     * @return Object holding the api version and the deploy hash
-     */
-    @JsonRpcMethod("speculative_exec")
-    JsonNode speculativeExec(@JsonRpcParam("block_identifier") BlockIdentifier blockIdentifier,
-                             @JsonRpcParam("deploy") Deploy deploy);
-
-    /* PROOF OF STAKE METHODS */
-
+    //region PROOF OF STAKE METHODS
     /**
      * Returns the Auction info for a given block
      *
@@ -262,8 +228,42 @@ public interface CasperService {
     @JsonRpcMethod("chain_get_era_info_by_switch_block")
     EraInfoData getEraInfoBySwitchBlock(@JsonRpcParam("block_identifier") BlockIdentifier blockIdentifier);
 
-    /* DEPRECATED METHODS */
+    /**
+     * Returns an EraInfo for a given block
+     *
+     * @param blockIdentifier BlockIdentifier data
+     * @return Object holding api version and EraInfo
+     */
+    @JsonRpcMethod("chain_get_era_summary")
+    EraInfoData getEraSummary(@JsonRpcParam("block_identifier") BlockIdentifier blockIdentifier);
+    //endregion
 
+    //region TO BE IMPLEMENTED ON 1.5.0
+    /**
+     * Fetches balance value
+     *
+     * @param stateIdentifier GlobalStateIndentifier: block hash or state root hash
+     * @param purseIdentifier The identifier to obtain the purse corresponding to balance query.
+     * @return Result for "query_balance" RPC response
+     */
+    @JsonRpcMethod("query_balance")
+    QueryBalanceData queryBalance(@JsonRpcParam("state_identifier") GlobalStateIdentifier stateIdentifier,
+                                  @JsonRpcParam("purse_identifier") PurseIdentifier purseIdentifier);
+
+    /**
+     * The speculative_exec endpoint provides a method to execute a Deploy
+     * without committing it to global state
+     *
+     * @param blockIdentifier BlockIdentifier data
+     * @param deploy          the deploy object to send to the network
+     * @return Object holding the api version and the deploy hash
+     */
+    @JsonRpcMethod("speculative_exec")
+    JsonNode speculativeExec(@JsonRpcParam("block_identifier") BlockIdentifier blockIdentifier,
+                             @JsonRpcParam("deploy") Deploy deploy);
+    //endregion
+
+    //region DEPRECATED METHODS
     /**
      * Returns a stored value from the network. This RPC is deprecated, use `query_global_state` instead"
      *
@@ -277,5 +277,5 @@ public interface CasperService {
     @JsonRpcMethod("state_get_item")
     StoredValueData getStateItem(@JsonRpcParam("state_root_hash") String stateRootHash,
                                  @JsonRpcParam("key") String key, @JsonRpcParam("path") List<String> path);
-
+    //endregion
 }

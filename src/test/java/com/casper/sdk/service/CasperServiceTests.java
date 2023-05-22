@@ -17,8 +17,6 @@ import com.casper.sdk.model.deploy.DeployData;
 import com.casper.sdk.model.deploy.executabledeploy.ModuleBytes;
 import com.casper.sdk.model.deploy.executabledeploy.StoredContractByHash;
 import com.casper.sdk.model.deploy.executionresult.Success;
-import com.casper.sdk.model.deploy.transform.Transform;
-import com.casper.sdk.model.deploy.transform.WriteCLValue;
 import com.casper.sdk.model.era.EraInfoData;
 import com.casper.sdk.model.globalstate.GlobalStateData;
 import com.casper.sdk.model.key.AlgorithmTag;
@@ -46,11 +44,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit tests for {@link CasperService}
@@ -69,7 +63,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
     void testIfBlockReturnedMatchesRequestedByHeight() {
         int blocks_to_check = 3;
         for (int i = 0; i < blocks_to_check; i++) {
-            JsonBlockData result = casperServiceMainnet.getBlock(new HeightBlockIdentifier(i));
+            JsonBlockData result = casperServiceNctl.getBlock(new HeightBlockIdentifier(i));
             assertEquals(result.getBlock().getHeader().getHeight(), i);
         }
     }
@@ -294,6 +288,23 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
         // getPrettyJson(loadJsonFromFile("era-info-samples/era-info-by-switch-block.json"));
 
         // JSONAssert.assertEquals(inputJson, getPrettyJson(eraInfoData), false);
+    }
+
+    @Test
+    void getEraSummaryByHash() {
+        JsonBlockData block = casperServiceNctl.getBlock(new HeightBlockIdentifier(10));
+        EraInfoData eraInfoData = casperServiceNctl.getEraSummary(new HashBlockIdentifier(block.getBlock().getHash().toString()));
+
+        assertNotNull(eraInfoData);
+        assertNotNull(eraInfoData.getEraSummary());
+    }
+
+    @Test
+    void getEraSummaryByHeight() {
+        EraInfoData eraInfoData = casperServiceNctl.getEraSummary(new HeightBlockIdentifier(10));
+
+        assertNotNull(eraInfoData);
+        assertNotNull(eraInfoData.getEraSummary());
     }
 
     @Test
