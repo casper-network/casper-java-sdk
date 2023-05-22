@@ -10,8 +10,40 @@ jobs:
   generate-docs-reports:
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
-
+    services:
+      nctl:
+        image: makesoftware/casper-nctl:latest
+        options: --name nctl
+        env:
+          PREDEFINED_ACCOUNTS: 'true'
+          MINIMUM_ROUND_EXPONENT: '12'
+          MAXIMUM_ROUND_EXPONENT: '14'
+          DEPLOY_DELAY: '30sec'
+        ports:
+          - 11101:11101
+          - 14101:14101
+          - 18101:18101
     steps:
+      # Build the assets folder from the started NCTL docker image
+      - name: Preparing NCTL assets on the started NCTL docker image
+        run: |
+          echo "Wait for NCTL"
+          sleep 30s
+          mkdir assets
+          docker cp nctl:/home/casper/casper-node/utils/nctl/assets/net-1/chainspec assets
+          docker cp nctl:/home/casper/casper-node/utils/nctl/assets/net-1/users assets
+          mv assets/users assets/net-1
+          mv assets/chainspec assets/net-1/chainspec          
+
+      # Upload the NCTL assets to a project artifact
+      - name: Upload NCTL assets to artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: nctl-accounts
+          path: |
+            assets/net-1/chainspec/accounts.toml
+            assets/net-1/user-*
+
       - uses: actions/checkout@v2
 
       - name: Set up JDK 11
