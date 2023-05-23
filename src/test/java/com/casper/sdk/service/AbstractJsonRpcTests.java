@@ -1,3 +1,4 @@
+
 package com.casper.sdk.service;
 
 import com.casper.sdk.model.AbstractJsonTests;
@@ -10,7 +11,7 @@ import java.net.MalformedURLException;
 
 /**
  * Abstract class for testing json rpc methods
- * 
+ *
  * @author Alexandre Carvalho
  * @author Andre Bertolace
  * @since 0.0.1
@@ -19,7 +20,7 @@ public abstract class AbstractJsonRpcTests extends AbstractJsonTests {
     @Getter
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     public enum CasperNetwork {
-        MAIN_NET("209.145.55.218", 7777), TEST_NET("85.114.132.133", 7777);
+        MAIN_NET("209.145.55.218", 7777), TEST_NET("85.114.132.133", 7777), NCTL("127.0.0.1", 11101);
 
         private final String ip;
         private final int port;
@@ -27,6 +28,7 @@ public abstract class AbstractJsonRpcTests extends AbstractJsonTests {
 
     protected static CasperService casperServiceMainnet;
     protected static CasperService casperServiceTestnet;
+    protected static CasperService casperServiceNctl;
 
     @BeforeAll
     public static void setUp() throws MalformedURLException {
@@ -34,5 +36,7 @@ public abstract class AbstractJsonRpcTests extends AbstractJsonTests {
                 CasperNetwork.MAIN_NET.getPort());
         casperServiceTestnet = CasperService.usingPeer(CasperNetwork.TEST_NET.getIp(),
                 CasperNetwork.TEST_NET.getPort());
+        casperServiceNctl = CasperService.usingPeer(CasperNetwork.NCTL.getIp(),
+                CasperNetwork.NCTL.getPort());
     }
 }
