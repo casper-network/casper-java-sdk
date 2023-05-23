@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AbstractEvent.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">casper-java-sdk</a> &gt; <a href="index.source.html" class="el_package">com.casper.sdk.service.impl.event</a> &gt; <span class="el_source">AbstractEvent.java</span></div><h1>AbstractEvent.java</h1><pre class="source lang-java linenums">package com.casper.sdk.service.impl.event;
+
+import com.casper.sdk.model.event.DataType;
+import com.casper.sdk.model.event.Event;
+import com.casper.sdk.model.event.EventType;
+import lombok.*;
+
+import java.util.Optional;
+
+/**
+ * The abstract base class implementation for all events
+ *
+ * @param &lt;T&gt; the type of the event data
+ * @author ian@meywood.com
+ */
+@Getter
+<span class="fc" id="L17">@AllArgsConstructor(access = AccessLevel.PACKAGE)</span>
+<span class="nc" id="L18">@ToString(doNotUseGetters = true)</span>
+<span class="nc bnc" id="L19" title="All 22 branches missed.">@EqualsAndHashCode(of = {&quot;source&quot;, &quot;id&quot;})</span>
+abstract class AbstractEvent&lt;T&gt; implements Event&lt;T&gt; {
+
+    /** The type of event RAW or POJO */
+<span class="fc" id="L23">    private final EventType eventType;</span>
+    /** The type of the data field */
+<span class="fc" id="L25">    private final DataType dataType;</span>
+    /** The source node of the event */
+<span class="fc" id="L27">    private final String source;</span>
+    /** The ID of the event */
+    private final Long id;
+    /** The event data */
+<span class="fc" id="L31">    private final T data;</span>
+    /** The version of the casper API that generate the event */
+<span class="fc" id="L33">    private final String version;</span>
+
+    public Optional&lt;Long&gt; getId() {
+<span class="fc" id="L36">        return Optional.ofNullable(id);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
