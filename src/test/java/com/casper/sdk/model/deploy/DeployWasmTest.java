@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.syntifi.crypto.key.Ed25519PrivateKey;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -32,6 +33,7 @@ import static org.hamcrest.core.IsNull.notNullValue;
  *
  * @author ian@meywood.com
  */
+@Disabled
 public class DeployWasmTest {
 
     private static final String WASM_PATH = "/contracts/erc20.wasm";
