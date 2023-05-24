@@ -360,6 +360,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
                 .build();
         QueryBalanceData balanceData = casperServiceNctl.queryBalance(stateRootHashIdentifier, mainPurseUnderPublickey);
         assertNotNull(balanceData);
+        assertNotEquals(balanceData.getBalance(), BigInteger.ZERO);
     }
 
     @Test
