@@ -69,7 +69,7 @@ jobs:
 
     services:
       nctl:
-        image: makesoftware/casper-nctl:latest
+        image: syntifi/nctl:dev
         options: --name nctl
         env:
           PREDEFINED_ACCOUNTS: 'true'
@@ -81,7 +81,7 @@ jobs:
           - 11101:11101
           - 14101:14101
           - 18101:18101
-          - 7778:7778
+          - 25101:25101
     steps:
       # Build the assets folder from the started NCTL docker image
       - name: Preparing NCTL assets on the started NCTL docker image
