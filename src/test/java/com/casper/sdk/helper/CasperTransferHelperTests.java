@@ -25,8 +25,7 @@ import java.util.Date;
 import java.util.Objects;
 import java.util.Random;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Casper Deploy Service test
@@ -143,6 +142,7 @@ public class CasperTransferHelperTests extends AbstractJsonRpcTests {
                 new ArrayList<>());
         SpeculativeDeployData deployData = speculativeCasperServiceNctl.speculativeExec(deploy);
         assertNotNull(deployData);
+        assertTrue(deployData.getExecutionResult().getCost().compareTo(BigInteger.ZERO) == 1);
     }
 
     @Test
