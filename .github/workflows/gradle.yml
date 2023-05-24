@@ -21,10 +21,12 @@ jobs:
           MINIMUM_ROUND_EXPONENT: '12'
           MAXIMUM_ROUND_EXPONENT: '14'
           DEPLOY_DELAY: '30sec'
+          SPECULATIVE_EXEC_SERVER_ENABLED: 'true'
         ports:
           - 11101:11101
           - 14101:14101
           - 18101:18101
+          - 25101:25101
     steps:
       # Build the assets folder from the started NCTL docker image
       - name: Preparing NCTL assets on the started NCTL docker image
@@ -74,10 +76,12 @@ jobs:
           MINIMUM_ROUND_EXPONENT: '12'
           MAXIMUM_ROUND_EXPONENT: '14'
           DEPLOY_DELAY: '30sec'
+          SPECULATIVE_EXEC_SERVER_ENABLED: 'true'
         ports:
           - 11101:11101
           - 14101:14101
           - 18101:18101
+          - 7778:7778
     steps:
       # Build the assets folder from the started NCTL docker image
       - name: Preparing NCTL assets on the started NCTL docker image
