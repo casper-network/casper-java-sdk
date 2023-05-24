@@ -3,7 +3,9 @@ package com.casper.sdk.helper;
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.common.Ttl;
 import com.casper.sdk.model.deploy.Deploy;
+import com.casper.sdk.model.deploy.DeployData;
 import com.casper.sdk.model.deploy.DeployResult;
+import com.casper.sdk.model.deploy.SpeculativeDeployData;
 import com.casper.sdk.model.key.PublicKey;
 import com.casper.sdk.service.AbstractJsonRpcTests;
 import com.syntifi.crypto.key.Ed25519PrivateKey;
@@ -23,7 +25,7 @@ import java.util.Date;
 import java.util.Objects;
 import java.util.Random;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Casper Deploy Service test
@@ -79,6 +81,71 @@ public class CasperTransferHelperTests extends AbstractJsonRpcTests {
     }
 
     @Test
+    void testTransferOnNctl() throws IOException, NoSuchTypeException, GeneralSecurityException, URISyntaxException, ValueSerializationException {
+        Ed25519PrivateKey user1 = new Ed25519PrivateKey();
+        Ed25519PrivateKey user2 = new Ed25519PrivateKey();
+        user1.readPrivateKey(getResourcesKeyPath("deploy-accounts/nctl/users/user-1/secret_key.pem"));
+        user2.readPrivateKey(getResourcesKeyPath("deploy-accounts/nctl/users/user-2/secret_key.pem"));
+
+        long id = Math.abs(new Random().nextInt());
+        Ttl ttl = Ttl
+                .builder()
+                .ttl("30m")
+                .build();
+        Random rnd = new Random();
+        boolean coin = rnd.nextBoolean();
+        Ed25519PrivateKey from;
+        PublicKey to;
+        if (coin) {
+            from = user1;
+            to = PublicKey.fromAbstractPublicKey(user2.derivePublicKey());
+        } else {
+            from = user2;
+            to = PublicKey.fromAbstractPublicKey(user1.derivePublicKey());
+        }
+
+        Deploy deploy = CasperTransferHelper.buildTransferDeploy(from, to,
+                BigInteger.valueOf(2500000000L), "casper-net-1",
+                id, BigInteger.valueOf(100000000L), 1L, ttl, new Date(),
+                new ArrayList<>());
+        DeployResult deployResult = casperServiceNctl.putDeploy(deploy);
+        assertEquals(deployResult.getDeployHash(), Hex.toHexString(deploy.getHash().getDigest()));
+    }
+
+    @Test
+    void testSpeculativeTransferOnNctl() throws IOException, NoSuchTypeException, GeneralSecurityException, URISyntaxException, ValueSerializationException {
+        Ed25519PrivateKey user1 = new Ed25519PrivateKey();
+        Ed25519PrivateKey user2 = new Ed25519PrivateKey();
+        user1.readPrivateKey(getResourcesKeyPath("deploy-accounts/nctl/users/user-1/secret_key.pem"));
+        user2.readPrivateKey(getResourcesKeyPath("deploy-accounts/nctl/users/user-2/secret_key.pem"));
+
+        long id = Math.abs(new Random().nextInt());
+        Ttl ttl = Ttl
+                .builder()
+                .ttl("30m")
+                .build();
+        Random rnd = new Random();
+        boolean coin = rnd.nextBoolean();
+        Ed25519PrivateKey from;
+        PublicKey to;
+        if (coin) {
+            from = user1;
+            to = PublicKey.fromAbstractPublicKey(user2.derivePublicKey());
+        } else {
+            from = user2;
+            to = PublicKey.fromAbstractPublicKey(user1.derivePublicKey());
+        }
+
+        Deploy deploy = CasperTransferHelper.buildTransferDeploy(from, to,
+                BigInteger.valueOf(2500000000L), "casper-net-1",
+                id, BigInteger.valueOf(100000000L), 1L, ttl, new Date(),
+                new ArrayList<>());
+        SpeculativeDeployData deployData = speculativeCasperServiceNctl.speculativeExec(deploy);
+        assertNotNull(deployData);
+        assertTrue(deployData.getExecutionResult().getCost().compareTo(BigInteger.ZERO) == 1);
+    }
+
+    @Test
     void testTransferWithNullIdOnTestnet() throws IOException, NoSuchTypeException, GeneralSecurityException, URISyntaxException, ValueSerializationException {
         Ed25519PrivateKey alice = new Ed25519PrivateKey();
         Ed25519PrivateKey bob = new Ed25519PrivateKey();
@@ -109,4 +176,6 @@ public class CasperTransferHelperTests extends AbstractJsonRpcTests {
         LOGGER.debug("deploy hash: " + deployResult.getDeployHash());
         assertEquals(deployResult.getDeployHash(), Hex.toHexString(deploy.getHash().getDigest()));
     }
+
+
 }
