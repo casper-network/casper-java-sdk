@@ -7,9 +7,13 @@ import com.casper.sdk.identifier.block.HashBlockIdentifier;
 import com.casper.sdk.identifier.block.HeightBlockIdentifier;
 import com.casper.sdk.identifier.global.BlockHashIdentifier;
 import com.casper.sdk.identifier.global.GlobalStateIdentifier;
+import com.casper.sdk.identifier.global.StateRootHashIdentifier;
+import com.casper.sdk.identifier.purse.MainPurseUnderPublickey;
+import com.casper.sdk.identifier.purse.PurseIdentifier;
 import com.casper.sdk.model.account.AccountData;
 import com.casper.sdk.model.auction.AuctionData;
 import com.casper.sdk.model.balance.GetBalanceData;
+import com.casper.sdk.model.balance.QueryBalanceData;
 import com.casper.sdk.model.block.JsonBlock;
 import com.casper.sdk.model.block.JsonBlockData;
 import com.casper.sdk.model.clvalue.CLValueString;
@@ -31,6 +35,8 @@ import com.casper.sdk.model.transfer.Transfer;
 import com.casper.sdk.model.transfer.TransferData;
 import com.casper.sdk.model.uref.URef;
 import com.casper.sdk.model.validator.ValidatorChangeData;
+import com.syntifi.crypto.key.AbstractPrivateKey;
+import com.syntifi.crypto.key.Ed25519PrivateKey;
 import dev.oak3.sbs4j.util.ByteUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
@@ -40,6 +46,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -336,6 +343,24 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
         String key = "deploy-46c75f79954218942a05c0efdc5c40031db3b5b1e43b95135d43874e21fabdae";
         GlobalStateData globalState = casperServiceMainnet.queryGlobalState(blockIdentifier, key, new String[0]);
         assertNotNull(globalState);
+    }
+
+    @Test
+    void queryBalance() throws IOException {
+        final URL privateKeyAccount1 = getClass().getResource("/deploy-accounts/nctl/users/user-1/secret_key.pem");
+        Assertions.assertNotNull(privateKeyAccount1);
+        final AbstractPrivateKey privateKey = new Ed25519PrivateKey();
+        privateKey.readPrivateKey(privateKeyAccount1.getFile());
+        PublicKey publicKeyAccount1 = PublicKey.fromAbstractPublicKey(privateKey.derivePublicKey());
+        GlobalStateIdentifier stateRootHashIdentifier = StateRootHashIdentifier.builder()
+                .hash(casperServiceNctl.getStateRootHash().getStateRootHash())
+                .build();
+        PurseIdentifier mainPurseUnderPublickey = MainPurseUnderPublickey.builder()
+                .publicKey(publicKeyAccount1)
+                .build();
+        QueryBalanceData balanceData = casperServiceNctl.queryBalance(stateRootHashIdentifier, mainPurseUnderPublickey);
+        assertNotNull(balanceData);
+        assertNotEquals(balanceData.getBalance(), BigInteger.ZERO);
     }
 
     @Test
