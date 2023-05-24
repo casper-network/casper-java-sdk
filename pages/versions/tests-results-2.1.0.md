@@ -5,5 +5,5 @@ menu_title: 2.1.0
 category: surefire_reports
 layout: iframe
 iframe_url: /docs/2.1.0/junit/test/index.html
-order: 3
+order: 4
 ---
