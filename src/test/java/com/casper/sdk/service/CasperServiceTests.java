@@ -226,7 +226,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
 
     @Test
     void getStatus() {
-        StatusData status = casperServiceMainnet.getStatus();
+        StatusData status = casperServiceNctl.getStatus();
         assertNotNull(status);
         assertNotNull(status.getLastAddedBlockInfo());
         assertNotNull(status.getStartStateRootHash());
