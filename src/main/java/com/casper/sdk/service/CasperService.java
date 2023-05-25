@@ -19,6 +19,7 @@ import com.casper.sdk.model.era.EraInfoData;
 import com.casper.sdk.model.globalstate.GlobalStateData;
 import com.casper.sdk.model.peer.PeerData;
 import com.casper.sdk.model.stateroothash.StateRootHashData;
+import com.casper.sdk.model.status.ChainspecData;
 import com.casper.sdk.model.status.StatusData;
 import com.casper.sdk.model.storedvalue.StoredValueData;
 import com.casper.sdk.model.transfer.TransferData;
@@ -258,7 +259,7 @@ public interface CasperService {
      * Returns an EraInfo for a given block
      *
      * @param blockIdentifier BlockIdentifier data
-     * @return Object holding api version and EraInfo
+     * @return Object holding api ChainspecDataversion and EraInfo
      */
     @JsonRpcMethod("chain_get_era_summary")
     EraInfoData getEraSummary(@JsonRpcParam("block_identifier") BlockIdentifier blockIdentifier);
@@ -277,7 +278,13 @@ public interface CasperService {
     QueryBalanceData queryBalance(@JsonRpcParam("state_identifier") GlobalStateIdentifier stateIdentifier,
                                   @JsonRpcParam("purse_identifier") PurseIdentifier purseIdentifier);
 
-
+    /**
+     * Fetches chainspec file as bytes
+     *
+     * @return the ChainspecData holder object
+     */
+    @JsonRpcMethod("info_get_chainspec")
+    ChainspecData getChainspec();
     //endregion
 
     //region DEPRECATED METHODS

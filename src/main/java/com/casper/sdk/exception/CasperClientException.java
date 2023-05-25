@@ -19,6 +19,5 @@ public class CasperClientException extends RuntimeException {
 
     public CasperClientException(String message) {
         super(message);
-
     }
 }
