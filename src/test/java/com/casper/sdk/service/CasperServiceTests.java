@@ -1,6 +1,7 @@
 package com.casper.sdk.service;
 
 import com.casper.sdk.exception.CasperClientException;
+import com.casper.sdk.exception.CasperInvalidStateException;
 import com.casper.sdk.exception.DynamicInstanceException;
 import com.casper.sdk.identifier.block.BlockIdentifier;
 import com.casper.sdk.identifier.block.HashBlockIdentifier;
@@ -27,6 +28,7 @@ import com.casper.sdk.model.key.AlgorithmTag;
 import com.casper.sdk.model.key.PublicKey;
 import com.casper.sdk.model.peer.PeerData;
 import com.casper.sdk.model.stateroothash.StateRootHashData;
+import com.casper.sdk.model.status.ChainspecData;
 import com.casper.sdk.model.status.StatusData;
 import com.casper.sdk.model.storedvalue.StoredValueAccount;
 import com.casper.sdk.model.storedvalue.StoredValueContract;
@@ -47,6 +49,8 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -361,6 +365,96 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
         QueryBalanceData balanceData = casperServiceNctl.queryBalance(stateRootHashIdentifier, mainPurseUnderPublickey);
         assertNotNull(balanceData);
         assertNotEquals(balanceData.getBalance(), BigInteger.ZERO);
+    }
+
+    @Test
+    void getChainspec() {
+        ChainspecData chainspec = casperServiceNctl.getChainspec();
+        assertNotNull(chainspec);
+        assertNotNull(chainspec.getChainspec().getChainspecBytes());
+    }
+
+    @Test
+    void getChainspecAndSaveAsFile() throws IOException {
+        ChainspecData chainspec = casperServiceNctl.getChainspec();
+        Path temp = Files.createTempFile("chainspec_", ".toml");
+        chainspec.saveChainspec(temp);
+        assertTrue(Files.exists(temp));
+        assertTrue(Files.size(temp) > 0);
+
+        String fileContent = new String(Files.readAllBytes(temp));
+        assertTrue(fileContent.contains("[protocol]"));
+    }
+
+    @Test
+    void getChainspecAndReadAsString() {
+        ChainspecData chainspec = casperServiceNctl.getChainspec();
+        String chainspecString = chainspec.readChainspecBytesToString();
+        assertNotNull(chainspecString);
+        assertFalse(chainspecString.isEmpty());
+        assertTrue(chainspecString.contains("[protocol]"));
+    }
+
+    @Test
+    void getGenesisAccountsAndSaveAsFile() throws IOException {
+        ChainspecData chainspec = casperServiceNctl.getChainspec();
+        Path temp = Files.createTempFile("accounts_", ".toml");
+        if (chainspec.getChainspec().getGenesisAccountsBytes() != null && chainspec.getChainspec().getGenesisAccountsBytes().getDigest() != null) {
+            chainspec.saveGenesisAccounts(temp);
+            assertTrue(Files.exists(temp));
+            assertTrue(Files.size(temp) > 0);
+
+            String fileContent = new String(Files.readAllBytes(temp));
+            assertTrue(fileContent.contains("[accounts]"));
+        } else {
+            assertThrowsExactly(CasperInvalidStateException.class, () -> chainspec.saveGenesisAccounts(temp));
+        }
+    }
+
+    @Test
+    void getGenesisAccountsAndReadAsString() {
+        ChainspecData chainspec = casperServiceNctl.getChainspec();
+        if (chainspec.getChainspec().getGenesisAccountsBytes() != null && chainspec.getChainspec().getGenesisAccountsBytes().getDigest() != null) {
+            String genesisAccountsString = chainspec.readGenesisAccountsBytesToString();
+            assertNotNull(genesisAccountsString);
+            assertFalse(genesisAccountsString.isEmpty());
+            assertTrue(genesisAccountsString.contains("[accounts]"));
+        } else {
+            assertThrowsExactly(CasperInvalidStateException.class, chainspec::readGenesisAccountsBytesToString);
+        }
+    }
+
+    @Test
+    void getGlobalStateAndSaveAsFile() throws IOException {
+        ChainspecData chainspec = casperServiceNctl.getChainspec();
+        Path temp = Files.createTempFile("global_state_", ".toml");
+
+        // TODO: Validate this when we have a chainspec with global state
+        if (chainspec.getChainspec().getGlobalStateBytes() != null && chainspec.getChainspec().getGlobalStateBytes().getDigest() != null) {
+            chainspec.saveGlobalState(temp);
+            assertTrue(Files.exists(temp));
+            assertTrue(Files.size(temp) > 0);
+
+            String fileContent = new String(Files.readAllBytes(temp));
+            assertTrue(fileContent.length() > 0);
+        } else {
+            assertThrowsExactly(CasperInvalidStateException.class, () -> chainspec.saveGlobalState(temp));
+        }
+    }
+
+    @Test
+    void getGlobalStateAndReadAsString() {
+        ChainspecData chainspec = casperServiceNctl.getChainspec();
+
+        // TODO: Validate this when we have a chainspec with global state
+        if (chainspec.getChainspec().getGlobalStateBytes() != null && chainspec.getChainspec().getGlobalStateBytes().getDigest() != null) {
+            String globalStateString = chainspec.readGlobalStateBytesToString();
+            assertNotNull(globalStateString);
+            assertFalse(globalStateString.isEmpty());
+            assertTrue(globalStateString.contains("[protocol]"));
+        } else {
+            assertThrowsExactly(CasperInvalidStateException.class, chainspec::readGlobalStateBytesToString);
+        }
     }
 
     @Test
