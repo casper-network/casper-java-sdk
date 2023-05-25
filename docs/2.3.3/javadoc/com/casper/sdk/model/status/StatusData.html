@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":9,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10};
+var data = {"i0":9,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -185,7 +185,7 @@ extends java.lang.Object</pre>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.String,java.lang.String,java.lang.String,com.casper.sdk.model.status.MinimalBlockInfo,com.casper.sdk.model.status.NextUpgrade,com.casper.sdk.model.key.PublicKey,java.util.List,java.lang.String,java.lang.String,java.lang.String)">StatusData</a></span>&#8203;(java.lang.String&nbsp;apiVersion,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.String,java.lang.String,java.lang.String,com.casper.sdk.model.status.MinimalBlockInfo,com.casper.sdk.model.status.NextUpgrade,com.casper.sdk.model.key.PublicKey,java.util.List,java.lang.String,java.lang.String,java.lang.String,com.casper.sdk.model.status.NodeState,com.casper.sdk.model.status.ReactorState,java.sql.Date,com.casper.sdk.model.status.AvailableBlockRange,com.casper.sdk.model.status.BlockSynchronizerStatus)">StatusData</a></span>&#8203;(java.lang.String&nbsp;apiVersion,
           java.lang.String&nbsp;buildVersion,
           java.lang.String&nbsp;chainSpecName,
           <a href="MinimalBlockInfo.html" title="class in com.casper.sdk.model.status">MinimalBlockInfo</a>&nbsp;lastAddedBlockInfo,
@@ -194,7 +194,12 @@ extends java.lang.Object</pre>
           java.util.List&lt;<a href="../peer/PeerEntry.html" title="class in com.casper.sdk.model.peer">PeerEntry</a>&gt;&nbsp;peers,
           java.lang.String&nbsp;roundLength,
           java.lang.String&nbsp;uptime,
-          java.lang.String&nbsp;startStateRootHash)</code></th>
+          java.lang.String&nbsp;startStateRootHash,
+          <a href="NodeState.html" title="enum in com.casper.sdk.model.status">NodeState</a>&nbsp;nodeState,
+          <a href="ReactorState.html" title="enum in com.casper.sdk.model.status">ReactorState</a>&nbsp;reactorState,
+          java.sql.Date&nbsp;lastProgress,
+          <a href="AvailableBlockRange.html" title="class in com.casper.sdk.model.status">AvailableBlockRange</a>&nbsp;availableBlockRange,
+          <a href="BlockSynchronizerStatus.html" title="class in com.casper.sdk.model.status">BlockSynchronizerStatus</a>&nbsp;blockSynchronizerStatus)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -228,120 +233,190 @@ extends java.lang.Object</pre>
 </td>
 </tr>
 <tr id="i2" class="altColor">
+<td class="colFirst"><code><a href="AvailableBlockRange.html" title="class in com.casper.sdk.model.status">AvailableBlockRange</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getAvailableBlockRange()">getAvailableBlockRange</a></span>()</code></th>
+<td class="colLast">
+<div class="block">The available block range in storage</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code><a href="BlockSynchronizerStatus.html" title="class in com.casper.sdk.model.status">BlockSynchronizerStatus</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getBlockSynchronizerStatus()">getBlockSynchronizerStatus</a></span>()</code></th>
+<td class="colLast">
+<div class="block">The status of the block synchronizer builders</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getBuildVersion()">getBuildVersion</a></span>()</code></th>
 <td class="colLast">
 <div class="block">The compiled node version</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getChainSpecName()">getChainSpecName</a></span>()</code></th>
 <td class="colLast">
 <div class="block">The chainspec name</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="MinimalBlockInfo.html" title="class in com.casper.sdk.model.status">MinimalBlockInfo</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getLastAddedBlockInfo()">getLastAddedBlockInfo</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i7" class="rowColor">
+<td class="colFirst"><code>java.sql.Date</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getLastProgress()">getLastProgress</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Timestamp of the last recorded progress in the reactor</div>
+</td>
+</tr>
+<tr id="i8" class="altColor">
 <td class="colFirst"><code><a href="NextUpgrade.html" title="class in com.casper.sdk.model.status">NextUpgrade</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getNextUpgrade()">getNextUpgrade</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i9" class="rowColor">
+<td class="colFirst"><code><a href="NodeState.html" title="enum in com.casper.sdk.model.status">NodeState</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getNodeState()">getNodeState</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Node run mode</div>
+</td>
+</tr>
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>java.util.List&lt;<a href="../peer/PeerEntry.html" title="class in com.casper.sdk.model.peer">PeerEntry</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPeers()">getPeers</a></span>()</code></th>
 <td class="colLast">
 <div class="block">List of</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code><a href="../key/PublicKey.html" title="class in com.casper.sdk.model.key">PublicKey</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPublicKey()">getPublicKey</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i12" class="altColor">
+<td class="colFirst"><code><a href="ReactorState.html" title="enum in com.casper.sdk.model.status">ReactorState</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getReactorState()">getReactorState</a></span>()</code></th>
+<td class="colLast">
+<div class="block">The state of the reactor</div>
+</td>
+</tr>
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getRoundLength()">getRoundLength</a></span>()</code></th>
 <td class="colLast">
 <div class="block">The next round length if this node is a validator</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getStartStateRootHash()">getStartStateRootHash</a></span>()</code></th>
 <td class="colLast">
 <div class="block">The state root hash used at the start of the current session</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getUptime()">getUptime</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Time passed since the node has started</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setApiVersion(java.lang.String)">setApiVersion</a></span>&#8203;(java.lang.String&nbsp;apiVersion)</code></th>
 <td class="colLast">
 <div class="block">The RPC API version</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i17" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setAvailableBlockRange(com.casper.sdk.model.status.AvailableBlockRange)">setAvailableBlockRange</a></span>&#8203;(<a href="AvailableBlockRange.html" title="class in com.casper.sdk.model.status">AvailableBlockRange</a>&nbsp;availableBlockRange)</code></th>
+<td class="colLast">
+<div class="block">The available block range in storage</div>
+</td>
+</tr>
+<tr id="i18" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setBlockSynchronizerStatus(com.casper.sdk.model.status.BlockSynchronizerStatus)">setBlockSynchronizerStatus</a></span>&#8203;(<a href="BlockSynchronizerStatus.html" title="class in com.casper.sdk.model.status">BlockSynchronizerStatus</a>&nbsp;blockSynchronizerStatus)</code></th>
+<td class="colLast">
+<div class="block">The status of the block synchronizer builders</div>
+</td>
+</tr>
+<tr id="i19" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setBuildVersion(java.lang.String)">setBuildVersion</a></span>&#8203;(java.lang.String&nbsp;buildVersion)</code></th>
 <td class="colLast">
 <div class="block">The compiled node version</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i20" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setChainSpecName(java.lang.String)">setChainSpecName</a></span>&#8203;(java.lang.String&nbsp;chainSpecName)</code></th>
 <td class="colLast">
 <div class="block">The chainspec name</div>
 </td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i21" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setLastAddedBlockInfo(com.casper.sdk.model.status.MinimalBlockInfo)">setLastAddedBlockInfo</a></span>&#8203;(<a href="MinimalBlockInfo.html" title="class in com.casper.sdk.model.status">MinimalBlockInfo</a>&nbsp;lastAddedBlockInfo)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i22" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setLastProgress(java.sql.Date)">setLastProgress</a></span>&#8203;(java.sql.Date&nbsp;lastProgress)</code></th>
+<td class="colLast">
+<div class="block">Timestamp of the last recorded progress in the reactor</div>
+</td>
+</tr>
+<tr id="i23" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setNextUpgrade(com.casper.sdk.model.status.NextUpgrade)">setNextUpgrade</a></span>&#8203;(<a href="NextUpgrade.html" title="class in com.casper.sdk.model.status">NextUpgrade</a>&nbsp;nextUpgrade)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i24" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setNodeState(com.casper.sdk.model.status.NodeState)">setNodeState</a></span>&#8203;(<a href="NodeState.html" title="enum in com.casper.sdk.model.status">NodeState</a>&nbsp;nodeState)</code></th>
+<td class="colLast">
+<div class="block">Node run mode</div>
+</td>
+</tr>
+<tr id="i25" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setPeers(java.util.List)">setPeers</a></span>&#8203;(java.util.List&lt;<a href="../peer/PeerEntry.html" title="class in com.casper.sdk.model.peer">PeerEntry</a>&gt;&nbsp;peers)</code></th>
 <td class="colLast">
 <div class="block">List of</div>
 </td>
 </tr>
-<tr id="i17" class="rowColor">
+<tr id="i26" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setPublicKey(com.casper.sdk.model.key.PublicKey)">setPublicKey</a></span>&#8203;(<a href="../key/PublicKey.html" title="class in com.casper.sdk.model.key">PublicKey</a>&nbsp;publicKey)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i18" class="altColor">
+<tr id="i27" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setReactorState(com.casper.sdk.model.status.ReactorState)">setReactorState</a></span>&#8203;(<a href="ReactorState.html" title="enum in com.casper.sdk.model.status">ReactorState</a>&nbsp;reactorState)</code></th>
+<td class="colLast">
+<div class="block">The state of the reactor</div>
+</td>
+</tr>
+<tr id="i28" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setRoundLength(java.lang.String)">setRoundLength</a></span>&#8203;(java.lang.String&nbsp;roundLength)</code></th>
 <td class="colLast">
 <div class="block">The next round length if this node is a validator</div>
 </td>
 </tr>
-<tr id="i19" class="rowColor">
+<tr id="i29" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setStartStateRootHash(java.lang.String)">setStartStateRootHash</a></span>&#8203;(java.lang.String&nbsp;startStateRootHash)</code></th>
 <td class="colLast">
 <div class="block">The state root hash used at the start of the current session</div>
 </td>
 </tr>
-<tr id="i20" class="altColor">
+<tr id="i30" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setUptime(java.lang.String)">setUptime</a></span>&#8203;(java.lang.String&nbsp;uptime)</code></th>
 <td class="colLast">
@@ -372,7 +447,7 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(java.lang.String,java.lang.String,java.lang.String,com.casper.sdk.model.status.MinimalBlockInfo,com.casper.sdk.model.status.NextUpgrade,com.casper.sdk.model.key.PublicKey,java.util.List,java.lang.String,java.lang.String,java.lang.String)">
+<a id="&lt;init&gt;(java.lang.String,java.lang.String,java.lang.String,com.casper.sdk.model.status.MinimalBlockInfo,com.casper.sdk.model.status.NextUpgrade,com.casper.sdk.model.key.PublicKey,java.util.List,java.lang.String,java.lang.String,java.lang.String,com.casper.sdk.model.status.NodeState,com.casper.sdk.model.status.ReactorState,java.sql.Date,com.casper.sdk.model.status.AvailableBlockRange,com.casper.sdk.model.status.BlockSynchronizerStatus)">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -387,7 +462,12 @@ extends java.lang.Object</pre>
                   java.util.List&lt;<a href="../peer/PeerEntry.html" title="class in com.casper.sdk.model.peer">PeerEntry</a>&gt;&nbsp;peers,
                   java.lang.String&nbsp;roundLength,
                   java.lang.String&nbsp;uptime,
-                  java.lang.String&nbsp;startStateRootHash)</pre>
+                  java.lang.String&nbsp;startStateRootHash,
+                  <a href="NodeState.html" title="enum in com.casper.sdk.model.status">NodeState</a>&nbsp;nodeState,
+                  <a href="ReactorState.html" title="enum in com.casper.sdk.model.status">ReactorState</a>&nbsp;reactorState,
+                  java.sql.Date&nbsp;lastProgress,
+                  <a href="AvailableBlockRange.html" title="class in com.casper.sdk.model.status">AvailableBlockRange</a>&nbsp;availableBlockRange,
+                  <a href="BlockSynchronizerStatus.html" title="class in com.casper.sdk.model.status">BlockSynchronizerStatus</a>&nbsp;blockSynchronizerStatus)</pre>
 </li>
 </ul>
 <a id="&lt;init&gt;()">
@@ -531,6 +611,56 @@ extends java.lang.Object</pre>
 <div class="block">The state root hash used at the start of the current session</div>
 </li>
 </ul>
+<a id="getNodeState()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getNodeState</h4>
+<pre class="methodSignature">public&nbsp;<a href="NodeState.html" title="enum in com.casper.sdk.model.status">NodeState</a>&nbsp;getNodeState()</pre>
+<div class="block">Node run mode</div>
+</li>
+</ul>
+<a id="getReactorState()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getReactorState</h4>
+<pre class="methodSignature">public&nbsp;<a href="ReactorState.html" title="enum in com.casper.sdk.model.status">ReactorState</a>&nbsp;getReactorState()</pre>
+<div class="block">The state of the reactor</div>
+</li>
+</ul>
+<a id="getLastProgress()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getLastProgress</h4>
+<pre class="methodSignature">public&nbsp;java.sql.Date&nbsp;getLastProgress()</pre>
+<div class="block">Timestamp of the last recorded progress in the reactor</div>
+</li>
+</ul>
+<a id="getAvailableBlockRange()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getAvailableBlockRange</h4>
+<pre class="methodSignature">public&nbsp;<a href="AvailableBlockRange.html" title="class in com.casper.sdk.model.status">AvailableBlockRange</a>&nbsp;getAvailableBlockRange()</pre>
+<div class="block">The available block range in storage</div>
+</li>
+</ul>
+<a id="getBlockSynchronizerStatus()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getBlockSynchronizerStatus</h4>
+<pre class="methodSignature">public&nbsp;<a href="BlockSynchronizerStatus.html" title="class in com.casper.sdk.model.status">BlockSynchronizerStatus</a>&nbsp;getBlockSynchronizerStatus()</pre>
+<div class="block">The status of the block synchronizer builders</div>
+</li>
+</ul>
 <a id="setApiVersion(java.lang.String)">
 <!--   -->
 </a>
@@ -637,11 +767,61 @@ extends java.lang.Object</pre>
 <a id="setStartStateRootHash(java.lang.String)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>setStartStateRootHash</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setStartStateRootHash&#8203;(java.lang.String&nbsp;startStateRootHash)</pre>
 <div class="block">The state root hash used at the start of the current session</div>
+</li>
+</ul>
+<a id="setNodeState(com.casper.sdk.model.status.NodeState)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setNodeState</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setNodeState&#8203;(<a href="NodeState.html" title="enum in com.casper.sdk.model.status">NodeState</a>&nbsp;nodeState)</pre>
+<div class="block">Node run mode</div>
+</li>
+</ul>
+<a id="setReactorState(com.casper.sdk.model.status.ReactorState)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setReactorState</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setReactorState&#8203;(<a href="ReactorState.html" title="enum in com.casper.sdk.model.status">ReactorState</a>&nbsp;reactorState)</pre>
+<div class="block">The state of the reactor</div>
+</li>
+</ul>
+<a id="setLastProgress(java.sql.Date)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setLastProgress</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setLastProgress&#8203;(java.sql.Date&nbsp;lastProgress)</pre>
+<div class="block">Timestamp of the last recorded progress in the reactor</div>
+</li>
+</ul>
+<a id="setAvailableBlockRange(com.casper.sdk.model.status.AvailableBlockRange)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setAvailableBlockRange</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setAvailableBlockRange&#8203;(<a href="AvailableBlockRange.html" title="class in com.casper.sdk.model.status">AvailableBlockRange</a>&nbsp;availableBlockRange)</pre>
+<div class="block">The available block range in storage</div>
+</li>
+</ul>
+<a id="setBlockSynchronizerStatus(com.casper.sdk.model.status.BlockSynchronizerStatus)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>setBlockSynchronizerStatus</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setBlockSynchronizerStatus&#8203;(<a href="BlockSynchronizerStatus.html" title="class in com.casper.sdk.model.status">BlockSynchronizerStatus</a>&nbsp;blockSynchronizerStatus)</pre>
+<div class="block">The status of the block synchronizer builders</div>
 </li>
 </ul>
 </li>
