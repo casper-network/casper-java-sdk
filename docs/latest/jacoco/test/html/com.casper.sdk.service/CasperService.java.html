@@ -19,12 +19,12 @@ import com.casper.sdk.model.era.EraInfoData;
 import com.casper.sdk.model.globalstate.GlobalStateData;
 import com.casper.sdk.model.peer.PeerData;
 import com.casper.sdk.model.stateroothash.StateRootHashData;
+import com.casper.sdk.model.status.ChainspecData;
 import com.casper.sdk.model.status.StatusData;
 import com.casper.sdk.model.storedvalue.StoredValueData;
 import com.casper.sdk.model.transfer.TransferData;
 import com.casper.sdk.model.uref.URef;
 import com.casper.sdk.model.validator.ValidatorChangeData;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.googlecode.jsonrpc4j.*;
 
 import java.net.MalformedURLException;
@@ -277,7 +277,13 @@ public interface CasperService {
     QueryBalanceData queryBalance(@JsonRpcParam(&quot;state_identifier&quot;) GlobalStateIdentifier stateIdentifier,
                                   @JsonRpcParam(&quot;purse_identifier&quot;) PurseIdentifier purseIdentifier);
 
-
+    /**
+     * Fetches chainspec file as bytes
+     *
+     * @return the ChainspecData holder object
+     */
+    @JsonRpcMethod(&quot;info_get_chainspec&quot;)
+    ChainspecData getChainspec();
     //endregion
 
     //region DEPRECATED METHODS
