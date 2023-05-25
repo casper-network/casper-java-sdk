@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":6,"i1":6,"i2":6,"i3":6,"i4":6,"i5":6,"i6":6,"i7":6,"i8":6,"i9":6,"i10":6,"i11":6,"i12":38,"i13":6,"i14":6,"i15":6,"i16":6,"i17":6,"i18":6,"i19":6,"i20":6,"i21":6,"i22":1};
+var data = {"i0":6,"i1":6,"i2":6,"i3":6,"i4":6,"i5":6,"i6":6,"i7":6,"i8":6,"i9":6,"i10":6,"i11":6,"i12":6,"i13":38,"i14":6,"i15":6,"i16":6,"i17":6,"i18":6,"i19":6,"i20":6,"i21":6,"i22":6,"i23":1};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],32:["t6","Deprecated Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -186,34 +186,41 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </td>
 </tr>
 <tr id="i5" class="rowColor">
+<td class="colFirst"><code><a href="../model/status/ChainspecData.html" title="class in com.casper.sdk.model.status">ChainspecData</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getChainspec()">getChainspec</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Fetches chainspec file as bytes</div>
+</td>
+</tr>
+<tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="../model/deploy/DeployData.html" title="class in com.casper.sdk.model.deploy">DeployData</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getDeploy(java.lang.String)">getDeploy</a></span>&#8203;(java.lang.String&nbsp;deployHash)</code></th>
 <td class="colLast">
 <div class="block">Returns a Deploy from the network</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code><a href="../model/era/EraInfoData.html" title="class in com.casper.sdk.model.era">EraInfoData</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getEraInfoBySwitchBlock(com.casper.sdk.identifier.block.BlockIdentifier)">getEraInfoBySwitchBlock</a></span>&#8203;(<a href="../identifier/block/BlockIdentifier.html" title="interface in com.casper.sdk.identifier.block">BlockIdentifier</a>&nbsp;blockIdentifier)</code></th>
 <td class="colLast">
 <div class="block">Returns an EraInfo from the network</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code><a href="../model/era/EraInfoData.html" title="class in com.casper.sdk.model.era">EraInfoData</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getEraSummary(com.casper.sdk.identifier.block.BlockIdentifier)">getEraSummary</a></span>&#8203;(<a href="../identifier/block/BlockIdentifier.html" title="interface in com.casper.sdk.identifier.block">BlockIdentifier</a>&nbsp;blockIdentifier)</code></th>
 <td class="colLast">
 <div class="block">Returns an EraInfo for a given block</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code><a href="../model/peer/PeerData.html" title="class in com.casper.sdk.model.peer">PeerData</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPeerData()">getPeerData</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Get network peers data</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code><a href="../model/account/AccountData.html" title="class in com.casper.sdk.model.account">AccountData</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getStateAccountInfo(java.lang.String,com.casper.sdk.identifier.block.BlockIdentifier)">getStateAccountInfo</a></span>&#8203;(java.lang.String&nbsp;publicKey,
                    <a href="../identifier/block/BlockIdentifier.html" title="interface in com.casper.sdk.identifier.block">BlockIdentifier</a>&nbsp;blockIdentifier)</code></th>
@@ -221,14 +228,14 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">Returns an Account from the network</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code><a href="../model/auction/AuctionData.html" title="class in com.casper.sdk.model.auction">AuctionData</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getStateAuctionInfo(com.casper.sdk.identifier.block.BlockIdentifier)">getStateAuctionInfo</a></span>&#8203;(<a href="../identifier/block/BlockIdentifier.html" title="interface in com.casper.sdk.identifier.block">BlockIdentifier</a>&nbsp;blockIdentifier)</code></th>
 <td class="colLast">
 <div class="block">Returns the Auction info for a given block</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code><a href="../model/dictionary/DictionaryData.html" title="class in com.casper.sdk.model.dictionary">DictionaryData</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getStateDictionaryItem(java.lang.String,com.casper.sdk.identifier.dictionary.DictionaryIdentifier)">getStateDictionaryItem</a></span>&#8203;(java.lang.String&nbsp;stateRootHash,
                       <a href="../identifier/dictionary/DictionaryIdentifier.html" title="interface in com.casper.sdk.identifier.dictionary">DictionaryIdentifier</a>&nbsp;dictionaryIdentifier)</code></th>
@@ -236,7 +243,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">Lookup a dictionary item via a Contract's named keys.</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code><a href="../model/storedvalue/StoredValueData.html" title="class in com.casper.sdk.model.storedvalue">StoredValueData</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getStateItem(java.lang.String,java.lang.String,java.util.List)">getStateItem</a></span>&#8203;(java.lang.String&nbsp;stateRootHash,
             java.lang.String&nbsp;key,
@@ -245,42 +252,42 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code><a href="../model/stateroothash/StateRootHashData.html" title="class in com.casper.sdk.model.stateroothash">StateRootHashData</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getStateRootHash()">getStateRootHash</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns a state root hash at the last Block</div>
 </td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code><a href="../model/stateroothash/StateRootHashData.html" title="class in com.casper.sdk.model.stateroothash">StateRootHashData</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getStateRootHash(com.casper.sdk.identifier.block.BlockIdentifier)">getStateRootHash</a></span>&#8203;(<a href="../identifier/block/BlockIdentifier.html" title="interface in com.casper.sdk.identifier.block">BlockIdentifier</a>&nbsp;blockIdentifier)</code></th>
 <td class="colLast">
 <div class="block">Returns a state root hash at a given a <a href="../identifier/block/BlockIdentifier.html" title="interface in com.casper.sdk.identifier.block"><code>BlockIdentifier</code></a></div>
 </td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code><a href="../model/status/StatusData.html" title="class in com.casper.sdk.model.status">StatusData</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getStatus()">getStatus</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the current status of the node</div>
 </td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code><a href="../model/validator/ValidatorChangeData.html" title="class in com.casper.sdk.model.validator">ValidatorChangeData</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getValidatorsChanges()">getValidatorsChanges</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the Validator Changes in between two eras</div>
 </td>
 </tr>
-<tr id="i17" class="rowColor">
+<tr id="i18" class="altColor">
 <td class="colFirst"><code><a href="../model/deploy/DeployResult.html" title="class in com.casper.sdk.model.deploy">DeployResult</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#putDeploy(com.casper.sdk.model.deploy.Deploy)">putDeploy</a></span>&#8203;(<a href="../model/deploy/Deploy.html" title="class in com.casper.sdk.model.deploy">Deploy</a>&nbsp;deploy)</code></th>
 <td class="colLast">
 <div class="block">Sends a deploy to be received by the network</div>
 </td>
 </tr>
-<tr id="i18" class="altColor">
+<tr id="i19" class="rowColor">
 <td class="colFirst"><code><a href="../model/balance/QueryBalanceData.html" title="class in com.casper.sdk.model.balance">QueryBalanceData</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#queryBalance(com.casper.sdk.identifier.global.GlobalStateIdentifier,com.casper.sdk.identifier.purse.PurseIdentifier)">queryBalance</a></span>&#8203;(<a href="../identifier/global/GlobalStateIdentifier.html" title="interface in com.casper.sdk.identifier.global">GlobalStateIdentifier</a>&nbsp;stateIdentifier,
             <a href="../identifier/purse/PurseIdentifier.html" title="interface in com.casper.sdk.identifier.purse">PurseIdentifier</a>&nbsp;purseIdentifier)</code></th>
@@ -288,7 +295,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">Fetches balance value</div>
 </td>
 </tr>
-<tr id="i19" class="rowColor">
+<tr id="i20" class="altColor">
 <td class="colFirst"><code><a href="../model/globalstate/GlobalStateData.html" title="class in com.casper.sdk.model.globalstate">GlobalStateData</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#queryGlobalState(com.casper.sdk.identifier.global.GlobalStateIdentifier,java.lang.String,java.lang.String%5B%5D)">queryGlobalState</a></span>&#8203;(<a href="../identifier/global/GlobalStateIdentifier.html" title="interface in com.casper.sdk.identifier.global">GlobalStateIdentifier</a>&nbsp;stateIdentifier,
                 java.lang.String&nbsp;key,
@@ -297,7 +304,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">Returns the global state data given a <a href="../identifier/global/GlobalStateIdentifier.html" title="interface in com.casper.sdk.identifier.global"><code>GlobalStateIdentifier</code></a>, key and paths</div>
 </td>
 </tr>
-<tr id="i20" class="altColor">
+<tr id="i21" class="rowColor">
 <td class="colFirst"><code><a href="../model/deploy/SpeculativeDeployData.html" title="class in com.casper.sdk.model.deploy">SpeculativeDeployData</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#speculativeExec(com.casper.sdk.identifier.block.BlockIdentifier,com.casper.sdk.model.deploy.Deploy)">speculativeExec</a></span>&#8203;(<a href="../identifier/block/BlockIdentifier.html" title="interface in com.casper.sdk.identifier.block">BlockIdentifier</a>&nbsp;blockIdentifier,
                <a href="../model/deploy/Deploy.html" title="class in com.casper.sdk.model.deploy">Deploy</a>&nbsp;deploy)</code></th>
@@ -306,7 +313,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
  without committing it to global state</div>
 </td>
 </tr>
-<tr id="i21" class="rowColor">
+<tr id="i22" class="altColor">
 <td class="colFirst"><code><a href="../model/deploy/SpeculativeDeployData.html" title="class in com.casper.sdk.model.deploy">SpeculativeDeployData</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#speculativeExec(com.casper.sdk.model.deploy.Deploy)">speculativeExec</a></span>&#8203;(<a href="../model/deploy/Deploy.html" title="class in com.casper.sdk.model.deploy">Deploy</a>&nbsp;deploy)</code></th>
 <td class="colLast">
@@ -314,7 +321,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
  without committing it to global state</div>
 </td>
 </tr>
-<tr id="i22" class="altColor">
+<tr id="i23" class="rowColor">
 <td class="colFirst"><code>static <a href="CasperService.html" title="interface in com.casper.sdk.service">CasperService</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#usingPeer(java.lang.String,int)">usingPeer</a></span>&#8203;(java.lang.String&nbsp;ip,
          int&nbsp;port)</code></th>
@@ -701,6 +708,20 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><code>purseIdentifier</code> - The identifier to obtain the purse corresponding to balance query.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>Result for "query_balance" RPC response</dd>
+</dl>
+</li>
+</ul>
+<a id="getChainspec()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getChainspec</h4>
+<pre class="methodSignature"><a href="../model/status/ChainspecData.html" title="class in com.casper.sdk.model.status">ChainspecData</a>&nbsp;getChainspec()</pre>
+<div class="block">Fetches chainspec file as bytes</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the ChainspecData holder object</dd>
 </dl>
 </li>
 </ul>
