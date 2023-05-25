@@ -2,10 +2,12 @@
 
 import com.casper.sdk.model.key.PublicKey;
 import com.casper.sdk.model.peer.PeerEntry;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
+import java.sql.Date;
 import java.util.List;
 
 /**
@@ -16,72 +18,105 @@ import java.util.List;
  * @since 0.0.1
  */
 @Getter
-<span class="fc" id="L19">@Setter</span>
-<span class="nc" id="L20">@Builder</span>
-<span class="nc" id="L21">@AllArgsConstructor</span>
-<span class="fc" id="L22">@NoArgsConstructor</span>
+<span class="pc" id="L21">@Setter</span>
+<span class="nc" id="L22">@Builder</span>
+<span class="nc" id="L23">@AllArgsConstructor</span>
+<span class="fc" id="L24">@NoArgsConstructor</span>
 public class StatusData {
 
     /**
      * The RPC API version
      */
     @JsonProperty(&quot;api_version&quot;)
-<span class="fc" id="L29">    private String apiVersion;</span>
+<span class="fc" id="L31">    private String apiVersion;</span>
 
     /**
      * The compiled node version
      */
     @JsonProperty(&quot;build_version&quot;)
-<span class="fc" id="L35">    private String buildVersion;</span>
+<span class="fc" id="L37">    private String buildVersion;</span>
 
     /**
      * The chainspec name
      */
     @JsonProperty(&quot;chainspec_name&quot;)
-<span class="fc" id="L41">    private String chainSpecName;</span>
+<span class="fc" id="L43">    private String chainSpecName;</span>
 
     /**
      * @see MinimalBlockInfo
      */
     @JsonProperty(&quot;last_added_block_info&quot;)
-<span class="fc" id="L47">    private MinimalBlockInfo lastAddedBlockInfo;</span>
+<span class="fc" id="L49">    private MinimalBlockInfo lastAddedBlockInfo;</span>
 
     /**
      * @see NextUpgrade
      */
     @JsonProperty(&quot;next_upgrade&quot;)
-<span class="fc" id="L53">    private NextUpgrade nextUpgrade;</span>
+<span class="fc" id="L55">    private NextUpgrade nextUpgrade;</span>
 
     /**
      * @see PublicKey
      */
     @JsonProperty(&quot;our_public_signing_key&quot;)
-<span class="fc" id="L59">    private PublicKey publicKey;</span>
+<span class="fc" id="L61">    private PublicKey publicKey;</span>
 
     /**
      * List of
      *
      * @see PeerEntry
      */
-<span class="fc" id="L66">    private List&lt;PeerEntry&gt; peers;</span>
+<span class="fc" id="L68">    private List&lt;PeerEntry&gt; peers;</span>
 
     /**
      * The next round length if this node is a validator
      */
     @JsonProperty(&quot;round_length&quot;)
-<span class="fc" id="L72">    private String roundLength;</span>
+<span class="fc" id="L74">    private String roundLength;</span>
 
     /**
      * Time passed since the node has started
      */
     @JsonInclude(JsonInclude.Include.NON_NULL)
-<span class="fc" id="L78">    private String uptime;</span>
+<span class="fc" id="L80">    private String uptime;</span>
 
     /**
      * The state root hash used at the start of the current session
      */
     @JsonProperty(&quot;starting_state_root_hash&quot;)
-<span class="fc" id="L84">    private String startStateRootHash;</span>
+<span class="fc" id="L86">    private String startStateRootHash;</span>
+
+    /**
+     * Node run mode
+     */
+    @JsonProperty(&quot;node_state&quot;)
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+<span class="fc" id="L93">    private NodeState nodeState;</span>
+
+    /**
+     * The state of the reactor
+     */
+    @JsonProperty(&quot;reactor_state&quot;)
+<span class="fc" id="L99">    private ReactorState reactorState;</span>
+
+    /**
+     * Timestamp of the last recorded progress in the reactor
+     */
+    @JsonProperty(&quot;last_progress&quot;)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = &quot;yyyy-MM-dd'T'HH:mm:ss.SSS'Z'&quot;)
+<span class="fc" id="L106">    private Date lastProgress;</span>
+
+    /**
+     * The available block range in storage
+     */
+    @JsonProperty(&quot;available_block_range&quot;)
+<span class="fc" id="L112">    private AvailableBlockRange availableBlockRange;</span>
+
+    /**
+     * The status of the block synchronizer builders
+     */
+    @JsonProperty(&quot;block_sync&quot;)
+<span class="fc" id="L118">    private BlockSynchronizerStatus blockSynchronizerStatus;</span>
+
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
