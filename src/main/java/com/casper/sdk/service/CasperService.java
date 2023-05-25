@@ -25,7 +25,6 @@ import com.casper.sdk.model.storedvalue.StoredValueData;
 import com.casper.sdk.model.transfer.TransferData;
 import com.casper.sdk.model.uref.URef;
 import com.casper.sdk.model.validator.ValidatorChangeData;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.googlecode.jsonrpc4j.*;
 
 import java.net.MalformedURLException;
@@ -259,7 +258,7 @@ public interface CasperService {
      * Returns an EraInfo for a given block
      *
      * @param blockIdentifier BlockIdentifier data
-     * @return Object holding api ChainspecDataversion and EraInfo
+     * @return Object holding api version and EraInfo
      */
     @JsonRpcMethod("chain_get_era_summary")
     EraInfoData getEraSummary(@JsonRpcParam("block_identifier") BlockIdentifier blockIdentifier);
