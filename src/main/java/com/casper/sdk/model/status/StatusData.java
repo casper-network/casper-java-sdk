@@ -2,10 +2,12 @@ package com.casper.sdk.model.status;
 
 import com.casper.sdk.model.key.PublicKey;
 import com.casper.sdk.model.peer.PeerEntry;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
+import java.sql.Date;
 import java.util.List;
 
 /**
@@ -82,5 +84,38 @@ public class StatusData {
      */
     @JsonProperty("starting_state_root_hash")
     private String startStateRootHash;
+
+    /**
+     * Node run mode
+     */
+    @JsonProperty("node_state")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private NodeState nodeState;
+
+    /**
+     * The state of the reactor
+     */
+    @JsonProperty("reactor_state")
+    private ReactorState reactorState;
+
+    /**
+     * Timestamp of the last recorded progress in the reactor
+     */
+    @JsonProperty("last_progress")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+    private Date lastProgress;
+
+    /**
+     * The available block range in storage
+     */
+    @JsonProperty("available_block_range")
+    private AvailableBlockRange availableBlockRange;
+
+    /**
+     * The status of the block synchronizer builders
+     */
+    @JsonProperty("block_sync")
+    private BlockSynchronizerStatus blockSynchronizerStatus;
+
 
 }
