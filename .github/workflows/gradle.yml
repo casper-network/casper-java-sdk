@@ -8,13 +8,14 @@ on:
     branches: [ main, dev ]
   pull_request:
     branches: [ main, dev ]
+  workflow_dispatch:    
 
 jobs:
   build:
     runs-on: ubuntu-latest
     services:
       nctl:
-        image: syntifi/nctl:dev
+        image: stormeye2000/cspr-nctl:dev
         options: --name nctl
         env:
           PREDEFINED_ACCOUNTS: 'true'
