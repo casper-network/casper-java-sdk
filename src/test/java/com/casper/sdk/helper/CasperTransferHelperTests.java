@@ -114,7 +114,6 @@ public class CasperTransferHelperTests extends AbstractJsonRpcTests {
     }
 
     @Test
-    @Disabled
     void testSpeculativeTransferOnNctl() throws IOException, NoSuchTypeException, GeneralSecurityException, URISyntaxException, ValueSerializationException {
         Ed25519PrivateKey user1 = new Ed25519PrivateKey();
         Ed25519PrivateKey user2 = new Ed25519PrivateKey();
