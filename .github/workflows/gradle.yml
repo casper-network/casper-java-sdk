@@ -70,3 +70,5 @@ jobs:
           mkdir -p src/test/resources/deploy-accounts/nctl/users
           mv user-* src/test/resources/deploy-accounts/nctl/users
           ./gradlew clean test
+
+
