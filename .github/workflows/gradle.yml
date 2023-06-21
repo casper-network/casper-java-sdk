@@ -67,4 +67,10 @@ jobs:
       - name: Build with Gradle
         run: |
           ls -ltra
+          rm -rf src/test/resources/deploy-accounts/nctl
+          mkdir src/test/resources/deploy-accounts/nctl
+          mkdir src/test/resources/deploy-accounts/nctl/users
+          mv user-* src/test/resources/deploy-accounts/nctl/users
+          ls src/test/resources/deploy-accounts/nctl -ltra
+          ls src/test/resources/deploy-accounts/nctl/users -ltra
 
