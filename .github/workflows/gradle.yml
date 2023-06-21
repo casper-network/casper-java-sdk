@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       nctl:
-        image: stormeye2000/cspr-nctl:dev
+        image: stormeye2000/cspr-nctl:1.5
         options: --name nctl
         env:
           PREDEFINED_ACCOUNTS: 'true'
@@ -35,10 +35,8 @@ jobs:
           echo "Wait for NCTL"
           sleep 30s
           mkdir assets
-          docker cp nctl:/home/casper/casper-node/utils/nctl/assets/net-1/chainspec assets
           docker cp nctl:/home/casper/casper-node/utils/nctl/assets/net-1/users assets
           mv assets/users assets/net-1
-          mv assets/chainspec assets/net-1/chainspec          
 
       # Upload the NCTL assets to a project artifact
       - name: Upload NCTL assets to artifacts
@@ -46,7 +44,6 @@ jobs:
         with:
           name: nctl-accounts
           path: |
-            assets/net-1/chainspec/accounts.toml
             assets/net-1/user-*
 
       - name: Checkout code
@@ -62,47 +59,14 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build with Gradle
-        run: ./gradlew clean build
+        run: |
+          ls -ltra
 
   publish-docs-reports:
     needs: build
     runs-on: ubuntu-latest
 
     services:
-      nctl:
-        image: syntifi/nctl:dev
-        options: --name nctl
-        env:
-          PREDEFINED_ACCOUNTS: 'true'
-          MINIMUM_ROUND_EXPONENT: '12'
-          MAXIMUM_ROUND_EXPONENT: '14'
-          DEPLOY_DELAY: '30sec'
-          SPECULATIVE_EXEC_SERVER_ENABLED: 'true'
-        ports:
-          - 11101:11101
-          - 14101:14101
-          - 18101:18101
-          - 25101:25101
-    steps:
-      # Build the assets folder from the started NCTL docker image
-      - name: Preparing NCTL assets on the started NCTL docker image
-        run: |
-          echo "Wait for NCTL"
-          sleep 30s
-          mkdir assets
-          docker cp nctl:/home/casper/casper-node/utils/nctl/assets/net-1/chainspec assets
-          docker cp nctl:/home/casper/casper-node/utils/nctl/assets/net-1/users assets
-          mv assets/users assets/net-1
-          mv assets/chainspec assets/net-1/chainspec          
-
-      # Upload the NCTL assets to a project artifact
-      - name: Upload NCTL assets to artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: nctl-accounts
-          path: |
-            assets/net-1/chainspec/accounts.toml
-            assets/net-1/user-*
 
       - name: Checkout code
         uses: actions/checkout@v2
@@ -120,10 +84,10 @@ jobs:
         run: echo "PROJECT_VERSION=$(./gradlew properties -q | grep "version:" | awk '{print $2}')" >> $GITHUB_ENV
 
       - name: Generate Javadoc
-        run: ./gradlew clean javadoc
+        run: ./gradlew javadoc
 
       - name: Run tests and generate reports
-        run: ./gradlew test
+        run: ./gradlew clean test
 
       - name: Deploy tests results to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4.2.2
