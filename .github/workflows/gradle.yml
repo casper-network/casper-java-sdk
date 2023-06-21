@@ -69,6 +69,60 @@ jobs:
           rm -rf src/test/resources/deploy-accounts/nctl
           mkdir -p src/test/resources/deploy-accounts/nctl/users
           mv user-* src/test/resources/deploy-accounts/nctl/users
-          ./gradlew clean test
+          ./gradlew clean build
+          
+      - name: Export project version
+        run: echo "PROJECT_VERSION=$(./gradlew properties -q | grep "version:" | awk '{print $2}')" >> $GITHUB_ENV
+
+      - name: Generate Javadoc
+        run: ./gradlew javadoc
+
+      - name: Deploy tests results to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4.2.2
+        with:
+          branch: gh-pages
+          clean: true
+          folder: build/reports/tests
+          target-folder: docs/latest/junit
+
+      - name: Deploy jacoco report to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4.2.2
+        with:
+          branch: gh-pages
+          clean: true
+          folder: build/reports/jacoco
+          target-folder: docs/latest/jacoco
+
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4.2.2
+        with:
+          branch: gh-pages
+          clean: true
+          folder: build/docs/javadoc
+          target-folder: docs/latest/javadoc
+
+      - name: Deploy tests results to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4.2.2
+        with:
+          branch: gh-pages
+          clean: true
+          folder: build/reports/tests
+          target-folder: docs/${{ env.PROJECT_VERSION }}/junit
+
+      - name: Deploy jacoco report to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4.2.2
+        with:
+          branch: gh-pages
+          clean: true
+          folder: build/reports/jacoco
+          target-folder: docs/${{ env.PROJECT_VERSION }}/jacoco
+
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4.2.2
+        with:
+          branch: gh-pages
+          clean: true
+          folder: build/docs/javadoc
+          target-folder: docs/${{ env.PROJECT_VERSION }}/javadoc
 
 
