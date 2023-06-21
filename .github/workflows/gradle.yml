@@ -55,6 +55,12 @@ jobs:
           java-version: '11'
           distribution: 'adopt'
 
+      # Download the NCTL assets artifact
+      - name: Download NCTL assets artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: nctl-accounts
+
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
