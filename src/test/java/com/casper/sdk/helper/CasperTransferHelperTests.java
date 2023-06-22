@@ -3,7 +3,6 @@ package com.casper.sdk.helper;
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.common.Ttl;
 import com.casper.sdk.model.deploy.Deploy;
-import com.casper.sdk.model.deploy.DeployData;
 import com.casper.sdk.model.deploy.DeployResult;
 import com.casper.sdk.model.deploy.SpeculativeDeployData;
 import com.casper.sdk.model.key.PublicKey;
@@ -84,8 +83,8 @@ public class CasperTransferHelperTests extends AbstractJsonRpcTests {
     void testTransferOnNctl() throws IOException, NoSuchTypeException, GeneralSecurityException, URISyntaxException, ValueSerializationException {
         Ed25519PrivateKey user1 = new Ed25519PrivateKey();
         Ed25519PrivateKey user2 = new Ed25519PrivateKey();
-        user1.readPrivateKey(getResourcesKeyPath("deploy-accounts/nctl/users/user-1/secret_key.pem"));
-        user2.readPrivateKey(getResourcesKeyPath("deploy-accounts/nctl/users/user-2/secret_key.pem"));
+        user1.readPrivateKey(getResourcesKeyPath("assets/users/user-1/secret_key.pem"));
+        user2.readPrivateKey(getResourcesKeyPath("assets/users/user-2/secret_key.pem"));
 
         long id = Math.abs(new Random().nextInt());
         Ttl ttl = Ttl
@@ -116,8 +115,8 @@ public class CasperTransferHelperTests extends AbstractJsonRpcTests {
     void testSpeculativeTransferOnNctl() throws IOException, NoSuchTypeException, GeneralSecurityException, URISyntaxException, ValueSerializationException {
         Ed25519PrivateKey user1 = new Ed25519PrivateKey();
         Ed25519PrivateKey user2 = new Ed25519PrivateKey();
-        user1.readPrivateKey(getResourcesKeyPath("deploy-accounts/nctl/users/user-1/secret_key.pem"));
-        user2.readPrivateKey(getResourcesKeyPath("deploy-accounts/nctl/users/user-2/secret_key.pem"));
+        user1.readPrivateKey(getResourcesKeyPath("assets/users/user-1/secret_key.pem"));
+        user2.readPrivateKey(getResourcesKeyPath("assets/users/user-2/secret_key.pem"));
 
         long id = Math.abs(new Random().nextInt());
         Ttl ttl = Ttl

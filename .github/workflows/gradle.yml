@@ -5,9 +5,9 @@ name: Java CI with Gradle
 
 on:
   push:
-    branches: [ main, dev ]
+    branches: [main, dev]
   pull_request:
-    branches: [ main, dev ]
+    branches: [main, dev]
   workflow_dispatch:    
 
 jobs:
@@ -15,8 +15,8 @@ jobs:
     runs-on: ubuntu-latest
     services:
       nctl:
-        image: stormeye2000/cspr-nctl:dev
-        options: --name nctl
+        image: stormeye2000/cspr-nctl:1.5
+        options: --name cspr-nctl
         env:
           PREDEFINED_ACCOUNTS: 'true'
           MINIMUM_ROUND_EXPONENT: '12'
@@ -29,25 +29,10 @@ jobs:
           - 18101:18101
           - 25101:25101
     steps:
-      # Build the assets folder from the started NCTL docker image
-      - name: Preparing NCTL assets on the started NCTL docker image
+      - name: Wait for NCTL
         run: |
           echo "Wait for NCTL"
           sleep 30s
-          mkdir assets
-          docker cp nctl:/home/casper/casper-node/utils/nctl/assets/net-1/chainspec assets
-          docker cp nctl:/home/casper/casper-node/utils/nctl/assets/net-1/users assets
-          mv assets/users assets/net-1
-          mv assets/chainspec assets/net-1/chainspec          
-
-      # Upload the NCTL assets to a project artifact
-      - name: Upload NCTL assets to artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: nctl-accounts
-          path: |
-            assets/net-1/chainspec/accounts.toml
-            assets/net-1/user-*
 
       - name: Checkout code
         uses: actions/checkout@v2
@@ -61,69 +46,17 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Build with Gradle
-        run: ./gradlew clean build
-
-  publish-docs-reports:
-    needs: build
-    runs-on: ubuntu-latest
-
-    services:
-      nctl:
-        image: syntifi/nctl:dev
-        options: --name nctl
-        env:
-          PREDEFINED_ACCOUNTS: 'true'
-          MINIMUM_ROUND_EXPONENT: '12'
-          MAXIMUM_ROUND_EXPONENT: '14'
-          DEPLOY_DELAY: '30sec'
-          SPECULATIVE_EXEC_SERVER_ENABLED: 'true'
-        ports:
-          - 11101:11101
-          - 14101:14101
-          - 18101:18101
-          - 25101:25101
-    steps:
-      # Build the assets folder from the started NCTL docker image
-      - name: Preparing NCTL assets on the started NCTL docker image
+      # Copy the assets from the NCTL docker image and build
+      - name: Build and test with Gradle
         run: |
-          echo "Wait for NCTL"
-          sleep 30s
-          mkdir assets
-          docker cp nctl:/home/casper/casper-node/utils/nctl/assets/net-1/chainspec assets
-          docker cp nctl:/home/casper/casper-node/utils/nctl/assets/net-1/users assets
-          mv assets/users assets/net-1
-          mv assets/chainspec assets/net-1/chainspec          
-
-      # Upload the NCTL assets to a project artifact
-      - name: Upload NCTL assets to artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: nctl-accounts
-          path: |
-            assets/net-1/chainspec/accounts.toml
-            assets/net-1/user-*
-
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Set up JDK 11
-        uses: actions/setup-java@v2
-        with:
-          java-version: '11'
-          distribution: 'adopt'
-
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-
+          cd sh && chmod +x docker-copy-assets.sh && ./docker-copy-assets.sh && cd ..
+          ./gradlew clean build
+          
       - name: Export project version
         run: echo "PROJECT_VERSION=$(./gradlew properties -q | grep "version:" | awk '{print $2}')" >> $GITHUB_ENV
 
       - name: Generate Javadoc
-        run: ./gradlew clean javadoc
-
-      - name: Run tests and generate reports
-        run: ./gradlew test
+        run: ./gradlew javadoc
 
       - name: Deploy tests results to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4.2.2
@@ -172,3 +105,5 @@ jobs:
           clean: true
           folder: build/docs/javadoc
           target-folder: docs/${{ env.PROJECT_VERSION }}/javadoc
+
+
