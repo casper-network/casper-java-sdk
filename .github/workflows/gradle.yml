@@ -34,9 +34,7 @@ jobs:
         run: |
           echo "Wait for NCTL"
           sleep 30s
-          mkdir assets
-          docker cp nctl:/home/casper/casper-node/utils/nctl/assets/net-1/users assets
-          mv assets/users assets/net-1
+
 
       # Upload the NCTL assets to a project artifact
 #      - name: Upload NCTL assets to artifacts
