@@ -13,17 +13,18 @@ import com.casper.sdk.model.block.JsonBlockData;
 import com.casper.sdk.model.deploy.Deploy;
 import com.casper.sdk.model.deploy.DeployData;
 import com.casper.sdk.model.deploy.DeployResult;
+import com.casper.sdk.model.deploy.SpeculativeDeployData;
 import com.casper.sdk.model.dictionary.DictionaryData;
 import com.casper.sdk.model.era.EraInfoData;
 import com.casper.sdk.model.globalstate.GlobalStateData;
 import com.casper.sdk.model.peer.PeerData;
 import com.casper.sdk.model.stateroothash.StateRootHashData;
+import com.casper.sdk.model.status.ChainspecData;
 import com.casper.sdk.model.status.StatusData;
 import com.casper.sdk.model.storedvalue.StoredValueData;
 import com.casper.sdk.model.transfer.TransferData;
 import com.casper.sdk.model.uref.URef;
 import com.casper.sdk.model.validator.ValidatorChangeData;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.googlecode.jsonrpc4j.*;
 
 import java.net.MalformedURLException;
@@ -63,6 +64,7 @@ public interface CasperService {
     }
 
     //region INFORMATIONAL METHODS
+
     /**
      * Get the latest block info
      *
@@ -191,6 +193,7 @@ public interface CasperService {
     //endregion
 
     //region TRANSACTIONAL METHODS
+
     /**
      * Sends a deploy to be received by the network
      *
@@ -199,9 +202,32 @@ public interface CasperService {
      */
     @JsonRpcMethod(value = "account_put_deploy", paramsPassMode = JsonRpcParamsPassMode.ARRAY)
     DeployResult putDeploy(Deploy deploy);
+
+    /**
+     * The speculative_exec endpoint provides a method to execute a Deploy
+     * without committing it to global state
+     *
+     * @param blockIdentifier BlockIdentifier data
+     * @param deploy          the deploy object to send to the network
+     * @return Object holding the api version and the deploy hash
+     */
+    @JsonRpcMethod("speculative_exec")
+    SpeculativeDeployData speculativeExec(@JsonRpcParam("block_identifier") BlockIdentifier blockIdentifier,
+                                 @JsonRpcParam("deploy") Deploy deploy);
+
+    /**
+     * The speculative_exec endpoint provides a method to execute a Deploy
+     * without committing it to global state
+     *
+     * @param deploy          the deploy object to send to the network
+     * @return Object holding the api version and the deploy hash
+     */
+    @JsonRpcMethod("speculative_exec")
+    SpeculativeDeployData speculativeExec(@JsonRpcParam("deploy") Deploy deploy);
     //endregion
 
     //region PROOF OF STAKE METHODS
+
     /**
      * Returns the Auction info for a given block
      *
@@ -239,6 +265,7 @@ public interface CasperService {
     //endregion
 
     //region TO BE IMPLEMENTED ON 1.5.0
+
     /**
      * Fetches balance value
      *
@@ -251,16 +278,12 @@ public interface CasperService {
                                   @JsonRpcParam("purse_identifier") PurseIdentifier purseIdentifier);
 
     /**
-     * The speculative_exec endpoint provides a method to execute a Deploy
-     * without committing it to global state
+     * Fetches chainspec file as bytes
      *
-     * @param blockIdentifier BlockIdentifier data
-     * @param deploy          the deploy object to send to the network
-     * @return Object holding the api version and the deploy hash
+     * @return the ChainspecData holder object
      */
-    @JsonRpcMethod("speculative_exec")
-    JsonNode speculativeExec(@JsonRpcParam("block_identifier") BlockIdentifier blockIdentifier,
-                             @JsonRpcParam("deploy") Deploy deploy);
+    @JsonRpcMethod("info_get_chainspec")
+    ChainspecData getChainspec();
     //endregion
 
     //region DEPRECATED METHODS
