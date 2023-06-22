@@ -17,8 +17,6 @@ import com.syntifi.crypto.key.AbstractPrivateKey;
 import com.syntifi.crypto.key.Ed25519PrivateKey;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.math.BigInteger;
@@ -29,8 +27,6 @@ import java.nio.file.Path;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class CasperServiceTestsNctl  extends AbstractJsonRpcTests {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(CasperServiceTestsNctl.class);
 
     /**
      * Test if get block matches requested by height
@@ -71,7 +67,10 @@ public class CasperServiceTestsNctl  extends AbstractJsonRpcTests {
 
     @Test
     void queryBalance() throws IOException {
-        final URL privateKeyAccount1 = getClass().getResource("/deploy-accounts/nctl/users/user-1/secret_key.pem");
+
+
+        final URL privateKeyAccount1 = getClass().getResource("/assets/users/user-1/secret_key.pem");
+
         Assertions.assertNotNull(privateKeyAccount1);
         final AbstractPrivateKey privateKey = new Ed25519PrivateKey();
         privateKey.readPrivateKey(privateKeyAccount1.getFile());

@@ -16,7 +16,7 @@ jobs:
     services:
       nctl:
         image: stormeye2000/cspr-nctl:1.5
-        options: --name nctl
+        options: --name cspr-nctl
         env:
           PREDEFINED_ACCOUNTS: 'true'
           MINIMUM_ROUND_EXPONENT: '12'
@@ -39,12 +39,12 @@ jobs:
           mv assets/users assets/net-1
 
       # Upload the NCTL assets to a project artifact
-      - name: Upload NCTL assets to artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: nctl-accounts
-          path: |
-            assets/net-1/user-*
+#      - name: Upload NCTL assets to artifacts
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: nctl-accounts
+#          path: |
+#            assets/net-1/user-*
 
       - name: Checkout code
         uses: actions/checkout@v2
@@ -56,19 +56,17 @@ jobs:
           distribution: 'adopt'
 
       # Download the NCTL assets artifact
-      - name: Download NCTL assets artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: nctl-accounts
+#      - name: Download NCTL assets artifact
+#        uses: actions/download-artifact@v3
+#        with:
+#          name: nctl-accounts
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
       - name: Build with Gradle
         run: |
-          rm -rf src/test/resources/deploy-accounts/nctl
-          mkdir -p src/test/resources/deploy-accounts/nctl/users
-          mv user-* src/test/resources/deploy-accounts/nctl/users
+          cd sh && chmod +x docker-copy-assets.sh && ./docker-copy-assets.sh && cd ..
           ./gradlew clean build
           
       - name: Export project version
