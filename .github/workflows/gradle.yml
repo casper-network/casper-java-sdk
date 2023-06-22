@@ -65,6 +65,8 @@ jobs:
       - name: Build with Gradle
         run: |
           cd sh && chmod +x docker-copy-assets.sh && ./docker-copy-assets.sh && cd ..
+          ls src/test/resources/assets/users -lta
+          ls src/test/resources/assets/users/user-1 -lta
           ./gradlew clean build
           
       - name: Export project version
