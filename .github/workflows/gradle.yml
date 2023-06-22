@@ -29,20 +29,10 @@ jobs:
           - 18101:18101
           - 25101:25101
     steps:
-      # Build the assets folder from the started NCTL docker image
-      - name: Preparing NCTL assets on the started NCTL docker image
+      - name: Wait for NCTL
         run: |
           echo "Wait for NCTL"
           sleep 30s
-
-
-      # Upload the NCTL assets to a project artifact
-#      - name: Upload NCTL assets to artifacts
-#        uses: actions/upload-artifact@v3
-#        with:
-#          name: nctl-accounts
-#          path: |
-#            assets/net-1/user-*
 
       - name: Checkout code
         uses: actions/checkout@v2
@@ -53,20 +43,13 @@ jobs:
           java-version: '11'
           distribution: 'adopt'
 
-      # Download the NCTL assets artifact
-#      - name: Download NCTL assets artifact
-#        uses: actions/download-artifact@v3
-#        with:
-#          name: nctl-accounts
-
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Build with Gradle
+      # Copy the assets from the NCTL docker image and build
+      - name: Build and test with Gradle
         run: |
           cd sh && chmod +x docker-copy-assets.sh && ./docker-copy-assets.sh && cd ..
-          ls src/test/resources/assets/users -lta
-          ls src/test/resources/assets/users/user-1 -lta
           ./gradlew clean build
           
       - name: Export project version
