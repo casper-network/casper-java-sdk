@@ -2,29 +2,36 @@ package com.casper.sdk.model.deploy;
 
 import com.casper.sdk.helper.CasperConstants;
 import com.casper.sdk.helper.CasperDeployHelper;
+import com.casper.sdk.identifier.dictionary.StringDictionaryIdentifier;
+import com.casper.sdk.model.account.Account;
+import com.casper.sdk.model.clvalue.CLValuePublicKey;
 import com.casper.sdk.model.clvalue.CLValueString;
 import com.casper.sdk.model.clvalue.CLValueU256;
 import com.casper.sdk.model.clvalue.CLValueU8;
 import com.casper.sdk.model.common.Ttl;
+import com.casper.sdk.model.contract.NamedKey;
 import com.casper.sdk.model.deploy.executabledeploy.ModuleBytes;
+import com.casper.sdk.model.deploy.executabledeploy.StoredContractByHash;
+import com.casper.sdk.model.key.PublicKey;
+import com.casper.sdk.model.stateroothash.StateRootHashData;
+import com.casper.sdk.model.storedvalue.StoredValueAccount;
+import com.casper.sdk.model.storedvalue.StoredValueData;
 import com.casper.sdk.service.CasperService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.syntifi.crypto.key.Ed25519PrivateKey;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import static com.casper.sdk.helper.CasperDeployHelper.getPaymentModuleBytes;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
 
@@ -33,7 +40,7 @@ import static org.hamcrest.core.IsNull.notNullValue;
  *
  * @author ian@meywood.com
  */
-@Disabled
+//@Disabled
 public class DeployWasmTest {
 
     private static final String WASM_PATH = "/contracts/erc20.wasm";
@@ -90,5 +97,106 @@ public class DeployWasmTest {
         final DeployResult deployResult = casperService.putDeploy(deploy);
         assertThat(deployResult, is(notNullValue()));
         assertThat(deployResult.getDeployHash(), is(notNullValue()));
+
+        // Wait for a successful deploy
+        waitForDeploy(casperService, deployResult.getDeployHash());
+
+        // Obtain the contract hash from the dictionary
+        final String contractHash = getContractHash(casperService, privateKey);
+
+        // Invoke the contract
+        invokeContractUsingStoredContractByHash(casperService, contractHash.substring(5), privateKey);
+    }
+
+    private String getContractHash(final CasperService casperService,
+                                   final Ed25519PrivateKey faucetPrivateKey) throws IOException {
+
+        PublicKey publicKey = PublicKey.fromAbstractPublicKey(faucetPrivateKey.derivePublicKey());
+        final String accountHash = publicKey.generateAccountHash(true);
+        final StringDictionaryIdentifier key = StringDictionaryIdentifier.builder().dictionary(accountHash).build();
+
+        final StateRootHashData stateRootHash = casperService.getStateRootHash();
+        final StoredValueData stateItem = casperService.getStateItem(
+                stateRootHash.getStateRootHash(),
+                key.getDictionary(),
+                new ArrayList<>());
+
+        assertThat(stateItem, is(notNullValue()));
+        assertThat(stateItem.getStoredValue(), is(instanceOf(StoredValueAccount.class)));
+
+
+        final Account account = (Account) stateItem.getStoredValue().getValue();
+        assertThat(account.getAssociatedKeys(), is(not(empty())));
+
+        for (NamedKey namedKey : account.getNamedKeys()) {
+            if (namedKey.getName().startsWith("ERC20") && namedKey.getKey().startsWith("hash")) {
+                return namedKey.getKey();
+            }
+        }
+        throw new RuntimeException("Missing contract hash");
+    }
+
+    private void invokeContractUsingStoredContractByHash(final CasperService casperService,
+                                                         final String contractHash,
+                                                         final Ed25519PrivateKey faucetPrivateKey) throws Exception {
+
+        final Ed25519PrivateKey recipientPrivateKey = Ed25519PrivateKey.deriveRandomKey();
+        final PublicKey recipient = PublicKey.fromAbstractPublicKey(recipientPrivateKey.derivePublicKey());
+        final BigInteger amount = new BigInteger("2500000000");
+
+        final List<NamedArg<?>> args = Arrays.asList(
+                new NamedArg<>("recipient", new CLValuePublicKey(recipient)),
+                new NamedArg<>("amount", new CLValueU256(amount))
+        );
+
+        final StoredContractByHash session = StoredContractByHash.builder()
+                .entryPoint("transfer")
+                .hash(contractHash)
+                .args(args)
+                .build();
+
+        final ModuleBytes payment = getPaymentModuleBytes(new BigInteger("2500000000"));
+
+        final String chainName = "casper-net-1";
+        final Deploy transferDeploy = CasperDeployHelper.buildDeploy(faucetPrivateKey,
+                chainName,
+                session,
+                payment,
+                1L,
+                Ttl.builder().ttl("30m").build(),
+                new Date(),
+                new ArrayList<>()
+        );
+
+        System.out.println(new ObjectMapper().writeValueAsString(transferDeploy));
+
+        final DeployResult deployResult = casperService.putDeploy(transferDeploy);
+
+        assertThat(deployResult.getDeployHash(), is(notNullValue()));
+    }
+
+    private DeployData waitForDeploy(CasperService casperService, final String deployHash) {
+
+        final long timeout = 300 * 1000L;
+        final long now = System.currentTimeMillis();
+
+        DeployData deploy = null;
+
+        while (deploy == null || deploy.getExecutionResults().isEmpty()) {
+
+            deploy = casperService.getDeploy(deployHash);
+            if (deploy.getExecutionResults().isEmpty() && System.currentTimeMillis() > now + timeout) {
+                throw new RuntimeException("Timed-out waiting for deploy " + deployHash);
+            }
+
+            try {
+                //noinspection BusyWait
+                Thread.sleep(1000L);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        return deploy;
     }
 }
