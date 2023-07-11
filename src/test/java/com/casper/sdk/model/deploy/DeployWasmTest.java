@@ -4,7 +4,7 @@ import com.casper.sdk.helper.CasperConstants;
 import com.casper.sdk.helper.CasperDeployHelper;
 import com.casper.sdk.identifier.dictionary.StringDictionaryIdentifier;
 import com.casper.sdk.model.account.Account;
-import com.casper.sdk.model.clvalue.CLValuePublicKey;
+import com.casper.sdk.model.clvalue.CLValueByteArray;
 import com.casper.sdk.model.clvalue.CLValueString;
 import com.casper.sdk.model.clvalue.CLValueU256;
 import com.casper.sdk.model.clvalue.CLValueU8;
@@ -12,6 +12,7 @@ import com.casper.sdk.model.common.Ttl;
 import com.casper.sdk.model.contract.NamedKey;
 import com.casper.sdk.model.deploy.executabledeploy.ModuleBytes;
 import com.casper.sdk.model.deploy.executabledeploy.StoredContractByHash;
+import com.casper.sdk.model.deploy.executionresult.Success;
 import com.casper.sdk.model.key.PublicKey;
 import com.casper.sdk.model.stateroothash.StateRootHashData;
 import com.casper.sdk.model.storedvalue.StoredValueAccount;
@@ -19,12 +20,12 @@ import com.casper.sdk.model.storedvalue.StoredValueData;
 import com.casper.sdk.service.CasperService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.syntifi.crypto.key.Ed25519PrivateKey;
+import com.syntifi.crypto.key.encdec.Hex;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.URL;
 import java.util.*;
@@ -56,10 +57,10 @@ public class DeployWasmTest {
         assertThat(bytes.length, is(189336));
 
         final String chainName = "casper-net-1";
-        final BigInteger payment = BigDecimal.valueOf(50e9).toBigInteger();
+        final BigInteger payment = new BigInteger("200000000000");
         final byte tokenDecimals = 11;
         final String tokenName = "Acme Token";
-        final BigInteger tokenTotalSupply = BigDecimal.valueOf(1e15).toBigInteger();
+        final BigInteger tokenTotalSupply = new BigInteger("500000000000");
         final String tokenSymbol = "ACME";
 
         // Load faucet private key
@@ -99,7 +100,8 @@ public class DeployWasmTest {
         assertThat(deployResult.getDeployHash(), is(notNullValue()));
 
         // Wait for a successful deploy
-        waitForDeploy(casperService, deployResult.getDeployHash());
+        final DeployData deployData = waitForDeploy(casperService, deployResult.getDeployHash());
+        assertThat(deployData.getExecutionResults().get(0).getResult(), is(instanceOf(Success.class)));
 
         // Obtain the contract hash from the dictionary
         final String contractHash = getContractHash(casperService, privateKey);
@@ -142,10 +144,13 @@ public class DeployWasmTest {
 
         final Ed25519PrivateKey recipientPrivateKey = Ed25519PrivateKey.deriveRandomKey();
         final PublicKey recipient = PublicKey.fromAbstractPublicKey(recipientPrivateKey.derivePublicKey());
+        final String accountHash = recipient.generateAccountHash(false);
         final BigInteger amount = new BigInteger("2500000000");
 
         final List<NamedArg<?>> args = Arrays.asList(
-                new NamedArg<>("recipient", new CLValuePublicKey(recipient)),
+                // new NamedArg<>("recipient", new CLValuePublicKey(recipient)),
+                // Python SDK uses CLValueByteArray successfully for this argument
+                new NamedArg<>("recipient", new CLValueByteArray(Hex.decode(accountHash))),
                 new NamedArg<>("amount", new CLValueU256(amount))
         );
 
@@ -173,6 +178,10 @@ public class DeployWasmTest {
         final DeployResult deployResult = casperService.putDeploy(transferDeploy);
 
         assertThat(deployResult.getDeployHash(), is(notNullValue()));
+
+        DeployData deployData = waitForDeploy(casperService, deployResult.getDeployHash());
+
+        assertThat(deployData.getExecutionResults().get(0).getResult(), is(instanceOf(Success.class)));
     }
 
     private DeployData waitForDeploy(CasperService casperService, final String deployHash) {
