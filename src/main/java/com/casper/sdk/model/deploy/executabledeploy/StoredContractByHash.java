@@ -59,7 +59,6 @@ public class StoredContractByHash implements ExecutableDeployItemWithEntryPoint 
     public void serialize(SerializerBuffer ser, Target target) throws NoSuchTypeException, ValueSerializationException {
         ser.writeU8(getOrder());
         ser.writeByteArray(Hex.decode(getHash()));
-        //ser.writeString(getHash());
         ser.writeString(getEntryPoint());
         ser.writeI32(args.size());
         for (NamedArg<?> namedArg : args) {
