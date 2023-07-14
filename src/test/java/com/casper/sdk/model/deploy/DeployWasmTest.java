@@ -23,6 +23,7 @@ import com.syntifi.crypto.key.Ed25519PrivateKey;
 import com.syntifi.crypto.key.encdec.Hex;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -41,7 +42,7 @@ import static org.hamcrest.core.IsNull.notNullValue;
  *
  * @author ian@meywood.com
  */
-//@Disabled
+@Disabled
 public class DeployWasmTest {
 
     private static final String WASM_PATH = "/contracts/erc20.wasm";
@@ -173,7 +174,9 @@ public class DeployWasmTest {
                 new ArrayList<>()
         );
 
-        System.out.println(new ObjectMapper().writeValueAsString(transferDeploy));
+        // So I can grab it when testing
+        final String json = new ObjectMapper().writeValueAsString(transferDeploy);
+        System.out.println(json);
 
         final DeployResult deployResult = casperService.putDeploy(transferDeploy);
 
