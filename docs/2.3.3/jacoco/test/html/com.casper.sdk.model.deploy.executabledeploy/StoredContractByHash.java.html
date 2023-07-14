@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
 import lombok.*;
+import org.bouncycastle.util.encoders.Hex;
 
 import java.util.List;
 
@@ -20,35 +21,35 @@ import java.util.List;
  * @since 0.0.1
  */
 @Getter
-<span class="fc" id="L23">@Setter</span>
-<span class="nc" id="L24">@Builder</span>
-<span class="nc" id="L25">@AllArgsConstructor</span>
-<span class="fc" id="L26">@NoArgsConstructor</span>
+<span class="fc" id="L24">@Setter</span>
+<span class="nc" id="L25">@Builder</span>
+<span class="nc" id="L26">@AllArgsConstructor</span>
+<span class="fc" id="L27">@NoArgsConstructor</span>
 @JsonTypeName(&quot;StoredContractByHash&quot;)
 public class StoredContractByHash implements ExecutableDeployItemWithEntryPoint {
 
     /**
      * Hex-encoded Hash
      */
-<span class="fc" id="L33">    private String hash;</span>
+<span class="fc" id="L34">    private String hash;</span>
 
     /**
      * Entry Point
      */
     @JsonProperty(&quot;entry_point&quot;)
-<span class="fc" id="L39">    private String entryPoint;</span>
+<span class="fc" id="L40">    private String entryPoint;</span>
 
     /**
      * @see NamedArg
      */
-<span class="fc" id="L44">    private List&lt;NamedArg&lt;?&gt;&gt; args;</span>
+<span class="fc" id="L45">    private List&lt;NamedArg&lt;?&gt;&gt; args;</span>
 
     /**
      * {@link ExecutableDeployItem} order 1
      */
     @Override
     public byte getOrder() {
-<span class="nc" id="L51">        return 0x1;</span>
+<span class="nc" id="L52">        return 0x1;</span>
     }
 
     /**
@@ -56,14 +57,13 @@ public class StoredContractByHash implements ExecutableDeployItemWithEntryPoint 
      */
     @Override
     public void serialize(SerializerBuffer ser, Target target) throws NoSuchTypeException, ValueSerializationException {
-<span class="nc" id="L59">        ser.writeU8(getOrder());</span>
-<span class="nc" id="L60">        ser.writeString(getHash());</span>
-<span class="nc" id="L61">        ser.writeString(getEntryPoint());</span>
-<span class="nc" id="L62">        ser.writeI32(args.size());</span>
-<span class="nc bnc" id="L63" title="All 2 branches missed.">        for (NamedArg&lt;?&gt; namedArg : args) {</span>
-<span class="nc" id="L64">            namedArg.serialize(ser, Target.BYTE);</span>
-<span class="nc" id="L65">        }</span>
-<span class="nc" id="L66">    }</span>
-
+<span class="nc" id="L60">        ser.writeU8(getOrder());</span>
+<span class="nc" id="L61">        ser.writeByteArray(Hex.decode(getHash()));</span>
+<span class="nc" id="L62">        ser.writeString(getEntryPoint());</span>
+<span class="nc" id="L63">        ser.writeI32(args.size());</span>
+<span class="nc bnc" id="L64" title="All 2 branches missed.">        for (NamedArg&lt;?&gt; namedArg : args) {</span>
+<span class="nc" id="L65">            namedArg.serialize(ser, Target.BYTE);</span>
+<span class="nc" id="L66">        }</span>
+<span class="nc" id="L67">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
