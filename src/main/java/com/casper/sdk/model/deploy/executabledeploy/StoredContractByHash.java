@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
 import lombok.*;
+import org.bouncycastle.util.encoders.Hex;
 
 import java.util.List;
 
@@ -57,12 +58,11 @@ public class StoredContractByHash implements ExecutableDeployItemWithEntryPoint 
     @Override
     public void serialize(SerializerBuffer ser, Target target) throws NoSuchTypeException, ValueSerializationException {
         ser.writeU8(getOrder());
-        ser.writeString(getHash());
+        ser.writeByteArray(Hex.decode(getHash()));
         ser.writeString(getEntryPoint());
         ser.writeI32(args.size());
         for (NamedArg<?> namedArg : args) {
             namedArg.serialize(ser, Target.BYTE);
         }
     }
-
 }

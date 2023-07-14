@@ -74,6 +74,14 @@ public class CLValueList extends AbstractCLValueWithChildren<List<? extends Abst
     }
 
     @Override
+    protected void encodeType(SerializerBuffer ser) throws NoSuchTypeException {
+        super.encodeType(ser);
+
+        byte val = (getClType().getListType().getClTypeData().getSerializationTag());
+        ser.writeU8(val);
+    }
+
+    @Override
     public void deserializeCustom(DeserializerBuffer deser) throws Exception {
         CLTypeData childrenType = getClType().getListType().getClTypeData();
 
