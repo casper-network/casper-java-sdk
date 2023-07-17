@@ -128,7 +128,7 @@ public abstract class AbstractCLValue<T, P extends AbstractCLType>
     }
 
     protected void encodeType(SerializerBuffer ser) throws NoSuchTypeException {
-        byte val = (getClType().getClTypeData().getSerializationTag());
-        ser.writeU8(val);
+        byte typeTag = (getClType().getClTypeData().getSerializationTag());
+        ser.writeU8(typeTag);
     }
 }
