@@ -13,6 +13,7 @@ plugins {
 apply plugin: 'java'
 
 group = 'network.casper'
+// Version number update for release
 version='2.3.0'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
