@@ -55,16 +55,9 @@ public class CLValueByteArray extends AbstractCLValue&lt;byte[], CLTypeByteArray
 <span class="fc" id="L55">    }</span>
 
     @Override
-    protected void encodeType(SerializerBuffer ser) throws NoSuchTypeException {
-<span class="nc" id="L59">        super.encodeType(ser);</span>
-
-<span class="nc" id="L61">        ser.writeI32(this.getClType().getLength());</span>
-<span class="nc" id="L62">    }</span>
-
-    @Override
     public void deserializeCustom(DeserializerBuffer deser) throws Exception {
-<span class="fc" id="L66">        this.setValue(deser.readByteArray(this.getClType().getLength()));</span>
-<span class="fc" id="L67">    }</span>
+<span class="fc" id="L59">        this.setValue(deser.readByteArray(this.getClType().getLength()));</span>
+<span class="fc" id="L60">    }</span>
 
     @Override
     @ExcludeFromJacocoGeneratedReport
@@ -107,7 +100,7 @@ public class CLValueByteArray extends AbstractCLValue&lt;byte[], CLTypeByteArray
 
     @Override
     public String toString() {
-<span class="nc bnc" id="L110" title="All 2 branches missed.">        return getValue() != null ? ByteUtils.encodeHexString(getValue()) : null;</span>
+<span class="nc bnc" id="L103" title="All 2 branches missed.">        return getValue() != null ? ByteUtils.encodeHexString(getValue()) : null;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

@@ -65,35 +65,27 @@ public class CLValueTuple1 extends AbstractCLValueWithChildren&lt;Unit&lt;? exte
 <span class="fc" id="L65">    }</span>
 
     @Override
-    protected void encodeType(SerializerBuffer ser) throws NoSuchTypeException {
-<span class="nc" id="L69">        super.encodeType(ser);</span>
-
-<span class="nc" id="L71">        byte element0TypeTag = getClType().getChildClTypeData(0).getSerializationTag();</span>
-<span class="nc" id="L72">        ser.writeU8(element0TypeTag);</span>
-<span class="nc" id="L73">    }</span>
-
-    @Override
     public void deserializeCustom(DeserializerBuffer deser) throws Exception {
-<span class="fc" id="L77">        CLTypeData childTypeData1 = clType.getChildClTypeData(0);</span>
+<span class="fc" id="L69">        CLTypeData childTypeData1 = clType.getChildClTypeData(0);</span>
 
-<span class="fc" id="L79">        AbstractCLValue&lt;?, ?&gt; child1 = CLTypeData.createCLValueFromCLTypeData(childTypeData1);</span>
-<span class="pc bpc" id="L80" title="1 of 2 branches missed.">        if (child1.getClType() instanceof AbstractCLTypeWithChildren) {</span>
-<span class="nc" id="L81">            ((AbstractCLTypeWithChildren) child1.getClType())</span>
-<span class="nc" id="L82">                    .setChildTypes(((AbstractCLTypeWithChildren) clType.getChildTypes().get(0)).getChildTypes());</span>
+<span class="fc" id="L71">        AbstractCLValue&lt;?, ?&gt; child1 = CLTypeData.createCLValueFromCLTypeData(childTypeData1);</span>
+<span class="pc bpc" id="L72" title="1 of 2 branches missed.">        if (child1.getClType() instanceof AbstractCLTypeWithChildren) {</span>
+<span class="nc" id="L73">            ((AbstractCLTypeWithChildren) child1.getClType())</span>
+<span class="nc" id="L74">                    .setChildTypes(((AbstractCLTypeWithChildren) clType.getChildTypes().get(0)).getChildTypes());</span>
         }
-<span class="fc" id="L84">        child1.deserializeCustom(deser);</span>
+<span class="fc" id="L76">        child1.deserializeCustom(deser);</span>
 
-<span class="fc" id="L86">        setValue(new Unit&lt;&gt;(child1));</span>
-<span class="fc" id="L87">    }</span>
+<span class="fc" id="L78">        setValue(new Unit&lt;&gt;(child1));</span>
+<span class="fc" id="L79">    }</span>
 
     @Override
     protected void setChildTypes(Unit&lt;? extends AbstractCLValue&lt;?, ?&gt;&gt; value) {
-<span class="fc" id="L91">        clType.setChildTypes(Arrays.asList(value.getValue0().getClType()));</span>
-<span class="fc" id="L92">    }</span>
+<span class="fc" id="L83">        clType.setChildTypes(Arrays.asList(value.getValue0().getClType()));</span>
+<span class="fc" id="L84">    }</span>
 
     @Override
     public String toString() {
-<span class="nc bnc" id="L96" title="All 2 branches missed.">        return getValue() != null ? getValue().toString() : null;</span>
+<span class="nc bnc" id="L88" title="All 2 branches missed.">        return getValue() != null ? getValue().toString() : null;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
