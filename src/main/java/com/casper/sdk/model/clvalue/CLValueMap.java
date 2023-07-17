@@ -75,17 +75,6 @@ public class CLValueMap extends
     }
 
     @Override
-    protected void encodeType(SerializerBuffer ser) throws NoSuchTypeException {
-        super.encodeType(ser);
-
-        byte keyTypeTag = (getClType().getKeyValueTypes().getKeyType().getClTypeData().getSerializationTag());
-        ser.writeU8(keyTypeTag);
-
-        byte valueTypeTag = (getClType().getKeyValueTypes().getValueType().getClTypeData().getSerializationTag());
-        ser.writeU8(valueTypeTag);
-    }
-
-    @Override
     public void deserializeCustom(DeserializerBuffer deser) throws Exception {
         CLTypeData keyType = clType.getKeyValueTypes().getKeyType().getClTypeData();
         CLTypeData valType = clType.getKeyValueTypes().getValueType().getClTypeData();

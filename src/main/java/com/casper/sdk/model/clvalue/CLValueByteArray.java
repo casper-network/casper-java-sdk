@@ -55,13 +55,6 @@ public class CLValueByteArray extends AbstractCLValue<byte[], CLTypeByteArray> {
     }
 
     @Override
-    protected void encodeType(SerializerBuffer ser) throws NoSuchTypeException {
-        super.encodeType(ser);
-
-        ser.writeI32(this.getClType().getLength());
-    }
-
-    @Override
     public void deserializeCustom(DeserializerBuffer deser) throws Exception {
         this.setValue(deser.readByteArray(this.getClType().getLength()));
     }

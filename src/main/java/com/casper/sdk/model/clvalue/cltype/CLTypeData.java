@@ -34,18 +34,19 @@ public enum CLTypeData {
     U512(AbstractCLType.U512, (byte) 0x8, CLValueU512.class, CLTypeU512.class),
     UNIT(AbstractCLType.UNIT, (byte) 0x9, CLValueUnit.class, CLTypeUnit.class),
     STRING(AbstractCLType.STRING, (byte) 0xA, CLValueString.class, CLTypeString.class),
-    KEY(AbstractCLType.KEY, (byte) 0xB, CLValueKey.class, CLTypeKey.class),
-    UREF(AbstractCLType.UREF, (byte) 0xC, CLValueURef.class, CLTypeURef.class),
+    UREF(AbstractCLType.UREF, (byte) 0xB, CLValueURef.class, CLTypeURef.class),
+    KEY(AbstractCLType.KEY, (byte) 0xC, CLValueKey.class, CLTypeKey.class),
     OPTION(AbstractCLType.OPTION, (byte) 0xD, CLValueOption.class, CLTypeOption.class),
     LIST(AbstractCLType.LIST, (byte) 0xE, CLValueList.class, CLTypeList.class),
-    BYTE_ARRAY(AbstractCLType.BYTE_ARRAY, (byte) 0xF, CLValueByteArray.class, CLTypeByteArray.class),
+    FIXED_LIST(AbstractCLType.FIXED_LIST, (byte) 0xF, CLValueFixedList.class, CLTypeFixedList.class),
     RESULT(AbstractCLType.RESULT, (byte) 0x10, CLValueResult.class, CLTypeResult.class),
     MAP(AbstractCLType.MAP, (byte) 0x11, CLValueMap.class, CLTypeMap.class),
     TUPLE1(AbstractCLType.TUPLE1, (byte) 0x12, CLValueTuple1.class, CLTypeTuple1.class),
     TUPLE2(AbstractCLType.TUPLE2, (byte) 0x13, CLValueTuple2.class, CLTypeTuple2.class),
     TUPLE3(AbstractCLType.TUPLE3, (byte) 0x14, CLValueTuple3.class, CLTypeTuple3.class),
     ANY(AbstractCLType.ANY, (byte) 0x15, CLValueAny.class, CLTypeAny.class),
-    PUBLIC_KEY(AbstractCLType.PUBLIC_KEY, (byte) 0x16, CLValuePublicKey.class, CLTypePublicKey.class);
+    PUBLIC_KEY(AbstractCLType.PUBLIC_KEY, (byte) 0x16, CLValuePublicKey.class, CLTypePublicKey.class),
+    BYTE_ARRAY(AbstractCLType.BYTE_ARRAY, (byte) 0x17, CLValueByteArray.class, CLTypeByteArray.class);
 
     private final String clTypeName;
     private final byte serializationTag;

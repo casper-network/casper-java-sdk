@@ -440,6 +440,80 @@ public class StoredValueTests extends AbstractJsonTests {
     }
 
     @Test
+    void validate_CLValueFixedList_Mapping_with_i32() throws IOException,
+            JSONException, ValueSerializationException {
+        String inputJson = getPrettyJson(loadJsonFromFile("stored-value-samples/stored-value-fixedlist-i32.json"));
+
+        LOGGER.debug("Original JSON: {}", inputJson);
+
+        StoredValueData sv = OBJECT_MAPPER.readValue(inputJson, StoredValueData.class);
+        // Should be CLValueList
+        assertTrue(sv.getStoredValue().getValue() instanceof CLValueFixedList);
+        CLValueFixedList expectedClValue = new CLValueFixedList(
+                Arrays.asList(new CLValueI32(1), new CLValueI32(2), new CLValueI32(3)));
+
+        StoredValueData expected = createAndInitExpectedStoredValueData(expectedClValue);
+
+        assertEquals(expected, sv);
+
+        String expectedJson = getPrettyJson(expected);
+
+        LOGGER.debug("Serialized JSON: {}", expectedJson);
+
+        JSONAssert.assertEquals(inputJson, expectedJson, JSONCompareMode.NON_EXTENSIBLE);
+    }
+
+    @Test
+    void validate_CLValueFixedList_Mapping_with_tuple1_i32() throws IOException, JSONException, ValueSerializationException {
+        String inputJson = getPrettyJson(
+                loadJsonFromFile("stored-value-samples/stored-value-fixedlist-tuple1-i32.json"));
+
+        LOGGER.debug("Original JSON: {}", inputJson);
+
+        StoredValueData sv = OBJECT_MAPPER.readValue(inputJson, StoredValueData.class);
+        // Should be CLValueList
+        assertTrue(sv.getStoredValue().getValue() instanceof CLValueFixedList);
+        CLValueFixedList expectedClValue = new CLValueFixedList(Arrays.asList(
+                new CLValueTuple1(new Unit<>(new CLValueI32(1))), new CLValueTuple1(new Unit<>(new CLValueI32(2))),
+                new CLValueTuple1(new Unit<>(new CLValueI32(3)))));
+
+        StoredValueData expected = createAndInitExpectedStoredValueData(expectedClValue);
+
+        assertEquals(expected, sv);
+
+        String expectedJson = getPrettyJson(expected);
+
+        LOGGER.debug("Serialized JSON: {}", expectedJson);
+
+        JSONAssert.assertEquals(inputJson, expectedJson, JSONCompareMode.NON_EXTENSIBLE);
+    }
+
+    @Test
+    void validate_CLValueFixedList_Mapping_with_i32_odd_byte_length() throws IOException {
+        String inputJson = getPrettyJson(
+                loadJsonFromFile("stored-value-samples/stored-value-fixedlist-i32-odd-byte-length.json"));
+
+        LOGGER.debug("Original JSON: {}", inputJson);
+
+        Throwable exception = assertThrows(JsonMappingException.class,
+                () -> OBJECT_MAPPER.readValue(inputJson, StoredValueData.class));
+        assertEquals(IllegalArgumentException.class, exception.getCause().getClass());
+    }
+
+    @Test
+    void validate_CLValueFixedList_Mapping_with_i32_wrong_byte_length()
+            throws IOException {
+        String inputJson = getPrettyJson(
+                loadJsonFromFile("stored-value-samples/stored-value-fixedlist-i32-wrong-byte-length.json"));
+
+        LOGGER.debug("Original JSON: {}", inputJson);
+
+        Throwable exception = assertThrows(JsonMappingException.class,
+                () -> OBJECT_MAPPER.readValue(inputJson, StoredValueData.class));
+        assertEquals(BufferUnderflowException.class, exception.getCause().getClass());
+    }
+
+    @Test
     void validate_CLValueList_Mapping_with_tuple2_i32_i32() throws IOException, JSONException, ValueSerializationException {
         String inputJson = getPrettyJson(
                 loadJsonFromFile("stored-value-samples/stored-value-list-tuple2-i32-i32.json"));

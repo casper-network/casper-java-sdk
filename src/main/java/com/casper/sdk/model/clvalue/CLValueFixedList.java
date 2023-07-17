@@ -3,13 +3,12 @@ package com.casper.sdk.model.clvalue;
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.cltype.AbstractCLTypeWithChildren;
 import com.casper.sdk.model.clvalue.cltype.CLTypeData;
-import com.casper.sdk.model.clvalue.cltype.CLTypeList;
-import com.casper.sdk.model.clvalue.cltype.CLTypeMap;
+import com.casper.sdk.model.clvalue.cltype.CLTypeFixedList;
 import com.casper.sdk.model.clvalue.serde.Target;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonSetter;
 import dev.oak3.sbs4j.DeserializerBuffer;
 import dev.oak3.sbs4j.SerializerBuffer;
+import dev.oak3.sbs4j.exception.ValueDeserializationException;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -17,7 +16,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.bouncycastle.util.encoders.Hex;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,18 +32,12 @@ import java.util.stream.Collectors;
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
-public class CLValueList extends AbstractCLValueWithChildren<List<? extends AbstractCLValue<?, ?>>, CLTypeList> {
+public class CLValueFixedList extends AbstractCLValue<List<? extends AbstractCLValue<?, ?>>, CLTypeFixedList> {
     @JsonProperty("cl_type")
-    private CLTypeList clType = new CLTypeList();
+    private CLTypeFixedList clType = new CLTypeFixedList();
 
-    @JsonSetter("cl_type")
-    public void setClType(CLTypeList clType) {
-        this.clType = clType;
-        childTypesSet();
-    }
-
-    public CLValueList(List<? extends AbstractCLValue<?, ?>> value) throws ValueSerializationException {
-        setChildTypes(value);
+    public CLValueFixedList(List<? extends AbstractCLValue<?, ?>> value) throws ValueSerializationException {
+        setListType(value);
         this.setValue(value);
     }
 
@@ -56,11 +49,7 @@ public class CLValueList extends AbstractCLValueWithChildren<List<? extends Abst
             super.serializePrefixWithLength(ser);
         }
 
-        setChildTypes(this.getValue());
-
-        // List length is written first
-        CLValueI32 length = new CLValueI32(getValue().size());
-        length.serialize(ser);
+        setListType(this.getValue());
 
         for (AbstractCLValue<?, ?> child : getValue()) {
             child.serialize(ser);
@@ -77,29 +66,30 @@ public class CLValueList extends AbstractCLValueWithChildren<List<? extends Abst
     public void deserializeCustom(DeserializerBuffer deser) throws Exception {
         CLTypeData childrenType = getClType().getListType().getClTypeData();
 
-        // List length is sent first
-        CLValueI32 length = new CLValueI32();
-        length.deserializeCustom(deser);
+        List<AbstractCLValue<?, ?>> list = new LinkedList<>();
 
-        List<AbstractCLValue<?, ?>> list = new ArrayList<>();
-        for (int i = 0; i < length.getValue(); i++) {
+        boolean hasMoreItems = true;
+        do {
             AbstractCLValue<?, ?> child = CLTypeData.createCLValueFromCLTypeData(childrenType);
-            if (child.getClType() instanceof CLTypeMap) {
-                ((CLTypeMap) child.getClType())
-                        .setKeyValueTypes(((CLTypeMap) clType.getListType()).getKeyValueTypes());
-            } else if (child.getClType() instanceof AbstractCLTypeWithChildren) {
+            if (child.getClType() instanceof AbstractCLTypeWithChildren) {
                 ((AbstractCLTypeWithChildren) child.getClType())
                         .setChildTypes(((AbstractCLTypeWithChildren) clType.getListType()).getChildTypes());
             }
-            child.deserializeCustom(deser);
-            list.add(child);
-        }
+            try {
+                child.deserializeCustom(deser);
+                list.add(child);
+            } catch (ValueDeserializationException valueDeserializationException) {
+                hasMoreItems = false;
+                if (deser.getBuffer().hasRemaining()) {
+                    throw valueDeserializationException;
+                }
+            }
+        } while (hasMoreItems);
 
         setValue(list);
     }
 
-    @Override
-    protected void setChildTypes(List<? extends AbstractCLValue<?, ?>> value) {
+    protected void setListType(List<? extends AbstractCLValue<?, ?>> value) {
         clType.setListType(value.get(0).getClType());
     }
 
