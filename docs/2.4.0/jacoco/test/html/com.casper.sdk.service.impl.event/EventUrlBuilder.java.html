@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EventUrlBuilder.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">casper-java-sdk</a> &gt; <a href="index.source.html" class="el_package">com.casper.sdk.service.impl.event</a> &gt; <span class="el_source">EventUrlBuilder.java</span></div><h1>EventUrlBuilder.java</h1><pre class="source lang-java linenums">package com.casper.sdk.service.impl.event;
+
+import com.casper.sdk.model.event.EventType;
+import com.casper.sdk.exception.CasperClientException;
+
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
+
+/**
+ * Class for building event URLs
+ */
+<span class="fc" id="L13">final class EventUrlBuilder {</span>
+
+    /**
+     * The root path to the events stream
+     */
+    private static final String EVENTS = &quot;/events/&quot;;
+    /**
+     * The start_from parameter that allow the specification of which ID to start from
+     */
+    public static final String START_FROM = &quot;start_from&quot;;
+
+    /**
+     * Builds an event URL
+     *
+     * @param uri       the URI to the host
+     * @param eventType the type of event to build a URL for
+     * @param startFrom the optional 'start_from' URL query parameter will be omitted if null
+     * @return the URL for the requested parameters
+     */
+    URL buildUrl(final URI uri, final EventType eventType, final Long startFrom) {
+
+        try {
+<span class="fc" id="L35">            return new URL(uri.toString() + EVENTS + eventType.toString().toLowerCase() + buildParams(startFrom));</span>
+<span class="nc" id="L36">        } catch (MalformedURLException e) {</span>
+<span class="nc" id="L37">            throw new CasperClientException(&quot;Error building URL for &quot; + uri, e);</span>
+        }
+    }
+
+    private String buildParams(final Long startFrom) {
+<span class="fc bfc" id="L42" title="All 2 branches covered.">        if (startFrom != null) {</span>
+<span class="fc" id="L43">            return '?' + START_FROM + '=' + startFrom;</span>
+        } else {
+<span class="fc" id="L45">            return &quot;&quot;;</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
