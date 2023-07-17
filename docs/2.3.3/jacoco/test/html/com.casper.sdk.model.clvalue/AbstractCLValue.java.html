@@ -128,8 +128,8 @@ import lombok.*;
 <span class="fc" id="L128">    }</span>
 
     protected void encodeType(SerializerBuffer ser) throws NoSuchTypeException {
-<span class="fc" id="L131">        byte typeTag = (getClType().getClTypeData().getSerializationTag());</span>
-<span class="fc" id="L132">        ser.writeU8(typeTag);</span>
+<span class="fc" id="L131">        byte val = (getClType().getClTypeData().getSerializationTag());</span>
+<span class="fc" id="L132">        ser.writeU8(val);</span>
 <span class="fc" id="L133">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
