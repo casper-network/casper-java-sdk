@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="x-ua-compatible" content="IE=edge"/>
+<title>Test results - CasperTransferHelperTests</title>
+<link href="../css/base-style.css" rel="stylesheet" type="text/css"/>
+<link href="../css/style.css" rel="stylesheet" type="text/css"/>
+<script src="../js/report.js" type="text/javascript"></script>
+</head>
+<body>
+<div id="content">
+<h1>CasperTransferHelperTests</h1>
+<div class="breadcrumbs">
+<a href="../index.html">all</a> &gt; 
+<a href="../packages/com.casper.sdk.helper.html">com.casper.sdk.helper</a> &gt; CasperTransferHelperTests</div>
+<div id="summary">
+<table>
+<tr>
+<td>
+<div class="summaryGroup">
+<table>
+<tr>
+<td>
+<div class="infoBox" id="tests">
+<div class="counter">4</div>
+<p>tests</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="failures">
+<div class="counter">0</div>
+<p>failures</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="ignored">
+<div class="counter">0</div>
+<p>ignored</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="duration">
+<div class="counter">1.084s</div>
+<p>duration</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</td>
+<td>
+<div class="infoBox success" id="successRate">
+<div class="percent">100%</div>
+<p>successful</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div id="tabs">
+<ul class="tabLinks">
+<li>
+<a href="#tab0">Tests</a>
+</li>
+<li>
+<a href="#tab1">Standard output</a>
+</li>
+</ul>
+<div id="tab0" class="tab">
+<h2>Tests</h2>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>Duration</th>
+<th>Result</th>
+</tr>
+</thead>
+<tr>
+<td class="success">testSpeculativeTransferOnNctl()</td>
+<td class="success">0.146s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testTransferOnNctl()</td>
+<td class="success">0.053s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testTransferOnTestnet()</td>
+<td class="success">0.740s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testTransferWithNullIdOnTestnet()</td>
+<td class="success">0.145s</td>
+<td class="success">passed</td>
+</tr>
+</table>
+</div>
+<div id="tab1" class="tab">
+<h2>Standard output</h2>
+<span class="code">
+<pre>Request {&quot;id&quot;:&quot;1485305924&quot;,&quot;jsonrpc&quot;:&quot;2.0&quot;,&quot;method&quot;:&quot;account_put_deploy&quot;,&quot;params&quot;:[{&quot;hash&quot;:&quot;a57fe816d2300ea8e000378d460b003b5b96920f3fe81aad54f38063462cfe61&quot;,&quot;header&quot;:{&quot;account&quot;:&quot;01eb90935e26b4d75c4b06cba40352b8fc9866793b0eb6e3ee213896bbab272661&quot;,&quot;dependencies&quot;:[],&quot;ttl&quot;:&quot;30m&quot;,&quot;body_hash&quot;:&quot;2d1c702eead5085ed5d999d94e0b6e3328e3fabc6ba4a27c418284933f633fb7&quot;,&quot;chain_name&quot;:&quot;casper-test&quot;,&quot;gas_price&quot;:1,&quot;timestamp&quot;:&quot;2023-07-18T10:27:27.750Z&quot;},&quot;approvals&quot;:[{&quot;signer&quot;:&quot;01eb90935e26b4d75c4b06cba40352b8fc9866793b0eb6e3ee213896bbab272661&quot;,&quot;signature&quot;:&quot;0154f2d8f1c442f43eb9288f18b86eb163f712014b5455a5938402f525b3fca0056dcbc904a94b931b474bffbd506127b155c049ebeeaae4d5922875e8a75f9f0f&quot;}],&quot;payment&quot;:{&quot;ModuleBytes&quot;:{&quot;args&quot;:[[&quot;amount&quot;,{&quot;bytes&quot;:&quot;0400e1f505&quot;,&quot;cl_type&quot;:&quot;U512&quot;}]],&quot;module_bytes&quot;:&quot;&quot;}},&quot;session&quot;:{&quot;Transfer&quot;:{&quot;args&quot;:[[&quot;amount&quot;,{&quot;bytes&quot;:&quot;0400f90295&quot;,&quot;cl_type&quot;:&quot;U512&quot;}],[&quot;target&quot;,{&quot;bytes&quot;:&quot;016faf63d89d11b37ab829807e67539cc54b6b7c9a3cf6b08b8767df8b49ec97d6&quot;,&quot;cl_type&quot;:&quot;PublicKey&quot;}],[&quot;id&quot;,{&quot;bytes&quot;:&quot;01c889795600000000&quot;,&quot;cl_type&quot;:{&quot;Option&quot;:&quot;U64&quot;}}]]}}}]}
+JSON-RPC Response: {&quot;jsonrpc&quot;:&quot;2.0&quot;,&quot;id&quot;:&quot;1485305924&quot;,&quot;result&quot;:{&quot;api_version&quot;:&quot;1.5.2&quot;,&quot;deploy_hash&quot;:&quot;a57fe816d2300ea8e000378d460b003b5b96920f3fe81aad54f38063462cfe61&quot;}}
+Request {&quot;id&quot;:&quot;1485305924&quot;,&quot;jsonrpc&quot;:&quot;2.0&quot;,&quot;method&quot;:&quot;speculative_exec&quot;,&quot;params&quot;:{&quot;deploy&quot;:{&quot;hash&quot;:&quot;575114a23028a7392790a15c96f43b344f27e597b6f86e3cb975210d9c74cdb6&quot;,&quot;header&quot;:{&quot;account&quot;:&quot;01ba1b2dc565c671bc02af6e0ab9dcdaa712ff607726d5ac551598442d4fc3e083&quot;,&quot;dependencies&quot;:[],&quot;ttl&quot;:&quot;30m&quot;,&quot;body_hash&quot;:&quot;d48431171bf054c3d509258809fef8c711d36e1b2bf95d8c0812fdae806bcd3f&quot;,&quot;chain_name&quot;:&quot;casper-net-1&quot;,&quot;gas_price&quot;:1,&quot;timestamp&quot;:&quot;2023-07-18T10:27:28.457Z&quot;},&quot;approvals&quot;:[{&quot;signer&quot;:&quot;01ba1b2dc565c671bc02af6e0ab9dcdaa712ff607726d5ac551598442d4fc3e083&quot;,&quot;signature&quot;:&quot;0148868036c3176a06167d5e79fb37ada279f99850068c8b6c81e30377e1163fd70c8dd24d88b4eaa442fa37521b250ccd55dca772b9a771076dbdb03fe67f3509&quot;}],&quot;payment&quot;:{&quot;ModuleBytes&quot;:{&quot;args&quot;:[[&quot;amount&quot;,{&quot;bytes&quot;:&quot;0400e1f505&quot;,&quot;cl_type&quot;:&quot;U512&quot;}]],&quot;module_bytes&quot;:&quot;&quot;}},&quot;session&quot;:{&quot;Transfer&quot;:{&quot;args&quot;:[[&quot;amount&quot;,{&quot;bytes&quot;:&quot;0400f90295&quot;,&quot;cl_type&quot;:&quot;U512&quot;}],[&quot;target&quot;,{&quot;bytes&quot;:&quot;013d3c1160abda84753cdd5153873d3ff30b554a5277d752d9bd6d9259bcdd84ad&quot;,&quot;cl_type&quot;:&quot;PublicKey&quot;}],[&quot;id&quot;,{&quot;bytes&quot;:&quot;010bf6ff6f00000000&quot;,&quot;cl_type&quot;:{&quot;Option&quot;:&quot;U64&quot;}}]]}}}}}
+JSON-RPC Response: {&quot;jsonrpc&quot;:&quot;2.0&quot;,&quot;id&quot;:&quot;1485305924&quot;,&quot;result&quot;:{&quot;api_version&quot;:&quot;1.0.0&quot;,&quot;block_hash&quot;:&quot;7231d1235d369a1a5ef565dfae72f11cd6cb0d3b9d18bd3fb484291ff4592fc9&quot;,&quot;execution_result&quot;:{&quot;Success&quot;:{&quot;effect&quot;:{&quot;operations&quot;:[],&quot;transforms&quot;:[{&quot;key&quot;:&quot;hash-1159b4a91f0d2454d7481a5a314bb0441b76b65cf02249ecf1ff25efe11679ca&quot;,&quot;transform&quot;:&quot;Identity&quot;},{&quot;key&quot;:&quot;account-hash-3dc9bc4f5d90c62064b5a541fc3bcbe2f81574850a8c6cada46bb410972a7fa1&quot;,&quot;transform&quot;:&quot;Identity&quot;},{&quot;key&quot;:&quot;account-hash-3dc9bc4f5d90c62064b5a541fc3bcbe2f81574850a8c6cada46bb410972a7fa1&quot;,&quot;transform&quot;:&quot;Identity&quot;},{&quot;key&quot;:&quot;hash-1159b4a91f0d2454d7481a5a314bb0441b76b65cf02249ecf1ff25efe11679ca&quot;,&quot;transform&quot;:&quot;Identity&quot;},{&quot;key&quot;:&quot;hash-1159b4a91f0d2454d7481a5a314bb0441b76b65cf02249ecf1ff25efe11679ca&quot;,&quot;transform&quot;:&quot;Identity&quot;},{&quot;key&quot;:&quot;hash-0f0983299f8322afff6b0ee80db8e5d94c2b57e0d4d734c5e2212565b97ca1ba&quot;,&quot;transform&quot;:&quot;Identity&quot;},{&quot;key&quot;:&quot;hash-1159b4a91f0d2454d7481a5a314bb0441b76b65cf02249ecf1ff25efe11679ca&quot;,&quot;transform&quot;:&quot;Identity&quot;},{&quot;key&quot;:&quot;hash-a0fa18f913cce9fe07d563d8fdea14c660b08e49c6e4cfca7b60fa3727b92698&quot;,&quot;transform&quot;:&quot;Identity&quot;},{&quot;key&quot;:&quot;hash-a0fa18f913cce9fe07d563d8fdea14c660b08e49c6e4cfca7b60fa3727b92698&quot;,&quot;transform&quot;:&quot;Identity&quot;},{&quot;key&quot;:&quot;hash-30761094ee98243d457e3668905765e9c7f73e804d95a661de1d43cc658a2667&quot;,&quot;transform&quot;:&quot;Identity&quot;},{&quot;key&quot;:&quot;hash-a0fa18f913cce9fe07d563d8fdea14c660b08e49c6e4cfca7b60fa3727b92698&quot;,&quot;transform&quot;:&quot;Identity&quot;},{&quot;key&quot;:&quot;balance-208083a44948ba6fa34c064bfa6f0a36c45cb05297fa026588e2f0474ab98b99&quot;,&quot;transform&quot;:&quot;Identity&quot;},{&quot;key&quot;:&quot;balance-367be1d2c21f05b8f42d8559b503fab3eaa3f555170beffcef70a3a70300961a&quot;,&quot;transform&quot;:&quot;Identity&quot;},{&quot;key&quot;:&quot;balance-208083a44948ba6fa34c064bfa6f0a36c45cb05297fa026588e2f0474ab98b99&quot;,&quot;transform&quot;:{&quot;WriteCLValue&quot;:{&quot;cl_type&quot;:&quot;U512&quot;,&quot;bytes&quot;:&quot;0e001f0afa095bc138938d44c64d31&quot;,&quot;parsed&quot;:&quot;999999999999999999999999900000000&quot;}}},{&quot;key&quot;:&quot;balance-367be1d2c21f05b8f42d8559b503fab3eaa3f555170beffcef70a3a70300961a&quot;,&quot;transform&quot;:{&quot;AddUInt512&quot;:&quot;100000000&quot;}},{&quot;key&quot;:&quot;hash-1159b4a91f0d2454d7481a5a314bb0441b76b65cf02249ecf1ff25efe11679ca&quot;,&quot;transform&quot;:&quot;Identity&quot;},{&quot;key&quot;:&quot;account-hash-3dc9bc4f5d90c62064b5a541fc3bcbe2f81574850a8c6cada46bb410972a7fa1&quot;,&quot;transform&quot;:&quot;Identity&quot;},{&quot;key&quot;:&quot;account-hash-3dc9bc4f5d90c62064b5a541fc3bcbe2f81574850a8c6cada46bb410972a7fa1&quot;,&quot;transform&quot;:&quot;Identity&quot;},{&quot;key&quot;:&quot;hash-1159b4a91f0d2454d7481a5a314bb0441b76b65cf02249ecf1ff25efe11679ca&quot;,&quot;transform&quot;:&quot;Identity&quot;},{&quot;key&quot;:&quot;hash-1159b4a91f0d2454d7481a5a314bb0441b76b65cf02249ecf1ff25efe11679ca&quot;,&quot;transform&quot;:&quot;Identity&quot;},{&quot;key&quot;:&quot;hash-0f0983299f8322afff6b0ee80db8e5d94c2b57e0d4d734c5e2212565b97ca1ba&quot;,&quot;transform&quot;:&quot;Identity&quot;},{&quot;key&quot;:&quot;hash-1159b4a91f0d2454d7481a5a314bb0441b76b65cf02249ecf1ff25efe11679ca&quot;,&quot;transform&quot;:&quot;Identity&quot;},{&quot;key&quot;:&quot;hash-a0fa18f913cce9fe07d563d8fdea14c660b08e49c6e4cfca7b60fa3727b92698&quot;,&quot;transform&quot;:&quot;Identity&quot;},{&quot;key&quot;:&quot;hash-a0fa18f913cce9fe07d563d8fdea14c660b08e49c6e4cfca7b60fa3727b92698&quot;,&quot;transform&quot;:&quot;Identity&quot;},{&quot;key&quot;:&quot;hash-30761094ee98243d457e3668905765e9c7f73e804d95a661de1d43cc658a2667&quot;,&quot;transform&quot;:&quot;Identity&quot;},{&quot;key&quot;:&quot;hash-a0fa18f913cce9fe07d563d8fdea14c660b08e49c6e4cfca7b60fa3727b92698&quot;,&quot;transform&quot;:&quot;Identity&quot;},{&quot;key&quot;:&quot;balance-208083a44948ba6fa34c064bfa6f0a36c45cb05297fa026588e2f0474ab98b99&quot;,&quot;transform&quot;:&quot;Identity&quot;},{&quot;key&quot;:&quot;balance-367be1d2c21f05b8f42d8559b503fab3eaa3f555170beffcef70a3a70300961a&quot;,&quot;transform&quot;:&quot;Identity&quot;},{&quot;key&quot;:&quot;balance-208083a44948ba6fa34c064bfa6f0a36c45cb05297fa026588e2f0474ab98b99&quot;,&quot;transform&quot;:{&quot;WriteCLValue&quot;:{&quot;cl_type&quot;:&quot;U512&quot;,&quot;bytes&quot;:&quot;0e001f0afa095bc138938d44c64d31&quot;,&quot;parsed&quot;:&quot;999999999999999999999999900000000&quot;}}},{&quot;key&quot;:&quot;balance-367be1d2c21f05b8f42d8559b503fab3eaa3f555170beffcef70a3a70300961a&quot;,&quot;transform&quot;:{&quot;AddUInt512&quot;:&quot;100000000&quot;}},{&quot;key&quot;:&quot;hash-a0fa18f913cce9fe07d563d8fdea14c660b08e49c6e4cfca7b60fa3727b92698&quot;,&quot;transform&quot;:&quot;Identity&quot;},{&quot;key&quot;:&quot;hash-a0fa18f913cce9fe07d563d8fdea14c660b08e49c6e4cfca7b60fa3727b92698&quot;,&quot;transform&quot;:&quot;Identity&quot;},{&quot;key&quot;:&quot;hash-30761094ee98243d457e3668905765e9c7f73e804d95a661de1d43cc658a2667&quot;,&quot;transform&quot;:&quot;Identity&quot;},{&quot;key&quot;:&quot;hash-a0fa18f913cce9fe07d563d8fdea14c660b08e49c6e4cfca7b60fa3727b92698&quot;,&quot;transform&quot;:&quot;Identity&quot;},{&quot;key&quot;:&quot;balance-208083a44948ba6fa34c064bfa6f0a36c45cb05297fa026588e2f0474ab98b99&quot;,&quot;transform&quot;:&quot;Identity&quot;},{&quot;key&quot;:&quot;balance-c841e9a5fff4bc6e7552166f1a3e448e3870653657b4cf6cc0d2a3c46bcd0fdc&quot;,&quot;transform&quot;:&quot;Identity&quot;},{&quot;key&quot;:&quot;balance-208083a44948ba6fa34c064bfa6f0a36c45cb05297fa026588e2f0474ab98b99&quot;,&quot;transform&quot;:{&quot;WriteCLValue&quot;:{&quot;cl_type&quot;:&quot;U512&quot;,&quot;bytes&quot;:&quot;0e00260765095bc138938d44c64d31&quot;,&quot;parsed&quot;:&quot;999999999999999999999997400000000&quot;}}},{&quot;key&quot;:&quot;balance-c841e9a5fff4bc6e7552166f1a3e448e3870653657b4cf6cc0d2a3c46bcd0fdc&quot;,&quot;transform&quot;:{&quot;AddUInt512&quot;:&quot;2500000000&quot;}},{&quot;key&quot;:&quot;transfer-f29c3c543acf1013ebe32b4c11f6e489af9d44d84d99dfaf1a682ae3c3486b8f&quot;,&quot;transform&quot;:{&quot;WriteTransfer&quot;:{&quot;deploy_hash&quot;:&quot;575114a23028a7392790a15c96f43b344f27e597b6f86e3cb975210d9c74cdb6&quot;,&quot;from&quot;:&quot;account-hash-7206b86e4d59ef332c4cf829557c9db1caffd7b060ef6c6c22800221341d0d04&quot;,&quot;to&quot;:&quot;account-hash-3dc9bc4f5d90c62064b5a541fc3bcbe2f81574850a8c6cada46bb410972a7fa1&quot;,&quot;source&quot;:&quot;uref-208083a44948ba6fa34c064bfa6f0a36c45cb05297fa026588e2f0474ab98b99-007&quot;,&quot;target&quot;:&quot;uref-c841e9a5fff4bc6e7552166f1a3e448e3870653657b4cf6cc0d2a3c46bcd0fdc-004&quot;,&quot;amount&quot;:&quot;2500000000&quot;,&quot;gas&quot;:&quot;0&quot;,&quot;id&quot;:1879045643}}},{&quot;key&quot;:&quot;deploy-575114a23028a7392790a15c96f43b344f27e597b6f86e3cb975210d9c74cdb6&quot;,&quot;transform&quot;:{&quot;WriteDeployInfo&quot;:{&quot;deploy_hash&quot;:&quot;575114a23028a7392790a15c96f43b344f27e597b6f86e3cb975210d9c74cdb6&quot;,&quot;transfers&quot;:[&quot;transfer-f29c3c543acf1013ebe32b4c11f6e489af9d44d84d99dfaf1a682ae3c3486b8f&quot;],&quot;from&quot;:&quot;account-hash-7206b86e4d59ef332c4cf829557c9db1caffd7b060ef6c6c22800221341d0d04&quot;,&quot;source&quot;:&quot;uref-208083a44948ba6fa34c064bfa6f0a36c45cb05297fa026588e2f0474ab98b99-007&quot;,&quot;gas&quot;:&quot;100000000&quot;}}},{&quot;key&quot;:&quot;hash-1159b4a91f0d2454d7481a5a314bb0441b76b65cf02249ecf1ff25efe11679ca&quot;,&quot;transform&quot;:&quot;Identity&quot;},{&quot;key&quot;:&quot;hash-1159b4a91f0d2454d7481a5a314bb0441b76b65cf02249ecf1ff25efe11679ca&quot;,&quot;transform&quot;:&quot;Identity&quot;},{&quot;key&quot;:&quot;hash-0f0983299f8322afff6b0ee80db8e5d94c2b57e0d4d734c5e2212565b97ca1ba&quot;,&quot;transform&quot;:&quot;Identity&quot;},{&quot;key&quot;:&quot;hash-1159b4a91f0d2454d7481a5a314bb0441b76b65cf02249ecf1ff25efe11679ca&quot;,&quot;transform&quot;:&quot;Identity&quot;},{&quot;key&quot;:&quot;balance-367be1d2c21f05b8f42d8559b503fab3eaa3f555170beffcef70a3a70300961a&quot;,&quot;transform&quot;:&quot;Identity&quot;},{&quot;key&quot;:&quot;hash-1159b4a91f0d2454d7481a5a314bb0441b76b65cf02249ecf1ff25efe11679ca&quot;,&quot;transform&quot;:&quot;Identity&quot;},{&quot;key&quot;:&quot;hash-a0fa18f913cce9fe07d563d8fdea14c660b08e49c6e4cfca7b60fa3727b92698&quot;,&quot;transform&quot;:&quot;Identity&quot;},{&quot;key&quot;:&quot;hash-30761094ee98243d457e3668905765e9c7f73e804d95a661de1d43cc658a2667&quot;,&quot;transform&quot;:&quot;Identity&quot;},{&quot;key&quot;:&quot;hash-a0fa18f913cce9fe07d563d8fdea14c660b08e49c6e4cfca7b60fa3727b92698&quot;,&quot;transform&quot;:&quot;Identity&quot;},{&quot;key&quot;:&quot;balance-367be1d2c21f05b8f42d8559b503fab3eaa3f555170beffcef70a3a70300961a&quot;,&quot;transform&quot;:&quot;Identity&quot;},{&quot;key&quot;:&quot;balance-baea04486b07331310601151a1a76da7cca2422b680bba7711918fb8f238b4ad&quot;,&quot;transform&quot;:&quot;Identity&quot;},{&quot;key&quot;:&quot;balance-367be1d2c21f05b8f42d8559b503fab3eaa3f555170beffcef70a3a70300961a&quot;,&quot;transform&quot;:{&quot;WriteCLValue&quot;:{&quot;cl_type&quot;:&quot;U512&quot;,&quot;bytes&quot;:&quot;00&quot;,&quot;parsed&quot;:&quot;0&quot;}}},{&quot;key&quot;:&quot;balance-baea04486b07331310601151a1a76da7cca2422b680bba7711918fb8f238b4ad&quot;,&quot;transform&quot;:{&quot;AddUInt512&quot;:&quot;100000000&quot;}}]},&quot;transfers&quot;:[&quot;transfer-f29c3c543acf1013ebe32b4c11f6e489af9d44d84d99dfaf1a682ae3c3486b8f&quot;],&quot;cost&quot;:&quot;100000000&quot;}}}}
+Request {&quot;id&quot;:&quot;571750972&quot;,&quot;jsonrpc&quot;:&quot;2.0&quot;,&quot;method&quot;:&quot;account_put_deploy&quot;,&quot;params&quot;:[{&quot;hash&quot;:&quot;e9b36473aa0d8c4cda183d0b5bc92bbd2c8e2d8e4036020e5555d26d9bc26fc4&quot;,&quot;header&quot;:{&quot;account&quot;:&quot;01eb90935e26b4d75c4b06cba40352b8fc9866793b0eb6e3ee213896bbab272661&quot;,&quot;dependencies&quot;:[],&quot;ttl&quot;:&quot;30m&quot;,&quot;body_hash&quot;:&quot;d30bac7a5676f73bc45f1396722e2cd739d9f4e04f6b67e989f1fc4b95f49bdc&quot;,&quot;chain_name&quot;:&quot;casper-test&quot;,&quot;gas_price&quot;:1,&quot;timestamp&quot;:&quot;2023-07-18T10:27:28.608Z&quot;},&quot;approvals&quot;:[{&quot;signer&quot;:&quot;01eb90935e26b4d75c4b06cba40352b8fc9866793b0eb6e3ee213896bbab272661&quot;,&quot;signature&quot;:&quot;01fbb16e9f6db218d83825488a46bc44bb64dbfaabcb90694e0af51fda46e8a6aeda2e5db74f46aac6d4896b98def5bc763a348ad174c4873ddbb2f0d4c664550b&quot;}],&quot;payment&quot;:{&quot;ModuleBytes&quot;:{&quot;args&quot;:[[&quot;amount&quot;,{&quot;bytes&quot;:&quot;0400e1f505&quot;,&quot;cl_type&quot;:&quot;U512&quot;}]],&quot;module_bytes&quot;:&quot;&quot;}},&quot;session&quot;:{&quot;Transfer&quot;:{&quot;args&quot;:[[&quot;amount&quot;,{&quot;bytes&quot;:&quot;0400f90295&quot;,&quot;cl_type&quot;:&quot;U512&quot;}],[&quot;target&quot;,{&quot;bytes&quot;:&quot;016faf63d89d11b37ab829807e67539cc54b6b7c9a3cf6b08b8767df8b49ec97d6&quot;,&quot;cl_type&quot;:&quot;PublicKey&quot;}],[&quot;id&quot;,{&quot;bytes&quot;:&quot;00&quot;,&quot;cl_type&quot;:{&quot;Option&quot;:&quot;U64&quot;}}]]}}}]}
+JSON-RPC Response: {&quot;jsonrpc&quot;:&quot;2.0&quot;,&quot;id&quot;:&quot;571750972&quot;,&quot;result&quot;:{&quot;api_version&quot;:&quot;1.5.2&quot;,&quot;deploy_hash&quot;:&quot;e9b36473aa0d8c4cda183d0b5bc92bbd2c8e2d8e4036020e5555d26d9bc26fc4&quot;}}
+deploy hash: e9b36473aa0d8c4cda183d0b5bc92bbd2c8e2d8e4036020e5555d26d9bc26fc4
+Request {&quot;id&quot;:&quot;1485305924&quot;,&quot;jsonrpc&quot;:&quot;2.0&quot;,&quot;method&quot;:&quot;account_put_deploy&quot;,&quot;params&quot;:[{&quot;hash&quot;:&quot;1d33ab40578a2af2d837d65feb9a4054d6e4b23173a7145b9c4f26fd09fcbb44&quot;,&quot;header&quot;:{&quot;account&quot;:&quot;01ba1b2dc565c671bc02af6e0ab9dcdaa712ff607726d5ac551598442d4fc3e083&quot;,&quot;dependencies&quot;:[],&quot;ttl&quot;:&quot;30m&quot;,&quot;body_hash&quot;:&quot;a025ee69fa1d69592aec1a62e9b8a99f61c6a465ca5a53f2319de2394c5d95c5&quot;,&quot;chain_name&quot;:&quot;casper-net-1&quot;,&quot;gas_price&quot;:1,&quot;timestamp&quot;:&quot;2023-07-18T10:27:28.758Z&quot;},&quot;approvals&quot;:[{&quot;signer&quot;:&quot;01ba1b2dc565c671bc02af6e0ab9dcdaa712ff607726d5ac551598442d4fc3e083&quot;,&quot;signature&quot;:&quot;016b83d3ee4e0af21ffbb49ec6609bc2beea98c7b5840d369ff84d79c4257502fecccaea737aea295ba56ab7efbb8c137d855fb122363017c37fb06770fc0b3e02&quot;}],&quot;payment&quot;:{&quot;ModuleBytes&quot;:{&quot;args&quot;:[[&quot;amount&quot;,{&quot;bytes&quot;:&quot;0400e1f505&quot;,&quot;cl_type&quot;:&quot;U512&quot;}]],&quot;module_bytes&quot;:&quot;&quot;}},&quot;session&quot;:{&quot;Transfer&quot;:{&quot;args&quot;:[[&quot;amount&quot;,{&quot;bytes&quot;:&quot;0400f90295&quot;,&quot;cl_type&quot;:&quot;U512&quot;}],[&quot;target&quot;,{&quot;bytes&quot;:&quot;013d3c1160abda84753cdd5153873d3ff30b554a5277d752d9bd6d9259bcdd84ad&quot;,&quot;cl_type&quot;:&quot;PublicKey&quot;}],[&quot;id&quot;,{&quot;bytes&quot;:&quot;0153f6ac1500000000&quot;,&quot;cl_type&quot;:{&quot;Option&quot;:&quot;U64&quot;}}]]}}}]}
+JSON-RPC Response: {&quot;jsonrpc&quot;:&quot;2.0&quot;,&quot;id&quot;:&quot;1485305924&quot;,&quot;result&quot;:{&quot;api_version&quot;:&quot;1.0.0&quot;,&quot;deploy_hash&quot;:&quot;1d33ab40578a2af2d837d65feb9a4054d6e4b23173a7145b9c4f26fd09fcbb44&quot;}}
+</pre>
+</span>
+</div>
+</div>
+<div id="footer">
+<p>
+<div>
+<label class="hidden" id="label-for-line-wrapping-toggle" for="line-wrapping-toggle">Wrap lines
+<input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
+</label>
+</div>Generated by 
+<a href="http://www.gradle.org">Gradle 7.5.1</a> at Jul 18, 2023, 10:27:59 AM</p>
+</div>
+</div>
+</body>
+</html>
