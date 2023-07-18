@@ -105,7 +105,11 @@ public class CLValueOption extends AbstractCLValueWithChildren<Optional<Abstract
 
     @Override
     protected void setChildTypes(Optional<AbstractCLValue<?, ?>> value) {
-        clType.setOptionType(value.isPresent() ? value.get().getClType() : null);
+        if (value.isPresent()) {
+            clType.setOptionType(value.get().getClType());
+        } else {
+            clType.setChildTypes(null);
+        }
     }
 
     @Override

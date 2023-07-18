@@ -16,6 +16,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.bouncycastle.util.encoders.Hex;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -124,8 +125,12 @@ public class CLValueMap extends
     @Override
     @JsonIgnore
     protected void setChildTypes(Map<? extends AbstractCLValue<?, ?>, ? extends AbstractCLValue<?, ?>> value) {
-        Entry<? extends AbstractCLValue<?, ?>, ? extends AbstractCLValue<?, ?>> entry = value.entrySet().iterator().next();
-        clType.setKeyValueTypes(new CLTypeMap.CLTypeMapEntryType(entry.getKey().getClType(), entry.getValue().getClType()));
+        if (value != null && value.entrySet().iterator().hasNext()) {
+            Entry<? extends AbstractCLValue<?, ?>, ? extends AbstractCLValue<?, ?>> entry = value.entrySet().iterator().next();
+            clType.setKeyValueTypes(new CLTypeMap.CLTypeMapEntryType(entry.getKey().getClType(), entry.getValue().getClType()));
+        } else {
+            clType.setChildTypes(new ArrayList<>());
+        }
     }
 
     // This needed to be customized to ensure equality is being checked correctly.

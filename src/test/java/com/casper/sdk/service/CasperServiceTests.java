@@ -2,7 +2,6 @@ package com.casper.sdk.service;
 
 import com.casper.sdk.exception.CasperClientException;
 import com.casper.sdk.exception.DynamicInstanceException;
-import com.casper.sdk.identifier.block.BlockIdentifier;
 import com.casper.sdk.identifier.block.HashBlockIdentifier;
 import com.casper.sdk.identifier.block.HeightBlockIdentifier;
 import com.casper.sdk.identifier.global.BlockHashIdentifier;
@@ -43,7 +42,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Unit tests for {@link CasperService}
@@ -200,9 +204,8 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
         assertTrue(deployData.getDeploy().getSession() instanceof StoredContractByHash);
         assertTrue(deployData.getExecutionResults().get(0).getResult() instanceof Success);
         assertTrue(deployData.getDeploy().getPayment() instanceof ModuleBytes);
-        assertTrue(deployData.getDeploy().getSession() instanceof StoredContractByHash);
-        String tmp = ((StoredContractByHash) deployData.getDeploy().getSession()).getHash();
-        assertEquals("ccb576d6ce6dec84a551e48f0d0b7af89ddba44c7390b690036257a04a3ae9ea", tmp);
+        String sessionHash = ((StoredContractByHash) deployData.getDeploy().getSession()).getHash();
+        assertEquals("ccb576d6ce6dec84a551e48f0d0b7af89ddba44c7390b690036257a04a3ae9ea", sessionHash);
     }
 
 
@@ -314,11 +317,19 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
     void getCasperClientExceptionExceptionBlockNotKnown() {
         String expectedMessage = "Invalid params (code: -32602)";
 
-        BlockIdentifier blockIdentifier = new HashBlockIdentifier("abc");
-
         CasperClientException casperClientException = assertThrows(CasperClientException.class,
                 () -> casperServiceMainnet.getDeploy("abc"));
 
         assertEquals(expectedMessage, casperClientException.getMessage());
+    }
+
+    @Test
+    void getDeployMainnetWithCLValueListEmpty() {
+        assertDoesNotThrow(() -> casperServiceMainnet.getDeploy("2f430047c90597ef30467bb5393081e83a69c76ae215b1a89e01918748831a60"));
+    }
+
+    @Test
+    void getDeployMainnetWithCLValueMapEmpty() {
+        assertDoesNotThrow(() -> casperServiceMainnet.getDeploy("f8c3d8a9bc4b2a07928c9eeaa8bac41ec54b13cc767eb25509770b333f0f77e9"));
     }
 }
