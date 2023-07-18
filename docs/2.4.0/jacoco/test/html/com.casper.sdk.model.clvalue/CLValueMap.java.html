@@ -16,6 +16,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.bouncycastle.util.encoders.Hex;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -32,156 +33,160 @@ import java.util.stream.Collectors;
  */
 @Getter
 @Setter
-<span class="fc" id="L35">@NoArgsConstructor</span>
+<span class="fc" id="L36">@NoArgsConstructor</span>
 public class CLValueMap extends
         AbstractCLValueWithChildren&lt;Map&lt;? extends AbstractCLValue&lt;?, ?&gt;, ? extends AbstractCLValue&lt;?, ?&gt;&gt;, CLTypeMap&gt; {
-<span class="fc" id="L38">    @JsonProperty(&quot;cl_type&quot;)</span>
-<span class="fc" id="L39">    private CLTypeMap clType = new CLTypeMap();</span>
+<span class="fc" id="L39">    @JsonProperty(&quot;cl_type&quot;)</span>
+<span class="fc" id="L40">    private CLTypeMap clType = new CLTypeMap();</span>
 
     @JsonSetter(&quot;cl_type&quot;)
     public void setClType(CLTypeMap clType) {
-<span class="fc" id="L43">        this.clType = clType;</span>
-<span class="fc" id="L44">        childTypesSet();</span>
-<span class="fc" id="L45">    }</span>
+<span class="fc" id="L44">        this.clType = clType;</span>
+<span class="fc" id="L45">        childTypesSet();</span>
+<span class="fc" id="L46">    }</span>
 
-<span class="fc" id="L47">    public CLValueMap(Map&lt;? extends AbstractCLValue&lt;?, ?&gt;, ? extends AbstractCLValue&lt;?, ?&gt;&gt; value) throws ValueSerializationException {</span>
-<span class="fc" id="L48">        setChildTypes(value);</span>
-<span class="fc" id="L49">        this.setValue(value);</span>
-<span class="fc" id="L50">    }</span>
+<span class="fc" id="L48">    public CLValueMap(Map&lt;? extends AbstractCLValue&lt;?, ?&gt;, ? extends AbstractCLValue&lt;?, ?&gt;&gt; value) throws ValueSerializationException {</span>
+<span class="fc" id="L49">        setChildTypes(value);</span>
+<span class="fc" id="L50">        this.setValue(value);</span>
+<span class="fc" id="L51">    }</span>
 
     @Override
     public void serialize(SerializerBuffer ser, Target target) throws ValueSerializationException, NoSuchTypeException {
-<span class="pc bpc" id="L54" title="1 of 2 branches missed.">        if (this.getValue() == null) return;</span>
+<span class="pc bpc" id="L55" title="1 of 2 branches missed.">        if (this.getValue() == null) return;</span>
 
-<span class="pc bpc" id="L56" title="1 of 2 branches missed.">        if (target.equals(Target.BYTE)) {</span>
-<span class="nc" id="L57">            super.serializePrefixWithLength(ser);</span>
+<span class="pc bpc" id="L57" title="1 of 2 branches missed.">        if (target.equals(Target.BYTE)) {</span>
+<span class="nc" id="L58">            super.serializePrefixWithLength(ser);</span>
         }
 
-<span class="fc" id="L60">        setChildTypes(this.getValue());</span>
+<span class="fc" id="L61">        setChildTypes(this.getValue());</span>
 
-<span class="fc" id="L62">        CLValueI32 mapLength = new CLValueI32(getValue().size());</span>
-<span class="fc" id="L63">        mapLength.serialize(ser);</span>
+<span class="fc" id="L63">        CLValueI32 mapLength = new CLValueI32(getValue().size());</span>
+<span class="fc" id="L64">        mapLength.serialize(ser);</span>
 
-<span class="fc bfc" id="L65" title="All 2 branches covered.">        for (Entry&lt;? extends AbstractCLValue&lt;?, ?&gt;, ? extends AbstractCLValue&lt;?, ?&gt;&gt; entry : getValue().entrySet()) {</span>
-<span class="fc" id="L66">            entry.getKey().serialize(ser);</span>
-<span class="fc" id="L67">            entry.getValue().serialize(ser);</span>
-<span class="fc" id="L68">        }</span>
+<span class="fc bfc" id="L66" title="All 2 branches covered.">        for (Entry&lt;? extends AbstractCLValue&lt;?, ?&gt;, ? extends AbstractCLValue&lt;?, ?&gt;&gt; entry : getValue().entrySet()) {</span>
+<span class="fc" id="L67">            entry.getKey().serialize(ser);</span>
+<span class="fc" id="L68">            entry.getValue().serialize(ser);</span>
+<span class="fc" id="L69">        }</span>
 
-<span class="pc bpc" id="L70" title="1 of 2 branches missed.">        if (target.equals(Target.BYTE)) {</span>
-<span class="nc" id="L71">            this.encodeType(ser);</span>
+<span class="pc bpc" id="L71" title="1 of 2 branches missed.">        if (target.equals(Target.BYTE)) {</span>
+<span class="nc" id="L72">            this.encodeType(ser);</span>
         }
 
-<span class="fc" id="L74">        this.setBytes(Hex.toHexString(ser.toByteArray()));</span>
-<span class="fc" id="L75">    }</span>
+<span class="fc" id="L75">        this.setBytes(Hex.toHexString(ser.toByteArray()));</span>
+<span class="fc" id="L76">    }</span>
 
     @Override
     protected void encodeType(SerializerBuffer ser) throws NoSuchTypeException {
-<span class="nc" id="L79">        super.encodeType(ser);</span>
+<span class="nc" id="L80">        super.encodeType(ser);</span>
 
-<span class="nc" id="L81">        byte keyTypeTag = (getClType().getKeyValueTypes().getKeyType().getClTypeData().getSerializationTag());</span>
-<span class="nc" id="L82">        ser.writeU8(keyTypeTag);</span>
+<span class="nc" id="L82">        byte keyTypeTag = (getClType().getKeyValueTypes().getKeyType().getClTypeData().getSerializationTag());</span>
+<span class="nc" id="L83">        ser.writeU8(keyTypeTag);</span>
 
-<span class="nc" id="L84">        byte valueTypeTag = (getClType().getKeyValueTypes().getValueType().getClTypeData().getSerializationTag());</span>
-<span class="nc" id="L85">        ser.writeU8(valueTypeTag);</span>
-<span class="nc" id="L86">    }</span>
+<span class="nc" id="L85">        byte valueTypeTag = (getClType().getKeyValueTypes().getValueType().getClTypeData().getSerializationTag());</span>
+<span class="nc" id="L86">        ser.writeU8(valueTypeTag);</span>
+<span class="nc" id="L87">    }</span>
 
     @Override
     public void deserializeCustom(DeserializerBuffer deser) throws Exception {
-<span class="fc" id="L90">        CLTypeData keyType = clType.getKeyValueTypes().getKeyType().getClTypeData();</span>
-<span class="fc" id="L91">        CLTypeData valType = clType.getKeyValueTypes().getValueType().getClTypeData();</span>
+<span class="fc" id="L91">        CLTypeData keyType = clType.getKeyValueTypes().getKeyType().getClTypeData();</span>
+<span class="fc" id="L92">        CLTypeData valType = clType.getKeyValueTypes().getValueType().getClTypeData();</span>
 
-<span class="fc" id="L93">        Map&lt;AbstractCLValue&lt;?, ?&gt;, AbstractCLValue&lt;?, ?&gt;&gt; map = new LinkedHashMap&lt;&gt;();</span>
-<span class="fc" id="L94">        CLValueI32 mapLength = new CLValueI32(0);</span>
-<span class="fc" id="L95">        mapLength.deserializeCustom(deser);</span>
+<span class="fc" id="L94">        Map&lt;AbstractCLValue&lt;?, ?&gt;, AbstractCLValue&lt;?, ?&gt;&gt; map = new LinkedHashMap&lt;&gt;();</span>
+<span class="fc" id="L95">        CLValueI32 mapLength = new CLValueI32(0);</span>
+<span class="fc" id="L96">        mapLength.deserializeCustom(deser);</span>
 
-<span class="fc bfc" id="L97" title="All 2 branches covered.">        for (int i = 0; i &lt; mapLength.getValue(); i++) {</span>
-<span class="fc" id="L98">            AbstractCLValue&lt;?, ?&gt; key = CLTypeData.createCLValueFromCLTypeData(keyType);</span>
-<span class="pc bpc" id="L99" title="1 of 2 branches missed.">            if (key.getClType() instanceof AbstractCLTypeWithChildren) {</span>
-<span class="nc" id="L100">                ((AbstractCLTypeWithChildren) key.getClType())</span>
-<span class="nc" id="L101">                        .setChildTypes(</span>
-<span class="nc" id="L102">                                ((AbstractCLTypeWithChildren) clType.getKeyValueTypes().getKeyType()).getChildTypes());</span>
+<span class="fc bfc" id="L98" title="All 2 branches covered.">        for (int i = 0; i &lt; mapLength.getValue(); i++) {</span>
+<span class="fc" id="L99">            AbstractCLValue&lt;?, ?&gt; key = CLTypeData.createCLValueFromCLTypeData(keyType);</span>
+<span class="pc bpc" id="L100" title="1 of 2 branches missed.">            if (key.getClType() instanceof AbstractCLTypeWithChildren) {</span>
+<span class="nc" id="L101">                ((AbstractCLTypeWithChildren) key.getClType())</span>
+<span class="nc" id="L102">                        .setChildTypes(</span>
+<span class="nc" id="L103">                                ((AbstractCLTypeWithChildren) clType.getKeyValueTypes().getKeyType()).getChildTypes());</span>
             }
-<span class="fc" id="L104">            key.deserializeCustom(deser);</span>
+<span class="fc" id="L105">            key.deserializeCustom(deser);</span>
 
-<span class="fc" id="L106">            AbstractCLValue&lt;?, ?&gt; val = CLTypeData.createCLValueFromCLTypeData(valType);</span>
+<span class="fc" id="L107">            AbstractCLValue&lt;?, ?&gt; val = CLTypeData.createCLValueFromCLTypeData(valType);</span>
 
-<span class="pc bpc" id="L108" title="1 of 2 branches missed.">            if (val.getClType() instanceof CLTypeMap) {</span>
-<span class="nc" id="L109">                ((CLTypeMap) val.getClType())</span>
-<span class="nc" id="L110">                        .setKeyValueTypes(((CLTypeMap) clType.getKeyValueTypes().getValueType()).getKeyValueTypes());</span>
-<span class="fc bfc" id="L111" title="All 2 branches covered.">            } else if (val.getClType() instanceof AbstractCLTypeWithChildren) {</span>
-<span class="fc" id="L112">                ((AbstractCLTypeWithChildren) val.getClType())</span>
-<span class="fc" id="L113">                        .setChildTypes(((AbstractCLTypeWithChildren) clType.getKeyValueTypes().getValueType())</span>
-<span class="fc" id="L114">                                .getChildTypes());</span>
+<span class="pc bpc" id="L109" title="1 of 2 branches missed.">            if (val.getClType() instanceof CLTypeMap) {</span>
+<span class="nc" id="L110">                ((CLTypeMap) val.getClType())</span>
+<span class="nc" id="L111">                        .setKeyValueTypes(((CLTypeMap) clType.getKeyValueTypes().getValueType()).getKeyValueTypes());</span>
+<span class="fc bfc" id="L112" title="All 2 branches covered.">            } else if (val.getClType() instanceof AbstractCLTypeWithChildren) {</span>
+<span class="fc" id="L113">                ((AbstractCLTypeWithChildren) val.getClType())</span>
+<span class="fc" id="L114">                        .setChildTypes(((AbstractCLTypeWithChildren) clType.getKeyValueTypes().getValueType())</span>
+<span class="fc" id="L115">                                .getChildTypes());</span>
             }
-<span class="fc" id="L116">            val.deserializeCustom(deser);</span>
+<span class="fc" id="L117">            val.deserializeCustom(deser);</span>
 
-<span class="fc" id="L118">            map.put(key, val);</span>
+<span class="fc" id="L119">            map.put(key, val);</span>
         }
 
-<span class="fc" id="L121">        setValue(map);</span>
-<span class="fc" id="L122">    }</span>
+<span class="fc" id="L122">        setValue(map);</span>
+<span class="fc" id="L123">    }</span>
 
     @Override
     @JsonIgnore
     protected void setChildTypes(Map&lt;? extends AbstractCLValue&lt;?, ?&gt;, ? extends AbstractCLValue&lt;?, ?&gt;&gt; value) {
-<span class="fc" id="L127">        Entry&lt;? extends AbstractCLValue&lt;?, ?&gt;, ? extends AbstractCLValue&lt;?, ?&gt;&gt; entry = value.entrySet().iterator().next();</span>
-<span class="fc" id="L128">        clType.setKeyValueTypes(new CLTypeMap.CLTypeMapEntryType(entry.getKey().getClType(), entry.getValue().getClType()));</span>
-<span class="fc" id="L129">    }</span>
+<span class="pc bpc" id="L128" title="1 of 4 branches missed.">        if (value != null &amp;&amp; value.entrySet().iterator().hasNext()) {</span>
+<span class="fc" id="L129">            Entry&lt;? extends AbstractCLValue&lt;?, ?&gt;, ? extends AbstractCLValue&lt;?, ?&gt;&gt; entry = value.entrySet().iterator().next();</span>
+<span class="fc" id="L130">            clType.setKeyValueTypes(new CLTypeMap.CLTypeMapEntryType(entry.getKey().getClType(), entry.getValue().getClType()));</span>
+<span class="fc" id="L131">        } else {</span>
+<span class="fc" id="L132">            clType.setChildTypes(new ArrayList&lt;&gt;());</span>
+        }
+<span class="fc" id="L134">    }</span>
 
     // This needed to be customized to ensure equality is being checked correctly.
     // The java Map equals method tries to get the &quot;other&quot; map entry's value by using &quot;this&quot; key object,
     // which then fails to find the object since they are &quot;different&quot; and returns always null.
     @Override
     public boolean equals(final Object o) {
-<span class="pc bpc" id="L136" title="1 of 2 branches missed.">        if (o == this) return true;</span>
-<span class="pc bpc" id="L137" title="1 of 2 branches missed.">        if (!(o instanceof CLValueMap)) return false;</span>
-<span class="fc" id="L138">        final CLValueMap other = (CLValueMap) o;</span>
-<span class="pc bpc" id="L139" title="1 of 2 branches missed.">        if (!other.canEqual(this)) return false;</span>
+<span class="pc bpc" id="L141" title="1 of 2 branches missed.">        if (o == this) return true;</span>
+<span class="pc bpc" id="L142" title="1 of 2 branches missed.">        if (!(o instanceof CLValueMap)) return false;</span>
+<span class="fc" id="L143">        final CLValueMap other = (CLValueMap) o;</span>
+<span class="pc bpc" id="L144" title="1 of 2 branches missed.">        if (!other.canEqual(this)) return false;</span>
 
-<span class="fc" id="L141">        final Object this$clType = this.getClType();</span>
-<span class="fc" id="L142">        final Object other$clType = other.getClType();</span>
-<span class="pc bpc" id="L143" title="1 of 2 branches missed.">        if (!Objects.equals(this$clType, other$clType)) return false;</span>
+<span class="fc" id="L146">        final Object this$clType = this.getClType();</span>
+<span class="fc" id="L147">        final Object other$clType = other.getClType();</span>
+<span class="pc bpc" id="L148" title="1 of 2 branches missed.">        if (!Objects.equals(this$clType, other$clType)) return false;</span>
 
-<span class="fc" id="L145">        final Object this$bytes = this.getBytes();</span>
-<span class="fc" id="L146">        final Object other$bytes = other.getBytes();</span>
-<span class="pc bpc" id="L147" title="1 of 2 branches missed.">        if (!Objects.equals(this$bytes, other$bytes)) return false;</span>
-<span class="fc" id="L148">        final Map&lt;? extends AbstractCLValue&lt;?, ?&gt;, ? extends AbstractCLValue&lt;?, ?&gt;&gt; this$value = this.getValue();</span>
-<span class="fc" id="L149">        final Map&lt;? extends AbstractCLValue&lt;?, ?&gt;, ? extends AbstractCLValue&lt;?, ?&gt;&gt; other$value = other.getValue();</span>
+<span class="fc" id="L150">        final Object this$bytes = this.getBytes();</span>
+<span class="fc" id="L151">        final Object other$bytes = other.getBytes();</span>
+<span class="pc bpc" id="L152" title="1 of 2 branches missed.">        if (!Objects.equals(this$bytes, other$bytes)) return false;</span>
+<span class="fc" id="L153">        final Map&lt;? extends AbstractCLValue&lt;?, ?&gt;, ? extends AbstractCLValue&lt;?, ?&gt;&gt; this$value = this.getValue();</span>
+<span class="fc" id="L154">        final Map&lt;? extends AbstractCLValue&lt;?, ?&gt;, ? extends AbstractCLValue&lt;?, ?&gt;&gt; other$value = other.getValue();</span>
 
-<span class="fc bfc" id="L151" title="All 2 branches covered.">        for (Entry&lt;? extends AbstractCLValue&lt;?, ?&gt;, ? extends AbstractCLValue&lt;?, ?&gt;&gt; this$entry : this$value.entrySet()) {</span>
-<span class="fc" id="L152">            AbstractCLValue&lt;?, ?&gt; this$entryKey = this$entry.getKey();</span>
-<span class="fc" id="L153">            AbstractCLValue&lt;?, ?&gt; this$entryValue = this$entry.getValue();</span>
-<span class="fc" id="L154">            boolean found = false;</span>
-<span class="pc bpc" id="L155" title="1 of 2 branches missed.">            for (Entry&lt;? extends AbstractCLValue&lt;?, ?&gt;, ? extends AbstractCLValue&lt;?, ?&gt;&gt; other$entry : other$value.entrySet()) {</span>
-<span class="fc" id="L156">                AbstractCLValue&lt;?, ?&gt; other$entryKey = other$entry.getKey();</span>
-<span class="fc" id="L157">                AbstractCLValue&lt;?, ?&gt; other$entryValue = other$entry.getValue();</span>
-<span class="pc bpc" id="L158" title="2 of 4 branches missed.">                if (this$entryKey.equals(other$entryKey) &amp;&amp; this$entryValue.equals(other$entryValue)) {</span>
-<span class="fc" id="L159">                    found = true;</span>
-<span class="fc" id="L160">                    break;</span>
+<span class="fc bfc" id="L156" title="All 2 branches covered.">        for (Entry&lt;? extends AbstractCLValue&lt;?, ?&gt;, ? extends AbstractCLValue&lt;?, ?&gt;&gt; this$entry : this$value.entrySet()) {</span>
+<span class="fc" id="L157">            AbstractCLValue&lt;?, ?&gt; this$entryKey = this$entry.getKey();</span>
+<span class="fc" id="L158">            AbstractCLValue&lt;?, ?&gt; this$entryValue = this$entry.getValue();</span>
+<span class="fc" id="L159">            boolean found = false;</span>
+<span class="pc bpc" id="L160" title="1 of 2 branches missed.">            for (Entry&lt;? extends AbstractCLValue&lt;?, ?&gt;, ? extends AbstractCLValue&lt;?, ?&gt;&gt; other$entry : other$value.entrySet()) {</span>
+<span class="fc" id="L161">                AbstractCLValue&lt;?, ?&gt; other$entryKey = other$entry.getKey();</span>
+<span class="fc" id="L162">                AbstractCLValue&lt;?, ?&gt; other$entryValue = other$entry.getValue();</span>
+<span class="pc bpc" id="L163" title="2 of 4 branches missed.">                if (this$entryKey.equals(other$entryKey) &amp;&amp; this$entryValue.equals(other$entryValue)) {</span>
+<span class="fc" id="L164">                    found = true;</span>
+<span class="fc" id="L165">                    break;</span>
                 }
-<span class="nc" id="L162">            }</span>
-<span class="pc bpc" id="L163" title="1 of 2 branches missed.">            if (!found) return false;</span>
-<span class="fc" id="L164">        }</span>
+<span class="nc" id="L167">            }</span>
+<span class="pc bpc" id="L168" title="1 of 2 branches missed.">            if (!found) return false;</span>
+<span class="fc" id="L169">        }</span>
 
-<span class="fc" id="L166">        return true;</span>
+<span class="fc" id="L171">        return true;</span>
     }
 
     protected boolean canEqual(final Object other) {
-<span class="fc" id="L170">        return other instanceof CLValueMap;</span>
+<span class="fc" id="L175">        return other instanceof CLValueMap;</span>
     }
 
     @Override
     public int hashCode() {
-<span class="nc" id="L175">        final int PRIME = 59;</span>
-<span class="nc" id="L176">        int result = super.hashCode();</span>
-<span class="nc" id="L177">        final Object $clType = this.getClType();</span>
-<span class="nc bnc" id="L178" title="All 2 branches missed.">        result = result * PRIME + ($clType == null ? 43 : $clType.hashCode());</span>
-<span class="nc" id="L179">        return result;</span>
+<span class="nc" id="L180">        final int PRIME = 59;</span>
+<span class="nc" id="L181">        int result = super.hashCode();</span>
+<span class="nc" id="L182">        final Object $clType = this.getClType();</span>
+<span class="nc bnc" id="L183" title="All 2 branches missed.">        result = result * PRIME + ($clType == null ? 43 : $clType.hashCode());</span>
+<span class="nc" id="L184">        return result;</span>
     }
 
     @Override
     public String toString() {
-<span class="nc bnc" id="L184" title="All 2 branches missed.">        return getValue() != null ? getValue().keySet().stream().map(key -&gt; key.getValue().toString() + &quot;=&quot; + key.getValue().toString()).collect(Collectors.joining(&quot;, &quot;)) : null;</span>
+<span class="nc bnc" id="L189" title="All 2 branches missed.">        return getValue() != null ? getValue().keySet().stream().map(key -&gt; key.getValue().toString() + &quot;=&quot; + key.getValue().toString()).collect(Collectors.joining(&quot;, &quot;)) : null;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

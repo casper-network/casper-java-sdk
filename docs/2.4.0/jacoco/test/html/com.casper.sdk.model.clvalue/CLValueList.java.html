@@ -108,12 +108,16 @@ public class CLValueList extends AbstractCLValueWithChildren&lt;List&lt;? extend
 
     @Override
     protected void setChildTypes(List&lt;? extends AbstractCLValue&lt;?, ?&gt;&gt; value) {
-<span class="fc" id="L111">        clType.setListType(value.get(0).getClType());</span>
-<span class="fc" id="L112">    }</span>
+<span class="fc bfc" id="L111" title="All 2 branches covered.">        if (!value.isEmpty()) {</span>
+<span class="fc" id="L112">            clType.setListType(value.get(0).getClType());</span>
+        } else {
+<span class="fc" id="L114">            clType.setChildTypes(new ArrayList&lt;&gt;());</span>
+        }
+<span class="fc" id="L116">    }</span>
 
     @Override
     public String toString() {
-<span class="nc bnc" id="L116" title="All 2 branches missed.">        return getValue() != null ? getValue().stream().map(item -&gt; item.getValue().toString()).collect(Collectors.joining(&quot;, &quot;)) : null;</span>
+<span class="nc bnc" id="L120" title="All 2 branches missed.">        return getValue() != null ? getValue().stream().map(item -&gt; item.getValue().toString()).collect(Collectors.joining(&quot;, &quot;)) : null;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
