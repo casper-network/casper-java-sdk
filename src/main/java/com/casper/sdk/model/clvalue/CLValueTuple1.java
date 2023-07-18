@@ -17,6 +17,7 @@ import lombok.Setter;
 import org.bouncycastle.util.encoders.Hex;
 import org.javatuples.Unit;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
@@ -88,7 +89,11 @@ public class CLValueTuple1 extends AbstractCLValueWithChildren<Unit<? extends Ab
 
     @Override
     protected void setChildTypes(Unit<? extends AbstractCLValue<?, ?>> value) {
-        clType.setChildTypes(Arrays.asList(value.getValue0().getClType()));
+        if (value.getValue0() != null) {
+            clType.setChildTypes(Arrays.asList(value.getValue0().getClType()));
+        } else {
+            clType.setChildTypes(new ArrayList<>());
+        }
     }
 
     @Override

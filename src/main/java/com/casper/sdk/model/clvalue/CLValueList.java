@@ -108,7 +108,11 @@ public class CLValueList extends AbstractCLValueWithChildren<List<? extends Abst
 
     @Override
     protected void setChildTypes(List<? extends AbstractCLValue<?, ?>> value) {
-        clType.setListType(value.get(0).getClType());
+        if (!value.isEmpty()) {
+            clType.setListType(value.get(0).getClType());
+        } else {
+            clType.setChildTypes(new ArrayList<>());
+        }
     }
 
     @Override

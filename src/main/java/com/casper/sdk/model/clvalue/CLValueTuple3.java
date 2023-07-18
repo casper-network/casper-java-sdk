@@ -17,6 +17,7 @@ import lombok.Setter;
 import org.bouncycastle.util.encoders.Hex;
 import org.javatuples.Triplet;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
@@ -112,8 +113,12 @@ public class CLValueTuple3 extends
 
     @Override
     protected void setChildTypes(Triplet<? extends AbstractCLValue<?, ?>, ? extends AbstractCLValue<?, ?>, ? extends AbstractCLValue<?, ?>> value) {
-        clType.setChildTypes(Arrays.asList(value.getValue0().getClType(), value.getValue1().getClType(),
-                value.getValue2().getClType()));
+        if (value.getValue0() != null && value.getValue1() != null && value.getValue2() != null) {
+            clType.setChildTypes(Arrays.asList(value.getValue0().getClType(), value.getValue1().getClType(),
+                    value.getValue2().getClType()));
+        } else {
+            clType.setChildTypes(new ArrayList<>());
+        }
     }
 
     @Override
