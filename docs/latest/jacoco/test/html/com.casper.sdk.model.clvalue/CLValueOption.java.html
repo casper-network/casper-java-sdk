@@ -105,12 +105,16 @@ public class CLValueOption extends AbstractCLValueWithChildren&lt;Optional&lt;Ab
 
     @Override
     protected void setChildTypes(Optional&lt;AbstractCLValue&lt;?, ?&gt;&gt; value) {
-<span class="pc bpc" id="L108" title="1 of 2 branches missed.">        clType.setOptionType(value.isPresent() ? value.get().getClType() : null);</span>
-<span class="fc" id="L109">    }</span>
+<span class="pc bpc" id="L108" title="1 of 2 branches missed.">        if (value.isPresent()) {</span>
+<span class="fc" id="L109">            clType.setOptionType(value.get().getClType());</span>
+        } else {
+<span class="nc" id="L111">            clType.setChildTypes(null);</span>
+        }
+<span class="fc" id="L113">    }</span>
 
     @Override
     public String toString() {
-<span class="nc bnc" id="L113" title="All 6 branches missed.">        return getValue() != null &amp;&amp; getValue().isPresent() &amp;&amp; getValue().get().getValue() != null ? getValue().get().toString() : &quot;None&quot;;</span>
+<span class="nc bnc" id="L117" title="All 6 branches missed.">        return getValue() != null &amp;&amp; getValue().isPresent() &amp;&amp; getValue().get().getValue() != null ? getValue().get().toString() : &quot;None&quot;;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
