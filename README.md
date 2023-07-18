@@ -21,7 +21,7 @@ This project implements the SDK to interact with a Casper Node. It wraps the Jso
 Using gradle:
 
 ```gradle
-implementation 'network.casper:casper-java-sdk:2.4.0'
+implementation 'network.casper:casper-java-sdk:2.4.1'
 ```
 
 Using maven:
@@ -30,7 +30,7 @@ Using maven:
 <dependency>
     <groupId>network.casper</groupId>
     <artifactId>casper-java-sdk</artifactId>
-    <version>2.4.0</version>
+    <version>2.4.1</version>
 </dependency>
 ```
 
