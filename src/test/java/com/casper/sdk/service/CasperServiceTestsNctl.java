@@ -20,16 +20,15 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.math.BigInteger;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class CasperServiceTestsNctl  extends AbstractJsonRpcTests {
+public class CasperServiceTestsNctl extends AbstractJsonRpcTests {
 
     /**
-     * Test if get block matches requested by height
+     * Test if the get block matches requested by height
      */
     @Test
     void testIfBlockReturnedMatchesRequestedByHeight() {
@@ -154,7 +153,7 @@ public class CasperServiceTestsNctl  extends AbstractJsonRpcTests {
             assertTrue(Files.size(temp) > 0);
 
             String fileContent = new String(Files.readAllBytes(temp));
-            assertTrue(fileContent.length() > 0);
+            assertFalse(fileContent.isEmpty());
         } else {
             assertThrowsExactly(CasperInvalidStateException.class, () -> chainspec.saveGlobalState(temp));
         }

@@ -1,10 +1,10 @@
 package com.casper.sdk.e2e.event;
 
+import com.casper.sdk.e2e.matcher.MatcherMap;
 import com.casper.sdk.e2e.utils.CasperClientProvider;
 import com.casper.sdk.model.event.Event;
 import com.casper.sdk.model.event.EventTarget;
 import com.casper.sdk.model.event.EventType;
-import com.casper.sdk.e2e.matcher.MatcherMap;
 import org.hamcrest.Matcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,11 +43,14 @@ public class EventHandler {
 
     private void consume(final EventType eventType, final EventTarget eventTarget) {
 
+        //                    logger.info("Got {} event {}", eventType, event);
         sseSources.add(
-                CasperClientProvider.getInstance().getEventService().consumeEvents(eventType, eventTarget, null, event -> {
-//                    logger.info("Got {} event {}", eventType, event);
-                    handleMatchers(event);
-                }, throwable -> logger.error("Error processing SSE event", throwable))
+                CasperClientProvider.getInstance().getEventService().consumeEvents(
+                        eventType,
+                        eventTarget, null,
+                        this::handleMatchers,
+                        throwable -> logger.error("Error processing SSE event", throwable)
+                )
         );
     }
 

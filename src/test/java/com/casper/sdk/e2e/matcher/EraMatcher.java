@@ -14,7 +14,7 @@ public class EraMatcher {
     private static final Logger logger = LoggerFactory.getLogger(EraMatcher.class);
 
     public static ExpiringMatcher<Event<Step>> theEraHasChanged() {
-        return new ExpiringMatcher<>(new CustomMatcher("A step event is encountered") {
+        return new ExpiringMatcher<>(new CustomMatcher<Event<Step>>("A step event is encountered") {
             @Override
             public boolean matches(final Object actual) {
                 if (actual instanceof Event && ((Event<?>) actual).getDataType() == DataType.STEP) {
@@ -25,5 +25,4 @@ public class EraMatcher {
             }
         });
     }
-
 }

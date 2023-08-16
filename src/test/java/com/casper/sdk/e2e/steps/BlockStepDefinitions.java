@@ -228,6 +228,7 @@ public class BlockStepDefinitions {
         assertThat(latestBlockSdk.getBlock().getBody(), is(notNullValue()));
         assertThat(latestBlockSdk.getBlock().getBody().getProposer().toString(), is(latestBlockNode.get("body").get("proposer").asText()));
 
+        //noinspection SizeReplaceableByIsEmpty
         if (latestBlockNode.get("body").get("deploy_hashes").size() == 0) {
             assertThat(latestBlockSdk.getBlock().getBody().getDeployHashes(), is(empty()));
         } else {
@@ -236,6 +237,7 @@ public class BlockStepDefinitions {
                     d -> assertThat(deploysLatestBlockSdk.getBlock().getBody().getDeployHashes(), hasItem(d.textValue()))
             );
         }
+        //noinspection SizeReplaceableByIsEmpty
         if (latestBlockNode.get("body").get("transfer_hashes").size() == 0) {
             assertThat(latestBlockSdk.getBlock().getBody().getTransferHashes(), is(empty()));
         } else {

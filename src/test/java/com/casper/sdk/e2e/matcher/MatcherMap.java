@@ -14,27 +14,26 @@ import java.util.Map;
  */
 public class MatcherMap {
 
-    private final Map<EventType, List<Matcher>> eventTypeListMap = new LinkedHashMap<>();
+    private final Map<EventType, List<Matcher<?>>> eventTypeListMap = new LinkedHashMap<>();
 
     public void addEventMatcher(final EventType eventType, Matcher<?> matcher) {
         getMatchers(eventType).add(matcher);
     }
 
 
-    private List<Matcher> getMatchers(final EventType eventType) {
+    private List<Matcher<?>> getMatchers(final EventType eventType) {
         return eventTypeListMap.computeIfAbsent(eventType, k -> new ArrayList<>());
     }
 
 
     public void handleEvent(Event<?> event) {
-        //noinspection rawtypes
-        List<Matcher> matchers = getMatchers(event.getEventType());
+        List<Matcher<?>> matchers = getMatchers(event.getEventType());
 
         matchers.forEach(matcher -> matcher.matches(event));
     }
 
     public void removeEventMatcher(EventType eventType, Matcher<?> matcher) {
-        List<Matcher> matchers = getMatchers(eventType);
+        List<Matcher<?>> matchers = getMatchers(eventType);
         matchers.remove(matcher);
     }
 }

@@ -3,6 +3,7 @@ package com.casper.sdk.e2e.utils;
 import com.casper.sdk.service.CasperService;
 import com.casper.sdk.service.EventService;
 import com.casper.sdk.e2e.exception.TestException;
+import lombok.Getter;
 
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -13,6 +14,7 @@ import java.net.URISyntaxException;
  *
  * @author ian@meywood.com
  */
+@Getter
 public class CasperClientProvider {
 
     private static CasperClientProvider instance;
@@ -38,11 +40,4 @@ public class CasperClientProvider {
         }
     }
 
-    public CasperService getCasperService() {
-        return casperService;
-    }
-
-    public EventService getEventService() {
-        return eventService;
-    }
 }

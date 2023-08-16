@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
@@ -47,8 +48,7 @@ public class ReadDeployStepDefinitions {
 
         logger.info("Given that the {} JSON deploy is loaded", jsonFilename);
 
-        //noinspection ConstantConditions
-        final InputStream jsonIn = getClass().getResource("/json/" + jsonFilename).openStream();
+        final InputStream jsonIn = Objects.requireNonNull(getClass().getResource("/json/" + jsonFilename)).openStream();
         assertThat(jsonIn, is(notNullValue()));
 
         final Deploy transfer = new ObjectMapper().readValue(jsonIn, Deploy.class);
