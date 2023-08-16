@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       nctl:
-        image: stormeye2000/cspr-nctl:1.5
+        image: stormeye2000/cspr-nctl:linux-1.5.2
         options: --name cspr-nctl
         env:
           PREDEFINED_ACCOUNTS: 'true'
