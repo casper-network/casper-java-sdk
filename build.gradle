@@ -14,12 +14,12 @@ apply plugin: 'java'
 
 group = 'network.casper'
 // Version number update for release
-version='2.4.1'
+version = '2.4.1'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 repositories {
-	mavenCentral()
+    mavenCentral()
     maven { url 'https://s01.oss.sonatype.org/content/repositories/snapshots' }
 }
 
@@ -56,6 +56,12 @@ dependencies {
     testImplementation files('assets')
     // path to features and other standard test resources from git submodule
     testImplementation files('cspr-standard-tests-resources')
+}
+
+configurations {
+    cucumberRuntime {
+        extendsFrom testImplementation
+    }
 }
 
 java {
@@ -95,9 +101,9 @@ test {
         //showStandardStreams true
         // set options for log level LIFECYCLE
         events TestLogEvent.FAILED,
-               TestLogEvent.PASSED,
-               TestLogEvent.SKIPPED
-               //TestLogEvent.STANDARD_OUT
+                TestLogEvent.PASSED,
+                TestLogEvent.SKIPPED
+        //TestLogEvent.STANDARD_OUT
         exceptionFormat TestExceptionFormat.FULL
         showExceptions true
         showCauses true
@@ -106,11 +112,11 @@ test {
         // set options for log level DEBUG and INFO
         debug {
             events TestLogEvent.STARTED,
-                   TestLogEvent.FAILED,
-                   TestLogEvent.PASSED,
-                   TestLogEvent.SKIPPED,
-                   TestLogEvent.STANDARD_ERROR
-                   TestLogEvent.STANDARD_OUT
+                    TestLogEvent.FAILED,
+                    TestLogEvent.PASSED,
+                    TestLogEvent.SKIPPED,
+                    TestLogEvent.STANDARD_ERROR
+            TestLogEvent.STANDARD_OUT
             exceptionFormat TestExceptionFormat.FULL
         }
         //info.events = debug.events
@@ -123,6 +129,33 @@ test {
                 def repeatLength = startItem.length() + output.length() + endItem.length()
                 println('\n' + ('-' * repeatLength) + '\n' + startItem + output + endItem + '\n' + ('-' * repeatLength))
             }
+        }
+    }
+}
+
+
+task cucumberCli() {
+
+    ext.cucmmber_name = System.getProperty('cucumber.name')
+    if (ext.cucmmber_name == null) {
+        ext.cucmmber_name = ''
+    }
+    println 'ext.cucmmber_name=' + ext.cucmmber_name;
+
+    dependsOn assemble, testClasses
+    doLast {
+        javaexec {
+            main = "io.cucumber.core.cli.Main"
+            classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
+            args = [
+                    '--plugin', 'pretty',
+                    '--plugin', 'html:reports/cucumber-report.html',
+                    '--plugin', 'junit:reports/cucumber-report.xml',
+                    '--plugin', 'json:reports/cucumber-report.json',
+                    '--glue', 'com.stormeye.evaluation',
+                    '--glue', 'com.casper.sdk',
+                    '--name', ext.cucmmber_name,
+                    'cspr-standard-tests-resources/features']
         }
     }
 }

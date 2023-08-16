@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
-cd "$(dirname "$0")/.." || exit
+# executes the JUnit tests. To execute the cucumber test use the e2e-test script
+cd "$(dirname "$0")/.." || exit 1
 ./gradlew test "$@"
 
