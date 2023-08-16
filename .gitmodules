@@ -1,0 +1,3 @@
+[submodule "cspr-standard-tests-resources"]
+	path = cspr-standard-tests-resources
+	url = git@github.com:stormeye2000/cspr-standard-tests-resources.git
