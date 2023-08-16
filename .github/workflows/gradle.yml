@@ -49,7 +49,7 @@ jobs:
       # Copy the assets from the NCTL docker image and build
       - name: Build and test with Gradle
         run: |
-          cd sh && chmod +x docker-copy-assets.sh && ./docker-copy-assets.sh && cd ..
+          cd script && chmod +x docker-copy-assets && ./docker-copy-assets && cd ..
           ./gradlew clean build
           
       - name: Export project version
