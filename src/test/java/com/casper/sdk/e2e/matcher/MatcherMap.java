@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * Map of EventType to list of Matchers.
+ *
  * @author ian@meywood.com
  */
 public class MatcherMap {

@@ -43,7 +43,7 @@ public class EventHandler {
 
     private void consume(final EventType eventType, final EventTarget eventTarget) {
 
-        //                    logger.info("Got {} event {}", eventType, event);
+        logger.info("Got {} event {}", eventType, eventTarget);
         sseSources.add(
                 CasperClientProvider.getInstance().getEventService().consumeEvents(
                         eventType,

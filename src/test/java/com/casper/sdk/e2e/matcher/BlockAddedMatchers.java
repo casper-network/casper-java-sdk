@@ -18,7 +18,6 @@ public class BlockAddedMatchers {
 
     private static final Logger logger = LoggerFactory.getLogger(BlockAddedMatchers.class);
 
-
     public static ExpiringMatcher<Event<BlockAdded>> hasTransferHashWithin(final String expectedTransferHash,
                                                                            final OnMatch<Event<BlockAdded>> onMatch) {
         return new ExpiringMatcher<>(
@@ -56,5 +55,4 @@ public class BlockAddedMatchers {
                 }
         );
     }
-
 }

@@ -35,7 +35,6 @@ public class Nctl {
         this.dockerName = dockerName;
     }
 
-
     public String getAccountMainPurse(final int userId) {
 
         final JsonNode node = execute("view_user_account.sh", "user=" + userId, s -> {
@@ -159,5 +158,3 @@ public class Nctl {
         return response.replaceAll("\u001B\\[[;\\d]*m", "");
     }
 }
-
-
