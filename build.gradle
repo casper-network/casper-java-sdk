@@ -50,6 +50,10 @@ dependencies {
     testImplementation "org.junit.jupiter:junit-jupiter:${jupiterVersion}"
     // Used to compare json strings while testing
     testImplementation "org.skyscreamer:jsonassert:${jsonassertVersion}"
+    // Use for e2e cucumber testing against a node
+    testImplementation "io.cucumber:cucumber-java:${cucumberVersion}"
+    // Path to assests used by e2e testing
+    testImplementation files('assets')
 }
 
 java {

@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# opens a bash shell against the casper nctl docker container
+docker exec -it cspr-nctl bash

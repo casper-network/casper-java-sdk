@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# stop the cspr-nctl docker container
+docker stop cspr-nctl
