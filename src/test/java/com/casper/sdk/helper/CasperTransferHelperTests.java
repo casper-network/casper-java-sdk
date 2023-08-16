@@ -17,11 +17,9 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.net.URISyntaxException;
-import java.nio.file.Paths;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Objects;
 import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -35,17 +33,6 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class CasperTransferHelperTests extends AbstractJsonRpcTests {
     private static final Logger LOGGER = LoggerFactory.getLogger(CasperTransferHelperTests.class);
-
-    /**
-     * Loads test key file from resources
-     *
-     * @param filename the file name
-     * @return a string with file path from resources
-     * @throws URISyntaxException thrown if it can't parse file url to URI for fetching the path
-     */
-    protected String getResourcesKeyPath(String filename) throws URISyntaxException {
-        return Paths.get(Objects.requireNonNull(getClass().getClassLoader().getResource(filename)).toURI()).toString();
-    }
 
     @Test
     void testTransferOnTestnet() throws IOException, NoSuchTypeException, GeneralSecurityException, URISyntaxException, ValueSerializationException {
@@ -83,8 +70,8 @@ public class CasperTransferHelperTests extends AbstractJsonRpcTests {
     void testTransferOnNctl() throws IOException, NoSuchTypeException, GeneralSecurityException, URISyntaxException, ValueSerializationException {
         Ed25519PrivateKey user1 = new Ed25519PrivateKey();
         Ed25519PrivateKey user2 = new Ed25519PrivateKey();
-        user1.readPrivateKey(getResourcesKeyPath("assets/users/user-1/secret_key.pem"));
-        user2.readPrivateKey(getResourcesKeyPath("assets/users/user-2/secret_key.pem"));
+        user1.readPrivateKey(getResourcesKeyPath("net-1/user-1/secret_key.pem"));
+        user2.readPrivateKey(getResourcesKeyPath("net-1/user-2/secret_key.pem"));
 
         long id = Math.abs(new Random().nextInt());
         Ttl ttl = Ttl
@@ -115,8 +102,8 @@ public class CasperTransferHelperTests extends AbstractJsonRpcTests {
     void testSpeculativeTransferOnNctl() throws IOException, NoSuchTypeException, GeneralSecurityException, URISyntaxException, ValueSerializationException {
         Ed25519PrivateKey user1 = new Ed25519PrivateKey();
         Ed25519PrivateKey user2 = new Ed25519PrivateKey();
-        user1.readPrivateKey(getResourcesKeyPath("assets/users/user-1/secret_key.pem"));
-        user2.readPrivateKey(getResourcesKeyPath("assets/users/user-2/secret_key.pem"));
+        user1.readPrivateKey(getResourcesKeyPath("net-1/user-1/secret_key.pem"));
+        user2.readPrivateKey(getResourcesKeyPath("net-1/user-2/secret_key.pem"));
 
         long id = Math.abs(new Random().nextInt());
         Ttl ttl = Ttl
@@ -141,7 +128,7 @@ public class CasperTransferHelperTests extends AbstractJsonRpcTests {
                 new ArrayList<>());
         SpeculativeDeployData deployData = speculativeCasperServiceNctl.speculativeExec(deploy);
         assertNotNull(deployData);
-        assertTrue(deployData.getExecutionResult().getCost().compareTo(BigInteger.ZERO) == 1);
+        assertEquals(1, deployData.getExecutionResult().getCost().compareTo(BigInteger.ZERO));
     }
 
     @Test

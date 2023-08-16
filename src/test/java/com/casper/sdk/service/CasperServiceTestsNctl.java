@@ -66,14 +66,13 @@ public class CasperServiceTestsNctl  extends AbstractJsonRpcTests {
     }
 
     @Test
-    void queryBalance() throws IOException {
+    void queryBalance() throws Exception {
 
-
-        final URL privateKeyAccount1 = getClass().getResource("/assets/users/user-1/secret_key.pem");
+        final String privateKeyAccount1 = getResourcesKeyPath("net-1/user-1/secret_key.pem");
 
         Assertions.assertNotNull(privateKeyAccount1);
         final AbstractPrivateKey privateKey = new Ed25519PrivateKey();
-        privateKey.readPrivateKey(privateKeyAccount1.getFile());
+        privateKey.readPrivateKey(privateKeyAccount1);
         PublicKey publicKeyAccount1 = PublicKey.fromAbstractPublicKey(privateKey.derivePublicKey());
         GlobalStateIdentifier stateRootHashIdentifier = StateRootHashIdentifier.builder()
                 .hash(casperServiceNctl.getStateRootHash().getStateRootHash())

@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.math.BigInteger;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -112,7 +113,7 @@ public class Nctl {
     }
 
     private List<String> buildCommand(final String shellCommand, final String params) {
-        return List.of("bash", "-c", String.format(
+        return Arrays.asList("bash", "-c", String.format(
                 "docker exec -t %s /bin/bash -c 'source casper-node/utils/nctl/sh/views/%s %s'",
                 dockerName,
                 shellCommand,

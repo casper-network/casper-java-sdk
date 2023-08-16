@@ -8,6 +8,9 @@ import lombok.Getter;
 import org.junit.jupiter.api.BeforeAll;
 
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.nio.file.Paths;
+import java.util.Objects;
 
 /**
  * Abstract class for testing json rpc methods
@@ -44,5 +47,16 @@ public abstract class AbstractJsonRpcTests extends AbstractJsonTests {
                 CasperNetwork.NCTL.getPort());
         speculativeCasperServiceNctl = CasperService.usingPeer(CasperNetwork.NCTL_SPECULATIVE.getIp(),
                 CasperNetwork.NCTL_SPECULATIVE.getPort());
+    }
+
+    /**
+     * Loads test key file from resources
+     *
+     * @param filename the file name
+     * @return a string with file path from resources
+     * @throws URISyntaxException thrown if it can't parse file url to URI for fetching the path
+     */
+    protected String getResourcesKeyPath(String filename) throws URISyntaxException {
+        return Paths.get(Objects.requireNonNull(getClass().getClassLoader().getResource(filename)).toURI()).toString();
     }
 }

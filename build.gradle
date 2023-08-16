@@ -54,6 +54,8 @@ dependencies {
     testImplementation "io.cucumber:cucumber-java:${cucumberVersion}"
     // Path to assests used by e2e testing
     testImplementation files('assets')
+    // path to features and other standard test resources from git submodule
+    testImplementation files('cspr-standard-tests-resources')
 }
 
 java {
