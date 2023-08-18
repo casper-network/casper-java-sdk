@@ -53,10 +53,13 @@ public class StateGetBalanceStepDefinitions {
     }
 
     @And("the state_get_balance_result contains the purse amount")
-    public void theState_get_balance_resultContainsThePurseAmount() {
+    public void theState_get_balance_resultContainsThePurseAmount() throws Exception {
         logger.info("And the state_get_balance_result contains the purse amount");
         final String accountMainPurse = nctl.getAccountMainPurse(1);
-        final BigInteger balance = nctl.geAccountBalance(accountMainPurse);
+
+        final JsonNode json = simpleRcpClient.getBalance(nctl.getStateRootHash(1), accountMainPurse);
+        final BigInteger balance = new BigInteger(json.findPath("balance_value").asText());
+
         final GetBalanceData balanceData = contextMap.get(STATE_GET_BALANCE_RESULT);
         assertThat(balanceData.getValue(), is(balance));
     }
