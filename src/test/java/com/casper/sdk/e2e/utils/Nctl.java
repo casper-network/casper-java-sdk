@@ -1,9 +1,9 @@
 package com.casper.sdk.e2e.utils;
 
+import com.casper.sdk.e2e.exception.NctlCommandException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.casper.sdk.e2e.exception.NctlCommandException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,7 +27,7 @@ import static org.hamcrest.core.IsNull.notNullValue;
  */
 public class Nctl {
 
-    private static final Logger logger = LoggerFactory.getLogger(Nctl.class);
+    private final Logger logger = LoggerFactory.getLogger(Nctl.class);
 
     private final String dockerName;
 
@@ -91,7 +91,10 @@ public class Nctl {
 
     public BigInteger geAccountBalance(final String purseUref) {
         return execute("view_chain_balance.sh", "purse-uref=" + purseUref,
-                s -> new BigInteger(s.split("=")[1].trim())
+                s -> {
+                    logger.info("**** Account balance = {}", s);
+                    return new BigInteger(s.split("=")[1].trim());
+                }
         );
     }
 

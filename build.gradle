@@ -133,7 +133,6 @@ test {
     }
 }
 
-
 task cucumberCli() {
 
     ext.cucmmber_name = System.getProperty('cucumber.name')
@@ -149,9 +148,9 @@ task cucumberCli() {
             classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
             args = [
                     '--plugin', 'pretty',
-                    '--plugin', 'html:reports/cucumber-report.html',
-                    '--plugin', 'junit:reports/cucumber-report.xml',
-                    '--plugin', 'json:reports/cucumber-report.json',
+                    '--plugin', 'html:build/reports/e2e/cucumber-report.html',
+                    '--plugin', 'junit:build/reports/e2e/cucumber-report.xml',
+                    '--plugin', 'json:build/reports/e2e/cucumber-report.json',
                     '--glue', 'com.stormeye.evaluation',
                     '--glue', 'com.casper.sdk',
                     '--name', ext.cucmmber_name,

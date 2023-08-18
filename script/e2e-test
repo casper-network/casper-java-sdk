@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
 # executes the cucumber e2e tests against a docker instance
 cd "$(dirname "$0")/.." || exit 1
+# to run tests filtered by regex use the following:
+# ./script/e2e-test -Dcucumber.name=info_get_status
+# where info_get_status is the pattern to filter on
 ./gradlew cucumber "$@"
