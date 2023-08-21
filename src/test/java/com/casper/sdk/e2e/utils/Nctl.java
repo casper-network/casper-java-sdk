@@ -92,7 +92,7 @@ public class Nctl {
     public BigInteger geAccountBalance(final String purseUref) {
         return execute("view_chain_balance.sh", "purse-uref=" + purseUref,
                 s -> {
-                    logger.info("**** Account balance = {}", s);
+                    logger.debug("**** Account balance = {}", s);
                     return new BigInteger(s.split("=")[1].trim());
                 }
         );
@@ -132,7 +132,7 @@ public class Nctl {
                     .redirectErrorStream(true)
                     .start();
 
-            logger.info("Executing NCTL bash command: " + String.join(" ", params));
+            logger.debug("Executing NCTL bash command: " + String.join(" ", params));
 
             final ConsoleStream consoleStream = new ConsoleStream(process.getInputStream(), s -> response.append(s).append("\n"));
             final Future<?> future = Executors.newSingleThreadExecutor().submit(consoleStream);
