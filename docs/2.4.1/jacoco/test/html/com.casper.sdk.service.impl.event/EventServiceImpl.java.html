@@ -56,7 +56,7 @@ final class EventServiceImpl implements EventService {
                                                                  final Consumer&lt;Throwable&gt; onFailure) {
 
 <span class="fc" id="L58">        final URL url = urlBuilder.buildUrl(uri, eventType, startFrom);</span>
-<span class="fc" id="L59">        logger.info(&quot;Targeting SSE URL {}&quot;, url);</span>
+<span class="fc" id="L59">        logger.debug(&quot;Targeting SSE URL {}&quot;, url);</span>
 <span class="fc" id="L60">        final WebTarget target = sssClient.target(url.toString());</span>
 <span class="fc" id="L61">        final Response response = target.request(&quot;text/plain&quot;, &quot;text/event-stream&quot;).get();</span>
 <span class="fc" id="L62">        final EventBuilder eventBuilder = new EventBuilder(eventType, eventTarget, target.getUri().toString());</span>
@@ -73,7 +73,7 @@ final class EventServiceImpl implements EventService {
 <span class="fc" id="L73">                }</span>
             }
 <span class="fc" id="L75">        }, throwable -&gt; {</span>
-<span class="nc" id="L76">            logger.error(&quot;SSE Event Error on {}&quot;, url, throwable);</span>
+<span class="nc" id="L76">            logger.debug(&quot;SSE Event Error on {}&quot;, url, throwable);</span>
 <span class="nc" id="L77">            onFailure.accept(throwable);</span>
 <span class="nc" id="L78">        });</span>
 
