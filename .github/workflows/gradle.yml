@@ -76,7 +76,7 @@ jobs:
 
 
       - name: Pull e2e test resources submodule
-        run: ./script/bootstrap
+        run: git submodule update --init --recursive
 
       - name: e2e tests
         run: ./script/e2e-test
