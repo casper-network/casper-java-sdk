@@ -74,6 +74,9 @@ jobs:
           folder: build/reports/jacoco
           target-folder: docs/latest/jacoco
 
+      - name: e2e tests
+        run: ./script/e2e-test
+
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4.2.2
         with:
@@ -106,4 +109,8 @@ jobs:
           folder: build/docs/javadoc
           target-folder: docs/${{ env.PROJECT_VERSION }}/javadoc
 
-
+      - name: Publish e2e tests
+        uses: deblockt/cucumber-report-annotations-action@v1.7
+        with:
+          access-token: ${{ secrets.GITHUB_TOKEN }}
+          path: "**/cucumber-report.json"
