@@ -74,6 +74,10 @@ jobs:
           folder: build/reports/jacoco
           target-folder: docs/latest/jacoco
 
+
+      - name: Pull e2e test resources submodule
+        run: ./script/bootstrap
+
       - name: e2e tests
         run: ./script/e2e-test
 
