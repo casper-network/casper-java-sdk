@@ -1,6 +1,5 @@
-# This workflow will build a Java project with Gradle
+# This workflow will build a Java project with Gradle and run e2e cucumber tests
 # For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-gradle
-
 name: Java CI with Gradle
 
 on:
@@ -57,6 +56,9 @@ jobs:
       - name: Export project version
         run: echo "PROJECT_VERSION=$(./gradlew properties -q | grep "version:" | awk '{print $2}')" >> $GITHUB_ENV
 
+      - name: Export Cspr Node Version
+        run: echo "CSRP_NODE_VERSION=$(./gradlew properties -q | grep "csprNodeVersion:" | awk '{print $2}')" >> $GITHUB_ENV
+
       - name: Generate Javadoc
         run: ./gradlew javadoc
 
@@ -76,6 +78,7 @@ jobs:
           folder: build/reports/jacoco
           target-folder: docs/latest/jacoco
 
+      # Runs all the e2e cucumber tests against the docker container cspr-nctl
       - name: e2e tests
         run: ./script/e2e-test
         continue-on-error: true
