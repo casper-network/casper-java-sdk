@@ -40,3 +40,4 @@ out/
 !.vscode/launch.json
 /assets/
 /reports/
+/src/test/resources/features
