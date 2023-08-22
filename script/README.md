@@ -17,7 +17,7 @@ Runs the casper-nctl docker container
 Stops a running casper-nctl docker container
 
 ## e2e-remote-debug
-Remote debugs one or more cucumber e2e tests, the 1st parameter is the cucumber name regex eg:
+Remote debugs one or more cucumber e2e tests, the 1st parameter is the cucumber name regex. If not specified all test run, eg:
 
 ```./script/e2e-remote-debug info_get_peers```
 
