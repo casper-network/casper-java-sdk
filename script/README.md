@@ -2,7 +2,8 @@
 This readme describes the usage of scripts in this folder.
 ## bootstrap
 The bootstrap script fetches the lasted from the 'cspr-standard-test-resources' git submodule that contains the e2e 
-cucumber features and associated test resources.
+cucumber features and associated test resources. The bootstrap script also creates a symbolic link needed by IntelliJ 
+to perform debugging of the features files within the IDE rather than having to remote debug to a gradle build.
 
 ## docker-bash
 Opens a bash terminal to the cspr-nctl docker container
