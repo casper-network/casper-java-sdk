@@ -4,7 +4,7 @@ echo "Bootstrap installs all dependencies."
 
 echo "Installing features from git@github.com:casper-network/sdk-std-test-resources.git"
 
-if [ -d "../cspr-standard-test-resources" ]
+if [ -d "../sdk-std-test-resources" ]
 then
     echo "cspr-standard-test-resources exists fetching submodules."
     git submodule update --init --recursive
@@ -15,8 +15,8 @@ fi
 
 if [ -d "../src/test/resources/features" ]
 then
-  echo "Features symbolic link already exists"
-else
-  echo "Creating features symbolic link required for IntelliJ debugging of features"
-  ln -s $(realpath -s "../sdk-std-test-resources/features") ../src/test/resources/features
+  rm ../src/test/resources/features
 fi
+
+echo "Creating features symbolic link required for IntelliJ debugging of features"
+ln -s $(realpath -s "../sdk-std-test-resources/features") ../src/test/resources/features
