@@ -55,7 +55,7 @@ dependencies {
     // Path to assests used by e2e testing
     testImplementation files('assets')
     // path to features and other standard test resources from git submodule
-    testImplementation files('cspr-standard-tests-resources')
+    testImplementation files('sdk-std-tests-resources')
 }
 
 configurations {
@@ -154,7 +154,7 @@ task cucumberCli() {
                     '--glue', 'com.stormeye.evaluation',
                     '--glue', 'com.casper.sdk',
                     '--name', ext.cucmmber_name,
-                    'cspr-standard-tests-resources/features']
+                    'sdk-std-test-resources/features']
         }
     }
 }
