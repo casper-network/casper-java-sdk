@@ -1,0 +1,3 @@
+[submodule "sdk-std-test-resources"]
+	path = sdk-std-test-resources
+	url = git@github.com:casper-network/sdk-std-test-resources.git

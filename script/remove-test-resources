@@ -2,7 +2,8 @@
 cd "$(dirname "$0")" || exit
 cd ..
 echo "Removes all test resources git submodules."
-git submodule deinit -f cspr-standard-tests-resources
-rm -rf .git/modules/cspr-standard-tests-resources
-git rm -f cspr-standard-tests-resources
+git submodule deinit -f sdk-std-test-resources
+rm -rf .git/modules/sdk-std-test-resources
+git rm -f sdk-std-test-resources
 rm .gitmodules
+rm src/test/resources/features
