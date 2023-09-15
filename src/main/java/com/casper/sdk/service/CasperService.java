@@ -63,6 +63,26 @@ public interface CasperService {
         return ProxyUtil.createClientProxy(CasperService.class.getClassLoader(), CasperService.class, client);
     }
 
+    static CasperService usingPeer(String ip, int port,HashMap<String,String> extraHeaders) throws MalformedURLException {
+        CasperObjectMapper objectMapper = new CasperObjectMapper();
+        Map<String, String> newHeaders = new HashMap<>();
+        newHeaders.put("Content-Type", "application/json");
+        newHeaders.putAll(extraHeaders);
+        JsonRpcHttpClient client;
+        if(ip.startsWith("https://")){
+            client = new JsonRpcHttpClient(objectMapper, new URL("https", ip.replace("https://",""), port, "/rpc"),
+                    newHeaders);
+        }
+        else{
+            client = new JsonRpcHttpClient(objectMapper, new URL("http", ip.replace("http://",""), port, "/rpc"),
+                    newHeaders);
+        }
+        ExceptionResolver exceptionResolver = new CasperClientExceptionResolver();
+        client.setExceptionResolver(exceptionResolver);
+
+        return ProxyUtil.createClientProxy(CasperService.class.getClassLoader(), CasperService.class, client);
+    }
+
     //region INFORMATIONAL METHODS
 
     /**

@@ -7,6 +7,7 @@ plugins {
     id 'jacoco'
     id 'signing'
     id 'maven-publish'
+    id 'com.github.johnrengelman.shadow' version '7.1.0' apply(true)
     id('io.github.gradle-nexus.publish-plugin') version '1.1.0'
 }
 
@@ -217,11 +218,4 @@ publishing {
     }
 
     // Reference at https://docs.gradle.org/current/userguide/signing_plugin.html#sec:in-memory-keys
-    signing {
-        def signingKey = System.getenv('GPG_SIGNING_KEY') ?: findProperty('GPG_SIGNING_KEY')
-        def signingKeyPassword = System.getenv('GPG_SIGNING_KEY_PASSWORD') ?: findProperty('GPG_SIGNING_KEY_PASSWORD')
-
-        useInMemoryPgpKeys(signingKey, signingKeyPassword)
-        sign publishing.publications.mavenJava
-    }
 }
