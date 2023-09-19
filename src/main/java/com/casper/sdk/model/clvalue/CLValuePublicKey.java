@@ -68,7 +68,16 @@ public class CLValuePublicKey extends AbstractCLValue<PublicKey, CLTypePublicKey
 
     @Override
     public void deserializeCustom(DeserializerBuffer deser) throws Exception {
-        this.setValue(PublicKey.fromTaggedHexString(ByteUtils.encodeHexString(deser.readByteArray(33))));
+        switch (deser.readByteArray(1)[0]){
+            case 0x1:
+                this.setValue(PublicKey.fromTaggedHexString(ByteUtils.encodeHexString(deser.readByteArray(33))));
+                break;
+            case 0x2:
+                this.setValue(PublicKey.fromTaggedHexString(ByteUtils.encodeHexString(deser.readByteArray(34))));
+                break;
+            default:
+                throw new ValueSerializationException("Public key is not of known type!");
+        }
     }
 
     @Override

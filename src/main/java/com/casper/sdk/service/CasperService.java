@@ -54,8 +54,11 @@ public interface CasperService {
         CasperObjectMapper objectMapper = new CasperObjectMapper();
         Map<String, String> newHeaders = new HashMap<>();
         newHeaders.put("Content-Type", "application/json");
-        JsonRpcHttpClient client = new JsonRpcHttpClient(objectMapper, new URL("http", ip, port, "/rpc"),
-                newHeaders);
+        JsonRpcHttpClient client;
+        if(port == 443)  client = new JsonRpcHttpClient(objectMapper, new URL("https", ip, port, "/rpc"),
+                    newHeaders);
+        else client = new JsonRpcHttpClient(objectMapper, new URL("http", ip, port, "/rpc"),
+                    newHeaders);
 
         ExceptionResolver exceptionResolver = new CasperClientExceptionResolver();
         client.setExceptionResolver(exceptionResolver);
@@ -69,14 +72,10 @@ public interface CasperService {
         newHeaders.put("Content-Type", "application/json");
         newHeaders.putAll(extraHeaders);
         JsonRpcHttpClient client;
-        if(ip.startsWith("https://")){
-            client = new JsonRpcHttpClient(objectMapper, new URL("https", ip.replace("https://",""), port, "/rpc"),
-                    newHeaders);
-        }
-        else{
-            client = new JsonRpcHttpClient(objectMapper, new URL("http", ip.replace("http://",""), port, "/rpc"),
-                    newHeaders);
-        }
+        if(port == 443)  client = new JsonRpcHttpClient(objectMapper, new URL("https", ip, port, "/rpc"),
+                newHeaders);
+        else client = new JsonRpcHttpClient(objectMapper, new URL("http", ip, port, "/rpc"),
+                newHeaders);
         ExceptionResolver exceptionResolver = new CasperClientExceptionResolver();
         client.setExceptionResolver(exceptionResolver);
 
