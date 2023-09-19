@@ -17,6 +17,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.bouncycastle.util.encoders.Hex;
 
+import java.util.Arrays;
+
 /**
  * Casper PublicKey CLValue implementation
  *
@@ -68,12 +70,19 @@ public class CLValuePublicKey extends AbstractCLValue<PublicKey, CLTypePublicKey
 
     @Override
     public void deserializeCustom(DeserializerBuffer deser) throws Exception {
+        byte[] publicKey;
         switch (deser.readByteArray(1)[0]){
             case 0x1:
-                this.setValue(PublicKey.fromTaggedHexString(ByteUtils.encodeHexString(deser.readByteArray(33))));
+                publicKey = new byte[33];
+                publicKey[0] = 0x1;
+                System.arraycopy(deser.readByteArray(32),0,publicKey,1,32);
+                this.setValue(PublicKey.fromTaggedHexString(ByteUtils.encodeHexString(publicKey)));
                 break;
             case 0x2:
-                this.setValue(PublicKey.fromTaggedHexString(ByteUtils.encodeHexString(deser.readByteArray(34))));
+                publicKey = new byte[34];
+                publicKey[0] = 0x2;
+                System.arraycopy(deser.readByteArray(33),0,publicKey,1,33);
+                this.setValue(PublicKey.fromTaggedHexString(ByteUtils.encodeHexString(publicKey)));
                 break;
             default:
                 throw new ValueSerializationException("Public key is not of known type!");
