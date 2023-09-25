@@ -19,4 +19,4 @@ then
 fi
 
 echo "Creating features symbolic link required for IntelliJ debugging of features"
-ln -s $(realpath -s "../sdk-std-test-resources/features") ../src/test/resources/features
+ln -s $(realpath "../sdk-std-test-resources/features") ../src/test/resources/features
