@@ -136,7 +136,7 @@ public class DeployGeneratedKeys {
         doDeploy(contextMap.get(StepConstants.SENDER_KEY_SK), contextMap.get(StepConstants.RECEIVER_KEY));
     }
 
-    @And("the transfer approvals signer contains the {string} algo")
+    @And("the returned block header proposer contains the {string} algo")
     public void theReturnedBlockHeaderProposerContainsTheAlgo(String algo) {
         logger.info("the returned block header proposer contains the {} algo", algo);
 

@@ -61,20 +61,17 @@ public class WasmStepDefinitions {
     public void thatASmartContractIsInTheFolder(String wasmFileName, String contractsFolder) throws IOException {
         logger.info("Give that a smart contract {string} is in the {string} folder");
 
-        final String wasmPath = "/" + contractsFolder + "/" + wasmFileName;
-        contextMap.put(StepConstants.WASM_PATH, wasmPath);
-        final URL resource = getClass().getResource(wasmPath);
-        //noinspection DataFlowIssue
-        assertThat(resource.openStream(), is(notNullValue()));
+        final URL wasmUrl = AssetUtils.getStandardTestResourceURL("/" + contractsFolder + "/" + wasmFileName);
+        contextMap.put(StepConstants.WASM_PATH, wasmUrl);
+        assertThat(wasmUrl.openStream(), is(notNullValue()));
     }
 
     @When("the wasm is loaded as from the file system")
     public void whenTheWasmIsLoadedAsFromTheFileSystem() throws IOException, ValueSerializationException, NoSuchTypeException, GeneralSecurityException {
         logger.info("Then when the wasm is loaded as from the file system");
 
-        final URL resource = getClass().getResource(contextMap.get(StepConstants.WASM_PATH));
+        final URL resource = contextMap.get(StepConstants.WASM_PATH);
 
-        //noinspection DataFlowIssue
         final byte[] bytes = IOUtils.readBytesFromStream(resource.openStream());
         assertThat(bytes.length, is(189336));
 

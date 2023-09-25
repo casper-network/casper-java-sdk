@@ -1,5 +1,6 @@
 package com.casper.sdk.e2e.steps;
 
+import com.casper.sdk.e2e.utils.AssetUtils;
 import com.casper.sdk.e2e.utils.CasperClientProvider;
 import com.casper.sdk.e2e.utils.ContextMap;
 import com.casper.sdk.model.clvalue.AbstractCLValue;
@@ -22,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
+import java.net.URL;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -48,7 +50,8 @@ public class ReadDeployStepDefinitions {
 
         logger.info("Given that the {} JSON deploy is loaded", jsonFilename);
 
-        final InputStream jsonIn = Objects.requireNonNull(getClass().getResource("/json/" + jsonFilename)).openStream();
+        final URL jsonUrl = AssetUtils.getStandardTestResourceURL("/json/" + jsonFilename);
+        final InputStream jsonIn = Objects.requireNonNull(jsonUrl.openStream());
         assertThat(jsonIn, is(notNullValue()));
 
         final Deploy transfer = new ObjectMapper().readValue(jsonIn, Deploy.class);
