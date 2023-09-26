@@ -193,7 +193,7 @@ public class QueryBalanceStepDefinitions {
         );
     }
 
-    @And("that a query balance is obtained by user-{int}'s main purse public and latest state root hash  identifier")
+    @And("that a query balance is obtained by user-{int}'s main purse public and latest state root hash identifier")
     public void thatAQueryBalanceIsObtainedByUserSMainPursePublicAndLatestStateRootHashIdentifier(int userId) throws Exception {
         final PublicKey publicKey = getUserPublicKey(userId);
 
