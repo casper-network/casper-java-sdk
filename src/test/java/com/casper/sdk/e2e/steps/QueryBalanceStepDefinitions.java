@@ -56,7 +56,6 @@ public class QueryBalanceStepDefinitions {
     private JsonNode queryBalanceJson;
     private DeployData deployData;
     private long transferAmount;
-    private long currentBalance;
     private JsonBlockData initialBlock;
     private QueryBalanceData initialBalance;
     private String initialStateRootHash;
@@ -170,7 +169,6 @@ public class QueryBalanceStepDefinitions {
                 purseIdentifier
         );
 
-        this.currentBalance = queryBalanceData.getBalance().longValue();
     }
 
     @Then("the balance includes the transferred amount")
