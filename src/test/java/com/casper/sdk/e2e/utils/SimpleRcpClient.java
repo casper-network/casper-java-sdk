@@ -61,7 +61,7 @@ public class SimpleRcpClient {
     /**
      * Obtains the query balance using the query_balance RCP method.
      *
-     * @return the info_get_validator_changes_result node
+     * @return the query_balance_result node
      * @throws Exception on an IO error
      */
     public JsonNode queryBalance(final String purseIdentifierName, final String identifier) throws Exception {

@@ -35,7 +35,9 @@ public class QueryBalanceStepDefinitions {
 
     private final CasperService casperService = CasperClientProvider.getInstance().getCasperService();
     private final TestProperties testProperties = new TestProperties();
-    private final SimpleRcpClient simpleRcpClient = new SimpleRcpClient(testProperties.getHostname(), testProperties.getRcpPort());
+    private final SimpleRcpClient simpleRcpClient = new SimpleRcpClient(
+            testProperties.getHostname(), testProperties.getRcpPort()
+    );
     private QueryBalanceData queryBalanceData;
     private JsonNode queryBalanceJson;
 
@@ -76,7 +78,10 @@ public class QueryBalanceStepDefinitions {
                 .build();
 
         queryBalanceData = casperService.queryBalance(null, purseIdentifier);
-        queryBalanceJson = simpleRcpClient.queryBalance("main_purse_under_account_hash", publicKey.generateAccountHash(true));
+        queryBalanceJson = simpleRcpClient.queryBalance(
+                "main_purse_under_account_hash",
+                publicKey.generateAccountHash(true)
+        );
     }
 
     @Given("that a query balance is obtained by main purse uref")
@@ -84,7 +89,10 @@ public class QueryBalanceStepDefinitions {
 
         final PublicKey publicKey = getFaucetPublicKey();
 
-        final AccountData accountInfo = casperService.getStateAccountInfo(publicKey.getAlgoTaggedHex(), new HashBlockIdentifier(casperService.getBlock().getBlock().getHash().toString()));
+        final AccountData accountInfo = casperService.getStateAccountInfo(
+                publicKey.getAlgoTaggedHex(),
+                new HashBlockIdentifier(casperService.getBlock().getBlock().getHash().toString())
+        );
         final String uref = accountInfo.getAccount().getMainPurse();
         final PurseIdentifier purseIdentifier = PurseUref.builder()
                 .purseURef(URef.fromString(uref))
