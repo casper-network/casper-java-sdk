@@ -8,6 +8,7 @@ if [ -d "../sdk-std-test-resources" ]
 then
     echo "cspr-standard-test-resources exists fetching submodules."
     git submodule update --init --recursive
+    git submodule update --remote
 else
     echo "Cloning sdk-std-test-resources.git as submodule."
     git submodule add git@github.com:casper-network/sdk-std-test-resources.git ../sdk-std-test-resources

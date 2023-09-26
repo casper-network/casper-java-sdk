@@ -59,6 +59,16 @@ public class SimpleRcpClient {
 
 
     /**
+     * Obtains the query balance using the query_balance RCP method.
+     *
+     * @return the info_get_validator_changes_result node
+     * @throws Exception on an IO error
+     */
+    public JsonNode queryBalance(final String purseIdentifierName, final String identifier) throws Exception {
+        return rcp("query_balance",  String.format("{\"purse_identifier\":{\"%s\":\"%s\"}}",purseIdentifierName, identifier));
+    }
+
+    /**
      * Obtains auction info as a JsonNode by block hash
      *
      * @param stateRootHash the state root hash
