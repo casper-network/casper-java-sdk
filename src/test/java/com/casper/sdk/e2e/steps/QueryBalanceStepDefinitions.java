@@ -247,6 +247,4 @@ public class QueryBalanceStepDefinitions {
         publicKey.readPublicKey(user1KeyUrl.getFile());
         return PublicKey.fromAbstractPublicKey(publicKey);
     }
-
-
 }
