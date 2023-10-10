@@ -16,6 +16,7 @@ public class TestProperties {
     private final int rcpPort;
     private final int restPort;
     private final int ssePort;
+    private final int spxPort;
 
     public TestProperties() {
 
@@ -24,6 +25,7 @@ public class TestProperties {
         this.rcpPort = getIntProperty("cspr.port.rcp", 11101);
         this.restPort = getIntProperty("cspr.port.rest", 14101);
         this.ssePort = getIntProperty("cspr.port.sse", 18101);
+        this.spxPort = getIntProperty("cspr.port.spx", 25101);
     }
 
     private String getProperty(final String name, final String defaultValue) {

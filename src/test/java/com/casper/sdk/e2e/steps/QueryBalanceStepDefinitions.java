@@ -23,20 +23,17 @@ import com.casper.sdk.model.uref.URef;
 import com.casper.sdk.service.CasperService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.syntifi.crypto.key.AbstractPrivateKey;
-import com.syntifi.crypto.key.Ed25519PrivateKey;
-import com.syntifi.crypto.key.Ed25519PublicKey;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
-import java.io.IOException;
 import java.math.BigInteger;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
 
+import static com.casper.sdk.e2e.utils.AssetUtils.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.Is.is;
@@ -227,24 +224,5 @@ public class QueryBalanceStepDefinitions {
     @Then("the balance is the pre transfer amount")
     public void theBalanceIsThePreTransferAmount() {
         assertThat(queryBalanceData.getBalance().longValue(), is(initialBalance.getBalance().longValue()));
-    }
-
-    private static PublicKey getFaucetPublicKey() throws IOException {
-        return PublicKey.fromAbstractPublicKey(getFaucetPrivateKey().derivePublicKey());
-    }
-
-    private static AbstractPrivateKey getFaucetPrivateKey() throws IOException {
-        final URL faucetPrivateKeyUrl = AssetUtils.getFaucetAsset(1, "secret_key.pem");
-        assertThat(faucetPrivateKeyUrl, is(notNullValue()));
-        final Ed25519PrivateKey privateKey = new Ed25519PrivateKey();
-        privateKey.readPrivateKey(faucetPrivateKeyUrl.getFile());
-        return privateKey;
-    }
-
-    private static PublicKey getUserPublicKey(final int userId) throws IOException {
-        final URL user1KeyUrl = AssetUtils.getUserKeyAsset(1, userId, "public_key.pem");
-        final Ed25519PublicKey publicKey = new Ed25519PublicKey();
-        publicKey.readPublicKey(user1KeyUrl.getFile());
-        return PublicKey.fromAbstractPublicKey(publicKey);
     }
 }
