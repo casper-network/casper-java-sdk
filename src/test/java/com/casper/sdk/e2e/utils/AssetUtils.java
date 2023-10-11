@@ -57,4 +57,11 @@ public class AssetUtils {
         publicKey.readPublicKey(user1KeyUrl.getFile());
         return PublicKey.fromAbstractPublicKey(publicKey);
     }
+
+    public static AbstractPrivateKey getUserPrivateKey(final int userId) throws IOException {
+        final URL userKeyUrl = getUserKeyAsset(1, userId, "secret_key.pem");
+        final Ed25519PrivateKey privateKey = new Ed25519PrivateKey();
+        privateKey.readPrivateKey(userKeyUrl.getFile());
+        return privateKey;
+    }
 }
