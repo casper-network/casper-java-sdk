@@ -31,9 +31,8 @@ public class NestedTupleStepDefinitions {
     private CLValueTuple3 tuple3Root;
 
     @Given("that a nested Tuple1 is defined as \\(\\({long})) using U32 numeric values")
-    public void thatANestedTupleIsDefinedAsUsingUNumericValue(long arg0) throws ValueSerializationException {
-        final CLValueTuple1 innerTuple = new CLValueTuple1(Unit.with(new CLValueU32(arg0)));
-        tuple1Root = new CLValueTuple1(Unit.with(innerTuple));
+    public void thatANestedTupleIsDefinedAsUsingUNumericValue(final long arg0) throws ValueSerializationException {
+        tuple1Root = new CLValueTuple1(Unit.with(new CLValueTuple1(Unit.with(new CLValueU32(arg0)))));
     }
 
     @Then("the {string} element of the Tuple{int} is {string}")
@@ -52,10 +51,20 @@ public class NestedTupleStepDefinitions {
     }
 
     @Given("that a nested Tuple2 is defined as \\({long}, \\({long}, \\({long}, {long}))) using U32 numeric values")
-    public void thatATupleIsDefinedAs(final long arg0, final long arg1, final long arg2, final long arg3) throws ValueSerializationException {
-        final CLValueTuple2 innerTuple2 = new CLValueTuple2(Pair.with(new CLValueU32(arg2), new CLValueU32(arg3)));
-        final CLValueTuple2 innerTuple1 = new CLValueTuple2(Pair.with(new CLValueU32(arg1), innerTuple2));
-        tuple2Root = new CLValueTuple2(Pair.with(new CLValueU32(arg0), innerTuple1));
+    public void thatATupleIsDefinedAs(final long arg0,
+                                      final long arg1,
+                                      final long arg2,
+                                      final long arg3) throws ValueSerializationException {
+        tuple2Root = new CLValueTuple2(Pair.with(
+                new CLValueU32(arg0),
+                new CLValueTuple2(Pair.with(
+                        new CLValueU32(arg1),
+                        new CLValueTuple2(Pair.with(
+                                new CLValueU32(arg2),
+                                new CLValueU32(arg3)
+                        ))
+                ))
+        ));
     }
 
     @And("the Tuple{long} bytes are {string}")
@@ -64,8 +73,13 @@ public class NestedTupleStepDefinitions {
     }
 
     @Given("that a nested Tuple3 is defined as \\({long}, {long}, \\({long}, {long}, \\({long}, {long}, {long}))) using U32 numeric values")
-    public void thatANestedTupleIsDefinedAsUsingUNumericValues(long arg0, long arg1, long arg2, long arg3, long arg4, long arg5, long arg6) throws ValueSerializationException {
-
+    public void thatANestedTupleIsDefinedAsUsingUNumericValues(final long arg0,
+                                                               final long arg1,
+                                                               final long arg2,
+                                                               final long arg3,
+                                                               final long arg4,
+                                                               final long arg5,
+                                                               final long arg6) throws ValueSerializationException {
         tuple3Root = new CLValueTuple3(Triplet.with(
                 new CLValueU32(arg0),
                 new CLValueU32(arg1),
@@ -118,7 +132,7 @@ public class NestedTupleStepDefinitions {
         throw new NotImplementedException("Tuple " + tuple + " " + valueIndex + " not implemented");
     }
 
-    private List<Long> getTupleValues(final AbstractCLValue<?,?> tuple) {
+    private List<Long> getTupleValues(final AbstractCLValue<?, ?> tuple) {
         return getTupleValues(tuple, new ArrayList<>());
     }
 
@@ -155,5 +169,3 @@ public class NestedTupleStepDefinitions {
         }
     }
 }
-
-
