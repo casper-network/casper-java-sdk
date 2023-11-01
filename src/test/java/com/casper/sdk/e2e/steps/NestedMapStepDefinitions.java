@@ -175,6 +175,7 @@ public class NestedMapStepDefinitions {
         assertThat(innerMap.get(key).getValue().toString(), is(strValue));
     }
 
+    @SuppressWarnings("unchecked")
     @And("the 1st nested map's key is {string} and value is {string}")
     public void theStNestedMapSKeyIsAndValueIs(final String strKey, final String strValue) throws ValueSerializationException {
         final CLValueString key = new CLValueString(strKey);
