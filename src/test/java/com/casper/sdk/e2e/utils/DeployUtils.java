@@ -73,7 +73,7 @@ public class DeployUtils {
 
         final Ttl ttl = Ttl.builder().ttl("30m").build();
 
-        final Deploy deploy = CasperDeployHelper.buildDeploy(
+        return CasperDeployHelper.buildDeploy(
                 senderKey,
                 "casper-net-1",
                 session,
@@ -83,8 +83,6 @@ public class DeployUtils {
                 new Date(),
                 new ArrayList<>()
         );
-
-        return deploy;
     }
 
     public static AbstractCLValue<?, ?> getNamedArgValue(final String type, final List<NamedArg<?>> namedArgs) {

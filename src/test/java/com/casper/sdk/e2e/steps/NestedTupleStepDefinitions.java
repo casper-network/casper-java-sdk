@@ -1,10 +1,8 @@
 package com.casper.sdk.e2e.steps;
 
 import com.casper.sdk.e2e.exception.NotImplementedException;
-import com.casper.sdk.e2e.utils.AssetUtils;
 import com.casper.sdk.e2e.utils.CasperClientProvider;
 import com.casper.sdk.e2e.utils.DeployUtils;
-import com.casper.sdk.helper.CasperDeployHelper;
 import com.casper.sdk.model.clvalue.*;
 import com.casper.sdk.model.deploy.Deploy;
 import com.casper.sdk.model.deploy.DeployData;
@@ -24,7 +22,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static com.casper.sdk.e2e.utils.DeployUtils.buildStandardTransferDeploy;
-import static com.casper.sdk.e2e.utils.DeployUtils.getNamedArgValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
@@ -110,54 +107,29 @@ public class NestedTupleStepDefinitions {
         ));
     }
 
+
     @Given("that the nested tuples are deployed in a transfer")
     public void thatTheNestedTuplesAreDeployedInATransfer() throws Exception {
 
-        final Ed25519PrivateKey senderKey = new Ed25519PrivateKey();
-        final Ed25519PublicKey receiverKey = new Ed25519PublicKey();
-
-        senderKey.readPrivateKey(AssetUtils.getUserKeyAsset(1, 1, "secret_key.pem").getFile());
-        receiverKey.readPublicKey(AssetUtils.getUserKeyAsset(1, 2, "public_key.pem").getFile());
-
         final List<NamedArg<?>> transferArgs = new LinkedList<>();
-        final NamedArg<CLTypeU512> amountNamedArg = new NamedArg<>("amount", new CLValueU512(new BigInteger("2500000000")));
-        transferArgs.add(amountNamedArg);
-        final NamedArg<CLTypePublicKey> publicKeyNamedArg = new NamedArg<>("target", new CLValuePublicKey(PublicKey.fromAbstractPublicKey(receiverKey)));
-        transferArgs.add(publicKeyNamedArg);
-
-        final CLValueOption idArg = new CLValueOption(Optional.of(new CLValueU64(BigInteger.valueOf(200))));
-        final NamedArg<CLTypeOption> idNamedArg = new NamedArg<>("id", idArg);
-        transferArgs.add(idNamedArg);
         transferArgs.add(new NamedArg<>("TUPLE_1", tuple1Root));
-        final Transfer session = Transfer.builder().args(transferArgs).build();
-        final ModuleBytes payment = CasperDeployHelper.getPaymentModuleBytes(new BigInteger("100000000"));
 
-        final Ttl ttl = Ttl.builder().ttl("30m").build();
-
-        final Deploy deploy = CasperDeployHelper.buildDeploy(
-                senderKey,
-                "casper-net-1",
-                session,
-                payment,
-                1L,
-                ttl,
-                new Date(),
-                new ArrayList<>()
-        );
+        final Deploy deploy = buildStandardTransferDeploy(transferArgs);
 
         // Clear out tuples as we need to obtain them from the deploy result and need to ensure existing values are not used
         tuple1Root = null;
         tuple2Root = null;
         tuple3Root = null;
 
-        casperService = CasperClientProvider.getInstance().getCasperService();
-
-        deployResult = casperService.putDeploy(deploy);
+        deployResult = CasperClientProvider.getInstance().getCasperService().putDeploy(deploy);
     }
 
     @And("the transfer is successful")
     public void theTransferIsSuccessful() {
-        deployData = DeployUtils.waitForDeploy(deployResult.getDeployHash(), 300, casperService);
+        deployData = DeployUtils.waitForDeploy(
+                deployResult.getDeployHash(), 300,
+                CasperClientProvider.getInstance().getCasperService()
+        );
         tuple1Root = (CLValueTuple1) getNamedArgValue("TUPLE_1", deployData.getDeploy().getSession().getArgs());
         tuple2Root = (CLValueTuple2) getNamedArgValue("TUPLE_2", deployData.getDeploy().getSession().getArgs());
         tuple3Root = (CLValueTuple3) getNamedArgValue("TUPLE_3", deployData.getDeploy().getSession().getArgs());
@@ -249,38 +221,5 @@ public class NestedTupleStepDefinitions {
             getTupleValues((AbstractCLValue<?, ?>) value, tupleValues);
         }
     }
-
-    @Given("that the nested tuples are deployed in a transfer")
-    public void thatTheNestedTuplesAreDeployedInATransfer() throws Exception {
-
-        final List<NamedArg<?>> transferArgs = new LinkedList<>();
-        transferArgs.add(new NamedArg<>("TUPLE_1", tuple1Root));
-
-        final Deploy deploy = buildStandardTransferDeploy(transferArgs);
-
-        // Clear out tuples as we need to obtain them from the deploy result and need to ensure existing values are not used
-        tuple1Root = null;
-        tuple2Root = null;
-        tuple3Root = null;
-
-        deployResult = CasperClientProvider.getInstance().getCasperService().putDeploy(deploy);
-    }
-
-    @And("the transfer is successful")
-    public void theTransferIsSuccessful() {
-        deployData = DeployUtils.waitForDeploy(
-                deployResult.getDeployHash(), 300,
-                CasperClientProvider.getInstance().getCasperService()
-        );
-        tuple1Root = (CLValueTuple1) getNamedArgValue("TUPLE_1", deployData.getDeploy().getSession().getArgs());
-        tuple2Root = (CLValueTuple2) getNamedArgValue("TUPLE_2", deployData.getDeploy().getSession().getArgs());
-        tuple3Root = (CLValueTuple3) getNamedArgValue("TUPLE_3", deployData.getDeploy().getSession().getArgs());
-    }
-
-    @When("the tuples deploy is obtained from the node")
-    public void theDeployIsObtainedFromTheNode() {
-        assertThat(deployData, is(notNullValue()));
-    }
-
 
 }
