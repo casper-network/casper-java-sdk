@@ -85,7 +85,7 @@ public class DeployUtils {
         );
     }
 
-    public static AbstractCLValue<?, ?> getNamedArgValue(final String type, final List<NamedArg<?>> namedArgs) {
+    public static AbstractCLValue<?, ?> getNamedArgValue(final List<NamedArg<?>> namedArgs, final String type) {
         return namedArgs.stream()
                 .filter(namedArg -> type.equals(namedArg.getType()))
                 .findFirst()
