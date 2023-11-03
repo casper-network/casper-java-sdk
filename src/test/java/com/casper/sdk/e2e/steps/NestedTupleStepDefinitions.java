@@ -113,6 +113,8 @@ public class NestedTupleStepDefinitions {
 
         final List<NamedArg<?>> transferArgs = new LinkedList<>();
         transferArgs.add(new NamedArg<>("TUPLE_1", tuple1Root));
+        transferArgs.add(new NamedArg<>("TUPLE_2", tuple2Root));
+        transferArgs.add(new NamedArg<>("TUPLE_3", tuple3Root));
 
         final Deploy deploy = buildStandardTransferDeploy(transferArgs);
 
