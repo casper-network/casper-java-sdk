@@ -38,8 +38,14 @@ public class CLValueFactory {
             case U64:
                 return new CLValueU64(new BigInteger(strValue));
 
+            case U128:
+                return new CLValueU128(new BigInteger(strValue));
+
             case U256:
                 return new CLValueU256(new BigInteger(strValue));
+
+            case U512:
+                return new CLValueU512(new BigInteger(strValue));
 
             case I32:
                 return new CLValueI32(Integer.valueOf(strValue));
@@ -108,10 +114,10 @@ public class CLValueFactory {
         final Map<AbstractCLValue, AbstractCLValue> map = new LinkedHashMap<>();
 
         int i = 0;
-        for (AbstractCLValue<?, ?> innerValue: innerValues) {
+        for (AbstractCLValue<?, ?> innerValue : innerValues) {
             AbstractCLValue<?, ?> key = new CLValueString(Integer.toString(i++));
             map.put(key, innerValue);
         }
-        return  map;
+        return map;
     }
 }

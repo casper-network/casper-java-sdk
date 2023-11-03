@@ -161,7 +161,7 @@ public class NestedMapStepDefinitions {
 
     @When("the map is read from the deploy")
     public void theMapIsReadFromTheDeploy() {
-        map = (CLValueMap) getNamedArgValue("MAP", deployData.getDeploy().getSession().getArgs());
+        map = (CLValueMap) getNamedArgValue(deployData.getDeploy().getSession().getArgs(), "MAP");
         assertThat(map, is(notNullValue()));
     }
 
