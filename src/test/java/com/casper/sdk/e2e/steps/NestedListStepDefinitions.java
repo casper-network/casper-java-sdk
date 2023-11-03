@@ -41,7 +41,7 @@ public class NestedListStepDefinitions {
                                             final int val2,
                                             final int val3) throws Exception {
         clValueList = new CLValueList(
-                asList(createNumericValue(numberLen, val1), createNumericValue(numberLen, val2), createNumericValue(numberLen, val3))
+                asList(createUnsignedValue(numberLen, val1), createUnsignedValue(numberLen, val2), createUnsignedValue(numberLen, val3))
         );
     }
 
@@ -51,9 +51,9 @@ public class NestedListStepDefinitions {
                                             final int val2,
                                             final int val3) throws Exception {
         clValueList = new CLValueList(asList(
-                createValue("I" + numberLen, Integer.toString(val1)),
-                createValue("I" + numberLen, Integer.toString(val2)),
-                createValue("I" + numberLen, Integer.toString(val3))
+                createSignedValue(numberLen, val1),
+                createSignedValue(numberLen, val2),
+                createSignedValue(numberLen, val3)
         ));
     }
 
@@ -61,7 +61,7 @@ public class NestedListStepDefinitions {
     public void theListSItemIsACLValueWithIValueOf(final String nth, final int type, final int value) throws Exception {
         final AbstractCLValue<?, ?> clValue = getClValue(nth);
         assertThat(clValue.getClType().getTypeName(), is("I" + type));
-        assertThat(clValue.getValue(), is(createValue("I" + type, Integer.toString(value)).getValue()));
+        assertThat(clValue.getValue(), is(createSignedValue(type, value).getValue()));
     }
 
     @Then("^the list's bytes are \"([^\"]*)\"$")
@@ -78,7 +78,7 @@ public class NestedListStepDefinitions {
     public void theListSItemIsACLValueWithUValueOf(final String index, final int numberLength, final int value) throws Throwable {
         final AbstractCLValue<?, ?> clValue = getClValue(index);
         assertThat(clValue.getClType().getTypeName(), is("U" + numberLength));
-        assertThat(clValue.getValue(), is(createNumericValue(numberLength, value).getValue()));
+        assertThat(clValue.getValue(), is(createUnsignedValue(numberLength, value).getValue()));
     }
 
     @Given("a list is created with {string} values of \\({string}, {string}, {string})")
@@ -106,16 +106,16 @@ public class NestedListStepDefinitions {
         clValueList = new CLValueList(Arrays.asList(
                 new CLValueList(
                         Arrays.asList(
-                                createNumericValue(type, val1),
-                                createNumericValue(type, val2),
-                                createNumericValue(type, val3)
+                                createUnsignedValue(type, val1),
+                                createUnsignedValue(type, val2),
+                                createUnsignedValue(type, val3)
                         )
                 ),
                 new CLValueList(
                         Arrays.asList(
-                                createNumericValue(type, val4),
-                                createNumericValue(type, val5),
-                                createNumericValue(type, val6)
+                                createUnsignedValue(type, val4),
+                                createUnsignedValue(type, val5),
+                                createUnsignedValue(type, val6)
                         )
                 )
         ));
@@ -126,7 +126,7 @@ public class NestedListStepDefinitions {
         CLValueList nestedList = (CLValueList) getClValue(nth);
         AbstractCLValue<?, ?> clValue = getClValue(nestedList, nestedNth);
         assertThat(clValue.getClType().getTypeName(), is("U" + type));
-        assertThat(clValue.getValue(), is(createNumericValue(type, val).getValue()));
+        assertThat(clValue.getValue(), is(createUnsignedValue(type, val).getValue()));
     }
 
     @Given("that the list is deployed in a transfer")
@@ -154,7 +154,6 @@ public class NestedListStepDefinitions {
         assertThat(clValueList, is(notNullValue()));
     }
 
-
     private AbstractCLValue<?, ?> getClValue(final String index) {
         return getClValue(clValueList, index);
     }
@@ -163,15 +162,15 @@ public class NestedListStepDefinitions {
         return list.getValue().get(Integer.parseInt(index.substring(0, 1)) - 1);
     }
 
+    private AbstractCLValue<?, ?> createSignedValue(int numberLen, int val1) throws Exception {
+        return createValue("I" + numberLen, Integer.toString(val1));
+    }
 
-    private AbstractCLValue<?, ?> createNumericValue(final int numberLen, final int value) throws Exception {
+    private AbstractCLValue<?, ?> createUnsignedValue(final int numberLen, final int value) throws Exception {
         return clValueFactory.createValue(CLTypeData.getTypeByName("U" + numberLen), Integer.toString(value));
     }
 
     private AbstractCLValue<?, ?> createValue(final String type, final String strValue) throws Exception {
         return clValueFactory.createValue(CLTypeData.getTypeByName(type), strValue);
-
     }
-
-
 }
