@@ -72,4 +72,12 @@ public class AnyValueStepDefinitions {
         clValueAny = (CLValueAny) getNamedArgValue(deployData.getDeploy().getSession().getArgs(), "ANY");
         assertThat(clValueAny, is(notNullValue()));
     }
+
+    @And("the type of the any is {string} with a value of {string}")
+    public void theTypeOfTheAnyIsWithAValueOf(String typeName, String strValue) throws Exception {
+        assertThat(clValueAny.getClType().getTypeName(), is("Any"));
+        assertThat(clValueAny.getValue(), is(notNullValue()));
+        // TODO this should really be an inner AbstractCLValue not bytes
+        assertThat(clValueAny.getValue(), is(Hex.decode(factory.createValue(CLTypeData.getTypeByName(typeName), strValue).getBytes())));
+    }
 }
