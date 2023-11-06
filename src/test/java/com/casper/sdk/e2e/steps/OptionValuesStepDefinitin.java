@@ -27,6 +27,7 @@ import static org.hamcrest.core.IsNull.notNullValue;
 
 /**
  * Step definitions for the Option value feature.
+ *
  * @author ian@meywood.com
  */
 public class OptionValuesStepDefinitin {
@@ -75,8 +76,7 @@ public class OptionValuesStepDefinitin {
         deployResult = CasperClientProvider.getInstance().getCasperService().putDeploy(deploy);
     }
 
-    @And("the transfer containing the Option value is successfully executed"
-    )
+    @And("the transfer containing the Option value is successfully executed")
     public void theTransferContainingTheOptionValueIsSuccessfullyExecuted() {
         deployData = DeployUtils.waitForDeploy(
                 deployResult.getDeployHash(),
@@ -95,6 +95,10 @@ public class OptionValuesStepDefinitin {
     public void theTypeOfTheOptionIsWithAValueOf(final String typeName, final String strValue) throws Exception {
         assertThat(clValueOption.getClType().getTypeName(), is("Option"));
         assertThat(clValueOption.getValue(), is(notNullValue()));
-        assertThat(clValueOption.getValue().get().getValue(), is(this.clValueFactory.createValue(CLTypeData.getTypeByName(typeName), strValue).getValue()));
+        //noinspection OptionalGetWithoutIsPresent
+        assertThat(
+                clValueOption.getValue().get().getValue(),
+                is(this.clValueFactory.createValue(CLTypeData.getTypeByName(typeName), strValue).getValue())
+        );
     }
 }
