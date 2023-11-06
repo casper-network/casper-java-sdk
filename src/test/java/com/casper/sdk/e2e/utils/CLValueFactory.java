@@ -23,6 +23,9 @@ public class CLValueFactory {
     public AbstractCLValue<?, ?> createValue(final CLTypeData clTypeData, final String strValue) throws Exception {
 
         switch (clTypeData) {
+            case ANY:
+                return new CLValueAny(Hex.decode(strValue));
+
             case STRING:
                 return new CLValueString(strValue);
 
