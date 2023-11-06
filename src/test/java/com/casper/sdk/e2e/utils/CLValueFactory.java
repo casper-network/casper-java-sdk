@@ -32,6 +32,21 @@ public class CLValueFactory {
             case BOOL:
                 return new CLValueBool(Boolean.TRUE.toString().equalsIgnoreCase(strValue));
 
+            case BYTE_ARRAY:
+                return new CLValueByteArray(Hex.decode(strValue));
+
+            case I32:
+                return new CLValueI32(Integer.valueOf(strValue));
+
+            case I64:
+                return new CLValueI64(Long.valueOf(strValue));
+
+            case KEY:
+                return new CLValueKey(Key.fromTaggedHexString(strValue));
+
+            case PUBLIC_KEY:
+                return new CLValuePublicKey(PublicKey.fromTaggedHexString(strValue));
+
             case U8:
                 return new CLValueU8(Byte.valueOf(strValue));
 
@@ -49,21 +64,6 @@ public class CLValueFactory {
 
             case U512:
                 return new CLValueU512(new BigInteger(strValue));
-
-            case I32:
-                return new CLValueI32(Integer.valueOf(strValue));
-
-            case I64:
-                return new CLValueI64(Long.valueOf(strValue));
-
-            case BYTE_ARRAY:
-                return new CLValueByteArray(Hex.decode(strValue));
-
-            case KEY:
-                return new CLValueKey(Key.fromTaggedHexString(strValue));
-
-            case PUBLIC_KEY:
-                return new CLValuePublicKey(PublicKey.fromTaggedHexString(strValue));
 
             case UREF:
                 return new CLValueURef(new URef(Hex.decode(strValue), URefAccessRight.READ_ADD_WRITE));
