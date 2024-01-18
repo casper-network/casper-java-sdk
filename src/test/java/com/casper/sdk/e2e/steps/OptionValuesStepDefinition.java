@@ -30,7 +30,7 @@ import static org.hamcrest.core.IsNull.notNullValue;
  *
  * @author ian@meywood.com
  */
-public class OptionValuesStepDefinitin {
+public class OptionValuesStepDefinition {
 
     private CLValueOption clValueOption;
     private final CLValueFactory clValueFactory = new CLValueFactory();

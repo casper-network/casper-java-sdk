@@ -223,5 +223,4 @@ public class NestedTupleStepDefinitions {
             getTupleValues((AbstractCLValue<?, ?>) value, tupleValues);
         }
     }
-
 }
