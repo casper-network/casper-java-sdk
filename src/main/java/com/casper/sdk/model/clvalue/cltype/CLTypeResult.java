@@ -19,6 +19,12 @@ import lombok.*;
 @EqualsAndHashCode(callSuper = false, of = {"typeName", "okErrTypes"})
 public class CLTypeResult extends AbstractCLType {
 
+    private final String typeName = RESULT;
+
+    @Setter
+    @JsonProperty(RESULT)
+    private CLTypeResultOkErrTypes okErrTypes;
+
     /**
      * Support class for {@link AbstractCLType#RESULT} ok/err types
      *
@@ -71,9 +77,8 @@ public class CLTypeResult extends AbstractCLType {
         }
     }
 
-    private final String typeName = RESULT;
-
-    @Setter
-    @JsonProperty(RESULT)
-    private CLTypeResultOkErrTypes okErrTypes;
+    @Override
+    public boolean isUndeserializable() {
+        return false;
+    }
 }

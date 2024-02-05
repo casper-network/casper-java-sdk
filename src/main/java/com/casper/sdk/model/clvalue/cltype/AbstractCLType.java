@@ -65,4 +65,11 @@ public abstract class AbstractCLType {
     public CLTypeData getClTypeData() throws NoSuchTypeException {
         return CLTypeData.getTypeByName(getTypeName());
     }
+
+    /**
+     * Indicates if the CLType contains any type child type in which case the bytes cannot be deserialized as the 'Any'
+     * type does not provide a length for its bytes. This information is obtained from the JSON metadata.
+     * @return true if a child, or child's child contains an 'Any' type.
+     */
+    public abstract boolean isUndeserializable();
 }
