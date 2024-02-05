@@ -55,6 +55,6 @@ public class CLTypeOption extends AbstractCLTypeWithChildren {
 
     @Override
     public boolean isDeserializable() {
-        return getOptionType().isDeserializable() || getChildTypes().stream().anyMatch(AbstractCLType::isDeserializable);
+        return getOptionType().isDeserializable() || getChildTypes().stream().allMatch(AbstractCLType::isDeserializable);
     }
 }

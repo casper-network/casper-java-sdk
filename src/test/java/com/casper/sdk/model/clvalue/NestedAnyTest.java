@@ -74,7 +74,7 @@ public class NestedAnyTest {
     }
 
     @Test
-    public void nestedMapWithoutAny() throws Exception {
+    public void nestedEmptyMapiWithoutAny() throws Exception {
 
         final String json = " {\n" +
                 "  \"cl_type\": {\n" +
@@ -93,4 +93,37 @@ public class NestedAnyTest {
         assertThat(clValueMap.getBytes(), is("00000000"));
     }
 
+    @Test
+    void nestedListWithAny() throws Exception {
+
+        final String json = " {\n" +
+                "  \"cl_type\": {\n" +
+                "    \"List\": \"Any\"\n" +
+                "  },\n" +
+                "  \"bytes\": \"00000000\",\n" +
+                "  \"parsed\": null\n" +
+                "}";
+
+        final CLValueList clValueList = (CLValueList) new ObjectMapper().readValue(json, AbstractCLValue.class);
+        assertThat(clValueList, is(notNullValue()));
+        assertThat(clValueList.getClType().isDeserializable(), is(false));
+        assertThat(clValueList.getBytes(), is("00000000"));
+    }
+
+    @Test
+    void nestedListWithoutAny() throws Exception {
+
+        final String json = " {\n" +
+                "  \"cl_type\": {\n" +
+                "    \"List\": \"U256\"\n" +
+                "  },\n" +
+                "  \"bytes\": \"00000000\",\n" +
+                "  \"parsed\": null\n" +
+                "}";
+
+        final CLValueList clValueList = (CLValueList) new ObjectMapper().readValue(json, AbstractCLValue.class);
+        assertThat(clValueList, is(notNullValue()));
+        assertThat(clValueList.getClType().isDeserializable(), is(true));
+        assertThat(clValueList.getBytes(), is("00000000"));
+    }
 }

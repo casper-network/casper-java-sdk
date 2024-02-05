@@ -36,7 +36,7 @@ public class CLTypeMap extends AbstractCLTypeWithChildren {
             // The map contains an 'Any' type therefore cannot be deserialized
             return false;
         } else if (getKeyValueTypes().valueType instanceof AbstractCLTypeWithChildren) {
-           return getChildTypes().stream().anyMatch(childType -> {
+           return getChildTypes().stream().allMatch(childType -> {
                 if (childType instanceof CLTypeAny) {
                     return false;
                 } else {

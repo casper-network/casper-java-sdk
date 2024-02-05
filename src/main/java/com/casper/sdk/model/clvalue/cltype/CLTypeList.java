@@ -54,7 +54,7 @@ public class CLTypeList extends AbstractCLTypeWithChildren {
     @Override
     public boolean isDeserializable() {
 
-        return getChildTypes().stream().anyMatch(childType -> {
+        return getChildTypes().stream().allMatch(childType -> {
             if (childType instanceof CLTypeAny) {
                 return false;
             } else {
