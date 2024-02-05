@@ -52,13 +52,13 @@ public class CLTypeList extends AbstractCLTypeWithChildren {
     }
 
     @Override
-    public boolean isUndeserializable() {
+    public boolean isDeserializable() {
 
         return getChildTypes().stream().anyMatch(childType -> {
             if (childType instanceof CLTypeAny) {
-                return true;
+                return false;
             } else {
-                return childType.isUndeserializable();
+                return childType.isDeserializable();
             }
         });
     }

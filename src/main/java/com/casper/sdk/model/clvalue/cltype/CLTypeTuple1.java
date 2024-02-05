@@ -36,7 +36,7 @@ public class CLTypeTuple1 extends AbstractCLTypeWithChildren {
     }
 
     @Override
-    public boolean isUndeserializable() {
-        return getChildTypes().stream().anyMatch(AbstractCLType::isUndeserializable);
+    public boolean isDeserializable() {
+        return getChildTypes().stream().anyMatch(AbstractCLType::isDeserializable);
     }
 }

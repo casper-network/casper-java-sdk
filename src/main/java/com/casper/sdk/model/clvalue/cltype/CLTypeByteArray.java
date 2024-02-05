@@ -23,7 +23,7 @@ public class CLTypeByteArray extends AbstractCLType {
     private int length;
 
     @Override
-    public boolean isUndeserializable() {
-        return false;
+    public boolean isDeserializable() {
+        return true;
     }
 }

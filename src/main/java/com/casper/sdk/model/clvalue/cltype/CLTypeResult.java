@@ -78,7 +78,7 @@ public class CLTypeResult extends AbstractCLType {
     }
 
     @Override
-    public boolean isUndeserializable() {
+    public boolean isDeserializable() {
         return false;
     }
 }

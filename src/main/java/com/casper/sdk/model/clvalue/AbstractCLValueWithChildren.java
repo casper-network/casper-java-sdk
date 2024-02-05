@@ -46,7 +46,7 @@ public abstract class AbstractCLValueWithChildren<T, P extends AbstractCLTypeWit
     protected void setJsonBytes(String bytes) {
         this.setBytes(bytes);
 
-        if (!getClType().getChildTypes().isEmpty() && !getClType().isUndeserializable()) {
+        if (!getClType().getChildTypes().isEmpty() && getClType().isDeserializable()) {
             DeserializerBuffer deser = new DeserializerBuffer(this.getBytes());
             this.deserialize(deser);
         }

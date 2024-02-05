@@ -69,14 +69,28 @@ public class NestedAnyTest {
         final CLValueMap clValueMap = (CLValueMap) new ObjectMapper().readValue(json, AbstractCLValue.class);
 
         assertThat(clValueMap, is(notNullValue()));
-        assertThat(clValueMap.getClType().isUndeserializable(), is(true));
+        assertThat(clValueMap.getClType().isDeserializable(), is(false));
         assertThat(clValueMap.getBytes(), is(hexBytes));
     }
 
     @Test
-    public void testListWithAny() {
+    public void nestedMapWithoutAny() throws Exception {
 
+        final String json = " {\n" +
+                "  \"cl_type\": {\n" +
+                "    \"Map\": {\n" +
+                "      \"key\": \"PublicKey\",\n" +
+                "      \"value\": \"U256\"\n" +
+                "    }\n" +
+                "  },\n" +
+                "  \"bytes\": \"00000000\",\n" +
+                "  \"parsed\": null\n" +
+                "}";
 
+        final CLValueMap clValueMap = (CLValueMap) new ObjectMapper().readValue(json, AbstractCLValue.class);
+        assertThat(clValueMap, is(notNullValue()));
+        assertThat(clValueMap.getClType().isDeserializable(), is(true));
+        assertThat(clValueMap.getBytes(), is("00000000"));
     }
 
 }

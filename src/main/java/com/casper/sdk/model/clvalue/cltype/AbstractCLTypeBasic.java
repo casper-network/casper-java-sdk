@@ -19,8 +19,8 @@ public abstract class AbstractCLTypeBasic extends AbstractCLType {
     }
 
     @Override
-    public boolean isUndeserializable() {
+    public boolean isDeserializable() {
         // Basic type can always be serialized
-        return false;
+        return true;
     }
 }
