@@ -72,5 +72,6 @@ public abstract class AbstractCLType {
      *
      * @return true if a child, or child's child contains an 'Any' type.
      */
+    @JsonIgnore
     public abstract boolean isDeserializable();
 }
