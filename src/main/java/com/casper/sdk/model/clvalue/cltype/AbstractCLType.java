@@ -67,9 +67,9 @@ public abstract class AbstractCLType {
     }
 
     /**
-     * Indicates if the CLType does not contains and 'Any', or other un-deserializable type child type from bytes. The
-     * reason for this is the 'Any' type does not provide a length for its bytes. This type information is obtained from
-     * the JSON metadata.
+     * Indicates if the CLType does not contains and 'Any', or other un-deserializable child type from bytes. The reason
+     * for this is the 'Any' type does not provide a length for its bytes. This type information is obtained from the
+     * JSON metadata.
      *
      * @return true if can be serialized, i.e: a child, or child's child does not contain a deserializable value such
      * as an 'Any' type.
