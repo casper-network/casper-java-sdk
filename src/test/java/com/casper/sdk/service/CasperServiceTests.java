@@ -82,15 +82,15 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
                 .withBody("$.params.block_identifier.Height", "2346915")
                 .thenDispatch(getClass().getResource("/block-samples/chain_get_block.json"));
 
-        JsonBlockData resultByHeight = casperServiceMock.getBlock(new HeightBlockIdentifier(2346915));
-        String hash = resultByHeight.getBlock().getHash().toString();
+        final JsonBlockData resultByHeight = casperServiceMock.getBlock(new HeightBlockIdentifier(2346915));
+        final String hash = resultByHeight.getBlock().getHash().toString();
 
         when.clear()
                 .withMethod("chain_get_block")
                 .withBody("$.params.block_identifier.Hash", hash)
                 .thenDispatch(getClass().getResource("/block-samples/chain_get_block.json"));
 
-        JsonBlockData resultByHash = casperServiceMock.getBlock(new HashBlockIdentifier(hash));
+        final JsonBlockData resultByHash = casperServiceMock.getBlock(new HashBlockIdentifier(hash));
         assertEquals(resultByHash.getBlock().getHash().toString(), hash);
     }
 
@@ -105,8 +105,8 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
                 .withBody("$.params.block_identifier.Height", "23469150")
                 .thenDispatch(getClass().getResource("/block-samples/chain_get_block.json"));
 
-        JsonBlockData result = casperServiceMock.getBlock(new HeightBlockIdentifier(23469150));
-        PublicKey key = result.getBlock().getBody().getProposer();
+        final JsonBlockData result = casperServiceMock.getBlock(new HeightBlockIdentifier(23469150));
+        final PublicKey key = result.getBlock().getBody().getProposer();
 
         assertEquals(AlgorithmTag.ED25519, key.getTag());
         assertEquals("01753af321afc6906fcd9c897e5328f66190b5842671f16b022b69f2ddb7619c32", key.getAlgoTaggedHex());
@@ -122,7 +122,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
                 .withMethod("info_get_peers")
                 .thenDispatch(getClass().getResource("/peer-samples/info_get_peers.json"));
 
-        PeerData peerData = casperServiceMock.getPeerData();
+        final PeerData peerData = casperServiceMock.getPeerData();
 
         assertNotNull(peerData);
         assertFalse(peerData.getPeers().isEmpty());
@@ -135,7 +135,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
                 .withMethod("chain_get_block")
                 .thenDispatch(getClass().getResource("/block-samples/chain_get_block.json"));
 
-        JsonBlockData blockData = casperServiceMock.getBlock();
+        final JsonBlockData blockData = casperServiceMock.getBlock();
         assertNotNull(blockData);
     }
 
@@ -147,11 +147,10 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
                 .withBody("$.params.block_identifier.Hash", "709a31cbaff23da43995e78d2209e7f5980905cf70ef850f6744b8d3cec9af13")
                 .thenDispatch(getClass().getResource("/block-samples/chain_get_block.json"));
 
-
-        JsonBlockData blockData = casperServiceMock.getBlock(new HashBlockIdentifier("709a31cbaff23da43995e78d2209e7f5980905cf70ef850f6744b8d3cec9af13"));
-
+        final JsonBlockData blockData = casperServiceMock.getBlock(new HashBlockIdentifier("709a31cbaff23da43995e78d2209e7f5980905cf70ef850f6744b8d3cec9af13"));
         assertNotNull(blockData);
-        JsonBlock block = blockData.getBlock();
+
+        final JsonBlock block = blockData.getBlock();
         assertEquals("ee3da162c775f921e836ec6d41dedcb006bb972224d1058738e9413dea61fd5e", block.getHeader().getParentHash().toString());
         assertEquals(2346915, block.getHeader().getHeight());
     }
@@ -178,7 +177,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
                 .withMethod("chain_get_block_transfers")
                 .thenDispatch(getClass().getResource("/block-samples/chain_get_block_transfers.json"));
 
-        TransferData transferData = casperServiceMock.getBlockTransfers();
+        final TransferData transferData = casperServiceMock.getBlockTransfers();
 
         assertNotNull(transferData);
         assertEquals(1, transferData.getTransfers().size());
@@ -193,11 +192,11 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
                 .withBody("$.params.block_identifier.Height", "2346915")
                 .thenDispatch(getClass().getResource("/block-samples/chain_get_block_transfers.json"));
 
-        TransferData transferData = casperServiceMock.getBlockTransfers(new HeightBlockIdentifier(2346915));
-
+        final TransferData transferData = casperServiceMock.getBlockTransfers(new HeightBlockIdentifier(2346915));
         assertNotNull(transferData);
         assertEquals(1, transferData.getTransfers().size());
-        Transfer transaction = transferData.getTransfers().get(0);
+
+        final Transfer transaction = transferData.getTransfers().get(0);
         assertEquals("c709e727b7eaadb3b7f76450aa5d3ac3dd28b0271b7471a6dcc828cfd29f745a", transaction.getDeployHash());
         assertEquals("account-hash-496d542527e1a29f576ab7c3f4c947bfcdc9b4145f75f6ec40e36089432d7351", transaction.getFrom());
         assertEquals("account-hash-8a35e688eac33089b13f91a78c94221b669a0b13a6ed199228b1da018ecfa9df", transaction.getTo());
@@ -212,11 +211,11 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
                 .withBody("$.params.block_identifier.Hash", "cdbbe893b5033093b64e73b18555dae1e90bd046a68c79a74e8239b4aed53535")
                 .thenDispatch(getClass().getResource("/block-samples/chain_get_block_transfers.json"));
 
-        TransferData transferData = casperServiceMock.getBlockTransfers(new HashBlockIdentifier("cdbbe893b5033093b64e73b18555dae1e90bd046a68c79a74e8239b4aed53535"));
-
+        final TransferData transferData = casperServiceMock.getBlockTransfers(new HashBlockIdentifier("cdbbe893b5033093b64e73b18555dae1e90bd046a68c79a74e8239b4aed53535"));
         assertNotNull(transferData);
         assertEquals(1, transferData.getTransfers().size());
-        Transfer transaction = transferData.getTransfers().get(0);
+
+        final Transfer transaction = transferData.getTransfers().get(0);
         assertEquals("c709e727b7eaadb3b7f76450aa5d3ac3dd28b0271b7471a6dcc828cfd29f745a", transaction.getDeployHash());
         assertEquals("account-hash-496d542527e1a29f576ab7c3f4c947bfcdc9b4145f75f6ec40e36089432d7351", transaction.getFrom());
         assertEquals("account-hash-8a35e688eac33089b13f91a78c94221b669a0b13a6ed199228b1da018ecfa9df", transaction.getTo());
@@ -243,7 +242,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
                 .withBody("$.params.block_identifier.Height", "2346915")
                 .thenDispatch(getClass().getResource("/status-samples/chain_get_state_root_hash.json"));
 
-        StateRootHashData stateRootHashData = casperServiceMock.getStateRootHash(new HeightBlockIdentifier(2346915));
+        final StateRootHashData stateRootHashData = casperServiceMock.getStateRootHash(new HeightBlockIdentifier(2346915));
         assertNotNull(stateRootHashData);
         assertEquals("1f32df883da12781ed1e8e699f0faf7350279b9e88b63274e619387ce28003f9", stateRootHashData.getStateRootHash());
     }
@@ -272,11 +271,11 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
                 .withBody("$.params.path[0]", "special_value")
                 .thenDispatch(getClass().getResource("/status-samples/state_get_item.json"));
 
-        String stateRootHash = "c0eb76e0c3c7a928a0cb43e82eb4fad683d9ad626bcd3b7835a466c0587b0fff";
-        String key = "account-hash-a9efd010c7cee2245b5bad77e70d9beb73c8776cbe4698b2d8fdf6c8433d5ba0";
-        List<String> path = Collections.singletonList("special_value");
+        final String stateRootHash = "c0eb76e0c3c7a928a0cb43e82eb4fad683d9ad626bcd3b7835a466c0587b0fff";
+        final String key = "account-hash-a9efd010c7cee2245b5bad77e70d9beb73c8776cbe4698b2d8fdf6c8433d5ba0";
+        final List<String> path = Collections.singletonList("special_value");
         //noinspection deprecation
-        StoredValueData result = casperServiceMock.getStateItem(stateRootHash, key, path);
+        final StoredValueData result = casperServiceMock.getStateItem(stateRootHash, key, path);
 
         assertInstanceOf(CLValueString.class, result.getStoredValue().getValue());
         // Should be equal incoming parsed
@@ -291,14 +290,14 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
                 .withBody("$.params.deploy_hash", "4f3e856179e7868787fb696c22b24e08d54a226b24693d807177142c1a84d672")
                 .thenDispatch(getClass().getResource("/deploy-samples/info_get_deploy.json"));
 
-        DeployData deployData = casperServiceMock.getDeploy("4f3e856179e7868787fb696c22b24e08d54a226b24693d807177142c1a84d672");
-
+        final DeployData deployData = casperServiceMock.getDeploy("4f3e856179e7868787fb696c22b24e08d54a226b24693d807177142c1a84d672");
         assertNotNull(deployData);
         assertNotNull(deployData.getDeploy());
         assertInstanceOf(StoredContractByHash.class, deployData.getDeploy().getSession());
         assertInstanceOf(Success.class, deployData.getExecutionResults().get(0).getResult());
         assertInstanceOf(ModuleBytes.class, deployData.getDeploy().getPayment());
-        String sessionHash = ((StoredContractByHash) deployData.getDeploy().getSession()).getHash();
+
+        final String sessionHash = ((StoredContractByHash) deployData.getDeploy().getSession()).getHash();
         assertEquals("ccb576d6ce6dec84a551e48f0d0b7af89ddba44c7390b690036257a04a3ae9ea", sessionHash);
     }
 
@@ -329,7 +328,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
                 .thenDispatch(getClass().getResource("/status-samples/state_get_item_contract.json"));
 
         //noinspection deprecation
-        StoredValueData storedValueData = casperServiceMock.getStateItem("0aba07d7dd032f6b9a2940b3f9e8ef6da39f941b89bb868ce7a769fb5a775f6f", "hash-d2469afeb99130f0be7c9ce230a84149e6d756e306ef8cf5b8a49d5182e41676", new ArrayList<>());
+        final StoredValueData storedValueData = casperServiceMock.getStateItem("0aba07d7dd032f6b9a2940b3f9e8ef6da39f941b89bb868ce7a769fb5a775f6f", "hash-d2469afeb99130f0be7c9ce230a84149e6d756e306ef8cf5b8a49d5182e41676", new ArrayList<>());
 
         assertInstanceOf(StoredValueContract.class, storedValueData.getStoredValue());
         assertEquals("contract-package-d63c44078a1931b5dc4b80a7a0ec586164fd0470ce9f8b23f6d93b9e86c5944d", ((StoredValueContract) storedValueData.getStoredValue()).getValue().getPackageHash());
@@ -346,7 +345,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
                 .withBody("$.params.block_identifier.Hash", "8a029e8920e3d1644eba29fa080c92e90ee0033bd1179da04288ad56c372a121")
                 .thenDispatch(getClass().getResource("/status-samples/state_get_account_info.json"));
 
-        AccountData account = casperServiceMock.getStateAccountInfo("0202f6a9be4f3a65371bb229f34c56de42667ffcfe43defffdc959db256f0ad99c1a",
+        final AccountData account = casperServiceMock.getStateAccountInfo("0202f6a9be4f3a65371bb229f34c56de42667ffcfe43defffdc959db256f0ad99c1a",
                 new HashBlockIdentifier("8a029e8920e3d1644eba29fa080c92e90ee0033bd1179da04288ad56c372a121"));
 
         assertNotNull(account);
@@ -363,7 +362,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
                 .withBody("$.params.block_identifier.Height", "2435022")
                 .thenDispatch(getClass().getResource("/status-samples/state_get_account_info.json"));
 
-        AccountData account = casperServiceMock.getStateAccountInfo("0202f6a9be4f3a65371bb229f34c56de42667ffcfe43defffdc959db256f0ad99c1a", new HeightBlockIdentifier(2435022));
+        final AccountData account = casperServiceMock.getStateAccountInfo("0202f6a9be4f3a65371bb229f34c56de42667ffcfe43defffdc959db256f0ad99c1a", new HeightBlockIdentifier(2435022));
 
         assertNotNull(account);
         assertNotNull(account.getAccount());
@@ -378,7 +377,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
                 .withBody("$.params.block_identifier.Hash", "8a029e8920e3d1644eba29fa080c92e90ee0033bd1179da04288ad56c372a121")
                 .thenDispatch(getClass().getResource("/auction-info-samples/state_get_auction_info.json"));
 
-        AuctionData auction = casperServiceMock.getStateAuctionInfo(new HashBlockIdentifier("8a029e8920e3d1644eba29fa080c92e90ee0033bd1179da04288ad56c372a121"));
+        final AuctionData auction = casperServiceMock.getStateAuctionInfo(new HashBlockIdentifier("8a029e8920e3d1644eba29fa080c92e90ee0033bd1179da04288ad56c372a121"));
 
         assertNotNull(auction);
         assertNotNull(auction.getAuctionState());
@@ -393,7 +392,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
                 .withBody("$.params.block_identifier.Height", "2435022")
                 .thenDispatch(getClass().getResource("/auction-info-samples/state_get_auction_info.json"));
 
-        AuctionData auction = casperServiceMock.getStateAuctionInfo(new HeightBlockIdentifier(2435022));
+        final AuctionData auction = casperServiceMock.getStateAuctionInfo(new HeightBlockIdentifier(2435022));
 
         assertNotNull(auction);
         assertNotNull(auction.getAuctionState());
@@ -408,7 +407,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
                 .withBody("$.params.block_identifier.Height", "423571")
                 .thenDispatch(getClass().getResource("/era-info-samples/era-info-by-switch-block-shrunk.json"));
 
-        EraInfoData eraInfoData = casperServiceMock.getEraInfoBySwitchBlock(new HeightBlockIdentifier(423571));
+        final EraInfoData eraInfoData = casperServiceMock.getEraInfoBySwitchBlock(new HeightBlockIdentifier(423571));
 
         assertNotNull(eraInfoData);
         assertNotNull(eraInfoData.getEraSummary());
@@ -424,7 +423,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
                 .withBody("$.params.block_identifier.Hash", "6eee8974bd9df0c2ae5469a239c23ff901c4ca884a1fe8b7b5319b04fac3b484")
                 .thenDispatch(getClass().getResource("/era-info-samples/era-info-by-switch-block-shrunk.json"));
 
-        EraInfoData eraInfoData = casperServiceMock.getEraInfoBySwitchBlock(new HashBlockIdentifier("6eee8974bd9df0c2ae5469a239c23ff901c4ca884a1fe8b7b5319b04fac3b484"));
+        final EraInfoData eraInfoData = casperServiceMock.getEraInfoBySwitchBlock(new HashBlockIdentifier("6eee8974bd9df0c2ae5469a239c23ff901c4ca884a1fe8b7b5319b04fac3b484"));
 
         assertNotNull(eraInfoData);
         assertNotNull(eraInfoData.getEraSummary());
@@ -440,7 +439,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
                 .withBody("$.params.purse_uref", "uref-2838aee2e1b1e8dfcf74aac7940a93c6ea34770b159ec18720872ac02d8abc98-007")
                 .thenDispatch(getClass().getResource("/balance/state_get_balance.json"));
 
-        GetBalanceData balance = casperServiceMock.getBalance("78e5d93246bcf9aa3336c4c80cd9359589cbddceda75e31bb3d65b0c6bda3b59",
+        final GetBalanceData balance = casperServiceMock.getBalance("78e5d93246bcf9aa3336c4c80cd9359589cbddceda75e31bb3d65b0c6bda3b59",
                 URef.fromString("uref-2838aee2e1b1e8dfcf74aac7940a93c6ea34770b159ec18720872ac02d8abc98-007"));
 
         assertNotNull(balance);
@@ -456,9 +455,9 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
                 .withBody("$.params.key", "deploy-94905b503c07c49564467a0b0b5c10a68642eaa35e7800b98b5e45e7531695e1")
                 .thenDispatch(getClass().getResource("/globalstate-samples/query_global_state.json"));
 
-        GlobalStateIdentifier blockIdentifier = new BlockHashIdentifier("0899a5e98a1b742551fc8f15a2393b9218366a12aaaeccf17a89d581f042dbdd");
-        String key = "deploy-94905b503c07c49564467a0b0b5c10a68642eaa35e7800b98b5e45e7531695e1";
-        GlobalStateData globalState = casperServiceMock.queryGlobalState(blockIdentifier, key, new String[0]);
+        final GlobalStateIdentifier blockIdentifier = new BlockHashIdentifier("0899a5e98a1b742551fc8f15a2393b9218366a12aaaeccf17a89d581f042dbdd");
+        final String key = "deploy-94905b503c07c49564467a0b0b5c10a68642eaa35e7800b98b5e45e7531695e1";
+        final GlobalStateData globalState = casperServiceMock.queryGlobalState(blockIdentifier, key, new String[0]);
 
         assertNotNull(globalState);
         assertThat(((StoredValueDeployInfo) globalState.getStoredValue()).getValue().getFrom(), is("account-hash-229695fc6ec91403b671f53ec65a27bb063f419442a5c61f7460da54ae610537"));
@@ -473,9 +472,8 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
                 .withMethod("info_get_validator_changes")
                 .thenDispatch(getClass().getResource("/globalstate-samples/info_get_validator_changes.json"));
 
-        ValidatorChangeData changes = casperServiceMock.getValidatorsChanges();
+        final ValidatorChangeData changes = casperServiceMock.getValidatorsChanges();
         assertNotNull(changes);
-
         assertThat(changes.getChanges(), hasSize(2));
         assertThat(changes.getChanges().get(0).getPublicKey().getAlgoTaggedHex(), is("01098d1758f1ca75350dfec8a1c4c1984a88d1ea5eab5590fbc9e856d67cde31eb"));
         assertThat(changes.getChanges().get(0).getStatusChanges().get(0).getEraId(), is(BigInteger.valueOf(12519L)));
@@ -490,9 +488,9 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
                 .withBody("$.params.deploy_hash", "abc")
                 .thenDispatch(getClass().getResource("/deploy-samples/info_get_deploy_error.json"));
 
-        String expectedMessage = "Invalid params (code: -32602)";
+        final String expectedMessage = "Invalid params (code: -32602)";
 
-        CasperClientException casperClientException = assertThrows(CasperClientException.class,
+        final CasperClientException casperClientException = assertThrows(CasperClientException.class,
                 () -> casperServiceMock.getDeploy("abc"));
 
         assertEquals(expectedMessage, casperClientException.getMessage());

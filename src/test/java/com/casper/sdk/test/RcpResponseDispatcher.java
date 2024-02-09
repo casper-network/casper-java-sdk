@@ -96,7 +96,7 @@ public class RcpResponseDispatcher extends Dispatcher {
         return this;
     }
 
-    public RcpResponseDispatcher thenDispatch(URL resource) {
+    public RcpResponseDispatcher thenDispatch(final URL resource) {
         this.resource = resource;
         return this;
     }
