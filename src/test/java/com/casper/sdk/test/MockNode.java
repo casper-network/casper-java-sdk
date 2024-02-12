@@ -27,4 +27,9 @@ public class MockNode {
         mockWebServer.setDispatcher(dispatcher);
     }
 
+    public RcpResponseDispatcher withRcpResponseDispatcher() {
+        final RcpResponseDispatcher whenDispatcher = new RcpResponseDispatcher();
+        setDispatcher(whenDispatcher);
+        return whenDispatcher;
+    }
 }
