@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CLValuePublicKey.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">casper-java-sdk</a> &gt; <a href="index.source.html" class="el_package">com.casper.sdk.model.clvalue</a> &gt; <span class="el_source">CLValuePublicKey.java</span></div><h1>CLValuePublicKey.java</h1><pre class="source lang-java linenums">package com.casper.sdk.model.clvalue;
+
+import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
+import com.casper.sdk.exception.NoSuchTypeException;
+import com.casper.sdk.model.clvalue.cltype.CLTypePublicKey;
+import com.casper.sdk.model.clvalue.serde.Target;
+import com.casper.sdk.model.key.PublicKey;
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonSetter;
+import dev.oak3.sbs4j.DeserializerBuffer;
+import dev.oak3.sbs4j.SerializerBuffer;
+import dev.oak3.sbs4j.exception.ValueSerializationException;
+import dev.oak3.sbs4j.util.ByteUtils;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.bouncycastle.util.encoders.Hex;
+
+/**
+ * Casper PublicKey CLValue implementation
+ *
+ * @author Alexandre Carvalho
+ * @author Andre Bertolace
+ * @see AbstractCLValue
+ * @since 0.0.1
+ */
+@Getter
+<span class="nc" id="L29">@Setter</span>
+<span class="pc bpc" id="L30" title="10 of 16 branches missed.">@EqualsAndHashCode(callSuper = true)</span>
+<span class="fc" id="L31">@NoArgsConstructor</span>
+public class CLValuePublicKey extends AbstractCLValue&lt;PublicKey, CLTypePublicKey&gt; {
+<span class="fc" id="L33">    private CLTypePublicKey clType = new CLTypePublicKey();</span>
+
+    @JsonSetter(&quot;cl_type&quot;)
+    @ExcludeFromJacocoGeneratedReport
+    protected void setJsonClType(CLTypePublicKey clType) {
+        this.clType = clType;
+    }
+
+    @JsonGetter(&quot;cl_type&quot;)
+    @ExcludeFromJacocoGeneratedReport
+    protected String getJsonClType() {
+        return this.getClType().getTypeName();
+    }
+
+<span class="fc" id="L47">    public CLValuePublicKey(PublicKey value) throws ValueSerializationException {</span>
+<span class="fc" id="L48">        this.setValue(value);</span>
+<span class="fc" id="L49">    }</span>
+
+    @Override
+    public void serialize(SerializerBuffer ser, Target target) throws NoSuchTypeException, ValueSerializationException {
+<span class="pc bpc" id="L53" title="1 of 2 branches missed.">        if (this.getValue() == null) return;</span>
+
+<span class="fc bfc" id="L55" title="All 2 branches covered.">        if (target.equals(Target.BYTE)) {</span>
+<span class="fc" id="L56">            super.serializePrefixWithLength(ser);</span>
+        }
+
+<span class="fc" id="L59">        ser.writeU8(this.getValue().getTag().getByteTag());</span>
+<span class="fc" id="L60">        ser.writeByteArray(this.getValue().getKey());</span>
+
+<span class="fc bfc" id="L62" title="All 2 branches covered.">        if (target.equals(Target.BYTE)) {</span>
+<span class="fc" id="L63">            this.encodeType(ser);</span>
+        }
+
+<span class="fc" id="L66">        this.setBytes(Hex.toHexString(ser.toByteArray()));</span>
+<span class="fc" id="L67">    }</span>
+
+    @Override
+    public void deserializeCustom(DeserializerBuffer deser) throws Exception {
+<span class="fc" id="L71">        this.setValue(PublicKey.fromTaggedHexString(ByteUtils.encodeHexString(deser.readByteArray(33))));</span>
+<span class="fc" id="L72">    }</span>
+
+    @Override
+    public String toString() {
+<span class="nc bnc" id="L76" title="All 2 branches missed.">        return getValue() != null ? getValue().getAlgoTaggedHex() : null;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
