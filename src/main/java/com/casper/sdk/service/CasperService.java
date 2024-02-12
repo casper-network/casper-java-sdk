@@ -26,6 +26,7 @@ import com.casper.sdk.model.transfer.TransferData;
 import com.casper.sdk.model.uref.URef;
 import com.casper.sdk.model.validator.ValidatorChangeData;
 import com.googlecode.jsonrpc4j.*;
+import org.apache.cxf.common.util.StringUtils;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -42,6 +43,29 @@ import java.util.Map;
  */
 public interface CasperService {
 
+
+    /**
+     * Builds a CasperService for the node url
+     *
+     * @param url the peer url to connect to
+     * @return A Dynamic Proxy to CasperService
+     * @throws MalformedURLException is thrown if ip/port are not compliant
+     */
+    static CasperService usingPeer(URL url) throws MalformedURLException {
+        if (StringUtils.isEmpty(url.getPath())) {
+            url = new URL(url.getProtocol(), url.getHost(), url.getPort(), "/rpc");
+        }
+        final CasperObjectMapper objectMapper = new CasperObjectMapper();
+        final Map<String, String> newHeaders = new HashMap<>();
+        newHeaders.put("Content-Type", "application/json");
+        final JsonRpcHttpClient client = new JsonRpcHttpClient(objectMapper, url, newHeaders);
+
+        final ExceptionResolver exceptionResolver = new CasperClientExceptionResolver();
+        client.setExceptionResolver(exceptionResolver);
+
+        return ProxyUtil.createClientProxy(CasperService.class.getClassLoader(), CasperService.class, client);
+    }
+
     /**
      * Builds a CasperService for the node ip/port pair
      *
@@ -51,16 +75,7 @@ public interface CasperService {
      * @throws MalformedURLException is thrown if ip/port are not compliant
      */
     static CasperService usingPeer(String ip, int port) throws MalformedURLException {
-        CasperObjectMapper objectMapper = new CasperObjectMapper();
-        Map<String, String> newHeaders = new HashMap<>();
-        newHeaders.put("Content-Type", "application/json");
-        JsonRpcHttpClient client = new JsonRpcHttpClient(objectMapper, new URL("http", ip, port, "/rpc"),
-                newHeaders);
-
-        ExceptionResolver exceptionResolver = new CasperClientExceptionResolver();
-        client.setExceptionResolver(exceptionResolver);
-
-        return ProxyUtil.createClientProxy(CasperService.class.getClassLoader(), CasperService.class, client);
+        return usingPeer(new URL("http", ip, port, "/rpc"));
     }
 
     //region INFORMATIONAL METHODS
@@ -213,13 +228,13 @@ public interface CasperService {
      */
     @JsonRpcMethod("speculative_exec")
     SpeculativeDeployData speculativeExec(@JsonRpcParam("block_identifier") BlockIdentifier blockIdentifier,
-                                 @JsonRpcParam("deploy") Deploy deploy);
+                                          @JsonRpcParam("deploy") Deploy deploy);
 
     /**
      * The speculative_exec endpoint provides a method to execute a Deploy
      * without committing it to global state
      *
-     * @param deploy          the deploy object to send to the network
+     * @param deploy the deploy object to send to the network
      * @return Object holding the api version and the deploy hash
      */
     @JsonRpcMethod("speculative_exec")
@@ -287,6 +302,7 @@ public interface CasperService {
     //endregion
 
     //region DEPRECATED METHODS
+
     /**
      * Returns a stored value from the network. This RPC is deprecated, use `query_global_state` instead"
      *
