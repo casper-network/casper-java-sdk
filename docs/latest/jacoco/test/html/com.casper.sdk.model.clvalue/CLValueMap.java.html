@@ -125,11 +125,11 @@ public class CLValueMap extends
     @Override
     @JsonIgnore
     protected void setChildTypes(Map&lt;? extends AbstractCLValue&lt;?, ?&gt;, ? extends AbstractCLValue&lt;?, ?&gt;&gt; value) {
-<span class="pc bpc" id="L128" title="2 of 4 branches missed.">        if (value != null &amp;&amp; value.entrySet().iterator().hasNext()) {</span>
+<span class="pc bpc" id="L128" title="1 of 4 branches missed.">        if (value != null &amp;&amp; value.entrySet().iterator().hasNext()) {</span>
 <span class="fc" id="L129">            Entry&lt;? extends AbstractCLValue&lt;?, ?&gt;, ? extends AbstractCLValue&lt;?, ?&gt;&gt; entry = value.entrySet().iterator().next();</span>
 <span class="fc" id="L130">            clType.setKeyValueTypes(new CLTypeMap.CLTypeMapEntryType(entry.getKey().getClType(), entry.getValue().getClType()));</span>
 <span class="fc" id="L131">        } else {</span>
-<span class="nc" id="L132">            clType.setChildTypes(new ArrayList&lt;&gt;());</span>
+<span class="fc" id="L132">            clType.setChildTypes(new ArrayList&lt;&gt;());</span>
         }
 <span class="fc" id="L134">    }</span>
 
