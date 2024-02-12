@@ -45,19 +45,23 @@ public interface CasperService {
 
 
     /**
-     * Builds a CasperService for the node url
+     * Builds a CasperService for the node url.
      *
      * @param url the peer url to connect to
+     * @param additionalHeaders additional headers to be added to the request
      * @return A Dynamic Proxy to CasperService
      * @throws MalformedURLException is thrown if ip/port are not compliant
      */
-    static CasperService usingPeer(URL url) throws MalformedURLException {
+    static CasperService usingPeer(URL url, final Map<String, String> additionalHeaders) throws MalformedURLException {
         if (StringUtils.isEmpty(url.getPath())) {
             url = new URL(url.getProtocol(), url.getHost(), url.getPort(), "/rpc");
         }
         final CasperObjectMapper objectMapper = new CasperObjectMapper();
         final Map<String, String> newHeaders = new HashMap<>();
         newHeaders.put("Content-Type", "application/json");
+        if (additionalHeaders != null) {
+            newHeaders.putAll(additionalHeaders);
+        }
         final JsonRpcHttpClient client = new JsonRpcHttpClient(objectMapper, url, newHeaders);
 
         final ExceptionResolver exceptionResolver = new CasperClientExceptionResolver();
@@ -75,7 +79,7 @@ public interface CasperService {
      * @throws MalformedURLException is thrown if ip/port are not compliant
      */
     static CasperService usingPeer(String ip, int port) throws MalformedURLException {
-        return usingPeer(new URL("http", ip, port, "/rpc"));
+        return usingPeer(new URL("http", ip, port, "/rpc"), null);
     }
 
     //region INFORMATIONAL METHODS
