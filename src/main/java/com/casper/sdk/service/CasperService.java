@@ -43,11 +43,10 @@ import java.util.Map;
  */
 public interface CasperService {
 
-
     /**
      * Builds a CasperService for the node url.
      *
-     * @param url the peer url to connect to
+     * @param url               the peer url to connect to
      * @param additionalHeaders additional headers to be added to the request
      * @return A Dynamic Proxy to CasperService
      * @throws MalformedURLException is thrown if ip/port are not compliant
@@ -56,16 +55,15 @@ public interface CasperService {
         if (StringUtils.isEmpty(url.getPath())) {
             url = new URL(url.getProtocol(), url.getHost(), url.getPort(), "/rpc");
         }
-        final CasperObjectMapper objectMapper = new CasperObjectMapper();
-        final Map<String, String> newHeaders = new HashMap<>();
-        newHeaders.put("Content-Type", "application/json");
-        if (additionalHeaders != null) {
-            newHeaders.putAll(additionalHeaders);
-        }
-        final JsonRpcHttpClient client = new JsonRpcHttpClient(objectMapper, url, newHeaders);
 
-        final ExceptionResolver exceptionResolver = new CasperClientExceptionResolver();
-        client.setExceptionResolver(exceptionResolver);
+        final Map<String, String> headers = new HashMap<>();
+        headers.put("Content-Type", "application/json");
+        if (additionalHeaders != null) {
+            headers.putAll(additionalHeaders);
+        }
+
+        final JsonRpcHttpClient client = new JsonRpcHttpClient(new CasperObjectMapper(), url, headers);
+        client.setExceptionResolver(new CasperClientExceptionResolver());
 
         return ProxyUtil.createClientProxy(CasperService.class.getClassLoader(), CasperService.class, client);
     }
