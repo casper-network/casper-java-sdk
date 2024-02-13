@@ -8,6 +8,7 @@ import lombok.Getter;
 import org.junit.jupiter.api.BeforeAll;
 
 import java.net.MalformedURLException;
+import java.net.URI;
 
 /**
  * Abstract class for testing json rpc methods
@@ -23,16 +24,22 @@ public abstract class AbstractJsonRpcTests extends AbstractJsonTests {
         MAIN_NET("65.109.54.159", 7777),
         TEST_NET("85.114.132.133", 7777),
         NCTL("127.0.0.1", 11101),
-        NCTL_SPECULATIVE("127.0.0.1", 25101);
+        NCTL_SPECULATIVE("127.0.0.1", 25101),
+        MOCK("localhost", 7777);
 
         private final String ip;
         private final int port;
+
+        public URI getUri() {
+            return URI.create("http://" + ip + ":" + port);
+        }
     }
 
     protected static CasperService casperServiceMainnet;
     protected static CasperService casperServiceTestnet;
     protected static CasperService casperServiceNctl;
     protected static CasperService speculativeCasperServiceNctl;
+    protected static CasperService casperServiceMock;
 
     @BeforeAll
     public static void setUp() throws MalformedURLException {
@@ -44,5 +51,6 @@ public abstract class AbstractJsonRpcTests extends AbstractJsonTests {
                 CasperNetwork.NCTL.getPort());
         speculativeCasperServiceNctl = CasperService.usingPeer(CasperNetwork.NCTL_SPECULATIVE.getIp(),
                 CasperNetwork.NCTL_SPECULATIVE.getPort());
+        casperServiceMock = CasperService.usingPeer(CasperNetwork.MOCK.ip, CasperNetwork.MOCK.port);
     }
 }

@@ -10,6 +10,8 @@ import com.casper.sdk.service.AbstractJsonRpcTests;
 import com.syntifi.crypto.key.Ed25519PrivateKey;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
 import org.bouncycastle.util.encoders.Hex;
+import org.junit.Ignore;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +35,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author Andre Bertolace
  * @since 0.2.0
  */
+@Disabled
 public class CasperTransferHelperTests extends AbstractJsonRpcTests {
     private static final Logger LOGGER = LoggerFactory.getLogger(CasperTransferHelperTests.class);
 

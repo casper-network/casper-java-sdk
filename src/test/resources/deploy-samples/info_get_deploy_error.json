@@ -1,0 +1,9 @@
+{
+  "jsonrpc": "2.0",
+  "id": "383766003",
+  "error": {
+    "code": -32602,
+    "message": "Invalid params",
+    "data": "Failed to parse 'params' field: could not convert slice to array"
+  }
+}

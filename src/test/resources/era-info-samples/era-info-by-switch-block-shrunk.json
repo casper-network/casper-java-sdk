@@ -1,0 +1,182 @@
+{
+  "jsonrpc": "2.0",
+  "id": "383766003",
+  "result": {
+    "api_version": "1.3.2",
+    "era_summary": {
+      "block_hash": "6eee8974bd9df0c2ae5469a239c23ff901c4ca884a1fe8b7b5319b04fac3b484",
+      "era_id": 1835,
+      "stored_value": {
+        "EraInfo": {
+          "seigniorage_allocations": [
+            {
+              "Delegator": {
+                "delegator_public_key": "01128ddb51119f1df535cf3a763996344ab0cc79038faaee0aaaf098a078031ce6",
+                "validator_public_key": "01026ca707c348ed8012ac6a1f28db031fadd6eb67203501a353b867a08c8b9a80",
+                "amount": "29519451635"
+              }
+            },
+            {
+              "Delegator": {
+                "delegator_public_key": "0115939cf8687a4e132ba2444c0350698e397952aa86f3248e61fb0cfc15ac527b",
+                "validator_public_key": "01026ca707c348ed8012ac6a1f28db031fadd6eb67203501a353b867a08c8b9a80",
+                "amount": "164420451299"
+              }
+            },
+            {
+              "Delegator": {
+                "delegator_public_key": "0136258664950cc030dbdc68e430f6961bef95c6ab2d269dc776ef2c9fa7bbca32",
+                "validator_public_key": "01026ca707c348ed8012ac6a1f28db031fadd6eb67203501a353b867a08c8b9a80",
+                "amount": "259526666391"
+              }
+            },
+            {
+              "Delegator": {
+                "delegator_public_key": "015efd26fcd2619c0bfad5a6ab4b55d7291af4e77263affa166e3f8ec00632efa8",
+                "validator_public_key": "01026ca707c348ed8012ac6a1f28db031fadd6eb67203501a353b867a08c8b9a80",
+                "amount": "0"
+              }
+            },
+            {
+              "Delegator": {
+                "delegator_public_key": "01d0f3fa56e64675fab02f2245b5e0caa5503c53bc57af7649af5dd8aa36141f44",
+                "validator_public_key": "01026ca707c348ed8012ac6a1f28db031fadd6eb67203501a353b867a08c8b9a80",
+                "amount": "69408738662"
+              }
+            },
+            {
+              "Delegator": {
+                "delegator_public_key": "01d2ebc5ea92af48f4b90df249a4d7d75f60c6790a5bf1a8cbbbc3f46cbb709d0f",
+                "validator_public_key": "01026ca707c348ed8012ac6a1f28db031fadd6eb67203501a353b867a08c8b9a80",
+                "amount": "115154826728"
+              }
+            },
+            {
+              "Delegator": {
+                "delegator_public_key": "01dfa7caca2088155d24dc3c2448e2cc9a348ba18663f5317092cde5ec4502105f",
+                "validator_public_key": "01026ca707c348ed8012ac6a1f28db031fadd6eb67203501a353b867a08c8b9a80",
+                "amount": "31369080306"
+              }
+            },
+            {
+              "Delegator": {
+                "delegator_public_key": "01ed392301164a763bbebe7320fff4effbba4f88705f8a409df2246b638cc231d7",
+                "validator_public_key": "01026ca707c348ed8012ac6a1f28db031fadd6eb67203501a353b867a08c8b9a80",
+                "amount": "163263274546"
+              }
+            },
+            {
+              "Delegator": {
+                "delegator_public_key": "02035c47ccbeaa32040d6904b6dc163c3b546314c52b2a78583835f54a224ab365a4",
+                "validator_public_key": "01026ca707c348ed8012ac6a1f28db031fadd6eb67203501a353b867a08c8b9a80",
+                "amount": "1808806784970"
+              }
+            },
+            {
+              "Validator": {
+                "validator_public_key": "01026ca707c348ed8012ac6a1f28db031fadd6eb67203501a353b867a08c8b9a80",
+                "amount": "1164624295822"
+              }
+            },
+            {
+              "Delegator": {
+                "delegator_public_key": "01031cdce87d5fe53246492f9262932f9eb7421ea54b30da1eca06874fd2a7df60",
+                "validator_public_key": "01031cdce87d5fe53246492f9262932f9eb7421ea54b30da1eca06874fd2a7df60",
+                "amount": "96112809"
+              }
+            },
+            {
+              "Validator": {
+                "validator_public_key": "01031cdce87d5fe53246492f9262932f9eb7421ea54b30da1eca06874fd2a7df60",
+                "amount": "266913770"
+              }
+            },
+            {
+              "Delegator": {
+                "delegator_public_key": "012c6173a4cccdebe18f0a50d9d51802eb82f81832cace51a9f510414d309d8181",
+                "validator_public_key": "0103dd8b2b18ef0b9fd5b7c8e340b104ee4d966f2a167eb1a938963f8c8f699a45",
+                "amount": "509082023"
+              }
+            },
+            {
+              "Delegator": {
+                "delegator_public_key": "0140d88e3eae457c8ef925446edf9e6fe6bf23c85503ae85b19dd6c9ac8d91b8b6",
+                "validator_public_key": "0103dd8b2b18ef0b9fd5b7c8e340b104ee4d966f2a167eb1a938963f8c8f699a45",
+                "amount": "22566306199"
+              }
+            },
+            {
+              "Delegator": {
+                "delegator_public_key": "015ac0d71b2142f35c974471589876bc7684bf4e495354a885ebd0ac2b1ffbcc01",
+                "validator_public_key": "0103dd8b2b18ef0b9fd5b7c8e340b104ee4d966f2a167eb1a938963f8c8f699a45",
+                "amount": "50941908"
+              }
+            },
+            {
+              "Validator": {
+                "validator_public_key": "0103dd8b2b18ef0b9fd5b7c8e340b104ee4d966f2a167eb1a938963f8c8f699a45",
+                "amount": "234352606"
+              }
+            },
+            {
+              "Validator": {
+                "validator_public_key": "010427c1d1227c9d2aafe8c06c6e6b276da8dcd8fd170ca848b8e3e8e1038a6dc8",
+                "amount": "22759733456"
+              }
+            },
+            {
+              "Delegator": {
+                "delegator_public_key": "01a705ba7136c27b7742bda63e9d38b8de745fd6420c3624981de794e871d635a7",
+                "validator_public_key": "010a78eef78966a56a633c665411388f97f850609960d5d898f3992272b8d4bcca",
+                "amount": "43751"
+              }
+            },
+            {
+              "Delegator": {
+                "delegator_public_key": "020245b32289d807f3fcd5f9dbec94ff51ee57857f4b39a3b9d6fb99305317d18a32",
+                "validator_public_key": "010a78eef78966a56a633c665411388f97f850609960d5d898f3992272b8d4bcca",
+                "amount": "2530125806"
+              }
+            },
+            {
+              "Validator": {
+                "validator_public_key": "010a78eef78966a56a633c665411388f97f850609960d5d898f3992272b8d4bcca",
+                "amount": "3214832555"
+              }
+            },
+            {
+              "Delegator": {
+                "delegator_public_key": "0102e35e9c40e8ce5e98a4d14abad90a78e8629329440122cd5f03032d0ac4b481",
+                "validator_public_key": "010a8ac8d23e6c57fa340c552ddf9199d9cba9166ecc0daee640053ebfc6254610",
+                "amount": "7114943"
+              }
+            },
+            {
+              "Delegator": {
+                "delegator_public_key": "010953f47ddbe32664990644c8a3481e0c88a51b5dc9e2ae0ba71869e50f9f2434",
+                "validator_public_key": "010a8ac8d23e6c57fa340c552ddf9199d9cba9166ecc0daee640053ebfc6254610",
+                "amount": "363281018"
+              }
+            },
+            {
+              "Delegator": {
+                "delegator_public_key": "011169be47b58298f9e7fe4af82f3510484c7d4c56801db56871bc117ddb187911",
+                "validator_public_key": "010a8ac8d23e6c57fa340c552ddf9199d9cba9166ecc0daee640053ebfc6254610",
+                "amount": "96953812"
+              }
+            },
+            {
+              "Delegator": {
+                "delegator_public_key": "01119bcbf29e296d53aabb24f412ba77b8c6d522d253ed49fe44b01e013813d462",
+                "validator_public_key": "010a8ac8d23e6c57fa340c552ddf9199d9cba9166ecc0daee640053ebfc6254610",
+                "amount": "173669642383"
+              }
+            }
+          ]
+        }
+      },
+      "state_root_hash": "485a33d5c737030432fba0c3b15c1cc6b372fd286677bf9f29d4ab8b1f0c9223",
+      "merkle_proof": "01000000052b0700000000000007e20900000101128ddb51119f1df535cf3a763996344ab0cc79038faaee0aaaf098a078031ce601026c"
+    }
+  }
+}
