@@ -42,12 +42,12 @@ public class PublicKey extends AbstractSerializedKeyTaggedHex&lt;AlgorithmTag&gt
     }
 
     public static PublicKey fromAbstractPublicKey(AbstractPublicKey key) {
-<span class="fc" id="L45">        PublicKey object = new PublicKey();</span>
-<span class="pc bpc" id="L46" title="1 of 2 branches missed.">        object.setTag((key instanceof Secp256k1PublicKey)</span>
+<span class="nc" id="L45">        PublicKey object = new PublicKey();</span>
+<span class="nc bnc" id="L46" title="All 2 branches missed.">        object.setTag((key instanceof Secp256k1PublicKey)</span>
 <span class="nc" id="L47">                ? AlgorithmTag.SECP256K1</span>
-<span class="fc" id="L48">                : AlgorithmTag.ED25519);</span>
-<span class="fc" id="L49">        object.setKey(key.getKey());</span>
-<span class="fc" id="L50">        return object;</span>
+<span class="nc" id="L48">                : AlgorithmTag.ED25519);</span>
+<span class="nc" id="L49">        object.setKey(key.getKey());</span>
+<span class="nc" id="L50">        return object;</span>
     }
 
     public String generateAccountHash(boolean includePrefix) throws IOException {

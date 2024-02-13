@@ -52,15 +52,15 @@ public class CLValuePublicKey extends AbstractCLValue&lt;PublicKey, CLTypePublic
     public void serialize(SerializerBuffer ser, Target target) throws NoSuchTypeException, ValueSerializationException {
 <span class="pc bpc" id="L53" title="1 of 2 branches missed.">        if (this.getValue() == null) return;</span>
 
-<span class="fc bfc" id="L55" title="All 2 branches covered.">        if (target.equals(Target.BYTE)) {</span>
-<span class="fc" id="L56">            super.serializePrefixWithLength(ser);</span>
+<span class="pc bpc" id="L55" title="1 of 2 branches missed.">        if (target.equals(Target.BYTE)) {</span>
+<span class="nc" id="L56">            super.serializePrefixWithLength(ser);</span>
         }
 
 <span class="fc" id="L59">        ser.writeU8(this.getValue().getTag().getByteTag());</span>
 <span class="fc" id="L60">        ser.writeByteArray(this.getValue().getKey());</span>
 
-<span class="fc bfc" id="L62" title="All 2 branches covered.">        if (target.equals(Target.BYTE)) {</span>
-<span class="fc" id="L63">            this.encodeType(ser);</span>
+<span class="pc bpc" id="L62" title="1 of 2 branches missed.">        if (target.equals(Target.BYTE)) {</span>
+<span class="nc" id="L63">            this.encodeType(ser);</span>
         }
 
 <span class="fc" id="L66">        this.setBytes(Hex.toHexString(ser.toByteArray()));</span>
