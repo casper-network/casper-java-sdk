@@ -80,28 +80,28 @@ public class CasperTransferHelper {
                                              String chainName, Long id, BigInteger paymentAmount,
                                              Long gasPrice, Ttl ttl, Date date, List&lt;Digest&gt; dependencies)
             throws NoSuchTypeException, GeneralSecurityException, ValueSerializationException {
-<span class="fc" id="L83">        List&lt;NamedArg&lt;?&gt;&gt; transferArgs = new LinkedList&lt;&gt;();</span>
-<span class="fc" id="L84">        NamedArg&lt;CLTypeU512&gt; amountNamedArg = new NamedArg&lt;&gt;(&quot;amount&quot;,</span>
+<span class="nc" id="L83">        List&lt;NamedArg&lt;?&gt;&gt; transferArgs = new LinkedList&lt;&gt;();</span>
+<span class="nc" id="L84">        NamedArg&lt;CLTypeU512&gt; amountNamedArg = new NamedArg&lt;&gt;(&quot;amount&quot;,</span>
                 new CLValueU512(amount));
-<span class="fc" id="L86">        transferArgs.add(amountNamedArg);</span>
-<span class="fc" id="L87">        NamedArg&lt;CLTypePublicKey&gt; publicKeyNamedArg = new NamedArg&lt;&gt;(&quot;target&quot;,</span>
+<span class="nc" id="L86">        transferArgs.add(amountNamedArg);</span>
+<span class="nc" id="L87">        NamedArg&lt;CLTypePublicKey&gt; publicKeyNamedArg = new NamedArg&lt;&gt;(&quot;target&quot;,</span>
                 new CLValuePublicKey(to));
-<span class="fc" id="L89">        transferArgs.add(publicKeyNamedArg);</span>
+<span class="nc" id="L89">        transferArgs.add(publicKeyNamedArg);</span>
 
-<span class="fc bfc" id="L91" title="All 2 branches covered.">        CLValueOption idArg = (id == null) ?</span>
-<span class="fc" id="L92">                new CLValueOption(Optional.of(new CLValueU64())) :</span>
-<span class="fc" id="L93">                new CLValueOption(Optional.of(new CLValueU64(BigInteger.valueOf(id))));</span>
+<span class="nc bnc" id="L91" title="All 2 branches missed.">        CLValueOption idArg = (id == null) ?</span>
+<span class="nc" id="L92">                new CLValueOption(Optional.of(new CLValueU64())) :</span>
+<span class="nc" id="L93">                new CLValueOption(Optional.of(new CLValueU64(BigInteger.valueOf(id))));</span>
 
-<span class="fc" id="L95">        NamedArg&lt;CLTypeOption&gt; idNamedArg = new NamedArg&lt;&gt;(&quot;id&quot;, idArg);</span>
-<span class="fc" id="L96">        transferArgs.add(idNamedArg);</span>
+<span class="nc" id="L95">        NamedArg&lt;CLTypeOption&gt; idNamedArg = new NamedArg&lt;&gt;(&quot;id&quot;, idArg);</span>
+<span class="nc" id="L96">        transferArgs.add(idNamedArg);</span>
 
         Transfer session = Transfer
-<span class="fc" id="L99">                .builder()</span>
-<span class="fc" id="L100">                .args(transferArgs)</span>
-<span class="fc" id="L101">                .build();</span>
-<span class="fc" id="L102">        ModuleBytes payment = CasperDeployHelper.getPaymentModuleBytes(paymentAmount);</span>
+<span class="nc" id="L99">                .builder()</span>
+<span class="nc" id="L100">                .args(transferArgs)</span>
+<span class="nc" id="L101">                .build();</span>
+<span class="nc" id="L102">        ModuleBytes payment = CasperDeployHelper.getPaymentModuleBytes(paymentAmount);</span>
 
-<span class="fc" id="L104">        return CasperDeployHelper.buildDeploy(signer, chainName, session, payment, gasPrice, ttl,</span>
+<span class="nc" id="L104">        return CasperDeployHelper.buildDeploy(signer, chainName, session, payment, gasPrice, ttl,</span>
                 date, dependencies);
     }
 

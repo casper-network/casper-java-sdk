@@ -50,8 +50,8 @@ public class CLValueOption extends AbstractCLValueWithChildren&lt;Optional&lt;Ab
     public void serialize(SerializerBuffer ser, Target target) throws ValueSerializationException, NoSuchTypeException {
 <span class="pc bpc" id="L51" title="1 of 2 branches missed.">        if (!this.getValue().isPresent()) return;</span>
 
-<span class="fc bfc" id="L53" title="All 2 branches covered.">        if (target.equals(Target.BYTE)) {</span>
-<span class="fc" id="L54">            super.serializePrefixWithLength(ser);</span>
+<span class="pc bpc" id="L53" title="1 of 2 branches missed.">        if (target.equals(Target.BYTE)) {</span>
+<span class="nc" id="L54">            super.serializePrefixWithLength(ser);</span>
         }
 
 <span class="fc" id="L57">        Optional&lt;AbstractCLValue&lt;?, ?&gt;&gt; value = getValue();</span>
@@ -69,10 +69,10 @@ public class CLValueOption extends AbstractCLValueWithChildren&lt;Optional&lt;Ab
 <span class="fc" id="L69">            child.get().serialize(ser);</span>
         }
 
-<span class="fc bfc" id="L72" title="All 2 branches covered.">        if (target.equals(Target.BYTE)) {</span>
-<span class="fc" id="L73">            this.encodeType(ser);</span>
-<span class="pc bpc" id="L74" title="1 of 2 branches missed.">            if (child.isPresent()) {</span>
-<span class="fc" id="L75">                child.get().encodeType(ser);</span>
+<span class="pc bpc" id="L72" title="1 of 2 branches missed.">        if (target.equals(Target.BYTE)) {</span>
+<span class="nc" id="L73">            this.encodeType(ser);</span>
+<span class="nc bnc" id="L74" title="All 2 branches missed.">            if (child.isPresent()) {</span>
+<span class="nc" id="L75">                child.get().encodeType(ser);</span>
             }
         }
 

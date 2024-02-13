@@ -24,7 +24,7 @@ import org.bouncycastle.util.encoders.Hex;
  */
 @Getter
 @Setter
-<span class="fc" id="L27">@NoArgsConstructor</span>
+<span class="nc" id="L27">@NoArgsConstructor</span>
 <span class="fc" id="L28">@AllArgsConstructor</span>
 <span class="nc bnc" id="L29" title="All 8 branches missed.">@EqualsAndHashCode(of = &quot;digest&quot;)</span>
 <span class="pc" id="L30">@Builder</span>
@@ -37,13 +37,13 @@ public class Digest implements CasperSerializableObject {
     }
 
     public void setDigest(byte[] hash) {
-<span class="fc" id="L40">        this.digest = Hex.toHexString(hash);</span>
-<span class="fc" id="L41">    }</span>
+<span class="nc" id="L40">        this.digest = Hex.toHexString(hash);</span>
+<span class="nc" id="L41">    }</span>
 
     public static Digest digestFromBytes(byte[] bytes) {
-<span class="fc" id="L44">        Digest digest = new Digest();</span>
-<span class="fc" id="L45">        digest.setDigest(bytes);</span>
-<span class="fc" id="L46">        return digest;</span>
+<span class="nc" id="L44">        Digest digest = new Digest();</span>
+<span class="nc" id="L45">        digest.setDigest(bytes);</span>
+<span class="nc" id="L46">        return digest;</span>
     }
 
     /**
