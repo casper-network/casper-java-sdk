@@ -30,7 +30,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: run the unit tests
-        run: ./gradlew clean build
+        run: ./gradlew clean build -x javadoc
 
       - name: export project version
         run: echo "project_version=$(./gradlew properties -q | grep "version:" | awk '{print $2}')" >> $github_env
