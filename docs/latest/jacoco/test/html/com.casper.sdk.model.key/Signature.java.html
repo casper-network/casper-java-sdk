@@ -22,13 +22,13 @@ import java.security.GeneralSecurityException;
 public class Signature extends AbstractSerializedKeyTaggedHex&lt;AlgorithmTag&gt; {
 
     public static Signature sign(AbstractPrivateKey key, byte[] msg) throws GeneralSecurityException {
-<span class="fc" id="L25">        byte[] signatureBytes = key.sign(msg);</span>
-<span class="fc" id="L26">        Signature signature = new Signature();</span>
-<span class="fc" id="L27">        signature.setKey(signatureBytes);</span>
-<span class="pc bpc" id="L28" title="1 of 2 branches missed.">        signature.setTag((key instanceof Secp256k1PrivateKey)</span>
+<span class="nc" id="L25">        byte[] signatureBytes = key.sign(msg);</span>
+<span class="nc" id="L26">        Signature signature = new Signature();</span>
+<span class="nc" id="L27">        signature.setKey(signatureBytes);</span>
+<span class="nc bnc" id="L28" title="All 2 branches missed.">        signature.setTag((key instanceof Secp256k1PrivateKey)</span>
 <span class="nc" id="L29">                ? AlgorithmTag.SECP256K1</span>
-<span class="fc" id="L30">                : AlgorithmTag.ED25519);</span>
-<span class="fc" id="L31">        return signature;</span>
+<span class="nc" id="L30">                : AlgorithmTag.ED25519);</span>
+<span class="nc" id="L31">        return signature;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

@@ -40,7 +40,7 @@ public class CLTypeOption extends AbstractCLTypeWithChildren {
 
     @JsonIgnore
     public AbstractCLType getOptionType() {
-<span class="pc bpc" id="L43" title="1 of 2 branches missed.">        if (!getChildTypes().isEmpty()) {</span>
+<span class="pc bpc" id="L43" title="1 of 2 branches missed.">        if (getChildTypes().size() &gt; 0) {</span>
 <span class="fc" id="L44">            return getChildTypes().get(0);</span>
         }
 
@@ -52,10 +52,5 @@ public class CLTypeOption extends AbstractCLTypeWithChildren {
 <span class="fc" id="L52">        getChildTypes().clear();</span>
 <span class="fc" id="L53">        getChildTypes().add(listType);</span>
 <span class="fc" id="L54">    }</span>
-
-    @Override
-    public boolean isDeserializable() {
-<span class="fc" id="L58">        return getOptionType().isDeserializable();</span>
-    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
