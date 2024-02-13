@@ -1,0 +1,27 @@
+{
+  "jsonrpc": "2.0",
+  "id": "383766003",
+  "result": {
+    "api_version": "1.5.6",
+    "changes": [
+      {
+        "public_key": "01098d1758f1ca75350dfec8a1c4c1984a88d1ea5eab5590fbc9e856d67cde31eb",
+        "status_changes": [
+          {
+            "era_id": 12519,
+            "validator_change": "Added"
+          }
+        ]
+      },
+      {
+        "public_key": "01577a5abeb369c4a11b045dfc7ba0653359cb927ed5188c32da555136b07c28f6",
+        "status_changes": [
+          {
+            "era_id": 12519,
+            "validator_change": "Removed"
+          }
+        ]
+      }
+    ]
+  }
+}

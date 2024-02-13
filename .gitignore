@@ -1,5 +1,6 @@
 HELP.md
 .gradle
+assets/
 build/
 src/test/resources/deploy-accounts/nctl
 !gradle/wrapper/gradle-wrapper.jar
