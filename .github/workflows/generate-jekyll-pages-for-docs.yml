@@ -2,7 +2,7 @@ name: generate-jekyll-pages-for-docs
 
 on:
   workflow_run:
-    workflows: [ update-gh-pages ]
+    workflows: [ test-and-build ]
     branches: [ main ]
     types: [ completed ]
 
@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4.1.1
         with:
           ref: gh-pages
           fetch-depth: 0
@@ -24,4 +24,4 @@ jobs:
           SOURCE_INDEX_FILE: README.md
 
       - name: Commit changes
-        uses: EndBug/add-and-commit@v8.0.1
+        uses: EndBug/add-and-commit@v9.1.4

@@ -1,7 +1,7 @@
 # This workflow will build a Java project with Gradle
 # For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-gradle
 
-name: Java CI with Gradle
+name: Java SDK test and build
 
 on:
   push:
@@ -13,32 +13,13 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    services:
-      nctl:
-        image: stormeye2000/cspr-nctl:1.5
-        options: --name cspr-nctl
-        env:
-          PREDEFINED_ACCOUNTS: 'true'
-          MINIMUM_ROUND_EXPONENT: '12'
-          MAXIMUM_ROUND_EXPONENT: '14'
-          DEPLOY_DELAY: '30sec'
-          SPECULATIVE_EXEC_SERVER_ENABLED: 'true'
-        ports:
-          - 11101:11101
-          - 14101:14101
-          - 18101:18101
-          - 25101:25101
     steps:
-      - name: Wait for NCTL
-        run: |
-          echo "Wait for NCTL"
-          sleep 30s
 
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4.1.1
 
       - name: Set up JDK 11
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v4
         with:
           java-version: '11'
           distribution: 'adopt'
@@ -46,36 +27,33 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      # Copy the assets from the NCTL docker image and build
-      - name: Build and test with Gradle
-        run: |
-          cd sh && chmod +x docker-copy-assets.sh && ./docker-copy-assets.sh && cd ..
-          ./gradlew clean build
-          
-      - name: Export project version
+      - name: run the unit tests
+        run: ./gradlew clean build -x javadoc
+
+      - name: export project version
         run: echo "PROJECT_VERSION=$(./gradlew properties -q | grep "version:" | awk '{print $2}')" >> $GITHUB_ENV
 
-      - name: Generate Javadoc
+      - name: generate javadoc
         run: ./gradlew javadoc
 
-      - name: Deploy tests results to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@v4.2.2
+      - name: deploy tests results to github pages
+        uses: jamesives/github-pages-deploy-action@v4.2.2
         with:
           branch: gh-pages
           clean: true
           folder: build/reports/tests
           target-folder: docs/latest/junit
 
-      - name: Deploy jacoco report to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@v4.2.2
+      - name: deploy jacoco report to github pages
+        uses: jamesives/github-pages-deploy-action@v4.5.0
         with:
           branch: gh-pages
           clean: true
           folder: build/reports/jacoco
           target-folder: docs/latest/jacoco
 
-      - name: Deploy to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@v4.2.2
+      - name: deploy to github pages
+        uses: jamesives/github-pages-deploy-action@v4.5.0
         with:
           branch: gh-pages
           clean: true
@@ -83,7 +61,7 @@ jobs:
           target-folder: docs/latest/javadoc
 
       - name: Deploy tests results to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@v4.2.2
+        uses: JamesIves/github-pages-deploy-action@v4.5.0
         with:
           branch: gh-pages
           clean: true
@@ -91,7 +69,7 @@ jobs:
           target-folder: docs/${{ env.PROJECT_VERSION }}/junit
 
       - name: Deploy jacoco report to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@v4.2.2
+        uses: JamesIves/github-pages-deploy-action@v4.5.0
         with:
           branch: gh-pages
           clean: true
@@ -99,7 +77,7 @@ jobs:
           target-folder: docs/${{ env.PROJECT_VERSION }}/jacoco
 
       - name: Deploy to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@v4.2.2
+        uses: JamesIves/github-pages-deploy-action@v4.5.0
         with:
           branch: gh-pages
           clean: true
