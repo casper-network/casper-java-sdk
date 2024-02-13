@@ -29,40 +29,33 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      # Start NCTL and copy assests over
-      - name: Start NCTL and copy assests over
-        run: |
-          cd script && chmod +x docker-run && ./docker-run
-          sleep 30
-          chmod +x docker-copy-assets && ./docker-copy-assets && cd ..          
-
-      - name: Run the unit tests
+      - name: run the unit tests
         run: ./gradlew clean build
-          
-      - name: Export project version
-        run: echo "PROJECT_VERSION=$(./gradlew properties -q | grep "version:" | awk '{print $2}')" >> $GITHUB_ENV
 
-      - name: Generate Javadoc
+      - name: export project version
+        run: echo "project_version=$(./gradlew properties -q | grep "version:" | awk '{print $2}')" >> $github_env
+
+      - name: generate javadoc
         run: ./gradlew javadoc
 
-      - name: Deploy tests results to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@v4.2.2
+      - name: deploy tests results to github pages
+        uses: jamesives/github-pages-deploy-action@v4.2.2
         with:
           branch: gh-pages
           clean: true
           folder: build/reports/tests
           target-folder: docs/latest/junit
 
-      - name: Deploy jacoco report to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@v4.5.0
+      - name: deploy jacoco report to github pages
+        uses: jamesives/github-pages-deploy-action@v4.5.0
         with:
           branch: gh-pages
           clean: true
           folder: build/reports/jacoco
           target-folder: docs/latest/jacoco
 
-      - name: Deploy to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@v4.5.0
+      - name: deploy to github pages
+        uses: jamesives/github-pages-deploy-action@v4.5.0
         with:
           branch: gh-pages
           clean: true
