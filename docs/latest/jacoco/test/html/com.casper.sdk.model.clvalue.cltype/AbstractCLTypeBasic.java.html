@@ -17,5 +17,11 @@ public abstract class AbstractCLTypeBasic extends AbstractCLType {
 <span class="nc" id="L17">                    String.format(&quot;%s is an invalid type for %s&quot;, getClass().getSimpleName(), typeName));</span>
         }
 <span class="fc" id="L19">    }</span>
+
+    @Override
+    public boolean isDeserializable() {
+        // Basic type can always be serialized
+<span class="fc" id="L24">        return true;</span>
+    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

@@ -28,12 +28,11 @@ import lombok.SneakyThrows;
      */
 <span class="pc" id="L29">    @SneakyThrows({ValueDeserializationException.class})</span>
     protected void childTypesSet() {
-<span class="fc bfc" id="L31" title="All 2 branches covered.">        if (getBytes().length() &gt; 0) {</span>
+<span class="fc bfc" id="L31" title="All 2 branches covered.">        if (!getBytes().isEmpty()) {</span>
 <span class="fc" id="L32">            DeserializerBuffer deser = new DeserializerBuffer(this.getBytes());</span>
-
-<span class="fc" id="L34">            this.deserialize(deser);</span>
+<span class="fc" id="L33">            this.deserialize(deser);</span>
         }
-<span class="fc" id="L36">    }</span>
+<span class="fc" id="L35">    }</span>
 
     /**
      * Sets the bytes and if the CLType is already set, fires bytes deserialization
@@ -47,9 +46,8 @@ import lombok.SneakyThrows;
     protected void setJsonBytes(String bytes) {
         this.setBytes(bytes);
 
-        if (!getClType().getChildTypes().isEmpty()) {
+        if (!getClType().getChildTypes().isEmpty() &amp;&amp; getClType().isDeserializable()) {
             DeserializerBuffer deser = new DeserializerBuffer(this.getBytes());
-
             this.deserialize(deser);
         }
     }

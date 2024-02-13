@@ -108,10 +108,10 @@ public class CLValueList extends AbstractCLValueWithChildren&lt;List&lt;? extend
 
     @Override
     protected void setChildTypes(List&lt;? extends AbstractCLValue&lt;?, ?&gt;&gt; value) {
-<span class="pc bpc" id="L111" title="1 of 2 branches missed.">        if (!value.isEmpty()) {</span>
+<span class="fc bfc" id="L111" title="All 2 branches covered.">        if (!value.isEmpty()) {</span>
 <span class="fc" id="L112">            clType.setListType(value.get(0).getClType());</span>
         } else {
-<span class="nc" id="L114">            clType.setChildTypes(new ArrayList&lt;&gt;());</span>
+<span class="fc" id="L114">            clType.setChildTypes(new ArrayList&lt;&gt;());</span>
         }
 <span class="fc" id="L116">    }</span>
 
