@@ -33,7 +33,7 @@ jobs:
         run: ./gradlew clean build -x javadoc
 
       - name: export project version
-        run: echo "project_version=$(./gradlew properties -q | grep "version:" | awk '{print $2}')" >> $github_env
+        run: echo "PROJECT_VERSION=$(./gradlew properties -q | grep "version:" | awk '{print $2}')" >> $github_env
 
       - name: generate javadoc
         run: ./gradlew javadoc
