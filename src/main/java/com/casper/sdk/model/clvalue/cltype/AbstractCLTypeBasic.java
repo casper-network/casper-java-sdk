@@ -17,4 +17,10 @@ public abstract class AbstractCLTypeBasic extends AbstractCLType {
                     String.format("%s is an invalid type for %s", getClass().getSimpleName(), typeName));
         }
     }
+
+    @Override
+    public boolean isDeserializable() {
+        // Basic type can always be serialized
+        return true;
+    }
 }

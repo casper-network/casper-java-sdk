@@ -21,4 +21,9 @@ public class CLTypeByteArray extends AbstractCLType {
     @Setter
     @JsonProperty(AbstractCLType.BYTE_ARRAY)
     private int length;
+
+    @Override
+    public boolean isDeserializable() {
+        return true;
+    }
 }

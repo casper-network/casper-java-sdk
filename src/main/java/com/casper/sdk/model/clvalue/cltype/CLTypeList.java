@@ -38,7 +38,7 @@ public class CLTypeList extends AbstractCLTypeWithChildren {
 
     @JsonIgnore
     public AbstractCLType getListType() {
-        if (getChildTypes().size() > 0) {
+        if (!getChildTypes().isEmpty()) {
             return getChildTypes().get(0);
         }
 
@@ -49,5 +49,17 @@ public class CLTypeList extends AbstractCLTypeWithChildren {
     public void setListType(AbstractCLType listType) {
         getChildTypes().clear();
         getChildTypes().add(listType);
+    }
+
+    @Override
+    public boolean isDeserializable() {
+
+        return getChildTypes().stream().allMatch(childType -> {
+            if (childType instanceof CLTypeAny) {
+                return false;
+            } else {
+                return childType.isDeserializable();
+            }
+        });
     }
 }

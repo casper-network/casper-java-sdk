@@ -59,6 +59,11 @@ public abstract class AbstractCLTypeWithChildren extends AbstractCLType {
         return CLTypeData.getTypeByName(getChildTypes().get(index).getTypeName());
     }
 
+    @Override
+    public boolean isDeserializable() {
+        return getChildTypes().stream().allMatch(AbstractCLType::isDeserializable);
+    }
+
     protected void loadCLTypes(List<Object> childTypeObjects)
             throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException,
             NoSuchMethodException, SecurityException, NoSuchTypeException {
