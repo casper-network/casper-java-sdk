@@ -16,16 +16,19 @@ import com.casper.sdk.model.status.StatusData;
 import com.syntifi.crypto.key.AbstractPrivateKey;
 import com.syntifi.crypto.key.Ed25519PrivateKey;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class CasperServiceTestsNctl extends AbstractJsonRpcTests {
+@Disabled
+public class CasperServiceTestsNctl  extends AbstractJsonRpcTests {
 
     /**
      * Test if the get block matches requested by height

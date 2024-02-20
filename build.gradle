@@ -14,12 +14,12 @@ apply plugin: 'java'
 
 group = 'network.casper'
 // Version number update for release
-version = '2.4.1'
+version='2.5.0'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 repositories {
-    mavenCentral()
+	mavenCentral()
     maven { url 'https://s01.oss.sonatype.org/content/repositories/snapshots' }
 }
 
@@ -101,9 +101,9 @@ test {
         //showStandardStreams true
         // set options for log level LIFECYCLE
         events TestLogEvent.FAILED,
-                TestLogEvent.PASSED,
-                TestLogEvent.SKIPPED
-        //TestLogEvent.STANDARD_OUT
+               TestLogEvent.PASSED,
+               TestLogEvent.SKIPPED
+               //TestLogEvent.STANDARD_OUT
         exceptionFormat TestExceptionFormat.FULL
         showExceptions true
         showCauses true
@@ -112,11 +112,11 @@ test {
         // set options for log level DEBUG and INFO
         debug {
             events TestLogEvent.STARTED,
-                    TestLogEvent.FAILED,
-                    TestLogEvent.PASSED,
-                    TestLogEvent.SKIPPED,
-                    TestLogEvent.STANDARD_ERROR
-            TestLogEvent.STANDARD_OUT
+                   TestLogEvent.FAILED,
+                   TestLogEvent.PASSED,
+                   TestLogEvent.SKIPPED,
+                   TestLogEvent.STANDARD_ERROR
+                   TestLogEvent.STANDARD_OUT
             exceptionFormat TestExceptionFormat.FULL
         }
         //info.events = debug.events

@@ -40,7 +40,7 @@ public class CLTypeOption extends AbstractCLTypeWithChildren {
 
     @JsonIgnore
     public AbstractCLType getOptionType() {
-        if (getChildTypes().size() > 0) {
+        if (!getChildTypes().isEmpty()) {
             return getChildTypes().get(0);
         }
 
@@ -51,5 +51,10 @@ public class CLTypeOption extends AbstractCLTypeWithChildren {
     public void setOptionType(AbstractCLType listType) {
         getChildTypes().clear();
         getChildTypes().add(listType);
+    }
+
+    @Override
+    public boolean isDeserializable() {
+        return getOptionType().isDeserializable();
     }
 }

@@ -29,6 +29,25 @@ public class CLTypeMap extends AbstractCLTypeWithChildren {
 
     private CLTypeMapEntryType keyValueTypes;
 
+    @Override
+    public boolean isDeserializable() {
+
+        if (getKeyValueTypes().keyType instanceof CLTypeAny || getKeyValueTypes().valueType instanceof CLTypeAny) {
+            // The map contains an 'Any' type therefore cannot be deserialized
+            return false;
+        } else if (getKeyValueTypes().valueType instanceof AbstractCLTypeWithChildren) {
+           return getChildTypes().stream().allMatch(childType -> {
+                if (childType instanceof CLTypeAny) {
+                    return false;
+                } else {
+                    return childType.isDeserializable();
+                }
+            });
+        } else {
+            return getKeyValueTypes().keyType.isDeserializable() || getKeyValueTypes().valueType.isDeserializable();
+        }
+    }
+
     /**
      * Support class for {@link AbstractCLType#MAP} entry types
      *
