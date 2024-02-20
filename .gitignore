@@ -38,6 +38,6 @@ out/
 .vscode/*
 !.vscode/tasks.json
 !.vscode/launch.json
-/assets/
+assets/
 /reports/
 /src/test/resources/features
