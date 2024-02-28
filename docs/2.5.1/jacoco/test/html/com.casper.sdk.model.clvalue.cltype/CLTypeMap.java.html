@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CLTypeMap.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">casper-java-sdk</a> &gt; <a href="index.source.html" class="el_package">com.casper.sdk.model.clvalue.cltype</a> &gt; <span class="el_source">CLTypeMap.java</span></div><h1>CLTypeMap.java</h1><pre class="source lang-java linenums">package com.casper.sdk.model.clvalue.cltype;
+
+import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
+import lombok.*;
+
+/**
+ * CLType for {@link AbstractCLType#MAP}
+ *
+ * @author Alexandre Carvalho
+ * @author Andre Bertolace
+ * @see AbstractCLType
+ * @since 0.0.1
+ */
+@Getter
+<span class="pc bpc" id="L19" title="15 of 22 branches missed.">@EqualsAndHashCode(callSuper = false, of = {&quot;typeName&quot;, &quot;keyValueTypes&quot;})</span>
+<span class="fc" id="L20">public class CLTypeMap extends AbstractCLTypeWithChildren {</span>
+<span class="fc" id="L21">    private final String typeName = AbstractCLType.MAP;</span>
+
+    @JsonProperty(MAP)
+    public void setKeyValueTypes(CLTypeMapEntryType keyValueTypes) {
+<span class="fc" id="L25">        this.keyValueTypes = keyValueTypes;</span>
+<span class="fc" id="L26">        getChildTypes().add(this.keyValueTypes.getKeyType());</span>
+<span class="fc" id="L27">        getChildTypes().add(this.keyValueTypes.getValueType());</span>
+<span class="fc" id="L28">    }</span>
+
+<span class="fc" id="L30">    private CLTypeMapEntryType keyValueTypes;</span>
+
+    @Override
+    public boolean isDeserializable() {
+
+<span class="pc bpc" id="L35" title="1 of 4 branches missed.">        if (getKeyValueTypes().keyType instanceof CLTypeAny || getKeyValueTypes().valueType instanceof CLTypeAny) {</span>
+            // The map contains an 'Any' type therefore cannot be deserialized
+<span class="fc" id="L37">            return false;</span>
+<span class="fc bfc" id="L38" title="All 2 branches covered.">        } else if (getKeyValueTypes().valueType instanceof AbstractCLTypeWithChildren) {</span>
+<span class="fc" id="L39">           return getChildTypes().stream().allMatch(childType -&gt; {</span>
+<span class="pc bpc" id="L40" title="1 of 2 branches missed.">                if (childType instanceof CLTypeAny) {</span>
+<span class="nc" id="L41">                    return false;</span>
+                } else {
+<span class="fc" id="L43">                    return childType.isDeserializable();</span>
+                }
+            });
+        } else {
+<span class="pc bpc" id="L47" title="3 of 4 branches missed.">            return getKeyValueTypes().keyType.isDeserializable() || getKeyValueTypes().valueType.isDeserializable();</span>
+        }
+    }
+
+    /**
+     * Support class for {@link AbstractCLType#MAP} entry types
+     *
+     * @author Alexandre Carvalho
+     * @author Andre Bertolace
+     * @see AbstractCLType
+     * @since 0.0.1
+     */
+    @Getter
+<span class="nc" id="L60">    @Setter</span>
+<span class="pc bpc" id="L61" title="15 of 22 branches missed.">    @EqualsAndHashCode(callSuper = false, of = {&quot;keyType&quot;, &quot;valueType&quot;})</span>
+<span class="fc" id="L62">    @NoArgsConstructor</span>
+<span class="fc" id="L63">    @AllArgsConstructor</span>
+    public static class CLTypeMapEntryType {
+        @JsonIgnore
+<span class="fc" id="L66">        private AbstractCLType keyType;</span>
+        @JsonIgnore
+<span class="fc" id="L68">        private AbstractCLType valueType;</span>
+
+        @JsonSetter(&quot;key&quot;)
+        @ExcludeFromJacocoGeneratedReport
+        protected void setJsonKey(AbstractCLType clType) {
+            this.keyType = clType;
+        }
+
+        @JsonGetter(&quot;key&quot;)
+        @ExcludeFromJacocoGeneratedReport
+        protected Object getJsonKey() {
+            if (this.keyType instanceof AbstractCLTypeBasic) {
+                return this.keyType.getTypeName();
+            } else {
+                return this.keyType;
+            }
+        }
+
+        @JsonSetter(&quot;value&quot;)
+        @ExcludeFromJacocoGeneratedReport
+        protected void setJsonValue(AbstractCLType clType) {
+            this.valueType = clType;
+        }
+
+        @JsonGetter(&quot;value&quot;)
+        @ExcludeFromJacocoGeneratedReport
+        protected Object getJsonValue() {
+            if (this.valueType instanceof AbstractCLTypeBasic) {
+                return this.valueType.getTypeName();
+            } else {
+                return this.valueType;
+            }
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

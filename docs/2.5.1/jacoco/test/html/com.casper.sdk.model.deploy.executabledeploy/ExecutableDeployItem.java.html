@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ExecutableDeployItem.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">casper-java-sdk</a> &gt; <a href="index.source.html" class="el_package">com.casper.sdk.model.deploy.executabledeploy</a> &gt; <span class="el_source">ExecutableDeployItem.java</span></div><h1>ExecutableDeployItem.java</h1><pre class="source lang-java linenums">package com.casper.sdk.model.deploy.executabledeploy;
+
+import com.casper.sdk.exception.NoSuchTypeException;
+import com.casper.sdk.model.clvalue.serde.CasperSerializableObject;
+import com.casper.sdk.model.clvalue.serde.Target;
+import com.casper.sdk.model.deploy.NamedArg;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import dev.oak3.sbs4j.SerializerBuffer;
+import dev.oak3.sbs4j.exception.ValueSerializationException;
+
+import java.util.List;
+
+/**
+ * Abstract Executable Deploy Item containing the runtime args of the contract.
+ * It can be any of the following types:
+ *
+ * @author Alexandre Carvalho
+ * @author Andre Bertolace
+ * @see ModuleBytes
+ * @see StoredContractByHash
+ * @see StoredContractByName
+ * @see StoredVersionedContractByHash
+ * @see StoredVersionedContractByName
+ * @see Transfer
+ * @since 0.0.1
+ */
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.WRAPPER_OBJECT)
+@JsonSubTypes({@JsonSubTypes.Type(value = ModuleBytes.class, name = &quot;ModuleBytes&quot;),
+        @JsonSubTypes.Type(value = StoredContractByHash.class, name = &quot;StoredContractByHash&quot;),
+        @JsonSubTypes.Type(value = StoredContractByName.class, name = &quot;StoredContractByName&quot;),
+        @JsonSubTypes.Type(value = StoredVersionedContractByHash.class, name = &quot;StoredVersionedContractByHash&quot;),
+        @JsonSubTypes.Type(value = StoredVersionedContractByName.class, name = &quot;StoredVersionedContractByName&quot;),
+        @JsonSubTypes.Type(value = Transfer.class, name = &quot;Transfer&quot;)})
+<span class="fc" id="L36">public abstract class ExecutableDeployItem implements CasperSerializableObject {</span>
+
+    public abstract List&lt;NamedArg&lt;?&gt;&gt; getArgs();
+
+    @JsonIgnore
+    abstract byte getOrder();
+
+    void serializeNamedArgs(SerializerBuffer ser, Target target) throws ValueSerializationException, NoSuchTypeException {
+<span class="fc" id="L44">        ser.writeI32(getArgs().size());</span>
+<span class="fc bfc" id="L45" title="All 2 branches covered.">        for (NamedArg&lt;?&gt; namedArg : getArgs()) {</span>
+<span class="fc" id="L46">            namedArg.serialize(ser, target);</span>
+<span class="fc" id="L47">        }</span>
+<span class="fc" id="L48">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
