@@ -24,7 +24,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonTypeName("Transfer")
-public class Transfer implements ExecutableDeployItem {
+public class Transfer extends ExecutableDeployItem {
 
     /**
      * List of {@link NamedArg}
@@ -45,9 +45,8 @@ public class Transfer implements ExecutableDeployItem {
     @Override
     public void serialize(SerializerBuffer ser, Target target) throws ValueSerializationException, NoSuchTypeException {
         ser.writeU8(getOrder());
-        ser.writeI32(args.size());
-        for (NamedArg<?> namedArg : args) {
-            namedArg.serialize(ser, Target.BYTE);
-        }
+        serializeNamedArgs(ser, target);
     }
+
+
 }

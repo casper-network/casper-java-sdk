@@ -25,7 +25,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonTypeName("StoredVersionedContractByHash")
-public class StoredVersionedContractByHash implements ExecutableDeployItemWithEntryPoint {
+public class StoredVersionedContractByHash extends ExecutableDeployItemWithEntryPoint {
 
     /**
      * Hex-encoded Hash
@@ -65,9 +65,6 @@ public class StoredVersionedContractByHash implements ExecutableDeployItemWithEn
         ser.writeString(getHash());
         ser.writeI64(getVersion());
         ser.writeString(getEntryPoint());
-        ser.writeI32(args.size());
-        for (NamedArg<?> namedArg : args) {
-            namedArg.serialize(ser, Target.BYTE);
-        }
+        serializeNamedArgs(ser, target);
     }
 }

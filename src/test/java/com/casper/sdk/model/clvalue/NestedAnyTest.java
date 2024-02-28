@@ -1,7 +1,15 @@
 package com.casper.sdk.model.clvalue;
 
+import com.casper.sdk.model.clvalue.cltype.CLTypeAny;
+import com.casper.sdk.model.clvalue.serde.Target;
+import com.casper.sdk.model.deploy.NamedArg;
+import com.casper.sdk.model.deploy.executabledeploy.ModuleBytes;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.syntifi.crypto.key.encdec.Hex;
+import dev.oak3.sbs4j.SerializerBuffer;
 import org.junit.jupiter.api.Test;
+
+import java.util.Collections;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -125,5 +133,26 @@ public class NestedAnyTest {
         assertThat(clValueList, is(notNullValue()));
         assertThat(clValueList.getClType().isDeserializable(), is(true));
         assertThat(clValueList.getBytes(), is("00000000"));
+    }
+
+
+    @Test
+    void anyNamedArgument() throws Exception {
+
+        final CLValueAny clValueAny = new CLValueAny(Hex.decode("d2029649"));
+        final NamedArg<CLTypeAny> namedArg = new NamedArg<>("any", clValueAny);
+
+        final ModuleBytes moduleBytes = new ModuleBytes();
+        moduleBytes.setJsonBytes("01020304");
+        moduleBytes.setArgs(Collections.singletonList(namedArg));
+
+        final SerializerBuffer ser = new SerializerBuffer();
+        moduleBytes.serialize(ser, Target.BYTE);
+
+        byte[] actual = ser.toByteArray();
+        byte[] expected = Hex.decode("0004000000010203040100000003000000616e7904000000d202964915");
+        assertThat(actual, is(expected));
+
+
     }
 }

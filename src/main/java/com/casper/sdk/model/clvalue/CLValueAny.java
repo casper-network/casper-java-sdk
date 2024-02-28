@@ -34,7 +34,7 @@ public class CLValueAny extends AbstractCLValue<byte[], CLTypeAny> {
 
     @JsonSetter("cl_type")
     @ExcludeFromJacocoGeneratedReport
-    protected void setJsonClType(CLTypeAny clType) {
+    protected void setJsonClType(final CLTypeAny clType) {
         this.clType = clType;
     }
 
@@ -44,19 +44,28 @@ public class CLValueAny extends AbstractCLValue<byte[], CLTypeAny> {
         return this.getClType().getTypeName();
     }
 
-    public CLValueAny(byte[] value) throws ValueSerializationException {
+    public CLValueAny(final byte[] value) throws ValueSerializationException {
         this.setValue(value);
     }
 
     @Override
-    public void serialize(SerializerBuffer ser, Target target) throws ValueSerializationException, NoSuchTypeException {
+    public void serialize(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {
         if (this.getValue() == null) return;
+
+        if (target.equals(Target.BYTE)) {
+            super.serializePrefixWithLength(ser);
+        }
+
         ser.writeByteArray(this.getValue());
-        this.setBytes(Hex.toHexString(ser.toByteArray()));
+        this.setBytes(Hex.toHexString(this.getValue()));
+
+        if (target == Target.BYTE) {
+            this.encodeType(ser);
+        }
     }
 
     @Override
-    public void deserializeCustom(DeserializerBuffer deser)
+    public void deserializeCustom(final DeserializerBuffer deser)
             throws Exception {
         this.setValue(deser.readByteArray(deser.getBuffer().remaining()));
     }

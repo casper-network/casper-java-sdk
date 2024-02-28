@@ -1,17 +1,19 @@
 package com.casper.sdk.model.clvalue;
 
+import com.casper.sdk.exception.DynamicInstanceException;
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.cltype.CLTypeAny;
 import com.casper.sdk.model.clvalue.cltype.CLTypeData;
-import com.casper.sdk.exception.DynamicInstanceException;
+import com.casper.sdk.model.clvalue.serde.Target;
+import com.syntifi.crypto.key.encdec.Hex;
+import dev.oak3.sbs4j.SerializerBuffer;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class CLValueTests {
-    private static final Logger LOGGER = LoggerFactory.getLogger(CLValueTests.class);
 
     @Test
     void allCLTypes_must_be_implemented() throws DynamicInstanceException, NoSuchTypeException {
@@ -59,6 +61,20 @@ public class CLValueTests {
     @Test
     void getCLTypeClassByName_from_CLTypeData_should_throw_NoSuchTypeException() {
         assertThrows(NoSuchTypeException.class, () -> CLTypeData.getCLTypeClassByName("NE"));
+    }
+
+    @Test
+    void clValueAnyByteSerializationWithAndWithoutTypeInfo() throws Exception {
+
+        final CLValueAny clValueAny = new CLValueAny(Hex.decode("d2029649"));
+
+        SerializerBuffer ser = new SerializerBuffer();
+        clValueAny.serialize(ser, Target.JSON);
+        assertThat(ser.toByteArray(), is(Hex.decode("d2029649")));
+
+        ser = new SerializerBuffer();
+        clValueAny.serialize(ser, Target.BYTE);
+        assertThat(ser.toByteArray(), is(Hex.decode("04000000d202964915")));
     }
 
     @Test
