@@ -25,7 +25,7 @@ import java.util.List;
 <span class="nc" id="L25">@AllArgsConstructor</span>
 <span class="fc" id="L26">@NoArgsConstructor</span>
 @JsonTypeName(&quot;StoredContractByName&quot;)
-public class StoredContractByName implements ExecutableDeployItemWithEntryPoint {
+public class StoredContractByName extends ExecutableDeployItemWithEntryPoint {
 
     /**
      * Contract name
@@ -41,7 +41,7 @@ public class StoredContractByName implements ExecutableDeployItemWithEntryPoint 
     /**
      * @see NamedArg
      */
-<span class="nc" id="L44">    private List&lt;NamedArg&lt;?&gt;&gt; args;</span>
+<span class="fc" id="L44">    private List&lt;NamedArg&lt;?&gt;&gt; args;</span>
 
     /**
      * {@link ExecutableDeployItem} order 2
@@ -59,10 +59,7 @@ public class StoredContractByName implements ExecutableDeployItemWithEntryPoint 
 <span class="fc" id="L59">        ser.writeU8(getOrder());</span>
 <span class="fc" id="L60">        ser.writeString(getName());</span>
 <span class="fc" id="L61">        ser.writeString(getEntryPoint());</span>
-<span class="fc" id="L62">        ser.writeI32(args.size());</span>
-<span class="fc bfc" id="L63" title="All 2 branches covered.">        for (NamedArg&lt;?&gt; namedArg : args) {</span>
-<span class="fc" id="L64">            namedArg.serialize(ser, Target.BYTE);</span>
-<span class="fc" id="L65">        }</span>
-<span class="fc" id="L66">    }</span>
+<span class="fc" id="L62">        serializeNamedArgs(ser, target);</span>
+<span class="fc" id="L63">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

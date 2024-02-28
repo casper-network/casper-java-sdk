@@ -25,7 +25,7 @@ import java.util.List;
 <span class="nc" id="L25">@AllArgsConstructor</span>
 <span class="nc" id="L26">@NoArgsConstructor</span>
 @JsonTypeName(&quot;StoredVersionedContractByHash&quot;)
-public class StoredVersionedContractByHash implements ExecutableDeployItemWithEntryPoint {
+public class StoredVersionedContractByHash extends ExecutableDeployItemWithEntryPoint {
 
     /**
      * Hex-encoded Hash
@@ -65,10 +65,7 @@ public class StoredVersionedContractByHash implements ExecutableDeployItemWithEn
 <span class="nc" id="L65">        ser.writeString(getHash());</span>
 <span class="nc" id="L66">        ser.writeI64(getVersion());</span>
 <span class="nc" id="L67">        ser.writeString(getEntryPoint());</span>
-<span class="nc" id="L68">        ser.writeI32(args.size());</span>
-<span class="nc bnc" id="L69" title="All 2 branches missed.">        for (NamedArg&lt;?&gt; namedArg : args) {</span>
-<span class="nc" id="L70">            namedArg.serialize(ser, Target.BYTE);</span>
-<span class="nc" id="L71">        }</span>
-<span class="nc" id="L72">    }</span>
+<span class="nc" id="L68">        serializeNamedArgs(ser, target);</span>
+<span class="nc" id="L69">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

@@ -27,13 +27,13 @@ import java.util.List;
 <span class="nc" id="L27">@AllArgsConstructor</span>
 <span class="fc" id="L28">@NoArgsConstructor</span>
 @JsonTypeName(&quot;ModuleBytes&quot;)
-public class ModuleBytes implements ExecutableDeployItem {
+public class ModuleBytes extends ExecutableDeployItem {
 
     /**
      * Module bytes
      */
     @JsonIgnore
-<span class="nc" id="L36">    private byte[] bytes;</span>
+<span class="fc" id="L36">    private byte[] bytes;</span>
 
     /**
      * @see NamedArg
@@ -55,7 +55,7 @@ public class ModuleBytes implements ExecutableDeployItem {
      */
     @Override
     public byte getOrder() {
-<span class="nc" id="L58">        return 0x0;</span>
+<span class="fc" id="L58">        return 0x0;</span>
     }
 
     /**
@@ -63,13 +63,10 @@ public class ModuleBytes implements ExecutableDeployItem {
      */
     @Override
     public void serialize(SerializerBuffer ser, Target target) throws ValueSerializationException, NoSuchTypeException {
-<span class="nc" id="L66">        ser.writeU8(getOrder());</span>
-<span class="nc" id="L67">        ser.writeI32(getBytes().length);</span>
-<span class="nc" id="L68">        ser.writeByteArray(getBytes());</span>
-<span class="nc" id="L69">        ser.writeI32(args.size());</span>
-<span class="nc bnc" id="L70" title="All 2 branches missed.">        for (NamedArg&lt;?&gt; namedArg : args) {</span>
-<span class="nc" id="L71">            namedArg.serialize(ser, target);</span>
-<span class="nc" id="L72">        }</span>
-<span class="nc" id="L73">    }</span>
+<span class="fc" id="L66">        ser.writeU8(getOrder());</span>
+<span class="fc" id="L67">        ser.writeI32(getBytes().length);</span>
+<span class="fc" id="L68">        ser.writeByteArray(getBytes());</span>
+<span class="fc" id="L69">        serializeNamedArgs(ser, target);</span>
+<span class="fc" id="L70">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

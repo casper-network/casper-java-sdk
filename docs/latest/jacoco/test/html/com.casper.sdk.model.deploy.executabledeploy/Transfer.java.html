@@ -24,7 +24,7 @@ import java.util.List;
 <span class="fc" id="L24">@NoArgsConstructor</span>
 <span class="nc" id="L25">@AllArgsConstructor</span>
 @JsonTypeName(&quot;Transfer&quot;)
-public class Transfer implements ExecutableDeployItem {
+public class Transfer extends ExecutableDeployItem {
 
     /**
      * List of {@link NamedArg}
@@ -45,10 +45,9 @@ public class Transfer implements ExecutableDeployItem {
     @Override
     public void serialize(SerializerBuffer ser, Target target) throws ValueSerializationException, NoSuchTypeException {
 <span class="fc" id="L47">        ser.writeU8(getOrder());</span>
-<span class="fc" id="L48">        ser.writeI32(args.size());</span>
-<span class="fc bfc" id="L49" title="All 2 branches covered.">        for (NamedArg&lt;?&gt; namedArg : args) {</span>
-<span class="fc" id="L50">            namedArg.serialize(ser, Target.BYTE);</span>
-<span class="fc" id="L51">        }</span>
-<span class="fc" id="L52">    }</span>
+<span class="fc" id="L48">        serializeNamedArgs(ser, target);</span>
+<span class="fc" id="L49">    }</span>
+
+
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

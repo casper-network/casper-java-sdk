@@ -38,7 +38,7 @@ import lombok.Getter;
 
     @JsonIgnore
     public AbstractCLType getListType() {
-<span class="pc bpc" id="L41" title="1 of 2 branches missed.">        if (getChildTypes().size() &gt; 0) {</span>
+<span class="pc bpc" id="L41" title="1 of 2 branches missed.">        if (!getChildTypes().isEmpty()) {</span>
 <span class="fc" id="L42">            return getChildTypes().get(0);</span>
         }
 
@@ -50,5 +50,17 @@ import lombok.Getter;
 <span class="fc" id="L50">        getChildTypes().clear();</span>
 <span class="fc" id="L51">        getChildTypes().add(listType);</span>
 <span class="fc" id="L52">    }</span>
+
+    @Override
+    public boolean isDeserializable() {
+
+<span class="fc" id="L57">        return getChildTypes().stream().allMatch(childType -&gt; {</span>
+<span class="fc bfc" id="L58" title="All 2 branches covered.">            if (childType instanceof CLTypeAny) {</span>
+<span class="fc" id="L59">                return false;</span>
+            } else {
+<span class="fc" id="L61">                return childType.isDeserializable();</span>
+            }
+        });
+    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

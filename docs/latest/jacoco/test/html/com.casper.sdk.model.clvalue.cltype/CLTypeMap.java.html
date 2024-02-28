@@ -29,6 +29,25 @@ import lombok.*;
 
 <span class="fc" id="L30">    private CLTypeMapEntryType keyValueTypes;</span>
 
+    @Override
+    public boolean isDeserializable() {
+
+<span class="pc bpc" id="L35" title="1 of 4 branches missed.">        if (getKeyValueTypes().keyType instanceof CLTypeAny || getKeyValueTypes().valueType instanceof CLTypeAny) {</span>
+            // The map contains an 'Any' type therefore cannot be deserialized
+<span class="fc" id="L37">            return false;</span>
+<span class="fc bfc" id="L38" title="All 2 branches covered.">        } else if (getKeyValueTypes().valueType instanceof AbstractCLTypeWithChildren) {</span>
+<span class="fc" id="L39">           return getChildTypes().stream().allMatch(childType -&gt; {</span>
+<span class="pc bpc" id="L40" title="1 of 2 branches missed.">                if (childType instanceof CLTypeAny) {</span>
+<span class="nc" id="L41">                    return false;</span>
+                } else {
+<span class="fc" id="L43">                    return childType.isDeserializable();</span>
+                }
+            });
+        } else {
+<span class="pc bpc" id="L47" title="3 of 4 branches missed.">            return getKeyValueTypes().keyType.isDeserializable() || getKeyValueTypes().valueType.isDeserializable();</span>
+        }
+    }
+
     /**
      * Support class for {@link AbstractCLType#MAP} entry types
      *
@@ -38,15 +57,15 @@ import lombok.*;
      * @since 0.0.1
      */
     @Getter
-<span class="nc" id="L41">    @Setter</span>
-<span class="pc bpc" id="L42" title="15 of 22 branches missed.">    @EqualsAndHashCode(callSuper = false, of = {&quot;keyType&quot;, &quot;valueType&quot;})</span>
-<span class="fc" id="L43">    @NoArgsConstructor</span>
-<span class="fc" id="L44">    @AllArgsConstructor</span>
+<span class="nc" id="L60">    @Setter</span>
+<span class="pc bpc" id="L61" title="15 of 22 branches missed.">    @EqualsAndHashCode(callSuper = false, of = {&quot;keyType&quot;, &quot;valueType&quot;})</span>
+<span class="fc" id="L62">    @NoArgsConstructor</span>
+<span class="fc" id="L63">    @AllArgsConstructor</span>
     public static class CLTypeMapEntryType {
         @JsonIgnore
-<span class="fc" id="L47">        private AbstractCLType keyType;</span>
+<span class="fc" id="L66">        private AbstractCLType keyType;</span>
         @JsonIgnore
-<span class="fc" id="L49">        private AbstractCLType valueType;</span>
+<span class="fc" id="L68">        private AbstractCLType valueType;</span>
 
         @JsonSetter(&quot;key&quot;)
         @ExcludeFromJacocoGeneratedReport
