@@ -60,7 +60,7 @@ public class StoredVersionedContractByName extends ExecutableDeployItemWithEntry
      * Implements the StoredVersionedContractName encoder
      */
     @Override
-    public void serialize(SerializerBuffer ser, Target target) throws ValueSerializationException, NoSuchTypeException {
+    public void serialize(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {
 <span class="nc" id="L64">        ser.writeU8(getOrder());</span>
 <span class="nc" id="L65">        ser.writeString(getName());</span>
 <span class="nc" id="L66">        ser.writeI64(getVersion());</span>

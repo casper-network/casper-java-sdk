@@ -62,7 +62,7 @@ public class ModuleBytes extends ExecutableDeployItem {
      * Implements the ModuleBytes encoder
      */
     @Override
-    public void serialize(SerializerBuffer ser, Target target) throws ValueSerializationException, NoSuchTypeException {
+    public void serialize(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {
 <span class="fc" id="L66">        ser.writeU8(getOrder());</span>
 <span class="fc" id="L67">        ser.writeI32(getBytes().length);</span>
 <span class="fc" id="L68">        ser.writeByteArray(getBytes());</span>
