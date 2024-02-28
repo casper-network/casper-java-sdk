@@ -40,7 +40,7 @@ import java.util.List;
     @JsonIgnore
     abstract byte getOrder();
 
-    void serializeNamedArgs(SerializerBuffer ser, Target target) throws ValueSerializationException, NoSuchTypeException {
+    void serializeNamedArgs(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {
 <span class="fc" id="L44">        ser.writeI32(getArgs().size());</span>
 <span class="fc bfc" id="L45" title="All 2 branches covered.">        for (NamedArg&lt;?&gt; namedArg : getArgs()) {</span>
 <span class="fc" id="L46">            namedArg.serialize(ser, target);</span>
