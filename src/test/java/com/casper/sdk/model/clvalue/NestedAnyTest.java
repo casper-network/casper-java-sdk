@@ -152,7 +152,5 @@ public class NestedAnyTest {
         byte[] actual = ser.toByteArray();
         byte[] expected = Hex.decode("0004000000010203040100000003000000616e7904000000d202964915");
         assertThat(actual, is(expected));
-
-
     }
 }
