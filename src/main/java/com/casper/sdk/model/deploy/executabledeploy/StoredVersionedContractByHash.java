@@ -25,7 +25,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonTypeName("StoredVersionedContractByHash")
-public class StoredVersionedContractByHash implements ExecutableDeployItemWithEntryPoint {
+public class StoredVersionedContractByHash extends ExecutableDeployItemWithEntryPoint {
 
     /**
      * Hex-encoded Hash
@@ -60,14 +60,11 @@ public class StoredVersionedContractByHash implements ExecutableDeployItemWithEn
      * Implements the StoredVersionedContractByHash encoder
      */
     @Override
-    public void serialize(SerializerBuffer ser, Target target) throws NoSuchTypeException, ValueSerializationException {
+    public void serialize(final SerializerBuffer ser, final Target target) throws NoSuchTypeException, ValueSerializationException {
         ser.writeU8(getOrder());
         ser.writeString(getHash());
         ser.writeI64(getVersion());
         ser.writeString(getEntryPoint());
-        ser.writeI32(args.size());
-        for (NamedArg<?> namedArg : args) {
-            namedArg.serialize(ser, Target.BYTE);
-        }
+        serializeNamedArgs(ser, target);
     }
 }

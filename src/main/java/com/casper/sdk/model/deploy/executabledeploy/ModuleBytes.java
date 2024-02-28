@@ -27,7 +27,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonTypeName("ModuleBytes")
-public class ModuleBytes implements ExecutableDeployItem {
+public class ModuleBytes extends ExecutableDeployItem {
 
     /**
      * Module bytes
@@ -62,13 +62,10 @@ public class ModuleBytes implements ExecutableDeployItem {
      * Implements the ModuleBytes encoder
      */
     @Override
-    public void serialize(SerializerBuffer ser, Target target) throws ValueSerializationException, NoSuchTypeException {
+    public void serialize(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {
         ser.writeU8(getOrder());
         ser.writeI32(getBytes().length);
         ser.writeByteArray(getBytes());
-        ser.writeI32(args.size());
-        for (NamedArg<?> namedArg : args) {
-            namedArg.serialize(ser, target);
-        }
+        serializeNamedArgs(ser, target);
     }
 }

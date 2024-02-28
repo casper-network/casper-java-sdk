@@ -25,7 +25,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonTypeName("StoredContractByName")
-public class StoredContractByName implements ExecutableDeployItemWithEntryPoint {
+public class StoredContractByName extends ExecutableDeployItemWithEntryPoint {
 
     /**
      * Contract name
@@ -55,13 +55,10 @@ public class StoredContractByName implements ExecutableDeployItemWithEntryPoint 
      * Implements the StoredContractByHash encoder
      */
     @Override
-    public void serialize(SerializerBuffer ser, Target target) throws NoSuchTypeException, ValueSerializationException {
+    public void serialize(final SerializerBuffer ser, final Target target) throws NoSuchTypeException, ValueSerializationException {
         ser.writeU8(getOrder());
         ser.writeString(getName());
         ser.writeString(getEntryPoint());
-        ser.writeI32(args.size());
-        for (NamedArg<?> namedArg : args) {
-            namedArg.serialize(ser, Target.BYTE);
-        }
+        serializeNamedArgs(ser, target);
     }
 }

@@ -1,10 +1,14 @@
 package com.casper.sdk.model.deploy.executabledeploy;
 
+import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.serde.CasperSerializableObject;
+import com.casper.sdk.model.clvalue.serde.Target;
 import com.casper.sdk.model.deploy.NamedArg;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import dev.oak3.sbs4j.SerializerBuffer;
+import dev.oak3.sbs4j.exception.ValueSerializationException;
 
 import java.util.List;
 
@@ -29,10 +33,17 @@ import java.util.List;
         @JsonSubTypes.Type(value = StoredVersionedContractByHash.class, name = "StoredVersionedContractByHash"),
         @JsonSubTypes.Type(value = StoredVersionedContractByName.class, name = "StoredVersionedContractByName"),
         @JsonSubTypes.Type(value = Transfer.class, name = "Transfer")})
-public interface ExecutableDeployItem extends CasperSerializableObject {
+public abstract class ExecutableDeployItem implements CasperSerializableObject {
 
-    List<NamedArg<?>> getArgs();
+    public abstract List<NamedArg<?>> getArgs();
 
     @JsonIgnore
-    byte getOrder();
+    abstract byte getOrder();
+
+    void serializeNamedArgs(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {
+        ser.writeI32(getArgs().size());
+        for (NamedArg<?> namedArg : getArgs()) {
+            namedArg.serialize(ser, target);
+        }
+    }
 }

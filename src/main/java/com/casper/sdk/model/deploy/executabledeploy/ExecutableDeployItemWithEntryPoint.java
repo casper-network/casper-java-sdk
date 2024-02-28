@@ -13,6 +13,6 @@ package com.casper.sdk.model.deploy.executabledeploy;
  * @see Transfer
  * @since 2.0.0
  */
-public interface ExecutableDeployItemWithEntryPoint extends ExecutableDeployItem {
-    String getEntryPoint();
+public abstract class ExecutableDeployItemWithEntryPoint extends ExecutableDeployItem {
+    abstract String getEntryPoint();
 }

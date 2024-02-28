@@ -26,7 +26,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonTypeName("StoredContractByHash")
-public class StoredContractByHash implements ExecutableDeployItemWithEntryPoint {
+public class StoredContractByHash extends ExecutableDeployItemWithEntryPoint {
 
     /**
      * Hex-encoded Hash
@@ -56,7 +56,7 @@ public class StoredContractByHash implements ExecutableDeployItemWithEntryPoint 
      * Implements the StoredContractByHAsh encoder
      */
     @Override
-    public void serialize(SerializerBuffer ser, Target target) throws NoSuchTypeException, ValueSerializationException {
+    public void serialize(final SerializerBuffer ser, final Target target) throws NoSuchTypeException, ValueSerializationException {
         ser.writeU8(getOrder());
         ser.writeByteArray(Hex.decode(getHash()));
         ser.writeString(getEntryPoint());
