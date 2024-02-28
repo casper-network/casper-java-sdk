@@ -55,7 +55,7 @@ public class StoredContractByName extends ExecutableDeployItemWithEntryPoint {
      * Implements the StoredContractByHash encoder
      */
     @Override
-    public void serialize(SerializerBuffer ser, Target target) throws NoSuchTypeException, ValueSerializationException {
+    public void serialize(final SerializerBuffer ser, final Target target) throws NoSuchTypeException, ValueSerializationException {
         ser.writeU8(getOrder());
         ser.writeString(getName());
         ser.writeString(getEntryPoint());

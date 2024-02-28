@@ -60,7 +60,7 @@ public class StoredVersionedContractByHash extends ExecutableDeployItemWithEntry
      * Implements the StoredVersionedContractByHash encoder
      */
     @Override
-    public void serialize(SerializerBuffer ser, Target target) throws NoSuchTypeException, ValueSerializationException {
+    public void serialize(final SerializerBuffer ser, final Target target) throws NoSuchTypeException, ValueSerializationException {
         ser.writeU8(getOrder());
         ser.writeString(getHash());
         ser.writeI64(getVersion());

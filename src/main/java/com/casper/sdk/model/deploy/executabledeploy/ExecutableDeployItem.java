@@ -40,7 +40,7 @@ public abstract class ExecutableDeployItem implements CasperSerializableObject {
     @JsonIgnore
     abstract byte getOrder();
 
-    void serializeNamedArgs(SerializerBuffer ser, Target target) throws ValueSerializationException, NoSuchTypeException {
+    void serializeNamedArgs(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {
         ser.writeI32(getArgs().size());
         for (NamedArg<?> namedArg : getArgs()) {
             namedArg.serialize(ser, target);
