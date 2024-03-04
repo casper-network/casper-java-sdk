@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="x-ua-compatible" content="IE=edge"/>
+<title>Test results - StatusDataTests</title>
+<link href="../css/base-style.css" rel="stylesheet" type="text/css"/>
+<link href="../css/style.css" rel="stylesheet" type="text/css"/>
+<script src="../js/report.js" type="text/javascript"></script>
+</head>
+<body>
+<div id="content">
+<h1>StatusDataTests</h1>
+<div class="breadcrumbs">
+<a href="../index.html">all</a> &gt; 
+<a href="../packages/com.casper.sdk.model.status.html">com.casper.sdk.model.status</a> &gt; StatusDataTests</div>
+<div id="summary">
+<table>
+<tr>
+<td>
+<div class="summaryGroup">
+<table>
+<tr>
+<td>
+<div class="infoBox" id="tests">
+<div class="counter">1</div>
+<p>tests</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="failures">
+<div class="counter">0</div>
+<p>failures</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="ignored">
+<div class="counter">0</div>
+<p>ignored</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="duration">
+<div class="counter">0.041s</div>
+<p>duration</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</td>
+<td>
+<div class="infoBox success" id="successRate">
+<div class="percent">100%</div>
+<p>successful</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div id="tabs">
+<ul class="tabLinks">
+<li>
+<a href="#tab0">Tests</a>
+</li>
+<li>
+<a href="#tab1">Standard output</a>
+</li>
+</ul>
+<div id="tab0" class="tab">
+<h2>Tests</h2>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>Duration</th>
+<th>Result</th>
+</tr>
+</thead>
+<tr>
+<td class="success">validateStatusMapping()</td>
+<td class="success">0.041s</td>
+<td class="success">passed</td>
+</tr>
+</table>
+</div>
+<div id="tab1" class="tab">
+<h2>Standard output</h2>
+<span class="code">
+<pre>Original JSON: {
+  &quot;peers&quot; : [ {
+    &quot;node_id&quot; : &quot;tls:49d0..8c20&quot;,
+    &quot;address&quot; : &quot;127.0.0.1:22103&quot;
+  }, {
+    &quot;node_id&quot; : &quot;tls:a3de..fc2d&quot;,
+    &quot;address&quot; : &quot;127.0.0.1:22104&quot;
+  }, {
+    &quot;node_id&quot; : &quot;tls:cd98..24db&quot;,
+    &quot;address&quot; : &quot;127.0.0.1:22105&quot;
+  }, {
+    &quot;node_id&quot; : &quot;tls:fc00..489f&quot;,
+    &quot;address&quot; : &quot;127.0.0.1:22102&quot;
+  } ],
+  &quot;api_version&quot; : &quot;1.0.0&quot;,
+  &quot;build_version&quot; : &quot;1.5.0-rc.1-65dda7c&quot;,
+  &quot;chainspec_name&quot; : &quot;casper-net-1&quot;,
+  &quot;starting_state_root_hash&quot; : &quot;545580ed566f3b599347ff2ddd63e8447cce9e9a1b20360cf4c627cb0626ddf2&quot;,
+  &quot;last_added_block_info&quot; : {
+    &quot;hash&quot; : &quot;3404d14e970bfbc8506a96aff2a1b5010e51f8a899fa592c784c5943d20a0d81&quot;,
+    &quot;timestamp&quot; : &quot;2023-05-25T12:14:26.816Z&quot;,
+    &quot;era_id&quot; : 13,
+    &quot;height&quot; : 131,
+    &quot;state_root_hash&quot; : &quot;d026a928b4719e488d2c3db5bb14cb90ff097d36f0d30ad3655f568cc79a8a13&quot;,
+    &quot;creator&quot; : &quot;0190664e16a17594ed2d0e3c279c4cf5894e8db0da15e3b91c938562a1caae32ab&quot;
+  },
+  &quot;our_public_signing_key&quot; : &quot;01fed662dc7f1f7af43ad785ba07a8cc05b7a96f9ee69613cfde43bc56bec1140b&quot;,
+  &quot;round_length&quot; : &quot;4s 96ms&quot;,
+  &quot;next_upgrade&quot; : null,
+  &quot;uptime&quot; : &quot;10m 20s 454ms&quot;,
+  &quot;reactor_state&quot; : &quot;Validate&quot;,
+  &quot;last_progress&quot; : &quot;2023-05-25T12:04:16.308Z&quot;,
+  &quot;available_block_range&quot; : {
+    &quot;low&quot; : 0,
+    &quot;high&quot; : 131
+  },
+  &quot;block_sync&quot; : {
+    &quot;historical&quot; : null,
+    &quot;forward&quot; : null
+  }
+}
+Serialized JSON: {
+  &quot;peers&quot; : [ {
+    &quot;address&quot; : &quot;127.0.0.1:22103&quot;,
+    &quot;node_id&quot; : &quot;tls:49d0..8c20&quot;
+  }, {
+    &quot;address&quot; : &quot;127.0.0.1:22104&quot;,
+    &quot;node_id&quot; : &quot;tls:a3de..fc2d&quot;
+  }, {
+    &quot;address&quot; : &quot;127.0.0.1:22105&quot;,
+    &quot;node_id&quot; : &quot;tls:cd98..24db&quot;
+  }, {
+    &quot;address&quot; : &quot;127.0.0.1:22102&quot;,
+    &quot;node_id&quot; : &quot;tls:fc00..489f&quot;
+  } ],
+  &quot;uptime&quot; : &quot;10m 20s 454ms&quot;,
+  &quot;api_version&quot; : &quot;1.0.0&quot;,
+  &quot;build_version&quot; : &quot;1.5.0-rc.1-65dda7c&quot;,
+  &quot;chainspec_name&quot; : &quot;casper-net-1&quot;,
+  &quot;last_added_block_info&quot; : {
+    &quot;creator&quot; : &quot;0190664e16a17594ed2d0e3c279c4cf5894e8db0da15e3b91c938562a1caae32ab&quot;,
+    &quot;hash&quot; : &quot;3404d14e970bfbc8506a96aff2a1b5010e51f8a899fa592c784c5943d20a0d81&quot;,
+    &quot;height&quot; : 131,
+    &quot;era_id&quot; : 13,
+    &quot;state_root_hash&quot; : &quot;d026a928b4719e488d2c3db5bb14cb90ff097d36f0d30ad3655f568cc79a8a13&quot;,
+    &quot;timestamp&quot; : &quot;2023-05-25T12:14:26.816Z&quot;
+  },
+  &quot;next_upgrade&quot; : null,
+  &quot;our_public_signing_key&quot; : &quot;01fed662dc7f1f7af43ad785ba07a8cc05b7a96f9ee69613cfde43bc56bec1140b&quot;,
+  &quot;round_length&quot; : &quot;4s 96ms&quot;,
+  &quot;starting_state_root_hash&quot; : &quot;545580ed566f3b599347ff2ddd63e8447cce9e9a1b20360cf4c627cb0626ddf2&quot;,
+  &quot;reactor_state&quot; : &quot;Validate&quot;,
+  &quot;last_progress&quot; : &quot;2023-05-25T12:04:16.308Z&quot;,
+  &quot;available_block_range&quot; : {
+    &quot;low&quot; : 0,
+    &quot;high&quot; : 131
+  },
+  &quot;block_sync&quot; : {
+    &quot;historical&quot; : null,
+    &quot;forward&quot; : null
+  }
+}
+</pre>
+</span>
+</div>
+</div>
+<div id="footer">
+<p>
+<div>
+<label class="hidden" id="label-for-line-wrapping-toggle" for="line-wrapping-toggle">Wrap lines
+<input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
+</label>
+</div>Generated by 
+<a href="http://www.gradle.org">Gradle 7.5.1</a> at Mar 4, 2024, 1:33:14 PM</p>
+</div>
+</div>
+</body>
+</html>
