@@ -49,19 +49,9 @@ public class CLValueAny extends AbstractCLValue<byte[], CLTypeAny> {
     }
 
     @Override
-    public void serialize(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {
-        if (this.getValue() == null) return;
-
-        if (target.equals(Target.BYTE)) {
-            super.serializePrefixWithLength(ser);
-        }
-
+    protected void serializeValue(SerializerBuffer ser) throws ValueSerializationException {
         ser.writeByteArray(this.getValue());
         this.setBytes(Hex.toHexString(this.getValue()));
-
-        if (target == Target.BYTE) {
-            this.encodeType(ser);
-        }
     }
 
     @Override

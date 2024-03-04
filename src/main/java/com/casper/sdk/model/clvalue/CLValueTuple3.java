@@ -49,23 +49,12 @@ public class CLValueTuple3 extends
     }
 
     @Override
-    public void serialize(SerializerBuffer ser, Target target) throws NoSuchTypeException, ValueSerializationException {
-        if (this.getValue() == null) return;
-
-        if (target.equals(Target.BYTE)) {
-            super.serializePrefixWithLength(ser);
-        }
-
+    protected void serializeValue(SerializerBuffer ser) throws ValueSerializationException {
         setChildTypes(this.getValue());
-
         getValue().getValue0().serialize(ser);
         getValue().getValue1().serialize(ser);
         getValue().getValue2().serialize(ser);
-
-        if (target.equals(Target.BYTE)) {
-            this.encodeType(ser);
-        }
-
+        // FIXME Don't use ser as it can contain parent data
         this.setBytes(Hex.toHexString(ser.toByteArray()));
     }
 

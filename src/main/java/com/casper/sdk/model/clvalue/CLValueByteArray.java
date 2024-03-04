@@ -38,26 +38,14 @@ public class CLValueByteArray extends AbstractCLValue<byte[], CLTypeByteArray> {
     }
 
     @Override
-    public void serialize(SerializerBuffer ser, Target target) throws NoSuchTypeException, ValueSerializationException {
-        if (this.getValue() == null) return;
-
-        if (target.equals(Target.BYTE)) {
-            super.serializePrefixWithLength(ser);
-        }
-
+    protected void serializeValue(SerializerBuffer ser) throws ValueSerializationException {
         ser.writeByteArray(this.getValue());
-
-        if (target.equals(Target.BYTE)) {
-            this.encodeType(ser);
-        }
-
         this.setBytes(Hex.toHexString(ser.toByteArray()));
     }
 
     @Override
     protected void encodeType(SerializerBuffer ser) throws NoSuchTypeException {
         super.encodeType(ser);
-
         ser.writeI32(this.getClType().getLength());
     }
 

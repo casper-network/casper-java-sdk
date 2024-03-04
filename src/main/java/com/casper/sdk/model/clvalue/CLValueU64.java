@@ -47,20 +47,12 @@ public class CLValueU64 extends AbstractCLValue<BigInteger, CLTypeU64> {
     }
 
     @Override
-    public void serialize(SerializerBuffer ser, Target target) throws ValueSerializationException, NoSuchTypeException {
-        if (this.getValue() == null) return;
-
-        if (target.equals(Target.BYTE)) {
-            super.serializePrefixWithLength(ser);
-        }
-
-        ser.writeU64(this.getValue());
-
-        if (target.equals(Target.BYTE)) {
-            this.encodeType(ser);
-        }
-
-        this.setBytes(Hex.toHexString(ser.toByteArray()));
+    protected void serializeValue(final SerializerBuffer ser) throws ValueSerializationException {
+        final SerializerBuffer serVal = new SerializerBuffer();
+        serVal.writeU64(this.getValue());
+        final byte[] bytes = serVal.toByteArray();
+        ser.writeByteArray(bytes);
+        this.setBytes(Hex.toHexString(bytes));
     }
 
     @Override

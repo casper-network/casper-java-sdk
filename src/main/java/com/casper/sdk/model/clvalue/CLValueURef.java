@@ -53,24 +53,15 @@ public class CLValueURef extends AbstractCLValue<URef, CLTypeURef> {
         this.clType = clType;
     }
 
+
     @Override
-    public void serialize(SerializerBuffer ser, Target target) throws NoSuchTypeException, ValueSerializationException {
-        if (this.getValue() == null) return;
-
-        if (target.equals(Target.BYTE)) {
-            super.serializePrefixWithLength(ser);
-        }
-
+    protected void serializeValue(SerializerBuffer ser) throws ValueSerializationException {
         URef uref = this.getValue();
         byte[] urefByte = new byte[uref.getAddress().length + 1];
         System.arraycopy(uref.getAddress(), 0, urefByte, 0, uref.getAddress().length);
         urefByte[32] = uref.getAccessRight().serializationTag;
         ser.writeByteArray(urefByte);
-
-        if (target.equals(Target.BYTE)) {
-            this.encodeType(ser);
-        }
-
+        // FIXME use a value SerializerBuffer to get the bytes
         this.setBytes(Hex.toHexString(ser.toByteArray()));
     }
 

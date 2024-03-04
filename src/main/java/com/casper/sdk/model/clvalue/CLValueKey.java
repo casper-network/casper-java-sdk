@@ -49,21 +49,10 @@ public class CLValueKey extends AbstractCLValue<Key, CLTypeKey> {
     }
 
     @Override
-    public void serialize(SerializerBuffer ser, Target target) throws NoSuchTypeException, ValueSerializationException {
-        if (this.getValue() == null) return;
-
-        if (target.equals(Target.BYTE)) {
-            super.serializePrefixWithLength(ser);
-        }
-
+    protected void serializeValue(final SerializerBuffer ser) throws ValueSerializationException {
         ser.writeU8(this.getValue().getTag().getByteTag());
         ser.writeByteArray(this.getValue().getKey());
-
-        if (target.equals(Target.BYTE)) {
-            this.encodeType(ser);
-        }
-
-        this.setBytes(Hex.toHexString(ser.toByteArray()));
+        this.setBytes(this.getValue().getAlgoTaggedHex());
     }
 
     @Override

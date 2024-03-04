@@ -53,14 +53,10 @@ public class CLValueResult extends AbstractCLValue<CLValueResult.Result, CLTypeR
     }
 
     @Override
-    public void serialize(SerializerBuffer ser, Target target) throws ValueSerializationException, NoSuchTypeException {
-        if (this.getValue() == null) return;
-
-        if (target.equals(Target.BYTE)) {
-            super.serializePrefixWithLength(ser);
-        }
-
+    protected void serializeValue(final SerializerBuffer ser) throws ValueSerializationException {
         setChildTypes(this.getValue().getOk(), this.getValue().getErr());
+
+        SerializerBuffer serValue = new SerializerBuffer();
 
         CLValueBool clValueTrue = new CLValueBool(true);
         clValueTrue.serialize(ser);
@@ -72,10 +68,7 @@ public class CLValueResult extends AbstractCLValue<CLValueResult.Result, CLTypeR
 
         getValue().getErr().serialize(ser);
 
-        if (target.equals(Target.BYTE)) {
-            this.encodeType(ser);
-        }
-
+        // FIXME This cannot use ser when is nested
         this.setBytes(Hex.toHexString(ser.toByteArray()));
     }
 

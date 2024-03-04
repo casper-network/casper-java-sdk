@@ -50,19 +50,9 @@ public class CLValueUnit extends AbstractCLValue<Object, CLTypeUnit> {
     }
 
     @Override
-    public void serialize(SerializerBuffer ser, Target target) throws NoSuchTypeException, ValueSerializationException {
-        if (this.getValue() == null) return;
-
-        if (target.equals(Target.BYTE)) {
-            super.serializePrefixWithLength(ser);
-        }
-
+    protected void serializeValue(SerializerBuffer ser) throws ValueSerializationException {
         setBytes(UNITY_EMPTY_VALUE);
-
-        if (target.equals(Target.BYTE)) {
-            this.encodeType(ser);
-        }
-
+        // FIXME use new SerializerBuffer()
         this.setBytes(Hex.toHexString(ser.toByteArray()));
     }
 

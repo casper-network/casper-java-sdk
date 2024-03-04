@@ -54,11 +54,27 @@ public class CLValueOption extends AbstractCLValueWithChildren<Optional<Abstract
             super.serializePrefixWithLength(ser);
         }
 
+        Optional<AbstractCLValue<?, ?>> child = getValue();
+
+        this.serializeValue(ser);
+
+        // FIXME TIDY THIS UP
+        if (target.equals(Target.BYTE)) {
+            this.encodeType(ser);
+            if (child.isPresent()) {
+                child.get().encodeType(ser);
+            }
+        }
+    }
+
+    @Override
+    protected void serializeValue(SerializerBuffer ser) throws ValueSerializationException {
         Optional<AbstractCLValue<?, ?>> value = getValue();
 
         CLValueBool isPresent = new CLValueBool(value.isPresent() && value.get().getValue() != null);
         isPresent.serialize(ser);
 
+        // FIXME Duplication of getValue()
         Optional<AbstractCLValue<?, ?>> child = getValue();
 
         if (child.isPresent() && child.get().getClType() instanceof AbstractCLTypeWithChildren) {
@@ -67,13 +83,6 @@ public class CLValueOption extends AbstractCLValueWithChildren<Optional<Abstract
         }
         if (child.isPresent() && isPresent.getValue().equals(Boolean.TRUE)) {
             child.get().serialize(ser);
-        }
-
-        if (target.equals(Target.BYTE)) {
-            this.encodeType(ser);
-            if (child.isPresent()) {
-                child.get().encodeType(ser);
-            }
         }
 
         this.setBytes(Hex.toHexString(ser.toByteArray()));

@@ -4,7 +4,6 @@ import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.cltype.AbstractCLTypeWithChildren;
 import com.casper.sdk.model.clvalue.cltype.CLTypeData;
 import com.casper.sdk.model.clvalue.cltype.CLTypeMap;
-import com.casper.sdk.model.clvalue.serde.Target;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
@@ -50,14 +49,9 @@ public class CLValueMap extends
         this.setValue(value);
     }
 
+
     @Override
-    public void serialize(SerializerBuffer ser, Target target) throws ValueSerializationException, NoSuchTypeException {
-        if (this.getValue() == null) return;
-
-        if (target.equals(Target.BYTE)) {
-            super.serializePrefixWithLength(ser);
-        }
-
+    protected void serializeValue(SerializerBuffer ser) throws ValueSerializationException {
         setChildTypes(this.getValue());
 
         CLValueI32 mapLength = new CLValueI32(getValue().size());
@@ -67,11 +61,6 @@ public class CLValueMap extends
             entry.getKey().serialize(ser);
             entry.getValue().serialize(ser);
         }
-
-        if (target.equals(Target.BYTE)) {
-            this.encodeType(ser);
-        }
-
         this.setBytes(Hex.toHexString(ser.toByteArray()));
     }
 

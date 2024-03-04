@@ -15,7 +15,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.bouncycastle.util.encoders.Hex;
 
 /**
  * Casper PublicKey CLValue implementation
@@ -49,21 +48,10 @@ public class CLValuePublicKey extends AbstractCLValue<PublicKey, CLTypePublicKey
     }
 
     @Override
-    public void serialize(SerializerBuffer ser, Target target) throws NoSuchTypeException, ValueSerializationException {
-        if (this.getValue() == null) return;
-
-        if (target.equals(Target.BYTE)) {
-            super.serializePrefixWithLength(ser);
-        }
-
+    protected void serializeValue(SerializerBuffer ser) throws ValueSerializationException {
         ser.writeU8(this.getValue().getTag().getByteTag());
         ser.writeByteArray(this.getValue().getKey());
-
-        if (target.equals(Target.BYTE)) {
-            this.encodeType(ser);
-        }
-
-        this.setBytes(Hex.toHexString(ser.toByteArray()));
+        this.setBytes(this.getValue().getAlgoTaggedHex());
     }
 
     @Override

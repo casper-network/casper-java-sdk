@@ -49,12 +49,7 @@ public class CLValueList extends AbstractCLValueWithChildren<List<? extends Abst
     }
 
     @Override
-    public void serialize(SerializerBuffer ser, Target target) throws ValueSerializationException, NoSuchTypeException {
-        if (this.getValue() == null) return;
-
-        if (target.equals(Target.BYTE)) {
-            super.serializePrefixWithLength(ser);
-        }
+    protected void serializeValue(final SerializerBuffer ser) throws ValueSerializationException {
 
         setChildTypes(this.getValue());
 
@@ -64,10 +59,6 @@ public class CLValueList extends AbstractCLValueWithChildren<List<? extends Abst
 
         for (AbstractCLValue<?, ?> child : getValue()) {
             child.serialize(ser);
-        }
-
-        if (target.equals(Target.BYTE)) {
-            this.encodeType(ser);
         }
 
         this.setBytes(Hex.toHexString(ser.toByteArray()));

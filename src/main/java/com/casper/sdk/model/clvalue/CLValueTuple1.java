@@ -48,20 +48,10 @@ public class CLValueTuple1 extends AbstractCLValueWithChildren<Unit<? extends Ab
     }
 
     @Override
-    public void serialize(SerializerBuffer ser, Target target) throws NoSuchTypeException, ValueSerializationException {
-        if (this.getValue() == null) return;
-
-        if (target.equals(Target.BYTE)) {
-            super.serializePrefixWithLength(ser);
-        }
-
+    protected void serializeValue(SerializerBuffer ser) throws ValueSerializationException {
         setChildTypes(this.getValue());
         getValue().getValue0().serialize(ser);
-
-        if (target.equals(Target.BYTE)) {
-            this.encodeType(ser);
-        }
-
+        // FIXME don't use ser as it can contain parent data
         this.setBytes(Hex.toHexString(ser.toByteArray()));
     }
 

@@ -114,7 +114,22 @@ public abstract class AbstractCLValue<T, P extends AbstractCLType>
     }
 
     @Override
-    public abstract void serialize(SerializerBuffer ser, Target target) throws ValueSerializationException, NoSuchTypeException;
+    public void serialize(SerializerBuffer ser, Target target) throws ValueSerializationException, NoSuchTypeException {
+        if (this.getValue() == null) return;
+
+        if (target.equals(Target.BYTE)) {
+            serializePrefixWithLength(ser);
+        }
+
+        serializeValue(ser);
+
+        if (target.equals(Target.BYTE)) {
+            this.encodeType(ser);
+        }
+    }
+
+
+    protected abstract void serializeValue(final SerializerBuffer ser) throws ValueSerializationException;
 
     public abstract void deserializeCustom(DeserializerBuffer deserializerBuffer) throws Exception;
 

@@ -48,19 +48,8 @@ public class CLValueBool extends AbstractCLValue<Boolean, CLTypeBool> {
     }
 
     @Override
-    public void serialize(@NotNull SerializerBuffer ser, Target target) throws NoSuchTypeException, ValueSerializationException {
-        if (this.getValue() == null) return;
-
-        if (target.equals(Target.BYTE)) {
-            super.serializePrefixWithLength(ser);
-        }
-
+    protected void serializeValue(SerializerBuffer ser) throws ValueSerializationException {
         ser.writeBool(this.getValue());
-
-        if (target.equals(Target.BYTE)) {
-            this.encodeType(ser);
-        }
-
         this.setBytes(Hex.toHexString(ser.toByteArray()));
     }
 
