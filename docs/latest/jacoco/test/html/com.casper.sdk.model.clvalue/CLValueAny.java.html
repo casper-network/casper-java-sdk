@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CLValueAny.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">casper-java-sdk</a> &gt; <a href="index.source.html" class="el_package">com.casper.sdk.model.clvalue</a> &gt; <span class="el_source">CLValueAny.java</span></div><h1>CLValueAny.java</h1><pre class="source lang-java linenums">package com.casper.sdk.model.clvalue;
 
 import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
-import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.cltype.CLTypeAny;
-import com.casper.sdk.model.clvalue.serde.Target;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import dev.oak3.sbs4j.DeserializerBuffer;
@@ -27,10 +25,10 @@ import java.util.Objects;
  * @since 0.0.1
  */
 @Getter
-<span class="nc" id="L30">@Setter</span>
-<span class="fc" id="L31">@NoArgsConstructor</span>
+<span class="nc" id="L28">@Setter</span>
+<span class="fc" id="L29">@NoArgsConstructor</span>
 public class CLValueAny extends AbstractCLValue&lt;byte[], CLTypeAny&gt; {
-<span class="fc" id="L33">    private CLTypeAny clType = new CLTypeAny();</span>
+<span class="fc" id="L31">    private CLTypeAny clType = new CLTypeAny();</span>
 
     @JsonSetter(&quot;cl_type&quot;)
     @ExcludeFromJacocoGeneratedReport
@@ -44,31 +42,20 @@ public class CLValueAny extends AbstractCLValue&lt;byte[], CLTypeAny&gt; {
         return this.getClType().getTypeName();
     }
 
-<span class="fc" id="L47">    public CLValueAny(final byte[] value) throws ValueSerializationException {</span>
-<span class="fc" id="L48">        this.setValue(value);</span>
-<span class="fc" id="L49">    }</span>
+<span class="fc" id="L45">    public CLValueAny(final byte[] value) throws ValueSerializationException {</span>
+<span class="fc" id="L46">        this.setValue(value);</span>
+<span class="fc" id="L47">    }</span>
 
     @Override
-    public void serialize(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {
-<span class="pc bpc" id="L53" title="1 of 2 branches missed.">        if (this.getValue() == null) return;</span>
-
-<span class="fc bfc" id="L55" title="All 2 branches covered.">        if (target.equals(Target.BYTE)) {</span>
-<span class="fc" id="L56">            super.serializePrefixWithLength(ser);</span>
-        }
-
-<span class="fc" id="L59">        ser.writeByteArray(this.getValue());</span>
-<span class="fc" id="L60">        this.setBytes(Hex.toHexString(this.getValue()));</span>
-
-<span class="fc bfc" id="L62" title="All 2 branches covered.">        if (target == Target.BYTE) {</span>
-<span class="fc" id="L63">            this.encodeType(ser);</span>
-        }
-<span class="fc" id="L65">    }</span>
+    protected void serializeValue(final SerializerBuffer ser) throws ValueSerializationException {
+<span class="fc" id="L51">        ser.writeByteArray(this.getValue());</span>
+<span class="fc" id="L52">        this.setBytes(Hex.toHexString(this.getValue()));</span>
+<span class="fc" id="L53">    }</span>
 
     @Override
-    public void deserializeCustom(final DeserializerBuffer deser)
-            throws Exception {
-<span class="fc" id="L70">        this.setValue(deser.readByteArray(deser.getBuffer().remaining()));</span>
-<span class="fc" id="L71">    }</span>
+    public void deserializeCustom(final DeserializerBuffer deser) throws Exception {
+<span class="fc" id="L57">        this.setValue(deser.readByteArray(deser.getBuffer().remaining()));</span>
+<span class="fc" id="L58">    }</span>
 
     @Override
     @ExcludeFromJacocoGeneratedReport
@@ -111,7 +98,7 @@ public class CLValueAny extends AbstractCLValue&lt;byte[], CLTypeAny&gt; {
 
     @Override
     public String toString() {
-<span class="nc bnc" id="L114" title="All 2 branches missed.">        return getValue() != null ? ByteUtils.encodeHexString(getValue()) : null;</span>
+<span class="nc bnc" id="L101" title="All 2 branches missed.">        return getValue() != null ? ByteUtils.encodeHexString(getValue()) : null;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
