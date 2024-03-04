@@ -4,7 +4,6 @@ import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.cltype.AbstractCLTypeWithChildren;
 import com.casper.sdk.model.clvalue.cltype.CLTypeData;
 import com.casper.sdk.model.clvalue.cltype.CLTypeTuple1;
-import com.casper.sdk.model.clvalue.serde.Target;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import dev.oak3.sbs4j.DeserializerBuffer;
@@ -18,7 +17,7 @@ import org.bouncycastle.util.encoders.Hex;
 import org.javatuples.Unit;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 
 /**
  * Casper Tuple1 CLValue implementation
@@ -37,26 +36,28 @@ public class CLValueTuple1 extends AbstractCLValueWithChildren<Unit<? extends Ab
     private CLTypeTuple1 clType = new CLTypeTuple1();
 
     @JsonSetter("cl_type")
-    public void setClType(CLTypeTuple1 clType) {
+    public void setClType(final CLTypeTuple1 clType) {
         this.clType = clType;
         childTypesSet();
     }
 
-    public CLValueTuple1(Unit<? extends AbstractCLValue<?, ?>> value) throws ValueSerializationException {
+    public CLValueTuple1(final Unit<? extends AbstractCLValue<?, ?>> value) throws ValueSerializationException {
         setChildTypes(value);
         this.setValue(value);
     }
 
     @Override
-    protected void serializeValue(SerializerBuffer ser) throws ValueSerializationException {
+    protected void serializeValue(final SerializerBuffer ser) throws ValueSerializationException {
+        final SerializerBuffer serVal = new SerializerBuffer();
         setChildTypes(this.getValue());
-        getValue().getValue0().serialize(ser);
-        // FIXME don't use ser as it can contain parent data
-        this.setBytes(Hex.toHexString(ser.toByteArray()));
+        getValue().getValue0().serialize(serVal);
+        final byte[] bytes = serVal.toByteArray();
+        ser.writeByteArray(bytes);
+        this.setBytes(Hex.toHexString(bytes));
     }
 
     @Override
-    protected void encodeType(SerializerBuffer ser) throws NoSuchTypeException {
+    protected void encodeType(final SerializerBuffer ser) throws NoSuchTypeException {
         super.encodeType(ser);
 
         byte element0TypeTag = getClType().getChildClTypeData(0).getSerializationTag();
@@ -64,7 +65,7 @@ public class CLValueTuple1 extends AbstractCLValueWithChildren<Unit<? extends Ab
     }
 
     @Override
-    public void deserializeCustom(DeserializerBuffer deser) throws Exception {
+    public void deserializeCustom(final DeserializerBuffer deser) throws Exception {
         CLTypeData childTypeData1 = clType.getChildClTypeData(0);
 
         AbstractCLValue<?, ?> child1 = CLTypeData.createCLValueFromCLTypeData(childTypeData1);
@@ -78,9 +79,9 @@ public class CLValueTuple1 extends AbstractCLValueWithChildren<Unit<? extends Ab
     }
 
     @Override
-    protected void setChildTypes(Unit<? extends AbstractCLValue<?, ?>> value) {
+    protected void setChildTypes(final Unit<? extends AbstractCLValue<?, ?>> value) {
         if (value.getValue0() != null) {
-            clType.setChildTypes(Arrays.asList(value.getValue0().getClType()));
+            clType.setChildTypes(Collections.singletonList(value.getValue0().getClType()));
         } else {
             clType.setChildTypes(new ArrayList<>());
         }

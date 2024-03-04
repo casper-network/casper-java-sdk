@@ -38,13 +38,13 @@ public class CLValueI32 extends AbstractCLValue<Integer, CLTypeI32> {
         return this.getClType().getTypeName();
     }
 
-    public CLValueI32(Integer value) throws ValueSerializationException {
+    public CLValueI32(final Integer value) throws ValueSerializationException {
         this.setValue(value);
     }
 
     @Override
-    protected void serializeValue(SerializerBuffer ser) throws ValueSerializationException {
-       final SerializerBuffer serVal = new SerializerBuffer();
+    protected void serializeValue(final SerializerBuffer ser) throws ValueSerializationException {
+        final SerializerBuffer serVal = new SerializerBuffer();
         serVal.writeI32(this.getValue());
         final byte[] bytes = serVal.toByteArray();
         ser.writeByteArray(bytes);
@@ -52,7 +52,7 @@ public class CLValueI32 extends AbstractCLValue<Integer, CLTypeI32> {
     }
 
     @Override
-    public void deserializeCustom(DeserializerBuffer deser) throws Exception {
+    public void deserializeCustom(final DeserializerBuffer deser) throws Exception {
         this.setValue(deser.readI32());
     }
 

@@ -4,7 +4,6 @@ import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.cltype.AbstractCLTypeWithChildren;
 import com.casper.sdk.model.clvalue.cltype.CLTypeData;
 import com.casper.sdk.model.clvalue.cltype.CLTypeTuple2;
-import com.casper.sdk.model.clvalue.serde.Target;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import dev.oak3.sbs4j.DeserializerBuffer;
@@ -50,35 +49,39 @@ public class CLValueTuple2
 
     @Override
     protected void serializeValue(final SerializerBuffer ser) throws ValueSerializationException {
+        final SerializerBuffer serVal = new SerializerBuffer();
         setChildTypes(this.getValue());
-        getValue().getValue0().serialize(ser);
-        getValue().getValue1().serialize(ser);
-        this.setBytes(Hex.toHexString(ser.toByteArray()));
+        getValue().getValue0().serialize(serVal);
+        getValue().getValue1().serialize(serVal);
+        final byte[] bytes = serVal.toByteArray();
+        ser.writeByteArray(bytes);
+        this.setBytes(Hex.toHexString(bytes));
+
     }
 
     @Override
-    protected void encodeType(SerializerBuffer ser) throws NoSuchTypeException {
+    protected void encodeType(final SerializerBuffer ser) throws NoSuchTypeException {
         super.encodeType(ser);
 
-        byte element0TypeTag = getClType().getChildClTypeData(0).getSerializationTag();
+        final byte element0TypeTag = getClType().getChildClTypeData(0).getSerializationTag();
         ser.writeU8(element0TypeTag);
-        byte element1TypeTag = getClType().getChildClTypeData(1).getSerializationTag();
+        final byte element1TypeTag = getClType().getChildClTypeData(1).getSerializationTag();
         ser.writeU8(element1TypeTag);
     }
 
     @Override
-    public void deserializeCustom(DeserializerBuffer deser) throws Exception {
-        CLTypeData childTypeData1 = clType.getChildClTypeData(0);
-        CLTypeData childTypeData2 = clType.getChildClTypeData(1);
+    public void deserializeCustom(final DeserializerBuffer deser) throws Exception {
+        final CLTypeData childTypeData1 = clType.getChildClTypeData(0);
+        final CLTypeData childTypeData2 = clType.getChildClTypeData(1);
 
-        AbstractCLValue<?, ?> child1 = CLTypeData.createCLValueFromCLTypeData(childTypeData1);
+        final AbstractCLValue<?, ?> child1 = CLTypeData.createCLValueFromCLTypeData(childTypeData1);
         if (child1.getClType() instanceof AbstractCLTypeWithChildren) {
             ((AbstractCLTypeWithChildren) child1.getClType())
                     .setChildTypes(((AbstractCLTypeWithChildren) clType.getChildTypes().get(0)).getChildTypes());
         }
         child1.deserializeCustom(deser);
 
-        AbstractCLValue<?, ?> child2 = CLTypeData.createCLValueFromCLTypeData(childTypeData2);
+        final AbstractCLValue<?, ?> child2 = CLTypeData.createCLValueFromCLTypeData(childTypeData2);
         if (child2.getClType() instanceof AbstractCLTypeWithChildren) {
             ((AbstractCLTypeWithChildren) child2.getClType())
                     .setChildTypes(((AbstractCLTypeWithChildren) clType.getChildTypes().get(1)).getChildTypes());
@@ -89,7 +92,7 @@ public class CLValueTuple2
     }
 
     @Override
-    protected void setChildTypes(Pair<? extends AbstractCLValue<?, ?>, ? extends AbstractCLValue<?, ?>> value) {
+    protected void setChildTypes(final Pair<? extends AbstractCLValue<?, ?>, ? extends AbstractCLValue<?, ?>> value) {
         if (value.getValue0() != null && value.getValue1() != null) {
             clType.setChildTypes(Arrays.asList(value.getValue0().getClType(), value.getValue1().getClType()));
         } else {

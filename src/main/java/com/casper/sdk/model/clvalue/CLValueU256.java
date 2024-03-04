@@ -1,9 +1,7 @@
 package com.casper.sdk.model.clvalue;
 
 import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
-import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.cltype.CLTypeU256;
-import com.casper.sdk.model.clvalue.serde.Target;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import dev.oak3.sbs4j.DeserializerBuffer;
@@ -34,7 +32,7 @@ public class CLValueU256 extends AbstractCLValue<BigInteger, CLTypeU256> {
 
     @JsonSetter("cl_type")
     @ExcludeFromJacocoGeneratedReport
-    protected void setJsonClType(CLTypeU256 clType) {
+    protected void setJsonClType(final CLTypeU256 clType) {
         this.clType = clType;
     }
 
@@ -44,7 +42,7 @@ public class CLValueU256 extends AbstractCLValue<BigInteger, CLTypeU256> {
         return this.getClType().getTypeName();
     }
 
-    public CLValueU256(BigInteger value) throws ValueSerializationException {
+    public CLValueU256(final BigInteger value) throws ValueSerializationException {
         this.setValue(value);
     }
 
@@ -58,7 +56,7 @@ public class CLValueU256 extends AbstractCLValue<BigInteger, CLTypeU256> {
     }
 
     @Override
-    public void deserializeCustom(DeserializerBuffer deser) throws Exception {
+    public void deserializeCustom(final DeserializerBuffer deser) throws Exception {
         this.setValue(deser.readU256());
     }
 

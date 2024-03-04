@@ -4,7 +4,6 @@ import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.cltype.AbstractCLTypeWithChildren;
 import com.casper.sdk.model.clvalue.cltype.CLTypeData;
 import com.casper.sdk.model.clvalue.cltype.CLTypeTuple3;
-import com.casper.sdk.model.clvalue.serde.Target;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import dev.oak3.sbs4j.DeserializerBuffer;
@@ -50,12 +49,14 @@ public class CLValueTuple3 extends
 
     @Override
     protected void serializeValue(SerializerBuffer ser) throws ValueSerializationException {
+        SerializerBuffer serVal = new SerializerBuffer();
         setChildTypes(this.getValue());
-        getValue().getValue0().serialize(ser);
-        getValue().getValue1().serialize(ser);
-        getValue().getValue2().serialize(ser);
-        // FIXME Don't use ser as it can contain parent data
-        this.setBytes(Hex.toHexString(ser.toByteArray()));
+        getValue().getValue0().serialize(serVal);
+        getValue().getValue1().serialize(serVal);
+        getValue().getValue2().serialize(serVal);
+        byte[] bytes = serVal.toByteArray();
+        ser.writeByteArray(bytes);
+        this.setBytes(Hex.toHexString(bytes));
     }
 
     @Override

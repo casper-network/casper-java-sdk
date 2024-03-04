@@ -45,12 +45,12 @@ public class CLValueTests {
 
     @Test
     void createCLTypeFromCLTypeData_should_return_correct_CLType() throws DynamicInstanceException {
-        assertTrue(CLTypeData.createCLTypeFromCLTypeData(CLTypeData.ANY) instanceof CLTypeAny);
+        assertInstanceOf(CLTypeAny.class, CLTypeData.createCLTypeFromCLTypeData(CLTypeData.ANY));
     }
 
     @Test
     void createCLValueFromCLTypeName_should_return_correct_CLValue() throws DynamicInstanceException, NoSuchTypeException {
-        assertTrue(CLTypeData.createCLValueFromCLTypeName(CLTypeData.ANY.getClTypeName()) instanceof CLValueAny);
+        assertInstanceOf(CLValueAny.class, CLTypeData.createCLValueFromCLTypeName(CLTypeData.ANY.getClTypeName()));
     }
 
     @Test

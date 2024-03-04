@@ -1,9 +1,7 @@
 package com.casper.sdk.model.clvalue;
 
 import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
-import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.cltype.CLTypeString;
-import com.casper.sdk.model.clvalue.serde.Target;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import dev.oak3.sbs4j.DeserializerBuffer;
@@ -32,7 +30,7 @@ public class CLValueString extends AbstractCLValue<String, CLTypeString> {
 
     @JsonSetter("cl_type")
     @ExcludeFromJacocoGeneratedReport
-    protected void setJsonClType(CLTypeString clType) {
+    protected void setJsonClType(final CLTypeString clType) {
         this.clType = clType;
     }
 
@@ -42,21 +40,21 @@ public class CLValueString extends AbstractCLValue<String, CLTypeString> {
         return this.getClType().getTypeName();
     }
 
-    public CLValueString(String value) throws ValueSerializationException {
+    public CLValueString(final String value) throws ValueSerializationException {
         this.setValue(value);
     }
 
     @Override
-    protected void serializeValue(SerializerBuffer ser) throws ValueSerializationException {
+    protected void serializeValue(final SerializerBuffer ser) throws ValueSerializationException {
         final SerializerBuffer serVal = new SerializerBuffer();
         serVal.writeString(this.getValue());
-        byte[] bytes = serVal.toByteArray();
-       ser.writeByteArray(bytes);
-       this.setBytes(Hex.toHexString(bytes));
+        final byte[] bytes = serVal.toByteArray();
+        ser.writeByteArray(bytes);
+        this.setBytes(Hex.toHexString(bytes));
     }
 
     @Override
-    public void deserializeCustom(DeserializerBuffer deser) throws Exception {
+    public void deserializeCustom(final DeserializerBuffer deser) throws Exception {
         this.setValue(deser.readString());
     }
 

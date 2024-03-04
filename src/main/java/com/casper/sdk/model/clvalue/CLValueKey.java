@@ -1,9 +1,7 @@
 package com.casper.sdk.model.clvalue;
 
 import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
-import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.cltype.CLTypeKey;
-import com.casper.sdk.model.clvalue.serde.Target;
 import com.casper.sdk.model.key.Key;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonSetter;
@@ -15,7 +13,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.bouncycastle.util.encoders.Hex;
 
 /**
  * Casper Key CLValue implementation
@@ -34,7 +31,7 @@ public class CLValueKey extends AbstractCLValue<Key, CLTypeKey> {
 
     @JsonSetter("cl_type")
     @ExcludeFromJacocoGeneratedReport
-    protected void setJsonClType(CLTypeKey clType) {
+    protected void setJsonClType(final CLTypeKey clType) {
         this.clType = clType;
     }
 
@@ -44,7 +41,7 @@ public class CLValueKey extends AbstractCLValue<Key, CLTypeKey> {
         return this.getClType().getTypeName();
     }
 
-    public CLValueKey(Key value) throws ValueSerializationException {
+    public CLValueKey(final Key value) throws ValueSerializationException {
         this.setValue(value);
     }
 
@@ -56,7 +53,7 @@ public class CLValueKey extends AbstractCLValue<Key, CLTypeKey> {
     }
 
     @Override
-    public void deserializeCustom(DeserializerBuffer deser) throws Exception {
+    public void deserializeCustom(final DeserializerBuffer deser) throws Exception {
         this.setValue(Key.fromTaggedHexString(ByteUtils.encodeHexString(deser.readByteArray(33))));
     }
 

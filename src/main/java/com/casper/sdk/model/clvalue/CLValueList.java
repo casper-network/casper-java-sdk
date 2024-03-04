@@ -5,7 +5,6 @@ import com.casper.sdk.model.clvalue.cltype.AbstractCLTypeWithChildren;
 import com.casper.sdk.model.clvalue.cltype.CLTypeData;
 import com.casper.sdk.model.clvalue.cltype.CLTypeList;
 import com.casper.sdk.model.clvalue.cltype.CLTypeMap;
-import com.casper.sdk.model.clvalue.serde.Target;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import dev.oak3.sbs4j.DeserializerBuffer;
@@ -38,12 +37,12 @@ public class CLValueList extends AbstractCLValueWithChildren<List<? extends Abst
     private CLTypeList clType = new CLTypeList();
 
     @JsonSetter("cl_type")
-    public void setClType(CLTypeList clType) {
+    public void setClType(final CLTypeList clType) {
         this.clType = clType;
         childTypesSet();
     }
 
-    public CLValueList(List<? extends AbstractCLValue<?, ?>> value) throws ValueSerializationException {
+    public CLValueList(final List<? extends AbstractCLValue<?, ?>> value) throws ValueSerializationException {
         setChildTypes(value);
         this.setValue(value);
     }
@@ -51,21 +50,25 @@ public class CLValueList extends AbstractCLValueWithChildren<List<? extends Abst
     @Override
     protected void serializeValue(final SerializerBuffer ser) throws ValueSerializationException {
 
+        final SerializerBuffer serVal = new SerializerBuffer();
+
         setChildTypes(this.getValue());
 
         // List length is written first
-        CLValueI32 length = new CLValueI32(getValue().size());
-        length.serialize(ser);
+        final CLValueI32 length = new CLValueI32(getValue().size());
+        length.serialize(serVal);
 
         for (AbstractCLValue<?, ?> child : getValue()) {
-            child.serialize(ser);
+            child.serialize(serVal);
         }
 
-        this.setBytes(Hex.toHexString(ser.toByteArray()));
+        final byte[] bytes = serVal.toByteArray();
+        ser.writeByteArray(bytes);
+        this.setBytes(Hex.toHexString(bytes));
     }
 
     @Override
-    protected void encodeType(SerializerBuffer ser) throws NoSuchTypeException {
+    protected void encodeType(final SerializerBuffer ser) throws NoSuchTypeException {
         super.encodeType(ser);
 
         byte val = (getClType().getListType().getClTypeData().getSerializationTag());
@@ -73,16 +76,16 @@ public class CLValueList extends AbstractCLValueWithChildren<List<? extends Abst
     }
 
     @Override
-    public void deserializeCustom(DeserializerBuffer deser) throws Exception {
-        CLTypeData childrenType = getClType().getListType().getClTypeData();
+    public void deserializeCustom(final DeserializerBuffer deser) throws Exception {
+        final CLTypeData childrenType = getClType().getListType().getClTypeData();
 
         // List length is sent first
-        CLValueI32 length = new CLValueI32();
+        final CLValueI32 length = new CLValueI32();
         length.deserializeCustom(deser);
 
-        List<AbstractCLValue<?, ?>> list = new ArrayList<>();
+        final List<AbstractCLValue<?, ?>> list = new ArrayList<>();
         for (int i = 0; i < length.getValue(); i++) {
-            AbstractCLValue<?, ?> child = CLTypeData.createCLValueFromCLTypeData(childrenType);
+            final AbstractCLValue<?, ?> child = CLTypeData.createCLValueFromCLTypeData(childrenType);
             if (child.getClType() instanceof CLTypeMap) {
                 ((CLTypeMap) child.getClType())
                         .setKeyValueTypes(((CLTypeMap) clType.getListType()).getKeyValueTypes());
@@ -98,7 +101,7 @@ public class CLValueList extends AbstractCLValueWithChildren<List<? extends Abst
     }
 
     @Override
-    protected void setChildTypes(List<? extends AbstractCLValue<?, ?>> value) {
+    protected void setChildTypes(final List<? extends AbstractCLValue<?, ?>> value) {
         if (!value.isEmpty()) {
             clType.setListType(value.get(0).getClType());
         } else {

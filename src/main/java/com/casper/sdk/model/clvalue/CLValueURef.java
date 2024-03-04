@@ -1,9 +1,7 @@
 package com.casper.sdk.model.clvalue;
 
 import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
-import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.cltype.CLTypeURef;
-import com.casper.sdk.model.clvalue.serde.Target;
 import com.casper.sdk.model.uref.URef;
 import com.casper.sdk.model.uref.URefAccessRight;
 import com.fasterxml.jackson.annotation.JsonGetter;
@@ -37,7 +35,7 @@ import java.util.Objects;
 public class CLValueURef extends AbstractCLValue<URef, CLTypeURef> {
     private CLTypeURef clType = new CLTypeURef();
 
-    public CLValueURef(URef value) throws ValueSerializationException {
+    public CLValueURef(final URef value) throws ValueSerializationException {
         this.setValue(value);
     }
 
@@ -49,29 +47,30 @@ public class CLValueURef extends AbstractCLValue<URef, CLTypeURef> {
 
     @JsonSetter("cl_type")
     @ExcludeFromJacocoGeneratedReport
-    protected void setJsonClType(CLTypeURef clType) {
+    protected void setJsonClType(final CLTypeURef clType) {
         this.clType = clType;
     }
 
-
     @Override
-    protected void serializeValue(SerializerBuffer ser) throws ValueSerializationException {
-        URef uref = this.getValue();
-        byte[] urefByte = new byte[uref.getAddress().length + 1];
+    protected void serializeValue(final SerializerBuffer ser) throws ValueSerializationException {
+        final SerializerBuffer serVal = new SerializerBuffer();
+        final URef uref = this.getValue();
+        final byte[] urefByte = new byte[uref.getAddress().length + 1];
         System.arraycopy(uref.getAddress(), 0, urefByte, 0, uref.getAddress().length);
         urefByte[32] = uref.getAccessRight().serializationTag;
-        ser.writeByteArray(urefByte);
-        // FIXME use a value SerializerBuffer to get the bytes
-        this.setBytes(Hex.toHexString(ser.toByteArray()));
+        serVal.writeByteArray(urefByte);
+        final byte[] bytes = serVal.toByteArray();
+        ser.writeByteArray(bytes);
+        this.setBytes(Hex.toHexString(bytes));
     }
 
     @Override
-    public void deserializeCustom(DeserializerBuffer deser) throws Exception {
-        URef uref = new URef();
-        CLValueByteArray clValueByteArray = new CLValueByteArray(new byte[32]);
+    public void deserializeCustom(final DeserializerBuffer deser) throws Exception {
+        final URef uref = new URef();
+        final CLValueByteArray clValueByteArray = new CLValueByteArray(new byte[32]);
         clValueByteArray.deserializeCustom(deser);
         uref.setAddress(clValueByteArray.getValue());
-        CLValueU8 serializationTag = new CLValueU8((byte) 0);
+        final CLValueU8 serializationTag = new CLValueU8((byte) 0);
         serializationTag.deserializeCustom(deser);
         uref.setAccessRight(URefAccessRight.getTypeBySerializationTag(serializationTag.getValue()));
         setValue(uref);

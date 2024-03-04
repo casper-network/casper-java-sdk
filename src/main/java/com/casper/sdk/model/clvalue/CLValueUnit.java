@@ -1,9 +1,7 @@
 package com.casper.sdk.model.clvalue;
 
 import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
-import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.cltype.CLTypeUnit;
-import com.casper.sdk.model.clvalue.serde.Target;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import dev.oak3.sbs4j.DeserializerBuffer;
@@ -12,7 +10,6 @@ import dev.oak3.sbs4j.exception.ValueSerializationException;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import org.bouncycastle.util.encoders.Hex;
 
 /**
  * Casper Unit CLValue implementation
@@ -52,8 +49,6 @@ public class CLValueUnit extends AbstractCLValue<Object, CLTypeUnit> {
     @Override
     protected void serializeValue(SerializerBuffer ser) throws ValueSerializationException {
         setBytes(UNITY_EMPTY_VALUE);
-        // FIXME use new SerializerBuffer()
-        this.setBytes(Hex.toHexString(ser.toByteArray()));
     }
 
     @Override
