@@ -1,11 +1,7 @@
 package com.casper.sdk.model.clvalue;
 
 import com.casper.sdk.exception.NoSuchTypeException;
-import com.casper.sdk.model.clvalue.cltype.AbstractCLTypeWithChildren;
-import com.casper.sdk.model.clvalue.cltype.CLTypeData;
-import com.casper.sdk.model.clvalue.cltype.CLTypeList;
-import com.casper.sdk.model.clvalue.cltype.CLTypeOption;
-import com.casper.sdk.model.clvalue.serde.Target;
+import com.casper.sdk.model.clvalue.cltype.*;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import dev.oak3.sbs4j.DeserializerBuffer;
@@ -41,22 +37,10 @@ public class CLValueOption extends AbstractCLValueWithChildren<Optional<Abstract
         childTypesSet();
     }
 
+    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     public CLValueOption(final Optional<AbstractCLValue<?, ?>> value) throws ValueSerializationException {
         setChildTypes(value);
         this.setValue(value);
-    }
-
-    @Override
-    public void serialize(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {
-
-        super.serialize(ser, target);
-
-        if (target.equals(Target.BYTE)) {
-            Optional<AbstractCLValue<?, ?>> child = getValue();
-            if (child.isPresent()) {
-                child.get().encodeType(ser);
-            }
-        }
     }
 
     @Override
@@ -72,7 +56,7 @@ public class CLValueOption extends AbstractCLValueWithChildren<Optional<Abstract
             ((AbstractCLTypeWithChildren) value.get().getClType())
                     .setChildTypes(((AbstractCLTypeWithChildren) clType.getOptionType()).getChildTypes());
         }
-        if (value.isPresent() && isPresent.getValue().equals(Boolean.TRUE)) {
+        if (Boolean.TRUE.equals(isPresent.getValue()) && value.isPresent()) {
             value.get().serialize(serVal);
         }
 
@@ -96,13 +80,26 @@ public class CLValueOption extends AbstractCLValueWithChildren<Optional<Abstract
         } else if (child.getClType() instanceof AbstractCLTypeWithChildren) {
             ((AbstractCLTypeWithChildren) child.getClType())
                     .setChildTypes(((AbstractCLTypeWithChildren) clType.getOptionType()).getChildTypes());
+        } else if (child instanceof CLValueByteArray) {
+            // Byte arrays require their length to be set to correctly deserialize
+            ((CLValueByteArray) child).setClType((CLTypeByteArray) clType.getOptionType());
         }
 
-        if (isPresent.getValue().equals(Boolean.TRUE)) {
+        if (Boolean.TRUE.equals(isPresent.getValue())) {
             child.deserializeCustom(deser);
         }
 
         setValue(Optional.of(child));
+    }
+
+    @Override
+    protected void encodeType(final SerializerBuffer ser) throws NoSuchTypeException {
+        super.encodeType(ser);
+
+        Optional<AbstractCLValue<?, ?>> child = getValue();
+        if (child.isPresent()) {
+            child.get().encodeType(ser);
+        }
     }
 
     @Override
