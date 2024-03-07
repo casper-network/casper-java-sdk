@@ -5,7 +5,9 @@ import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.cltype.CLTypeAny;
 import com.casper.sdk.model.clvalue.cltype.CLTypeData;
 import com.casper.sdk.model.clvalue.cltype.CLTypeMap;
+import com.casper.sdk.model.clvalue.cltype.CLTypeTuple1;
 import com.casper.sdk.model.clvalue.serde.Target;
+import com.casper.sdk.model.deploy.NamedArg;
 import com.syntifi.crypto.key.encdec.Hex;
 import dev.oak3.sbs4j.DeserializerBuffer;
 import dev.oak3.sbs4j.SerializerBuffer;
@@ -96,7 +98,14 @@ public class CLValueTests {
         ser = new SerializerBuffer();
         clValueTuple1.serialize(ser, Target.BYTE);
 
-        final byte [] expected = { 4,0,0,0,1,0,0,0,18,4 };
+        byte[] expected = {4, 0, 0, 0, 1, 0, 0, 0, 18, 4};
+        assertThat(ser.toByteArray(), is(expected));
+
+        NamedArg<CLTypeTuple1> namedArg = new NamedArg<>("TUPLE_1", clValueTuple1);
+        ser = new SerializerBuffer();
+        namedArg.serialize(ser, Target.BYTE);
+        expected = new byte[]{7, 0, 0, 0, 84, 85, 80, 76, 69, 95, 49, 4, 0, 0, 0, 1, 0, 0, 0, 18, 4};
+
         assertThat(ser.toByteArray(), is(expected));
     }
 
@@ -144,5 +153,21 @@ public class CLValueTests {
         CLValueU32 valueDeser = (CLValueU32) deserialized.getValue().get(key);
         assertThat(valueDeser, is(value));
         assertThat(valueDeser.getBytes(), is(value.getBytes()));
+    }
+
+
+
+    @Test
+    void nestedTupleSerialization() throws Exception {
+        final CLValueTuple1 innerTuple1 = new CLValueTuple1(new Unit<>(new CLValueU32(1L)));
+        final CLValueTuple1 outerTuple1 = new CLValueTuple1(new Unit<>(innerTuple1));
+
+        final SerializerBuffer ser = new SerializerBuffer();
+        outerTuple1.serialize(ser, Target.BYTE);
+
+        final byte[] expected = {4, 0, 0, 0, 1, 0, 0, 0, 18, 18, 4};
+
+        assertThat(ser.toByteArray(), is(expected));
+
     }
 }

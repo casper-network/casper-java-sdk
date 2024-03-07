@@ -117,13 +117,13 @@ public abstract class AbstractCLValue<T, P extends AbstractCLType>
     public void serialize(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {
         if (this.getValue() == null) return;
 
-        if (target.equals(Target.BYTE)) {
+        if (Target.BYTE.equals(target)) {
             serializePrefixWithLength(ser);
         }
 
         serializeValue(ser);
 
-        if (target.equals(Target.BYTE)) {
+        if (Target.BYTE.equals(target)) {
             this.encodeType(ser);
         }
     }
