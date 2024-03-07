@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":6,"i5":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":6,"i6":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -208,21 +208,31 @@ extends <a href="AbstractCLValue.html" title="class in com.casper.sdk.model.clva
 </td>
 </tr>
 <tr id="i2" class="altColor">
+<td class="colFirst"><code>protected void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#encodeChildType(dev.oak3.sbs4j.SerializerBuffer,com.casper.sdk.model.clvalue.AbstractCLValue,com.casper.sdk.model.clvalue.cltype.CLTypeData)">encodeChildType</a></span>&#8203;(dev.oak3.sbs4j.SerializerBuffer&nbsp;ser,
+               <a href="AbstractCLValue.html" title="class in com.casper.sdk.model.clvalue">AbstractCLValue</a>&lt;?,&#8203;?&gt;&nbsp;child,
+               <a href="cltype/CLTypeData.html" title="enum in com.casper.sdk.model.clvalue.cltype">CLTypeData</a>&nbsp;childDataType)</code></th>
+<td class="colLast">
+<div class="block">Encodes the bytes of the child type, if the child value is not present but the type is known from the parent type
+ info, the childDataType is used to encode the bytes of the child rather than the child value.</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#equals(java.lang.Object)">equals</a></span>&#8203;(java.lang.Object&nbsp;o)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hashCode()">hashCode</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>protected abstract void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setChildTypes(T)">setChildTypes</a></span>&#8203;(<a href="AbstractCLValueWithChildren.html" title="type parameter in AbstractCLValueWithChildren">T</a>&nbsp;value)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setJsonBytes(java.lang.String)">setJsonBytes</a></span>&#8203;(java.lang.String&nbsp;bytes)</code></th>
 <td class="colLast">
@@ -324,6 +334,28 @@ protected&nbsp;void&nbsp;setJsonBytes&#8203;(java.lang.String&nbsp;bytes)</pre>
 <dd><code><a href="AbstractCLValue.html#setJsonBytes(java.lang.String)">setJsonBytes</a></code>&nbsp;in class&nbsp;<code><a href="AbstractCLValue.html" title="class in com.casper.sdk.model.clvalue">AbstractCLValue</a>&lt;<a href="AbstractCLValueWithChildren.html" title="type parameter in AbstractCLValueWithChildren">T</a>,&#8203;<a href="AbstractCLValueWithChildren.html" title="type parameter in AbstractCLValueWithChildren">P</a> extends <a href="cltype/AbstractCLTypeWithChildren.html" title="class in com.casper.sdk.model.clvalue.cltype">AbstractCLTypeWithChildren</a>&gt;</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>bytes</code> - the input bytes for this CLValue</dd>
+</dl>
+</li>
+</ul>
+<a id="encodeChildType(dev.oak3.sbs4j.SerializerBuffer,com.casper.sdk.model.clvalue.AbstractCLValue,com.casper.sdk.model.clvalue.cltype.CLTypeData)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>encodeChildType</h4>
+<pre class="methodSignature">protected&nbsp;void&nbsp;encodeChildType&#8203;(dev.oak3.sbs4j.SerializerBuffer&nbsp;ser,
+                               <a href="AbstractCLValue.html" title="class in com.casper.sdk.model.clvalue">AbstractCLValue</a>&lt;?,&#8203;?&gt;&nbsp;child,
+                               <a href="cltype/CLTypeData.html" title="enum in com.casper.sdk.model.clvalue.cltype">CLTypeData</a>&nbsp;childDataType)
+                        throws <a href="../../exception/NoSuchTypeException.html" title="class in com.casper.sdk.exception">NoSuchTypeException</a></pre>
+<div class="block">Encodes the bytes of the child type, if the child value is not present but the type is known from the parent type
+ info, the childDataType is used to encode the bytes of the child rather than the child value.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>ser</code> - the serializer buffer</dd>
+<dd><code>child</code> - the child value whose type is to be encoded</dd>
+<dd><code>childDataType</code> - the data type of the child</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="../../exception/NoSuchTypeException.html" title="class in com.casper.sdk.exception">NoSuchTypeException</a></code> - if the child type is not found</dd>
 </dl>
 </li>
 </ul>
