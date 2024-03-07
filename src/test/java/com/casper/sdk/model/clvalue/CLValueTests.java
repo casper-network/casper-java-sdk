@@ -7,6 +7,7 @@ import com.casper.sdk.model.clvalue.cltype.CLTypeData;
 import com.casper.sdk.model.clvalue.serde.Target;
 import com.syntifi.crypto.key.encdec.Hex;
 import dev.oak3.sbs4j.SerializerBuffer;
+import org.javatuples.Unit;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -75,6 +76,23 @@ public class CLValueTests {
         ser = new SerializerBuffer();
         clValueAny.serialize(ser, Target.BYTE);
         assertThat(ser.toByteArray(), is(Hex.decode("04000000d202964915")));
+    }
+
+
+    @Test
+    void clValueTupleOneSerialization() throws Exception {
+
+        final CLValueTuple1 clValueTuple1 = new CLValueTuple1(new Unit<>(new CLValueU32(1L)));
+
+        SerializerBuffer ser = new SerializerBuffer();
+        clValueTuple1.serialize(ser, Target.JSON);
+        assertThat(ser.toByteArray(), is(Hex.decode("01000000")));
+
+        ser = new SerializerBuffer();
+        clValueTuple1.serialize(ser, Target.BYTE);
+
+        final byte [] expected = { 4,0,0,0,1,0,0,0,18,4 };
+        assertThat(ser.toByteArray(), is(expected));
     }
 
     @Test
