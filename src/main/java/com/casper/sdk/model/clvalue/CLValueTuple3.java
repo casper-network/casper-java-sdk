@@ -63,12 +63,9 @@ public class CLValueTuple3 extends
     protected void encodeType(SerializerBuffer ser) throws NoSuchTypeException {
         super.encodeType(ser);
 
-        byte element0TypeTag = getClType().getChildClTypeData(0).getSerializationTag();
-        ser.writeU8(element0TypeTag);
-        byte element1TypeTag = getClType().getChildClTypeData(1).getSerializationTag();
-        ser.writeU8(element1TypeTag);
-        byte element2TypeTag = getClType().getChildClTypeData(2).getSerializationTag();
-        ser.writeU8(element2TypeTag);
+        encodeChildType(ser, this.getValue().getValue0(), getClType().getChildClTypeData(0));
+        encodeChildType(ser, this.getValue().getValue1(), getClType().getChildClTypeData(1));
+        encodeChildType(ser, this.getValue().getValue2(), getClType().getChildClTypeData(2));
     }
 
     @Override

@@ -63,11 +63,10 @@ public class CLValueTuple2
     protected void encodeType(final SerializerBuffer ser) throws NoSuchTypeException {
         super.encodeType(ser);
 
-        final byte element0TypeTag = getClType().getChildClTypeData(0).getSerializationTag();
-        ser.writeU8(element0TypeTag);
-        final byte element1TypeTag = getClType().getChildClTypeData(1).getSerializationTag();
-        ser.writeU8(element1TypeTag);
+        encodeChildType(ser, this.getValue().getValue0(), getClType().getChildClTypeData(0));
+        encodeChildType(ser, this.getValue().getValue1(), getClType().getChildClTypeData(1));
     }
+
 
     @Override
     public void deserializeCustom(final DeserializerBuffer deser) throws Exception {

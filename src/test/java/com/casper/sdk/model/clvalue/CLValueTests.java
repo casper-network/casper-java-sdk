@@ -11,6 +11,8 @@ import com.casper.sdk.model.deploy.NamedArg;
 import com.syntifi.crypto.key.encdec.Hex;
 import dev.oak3.sbs4j.DeserializerBuffer;
 import dev.oak3.sbs4j.SerializerBuffer;
+import org.javatuples.Pair;
+import org.javatuples.Triplet;
 import org.javatuples.Unit;
 import org.junit.jupiter.api.Test;
 
@@ -155,10 +157,8 @@ public class CLValueTests {
         assertThat(valueDeser.getBytes(), is(value.getBytes()));
     }
 
-
-
     @Test
-    void nestedTupleSerialization() throws Exception {
+    void nestedTuple1Serialization() throws Exception {
         final CLValueTuple1 innerTuple1 = new CLValueTuple1(new Unit<>(new CLValueU32(1L)));
         final CLValueTuple1 outerTuple1 = new CLValueTuple1(new Unit<>(innerTuple1));
 
@@ -168,6 +168,33 @@ public class CLValueTests {
         final byte[] expected = {4, 0, 0, 0, 1, 0, 0, 0, 18, 18, 4};
 
         assertThat(ser.toByteArray(), is(expected));
+    }
 
+    @Test
+    void nestedTuple2Serialization() throws Exception {
+        final CLValueTuple2 innerTuple1 = new CLValueTuple2(new Pair<>(new CLValueU32(1L), new CLValueU32(2L)));
+        final CLValueTuple2 innerTuple2 = new CLValueTuple2(new Pair<>(new CLValueU32(3L), new CLValueU32(4L)));
+        final CLValueTuple2 outerTuple = new CLValueTuple2(new Pair<>(innerTuple1, innerTuple2));
+
+        final SerializerBuffer ser = new SerializerBuffer();
+        outerTuple.serialize(ser, Target.BYTE);
+
+        final byte[] expected = {16, 0, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0, 3, 0, 0, 0, 4, 0, 0, 0, 19, 19, 4, 4, 19, 4, 4};
+
+        assertThat(ser.toByteArray(), is(expected));
+    }
+
+    @Test
+    void nestedTuple3Serialization() throws Exception {
+        final CLValueTuple3 innerTuple1 = new CLValueTuple3(new Triplet<>(new CLValueU32(1L), new CLValueU32(2L), new CLValueU32(3L)));
+        final CLValueTuple3 innerTuple2 = new CLValueTuple3(new Triplet<>(innerTuple1, new CLValueU32(4L), new CLValueU32(5L)));
+        final CLValueTuple3 outerTuple = new CLValueTuple3(new Triplet<>(innerTuple2, new CLValueU32(6L), new CLValueU32(7L)));
+
+        final SerializerBuffer ser = new SerializerBuffer();
+        outerTuple.serialize(ser, Target.BYTE);
+
+        final byte[] expected = {28, 0, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0, 3, 0, 0, 0, 4, 0, 0, 0, 5, 0, 0, 0, 6, 0, 0, 0, 7, 0, 0, 0, 20, 20, 20, 4, 4, 4, 4, 4, 4, 4};
+
+        assertThat(ser.toByteArray(), is(expected));
     }
 }
