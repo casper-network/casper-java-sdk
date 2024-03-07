@@ -1,9 +1,7 @@
 package com.casper.sdk.model.clvalue;
 
 import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
-import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.cltype.CLTypeI64;
-import com.casper.sdk.model.clvalue.serde.Target;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import dev.oak3.sbs4j.DeserializerBuffer;
@@ -32,7 +30,7 @@ public class CLValueI64 extends AbstractCLValue<Long, CLTypeI64> {
 
     @JsonSetter("cl_type")
     @ExcludeFromJacocoGeneratedReport
-    protected void setJsonClType(CLTypeI64 clType) {
+    protected void setJsonClType(final CLTypeI64 clType) {
         this.clType = clType;
     }
 
@@ -42,29 +40,21 @@ public class CLValueI64 extends AbstractCLValue<Long, CLTypeI64> {
         return this.getClType().getTypeName();
     }
 
-    public CLValueI64(Long value) throws ValueSerializationException {
+    public CLValueI64(final Long value) throws ValueSerializationException {
         this.setValue(value);
     }
 
     @Override
-    public void serialize(SerializerBuffer ser, Target target) throws NoSuchTypeException, ValueSerializationException {
-        if (this.getValue() == null) return;
-
-        if (target.equals(Target.BYTE)) {
-            super.serializePrefixWithLength(ser);
-        }
-
-        ser.writeI64(this.getValue());
-
-        if (target.equals(Target.BYTE)) {
-            this.encodeType(ser);
-        }
-
-        this.setBytes(Hex.toHexString(ser.toByteArray()));
+    protected void serializeValue(final SerializerBuffer ser) throws ValueSerializationException {
+        final SerializerBuffer serVal = new SerializerBuffer();
+        serVal.writeI64(this.getValue());
+        final byte[] bytes = serVal.toByteArray();
+        ser.writeByteArray(bytes);
+        this.setBytes(Hex.toHexString(bytes));
     }
 
     @Override
-    public void deserializeCustom(DeserializerBuffer deser) throws Exception {
+    public void deserializeCustom(final DeserializerBuffer deser) throws Exception {
         this.setValue(deser.readI64());
     }
 

@@ -1,9 +1,7 @@
 package com.casper.sdk.model.clvalue;
 
 import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
-import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.cltype.CLTypeU8;
-import com.casper.sdk.model.clvalue.serde.Target;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import dev.oak3.sbs4j.DeserializerBuffer;
@@ -32,7 +30,7 @@ public class CLValueU8 extends AbstractCLValue<Byte, CLTypeU8> {
 
     @JsonSetter("cl_type")
     @ExcludeFromJacocoGeneratedReport
-    protected void setJsonClType(CLTypeU8 clType) {
+    protected void setJsonClType(final CLTypeU8 clType) {
         this.clType = clType;
     }
 
@@ -42,29 +40,21 @@ public class CLValueU8 extends AbstractCLValue<Byte, CLTypeU8> {
         return this.getClType().getTypeName();
     }
 
-    public CLValueU8(Byte value) throws ValueSerializationException {
+    public CLValueU8(final Byte value) throws ValueSerializationException {
         this.setValue(value);
     }
 
     @Override
-    public void serialize(SerializerBuffer ser, Target target) throws NoSuchTypeException, ValueSerializationException {
-        if (this.getValue() == null) return;
-
-        if (target.equals(Target.BYTE)) {
-            super.serializePrefixWithLength(ser);
-        }
-
-        ser.writeU8(this.getValue());
-
-        if (target.equals(Target.BYTE)) {
-            this.encodeType(ser);
-        }
-
-        this.setBytes(Hex.toHexString(ser.toByteArray()));
+    protected void serializeValue(final SerializerBuffer ser) throws ValueSerializationException {
+        final SerializerBuffer serVal = new SerializerBuffer();
+        serVal.writeU8(this.getValue());
+        final byte[] bytes = serVal.toByteArray();
+        ser.writeByteArray(bytes);
+        this.setBytes(Hex.toHexString(bytes));
     }
 
     @Override
-    public void deserializeCustom(DeserializerBuffer deser) throws Exception {
+    public void deserializeCustom(final DeserializerBuffer deser) throws Exception {
         this.setValue(deser.readU8());
     }
 

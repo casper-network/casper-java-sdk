@@ -4,7 +4,6 @@ import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.cltype.AbstractCLTypeWithChildren;
 import com.casper.sdk.model.clvalue.cltype.CLTypeData;
 import com.casper.sdk.model.clvalue.cltype.CLTypeMap;
-import com.casper.sdk.model.clvalue.serde.Target;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
@@ -45,58 +44,54 @@ public class CLValueMap extends
         childTypesSet();
     }
 
-    public CLValueMap(Map<? extends AbstractCLValue<?, ?>, ? extends AbstractCLValue<?, ?>> value) throws ValueSerializationException {
+    public CLValueMap(final Map<? extends AbstractCLValue<?, ?>, ? extends AbstractCLValue<?, ?>> value) throws ValueSerializationException {
         setChildTypes(value);
         this.setValue(value);
     }
 
-    @Override
-    public void serialize(SerializerBuffer ser, Target target) throws ValueSerializationException, NoSuchTypeException {
-        if (this.getValue() == null) return;
 
-        if (target.equals(Target.BYTE)) {
-            super.serializePrefixWithLength(ser);
-        }
+    @Override
+    protected void serializeValue(final SerializerBuffer ser) throws ValueSerializationException {
+
+        final SerializerBuffer serVal = new SerializerBuffer();
 
         setChildTypes(this.getValue());
 
-        CLValueI32 mapLength = new CLValueI32(getValue().size());
-        mapLength.serialize(ser);
+        final CLValueI32 mapLength = new CLValueI32(getValue().size());
+        mapLength.serialize(serVal);
 
         for (Entry<? extends AbstractCLValue<?, ?>, ? extends AbstractCLValue<?, ?>> entry : getValue().entrySet()) {
-            entry.getKey().serialize(ser);
-            entry.getValue().serialize(ser);
+            entry.getKey().serialize(serVal);
+            entry.getValue().serialize(serVal);
         }
 
-        if (target.equals(Target.BYTE)) {
-            this.encodeType(ser);
-        }
-
-        this.setBytes(Hex.toHexString(ser.toByteArray()));
+        final byte[] bytes = serVal.toByteArray();
+        ser.writeByteArray(bytes);
+        this.setBytes(Hex.toHexString(bytes));
     }
 
     @Override
-    protected void encodeType(SerializerBuffer ser) throws NoSuchTypeException {
+    protected void encodeType(final SerializerBuffer ser) throws NoSuchTypeException {
         super.encodeType(ser);
 
-        byte keyTypeTag = (getClType().getKeyValueTypes().getKeyType().getClTypeData().getSerializationTag());
+        final byte keyTypeTag = (getClType().getKeyValueTypes().getKeyType().getClTypeData().getSerializationTag());
         ser.writeU8(keyTypeTag);
 
-        byte valueTypeTag = (getClType().getKeyValueTypes().getValueType().getClTypeData().getSerializationTag());
+        final byte valueTypeTag = (getClType().getKeyValueTypes().getValueType().getClTypeData().getSerializationTag());
         ser.writeU8(valueTypeTag);
     }
 
     @Override
-    public void deserializeCustom(DeserializerBuffer deser) throws Exception {
-        CLTypeData keyType = clType.getKeyValueTypes().getKeyType().getClTypeData();
-        CLTypeData valType = clType.getKeyValueTypes().getValueType().getClTypeData();
+    public void deserializeCustom(final DeserializerBuffer deser) throws Exception {
+        final CLTypeData keyType = clType.getKeyValueTypes().getKeyType().getClTypeData();
+        final CLTypeData valType = clType.getKeyValueTypes().getValueType().getClTypeData();
 
-        Map<AbstractCLValue<?, ?>, AbstractCLValue<?, ?>> map = new LinkedHashMap<>();
-        CLValueI32 mapLength = new CLValueI32(0);
+        final Map<AbstractCLValue<?, ?>, AbstractCLValue<?, ?>> map = new LinkedHashMap<>();
+        final CLValueI32 mapLength = new CLValueI32(0);
         mapLength.deserializeCustom(deser);
 
         for (int i = 0; i < mapLength.getValue(); i++) {
-            AbstractCLValue<?, ?> key = CLTypeData.createCLValueFromCLTypeData(keyType);
+            final AbstractCLValue<?, ?> key = CLTypeData.createCLValueFromCLTypeData(keyType);
             if (key.getClType() instanceof AbstractCLTypeWithChildren) {
                 ((AbstractCLTypeWithChildren) key.getClType())
                         .setChildTypes(
@@ -104,7 +99,7 @@ public class CLValueMap extends
             }
             key.deserializeCustom(deser);
 
-            AbstractCLValue<?, ?> val = CLTypeData.createCLValueFromCLTypeData(valType);
+            final AbstractCLValue<?, ?> val = CLTypeData.createCLValueFromCLTypeData(valType);
 
             if (val.getClType() instanceof CLTypeMap) {
                 ((CLTypeMap) val.getClType())
@@ -124,9 +119,9 @@ public class CLValueMap extends
 
     @Override
     @JsonIgnore
-    protected void setChildTypes(Map<? extends AbstractCLValue<?, ?>, ? extends AbstractCLValue<?, ?>> value) {
+    protected void setChildTypes(final Map<? extends AbstractCLValue<?, ?>, ? extends AbstractCLValue<?, ?>> value) {
         if (value != null && value.entrySet().iterator().hasNext()) {
-            Entry<? extends AbstractCLValue<?, ?>, ? extends AbstractCLValue<?, ?>> entry = value.entrySet().iterator().next();
+            final Entry<? extends AbstractCLValue<?, ?>, ? extends AbstractCLValue<?, ?>> entry = value.entrySet().iterator().next();
             clType.setKeyValueTypes(new CLTypeMap.CLTypeMapEntryType(entry.getKey().getClType(), entry.getValue().getClType()));
         } else {
             clType.setChildTypes(new ArrayList<>());

@@ -1,9 +1,7 @@
 package com.casper.sdk.model.clvalue;
 
 import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
-import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.cltype.CLTypeBool;
-import com.casper.sdk.model.clvalue.serde.Target;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import dev.oak3.sbs4j.DeserializerBuffer;
@@ -14,7 +12,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.bouncycastle.util.encoders.Hex;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Casper Bool CLValue implementation
@@ -33,7 +30,7 @@ public class CLValueBool extends AbstractCLValue<Boolean, CLTypeBool> {
 
     @JsonSetter("cl_type")
     @ExcludeFromJacocoGeneratedReport
-    protected void setJsonClType(CLTypeBool clType) {
+    protected void setJsonClType(final CLTypeBool clType) {
         this.clType = clType;
     }
 
@@ -43,29 +40,18 @@ public class CLValueBool extends AbstractCLValue<Boolean, CLTypeBool> {
         return this.getClType().getTypeName();
     }
 
-    public CLValueBool(Boolean value) throws ValueSerializationException {
+    public CLValueBool(final Boolean value) throws ValueSerializationException {
         this.setValue(value);
     }
 
     @Override
-    public void serialize(@NotNull SerializerBuffer ser, Target target) throws NoSuchTypeException, ValueSerializationException {
-        if (this.getValue() == null) return;
-
-        if (target.equals(Target.BYTE)) {
-            super.serializePrefixWithLength(ser);
-        }
-
+    protected void serializeValue(final SerializerBuffer ser) throws ValueSerializationException {
         ser.writeBool(this.getValue());
-
-        if (target.equals(Target.BYTE)) {
-            this.encodeType(ser);
-        }
-
         this.setBytes(Hex.toHexString(ser.toByteArray()));
     }
 
     @Override
-    public void deserializeCustom(DeserializerBuffer deser) throws Exception {
+    public void deserializeCustom(final DeserializerBuffer deser) throws Exception {
         this.setValue(deser.readBool());
     }
 

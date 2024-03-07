@@ -70,7 +70,7 @@ public class SerializerDeserializerTests {
             new TestData<>(AbstractCLType.U512, new BigInteger("2500010000", 10), "0410200395", null, Target.JSON),
             new TestData<>(AbstractCLType.STRING, "the string", "0a00000074686520737472696e67", null, Target.JSON),
             new TestData<>(AbstractCLType.STRING, "Hello, World!", "0d00000048656c6c6f2c20576f726c6421", null, Target.JSON),
-            new TestData<>(AbstractCLType.STRING, "nested", "0a000000060000006e65737465640a", null, Target.BYTE));
+            new TestData<>(AbstractCLType.STRING, "nested", "060000006e6573746564", null, Target.JSON));
 
     private final List<TestData<?>> lastValidNumberTestDataList = Arrays.asList(
             new TestData<>(AbstractCLType.U64, SerializerBuffer.MAX_U64, null, null, Target.JSON),

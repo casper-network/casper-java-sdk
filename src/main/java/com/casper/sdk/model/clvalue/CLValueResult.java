@@ -1,10 +1,8 @@
 package com.casper.sdk.model.clvalue;
 
-import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.cltype.AbstractCLTypeWithChildren;
 import com.casper.sdk.model.clvalue.cltype.CLTypeData;
 import com.casper.sdk.model.clvalue.cltype.CLTypeResult;
-import com.casper.sdk.model.clvalue.serde.Target;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dev.oak3.sbs4j.DeserializerBuffer;
 import dev.oak3.sbs4j.SerializerBuffer;
@@ -47,45 +45,40 @@ public class CLValueResult extends AbstractCLValue<CLValueResult.Result, CLTypeR
     @JsonProperty("cl_type")
     private CLTypeResult clType = new CLTypeResult();
 
-    public CLValueResult(AbstractCLValue<?, ?> ok, AbstractCLValue<?, ?> err) throws ValueSerializationException {
+    public CLValueResult(final AbstractCLValue<?, ?> ok, final AbstractCLValue<?, ?> err) throws ValueSerializationException {
         setChildTypes(ok, err);
         this.setValue(new Result(ok, err));
     }
 
     @Override
-    public void serialize(SerializerBuffer ser, Target target) throws ValueSerializationException, NoSuchTypeException {
-        if (this.getValue() == null) return;
-
-        if (target.equals(Target.BYTE)) {
-            super.serializePrefixWithLength(ser);
-        }
-
+    protected void serializeValue(final SerializerBuffer ser) throws ValueSerializationException {
         setChildTypes(this.getValue().getOk(), this.getValue().getErr());
 
-        CLValueBool clValueTrue = new CLValueBool(true);
-        clValueTrue.serialize(ser);
+        SerializerBuffer serVal = new SerializerBuffer();
 
-        getValue().getOk().serialize(ser);
+        CLValueBool clValueTrue = new CLValueBool(true);
+        clValueTrue.serialize(serVal);
+
+        getValue().getOk().serialize(serVal);
 
         CLValueBool clValueFalse = new CLValueBool(false);
-        clValueFalse.serialize(ser);
+        clValueFalse.serialize(serVal);
 
-        getValue().getErr().serialize(ser);
+        getValue().getErr().serialize(serVal);
 
-        if (target.equals(Target.BYTE)) {
-            this.encodeType(ser);
-        }
+        final byte[] bytes = serVal.toByteArray();
+        ser.writeByteArray(bytes);
 
-        this.setBytes(Hex.toHexString(ser.toByteArray()));
+        this.setBytes(Hex.toHexString(bytes));
     }
 
     @Override
-    public void deserializeCustom(DeserializerBuffer deser) throws Exception {
-        Result result = new Result();
+    public void deserializeCustom(final DeserializerBuffer deser) throws Exception {
+        final Result result = new Result();
         CLValueBool bool = new CLValueBool();
         bool.setValue(deser.readBool());
-        CLTypeData typeOk = clType.getOkErrTypes().getOkClType().getClTypeData();
-        AbstractCLValue<?, ?> clValueOk = CLTypeData.createCLValueFromCLTypeData(typeOk);
+        final CLTypeData typeOk = clType.getOkErrTypes().getOkClType().getClTypeData();
+        final AbstractCLValue<?, ?> clValueOk = CLTypeData.createCLValueFromCLTypeData(typeOk);
         if (clValueOk.getClType() instanceof AbstractCLTypeWithChildren) {
             ((AbstractCLTypeWithChildren) clValueOk.getClType()).getChildTypes()
                     .addAll(((AbstractCLTypeWithChildren) clType.getOkErrTypes().getOkClType()).getChildTypes());
@@ -95,8 +88,8 @@ public class CLValueResult extends AbstractCLValue<CLValueResult.Result, CLTypeR
 
         bool = new CLValueBool();
         bool.deserializeCustom(deser);
-        CLTypeData typeErr = clType.getOkErrTypes().getErrClType().getClTypeData();
-        AbstractCLValue<?, ?> clValueErr = CLTypeData.createCLValueFromCLTypeData(typeErr);
+        final CLTypeData typeErr = clType.getOkErrTypes().getErrClType().getClTypeData();
+        final AbstractCLValue<?, ?> clValueErr = CLTypeData.createCLValueFromCLTypeData(typeErr);
         if (clValueErr.getClType() instanceof AbstractCLTypeWithChildren) {
             ((AbstractCLTypeWithChildren) clValueErr.getClType()).getChildTypes()
                     .addAll(((AbstractCLTypeWithChildren) clType.getOkErrTypes().getErrClType()).getChildTypes());
@@ -107,7 +100,7 @@ public class CLValueResult extends AbstractCLValue<CLValueResult.Result, CLTypeR
         setValue(result);
     }
 
-    protected void setChildTypes(AbstractCLValue<?, ?> ok, AbstractCLValue<?, ?> err) {
+    protected void setChildTypes(final AbstractCLValue<?, ?> ok, AbstractCLValue<?, ?> err) {
         clType.setOkErrTypes(
                 new CLTypeResult.CLTypeResultOkErrTypes(ok.getClType(), err.getClType()));
     }
