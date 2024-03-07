@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AbstractCLValueWithChildren.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">casper-java-sdk</a> &gt; <a href="index.source.html" class="el_package">com.casper.sdk.model.clvalue</a> &gt; <span class="el_source">AbstractCLValueWithChildren.java</span></div><h1>AbstractCLValueWithChildren.java</h1><pre class="source lang-java linenums">package com.casper.sdk.model.clvalue;
 
 import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
+import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.cltype.AbstractCLTypeWithChildren;
+import com.casper.sdk.model.clvalue.cltype.CLTypeData;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import dev.oak3.sbs4j.DeserializerBuffer;
+import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueDeserializationException;
 import lombok.EqualsAndHashCode;
 import lombok.SneakyThrows;
@@ -16,8 +19,8 @@ import lombok.SneakyThrows;
  * @see AbstractCLValue
  * @since 0.0.1
  */
-<span class="pc bpc" id="L19" title="4 of 8 branches missed.">@EqualsAndHashCode(callSuper = true)</span>
-<span class="fc" id="L20">public abstract class AbstractCLValueWithChildren&lt;T, P extends AbstractCLTypeWithChildren&gt; extends AbstractCLValue&lt;T, P&gt; {</span>
+<span class="pc bpc" id="L22" title="4 of 8 branches missed.">@EqualsAndHashCode(callSuper = true)</span>
+<span class="fc" id="L23">public abstract class AbstractCLValueWithChildren&lt;T, P extends AbstractCLTypeWithChildren&gt; extends AbstractCLValue&lt;T, P&gt; {</span>
     protected abstract void setChildTypes(T value);
 
     /**
@@ -26,13 +29,13 @@ import lombok.SneakyThrows;
      * &lt;p&gt;
      * Should always be called in the end of the json setter for ClType within CLValueWithChildren
      */
-<span class="pc" id="L29">    @SneakyThrows({ValueDeserializationException.class})</span>
+<span class="pc" id="L32">    @SneakyThrows({ValueDeserializationException.class})</span>
     protected void childTypesSet() {
-<span class="fc bfc" id="L31" title="All 2 branches covered.">        if (!getBytes().isEmpty()) {</span>
-<span class="fc" id="L32">            DeserializerBuffer deser = new DeserializerBuffer(this.getBytes());</span>
-<span class="fc" id="L33">            this.deserialize(deser);</span>
+<span class="fc bfc" id="L34" title="All 2 branches covered.">        if (!getBytes().isEmpty()) {</span>
+<span class="fc" id="L35">            DeserializerBuffer deser = new DeserializerBuffer(this.getBytes());</span>
+<span class="fc" id="L36">            this.deserialize(deser);</span>
         }
-<span class="fc" id="L35">    }</span>
+<span class="fc" id="L38">    }</span>
 
     /**
      * Sets the bytes and if the CLType is already set, fires bytes deserialization
@@ -51,5 +54,26 @@ import lombok.SneakyThrows;
             this.deserialize(deser);
         }
     }
+
+    /**
+     * Encodes the bytes of the child type, if the child value is not present but the type is known from the parent type
+     * info, the childDataType is used to encode the bytes of the child rather than the child value.
+     *
+     * @param ser           the serializer buffer
+     * @param child         the child value whose type is to be encoded
+     * @param childDataType the data type of the child
+     * @throws NoSuchTypeException if the child type is not found
+     */
+    protected void encodeChildType(final SerializerBuffer ser,
+                                   final AbstractCLValue&lt;?, ?&gt; child,
+                                   final CLTypeData childDataType) throws NoSuchTypeException {
+<span class="fc bfc" id="L70" title="All 2 branches covered.">        if (child instanceof AbstractCLValueWithChildren) {</span>
+<span class="fc" id="L71">            child.encodeType(ser);</span>
+        } else {
+            // If there are no AbstractCLValueWithChildren as children we just need a simple tag
+<span class="fc" id="L74">            byte element0TypeTag = childDataType.getSerializationTag();</span>
+<span class="fc" id="L75">            ser.writeU8(element0TypeTag);</span>
+        }
+<span class="fc" id="L77">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

@@ -117,13 +117,13 @@ import lombok.*;
     public void serialize(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {
 <span class="fc bfc" id="L118" title="All 2 branches covered.">        if (this.getValue() == null) return;</span>
 
-<span class="fc bfc" id="L120" title="All 2 branches covered.">        if (target.equals(Target.BYTE)) {</span>
+<span class="fc bfc" id="L120" title="All 2 branches covered.">        if (Target.BYTE.equals(target)) {</span>
 <span class="fc" id="L121">            serializePrefixWithLength(ser);</span>
         }
 
 <span class="fc" id="L124">        serializeValue(ser);</span>
 
-<span class="fc bfc" id="L126" title="All 2 branches covered.">        if (target.equals(Target.BYTE)) {</span>
+<span class="fc bfc" id="L126" title="All 2 branches covered.">        if (Target.BYTE.equals(target)) {</span>
 <span class="fc" id="L127">            this.encodeType(ser);</span>
         }
 <span class="fc" id="L129">    }</span>
