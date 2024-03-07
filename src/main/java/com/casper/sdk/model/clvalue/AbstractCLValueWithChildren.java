@@ -55,6 +55,13 @@ public abstract class AbstractCLValueWithChildren<T, P extends AbstractCLTypeWit
         }
     }
 
+    protected void encodeType(final SerializerBuffer ser) throws NoSuchTypeException {
+      super.encodeType(ser);
+      encodeChildTypes(ser);
+    }
+
+    protected abstract void encodeChildTypes(final SerializerBuffer ser) throws NoSuchTypeException;
+
     /**
      * Encodes the bytes of the child type, if the child value is not present but the type is known from the parent type
      * info, the childDataType is used to encode the bytes of the child rather than the child value.

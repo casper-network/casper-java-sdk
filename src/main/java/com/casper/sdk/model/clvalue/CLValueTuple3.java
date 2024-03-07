@@ -37,58 +37,56 @@ public class CLValueTuple3 extends
     private CLTypeTuple3 clType = new CLTypeTuple3();
 
     @JsonSetter("cl_type")
-    public void setClType(CLTypeTuple3 clType) {
+    public void setClType(final CLTypeTuple3 clType) {
         this.clType = clType;
         childTypesSet();
     }
 
-    public CLValueTuple3(Triplet<? extends AbstractCLValue<?, ?>, ? extends AbstractCLValue<?, ?>, ? extends AbstractCLValue<?, ?>> value) throws ValueSerializationException {
+    public CLValueTuple3(final Triplet<? extends AbstractCLValue<?, ?>, ? extends AbstractCLValue<?, ?>, ? extends AbstractCLValue<?, ?>> value) throws ValueSerializationException {
         setChildTypes(value);
         this.setValue(value);
     }
 
     @Override
-    protected void serializeValue(SerializerBuffer ser) throws ValueSerializationException {
-        SerializerBuffer serVal = new SerializerBuffer();
+    protected void serializeValue(final SerializerBuffer ser) throws ValueSerializationException {
+        final SerializerBuffer serVal = new SerializerBuffer();
         setChildTypes(this.getValue());
         getValue().getValue0().serialize(serVal);
         getValue().getValue1().serialize(serVal);
         getValue().getValue2().serialize(serVal);
-        byte[] bytes = serVal.toByteArray();
+        final byte[] bytes = serVal.toByteArray();
         ser.writeByteArray(bytes);
         this.setBytes(Hex.toHexString(bytes));
     }
 
     @Override
-    protected void encodeType(SerializerBuffer ser) throws NoSuchTypeException {
-        super.encodeType(ser);
-
+    protected void encodeChildTypes(SerializerBuffer ser) throws NoSuchTypeException {
         encodeChildType(ser, this.getValue().getValue0(), getClType().getChildClTypeData(0));
         encodeChildType(ser, this.getValue().getValue1(), getClType().getChildClTypeData(1));
         encodeChildType(ser, this.getValue().getValue2(), getClType().getChildClTypeData(2));
     }
 
     @Override
-    public void deserializeCustom(DeserializerBuffer deser) throws Exception {
-        CLTypeData childTypeData1 = clType.getChildClTypeData(0);
-        CLTypeData childTypeData2 = clType.getChildClTypeData(1);
-        CLTypeData childTypeData3 = clType.getChildClTypeData(2);
+    public void deserializeCustom(final DeserializerBuffer deser) throws Exception {
+        final CLTypeData childTypeData1 = clType.getChildClTypeData(0);
+        final CLTypeData childTypeData2 = clType.getChildClTypeData(1);
+        final CLTypeData childTypeData3 = clType.getChildClTypeData(2);
 
-        AbstractCLValue<?, ?> child1 = CLTypeData.createCLValueFromCLTypeData(childTypeData1);
+        final AbstractCLValue<?, ?> child1 = CLTypeData.createCLValueFromCLTypeData(childTypeData1);
         if (child1.getClType() instanceof AbstractCLTypeWithChildren) {
             ((AbstractCLTypeWithChildren) child1.getClType())
                     .setChildTypes(((AbstractCLTypeWithChildren) clType.getChildTypes().get(0)).getChildTypes());
         }
         child1.deserializeCustom(deser);
 
-        AbstractCLValue<?, ?> child2 = CLTypeData.createCLValueFromCLTypeData(childTypeData2);
+        final AbstractCLValue<?, ?> child2 = CLTypeData.createCLValueFromCLTypeData(childTypeData2);
         if (child2.getClType() instanceof AbstractCLTypeWithChildren) {
             ((AbstractCLTypeWithChildren) child2.getClType())
                     .setChildTypes(((AbstractCLTypeWithChildren) clType.getChildTypes().get(1)).getChildTypes());
         }
         child2.deserializeCustom(deser);
 
-        AbstractCLValue<?, ?> child3 = CLTypeData.createCLValueFromCLTypeData(childTypeData3);
+        final AbstractCLValue<?, ?> child3 = CLTypeData.createCLValueFromCLTypeData(childTypeData3);
         if (child3.getClType() instanceof AbstractCLTypeWithChildren) {
             ((AbstractCLTypeWithChildren) child3.getClType())
                     .setChildTypes(((AbstractCLTypeWithChildren) clType.getChildTypes().get(2)).getChildTypes());
@@ -99,7 +97,7 @@ public class CLValueTuple3 extends
     }
 
     @Override
-    protected void setChildTypes(Triplet<? extends AbstractCLValue<?, ?>, ? extends AbstractCLValue<?, ?>, ? extends AbstractCLValue<?, ?>> value) {
+    protected void setChildTypes(final Triplet<? extends AbstractCLValue<?, ?>, ? extends AbstractCLValue<?, ?>, ? extends AbstractCLValue<?, ?>> value) {
         if (value.getValue0() != null && value.getValue1() != null && value.getValue2() != null) {
             clType.setChildTypes(Arrays.asList(value.getValue0().getClType(), value.getValue1().getClType(),
                     value.getValue2().getClType()));

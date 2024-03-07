@@ -93,9 +93,7 @@ public class CLValueOption extends AbstractCLValueWithChildren<Optional<Abstract
     }
 
     @Override
-    protected void encodeType(final SerializerBuffer ser) throws NoSuchTypeException {
-        super.encodeType(ser);
-
+    protected void encodeChildTypes(final SerializerBuffer ser) throws NoSuchTypeException {
         final Optional<AbstractCLValue<?, ?>> child = getValue();
         if (child.isPresent()) {
             encodeChildType(ser, child.get(), this.getClType().getOptionType().getClTypeData());

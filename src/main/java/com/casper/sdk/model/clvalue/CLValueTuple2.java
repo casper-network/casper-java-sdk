@@ -60,9 +60,7 @@ public class CLValueTuple2
     }
 
     @Override
-    protected void encodeType(final SerializerBuffer ser) throws NoSuchTypeException {
-        super.encodeType(ser);
-
+    protected void encodeChildTypes(final SerializerBuffer ser) throws NoSuchTypeException {
         encodeChildType(ser, this.getValue().getValue0(), getClType().getChildClTypeData(0));
         encodeChildType(ser, this.getValue().getValue1(), getClType().getChildClTypeData(1));
     }
