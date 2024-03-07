@@ -96,9 +96,9 @@ public class CLValueOption extends AbstractCLValueWithChildren&lt;Optional&lt;Ab
     protected void encodeType(final SerializerBuffer ser) throws NoSuchTypeException {
 <span class="nc" id="L97">        super.encodeType(ser);</span>
 
-<span class="nc" id="L99">        Optional&lt;AbstractCLValue&lt;?, ?&gt;&gt; child = getValue();</span>
+<span class="nc" id="L99">        final Optional&lt;AbstractCLValue&lt;?, ?&gt;&gt; child = getValue();</span>
 <span class="nc bnc" id="L100" title="All 2 branches missed.">        if (child.isPresent()) {</span>
-<span class="nc" id="L101">            child.get().encodeType(ser);</span>
+<span class="nc" id="L101">            encodeChildType(ser, child.get(), this.getClType().getOptionType().getClTypeData());</span>
         }
 <span class="nc" id="L103">    }</span>
 
