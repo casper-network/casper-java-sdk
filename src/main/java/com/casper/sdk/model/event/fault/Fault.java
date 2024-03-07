@@ -26,5 +26,5 @@ public class Fault implements EventData {
 
     /** A timestamp type, representing a concrete moment in time of the fault. */
     @JsonProperty("timestamp")
-    private String timestamp; // TODO convert to data
+    private String timestamp; // TODO convert to date
 }

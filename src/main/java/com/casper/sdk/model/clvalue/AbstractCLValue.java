@@ -49,17 +49,17 @@ public abstract class AbstractCLValue<T, P extends AbstractCLType>
         return this.value;
     }
 
-    public void setValue(T value) throws ValueSerializationException {
+    public void setValue(final T value) throws ValueSerializationException {
         this.value = value;
         this.serialize(new SerializerBuffer());
     }
 
-    public static AbstractCLValue<?, ?> createInstanceFromBytes(DeserializerBuffer deser) throws ValueDeserializationException {
-        int length = deser.readI32();
-        byte[] bytes = deser.readByteArray(length);
-        byte clType = deser.readU8();
+    public static AbstractCLValue<?, ?> createInstanceFromBytes(final DeserializerBuffer deser) throws ValueDeserializationException {
+        final int length = deser.readI32();
+        final byte[] bytes = deser.readByteArray(length);
+        final byte clType = deser.readU8();
         try {
-            AbstractCLValue<?, ?> clValue = CLTypeData.getTypeBySerializationTag(clType).getClazz().getDeclaredConstructor().newInstance();
+            final AbstractCLValue<?, ?> clValue = CLTypeData.getTypeBySerializationTag(clType).getClazz().getDeclaredConstructor().newInstance();
             clValue.deserializeCustom(new DeserializerBuffer(Hex.encode(bytes)));
             return clValue;
         } catch (Exception e) {
@@ -71,7 +71,7 @@ public abstract class AbstractCLValue<T, P extends AbstractCLType>
     @JsonGetter(value = "bytes")
     @ExcludeFromJacocoGeneratedReport
     protected String getJsonBytes() {
-        SerializerBuffer ser = new SerializerBuffer();
+        final SerializerBuffer ser = new SerializerBuffer();
         this.serialize(ser, Target.JSON);
 
         this.bytes = ByteUtils.encodeHexString(ser.toByteArray());
@@ -82,10 +82,10 @@ public abstract class AbstractCLValue<T, P extends AbstractCLType>
     @SneakyThrows({ValueDeserializationException.class})
     @JsonSetter(value = "bytes")
     @ExcludeFromJacocoGeneratedReport
-    protected void setJsonBytes(String bytes) {
+    protected void setJsonBytes(final String bytes) {
         this.bytes = bytes;
 
-        DeserializerBuffer deser = new DeserializerBuffer(this.bytes);
+        final DeserializerBuffer deser = new DeserializerBuffer(this.bytes);
 
         this.deserialize(deser);
     }
@@ -96,15 +96,15 @@ public abstract class AbstractCLValue<T, P extends AbstractCLType>
     public abstract void setClType(P value);
 
 
-    protected void serializePrefixWithLength(SerializerBuffer ser) throws ValueSerializationException {
-        SerializerBuffer localSer = new SerializerBuffer();
+    protected void serializePrefixWithLength(final SerializerBuffer ser) throws ValueSerializationException {
+        final SerializerBuffer localSer = new SerializerBuffer();
         serialize(localSer);
-        int size = localSer.toByteArray().length;
+        final int size = localSer.toByteArray().length;
         ser.writeI32(size);
     }
 
     @Override
-    public AbstractCLValue<?, ?> deserialize(DeserializerBuffer deser, Target target) throws ValueDeserializationException {
+    public AbstractCLValue<?, ?> deserialize(final DeserializerBuffer deser, final Target target) throws ValueDeserializationException {
         if (target.equals(Target.BYTE)) {
             return AbstractCLValue.createInstanceFromBytes(deser);
         } else {
@@ -114,12 +114,26 @@ public abstract class AbstractCLValue<T, P extends AbstractCLType>
     }
 
     @Override
-    public abstract void serialize(SerializerBuffer ser, Target target) throws ValueSerializationException, NoSuchTypeException;
+    public void serialize(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {
+        if (this.getValue() == null) return;
 
-    public abstract void deserializeCustom(DeserializerBuffer deserializerBuffer) throws Exception;
+        if (target.equals(Target.BYTE)) {
+            serializePrefixWithLength(ser);
+        }
+
+        serializeValue(ser);
+
+        if (target.equals(Target.BYTE)) {
+            this.encodeType(ser);
+        }
+    }
+
+    protected abstract void serializeValue(final SerializerBuffer ser) throws ValueSerializationException;
+
+    public abstract void deserializeCustom(final DeserializerBuffer deserializerBuffer) throws Exception;
 
     @Override
-    public void deserialize(DeserializerBuffer deserializerBuffer) throws ValueDeserializationException {
+    public void deserialize(final DeserializerBuffer deserializerBuffer) throws ValueDeserializationException {
         try {
             this.deserializeCustom(deserializerBuffer);
         } catch (Exception e) {
@@ -127,8 +141,8 @@ public abstract class AbstractCLValue<T, P extends AbstractCLType>
         }
     }
 
-    protected void encodeType(SerializerBuffer ser) throws NoSuchTypeException {
-        byte typeTag = (getClType().getClTypeData().getSerializationTag());
+    protected void encodeType(final SerializerBuffer ser) throws NoSuchTypeException {
+        final byte typeTag = (getClType().getClTypeData().getSerializationTag());
         ser.writeU8(typeTag);
     }
 }

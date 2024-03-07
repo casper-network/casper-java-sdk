@@ -33,7 +33,7 @@ public class DeployProcessed implements EventData {
     private Digest account;
 
     @JsonProperty("timestamp")
-    private String timestamp; // TODO convert to data
+    private String timestamp; // TODO convert to date
 
     @JsonProperty("ttl")
     private String ttl;

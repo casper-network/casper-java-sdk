@@ -1,9 +1,7 @@
 package com.casper.sdk.model.clvalue;
 
 import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
-import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.cltype.CLTypePublicKey;
-import com.casper.sdk.model.clvalue.serde.Target;
 import com.casper.sdk.model.key.PublicKey;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonSetter;
@@ -15,7 +13,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.bouncycastle.util.encoders.Hex;
 
 /**
  * Casper PublicKey CLValue implementation
@@ -34,7 +31,7 @@ public class CLValuePublicKey extends AbstractCLValue<PublicKey, CLTypePublicKey
 
     @JsonSetter("cl_type")
     @ExcludeFromJacocoGeneratedReport
-    protected void setJsonClType(CLTypePublicKey clType) {
+    protected void setJsonClType(final CLTypePublicKey clType) {
         this.clType = clType;
     }
 
@@ -44,30 +41,19 @@ public class CLValuePublicKey extends AbstractCLValue<PublicKey, CLTypePublicKey
         return this.getClType().getTypeName();
     }
 
-    public CLValuePublicKey(PublicKey value) throws ValueSerializationException {
+    public CLValuePublicKey(final PublicKey value) throws ValueSerializationException {
         this.setValue(value);
     }
 
     @Override
-    public void serialize(SerializerBuffer ser, Target target) throws NoSuchTypeException, ValueSerializationException {
-        if (this.getValue() == null) return;
-
-        if (target.equals(Target.BYTE)) {
-            super.serializePrefixWithLength(ser);
-        }
-
+    protected void serializeValue(final SerializerBuffer ser) throws ValueSerializationException {
         ser.writeU8(this.getValue().getTag().getByteTag());
         ser.writeByteArray(this.getValue().getKey());
-
-        if (target.equals(Target.BYTE)) {
-            this.encodeType(ser);
-        }
-
-        this.setBytes(Hex.toHexString(ser.toByteArray()));
+        this.setBytes(this.getValue().getAlgoTaggedHex());
     }
 
     @Override
-    public void deserializeCustom(DeserializerBuffer deser) throws Exception {
+    public void deserializeCustom(final DeserializerBuffer deser) throws Exception {
         this.setValue(PublicKey.fromTaggedHexString(ByteUtils.encodeHexString(deser.readByteArray(33))));
     }
 
