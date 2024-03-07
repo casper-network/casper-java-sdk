@@ -55,6 +55,13 @@ import lombok.SneakyThrows;
         }
     }
 
+    protected void encodeType(final SerializerBuffer ser) throws NoSuchTypeException {
+<span class="fc" id="L59">      super.encodeType(ser);</span>
+<span class="fc" id="L60">      encodeChildTypes(ser);</span>
+<span class="fc" id="L61">    }</span>
+
+    protected abstract void encodeChildTypes(final SerializerBuffer ser) throws NoSuchTypeException;
+
     /**
      * Encodes the bytes of the child type, if the child value is not present but the type is known from the parent type
      * info, the childDataType is used to encode the bytes of the child rather than the child value.
@@ -67,13 +74,13 @@ import lombok.SneakyThrows;
     protected void encodeChildType(final SerializerBuffer ser,
                                    final AbstractCLValue&lt;?, ?&gt; child,
                                    final CLTypeData childDataType) throws NoSuchTypeException {
-<span class="fc bfc" id="L70" title="All 2 branches covered.">        if (child instanceof AbstractCLValueWithChildren) {</span>
-<span class="fc" id="L71">            child.encodeType(ser);</span>
+<span class="fc bfc" id="L77" title="All 2 branches covered.">        if (child instanceof AbstractCLValueWithChildren) {</span>
+<span class="fc" id="L78">            child.encodeType(ser);</span>
         } else {
             // If there are no AbstractCLValueWithChildren as children we just need a simple tag
-<span class="fc" id="L74">            byte element0TypeTag = childDataType.getSerializationTag();</span>
-<span class="fc" id="L75">            ser.writeU8(element0TypeTag);</span>
+<span class="fc" id="L81">            byte element0TypeTag = childDataType.getSerializationTag();</span>
+<span class="fc" id="L82">            ser.writeU8(element0TypeTag);</span>
         }
-<span class="fc" id="L77">    }</span>
+<span class="fc" id="L84">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

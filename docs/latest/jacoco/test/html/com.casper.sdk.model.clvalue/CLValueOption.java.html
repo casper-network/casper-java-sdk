@@ -93,27 +93,25 @@ public class CLValueOption extends AbstractCLValueWithChildren&lt;Optional&lt;Ab
 <span class="fc" id="L93">    }</span>
 
     @Override
-    protected void encodeType(final SerializerBuffer ser) throws NoSuchTypeException {
-<span class="nc" id="L97">        super.encodeType(ser);</span>
-
-<span class="nc" id="L99">        final Optional&lt;AbstractCLValue&lt;?, ?&gt;&gt; child = getValue();</span>
-<span class="nc bnc" id="L100" title="All 2 branches missed.">        if (child.isPresent()) {</span>
-<span class="nc" id="L101">            encodeChildType(ser, child.get(), this.getClType().getOptionType().getClTypeData());</span>
+    protected void encodeChildTypes(final SerializerBuffer ser) throws NoSuchTypeException {
+<span class="nc" id="L97">        final Optional&lt;AbstractCLValue&lt;?, ?&gt;&gt; child = getValue();</span>
+<span class="nc bnc" id="L98" title="All 2 branches missed.">        if (child.isPresent()) {</span>
+<span class="nc" id="L99">            encodeChildType(ser, child.get(), this.getClType().getOptionType().getClTypeData());</span>
         }
-<span class="nc" id="L103">    }</span>
+<span class="nc" id="L101">    }</span>
 
     @Override
     protected void setChildTypes(final Optional&lt;AbstractCLValue&lt;?, ?&gt;&gt; value) {
-<span class="pc bpc" id="L107" title="1 of 2 branches missed.">        if (value.isPresent()) {</span>
-<span class="fc" id="L108">            clType.setOptionType(value.get().getClType());</span>
+<span class="pc bpc" id="L105" title="1 of 2 branches missed.">        if (value.isPresent()) {</span>
+<span class="fc" id="L106">            clType.setOptionType(value.get().getClType());</span>
         } else {
-<span class="nc" id="L110">            clType.setChildTypes(null);</span>
+<span class="nc" id="L108">            clType.setChildTypes(null);</span>
         }
-<span class="fc" id="L112">    }</span>
+<span class="fc" id="L110">    }</span>
 
     @Override
     public String toString() {
-<span class="nc bnc" id="L116" title="All 6 branches missed.">        return getValue() != null &amp;&amp; getValue().isPresent() &amp;&amp; getValue().get().getValue() != null ? getValue().get().toString() : &quot;None&quot;;</span>
+<span class="nc bnc" id="L114" title="All 6 branches missed.">        return getValue() != null &amp;&amp; getValue().isPresent() &amp;&amp; getValue().get().getValue() != null ? getValue().get().toString() : &quot;None&quot;;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
