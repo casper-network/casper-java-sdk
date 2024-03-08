@@ -76,8 +76,14 @@ public class CLValueMap extends
         final byte keyTypeTag = (getClType().getKeyValueTypes().getKeyType().getClTypeData().getSerializationTag());
         ser.writeU8(keyTypeTag);
 
-        final byte valueTypeTag = (getClType().getKeyValueTypes().getValueType().getClTypeData().getSerializationTag());
-        ser.writeU8(valueTypeTag);
+        final Map<? extends AbstractCLValue<?, ?>, ? extends AbstractCLValue<?, ?>> value = this.getValue();
+        final CLTypeData clTypeData = getClType().getKeyValueTypes().getValueType().getClTypeData();
+        if (!value.isEmpty()) {
+            encodeChildType(ser, value.values().iterator().next(), clTypeData);
+        } else {
+            final byte valueTypeTag = (clTypeData.getSerializationTag());
+            ser.writeU8(valueTypeTag);
+        }
     }
 
     @Override
@@ -180,6 +186,6 @@ public class CLValueMap extends
 
     @Override
     public String toString() {
-        return getValue() != null ? getValue().keySet().stream().map(key -> key.getValue().toString() + "=" + key.getValue().toString()).collect(Collectors.joining(", ")) : null;
+        return getValue() != null ? getValue().entrySet().stream().map(entry -> entry.getKey().toString() + "=" + entry.getValue().toString()).collect(Collectors.joining(", ")) : null;
     }
 }

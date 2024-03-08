@@ -17,6 +17,7 @@ import org.javatuples.Unit;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -194,6 +195,32 @@ public class CLValueTests {
         outerTuple.serialize(ser, Target.BYTE);
 
         final byte[] expected = {28, 0, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0, 3, 0, 0, 0, 4, 0, 0, 0, 5, 0, 0, 0, 6, 0, 0, 0, 7, 0, 0, 0, 20, 20, 20, 4, 4, 4, 4, 4, 4, 4};
+
+        assertThat(ser.toByteArray(), is(expected));
+    }
+
+    @Test
+    void nestedMapSerialization() throws Exception {
+
+        Map<CLValueString, CLValueU32> map = new LinkedHashMap<>();
+        map.put(new CLValueString("ONE"), new CLValueU32(1L));
+        final CLValueMap innerMap1 = new CLValueMap(map);
+
+        map = new LinkedHashMap<>();
+        map.put(new CLValueString("TWO"), new CLValueU32(2L));
+        final CLValueMap innerMap2 = new CLValueMap(map);
+
+
+        Map<CLValueString, CLValueMap> map2 = new LinkedHashMap<>();
+        map2.put(new CLValueString("THREE"), innerMap1);
+        map2.put(new CLValueString("FOUR"), innerMap2);
+
+        final CLValueMap outerMap = new CLValueMap(map2);
+
+        final SerializerBuffer ser = new SerializerBuffer();
+        outerMap.serialize(ser, Target.BYTE);
+
+        byte[] expected = {51, 0, 0, 0, 2, 0, 0, 0, 5, 0, 0, 0, 84, 72, 82, 69, 69, 1, 0, 0, 0, 3, 0, 0, 0, 79, 78, 69, 1, 0, 0, 0, 4, 0, 0, 0, 70, 79, 85, 82, 1, 0, 0, 0, 3, 0, 0, 0, 84, 87, 79, 2, 0, 0, 0, 17, 10, 17, 10, 4};
 
         assertThat(ser.toByteArray(), is(expected));
     }
