@@ -71,8 +71,7 @@ public class CLValueMap extends
     }
 
     @Override
-    protected void encodeType(final SerializerBuffer ser) throws NoSuchTypeException {
-        super.encodeType(ser);
+    protected void encodeChildTypes(final SerializerBuffer ser) throws NoSuchTypeException {
 
         final byte keyTypeTag = (getClType().getKeyValueTypes().getKeyType().getClTypeData().getSerializationTag());
         ser.writeU8(keyTypeTag);

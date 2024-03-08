@@ -5,10 +5,15 @@ import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.cltype.CLTypeAny;
 import com.casper.sdk.model.clvalue.cltype.CLTypeData;
 import com.casper.sdk.model.clvalue.cltype.CLTypeMap;
+import com.casper.sdk.model.clvalue.cltype.CLTypeTuple1;
 import com.casper.sdk.model.clvalue.serde.Target;
+import com.casper.sdk.model.deploy.NamedArg;
 import com.syntifi.crypto.key.encdec.Hex;
 import dev.oak3.sbs4j.DeserializerBuffer;
 import dev.oak3.sbs4j.SerializerBuffer;
+import org.javatuples.Pair;
+import org.javatuples.Triplet;
+import org.javatuples.Unit;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
@@ -82,6 +87,30 @@ public class CLValueTests {
         assertThat(ser.toByteArray(), is(Hex.decode("04000000d202964915")));
     }
 
+
+    @Test
+    void clValueTupleOneSerialization() throws Exception {
+
+        final CLValueTuple1 clValueTuple1 = new CLValueTuple1(new Unit<>(new CLValueU32(1L)));
+
+        SerializerBuffer ser = new SerializerBuffer();
+        clValueTuple1.serialize(ser, Target.JSON);
+        assertThat(ser.toByteArray(), is(Hex.decode("01000000")));
+
+        ser = new SerializerBuffer();
+        clValueTuple1.serialize(ser, Target.BYTE);
+
+        byte[] expected = {4, 0, 0, 0, 1, 0, 0, 0, 18, 4};
+        assertThat(ser.toByteArray(), is(expected));
+
+        NamedArg<CLTypeTuple1> namedArg = new NamedArg<>("TUPLE_1", clValueTuple1);
+        ser = new SerializerBuffer();
+        namedArg.serialize(ser, Target.BYTE);
+        expected = new byte[]{7, 0, 0, 0, 84, 85, 80, 76, 69, 95, 49, 4, 0, 0, 0, 1, 0, 0, 0, 18, 4};
+
+        assertThat(ser.toByteArray(), is(expected));
+    }
+
     @Test
     void getTypeByName_from_CLTypeData_should_throw_NoSuchTypeException() {
         assertThrows(NoSuchTypeException.class, () -> CLTypeData.getTypeByName("NE"));
@@ -126,5 +155,46 @@ public class CLValueTests {
         CLValueU32 valueDeser = (CLValueU32) deserialized.getValue().get(key);
         assertThat(valueDeser, is(value));
         assertThat(valueDeser.getBytes(), is(value.getBytes()));
+    }
+
+    @Test
+    void nestedTuple1Serialization() throws Exception {
+        final CLValueTuple1 innerTuple1 = new CLValueTuple1(new Unit<>(new CLValueU32(1L)));
+        final CLValueTuple1 outerTuple1 = new CLValueTuple1(new Unit<>(innerTuple1));
+
+        final SerializerBuffer ser = new SerializerBuffer();
+        outerTuple1.serialize(ser, Target.BYTE);
+
+        final byte[] expected = {4, 0, 0, 0, 1, 0, 0, 0, 18, 18, 4};
+
+        assertThat(ser.toByteArray(), is(expected));
+    }
+
+    @Test
+    void nestedTuple2Serialization() throws Exception {
+        final CLValueTuple2 innerTuple1 = new CLValueTuple2(new Pair<>(new CLValueU32(1L), new CLValueU32(2L)));
+        final CLValueTuple2 innerTuple2 = new CLValueTuple2(new Pair<>(new CLValueU32(3L), new CLValueU32(4L)));
+        final CLValueTuple2 outerTuple = new CLValueTuple2(new Pair<>(innerTuple1, innerTuple2));
+
+        final SerializerBuffer ser = new SerializerBuffer();
+        outerTuple.serialize(ser, Target.BYTE);
+
+        final byte[] expected = {16, 0, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0, 3, 0, 0, 0, 4, 0, 0, 0, 19, 19, 4, 4, 19, 4, 4};
+
+        assertThat(ser.toByteArray(), is(expected));
+    }
+
+    @Test
+    void nestedTuple3Serialization() throws Exception {
+        final CLValueTuple3 innerTuple1 = new CLValueTuple3(new Triplet<>(new CLValueU32(1L), new CLValueU32(2L), new CLValueU32(3L)));
+        final CLValueTuple3 innerTuple2 = new CLValueTuple3(new Triplet<>(innerTuple1, new CLValueU32(4L), new CLValueU32(5L)));
+        final CLValueTuple3 outerTuple = new CLValueTuple3(new Triplet<>(innerTuple2, new CLValueU32(6L), new CLValueU32(7L)));
+
+        final SerializerBuffer ser = new SerializerBuffer();
+        outerTuple.serialize(ser, Target.BYTE);
+
+        final byte[] expected = {28, 0, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0, 3, 0, 0, 0, 4, 0, 0, 0, 5, 0, 0, 0, 6, 0, 0, 0, 7, 0, 0, 0, 20, 20, 20, 4, 4, 4, 4, 4, 4, 4};
+
+        assertThat(ser.toByteArray(), is(expected));
     }
 }

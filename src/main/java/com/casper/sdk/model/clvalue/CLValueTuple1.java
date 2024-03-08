@@ -57,11 +57,8 @@ public class CLValueTuple1 extends AbstractCLValueWithChildren<Unit<? extends Ab
     }
 
     @Override
-    protected void encodeType(final SerializerBuffer ser) throws NoSuchTypeException {
-        super.encodeType(ser);
-
-        byte element0TypeTag = getClType().getChildClTypeData(0).getSerializationTag();
-        ser.writeU8(element0TypeTag);
+    protected void encodeChildTypes(final SerializerBuffer ser) throws NoSuchTypeException {
+        encodeChildType(ser, this.getValue().getValue0(), getClType().getChildClTypeData(0));
     }
 
     @Override
