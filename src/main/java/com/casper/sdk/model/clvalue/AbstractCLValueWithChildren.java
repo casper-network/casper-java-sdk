@@ -32,8 +32,7 @@ public abstract class AbstractCLValueWithChildren<T, P extends AbstractCLTypeWit
     @SneakyThrows({ValueDeserializationException.class})
     protected void childTypesSet() {
         if (!getBytes().isEmpty()) {
-            DeserializerBuffer deser = new DeserializerBuffer(this.getBytes());
-            this.deserialize(deser);
+            this.deserialize(new DeserializerBuffer(this.getBytes()));
         }
     }
 
@@ -50,14 +49,13 @@ public abstract class AbstractCLValueWithChildren<T, P extends AbstractCLTypeWit
         this.setBytes(bytes);
 
         if (!getClType().getChildTypes().isEmpty() && getClType().isDeserializable()) {
-            DeserializerBuffer deser = new DeserializerBuffer(this.getBytes());
-            this.deserialize(deser);
+            this.deserialize(new DeserializerBuffer(this.getBytes()));
         }
     }
 
     protected void encodeType(final SerializerBuffer ser) throws NoSuchTypeException {
-      super.encodeType(ser);
-      encodeChildTypes(ser);
+        super.encodeType(ser);
+        encodeChildTypes(ser);
     }
 
     protected abstract void encodeChildTypes(final SerializerBuffer ser) throws NoSuchTypeException;
@@ -81,5 +79,9 @@ public abstract class AbstractCLValueWithChildren<T, P extends AbstractCLTypeWit
             byte element0TypeTag = childDataType.getSerializationTag();
             ser.writeU8(element0TypeTag);
         }
+    }
+
+    public void populateChildTypes(final DeserializerBuffer dser) {
+
     }
 }

@@ -1,6 +1,8 @@
 package com.casper.sdk.model.clvalue;
 
+import com.casper.sdk.exception.DynamicInstanceException;
 import com.casper.sdk.exception.NoSuchTypeException;
+import com.casper.sdk.model.clvalue.cltype.AbstractCLType;
 import com.casper.sdk.model.clvalue.cltype.AbstractCLTypeWithChildren;
 import com.casper.sdk.model.clvalue.cltype.CLTypeData;
 import com.casper.sdk.model.clvalue.cltype.CLTypeMap;
@@ -9,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import dev.oak3.sbs4j.DeserializerBuffer;
 import dev.oak3.sbs4j.SerializerBuffer;
+import dev.oak3.sbs4j.exception.ValueDeserializationException;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -88,6 +91,10 @@ public class CLValueMap extends
 
     @Override
     public void deserializeCustom(final DeserializerBuffer deser) throws Exception {
+        if (this.clType.getChildTypes().isEmpty()) {
+            this.clType.deserializeChildTypes(deser);
+        }
+
         final CLTypeData keyType = clType.getKeyValueTypes().getKeyType().getClTypeData();
         final CLTypeData valType = clType.getKeyValueTypes().getValueType().getClTypeData();
 
@@ -122,6 +129,7 @@ public class CLValueMap extends
         setValue(map);
     }
 
+
     @Override
     @JsonIgnore
     protected void setChildTypes(final Map<? extends AbstractCLValue<?, ?>, ? extends AbstractCLValue<?, ?>> value) {
@@ -134,8 +142,8 @@ public class CLValueMap extends
     }
 
     // This needed to be customized to ensure equality is being checked correctly.
-    // The java Map equals method tries to get the "other" map entry's value by using "this" key object,
-    // which then fails to find the object since they are "different" and returns always null.
+// The java Map equals method tries to get the "other" map entry's value by using "this" key object,
+// which then fails to find the object since they are "different" and returns always null.
     @Override
     public boolean equals(final Object o) {
         if (o == this) return true;

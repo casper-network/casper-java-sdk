@@ -2,10 +2,7 @@ package com.casper.sdk.model.clvalue;
 
 import com.casper.sdk.exception.DynamicInstanceException;
 import com.casper.sdk.exception.NoSuchTypeException;
-import com.casper.sdk.model.clvalue.cltype.CLTypeAny;
-import com.casper.sdk.model.clvalue.cltype.CLTypeData;
-import com.casper.sdk.model.clvalue.cltype.CLTypeMap;
-import com.casper.sdk.model.clvalue.cltype.CLTypeTuple1;
+import com.casper.sdk.model.clvalue.cltype.*;
 import com.casper.sdk.model.clvalue.serde.Target;
 import com.casper.sdk.model.deploy.NamedArg;
 import com.syntifi.crypto.key.encdec.Hex;
@@ -16,11 +13,13 @@ import org.javatuples.Triplet;
 import org.javatuples.Unit;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -224,4 +223,72 @@ public class CLValueTests {
 
         assertThat(ser.toByteArray(), is(expected));
     }
+
+    @Test
+    void nestedMapDeserialization() throws Exception {
+
+        byte[] bytes = {51, 0, 0, 0, 2, 0, 0, 0, 5, 0, 0, 0, 84, 72, 82, 69, 69, 1, 0, 0, 0, 3, 0, 0, 0, 79, 78, 69, 1, 0, 0, 0, 4, 0, 0, 0, 70, 79, 85, 82, 1, 0, 0, 0, 3, 0, 0, 0, 84, 87, 79, 2, 0, 0, 0, 17, 10, 17, 10, 4};
+
+        final CLTypeMap innerType = new CLTypeMap();
+        innerType.setKeyValueTypes(new CLTypeMap.CLTypeMapEntryType(new CLTypeString(), new CLTypeU32()));
+
+        final CLTypeMap outerType = new CLTypeMap();
+        outerType.setKeyValueTypes(new CLTypeMap.CLTypeMapEntryType(new CLTypeString(), innerType));
+
+        final CLValueMap outerMap = new CLValueMap();
+        outerMap.setClType(outerType);
+        outerMap.deserialize(new DeserializerBuffer(bytes), Target.BYTE);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test
+    void nestedMapDeserialization2() throws Exception {
+
+        //  a nested map is created  {1: {11: {111: "ONE_ONE_ONE"}, 12: {121: "ONE_TWO_ONE"}}, 2: {21: {211: "TWO_ONE_ONE"}, 22: {221: "TWO_TWO_ONE"}}}
+
+        Map map = new LinkedHashMap<>();
+        map.put(new CLValueU256(BigInteger.valueOf(111L)),  new CLValueString("ONE_ONE_ONE"));
+        final CLValueMap innerMap111 = new CLValueMap(map);
+
+        map = new LinkedHashMap<>();
+        map.put(new CLValueU256(BigInteger.valueOf(121L)),  new CLValueString("ONE_TWO_ONE"));
+        final CLValueMap innerMap121 = new CLValueMap(map);
+
+        map = new LinkedHashMap<>();
+        map.put(new CLValueU256(BigInteger.valueOf(11L)), innerMap111);
+        map.put(new CLValueU256(BigInteger.valueOf(12L)), innerMap121);
+        final CLValueMap innerMap1 = new CLValueMap(map);
+
+        map = new LinkedHashMap<>();
+        map.put(new CLValueU256(BigInteger.valueOf(211L)),  new CLValueString("TWO_ONE_ONE"));
+        final CLValueMap innerMap21 = new CLValueMap(map);
+
+        map = new LinkedHashMap<>();
+        map.put(new CLValueU256(BigInteger.valueOf(221)),  new CLValueString("TWO_TWO_ONE"));
+        final CLValueMap innerMap22 = new CLValueMap(map);
+
+        map = new LinkedHashMap<>();
+        map.put(new CLValueU256(BigInteger.valueOf(21L)), innerMap21);
+        map.put(new CLValueU256(BigInteger.valueOf(22L)), innerMap22);
+        final CLValueMap innerMap2 = new CLValueMap(map);
+
+        map = new LinkedHashMap<>();
+        map.put(new CLValueU256(BigInteger.valueOf(1L)), innerMap1);
+        map.put(new CLValueU256(BigInteger.valueOf(2L)), innerMap2);
+        final CLValueMap outerMap = new CLValueMap(map);
+
+        final SerializerBuffer ser = new SerializerBuffer();
+        outerMap.serialize(ser, Target.BYTE);
+
+        byte[] actualBytes = ser.toByteArray();
+
+        assertThat(actualBytes.length, is(greaterThan(0)));
+
+        CLValueMap clValueMap = new CLValueMap();
+        clValueMap = (CLValueMap) clValueMap.deserialize(new DeserializerBuffer(actualBytes), Target.BYTE);
+
+        assertThat(clValueMap.getBytes(), is(outerMap.getBytes()));
+    }
+
+
 }

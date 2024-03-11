@@ -1,10 +1,14 @@
 package com.casper.sdk.model.clvalue.cltype;
 
 import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
+import com.casper.sdk.exception.DynamicInstanceException;
+import com.casper.sdk.exception.NoSuchTypeException;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import dev.oak3.sbs4j.DeserializerBuffer;
+import dev.oak3.sbs4j.exception.ValueDeserializationException;
 import lombok.*;
 
 /**
@@ -21,7 +25,7 @@ public class CLTypeMap extends AbstractCLTypeWithChildren {
     private final String typeName = AbstractCLType.MAP;
 
     @JsonProperty(MAP)
-    public void setKeyValueTypes(CLTypeMapEntryType keyValueTypes) {
+    public void setKeyValueTypes(final CLTypeMapEntryType keyValueTypes) {
         this.keyValueTypes = keyValueTypes;
         getChildTypes().add(this.keyValueTypes.getKeyType());
         getChildTypes().add(this.keyValueTypes.getValueType());
@@ -36,7 +40,7 @@ public class CLTypeMap extends AbstractCLTypeWithChildren {
             // The map contains an 'Any' type therefore cannot be deserialized
             return false;
         } else if (getKeyValueTypes().valueType instanceof AbstractCLTypeWithChildren) {
-           return getChildTypes().stream().allMatch(childType -> {
+            return getChildTypes().stream().allMatch(childType -> {
                 if (childType instanceof CLTypeAny) {
                     return false;
                 } else {
@@ -69,7 +73,7 @@ public class CLTypeMap extends AbstractCLTypeWithChildren {
 
         @JsonSetter("key")
         @ExcludeFromJacocoGeneratedReport
-        protected void setJsonKey(AbstractCLType clType) {
+        protected void setJsonKey(final AbstractCLType clType) {
             this.keyType = clType;
         }
 
@@ -85,7 +89,7 @@ public class CLTypeMap extends AbstractCLTypeWithChildren {
 
         @JsonSetter("value")
         @ExcludeFromJacocoGeneratedReport
-        protected void setJsonValue(AbstractCLType clType) {
+        protected void setJsonValue(final AbstractCLType clType) {
             this.valueType = clType;
         }
 
@@ -98,5 +102,24 @@ public class CLTypeMap extends AbstractCLTypeWithChildren {
                 return this.valueType;
             }
         }
+    }
+
+    @Override
+    public void deserializeChildTypes(final DeserializerBuffer deser) throws ValueDeserializationException, NoSuchTypeException, DynamicInstanceException {
+
+        // read child types
+        final int keyTypeTag = deser.readU8();
+        final int valueTypeTag = deser.readU8();
+
+        final CLTypeData keyType = CLTypeData.getTypeBySerializationTag((byte) keyTypeTag);
+        final CLTypeData valueType = CLTypeData.getTypeBySerializationTag((byte) valueTypeTag);
+        final AbstractCLType clTypeKey = CLTypeData.createCLTypeFromCLTypeName(keyType.getClTypeName());
+        AbstractCLType clTypeValue = CLTypeData.createCLTypeFromCLTypeName(valueType.getClTypeName());
+
+        if (clTypeValue instanceof AbstractCLTypeWithChildren) {
+            ((AbstractCLTypeWithChildren) clTypeValue).deserializeChildTypes(deser);
+        }
+
+        setKeyValueTypes(new CLTypeMap.CLTypeMapEntryType(clTypeKey, clTypeValue));
     }
 }

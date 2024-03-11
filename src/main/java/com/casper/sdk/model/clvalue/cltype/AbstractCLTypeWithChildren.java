@@ -1,7 +1,10 @@
 package com.casper.sdk.model.clvalue.cltype;
 
+import com.casper.sdk.exception.DynamicInstanceException;
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import dev.oak3.sbs4j.DeserializerBuffer;
+import dev.oak3.sbs4j.exception.ValueDeserializationException;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,10 +30,9 @@ public abstract class AbstractCLTypeWithChildren extends AbstractCLType {
 
     @JsonIgnore
     private List<AbstractCLType> childTypes = new ArrayList<>();
-
     private List<Object> childTypeObjects;
 
-    protected void setChildTypeObjects(List<Object> childTypeObjects)
+    protected void setChildTypeObjects(final List<Object> childTypeObjects)
             throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException,
             NoSuchMethodException, SecurityException, NoSuchTypeException {
         this.childTypeObjects = childTypeObjects;
@@ -55,7 +57,7 @@ public abstract class AbstractCLTypeWithChildren extends AbstractCLType {
     }
 
     @JsonIgnore
-    public CLTypeData getChildClTypeData(int index) throws NoSuchTypeException {
+    public CLTypeData getChildClTypeData(final int index) throws NoSuchTypeException {
         return CLTypeData.getTypeByName(getChildTypes().get(index).getTypeName());
     }
 
@@ -64,7 +66,7 @@ public abstract class AbstractCLTypeWithChildren extends AbstractCLType {
         return getChildTypes().stream().allMatch(AbstractCLType::isDeserializable);
     }
 
-    protected void loadCLTypes(List<Object> childTypeObjects)
+    protected void loadCLTypes(final List<Object> childTypeObjects)
             throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException,
             NoSuchMethodException, SecurityException, NoSuchTypeException {
         childTypes.clear();
@@ -97,4 +99,11 @@ public abstract class AbstractCLTypeWithChildren extends AbstractCLType {
             }
         }
     }
+
+    /**
+     * Update the child types from the deserializer buffer.
+     *
+     * @param deser the deserializer buffer
+     */
+    public abstract void deserializeChildTypes(final DeserializerBuffer deser) throws ValueDeserializationException, NoSuchTypeException, DynamicInstanceException;
 }
