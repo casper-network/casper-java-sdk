@@ -21,7 +21,7 @@ public class CLTypeU512 extends AbstractCLTypeBasic {
     private final String typeName = AbstractCLType.U512;
 
     @JsonCreator
-    protected CLTypeU512(String typeName) {
+    protected CLTypeU512(final String typeName) {
         super(typeName);
     }
 }

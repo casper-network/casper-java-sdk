@@ -20,7 +20,7 @@ public class CLTypeU8 extends AbstractCLTypeBasic {
     private final String typeName = AbstractCLType.U8;
 
     @JsonCreator
-    protected CLTypeU8(String typeName) {
+    protected CLTypeU8(final String typeName) {
         super(typeName);
     }
 }

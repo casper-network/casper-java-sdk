@@ -78,7 +78,7 @@ public abstract class AbstractCLTypeWithChildren extends AbstractCLType {
         }
     }
 
-    private void addChildType(Object childTypeObject, List<AbstractCLType> parent)
+    private void addChildType(final Object childTypeObject, final List<AbstractCLType> parent)
             throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException,
             NoSuchMethodException, SecurityException, NoSuchTypeException {
         if (childTypeObject instanceof String) {
@@ -101,7 +101,7 @@ public abstract class AbstractCLTypeWithChildren extends AbstractCLType {
     }
 
     /**
-     * Update the child types from the deserializer buffer.
+     * Updates the child types from the deserializer buffer.
      *
      * @param deser the deserializer buffer
      */
