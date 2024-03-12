@@ -41,7 +41,7 @@ import java.util.List;
     }
 
     @Override
-    public void serializeChildTypes(SerializerBuffer ser) throws NoSuchTypeException {
+    public void serializeChildTypes(final SerializerBuffer ser) throws NoSuchTypeException {
 
 <span class="pc bpc" id="L46" title="1 of 2 branches missed.">        if (getChildTypes().size() &gt;= 2) {</span>
 <span class="fc" id="L47">            getChildTypes().get(0).serialize(ser);</span>
@@ -55,7 +55,5 @@ import java.util.List;
 <span class="nc" id="L55">        getChildTypes().add(deserializeChildType(deser));</span>
 <span class="nc" id="L56">        getChildTypes().add(deserializeChildType(deser));</span>
 <span class="nc" id="L57">    }</span>
-
-
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
