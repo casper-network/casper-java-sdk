@@ -53,5 +53,6 @@ public class CLTypeTuple3 extends AbstractCLTypeWithChildren {
             throws ValueDeserializationException, NoSuchTypeException, DynamicInstanceException {
         getChildTypes().add(deserializeChildType(deser));
         getChildTypes().add(deserializeChildType(deser));
+        getChildTypes().add(deserializeChildType(deser));
     }
 }
