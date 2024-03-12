@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":9,"i2":10,"i3":10,"i4":6,"i5":10,"i6":10,"i7":10,"i8":6,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":6,"i16":10,"i17":6,"i18":10,"i19":10,"i20":10};
+var data = {"i0":10,"i1":10,"i2":9,"i3":10,"i4":10,"i5":6,"i6":10,"i7":10,"i8":6,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":6,"i16":10,"i17":6,"i18":10,"i19":10,"i20":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -196,18 +196,23 @@ implements <a href="serde/CasperSerializableObject.html" title="interface in com
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code>protected java.lang.Object</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#clone()">clone</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>static <a href="AbstractCLValue.html" title="class in com.casper.sdk.model.clvalue">AbstractCLValue</a>&lt;?,&#8203;?&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#createInstanceFromBytes(dev.oak3.sbs4j.DeserializerBuffer)">createInstanceFromBytes</a></span>&#8203;(dev.oak3.sbs4j.DeserializerBuffer&nbsp;deser)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#deserialize(dev.oak3.sbs4j.DeserializerBuffer)">deserialize</a></span>&#8203;(dev.oak3.sbs4j.DeserializerBuffer&nbsp;deserializerBuffer)</code></th>
 <td class="colLast">
 <div class="block">Called when the object's values must be deserialized</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="AbstractCLValue.html" title="class in com.casper.sdk.model.clvalue">AbstractCLValue</a>&lt;?,&#8203;?&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#deserialize(dev.oak3.sbs4j.DeserializerBuffer,com.casper.sdk.model.clvalue.serde.Target)">deserialize</a></span>&#8203;(dev.oak3.sbs4j.DeserializerBuffer&nbsp;deser,
            <a href="serde/Target.html" title="enum in com.casper.sdk.model.clvalue.serde">Target</a>&nbsp;target)</code></th>
@@ -215,14 +220,9 @@ implements <a href="serde/CasperSerializableObject.html" title="interface in com
 <div class="block">Called when the object's values must be deserialized</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>abstract void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#deserializeCustom(dev.oak3.sbs4j.DeserializerBuffer)">deserializeCustom</a></span>&#8203;(dev.oak3.sbs4j.DeserializerBuffer&nbsp;deserializerBuffer)</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr id="i5" class="rowColor">
-<td class="colFirst"><code>protected void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#encodeType(dev.oak3.sbs4j.SerializerBuffer)">encodeType</a></span>&#8203;(dev.oak3.sbs4j.SerializerBuffer&nbsp;ser)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i6" class="altColor">
@@ -309,7 +309,7 @@ implements <a href="serde/CasperSerializableObject.html" title="interface in com
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;java.lang.Object</h3>
-<code>clone, finalize, getClass, notify, notifyAll, toString, wait, wait, wait</code></li>
+<code>finalize, getClass, notify, notifyAll, toString, wait, wait, wait</code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.com.casper.sdk.model.clvalue.serde.CasperSerializableObject">
@@ -389,6 +389,22 @@ implements <a href="serde/CasperSerializableObject.html" title="interface in com
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>dev.oak3.sbs4j.exception.ValueDeserializationException</code></dd>
+</dl>
+</li>
+</ul>
+<a id="clone()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>clone</h4>
+<pre class="methodSignature">protected&nbsp;java.lang.Object&nbsp;clone()
+                          throws java.lang.CloneNotSupportedException</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code>clone</code>&nbsp;in class&nbsp;<code>java.lang.Object</code></dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code>java.lang.CloneNotSupportedException</code></dd>
 </dl>
 </li>
 </ul>
@@ -541,20 +557,6 @@ protected&nbsp;void&nbsp;setJsonBytes&#8203;(java.lang.String&nbsp;bytes)</pre>
 <dd><code>deserializerBuffer</code> - the deserializer to be used</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>dev.oak3.sbs4j.exception.ValueDeserializationException</code> - exception holding information of failure to deserialize a value</dd>
-</dl>
-</li>
-</ul>
-<a id="encodeType(dev.oak3.sbs4j.SerializerBuffer)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>encodeType</h4>
-<pre class="methodSignature">protected&nbsp;void&nbsp;encodeType&#8203;(dev.oak3.sbs4j.SerializerBuffer&nbsp;ser)
-                   throws <a href="../../exception/NoSuchTypeException.html" title="class in com.casper.sdk.exception">NoSuchTypeException</a></pre>
-<dl>
-<dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="../../exception/NoSuchTypeException.html" title="class in com.casper.sdk.exception">NoSuchTypeException</a></code></dd>
 </dl>
 </li>
 </ul>

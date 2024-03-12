@@ -1475,6 +1475,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">This fires deserialization in case the json/jackson mapped bytes before CLType
  This only happens when whe have CLTypes with children types.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/AbstractCLValue.html#clone()">clone()</a></span> - Method in class com.casper.sdk.model.clvalue.<a href="com/casper/sdk/model/clvalue/AbstractCLValue.html" title="class in com.casper.sdk.model.clvalue">AbstractCLValue</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/casper/sdk/model/contract/Parameter.ParameterBuilder.html#clType(com.casper.sdk.model.clvalue.cltype.AbstractCLType)">clType(AbstractCLType)</a></span> - Method in class com.casper.sdk.model.contract.<a href="com/casper/sdk/model/contract/Parameter.ParameterBuilder.html" title="class in com.casper.sdk.model.contract">Parameter.ParameterBuilder</a></dt>
 <dd>
 <div class="block">cl_type(CLType) The value of the entry: a casper `Key` type.</div>
@@ -2341,6 +2343,24 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Called when the object's values must be deserialized</div>
 </dd>
+<dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/cltype/AbstractCLTypeWithChildren.html#deserializeChildType(dev.oak3.sbs4j.DeserializerBuffer)">deserializeChildType(DeserializerBuffer)</a></span> - Method in class com.casper.sdk.model.clvalue.cltype.<a href="com/casper/sdk/model/clvalue/cltype/AbstractCLTypeWithChildren.html" title="class in com.casper.sdk.model.clvalue.cltype">AbstractCLTypeWithChildren</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/cltype/AbstractCLTypeWithChildren.html#deserializeChildTypes(dev.oak3.sbs4j.DeserializerBuffer)">deserializeChildTypes(DeserializerBuffer)</a></span> - Method in class com.casper.sdk.model.clvalue.cltype.<a href="com/casper/sdk/model/clvalue/cltype/AbstractCLTypeWithChildren.html" title="class in com.casper.sdk.model.clvalue.cltype">AbstractCLTypeWithChildren</a></dt>
+<dd>
+<div class="block">Updates the child types from the deserializer buffer.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/cltype/CLTypeList.html#deserializeChildTypes(dev.oak3.sbs4j.DeserializerBuffer)">deserializeChildTypes(DeserializerBuffer)</a></span> - Method in class com.casper.sdk.model.clvalue.cltype.<a href="com/casper/sdk/model/clvalue/cltype/CLTypeList.html" title="class in com.casper.sdk.model.clvalue.cltype">CLTypeList</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/cltype/CLTypeMap.html#deserializeChildTypes(dev.oak3.sbs4j.DeserializerBuffer)">deserializeChildTypes(DeserializerBuffer)</a></span> - Method in class com.casper.sdk.model.clvalue.cltype.<a href="com/casper/sdk/model/clvalue/cltype/CLTypeMap.html" title="class in com.casper.sdk.model.clvalue.cltype">CLTypeMap</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/cltype/CLTypeOption.html#deserializeChildTypes(dev.oak3.sbs4j.DeserializerBuffer)">deserializeChildTypes(DeserializerBuffer)</a></span> - Method in class com.casper.sdk.model.clvalue.cltype.<a href="com/casper/sdk/model/clvalue/cltype/CLTypeOption.html" title="class in com.casper.sdk.model.clvalue.cltype">CLTypeOption</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/cltype/CLTypeTuple1.html#deserializeChildTypes(dev.oak3.sbs4j.DeserializerBuffer)">deserializeChildTypes(DeserializerBuffer)</a></span> - Method in class com.casper.sdk.model.clvalue.cltype.<a href="com/casper/sdk/model/clvalue/cltype/CLTypeTuple1.html" title="class in com.casper.sdk.model.clvalue.cltype">CLTypeTuple1</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/cltype/CLTypeTuple2.html#deserializeChildTypes(dev.oak3.sbs4j.DeserializerBuffer)">deserializeChildTypes(DeserializerBuffer)</a></span> - Method in class com.casper.sdk.model.clvalue.cltype.<a href="com/casper/sdk/model/clvalue/cltype/CLTypeTuple2.html" title="class in com.casper.sdk.model.clvalue.cltype">CLTypeTuple2</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/cltype/CLTypeTuple3.html#deserializeChildTypes(dev.oak3.sbs4j.DeserializerBuffer)">deserializeChildTypes(DeserializerBuffer)</a></span> - Method in class com.casper.sdk.model.clvalue.cltype.<a href="com/casper/sdk/model/clvalue/cltype/CLTypeTuple3.html" title="class in com.casper.sdk.model.clvalue.cltype">CLTypeTuple3</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/AbstractCLValue.html#deserializeCustom(dev.oak3.sbs4j.DeserializerBuffer)">deserializeCustom(DeserializerBuffer)</a></span> - Method in class com.casper.sdk.model.clvalue.<a href="com/casper/sdk/model/clvalue/AbstractCLValue.html" title="class in com.casper.sdk.model.clvalue">AbstractCLValue</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/CLValueAny.html#deserializeCustom(dev.oak3.sbs4j.DeserializerBuffer)">deserializeCustom(DeserializerBuffer)</a></span> - Method in class com.casper.sdk.model.clvalue.<a href="com/casper/sdk/model/clvalue/CLValueAny.html" title="class in com.casper.sdk.model.clvalue">CLValueAny</a></dt>
@@ -2478,31 +2498,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="com/casper/sdk/model/deploy/executionresult/Failure.FailureBuilder.html#effect(com.casper.sdk.model.deploy.ExecutionEffect)">effect(ExecutionEffect)</a></span> - Method in class com.casper.sdk.model.deploy.executionresult.<a href="com/casper/sdk/model/deploy/executionresult/Failure.FailureBuilder.html" title="class in com.casper.sdk.model.deploy.executionresult">Failure.FailureBuilder</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/casper/sdk/model/deploy/executionresult/Success.SuccessBuilder.html#effect(com.casper.sdk.model.deploy.ExecutionEffect)">effect(ExecutionEffect)</a></span> - Method in class com.casper.sdk.model.deploy.executionresult.<a href="com/casper/sdk/model/deploy/executionresult/Success.SuccessBuilder.html" title="class in com.casper.sdk.model.deploy.executionresult">Success.SuccessBuilder</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/AbstractCLValueWithChildren.html#encodeChildType(dev.oak3.sbs4j.SerializerBuffer,com.casper.sdk.model.clvalue.AbstractCLValue,com.casper.sdk.model.clvalue.cltype.CLTypeData)">encodeChildType(SerializerBuffer, AbstractCLValue&lt;?, ?&gt;, CLTypeData)</a></span> - Method in class com.casper.sdk.model.clvalue.<a href="com/casper/sdk/model/clvalue/AbstractCLValueWithChildren.html" title="class in com.casper.sdk.model.clvalue">AbstractCLValueWithChildren</a></dt>
-<dd>
-<div class="block">Encodes the bytes of the child type, if the child value is not present but the type is known from the parent type
- info, the childDataType is used to encode the bytes of the child rather than the child value.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/AbstractCLValueWithChildren.html#encodeChildTypes(dev.oak3.sbs4j.SerializerBuffer)">encodeChildTypes(SerializerBuffer)</a></span> - Method in class com.casper.sdk.model.clvalue.<a href="com/casper/sdk/model/clvalue/AbstractCLValueWithChildren.html" title="class in com.casper.sdk.model.clvalue">AbstractCLValueWithChildren</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/CLValueList.html#encodeChildTypes(dev.oak3.sbs4j.SerializerBuffer)">encodeChildTypes(SerializerBuffer)</a></span> - Method in class com.casper.sdk.model.clvalue.<a href="com/casper/sdk/model/clvalue/CLValueList.html" title="class in com.casper.sdk.model.clvalue">CLValueList</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/CLValueMap.html#encodeChildTypes(dev.oak3.sbs4j.SerializerBuffer)">encodeChildTypes(SerializerBuffer)</a></span> - Method in class com.casper.sdk.model.clvalue.<a href="com/casper/sdk/model/clvalue/CLValueMap.html" title="class in com.casper.sdk.model.clvalue">CLValueMap</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/CLValueOption.html#encodeChildTypes(dev.oak3.sbs4j.SerializerBuffer)">encodeChildTypes(SerializerBuffer)</a></span> - Method in class com.casper.sdk.model.clvalue.<a href="com/casper/sdk/model/clvalue/CLValueOption.html" title="class in com.casper.sdk.model.clvalue">CLValueOption</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/CLValueTuple1.html#encodeChildTypes(dev.oak3.sbs4j.SerializerBuffer)">encodeChildTypes(SerializerBuffer)</a></span> - Method in class com.casper.sdk.model.clvalue.<a href="com/casper/sdk/model/clvalue/CLValueTuple1.html" title="class in com.casper.sdk.model.clvalue">CLValueTuple1</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/CLValueTuple2.html#encodeChildTypes(dev.oak3.sbs4j.SerializerBuffer)">encodeChildTypes(SerializerBuffer)</a></span> - Method in class com.casper.sdk.model.clvalue.<a href="com/casper/sdk/model/clvalue/CLValueTuple2.html" title="class in com.casper.sdk.model.clvalue">CLValueTuple2</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/CLValueTuple3.html#encodeChildTypes(dev.oak3.sbs4j.SerializerBuffer)">encodeChildTypes(SerializerBuffer)</a></span> - Method in class com.casper.sdk.model.clvalue.<a href="com/casper/sdk/model/clvalue/CLValueTuple3.html" title="class in com.casper.sdk.model.clvalue">CLValueTuple3</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/AbstractCLValue.html#encodeType(dev.oak3.sbs4j.SerializerBuffer)">encodeType(SerializerBuffer)</a></span> - Method in class com.casper.sdk.model.clvalue.<a href="com/casper/sdk/model/clvalue/AbstractCLValue.html" title="class in com.casper.sdk.model.clvalue">AbstractCLValue</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/AbstractCLValueWithChildren.html#encodeType(dev.oak3.sbs4j.SerializerBuffer)">encodeType(SerializerBuffer)</a></span> - Method in class com.casper.sdk.model.clvalue.<a href="com/casper/sdk/model/clvalue/AbstractCLValueWithChildren.html" title="class in com.casper.sdk.model.clvalue">AbstractCLValueWithChildren</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/CLValueByteArray.html#encodeType(dev.oak3.sbs4j.SerializerBuffer)">encodeType(SerializerBuffer)</a></span> - Method in class com.casper.sdk.model.clvalue.<a href="com/casper/sdk/model/clvalue/CLValueByteArray.html" title="class in com.casper.sdk.model.clvalue">CLValueByteArray</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/casper/sdk/model/deploy/Entry.html" title="class in com.casper.sdk.model.deploy"><span class="typeNameLink">Entry</span></a> - Class in <a href="com/casper/sdk/model/deploy/package-summary.html">com.casper.sdk.model.deploy</a></dt>
 <dd>
@@ -4919,7 +4914,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dd>
 <dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/cltype/AbstractCLType.html#isDeserializable()">isDeserializable()</a></span> - Method in class com.casper.sdk.model.clvalue.cltype.<a href="com/casper/sdk/model/clvalue/cltype/AbstractCLType.html" title="class in com.casper.sdk.model.clvalue.cltype">AbstractCLType</a></dt>
 <dd>
-<div class="block">Indicates if the CLType does not contains and 'Any', or other un-deserializable child type from bytes.</div>
+<div class="block">Indicates if the CLType does not contain an 'Any', or other un-deserializable child type from bytes.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/cltype/AbstractCLTypeBasic.html#isDeserializable()">isDeserializable()</a></span> - Method in class com.casper.sdk.model.clvalue.cltype.<a href="com/casper/sdk/model/clvalue/cltype/AbstractCLTypeBasic.html" title="class in com.casper.sdk.model.clvalue.cltype">AbstractCLTypeBasic</a></dt>
 <dd>&nbsp;</dd>
@@ -5702,6 +5697,14 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/casper/sdk/model/uref/URefAccessRight.html#serializationTag">serializationTag</a></span> - Variable in enum com.casper.sdk.model.uref.<a href="com/casper/sdk/model/uref/URefAccessRight.html" title="enum in com.casper.sdk.model.uref">URefAccessRight</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/cltype/AbstractCLType.html#serialize(dev.oak3.sbs4j.SerializerBuffer)">serialize(SerializerBuffer)</a></span> - Method in class com.casper.sdk.model.clvalue.cltype.<a href="com/casper/sdk/model/clvalue/cltype/AbstractCLType.html" title="class in com.casper.sdk.model.clvalue.cltype">AbstractCLType</a></dt>
+<dd>
+<div class="block">Serializes the type to the provided buffer</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/cltype/AbstractCLTypeWithChildren.html#serialize(dev.oak3.sbs4j.SerializerBuffer)">serialize(SerializerBuffer)</a></span> - Method in class com.casper.sdk.model.clvalue.cltype.<a href="com/casper/sdk/model/clvalue/cltype/AbstractCLTypeWithChildren.html" title="class in com.casper.sdk.model.clvalue.cltype">AbstractCLTypeWithChildren</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/cltype/CLTypeByteArray.html#serialize(dev.oak3.sbs4j.SerializerBuffer)">serialize(SerializerBuffer)</a></span> - Method in class com.casper.sdk.model.clvalue.cltype.<a href="com/casper/sdk/model/clvalue/cltype/CLTypeByteArray.html" title="class in com.casper.sdk.model.clvalue.cltype">CLTypeByteArray</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/serde/CasperSerializableObject.html#serialize(dev.oak3.sbs4j.SerializerBuffer)">serialize(SerializerBuffer)</a></span> - Method in interface com.casper.sdk.model.clvalue.serde.<a href="com/casper/sdk/model/clvalue/serde/CasperSerializableObject.html" title="interface in com.casper.sdk.model.clvalue.serde">CasperSerializableObject</a></dt>
 <dd>
 <div class="block">Called when the object's values must be serialized</div>
@@ -5762,6 +5765,22 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Implements TaggedHEx encoder</div>
 </dd>
+<dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/cltype/AbstractCLTypeWithChildren.html#serializeChildTypes(dev.oak3.sbs4j.SerializerBuffer)">serializeChildTypes(SerializerBuffer)</a></span> - Method in class com.casper.sdk.model.clvalue.cltype.<a href="com/casper/sdk/model/clvalue/cltype/AbstractCLTypeWithChildren.html" title="class in com.casper.sdk.model.clvalue.cltype">AbstractCLTypeWithChildren</a></dt>
+<dd>
+<div class="block">Writes the child types to the serialization buffer.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/cltype/CLTypeList.html#serializeChildTypes(dev.oak3.sbs4j.SerializerBuffer)">serializeChildTypes(SerializerBuffer)</a></span> - Method in class com.casper.sdk.model.clvalue.cltype.<a href="com/casper/sdk/model/clvalue/cltype/CLTypeList.html" title="class in com.casper.sdk.model.clvalue.cltype">CLTypeList</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/cltype/CLTypeMap.html#serializeChildTypes(dev.oak3.sbs4j.SerializerBuffer)">serializeChildTypes(SerializerBuffer)</a></span> - Method in class com.casper.sdk.model.clvalue.cltype.<a href="com/casper/sdk/model/clvalue/cltype/CLTypeMap.html" title="class in com.casper.sdk.model.clvalue.cltype">CLTypeMap</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/cltype/CLTypeOption.html#serializeChildTypes(dev.oak3.sbs4j.SerializerBuffer)">serializeChildTypes(SerializerBuffer)</a></span> - Method in class com.casper.sdk.model.clvalue.cltype.<a href="com/casper/sdk/model/clvalue/cltype/CLTypeOption.html" title="class in com.casper.sdk.model.clvalue.cltype">CLTypeOption</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/cltype/CLTypeTuple1.html#serializeChildTypes(dev.oak3.sbs4j.SerializerBuffer)">serializeChildTypes(SerializerBuffer)</a></span> - Method in class com.casper.sdk.model.clvalue.cltype.<a href="com/casper/sdk/model/clvalue/cltype/CLTypeTuple1.html" title="class in com.casper.sdk.model.clvalue.cltype">CLTypeTuple1</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/cltype/CLTypeTuple2.html#serializeChildTypes(dev.oak3.sbs4j.SerializerBuffer)">serializeChildTypes(SerializerBuffer)</a></span> - Method in class com.casper.sdk.model.clvalue.cltype.<a href="com/casper/sdk/model/clvalue/cltype/CLTypeTuple2.html" title="class in com.casper.sdk.model.clvalue.cltype">CLTypeTuple2</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/cltype/CLTypeTuple3.html#serializeChildTypes(dev.oak3.sbs4j.SerializerBuffer)">serializeChildTypes(SerializerBuffer)</a></span> - Method in class com.casper.sdk.model.clvalue.cltype.<a href="com/casper/sdk/model/clvalue/cltype/CLTypeTuple3.html" title="class in com.casper.sdk.model.clvalue.cltype">CLTypeTuple3</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/AbstractCLValue.html#serializePrefixWithLength(dev.oak3.sbs4j.SerializerBuffer)">serializePrefixWithLength(SerializerBuffer)</a></span> - Method in class com.casper.sdk.model.clvalue.<a href="com/casper/sdk/model/clvalue/AbstractCLValue.html" title="class in com.casper.sdk.model.clvalue">AbstractCLValue</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/casper/sdk/model/clvalue/AbstractCLValue.html#serializeValue(dev.oak3.sbs4j.SerializerBuffer)">serializeValue(SerializerBuffer)</a></span> - Method in class com.casper.sdk.model.clvalue.<a href="com/casper/sdk/model/clvalue/AbstractCLValue.html" title="class in com.casper.sdk.model.clvalue">AbstractCLValue</a></dt>
