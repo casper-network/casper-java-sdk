@@ -112,21 +112,11 @@ public class CLTypeMap extends AbstractCLTypeWithChildren {
     }
 
     @Override
-    public void deserializeChildTypes(final DeserializerBuffer deser) throws ValueDeserializationException, NoSuchTypeException, DynamicInstanceException {
-
+    public void deserializeChildTypes(final DeserializerBuffer deser)
+            throws ValueDeserializationException, NoSuchTypeException, DynamicInstanceException {
         // read child types
-        final int keyTypeTag = deser.readU8();
-        final int valueTypeTag = deser.readU8();
-
-        final CLTypeData keyType = CLTypeData.getTypeBySerializationTag((byte) keyTypeTag);
-        final CLTypeData valueType = CLTypeData.getTypeBySerializationTag((byte) valueTypeTag);
-        final AbstractCLType clTypeKey = CLTypeData.createCLTypeFromCLTypeName(keyType.getClTypeName());
-        final AbstractCLType clTypeValue = CLTypeData.createCLTypeFromCLTypeName(valueType.getClTypeName());
-
-        if (clTypeValue instanceof AbstractCLTypeWithChildren) {
-            ((AbstractCLTypeWithChildren) clTypeValue).deserializeChildTypes(deser);
-        }
-
+        final AbstractCLType clTypeKey = deserializeChildType(deser);
+        final AbstractCLType clTypeValue = deserializeChildType(deser);
         setKeyValueTypes(new CLTypeMap.CLTypeMapEntryType(clTypeKey, clTypeValue));
     }
 }

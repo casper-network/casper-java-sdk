@@ -166,6 +166,9 @@ public class CLValueTests {
         final byte[] expected = {4, 0, 0, 0, 1, 0, 0, 0, 18, 18, 4};
 
         assertThat(ser.toByteArray(), is(expected));
+
+        final CLValueTuple1 deserialized = (CLValueTuple1) outerTuple1.deserialize(new DeserializerBuffer(expected), Target.BYTE);
+        assertThat(deserialized.getBytes(), is(outerTuple1.getBytes()));
     }
 
     @Test
@@ -291,40 +294,6 @@ public class CLValueTests {
     @Test
     void nestedListSerialization() throws Exception {
 
-        /*
-        [0] = {u8} 24 [0x18]
-[1] = {u8} 0 [0x0]
-[2] = {u8} 0 [0x0]
-[3] = {u8} 0 [0x0]
-[4] = {u8} 2 [0x2]
-[5] = {u8} 0 [0x0]
-[6] = {u8} 0 [0x0]
-[7] = {u8} 0 [0x0]
-[8] = {u8} 3 [0x3]
-[9] = {u8} 0 [0x0]
-[10] = {u8} 0 [0x0]
-[11] = {u8} 0 [0x0]
-[12] = {u8} 1 [0x1]
-[13] = {u8} 1 [0x1]
-[14] = {u8} 1 [0x1]
-[15] = {u8} 2 [0x2]
-[16] = {u8} 1 [0x1]
-[17] = {u8} 3 [0x3]
-[18] = {u8} 3 [0x3]
-[19] = {u8} 0 [0x0]
-[20] = {u8} 0 [0x0]
-[21] = {u8} 0 [0x0]
-[22] = {u8} 1 [0x1]
-[23] = {u8} 4 [0x4]
-[24] = {u8} 1 [0x1]
-[25] = {u8} 5 [0x5]
-[26] = {u8} 1 [0x1]
-[27] = {u8} 6 [0x6]
-[28] = {u8} 14 [0xe]
-[29] = {u8} 14 [0xe]
-[30] = {u8} 7 [0x7]
-         */
-
         final byte[] expectedBytes = {24, 0, 0, 0, 2, 0, 0, 0, 3, 0, 0, 0, 1, 1, 1, 2, 1, 3, 3, 0, 0, 0, 1, 4, 1, 5, 1, 6, 14, 14, 7};
 
         List<CLValueU256> innerInernalList = new ArrayList<>();
@@ -353,6 +322,5 @@ public class CLValueTests {
         CLValueList clValueList = (CLValueList) outerList.deserialize(new DeserializerBuffer(actualBytes), Target.BYTE);
 
         assertThat(clValueList.getBytes(), is(outerList.getBytes()));
-
     }
 }

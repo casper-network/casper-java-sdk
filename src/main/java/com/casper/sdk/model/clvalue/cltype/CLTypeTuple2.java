@@ -50,7 +50,11 @@ public class CLTypeTuple2 extends AbstractCLTypeWithChildren {
     }
 
     @Override
-    public void deserializeChildTypes(final DeserializerBuffer deser) throws ValueDeserializationException, NoSuchTypeException, DynamicInstanceException {
-        // FIXME
+    public void deserializeChildTypes(final DeserializerBuffer deser)
+            throws ValueDeserializationException, NoSuchTypeException, DynamicInstanceException {
+        getChildTypes().add(deserializeChildType(deser));
+        getChildTypes().add(deserializeChildType(deser));
     }
+
+
 }

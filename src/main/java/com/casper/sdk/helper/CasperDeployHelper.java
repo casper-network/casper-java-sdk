@@ -39,9 +39,13 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CasperDeployHelper {
 
-    public static DeployHeader buildDeployHeader(PublicKey fromPublicKey, String chainName,
-                                                 Long gasPrice, Ttl ttl, Date date,
-                                                 List<Digest> dependencies, byte[] bodyHash) {
+    public static DeployHeader buildDeployHeader(final PublicKey fromPublicKey,
+                                                 final String chainName,
+                                                 final Long gasPrice,
+                                                 final Ttl ttl,
+                                                 final Date date,
+                                                 final List<Digest> dependencies,
+                                                 final byte[] bodyHash) {
         return DeployHeader
                 .builder()
                 .account(fromPublicKey)
@@ -54,28 +58,29 @@ public class CasperDeployHelper {
                 .build();
     }
 
-    public static HashAndSignature signDeployHeader(AbstractPrivateKey privateKey, DeployHeader deployHeader)
+    public static HashAndSignature signDeployHeader(final AbstractPrivateKey privateKey, final DeployHeader deployHeader)
             throws GeneralSecurityException, NoSuchTypeException, ValueSerializationException {
-        SerializerBuffer serializerBuffer = new SerializerBuffer();
-
+        final SerializerBuffer serializerBuffer = new SerializerBuffer();
         deployHeader.serialize(serializerBuffer, Target.BYTE);
-        byte[] headerHash = Blake2b.digest(serializerBuffer.toByteArray(), 32);
-        Signature signature = Signature.sign(privateKey, headerHash);
+        final byte[] headerHash = Blake2b.digest(serializerBuffer.toByteArray(), 32);
+        final Signature signature = Signature.sign(privateKey, headerHash);
         return new HashAndSignature(headerHash, signature);
     }
 
-    public static byte[] getDeployItemAndModuleBytesHash(ExecutableDeployItem deployItem, ModuleBytes moduleBytes)
+    public static byte[] getDeployItemAndModuleBytesHash(final ExecutableDeployItem deployItem, final ModuleBytes moduleBytes)
             throws NoSuchTypeException, ValueSerializationException {
-        SerializerBuffer ser = new SerializerBuffer();
+        final SerializerBuffer ser = new SerializerBuffer();
         moduleBytes.serialize(ser, Target.BYTE);
         deployItem.serialize(ser, Target.BYTE);
         return Blake2b.digest(ser.toByteArray(), 32);
     }
 
-    public static ModuleBytes getPaymentModuleBytes(BigInteger paymentAmount) throws ValueSerializationException {
-        List<NamedArg<?>> paymentArgs = new LinkedList<>();
-        NamedArg<CLTypeU512> paymentArg = new NamedArg<>("amount",
-                new CLValueU512(paymentAmount));
+    public static ModuleBytes getPaymentModuleBytes(final BigInteger paymentAmount) throws ValueSerializationException {
+        final List<NamedArg<?>> paymentArgs = new LinkedList<>();
+        final NamedArg<CLTypeU512> paymentArg = new NamedArg<>(
+                "amount",
+                new CLValueU512(paymentAmount)
+        );
         paymentArgs.add(paymentArg);
         return ModuleBytes
                 .builder()
@@ -96,26 +101,38 @@ public class CasperDeployHelper {
      *                       ms (30 minutes))
      * @param date           deploy date
      * @param dependencies   list of digest dependencies
-     * @return
+     * @return the built deploy
      * @throws NoSuchTypeException
      * @throws GeneralSecurityException
      * @throws ValueSerializationException
      */
-    public static Deploy buildDeploy(AbstractPrivateKey fromPrivateKey, String chainName,
-                                     ExecutableDeployItem session, ModuleBytes payment,
-                                     Long gasPrice, Ttl ttl, Date date, List<Digest> dependencies)
+    public static Deploy buildDeploy(final AbstractPrivateKey fromPrivateKey,
+                                     final String chainName,
+                                     final ExecutableDeployItem session,
+                                     final ModuleBytes payment,
+                                     final Long gasPrice,
+                                     final Ttl ttl,
+                                     final Date date,
+                                     final List<Digest> dependencies)
             throws NoSuchTypeException, GeneralSecurityException, ValueSerializationException {
 
-        byte[] sessionAnPaymentHash = getDeployItemAndModuleBytesHash(session, payment);
+        final byte[] sessionAnPaymentHash = getDeployItemAndModuleBytesHash(session, payment);
 
-        PublicKey fromPublicKey = PublicKey.fromAbstractPublicKey(fromPrivateKey.derivePublicKey());
+        final PublicKey fromPublicKey = PublicKey.fromAbstractPublicKey(fromPrivateKey.derivePublicKey());
 
-        DeployHeader deployHeader = buildDeployHeader(fromPublicKey, chainName, gasPrice, ttl,
-                date, dependencies, sessionAnPaymentHash);
+        final DeployHeader deployHeader = buildDeployHeader(
+                fromPublicKey,
+                chainName,
+                gasPrice,
+                ttl,
+                date,
+                dependencies,
+                sessionAnPaymentHash
+        );
 
-        HashAndSignature hashAndSignature = signDeployHeader(fromPrivateKey, deployHeader);
+        final HashAndSignature hashAndSignature = signDeployHeader(fromPrivateKey, deployHeader);
 
-        List<Approval> approvals = new LinkedList<>();
+        final List<Approval> approvals = new LinkedList<>();
         approvals.add(Approval.builder()
                 .signer(PublicKey.fromAbstractPublicKey(fromPrivateKey.derivePublicKey()))
                 .signature(hashAndSignature.getSignature())

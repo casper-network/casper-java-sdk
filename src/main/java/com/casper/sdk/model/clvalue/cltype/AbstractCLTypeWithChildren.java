@@ -112,7 +112,8 @@ public abstract class AbstractCLTypeWithChildren extends AbstractCLType {
      *
      * @param deser the deserializer buffer
      */
-    public abstract void deserializeChildTypes(final DeserializerBuffer deser) throws ValueDeserializationException, NoSuchTypeException, DynamicInstanceException;
+    public abstract void deserializeChildTypes(final DeserializerBuffer deser)
+            throws ValueDeserializationException, NoSuchTypeException, DynamicInstanceException;
 
     /**
      * Writes the child types to the serialization buffer.
@@ -120,4 +121,17 @@ public abstract class AbstractCLTypeWithChildren extends AbstractCLType {
      * @param ser the serialization buffer
      */
     protected abstract void serializeChildTypes(final SerializerBuffer ser) throws NoSuchTypeException;
+
+    protected AbstractCLType deserializeChildType(final DeserializerBuffer deser)
+            throws ValueDeserializationException, NoSuchTypeException, DynamicInstanceException {
+        final int childTypeTag = deser.readU8();
+        final CLTypeData childType = CLTypeData.getTypeBySerializationTag((byte) childTypeTag);
+        final AbstractCLType clChildType = CLTypeData.createCLTypeFromCLTypeName(childType.getClTypeName());
+
+        if (clChildType instanceof AbstractCLTypeWithChildren) {
+            ((AbstractCLTypeWithChildren) clChildType).deserializeChildTypes(deser);
+        }
+
+        return clChildType;
+    }
 }
