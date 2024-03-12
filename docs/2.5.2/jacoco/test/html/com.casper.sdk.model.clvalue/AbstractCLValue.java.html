@@ -4,6 +4,7 @@ import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.jackson.resolver.CLValueResolver;
 import com.casper.sdk.model.clvalue.cltype.AbstractCLType;
+import com.casper.sdk.model.clvalue.cltype.AbstractCLTypeWithChildren;
 import com.casper.sdk.model.clvalue.cltype.CLTypeData;
 import com.casper.sdk.model.clvalue.serde.CasperDeserializableObject;
 import com.casper.sdk.model.clvalue.serde.CasperSerializableObject;
@@ -30,41 +31,53 @@ import lombok.*;
 @Getter
 @JsonTypeInfo(use = JsonTypeInfo.Id.NONE)
 @JsonTypeResolver(CLValueResolver.class)
-<span class="pc bpc" id="L33" title="11 of 22 branches missed.">@EqualsAndHashCode(of = {&quot;bytes&quot;, &quot;value&quot;})</span>
-<span class="fc" id="L34">public abstract class AbstractCLValue&lt;T, P extends AbstractCLType&gt;</span>
+<span class="pc bpc" id="L34" title="11 of 22 branches missed.">@EqualsAndHashCode(of = {&quot;bytes&quot;, &quot;value&quot;})</span>
+<span class="fc" id="L35">public abstract class AbstractCLValue&lt;T, P extends AbstractCLType&gt;</span>
         implements CasperSerializableObject, CasperDeserializableObject {
 
-<span class="fc" id="L37">    @Setter(AccessLevel.PROTECTED)</span>
-<span class="fc" id="L38">    private String bytes = &quot;&quot;;</span>
+<span class="fc" id="L38">    @Setter(AccessLevel.PROTECTED)</span>
+<span class="fc" id="L39">    private String bytes = &quot;&quot;;</span>
 
-<span class="fc" id="L40">    @Setter</span>
+<span class="fc" id="L41">    @Setter</span>
     @JsonProperty(&quot;parsed&quot;)
     @JsonInclude(Include.NON_NULL)
-<span class="fc" id="L43">    private Object parsed;</span>
+<span class="fc" id="L44">    private Object parsed;</span>
 
     @JsonIgnore
     private T value;
 
     public T getValue() {
-<span class="fc" id="L49">        return this.value;</span>
+<span class="fc" id="L50">        return this.value;</span>
     }
 
     public void setValue(final T value) throws ValueSerializationException {
-<span class="fc" id="L53">        this.value = value;</span>
-<span class="fc" id="L54">        this.serialize(new SerializerBuffer());</span>
-<span class="fc" id="L55">    }</span>
+<span class="fc" id="L54">        this.value = value;</span>
+<span class="fc" id="L55">        this.serialize(new SerializerBuffer());</span>
+<span class="fc" id="L56">    }</span>
 
     public static AbstractCLValue&lt;?, ?&gt; createInstanceFromBytes(final DeserializerBuffer deser) throws ValueDeserializationException {
-<span class="nc" id="L58">        final int length = deser.readI32();</span>
-<span class="nc" id="L59">        final byte[] bytes = deser.readByteArray(length);</span>
-<span class="nc" id="L60">        final byte clType = deser.readU8();</span>
+<span class="fc" id="L59">        final int length = deser.readI32();</span>
+<span class="fc" id="L60">        final byte[] bytes = deser.readByteArray(length);</span>
+<span class="fc" id="L61">        final byte clType = deser.readU8();</span>
+
         try {
-<span class="nc" id="L62">            final AbstractCLValue&lt;?, ?&gt; clValue = CLTypeData.getTypeBySerializationTag(clType).getClazz().getDeclaredConstructor().newInstance();</span>
-<span class="nc" id="L63">            clValue.deserializeCustom(new DeserializerBuffer(Hex.encode(bytes)));</span>
-<span class="nc" id="L64">            return clValue;</span>
-<span class="nc" id="L65">        } catch (Exception e) {</span>
-<span class="nc" id="L66">            throw new ValueDeserializationException(&quot;Error while instantiating CLValue&quot;, e);</span>
+<span class="fc" id="L64">            CLTypeData clTypeData = CLTypeData.getTypeBySerializationTag(clType);</span>
+<span class="fc" id="L65">            final AbstractCLValue&lt;?, ?&gt; clValue = clTypeData.getClazz().getDeclaredConstructor().newInstance();</span>
+<span class="pc bpc" id="L66" title="1 of 2 branches missed.">            if (clValue instanceof AbstractCLValueWithChildren) {</span>
+                // We have only obtained the parent type from the buffer now we need to read the child types
+<span class="fc" id="L68">                ((AbstractCLTypeWithChildren) clValue.getClType()).deserializeChildTypes(deser);</span>
+            }
+
+<span class="fc" id="L71">            clValue.deserializeCustom(new DeserializerBuffer(Hex.encode(bytes)));</span>
+<span class="fc" id="L72">            return clValue;</span>
+<span class="nc" id="L73">        } catch (Exception e) {</span>
+<span class="nc" id="L74">            throw new ValueDeserializationException(&quot;Error while instantiating CLValue&quot;, e);</span>
         }
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+<span class="nc" id="L80">        return super.clone();</span>
     }
 
     @SneakyThrows({ValueSerializationException.class, NoSuchTypeException.class})
@@ -84,10 +97,7 @@ import lombok.*;
     @ExcludeFromJacocoGeneratedReport
     protected void setJsonBytes(final String bytes) {
         this.bytes = bytes;
-
-        final DeserializerBuffer deser = new DeserializerBuffer(this.bytes);
-
-        this.deserialize(deser);
+        this.deserialize(new DeserializerBuffer(this.bytes));
     }
 
     @JsonIgnore
@@ -97,36 +107,36 @@ import lombok.*;
 
 
     protected void serializePrefixWithLength(final SerializerBuffer ser) throws ValueSerializationException {
-<span class="fc" id="L100">        final SerializerBuffer localSer = new SerializerBuffer();</span>
-<span class="fc" id="L101">        serialize(localSer);</span>
-<span class="fc" id="L102">        final int size = localSer.toByteArray().length;</span>
-<span class="fc" id="L103">        ser.writeI32(size);</span>
-<span class="fc" id="L104">    }</span>
+<span class="fc" id="L110">        final SerializerBuffer localSer = new SerializerBuffer();</span>
+<span class="fc" id="L111">        serialize(localSer);</span>
+<span class="fc" id="L112">        final int size = localSer.toByteArray().length;</span>
+<span class="fc" id="L113">        ser.writeI32(size);</span>
+<span class="fc" id="L114">    }</span>
 
     @Override
     public AbstractCLValue&lt;?, ?&gt; deserialize(final DeserializerBuffer deser, final Target target) throws ValueDeserializationException {
-<span class="pc bpc" id="L108" title="1 of 2 branches missed.">        if (target.equals(Target.BYTE)) {</span>
-<span class="nc" id="L109">            return AbstractCLValue.createInstanceFromBytes(deser);</span>
+<span class="fc bfc" id="L118" title="All 2 branches covered.">        if (target.equals(Target.BYTE)) {</span>
+<span class="fc" id="L119">            return AbstractCLValue.createInstanceFromBytes(deser);</span>
         } else {
-<span class="fc" id="L111">            deserialize(deser);</span>
-<span class="fc" id="L112">            return this;</span>
+<span class="fc" id="L121">            deserialize(deser);</span>
+<span class="fc" id="L122">            return this;</span>
         }
     }
 
     @Override
     public void serialize(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {
-<span class="fc bfc" id="L118" title="All 2 branches covered.">        if (this.getValue() == null) return;</span>
+<span class="fc bfc" id="L128" title="All 2 branches covered.">        if (this.getValue() == null) return;</span>
 
-<span class="fc bfc" id="L120" title="All 2 branches covered.">        if (Target.BYTE.equals(target)) {</span>
-<span class="fc" id="L121">            serializePrefixWithLength(ser);</span>
+<span class="fc bfc" id="L130" title="All 2 branches covered.">        if (Target.BYTE.equals(target)) {</span>
+<span class="fc" id="L131">            serializePrefixWithLength(ser);</span>
         }
 
-<span class="fc" id="L124">        serializeValue(ser);</span>
+<span class="fc" id="L134">        serializeValue(ser);</span>
 
-<span class="fc bfc" id="L126" title="All 2 branches covered.">        if (Target.BYTE.equals(target)) {</span>
-<span class="fc" id="L127">            this.encodeType(ser);</span>
+<span class="fc bfc" id="L136" title="All 2 branches covered.">        if (Target.BYTE.equals(target)) {</span>
+<span class="fc" id="L137">            getClType().serialize(ser);</span>
         }
-<span class="fc" id="L129">    }</span>
+<span class="fc" id="L139">    }</span>
 
     protected abstract void serializeValue(final SerializerBuffer ser) throws ValueSerializationException;
 
@@ -135,15 +145,10 @@ import lombok.*;
     @Override
     public void deserialize(final DeserializerBuffer deserializerBuffer) throws ValueDeserializationException {
         try {
-<span class="fc" id="L138">            this.deserializeCustom(deserializerBuffer);</span>
-<span class="fc" id="L139">        } catch (Exception e) {</span>
-<span class="fc" id="L140">            throw new ValueDeserializationException(&quot;Error deserializing value&quot;, e);</span>
-<span class="fc" id="L141">        }</span>
-<span class="fc" id="L142">    }</span>
-
-    protected void encodeType(final SerializerBuffer ser) throws NoSuchTypeException {
-<span class="fc" id="L145">        final byte typeTag = (getClType().getClTypeData().getSerializationTag());</span>
-<span class="fc" id="L146">        ser.writeU8(typeTag);</span>
-<span class="fc" id="L147">    }</span>
+<span class="fc" id="L148">            this.deserializeCustom(deserializerBuffer);</span>
+<span class="fc" id="L149">        } catch (Exception e) {</span>
+<span class="fc" id="L150">            throw new ValueDeserializationException(&quot;Error deserializing value&quot;, e);</span>
+<span class="fc" id="L151">        }</span>
+<span class="fc" id="L152">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
