@@ -5,6 +5,7 @@ import com.casper.sdk.jackson.resolver.CLTypeResolver;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonTypeResolver;
+import dev.oak3.sbs4j.SerializerBuffer;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,7 +21,7 @@ import lombok.Setter;
 @Setter
 @JsonTypeInfo(use = JsonTypeInfo.Id.NONE)
 @JsonTypeResolver(CLTypeResolver.class)
-<span class="fc" id="L23">public abstract class AbstractCLType {</span>
+<span class="fc" id="L24">public abstract class AbstractCLType {</span>
     /**
      * String constants for all CLTypes as defined by the api spec
      */
@@ -63,11 +64,11 @@ import lombok.Setter;
      */
     @JsonIgnore
     public CLTypeData getClTypeData() throws NoSuchTypeException {
-<span class="fc" id="L66">        return CLTypeData.getTypeByName(getTypeName());</span>
+<span class="fc" id="L67">        return CLTypeData.getTypeByName(getTypeName());</span>
     }
 
     /**
-     * Indicates if the CLType does not contains and 'Any', or other un-deserializable child type from bytes. The reason
+     * Indicates if the CLType does not contain an 'Any', or other un-deserializable child type from bytes. The reason
      * for this is the 'Any' type does not provide a length for its bytes. This type information is obtained from the
      * JSON metadata.
      *
@@ -76,5 +77,16 @@ import lombok.Setter;
      */
     @JsonIgnore
     public abstract boolean isDeserializable();
+
+
+    /**
+     * Serializes the type to the provided buffer
+     *
+     * @param ser the buffer to serialize to
+     * @throws NoSuchTypeException if the type is not supported
+     */
+    public void serialize(final SerializerBuffer ser) throws NoSuchTypeException {
+<span class="fc" id="L89">        ser.writeU8(getClTypeData().getSerializationTag());</span>
+<span class="fc" id="L90">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

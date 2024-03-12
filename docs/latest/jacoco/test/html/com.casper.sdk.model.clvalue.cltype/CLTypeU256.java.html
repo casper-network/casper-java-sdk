@@ -16,12 +16,12 @@ import lombok.NoArgsConstructor;
 
 @Getter
 <span class="fc" id="L18">@NoArgsConstructor</span>
-<span class="pc bpc" id="L19" title="9 of 14 branches missed.">@EqualsAndHashCode(callSuper = false, of = {&quot;typeName&quot;})</span>
+<span class="pc bpc" id="L19" title="8 of 14 branches missed.">@EqualsAndHashCode(callSuper = false, of = {&quot;typeName&quot;})</span>
 public class CLTypeU256 extends AbstractCLTypeBasic {
 <span class="fc" id="L21">    private final String typeName = U256;</span>
 
     @JsonCreator
-    protected CLTypeU256(String typeName) {
+    protected CLTypeU256(final String typeName) {
 <span class="fc" id="L25">        super(typeName);</span>
 <span class="fc" id="L26">    }</span>
 }

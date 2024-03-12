@@ -59,7 +59,7 @@ public enum CLTypeData {
      * @return the requested {@link CLTypeData}
      * @throws NoSuchTypeException raised when the clType is not valid/found
      */
-    public static CLTypeData getTypeBySerializationTag(byte serializationTag) throws NoSuchTypeException {
+    public static CLTypeData getTypeBySerializationTag(final byte serializationTag) throws NoSuchTypeException {
 <span class="pc bpc" id="L63" title="1 of 2 branches missed.">        for (CLTypeData clType : values()) {</span>
 <span class="fc bfc" id="L64" title="All 2 branches covered.">            if (clType.serializationTag == serializationTag) {</span>
 <span class="fc" id="L65">                return clType;</span>
@@ -162,7 +162,7 @@ public enum CLTypeData {
      */
     public static AbstractCLType createCLTypeFromCLTypeName(String clTypeName)
             throws DynamicInstanceException, NoSuchTypeException {
-<span class="nc" id="L165">        return CLTypeData.createCLTypeFromCLTypeData(CLTypeData.getTypeByName(clTypeName));</span>
+<span class="fc" id="L165">        return CLTypeData.createCLTypeFromCLTypeData(CLTypeData.getTypeByName(clTypeName));</span>
     }
 
     /**

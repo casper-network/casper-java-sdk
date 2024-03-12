@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
  */
 <span class="fc" id="L12">@NoArgsConstructor</span>
 public abstract class AbstractCLTypeBasic extends AbstractCLType {
-<span class="fc" id="L14">    protected AbstractCLTypeBasic(String typeName) {</span>
+<span class="fc" id="L14">    protected AbstractCLTypeBasic(final String typeName) {</span>
 <span class="pc bpc" id="L15" title="1 of 2 branches missed.">        if (!this.getTypeName().equals(typeName)) {</span>
 <span class="nc" id="L16">            throw new IllegalArgumentException(</span>
 <span class="nc" id="L17">                    String.format(&quot;%s is an invalid type for %s&quot;, getClass().getSimpleName(), typeName));</span>

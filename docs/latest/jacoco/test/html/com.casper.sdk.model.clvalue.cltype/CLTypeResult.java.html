@@ -46,7 +46,7 @@ import lombok.*;
 
         @JsonSetter(&quot;ok&quot;)
         @ExcludeFromJacocoGeneratedReport
-        protected void setJsonKey(AbstractCLType clType) {
+        protected void setJsonKey(final AbstractCLType clType) {
             this.okClType = clType;
         }
 
@@ -62,7 +62,7 @@ import lombok.*;
 
         @JsonSetter(&quot;err&quot;)
         @ExcludeFromJacocoGeneratedReport
-        protected void setJsonValue(AbstractCLType clType) {
+        protected void setJsonValue(final AbstractCLType clType) {
             this.errClType = clType;
         }
 
