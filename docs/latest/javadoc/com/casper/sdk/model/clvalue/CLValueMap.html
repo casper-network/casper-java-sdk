@@ -212,7 +212,9 @@ extends <a href="AbstractCLValueWithChildren.html" title="class in com.casper.sd
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#equals(java.lang.Object)">equals</a></span>&#8203;(java.lang.Object&nbsp;o)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">This needed to be customized to ensure equality is being checked correctly.</div>
+</td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="cltype/CLTypeMap.html" title="class in com.casper.sdk.model.clvalue.cltype">CLTypeMap</a></code></td>
@@ -387,9 +389,16 @@ extends <a href="AbstractCLValueWithChildren.html" title="class in com.casper.sd
 <li class="blockList">
 <h4>equals</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;equals&#8203;(java.lang.Object&nbsp;o)</pre>
+<div class="block">This needed to be customized to ensure equality is being checked correctly.
+ The java Map equals method tries to get the "other" map entry's value by using "this" key object,
+ which then fails to find the object since they are "different" and returns always null.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="AbstractCLValueWithChildren.html#equals(java.lang.Object)">equals</a></code>&nbsp;in class&nbsp;<code><a href="AbstractCLValueWithChildren.html" title="class in com.casper.sdk.model.clvalue">AbstractCLValueWithChildren</a>&lt;java.util.Map&lt;? extends <a href="AbstractCLValue.html" title="class in com.casper.sdk.model.clvalue">AbstractCLValue</a>&lt;?,&#8203;?&gt;,&#8203;? extends <a href="AbstractCLValue.html" title="class in com.casper.sdk.model.clvalue">AbstractCLValue</a>&lt;?,&#8203;?&gt;&gt;,&#8203;<a href="cltype/CLTypeMap.html" title="class in com.casper.sdk.model.clvalue.cltype">CLTypeMap</a>&gt;</code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>o</code> - the object to compare</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>true if the objects are equal, false otherwise</dd>
 </dl>
 </li>
 </ul>
