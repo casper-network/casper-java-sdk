@@ -122,60 +122,74 @@ public class CLValueMap extends
         }
 <span class="fc" id="L123">    }</span>
 
-    // This needed to be customized to ensure equality is being checked correctly.
-// The java Map equals method tries to get the &quot;other&quot; map entry's value by using &quot;this&quot; key object,
-// which then fails to find the object since they are &quot;different&quot; and returns always null.
+    /**
+     * This needed to be customized to ensure equality is being checked correctly.
+     * The java Map equals method tries to get the &quot;other&quot; map entry's value by using &quot;this&quot; key object,
+     * which then fails to find the object since they are &quot;different&quot; and returns always null.
+     *
+     * @param o the object to compare
+     * @return true if the objects are equal, false otherwise
+     */
     @Override
     public boolean equals(final Object o) {
-<span class="pc bpc" id="L130" title="1 of 2 branches missed.">        if (o == this) return true;</span>
-<span class="pc bpc" id="L131" title="1 of 2 branches missed.">        if (!(o instanceof CLValueMap)) return false;</span>
-<span class="fc" id="L132">        final CLValueMap other = (CLValueMap) o;</span>
-<span class="pc bpc" id="L133" title="1 of 2 branches missed.">        if (!other.canEqual(this)) return false;</span>
+<span class="pc bpc" id="L135" title="1 of 2 branches missed.">        if (o == this) return true;</span>
+<span class="pc bpc" id="L136" title="1 of 2 branches missed.">        if (!(o instanceof CLValueMap)) return false;</span>
+<span class="fc" id="L137">        final CLValueMap other = (CLValueMap) o;</span>
+<span class="pc bpc" id="L138" title="1 of 2 branches missed.">        if (!other.canEqual(this)) return false;</span>
 
-<span class="fc" id="L135">        final Object this$clType = this.getClType();</span>
-<span class="fc" id="L136">        final Object other$clType = other.getClType();</span>
-<span class="pc bpc" id="L137" title="1 of 2 branches missed.">        if (!Objects.equals(this$clType, other$clType)) return false;</span>
+<span class="fc" id="L140">        final Object this$clType = this.getClType();</span>
+<span class="fc" id="L141">        final Object other$clType = other.getClType();</span>
+<span class="pc bpc" id="L142" title="1 of 2 branches missed.">        if (!Objects.equals(this$clType, other$clType)) return false;</span>
 
-<span class="fc" id="L139">        final Object this$bytes = this.getBytes();</span>
-<span class="fc" id="L140">        final Object other$bytes = other.getBytes();</span>
-<span class="pc bpc" id="L141" title="1 of 2 branches missed.">        if (!Objects.equals(this$bytes, other$bytes)) return false;</span>
-<span class="fc" id="L142">        final Map&lt;? extends AbstractCLValue&lt;?, ?&gt;, ? extends AbstractCLValue&lt;?, ?&gt;&gt; this$value = this.getValue();</span>
-<span class="fc" id="L143">        final Map&lt;? extends AbstractCLValue&lt;?, ?&gt;, ? extends AbstractCLValue&lt;?, ?&gt;&gt; other$value = other.getValue();</span>
+<span class="fc" id="L144">        final Object this$bytes = this.getBytes();</span>
+<span class="fc" id="L145">        final Object other$bytes = other.getBytes();</span>
+<span class="pc bpc" id="L146" title="1 of 2 branches missed.">        if (!Objects.equals(this$bytes, other$bytes)) return false;</span>
+<span class="fc" id="L147">        final Map&lt;? extends AbstractCLValue&lt;?, ?&gt;, ? extends AbstractCLValue&lt;?, ?&gt;&gt; this$value = this.getValue();</span>
+<span class="fc" id="L148">        final Map&lt;? extends AbstractCLValue&lt;?, ?&gt;, ? extends AbstractCLValue&lt;?, ?&gt;&gt; other$value = other.getValue();</span>
 
-<span class="fc bfc" id="L145" title="All 2 branches covered.">        for (Entry&lt;? extends AbstractCLValue&lt;?, ?&gt;, ? extends AbstractCLValue&lt;?, ?&gt;&gt; this$entry : this$value.entrySet()) {</span>
-<span class="fc" id="L146">            AbstractCLValue&lt;?, ?&gt; this$entryKey = this$entry.getKey();</span>
-<span class="fc" id="L147">            AbstractCLValue&lt;?, ?&gt; this$entryValue = this$entry.getValue();</span>
-<span class="fc" id="L148">            boolean found = false;</span>
-<span class="pc bpc" id="L149" title="1 of 2 branches missed.">            for (Entry&lt;? extends AbstractCLValue&lt;?, ?&gt;, ? extends AbstractCLValue&lt;?, ?&gt;&gt; other$entry : other$value.entrySet()) {</span>
-<span class="fc" id="L150">                AbstractCLValue&lt;?, ?&gt; other$entryKey = other$entry.getKey();</span>
-<span class="fc" id="L151">                AbstractCLValue&lt;?, ?&gt; other$entryValue = other$entry.getValue();</span>
-<span class="pc bpc" id="L152" title="2 of 4 branches missed.">                if (this$entryKey.equals(other$entryKey) &amp;&amp; this$entryValue.equals(other$entryValue)) {</span>
-<span class="fc" id="L153">                    found = true;</span>
-<span class="fc" id="L154">                    break;</span>
+<span class="fc bfc" id="L150" title="All 2 branches covered.">        for (Entry&lt;? extends AbstractCLValue&lt;?, ?&gt;, ? extends AbstractCLValue&lt;?, ?&gt;&gt; this$entry : this$value.entrySet()) {</span>
+<span class="fc" id="L151">            AbstractCLValue&lt;?, ?&gt; this$entryKey = this$entry.getKey();</span>
+<span class="fc" id="L152">            AbstractCLValue&lt;?, ?&gt; this$entryValue = this$entry.getValue();</span>
+<span class="fc" id="L153">            boolean found = false;</span>
+<span class="pc bpc" id="L154" title="1 of 2 branches missed.">            for (Entry&lt;? extends AbstractCLValue&lt;?, ?&gt;, ? extends AbstractCLValue&lt;?, ?&gt;&gt; other$entry : other$value.entrySet()) {</span>
+<span class="fc" id="L155">                AbstractCLValue&lt;?, ?&gt; other$entryKey = other$entry.getKey();</span>
+<span class="fc" id="L156">                AbstractCLValue&lt;?, ?&gt; other$entryValue = other$entry.getValue();</span>
+<span class="pc bpc" id="L157" title="2 of 4 branches missed.">                if (this$entryKey.equals(other$entryKey) &amp;&amp; this$entryValue.equals(other$entryValue)) {</span>
+<span class="fc" id="L158">                    found = true;</span>
+<span class="fc" id="L159">                    break;</span>
                 }
-<span class="nc" id="L156">            }</span>
-<span class="pc bpc" id="L157" title="1 of 2 branches missed.">            if (!found) return false;</span>
-<span class="fc" id="L158">        }</span>
+<span class="nc" id="L161">            }</span>
+<span class="pc bpc" id="L162" title="1 of 2 branches missed.">            if (!found) return false;</span>
+<span class="fc" id="L163">        }</span>
 
-<span class="fc" id="L160">        return true;</span>
+<span class="fc" id="L165">        return true;</span>
     }
 
     protected boolean canEqual(final Object other) {
-<span class="fc" id="L164">        return other instanceof CLValueMap;</span>
+<span class="fc" id="L169">        return other instanceof CLValueMap;</span>
     }
 
     @Override
     public int hashCode() {
-<span class="nc" id="L169">        final int PRIME = 59;</span>
-<span class="nc" id="L170">        int result = super.hashCode();</span>
-<span class="nc" id="L171">        final Object $clType = this.getClType();</span>
-<span class="nc bnc" id="L172" title="All 2 branches missed.">        result = result * PRIME + ($clType == null ? 43 : $clType.hashCode());</span>
-<span class="nc" id="L173">        return result;</span>
+<span class="nc" id="L174">        final int PRIME = 59;</span>
+<span class="nc" id="L175">        int result = super.hashCode();</span>
+<span class="nc" id="L176">        final Object $clType = this.getClType();</span>
+<span class="nc bnc" id="L177" title="All 2 branches missed.">        result = result * PRIME + ($clType == null ? 43 : $clType.hashCode());</span>
+<span class="nc" id="L178">        return result;</span>
     }
 
     @Override
     public String toString() {
-<span class="nc bnc" id="L178" title="All 2 branches missed.">        return getValue() != null ? getValue().entrySet().stream().map(entry -&gt; entry.getKey().toString() + &quot;=&quot; + entry.getValue().toString()).collect(Collectors.joining(&quot;, &quot;)) : null;</span>
+<span class="nc bnc" id="L183" title="All 2 branches missed.">        if (getValue() == null) {</span>
+<span class="nc" id="L184">            return null;</span>
+        } else {
+<span class="nc" id="L186">            return getValue()</span>
+<span class="nc" id="L187">                    .entrySet()</span>
+<span class="nc" id="L188">                    .stream()</span>
+<span class="nc" id="L189">                    .map(entry -&gt;</span>
+<span class="nc" id="L190">                            entry.getKey().toString() + &quot;=&quot; + entry.getValue().toString()).collect(Collectors.joining(&quot;, &quot;)</span>
+                    );
+        }
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
