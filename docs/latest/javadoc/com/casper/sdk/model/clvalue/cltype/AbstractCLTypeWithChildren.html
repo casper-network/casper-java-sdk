@@ -27,8 +27,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10};
-var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
+var data = {"i0":10,"i1":10,"i2":6,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":6,"i12":10,"i13":10};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -199,7 +199,7 @@ extends <a href="AbstractCLType.html" title="class in com.casper.sdk.model.clval
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t3" class="tableTab"><span><a href="javascript:show(4);">Abstract Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
@@ -211,48 +211,74 @@ extends <a href="AbstractCLType.html" title="class in com.casper.sdk.model.clval
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code>protected <a href="AbstractCLType.html" title="class in com.casper.sdk.model.clvalue.cltype">AbstractCLType</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#deserializeChildType(dev.oak3.sbs4j.DeserializerBuffer)">deserializeChildType</a></span>&#8203;(dev.oak3.sbs4j.DeserializerBuffer&nbsp;deser)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>abstract void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#deserializeChildTypes(dev.oak3.sbs4j.DeserializerBuffer)">deserializeChildTypes</a></span>&#8203;(dev.oak3.sbs4j.DeserializerBuffer&nbsp;deser)</code></th>
+<td class="colLast">
+<div class="block">Updates the child types from the deserializer buffer.</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#equals(java.lang.Object)">equals</a></span>&#8203;(java.lang.Object&nbsp;o)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="CLTypeData.html" title="enum in com.casper.sdk.model.clvalue.cltype">CLTypeData</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getChildClTypeData(int)">getChildClTypeData</a></span>&#8203;(int&nbsp;index)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>protected java.util.List&lt;java.lang.Object&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getChildTypeObjects()">getChildTypeObjects</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>java.util.List&lt;<a href="AbstractCLType.html" title="class in com.casper.sdk.model.clvalue.cltype">AbstractCLType</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getChildTypes()">getChildTypes</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hashCode()">hashCode</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isDeserializable()">isDeserializable</a></span>()</code></th>
 <td class="colLast">
-<div class="block">Indicates if the CLType does not contains and 'Any', or other un-deserializable child type from bytes.</div>
+<div class="block">Indicates if the CLType does not contain an 'Any', or other un-deserializable child type from bytes.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#loadCLTypes(java.util.List)">loadCLTypes</a></span>&#8203;(java.util.List&lt;java.lang.Object&gt;&nbsp;childTypeObjects)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i10" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#serialize(dev.oak3.sbs4j.SerializerBuffer)">serialize</a></span>&#8203;(dev.oak3.sbs4j.SerializerBuffer&nbsp;ser)</code></th>
+<td class="colLast">
+<div class="block">Serializes the type to the provided buffer</div>
+</td>
+</tr>
+<tr id="i11" class="rowColor">
+<td class="colFirst"><code>protected abstract void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#serializeChildTypes(dev.oak3.sbs4j.SerializerBuffer)">serializeChildTypes</a></span>&#8203;(dev.oak3.sbs4j.SerializerBuffer&nbsp;ser)</code></th>
+<td class="colLast">
+<div class="block">Writes the child types to the serialization buffer.</div>
+</td>
+</tr>
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setChildTypeObjects(java.util.List)">setChildTypeObjects</a></span>&#8203;(java.util.List&lt;java.lang.Object&gt;&nbsp;childTypeObjects)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setChildTypes(java.util.List)">setChildTypes</a></span>&#8203;(java.util.List&lt;<a href="AbstractCLType.html" title="class in com.casper.sdk.model.clvalue.cltype">AbstractCLType</a>&gt;&nbsp;childTypes)</code></th>
 <td class="colLast">&nbsp;</td>
@@ -364,7 +390,7 @@ extends <a href="AbstractCLType.html" title="class in com.casper.sdk.model.clval
 <h4>isDeserializable</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;isDeserializable()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="AbstractCLType.html#isDeserializable()">AbstractCLType</a></code></span></div>
-<div class="block">Indicates if the CLType does not contains and 'Any', or other un-deserializable child type from bytes. The reason
+<div class="block">Indicates if the CLType does not contain an 'Any', or other un-deserializable child type from bytes. The reason
  for this is the 'Any' type does not provide a length for its bytes. This type information is obtained from the
  JSON metadata.</div>
 <dl>
@@ -399,6 +425,82 @@ extends <a href="AbstractCLType.html" title="class in com.casper.sdk.model.clval
 <dd><code>java.lang.NoSuchMethodException</code></dd>
 <dd><code>java.lang.SecurityException</code></dd>
 <dd><code><a href="../../../exception/NoSuchTypeException.html" title="class in com.casper.sdk.exception">NoSuchTypeException</a></code></dd>
+</dl>
+</li>
+</ul>
+<a id="serialize(dev.oak3.sbs4j.SerializerBuffer)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>serialize</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;serialize&#8203;(dev.oak3.sbs4j.SerializerBuffer&nbsp;ser)
+               throws <a href="../../../exception/NoSuchTypeException.html" title="class in com.casper.sdk.exception">NoSuchTypeException</a></pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="AbstractCLType.html#serialize(dev.oak3.sbs4j.SerializerBuffer)">AbstractCLType</a></code></span></div>
+<div class="block">Serializes the type to the provided buffer</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code><a href="AbstractCLType.html#serialize(dev.oak3.sbs4j.SerializerBuffer)">serialize</a></code>&nbsp;in class&nbsp;<code><a href="AbstractCLType.html" title="class in com.casper.sdk.model.clvalue.cltype">AbstractCLType</a></code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>ser</code> - the buffer to serialize to</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="../../../exception/NoSuchTypeException.html" title="class in com.casper.sdk.exception">NoSuchTypeException</a></code> - if the type is not supported</dd>
+</dl>
+</li>
+</ul>
+<a id="deserializeChildTypes(dev.oak3.sbs4j.DeserializerBuffer)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>deserializeChildTypes</h4>
+<pre class="methodSignature">public abstract&nbsp;void&nbsp;deserializeChildTypes&#8203;(dev.oak3.sbs4j.DeserializerBuffer&nbsp;deser)
+                                    throws dev.oak3.sbs4j.exception.ValueDeserializationException,
+                                           <a href="../../../exception/NoSuchTypeException.html" title="class in com.casper.sdk.exception">NoSuchTypeException</a>,
+                                           <a href="../../../exception/DynamicInstanceException.html" title="class in com.casper.sdk.exception">DynamicInstanceException</a></pre>
+<div class="block">Updates the child types from the deserializer buffer.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>deser</code> - the deserializer buffer</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code>dev.oak3.sbs4j.exception.ValueDeserializationException</code></dd>
+<dd><code><a href="../../../exception/NoSuchTypeException.html" title="class in com.casper.sdk.exception">NoSuchTypeException</a></code></dd>
+<dd><code><a href="../../../exception/DynamicInstanceException.html" title="class in com.casper.sdk.exception">DynamicInstanceException</a></code></dd>
+</dl>
+</li>
+</ul>
+<a id="serializeChildTypes(dev.oak3.sbs4j.SerializerBuffer)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>serializeChildTypes</h4>
+<pre class="methodSignature">protected abstract&nbsp;void&nbsp;serializeChildTypes&#8203;(dev.oak3.sbs4j.SerializerBuffer&nbsp;ser)
+                                     throws <a href="../../../exception/NoSuchTypeException.html" title="class in com.casper.sdk.exception">NoSuchTypeException</a></pre>
+<div class="block">Writes the child types to the serialization buffer.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>ser</code> - the serialization buffer</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="../../../exception/NoSuchTypeException.html" title="class in com.casper.sdk.exception">NoSuchTypeException</a></code></dd>
+</dl>
+</li>
+</ul>
+<a id="deserializeChildType(dev.oak3.sbs4j.DeserializerBuffer)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>deserializeChildType</h4>
+<pre class="methodSignature">protected&nbsp;<a href="AbstractCLType.html" title="class in com.casper.sdk.model.clvalue.cltype">AbstractCLType</a>&nbsp;deserializeChildType&#8203;(dev.oak3.sbs4j.DeserializerBuffer&nbsp;deser)
+                                       throws dev.oak3.sbs4j.exception.ValueDeserializationException,
+                                              <a href="../../../exception/NoSuchTypeException.html" title="class in com.casper.sdk.exception">NoSuchTypeException</a>,
+                                              <a href="../../../exception/DynamicInstanceException.html" title="class in com.casper.sdk.exception">DynamicInstanceException</a></pre>
+<dl>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code>dev.oak3.sbs4j.exception.ValueDeserializationException</code></dd>
+<dd><code><a href="../../../exception/NoSuchTypeException.html" title="class in com.casper.sdk.exception">NoSuchTypeException</a></code></dd>
+<dd><code><a href="../../../exception/DynamicInstanceException.html" title="class in com.casper.sdk.exception">DynamicInstanceException</a></code></dd>
 </dl>
 </li>
 </ul>

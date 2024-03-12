@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":6,"i2":6};
+var data = {"i0":10,"i1":6,"i2":6,"i3":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -341,7 +341,14 @@ extends java.lang.Object</pre>
 <td class="colFirst"><code>abstract boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isDeserializable()">isDeserializable</a></span>()</code></th>
 <td class="colLast">
-<div class="block">Indicates if the CLType does not contains and 'Any', or other un-deserializable child type from bytes.</div>
+<div class="block">Indicates if the CLType does not contain an 'Any', or other un-deserializable child type from bytes.</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#serialize(dev.oak3.sbs4j.SerializerBuffer)">serialize</a></span>&#8203;(dev.oak3.sbs4j.SerializerBuffer&nbsp;ser)</code></th>
+<td class="colLast">
+<div class="block">Serializes the type to the provided buffer</div>
 </td>
 </tr>
 </table>
@@ -743,17 +750,34 @@ extends java.lang.Object</pre>
 <a id="isDeserializable()">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>isDeserializable</h4>
 <pre class="methodSignature">public abstract&nbsp;boolean&nbsp;isDeserializable()</pre>
-<div class="block">Indicates if the CLType does not contains and 'Any', or other un-deserializable child type from bytes. The reason
+<div class="block">Indicates if the CLType does not contain an 'Any', or other un-deserializable child type from bytes. The reason
  for this is the 'Any' type does not provide a length for its bytes. This type information is obtained from the
  JSON metadata.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>true if can be serialized, i.e: a child, or child's child does not contain a deserializable value such
  as an 'Any' type.</dd>
+</dl>
+</li>
+</ul>
+<a id="serialize(dev.oak3.sbs4j.SerializerBuffer)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>serialize</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;serialize&#8203;(dev.oak3.sbs4j.SerializerBuffer&nbsp;ser)
+               throws <a href="../../../exception/NoSuchTypeException.html" title="class in com.casper.sdk.exception">NoSuchTypeException</a></pre>
+<div class="block">Serializes the type to the provided buffer</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>ser</code> - the buffer to serialize to</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="../../../exception/NoSuchTypeException.html" title="class in com.casper.sdk.exception">NoSuchTypeException</a></code> - if the type is not supported</dd>
 </dl>
 </li>
 </ul>

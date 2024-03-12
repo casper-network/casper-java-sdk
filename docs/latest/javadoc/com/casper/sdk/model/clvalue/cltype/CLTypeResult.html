@@ -259,7 +259,7 @@ extends <a href="AbstractCLType.html" title="class in com.casper.sdk.model.clval
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isDeserializable()">isDeserializable</a></span>()</code></th>
 <td class="colLast">
-<div class="block">Indicates if the CLType does not contains and 'Any', or other un-deserializable child type from bytes.</div>
+<div class="block">Indicates if the CLType does not contain an 'Any', or other un-deserializable child type from bytes.</div>
 </td>
 </tr>
 <tr id="i6" class="altColor">
@@ -273,7 +273,7 @@ extends <a href="AbstractCLType.html" title="class in com.casper.sdk.model.clval
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;com.casper.sdk.model.clvalue.cltype.<a href="AbstractCLType.html" title="class in com.casper.sdk.model.clvalue.cltype">AbstractCLType</a></h3>
-<code><a href="AbstractCLType.html#getClTypeData()">getClTypeData</a></code></li>
+<code><a href="AbstractCLType.html#getClTypeData()">getClTypeData</a>, <a href="AbstractCLType.html#serialize(dev.oak3.sbs4j.SerializerBuffer)">serialize</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
@@ -325,7 +325,7 @@ extends <a href="AbstractCLType.html" title="class in com.casper.sdk.model.clval
 <h4>isDeserializable</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;isDeserializable()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="AbstractCLType.html#isDeserializable()">AbstractCLType</a></code></span></div>
-<div class="block">Indicates if the CLType does not contains and 'Any', or other un-deserializable child type from bytes. The reason
+<div class="block">Indicates if the CLType does not contain an 'Any', or other un-deserializable child type from bytes. The reason
  for this is the 'Any' type does not provide a length for its bytes. This type information is obtained from the
  JSON metadata.</div>
 <dl>
