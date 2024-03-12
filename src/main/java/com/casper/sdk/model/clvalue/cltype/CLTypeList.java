@@ -76,15 +76,8 @@ public class CLTypeList extends AbstractCLTypeWithChildren {
     }
 
     @Override
-    public void deserializeChildTypes(final DeserializerBuffer deser) throws ValueDeserializationException, NoSuchTypeException, DynamicInstanceException {
-        final int childTypeTag = deser.readU8();
-        final CLTypeData childType = CLTypeData.getTypeBySerializationTag((byte) childTypeTag);
-        final AbstractCLType clChildType = CLTypeData.createCLTypeFromCLTypeName(childType.getClTypeName());
-
-        if (clChildType instanceof AbstractCLTypeWithChildren) {
-            ((AbstractCLTypeWithChildren) clChildType).deserializeChildTypes(deser);
-        }
-
-        setListType(clChildType);
+    public void deserializeChildTypes(final DeserializerBuffer deser)
+            throws ValueDeserializationException, NoSuchTypeException, DynamicInstanceException {
+        setListType(deserializeChildType(deser));
     }
 }

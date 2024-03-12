@@ -122,9 +122,14 @@ public class CLValueMap extends
         }
     }
 
-    // This needed to be customized to ensure equality is being checked correctly.
-// The java Map equals method tries to get the "other" map entry's value by using "this" key object,
-// which then fails to find the object since they are "different" and returns always null.
+    /**
+     * This needed to be customized to ensure equality is being checked correctly.
+     * The java Map equals method tries to get the "other" map entry's value by using "this" key object,
+     * which then fails to find the object since they are "different" and returns always null.
+     *
+     * @param o the object to compare
+     * @return true if the objects are equal, false otherwise
+     */
     @Override
     public boolean equals(final Object o) {
         if (o == this) return true;
@@ -175,6 +180,15 @@ public class CLValueMap extends
 
     @Override
     public String toString() {
-        return getValue() != null ? getValue().entrySet().stream().map(entry -> entry.getKey().toString() + "=" + entry.getValue().toString()).collect(Collectors.joining(", ")) : null;
+        if (getValue() == null) {
+            return null;
+        } else {
+            return getValue()
+                    .entrySet()
+                    .stream()
+                    .map(entry ->
+                            entry.getKey().toString() + "=" + entry.getValue().toString()).collect(Collectors.joining(", ")
+                    );
+        }
     }
 }

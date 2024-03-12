@@ -41,7 +41,7 @@ public class CLTypeTuple2 extends AbstractCLTypeWithChildren {
     }
 
     @Override
-    public void serializeChildTypes(SerializerBuffer ser) throws NoSuchTypeException {
+    public void serializeChildTypes(final SerializerBuffer ser) throws NoSuchTypeException {
 
         if (getChildTypes().size() >= 2) {
             getChildTypes().get(0).serialize(ser);
@@ -55,6 +55,4 @@ public class CLTypeTuple2 extends AbstractCLTypeWithChildren {
         getChildTypes().add(deserializeChildType(deser));
         getChildTypes().add(deserializeChildType(deser));
     }
-
-
 }
