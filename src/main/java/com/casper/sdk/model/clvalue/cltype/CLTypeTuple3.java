@@ -4,6 +4,7 @@ import com.casper.sdk.exception.DynamicInstanceException;
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dev.oak3.sbs4j.DeserializerBuffer;
+import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueDeserializationException;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -38,8 +39,17 @@ public class CLTypeTuple3 extends AbstractCLTypeWithChildren {
         return super.getChildTypeObjects();
     }
 
+    public void serializeChildTypes(SerializerBuffer ser) throws NoSuchTypeException {
+
+        if (getChildTypes().size() >= 3) {
+            getChildTypes().get(0).serialize(ser);
+            getChildTypes().get(1).serialize(ser);
+            getChildTypes().get(2).serialize(ser);
+        }
+    }
+
     @Override
     public void deserializeChildTypes(final DeserializerBuffer deser) throws ValueDeserializationException, NoSuchTypeException, DynamicInstanceException {
-        // FIXME: 2021/10/20
+        // FIXME
     }
 }

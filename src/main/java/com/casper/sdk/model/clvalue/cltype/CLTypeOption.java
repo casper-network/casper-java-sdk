@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import dev.oak3.sbs4j.DeserializerBuffer;
+import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueDeserializationException;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -63,7 +64,12 @@ public class CLTypeOption extends AbstractCLTypeWithChildren {
     }
 
     @Override
+    public void serializeChildTypes(final SerializerBuffer ser) throws NoSuchTypeException {
+        getOptionType().serialize(ser);
+    }
+
+    @Override
     public void deserializeChildTypes(final DeserializerBuffer deser) throws ValueDeserializationException, NoSuchTypeException, DynamicInstanceException {
-        // FIXME: 2021/10/20
+        // FIXME
     }
 }

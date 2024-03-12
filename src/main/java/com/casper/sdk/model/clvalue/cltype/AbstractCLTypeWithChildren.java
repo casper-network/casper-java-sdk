@@ -4,6 +4,7 @@ import com.casper.sdk.exception.DynamicInstanceException;
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import dev.oak3.sbs4j.DeserializerBuffer;
+import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueDeserializationException;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -100,10 +101,23 @@ public abstract class AbstractCLTypeWithChildren extends AbstractCLType {
         }
     }
 
+    @Override
+    public void serialize(final SerializerBuffer ser) throws NoSuchTypeException {
+        super.serialize(ser);
+        serializeChildTypes(ser);
+    }
+
     /**
      * Updates the child types from the deserializer buffer.
      *
      * @param deser the deserializer buffer
      */
     public abstract void deserializeChildTypes(final DeserializerBuffer deser) throws ValueDeserializationException, NoSuchTypeException, DynamicInstanceException;
+
+    /**
+     * Writes the child types to the serialization buffer.
+     *
+     * @param ser the serialization buffer
+     */
+    protected abstract void serializeChildTypes(final SerializerBuffer ser) throws NoSuchTypeException;
 }

@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import dev.oak3.sbs4j.DeserializerBuffer;
+import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueDeserializationException;
 import lombok.*;
 
@@ -105,6 +106,12 @@ public class CLTypeMap extends AbstractCLTypeWithChildren {
     }
 
     @Override
+    public void serializeChildTypes(final SerializerBuffer ser) throws NoSuchTypeException {
+        getKeyValueTypes().getKeyType().serialize(ser);
+        getKeyValueTypes().getValueType().serialize(ser);
+    }
+
+    @Override
     public void deserializeChildTypes(final DeserializerBuffer deser) throws ValueDeserializationException, NoSuchTypeException, DynamicInstanceException {
 
         // read child types
@@ -114,7 +121,7 @@ public class CLTypeMap extends AbstractCLTypeWithChildren {
         final CLTypeData keyType = CLTypeData.getTypeBySerializationTag((byte) keyTypeTag);
         final CLTypeData valueType = CLTypeData.getTypeBySerializationTag((byte) valueTypeTag);
         final AbstractCLType clTypeKey = CLTypeData.createCLTypeFromCLTypeName(keyType.getClTypeName());
-        AbstractCLType clTypeValue = CLTypeData.createCLTypeFromCLTypeName(valueType.getClTypeName());
+        final AbstractCLType clTypeValue = CLTypeData.createCLTypeFromCLTypeName(valueType.getClTypeName());
 
         if (clTypeValue instanceof AbstractCLTypeWithChildren) {
             ((AbstractCLTypeWithChildren) clTypeValue).deserializeChildTypes(deser);

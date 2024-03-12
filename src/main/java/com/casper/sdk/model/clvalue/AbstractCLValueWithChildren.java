@@ -1,12 +1,9 @@
 package com.casper.sdk.model.clvalue;
 
 import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
-import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.cltype.AbstractCLTypeWithChildren;
-import com.casper.sdk.model.clvalue.cltype.CLTypeData;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import dev.oak3.sbs4j.DeserializerBuffer;
-import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueDeserializationException;
 import lombok.EqualsAndHashCode;
 import lombok.SneakyThrows;
@@ -51,37 +48,5 @@ public abstract class AbstractCLValueWithChildren<T, P extends AbstractCLTypeWit
         if (!getClType().getChildTypes().isEmpty() && getClType().isDeserializable()) {
             this.deserialize(new DeserializerBuffer(this.getBytes()));
         }
-    }
-
-    protected void encodeType(final SerializerBuffer ser) throws NoSuchTypeException {
-        super.encodeType(ser);
-        encodeChildTypes(ser);
-    }
-
-    protected abstract void encodeChildTypes(final SerializerBuffer ser) throws NoSuchTypeException;
-
-    /**
-     * Encodes the bytes of the child type, if the child value is not present but the type is known from the parent type
-     * info, the childDataType is used to encode the bytes of the child rather than the child value.
-     *
-     * @param ser           the serializer buffer
-     * @param child         the child value whose type is to be encoded
-     * @param childDataType the data type of the child
-     * @throws NoSuchTypeException if the child type is not found
-     */
-    protected void encodeChildType(final SerializerBuffer ser,
-                                   final AbstractCLValue<?, ?> child,
-                                   final CLTypeData childDataType) throws NoSuchTypeException {
-        if (child instanceof AbstractCLValueWithChildren) {
-            child.encodeType(ser);
-        } else {
-            // If there are no AbstractCLValueWithChildren as children we just need a simple tag
-            byte element0TypeTag = childDataType.getSerializationTag();
-            ser.writeU8(element0TypeTag);
-        }
-    }
-
-    public void populateChildTypes(final DeserializerBuffer dser) {
-
     }
 }

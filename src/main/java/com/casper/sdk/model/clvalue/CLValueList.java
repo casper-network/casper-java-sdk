@@ -1,6 +1,5 @@
 package com.casper.sdk.model.clvalue;
 
-import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.cltype.AbstractCLTypeWithChildren;
 import com.casper.sdk.model.clvalue.cltype.CLTypeData;
 import com.casper.sdk.model.clvalue.cltype.CLTypeList;
@@ -67,11 +66,6 @@ public class CLValueList extends AbstractCLValueWithChildren<List<? extends Abst
         this.setBytes(Hex.toHexString(bytes));
     }
 
-    @Override
-    protected void encodeChildTypes(final SerializerBuffer ser) throws NoSuchTypeException {
-        final byte val = (getClType().getListType().getClTypeData().getSerializationTag());
-        ser.writeU8(val);
-    }
 
     @Override
     public void deserializeCustom(final DeserializerBuffer deser) throws Exception {

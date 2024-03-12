@@ -1,6 +1,5 @@
 package com.casper.sdk.model.clvalue;
 
-import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.cltype.AbstractCLTypeWithChildren;
 import com.casper.sdk.model.clvalue.cltype.CLTypeData;
 import com.casper.sdk.model.clvalue.cltype.CLTypeTuple3;
@@ -57,13 +56,6 @@ public class CLValueTuple3 extends
         final byte[] bytes = serVal.toByteArray();
         ser.writeByteArray(bytes);
         this.setBytes(Hex.toHexString(bytes));
-    }
-
-    @Override
-    protected void encodeChildTypes(SerializerBuffer ser) throws NoSuchTypeException {
-        encodeChildType(ser, this.getValue().getValue0(), getClType().getChildClTypeData(0));
-        encodeChildType(ser, this.getValue().getValue1(), getClType().getChildClTypeData(1));
-        encodeChildType(ser, this.getValue().getValue2(), getClType().getChildClTypeData(2));
     }
 
     @Override

@@ -1,13 +1,11 @@
 package com.casper.sdk.model.clvalue;
 
 import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
-import com.casper.sdk.exception.DynamicInstanceException;
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.jackson.resolver.CLValueResolver;
 import com.casper.sdk.model.clvalue.cltype.AbstractCLType;
 import com.casper.sdk.model.clvalue.cltype.AbstractCLTypeWithChildren;
 import com.casper.sdk.model.clvalue.cltype.CLTypeData;
-import com.casper.sdk.model.clvalue.cltype.CLTypeMap;
 import com.casper.sdk.model.clvalue.serde.CasperDeserializableObject;
 import com.casper.sdk.model.clvalue.serde.CasperSerializableObject;
 import com.casper.sdk.model.clvalue.serde.Target;
@@ -82,11 +80,6 @@ public abstract class AbstractCLValue<T, P extends AbstractCLType>
         return super.clone();
     }
 
-    protected CLTypeData deserializeTypeData(DeserializerBuffer dser) throws NoSuchTypeException, ValueDeserializationException {
-        byte clType = dser.readU8();
-        return CLTypeData.getTypeBySerializationTag(clType);
-    }
-
     @SneakyThrows({ValueSerializationException.class, NoSuchTypeException.class})
     @JsonGetter(value = "bytes")
     @ExcludeFromJacocoGeneratedReport
@@ -104,7 +97,7 @@ public abstract class AbstractCLValue<T, P extends AbstractCLType>
     @ExcludeFromJacocoGeneratedReport
     protected void setJsonBytes(final String bytes) {
         this.bytes = bytes;
-        this.deserialize( new DeserializerBuffer(this.bytes));
+        this.deserialize(new DeserializerBuffer(this.bytes));
     }
 
     @JsonIgnore
@@ -141,7 +134,7 @@ public abstract class AbstractCLValue<T, P extends AbstractCLType>
         serializeValue(ser);
 
         if (Target.BYTE.equals(target)) {
-            this.encodeType(ser);
+            getClType().serialize(ser);
         }
     }
 
@@ -156,10 +149,5 @@ public abstract class AbstractCLValue<T, P extends AbstractCLType>
         } catch (Exception e) {
             throw new ValueDeserializationException("Error deserializing value", e);
         }
-    }
-
-    protected void encodeType(final SerializerBuffer ser) throws NoSuchTypeException {
-        final byte typeTag = (getClType().getClTypeData().getSerializationTag());
-        ser.writeU8(typeTag);
     }
 }

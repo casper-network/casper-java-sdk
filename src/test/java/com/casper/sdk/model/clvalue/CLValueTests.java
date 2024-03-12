@@ -14,9 +14,7 @@ import org.javatuples.Unit;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigInteger;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
@@ -245,37 +243,37 @@ public class CLValueTests {
     void nestedMapDeserialization2() throws Exception {
 
         //  a nested map is created  {1: {11: {111: "ONE_ONE_ONE"}, 12: {121: "ONE_TWO_ONE"}}, 2: {21: {211: "TWO_ONE_ONE"}, 22: {221: "TWO_TWO_ONE"}}}
+        //noinspection rawtypes
+        Map innerMap = new LinkedHashMap<>();
+        innerMap.put(new CLValueU256(BigInteger.valueOf(111L)), new CLValueString("ONE_ONE_ONE"));
+        final CLValueMap innerMap111 = new CLValueMap(innerMap);
 
-        Map map = new LinkedHashMap<>();
-        map.put(new CLValueU256(BigInteger.valueOf(111L)),  new CLValueString("ONE_ONE_ONE"));
-        final CLValueMap innerMap111 = new CLValueMap(map);
+        innerMap = new LinkedHashMap<>();
+        innerMap.put(new CLValueU256(BigInteger.valueOf(121L)), new CLValueString("ONE_TWO_ONE"));
+        final CLValueMap innerMap121 = new CLValueMap(innerMap);
 
-        map = new LinkedHashMap<>();
-        map.put(new CLValueU256(BigInteger.valueOf(121L)),  new CLValueString("ONE_TWO_ONE"));
-        final CLValueMap innerMap121 = new CLValueMap(map);
+        innerMap = new LinkedHashMap<>();
+        innerMap.put(new CLValueU256(BigInteger.valueOf(11L)), innerMap111);
+        innerMap.put(new CLValueU256(BigInteger.valueOf(12L)), innerMap121);
+        final CLValueMap innerMap1 = new CLValueMap(innerMap);
 
-        map = new LinkedHashMap<>();
-        map.put(new CLValueU256(BigInteger.valueOf(11L)), innerMap111);
-        map.put(new CLValueU256(BigInteger.valueOf(12L)), innerMap121);
-        final CLValueMap innerMap1 = new CLValueMap(map);
+        innerMap = new LinkedHashMap<>();
+        innerMap.put(new CLValueU256(BigInteger.valueOf(211L)), new CLValueString("TWO_ONE_ONE"));
+        final CLValueMap innerMap21 = new CLValueMap(innerMap);
 
-        map = new LinkedHashMap<>();
-        map.put(new CLValueU256(BigInteger.valueOf(211L)),  new CLValueString("TWO_ONE_ONE"));
-        final CLValueMap innerMap21 = new CLValueMap(map);
+        innerMap = new LinkedHashMap<>();
+        innerMap.put(new CLValueU256(BigInteger.valueOf(221)), new CLValueString("TWO_TWO_ONE"));
+        final CLValueMap innerMap22 = new CLValueMap(innerMap);
 
-        map = new LinkedHashMap<>();
-        map.put(new CLValueU256(BigInteger.valueOf(221)),  new CLValueString("TWO_TWO_ONE"));
-        final CLValueMap innerMap22 = new CLValueMap(map);
+        innerMap = new LinkedHashMap<>();
+        innerMap.put(new CLValueU256(BigInteger.valueOf(21L)), innerMap21);
+        innerMap.put(new CLValueU256(BigInteger.valueOf(22L)), innerMap22);
+        final CLValueMap innerMap2 = new CLValueMap(innerMap);
 
-        map = new LinkedHashMap<>();
-        map.put(new CLValueU256(BigInteger.valueOf(21L)), innerMap21);
-        map.put(new CLValueU256(BigInteger.valueOf(22L)), innerMap22);
-        final CLValueMap innerMap2 = new CLValueMap(map);
-
-        map = new LinkedHashMap<>();
-        map.put(new CLValueU256(BigInteger.valueOf(1L)), innerMap1);
-        map.put(new CLValueU256(BigInteger.valueOf(2L)), innerMap2);
-        final CLValueMap outerMap = new CLValueMap(map);
+        innerMap = new LinkedHashMap<>();
+        innerMap.put(new CLValueU256(BigInteger.valueOf(1L)), innerMap1);
+        innerMap.put(new CLValueU256(BigInteger.valueOf(2L)), innerMap2);
+        final CLValueMap outerMap = new CLValueMap(innerMap);
 
         final SerializerBuffer ser = new SerializerBuffer();
         outerMap.serialize(ser, Target.BYTE);
@@ -290,5 +288,71 @@ public class CLValueTests {
         assertThat(clValueMap.getBytes(), is(outerMap.getBytes()));
     }
 
+    @Test
+    void nestedListSerialization() throws Exception {
 
+        /*
+        [0] = {u8} 24 [0x18]
+[1] = {u8} 0 [0x0]
+[2] = {u8} 0 [0x0]
+[3] = {u8} 0 [0x0]
+[4] = {u8} 2 [0x2]
+[5] = {u8} 0 [0x0]
+[6] = {u8} 0 [0x0]
+[7] = {u8} 0 [0x0]
+[8] = {u8} 3 [0x3]
+[9] = {u8} 0 [0x0]
+[10] = {u8} 0 [0x0]
+[11] = {u8} 0 [0x0]
+[12] = {u8} 1 [0x1]
+[13] = {u8} 1 [0x1]
+[14] = {u8} 1 [0x1]
+[15] = {u8} 2 [0x2]
+[16] = {u8} 1 [0x1]
+[17] = {u8} 3 [0x3]
+[18] = {u8} 3 [0x3]
+[19] = {u8} 0 [0x0]
+[20] = {u8} 0 [0x0]
+[21] = {u8} 0 [0x0]
+[22] = {u8} 1 [0x1]
+[23] = {u8} 4 [0x4]
+[24] = {u8} 1 [0x1]
+[25] = {u8} 5 [0x5]
+[26] = {u8} 1 [0x1]
+[27] = {u8} 6 [0x6]
+[28] = {u8} 14 [0xe]
+[29] = {u8} 14 [0xe]
+[30] = {u8} 7 [0x7]
+         */
+
+        final byte[] expectedBytes = {24, 0, 0, 0, 2, 0, 0, 0, 3, 0, 0, 0, 1, 1, 1, 2, 1, 3, 3, 0, 0, 0, 1, 4, 1, 5, 1, 6, 14, 14, 7};
+
+        List<CLValueU256> innerInernalList = new ArrayList<>();
+        innerInernalList.add(new CLValueU256(BigInteger.valueOf(1L)));
+        innerInernalList.add(new CLValueU256(BigInteger.valueOf(2L)));
+        innerInernalList.add(new CLValueU256(BigInteger.valueOf(3L)));
+        CLValueList innerList1 = new CLValueList(innerInernalList);
+
+        innerInernalList = new ArrayList<>();
+        innerInernalList.add(new CLValueU256(BigInteger.valueOf(4L)));
+        innerInernalList.add(new CLValueU256(BigInteger.valueOf(5L)));
+        innerInernalList.add(new CLValueU256(BigInteger.valueOf(6L)));
+        CLValueList innerList2 = new CLValueList(innerInernalList);
+
+        List<CLValueList> internalOutList = new ArrayList<>();
+        internalOutList.add(innerList1);
+        internalOutList.add(innerList2);
+        CLValueList outerList = new CLValueList(internalOutList);
+
+        final SerializerBuffer ser = new SerializerBuffer();
+        outerList.serialize(ser, Target.BYTE);
+
+        byte[] actualBytes = ser.toByteArray();
+        assertThat(actualBytes, is(expectedBytes));
+
+        CLValueList clValueList = (CLValueList) outerList.deserialize(new DeserializerBuffer(actualBytes), Target.BYTE);
+
+        assertThat(clValueList.getBytes(), is(outerList.getBytes()));
+
+    }
 }

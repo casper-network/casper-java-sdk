@@ -1,7 +1,6 @@
 package com.casper.sdk.model.clvalue;
 
 import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
-import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.cltype.CLTypeByteArray;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dev.oak3.sbs4j.DeserializerBuffer;
@@ -40,12 +39,6 @@ public class CLValueByteArray extends AbstractCLValue<byte[], CLTypeByteArray> {
     protected void serializeValue(final SerializerBuffer ser) throws ValueSerializationException {
         ser.writeByteArray(this.getValue());
         this.setBytes(Hex.toHexString(getValue()));
-    }
-
-    @Override
-    protected void encodeType(final SerializerBuffer ser) throws NoSuchTypeException {
-        super.encodeType(ser);
-        ser.writeI32(this.getClType().getLength());
     }
 
     @Override

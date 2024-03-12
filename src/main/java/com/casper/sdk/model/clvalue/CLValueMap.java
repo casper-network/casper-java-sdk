@@ -1,8 +1,5 @@
 package com.casper.sdk.model.clvalue;
 
-import com.casper.sdk.exception.DynamicInstanceException;
-import com.casper.sdk.exception.NoSuchTypeException;
-import com.casper.sdk.model.clvalue.cltype.AbstractCLType;
 import com.casper.sdk.model.clvalue.cltype.AbstractCLTypeWithChildren;
 import com.casper.sdk.model.clvalue.cltype.CLTypeData;
 import com.casper.sdk.model.clvalue.cltype.CLTypeMap;
@@ -11,7 +8,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import dev.oak3.sbs4j.DeserializerBuffer;
 import dev.oak3.sbs4j.SerializerBuffer;
-import dev.oak3.sbs4j.exception.ValueDeserializationException;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -73,21 +69,6 @@ public class CLValueMap extends
         this.setBytes(Hex.toHexString(bytes));
     }
 
-    @Override
-    protected void encodeChildTypes(final SerializerBuffer ser) throws NoSuchTypeException {
-
-        final byte keyTypeTag = (getClType().getKeyValueTypes().getKeyType().getClTypeData().getSerializationTag());
-        ser.writeU8(keyTypeTag);
-
-        final Map<? extends AbstractCLValue<?, ?>, ? extends AbstractCLValue<?, ?>> value = this.getValue();
-        final CLTypeData clTypeData = getClType().getKeyValueTypes().getValueType().getClTypeData();
-        if (!value.isEmpty()) {
-            encodeChildType(ser, value.values().iterator().next(), clTypeData);
-        } else {
-            final byte valueTypeTag = (clTypeData.getSerializationTag());
-            ser.writeU8(valueTypeTag);
-        }
-    }
 
     @Override
     public void deserializeCustom(final DeserializerBuffer deser) throws Exception {
