@@ -18,16 +18,19 @@ import java.security.NoSuchAlgorithmException;
 <span class="fc" id="L18">@Getter</span>
 <span class="fc" id="L19">@AllArgsConstructor(access = AccessLevel.PRIVATE)</span>
 public enum AlgorithmTag implements Tag {
-<span class="fc" id="L21">    SECP256K1((byte) 0x02), ED25519((byte) 0x01);</span>
+<span class="fc" id="L21">    SECP256K1((byte) 0x02, 33), ED25519((byte) 0x01, 32);</span>
 
 <span class="fc" id="L23">    private final byte byteTag;</span>
+    /** The number of bytes for a key excluding the tag byte */
+<span class="fc" id="L25">    private final int length;</span>
 
     public static AlgorithmTag getByTag(byte byteTag) throws NoSuchAlgorithmException {
-<span class="pc bpc" id="L26" title="1 of 2 branches missed.">        for (AlgorithmTag a : values()) {</span>
-<span class="fc bfc" id="L27" title="All 2 branches covered.">            if (a.byteTag == byteTag)</span>
-<span class="fc" id="L28">                return a;</span>
+<span class="pc bpc" id="L28" title="1 of 2 branches missed.">        for (AlgorithmTag a : values()) {</span>
+<span class="fc bfc" id="L29" title="All 2 branches covered.">            if (a.byteTag == byteTag)</span>
+<span class="fc" id="L30">                return a;</span>
         }
-<span class="nc" id="L30">        throw new NoSuchAlgorithmException();</span>
+<span class="nc" id="L32">        throw new NoSuchAlgorithmException();</span>
     }
+
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
