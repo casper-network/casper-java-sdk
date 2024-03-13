@@ -63,7 +63,7 @@ import lombok.*;
         try {
 <span class="fc" id="L64">            CLTypeData clTypeData = CLTypeData.getTypeBySerializationTag(clType);</span>
 <span class="fc" id="L65">            final AbstractCLValue&lt;?, ?&gt; clValue = clTypeData.getClazz().getDeclaredConstructor().newInstance();</span>
-<span class="pc bpc" id="L66" title="1 of 2 branches missed.">            if (clValue instanceof AbstractCLValueWithChildren) {</span>
+<span class="fc bfc" id="L66" title="All 2 branches covered.">            if (clValue instanceof AbstractCLValueWithChildren) {</span>
                 // We have only obtained the parent type from the buffer now we need to read the child types
 <span class="fc" id="L68">                ((AbstractCLTypeWithChildren) clValue.getClType()).deserializeChildTypes(deser);</span>
             }

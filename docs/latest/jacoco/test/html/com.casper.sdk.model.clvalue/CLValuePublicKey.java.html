@@ -8,7 +8,6 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import dev.oak3.sbs4j.DeserializerBuffer;
 import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
-import dev.oak3.sbs4j.util.ByteUtils;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,11 +22,11 @@ import lombok.Setter;
  * @since 0.0.1
  */
 @Getter
-<span class="nc" id="L26">@Setter</span>
-<span class="pc bpc" id="L27" title="10 of 16 branches missed.">@EqualsAndHashCode(callSuper = true)</span>
-<span class="fc" id="L28">@NoArgsConstructor</span>
+<span class="nc" id="L25">@Setter</span>
+<span class="pc bpc" id="L26" title="10 of 16 branches missed.">@EqualsAndHashCode(callSuper = true)</span>
+<span class="fc" id="L27">@NoArgsConstructor</span>
 public class CLValuePublicKey extends AbstractCLValue&lt;PublicKey, CLTypePublicKey&gt; {
-<span class="fc" id="L30">    private CLTypePublicKey clType = new CLTypePublicKey();</span>
+<span class="fc" id="L29">    private CLTypePublicKey clType = new CLTypePublicKey();</span>
 
     @JsonSetter(&quot;cl_type&quot;)
     @ExcludeFromJacocoGeneratedReport
@@ -41,25 +40,25 @@ public class CLValuePublicKey extends AbstractCLValue&lt;PublicKey, CLTypePublic
         return this.getClType().getTypeName();
     }
 
-<span class="fc" id="L44">    public CLValuePublicKey(final PublicKey value) throws ValueSerializationException {</span>
-<span class="fc" id="L45">        this.setValue(value);</span>
-<span class="fc" id="L46">    }</span>
+<span class="fc" id="L43">    public CLValuePublicKey(final PublicKey value) throws ValueSerializationException {</span>
+<span class="fc" id="L44">        this.setValue(value);</span>
+<span class="fc" id="L45">    }</span>
 
     @Override
     protected void serializeValue(final SerializerBuffer ser) throws ValueSerializationException {
-<span class="fc" id="L50">        ser.writeU8(this.getValue().getTag().getByteTag());</span>
-<span class="fc" id="L51">        ser.writeByteArray(this.getValue().getKey());</span>
-<span class="fc" id="L52">        this.setBytes(this.getValue().getAlgoTaggedHex());</span>
-<span class="fc" id="L53">    }</span>
+<span class="fc" id="L49">        ser.writeU8(this.getValue().getTag().getByteTag());</span>
+<span class="fc" id="L50">        ser.writeByteArray(this.getValue().getKey());</span>
+<span class="fc" id="L51">        this.setBytes(this.getValue().getAlgoTaggedHex());</span>
+<span class="fc" id="L52">    }</span>
 
     @Override
     public void deserializeCustom(final DeserializerBuffer deser) throws Exception {
-<span class="fc" id="L57">        this.setValue(PublicKey.fromTaggedHexString(ByteUtils.encodeHexString(deser.readByteArray(33))));</span>
-<span class="fc" id="L58">    }</span>
+<span class="fc" id="L56">        this.setValue(PublicKey.deserialize(deser));</span>
+<span class="fc" id="L57">    }</span>
 
     @Override
     public String toString() {
-<span class="nc bnc" id="L62" title="All 2 branches missed.">        return getValue() != null ? getValue().getAlgoTaggedHex() : null;</span>
+<span class="nc bnc" id="L61" title="All 2 branches missed.">        return getValue() != null ? getValue().getAlgoTaggedHex() : null;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
