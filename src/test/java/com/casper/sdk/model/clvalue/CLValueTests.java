@@ -2,9 +2,14 @@ package com.casper.sdk.model.clvalue;
 
 import com.casper.sdk.exception.DynamicInstanceException;
 import com.casper.sdk.exception.NoSuchTypeException;
+import com.casper.sdk.helper.CasperKeyHelper;
 import com.casper.sdk.model.clvalue.cltype.*;
 import com.casper.sdk.model.clvalue.serde.Target;
 import com.casper.sdk.model.deploy.NamedArg;
+import com.casper.sdk.model.key.PublicKey;
+import com.syntifi.crypto.key.AbstractPublicKey;
+import com.syntifi.crypto.key.Ed25519PrivateKey;
+import com.syntifi.crypto.key.Secp256k1PrivateKey;
 import com.syntifi.crypto.key.encdec.Hex;
 import dev.oak3.sbs4j.DeserializerBuffer;
 import dev.oak3.sbs4j.SerializerBuffer;
@@ -323,4 +328,40 @@ public class CLValueTests {
 
         assertThat(clValueList.getBytes(), is(outerList.getBytes()));
     }
+
+    @Test
+    void secp256k1PublicKeySerialization() throws Exception {
+
+        final Secp256k1PrivateKey secp256k1PrivateKey = CasperKeyHelper.createRandomSecp256k1Key();
+        final AbstractPublicKey abstractPublicKey = secp256k1PrivateKey.derivePublicKey();
+        final PublicKey publicKey = PublicKey.fromAbstractPublicKey(abstractPublicKey);
+
+        final CLValuePublicKey clValuePublicKey = new CLValuePublicKey(publicKey);
+        final SerializerBuffer ser = new SerializerBuffer();
+        clValuePublicKey.serialize(ser, Target.BYTE);
+
+        final byte[] bytes = ser.toByteArray();
+        assertThat(bytes.length, is(39));
+
+        final CLValuePublicKey deserialized = (CLValuePublicKey) clValuePublicKey.deserialize(new DeserializerBuffer(bytes), Target.BYTE);
+        assertThat(deserialized.getBytes(), is(clValuePublicKey.getBytes()));
+    }
+
+    @Test
+    void Ed25519PublicKeySerialization() throws Exception {
+        Ed25519PrivateKey randomEd25519Key = CasperKeyHelper.createRandomEd25519Key();
+        final AbstractPublicKey abstractPublicKey = randomEd25519Key.derivePublicKey();
+        final PublicKey publicKey = PublicKey.fromAbstractPublicKey(abstractPublicKey);
+
+        final CLValuePublicKey clValuePublicKey = new CLValuePublicKey(publicKey);
+        final SerializerBuffer ser = new SerializerBuffer();
+        clValuePublicKey.serialize(ser, Target.BYTE);
+
+        final byte[] bytes = ser.toByteArray();
+        assertThat(bytes.length, is(38));
+
+        final CLValuePublicKey deserialized = (CLValuePublicKey) clValuePublicKey.deserialize(new DeserializerBuffer(bytes), Target.BYTE);
+        assertThat(deserialized.getBytes(), is(clValuePublicKey.getBytes()));
+    }
+
 }
