@@ -52,11 +52,10 @@ public class PublicKey extends AbstractSerializedKeyTaggedHex<AlgorithmTag> {
     public static PublicKey deserialize(final DeserializerBuffer deser) throws ValueDeserializationException, NoSuchAlgorithmException {
         // Obtain algorithm tag
         final AlgorithmTag tag = AlgorithmTag.getByTag(deser.readU8());
-        final int len = tag.getLength();
         final PublicKey publicKey = new PublicKey();
         publicKey.setTag(tag);
         // Read the required number of bytes for the algorithm length
-        publicKey.setKey(deser.readByteArray(len));
+        publicKey.setKey(deser.readByteArray(tag.getLength()));
         return publicKey;
     }
 
