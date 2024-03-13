@@ -18,9 +18,11 @@ import java.security.NoSuchAlgorithmException;
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public enum AlgorithmTag implements Tag {
-    SECP256K1((byte) 0x02), ED25519((byte) 0x01);
+    SECP256K1((byte) 0x02, 33), ED25519((byte) 0x01, 32);
 
     private final byte byteTag;
+    /** The number of bytes for a key excluding the tag byte */
+    private final int length;
 
     public static AlgorithmTag getByTag(byte byteTag) throws NoSuchAlgorithmException {
         for (AlgorithmTag a : values()) {
@@ -29,4 +31,5 @@ public enum AlgorithmTag implements Tag {
         }
         throw new NoSuchAlgorithmException();
     }
+
 }
