@@ -5,6 +5,7 @@ import com.casper.sdk.jackson.resolver.CLTypeResolver;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonTypeResolver;
+import dev.oak3.sbs4j.SerializerBuffer;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -67,7 +68,7 @@ public abstract class AbstractCLType {
     }
 
     /**
-     * Indicates if the CLType does not contains and 'Any', or other un-deserializable child type from bytes. The reason
+     * Indicates if the CLType does not contain an 'Any', or other un-deserializable child type from bytes. The reason
      * for this is the 'Any' type does not provide a length for its bytes. This type information is obtained from the
      * JSON metadata.
      *
@@ -76,4 +77,15 @@ public abstract class AbstractCLType {
      */
     @JsonIgnore
     public abstract boolean isDeserializable();
+
+
+    /**
+     * Serializes the type to the provided buffer
+     *
+     * @param ser the buffer to serialize to
+     * @throws NoSuchTypeException if the type is not supported
+     */
+    public void serialize(final SerializerBuffer ser) throws NoSuchTypeException {
+        ser.writeU8(getClTypeData().getSerializationTag());
+    }
 }

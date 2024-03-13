@@ -20,7 +20,7 @@ public class CLTypeBool extends AbstractCLTypeBasic {
     private final String typeName = AbstractCLType.BOOL;
 
     @JsonCreator
-    protected CLTypeBool(String typeName) {
+    protected CLTypeBool(final String typeName) {
         super(typeName);
     }
 }

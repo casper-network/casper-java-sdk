@@ -1,6 +1,5 @@
 package com.casper.sdk.model.clvalue;
 
-import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.cltype.AbstractCLTypeWithChildren;
 import com.casper.sdk.model.clvalue.cltype.CLTypeData;
 import com.casper.sdk.model.clvalue.cltype.CLTypeMap;
@@ -70,18 +69,13 @@ public class CLValueMap extends
         this.setBytes(Hex.toHexString(bytes));
     }
 
-    @Override
-    protected void encodeChildTypes(final SerializerBuffer ser) throws NoSuchTypeException {
-
-        final byte keyTypeTag = (getClType().getKeyValueTypes().getKeyType().getClTypeData().getSerializationTag());
-        ser.writeU8(keyTypeTag);
-
-        final byte valueTypeTag = (getClType().getKeyValueTypes().getValueType().getClTypeData().getSerializationTag());
-        ser.writeU8(valueTypeTag);
-    }
 
     @Override
     public void deserializeCustom(final DeserializerBuffer deser) throws Exception {
+        if (this.clType.getChildTypes().isEmpty()) {
+            this.clType.deserializeChildTypes(deser);
+        }
+
         final CLTypeData keyType = clType.getKeyValueTypes().getKeyType().getClTypeData();
         final CLTypeData valType = clType.getKeyValueTypes().getValueType().getClTypeData();
 
@@ -116,6 +110,7 @@ public class CLValueMap extends
         setValue(map);
     }
 
+
     @Override
     @JsonIgnore
     protected void setChildTypes(final Map<? extends AbstractCLValue<?, ?>, ? extends AbstractCLValue<?, ?>> value) {
@@ -127,9 +122,14 @@ public class CLValueMap extends
         }
     }
 
-    // This needed to be customized to ensure equality is being checked correctly.
-    // The java Map equals method tries to get the "other" map entry's value by using "this" key object,
-    // which then fails to find the object since they are "different" and returns always null.
+    /**
+     * This needed to be customized to ensure equality is being checked correctly.
+     * The java Map equals method tries to get the "other" map entry's value by using "this" key object,
+     * which then fails to find the object since they are "different" and returns always null.
+     *
+     * @param o the object to compare
+     * @return true if the objects are equal, false otherwise
+     */
     @Override
     public boolean equals(final Object o) {
         if (o == this) return true;
@@ -180,6 +180,15 @@ public class CLValueMap extends
 
     @Override
     public String toString() {
-        return getValue() != null ? getValue().keySet().stream().map(key -> key.getValue().toString() + "=" + key.getValue().toString()).collect(Collectors.joining(", ")) : null;
+        if (getValue() == null) {
+            return null;
+        } else {
+            return getValue()
+                    .entrySet()
+                    .stream()
+                    .map(entry ->
+                            entry.getKey().toString() + "=" + entry.getValue().toString()).collect(Collectors.joining(", ")
+                    );
+        }
     }
 }

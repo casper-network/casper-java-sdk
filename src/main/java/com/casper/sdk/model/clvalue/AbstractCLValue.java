@@ -4,6 +4,7 @@ import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.jackson.resolver.CLValueResolver;
 import com.casper.sdk.model.clvalue.cltype.AbstractCLType;
+import com.casper.sdk.model.clvalue.cltype.AbstractCLTypeWithChildren;
 import com.casper.sdk.model.clvalue.cltype.CLTypeData;
 import com.casper.sdk.model.clvalue.serde.CasperDeserializableObject;
 import com.casper.sdk.model.clvalue.serde.CasperSerializableObject;
@@ -58,13 +59,25 @@ public abstract class AbstractCLValue<T, P extends AbstractCLType>
         final int length = deser.readI32();
         final byte[] bytes = deser.readByteArray(length);
         final byte clType = deser.readU8();
+
         try {
-            final AbstractCLValue<?, ?> clValue = CLTypeData.getTypeBySerializationTag(clType).getClazz().getDeclaredConstructor().newInstance();
+            CLTypeData clTypeData = CLTypeData.getTypeBySerializationTag(clType);
+            final AbstractCLValue<?, ?> clValue = clTypeData.getClazz().getDeclaredConstructor().newInstance();
+            if (clValue instanceof AbstractCLValueWithChildren) {
+                // We have only obtained the parent type from the buffer now we need to read the child types
+                ((AbstractCLTypeWithChildren) clValue.getClType()).deserializeChildTypes(deser);
+            }
+
             clValue.deserializeCustom(new DeserializerBuffer(Hex.encode(bytes)));
             return clValue;
         } catch (Exception e) {
             throw new ValueDeserializationException("Error while instantiating CLValue", e);
         }
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 
     @SneakyThrows({ValueSerializationException.class, NoSuchTypeException.class})
@@ -84,10 +97,7 @@ public abstract class AbstractCLValue<T, P extends AbstractCLType>
     @ExcludeFromJacocoGeneratedReport
     protected void setJsonBytes(final String bytes) {
         this.bytes = bytes;
-
-        final DeserializerBuffer deser = new DeserializerBuffer(this.bytes);
-
-        this.deserialize(deser);
+        this.deserialize(new DeserializerBuffer(this.bytes));
     }
 
     @JsonIgnore
@@ -124,7 +134,7 @@ public abstract class AbstractCLValue<T, P extends AbstractCLType>
         serializeValue(ser);
 
         if (Target.BYTE.equals(target)) {
-            this.encodeType(ser);
+            getClType().serialize(ser);
         }
     }
 
@@ -139,10 +149,5 @@ public abstract class AbstractCLValue<T, P extends AbstractCLType>
         } catch (Exception e) {
             throw new ValueDeserializationException("Error deserializing value", e);
         }
-    }
-
-    protected void encodeType(final SerializerBuffer ser) throws NoSuchTypeException {
-        final byte typeTag = (getClType().getClTypeData().getSerializationTag());
-        ser.writeU8(typeTag);
     }
 }

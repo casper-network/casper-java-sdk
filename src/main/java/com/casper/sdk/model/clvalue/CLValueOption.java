@@ -1,6 +1,5 @@
 package com.casper.sdk.model.clvalue;
 
-import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.cltype.*;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
@@ -90,14 +89,6 @@ public class CLValueOption extends AbstractCLValueWithChildren<Optional<Abstract
         }
 
         setValue(Optional.of(child));
-    }
-
-    @Override
-    protected void encodeChildTypes(final SerializerBuffer ser) throws NoSuchTypeException {
-        final Optional<AbstractCLValue<?, ?>> child = getValue();
-        if (child.isPresent()) {
-            encodeChildType(ser, child.get(), this.getClType().getOptionType().getClTypeData());
-        }
     }
 
     @Override

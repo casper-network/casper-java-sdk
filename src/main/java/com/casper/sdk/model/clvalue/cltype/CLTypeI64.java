@@ -20,7 +20,7 @@ public class CLTypeI64 extends AbstractCLTypeBasic {
     private final String typeName = I64;
 
     @JsonCreator
-    protected CLTypeI64(String typeName) {
+    protected CLTypeI64(final String typeName) {
         super(typeName);
     }
 }

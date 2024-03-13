@@ -1,9 +1,14 @@
 package com.casper.sdk.model.clvalue.cltype;
 
 import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
+import com.casper.sdk.exception.DynamicInstanceException;
+import com.casper.sdk.exception.NoSuchTypeException;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import dev.oak3.sbs4j.DeserializerBuffer;
+import dev.oak3.sbs4j.SerializerBuffer;
+import dev.oak3.sbs4j.exception.ValueDeserializationException;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
@@ -32,7 +37,7 @@ public class CLTypeList extends AbstractCLTypeWithChildren {
 
     @JsonSetter(AbstractCLType.LIST)
     @ExcludeFromJacocoGeneratedReport
-    protected void setJsonValue(AbstractCLType clType) {
+    protected void setJsonValue(final AbstractCLType clType) {
         getChildTypes().add(clType);
     }
 
@@ -46,7 +51,7 @@ public class CLTypeList extends AbstractCLTypeWithChildren {
     }
 
     @JsonIgnore
-    public void setListType(AbstractCLType listType) {
+    public void setListType(final AbstractCLType listType) {
         getChildTypes().clear();
         getChildTypes().add(listType);
     }
@@ -61,5 +66,18 @@ public class CLTypeList extends AbstractCLTypeWithChildren {
                 return childType.isDeserializable();
             }
         });
+    }
+
+    @Override
+    public void serializeChildTypes(final SerializerBuffer ser) throws NoSuchTypeException {
+        if (!this.getChildTypes().isEmpty()) {
+            this.getChildTypes().get(0).serialize(ser);
+        }
+    }
+
+    @Override
+    public void deserializeChildTypes(final DeserializerBuffer deser)
+            throws ValueDeserializationException, NoSuchTypeException, DynamicInstanceException {
+        setListType(deserializeChildType(deser));
     }
 }

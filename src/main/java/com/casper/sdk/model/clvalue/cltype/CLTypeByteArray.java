@@ -1,6 +1,8 @@
 package com.casper.sdk.model.clvalue.cltype;
 
+import com.casper.sdk.exception.NoSuchTypeException;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import dev.oak3.sbs4j.SerializerBuffer;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,5 +27,11 @@ public class CLTypeByteArray extends AbstractCLType {
     @Override
     public boolean isDeserializable() {
         return true;
+    }
+
+    @Override
+    public void serialize(final SerializerBuffer ser) throws NoSuchTypeException {
+        super.serialize(ser);
+        ser.writeI32(getLength());
     }
 }

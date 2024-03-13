@@ -59,7 +59,7 @@ public enum CLTypeData {
      * @return the requested {@link CLTypeData}
      * @throws NoSuchTypeException raised when the clType is not valid/found
      */
-    public static CLTypeData getTypeBySerializationTag(byte serializationTag) throws NoSuchTypeException {
+    public static CLTypeData getTypeBySerializationTag(final byte serializationTag) throws NoSuchTypeException {
         for (CLTypeData clType : values()) {
             if (clType.serializationTag == serializationTag) {
                 return clType;

@@ -21,7 +21,7 @@ public class CLTypeUnit extends AbstractCLTypeBasic {
     private final String typeName = UNIT;
 
     @JsonCreator
-    protected CLTypeUnit(String typeName) {
+    protected CLTypeUnit(final String typeName) {
         super(typeName);
     }
 }

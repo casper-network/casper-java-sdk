@@ -1,7 +1,11 @@
 package com.casper.sdk.model.clvalue.cltype;
 
+import com.casper.sdk.exception.DynamicInstanceException;
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import dev.oak3.sbs4j.DeserializerBuffer;
+import dev.oak3.sbs4j.SerializerBuffer;
+import dev.oak3.sbs4j.exception.ValueDeserializationException;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,10 +31,9 @@ public abstract class AbstractCLTypeWithChildren extends AbstractCLType {
 
     @JsonIgnore
     private List<AbstractCLType> childTypes = new ArrayList<>();
-
     private List<Object> childTypeObjects;
 
-    protected void setChildTypeObjects(List<Object> childTypeObjects)
+    protected void setChildTypeObjects(final List<Object> childTypeObjects)
             throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException,
             NoSuchMethodException, SecurityException, NoSuchTypeException {
         this.childTypeObjects = childTypeObjects;
@@ -55,7 +58,7 @@ public abstract class AbstractCLTypeWithChildren extends AbstractCLType {
     }
 
     @JsonIgnore
-    public CLTypeData getChildClTypeData(int index) throws NoSuchTypeException {
+    public CLTypeData getChildClTypeData(final int index) throws NoSuchTypeException {
         return CLTypeData.getTypeByName(getChildTypes().get(index).getTypeName());
     }
 
@@ -64,7 +67,7 @@ public abstract class AbstractCLTypeWithChildren extends AbstractCLType {
         return getChildTypes().stream().allMatch(AbstractCLType::isDeserializable);
     }
 
-    protected void loadCLTypes(List<Object> childTypeObjects)
+    protected void loadCLTypes(final List<Object> childTypeObjects)
             throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException,
             NoSuchMethodException, SecurityException, NoSuchTypeException {
         childTypes.clear();
@@ -76,7 +79,7 @@ public abstract class AbstractCLTypeWithChildren extends AbstractCLType {
         }
     }
 
-    private void addChildType(Object childTypeObject, List<AbstractCLType> parent)
+    private void addChildType(final Object childTypeObject, final List<AbstractCLType> parent)
             throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException,
             NoSuchMethodException, SecurityException, NoSuchTypeException {
         if (childTypeObject instanceof String) {
@@ -96,5 +99,39 @@ public abstract class AbstractCLTypeWithChildren extends AbstractCLType {
                 addChildType(entry.getValue(), ((AbstractCLTypeWithChildren) nextParent).getChildTypes());
             }
         }
+    }
+
+    @Override
+    public void serialize(final SerializerBuffer ser) throws NoSuchTypeException {
+        super.serialize(ser);
+        serializeChildTypes(ser);
+    }
+
+    /**
+     * Updates the child types from the deserializer buffer.
+     *
+     * @param deser the deserializer buffer
+     */
+    public abstract void deserializeChildTypes(final DeserializerBuffer deser)
+            throws ValueDeserializationException, NoSuchTypeException, DynamicInstanceException;
+
+    /**
+     * Writes the child types to the serialization buffer.
+     *
+     * @param ser the serialization buffer
+     */
+    protected abstract void serializeChildTypes(final SerializerBuffer ser) throws NoSuchTypeException;
+
+    protected AbstractCLType deserializeChildType(final DeserializerBuffer deser)
+            throws ValueDeserializationException, NoSuchTypeException, DynamicInstanceException {
+        final int childTypeTag = deser.readU8();
+        final CLTypeData childType = CLTypeData.getTypeBySerializationTag((byte) childTypeTag);
+        final AbstractCLType clChildType = CLTypeData.createCLTypeFromCLTypeName(childType.getClTypeName());
+
+        if (clChildType instanceof AbstractCLTypeWithChildren) {
+            ((AbstractCLTypeWithChildren) clChildType).deserializeChildTypes(deser);
+        }
+
+        return clChildType;
     }
 }
