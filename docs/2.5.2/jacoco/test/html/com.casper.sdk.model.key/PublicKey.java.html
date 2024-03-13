@@ -52,39 +52,38 @@ public class PublicKey extends AbstractSerializedKeyTaggedHex&lt;AlgorithmTag&gt
     public static PublicKey deserialize(final DeserializerBuffer deser) throws ValueDeserializationException, NoSuchAlgorithmException {
         // Obtain algorithm tag
 <span class="fc" id="L54">        final AlgorithmTag tag = AlgorithmTag.getByTag(deser.readU8());</span>
-<span class="fc" id="L55">        final int len = tag.getLength();</span>
-<span class="fc" id="L56">        final PublicKey publicKey = new PublicKey();</span>
-<span class="fc" id="L57">        publicKey.setTag(tag);</span>
+<span class="fc" id="L55">        final PublicKey publicKey = new PublicKey();</span>
+<span class="fc" id="L56">        publicKey.setTag(tag);</span>
         // Read the required number of bytes for the algorithm length
-<span class="fc" id="L59">        publicKey.setKey(deser.readByteArray(len));</span>
-<span class="fc" id="L60">        return publicKey;</span>
+<span class="fc" id="L58">        publicKey.setKey(deser.readByteArray(tag.getLength()));</span>
+<span class="fc" id="L59">        return publicKey;</span>
     }
 
 
     public String generateAccountHash(final boolean includePrefix) throws IOException {
-<span class="nc" id="L65">        final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();</span>
-<span class="nc" id="L66">        byteArrayOutputStream.write(getTag().toString().toLowerCase().getBytes(StandardCharsets.UTF_8));</span>
-<span class="nc" id="L67">        byteArrayOutputStream.write(0);</span>
-<span class="nc" id="L68">        byteArrayOutputStream.write(getKey());</span>
+<span class="nc" id="L64">        final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();</span>
+<span class="nc" id="L65">        byteArrayOutputStream.write(getTag().toString().toLowerCase().getBytes(StandardCharsets.UTF_8));</span>
+<span class="nc" id="L66">        byteArrayOutputStream.write(0);</span>
+<span class="nc" id="L67">        byteArrayOutputStream.write(getKey());</span>
 
-<span class="nc bnc" id="L70" title="All 2 branches missed.">        return (includePrefix ? &quot;account-hash-&quot; : &quot;&quot;) + ByteUtils.encodeHexString(Blake2b.digest(byteArrayOutputStream.toByteArray(), 32));</span>
+<span class="nc bnc" id="L69" title="All 2 branches missed.">        return (includePrefix ? &quot;account-hash-&quot; : &quot;&quot;) + ByteUtils.encodeHexString(Blake2b.digest(byteArrayOutputStream.toByteArray(), 32));</span>
     }
 
     @JsonCreator
     public void createPublicKey(final String key) throws NoSuchAlgorithmException, IllegalArgumentException {
-<span class="nc" id="L75">        final PublicKey obj = PublicKey.fromTaggedHexString(key);</span>
-<span class="nc" id="L76">        this.setTag(obj.getTag());</span>
-<span class="nc" id="L77">        this.setKey(obj.getKey());</span>
-<span class="nc" id="L78">    }</span>
+<span class="nc" id="L74">        final PublicKey obj = PublicKey.fromTaggedHexString(key);</span>
+<span class="nc" id="L75">        this.setTag(obj.getTag());</span>
+<span class="nc" id="L76">        this.setKey(obj.getKey());</span>
+<span class="nc" id="L77">    }</span>
 
     @JsonIgnore
     public AbstractPublicKey getPubKey() throws NoSuchAlgorithmException {
-<span class="nc bnc" id="L82" title="All 2 branches missed.">        if (getTag().equals(AlgorithmTag.ED25519)) {</span>
-<span class="nc" id="L83">            return new Ed25519PublicKey(getKey());</span>
-<span class="nc bnc" id="L84" title="All 2 branches missed.">        } else if (getTag().equals(AlgorithmTag.SECP256K1)) {</span>
-<span class="nc" id="L85">            return new Secp256k1PublicKey(getKey());</span>
+<span class="nc bnc" id="L81" title="All 2 branches missed.">        if (getTag().equals(AlgorithmTag.ED25519)) {</span>
+<span class="nc" id="L82">            return new Ed25519PublicKey(getKey());</span>
+<span class="nc bnc" id="L83" title="All 2 branches missed.">        } else if (getTag().equals(AlgorithmTag.SECP256K1)) {</span>
+<span class="nc" id="L84">            return new Secp256k1PublicKey(getKey());</span>
         } else {
-<span class="nc" id="L87">            throw new NoSuchAlgorithmException();</span>
+<span class="nc" id="L86">            throw new NoSuchAlgorithmException();</span>
         }
     }
 }
