@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":6,"i5":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":6,"i6":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -218,11 +218,17 @@ extends <a href="AbstractCLValue.html" title="class in com.casper.sdk.model.clva
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
+<td class="colFirst"><code>protected void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#populateChildTypesFromParent(com.casper.sdk.model.clvalue.AbstractCLValue,com.casper.sdk.model.clvalue.cltype.AbstractCLType)">populateChildTypesFromParent</a></span>&#8203;(<a href="AbstractCLValue.html" title="class in com.casper.sdk.model.clvalue">AbstractCLValue</a>&lt;?,&#8203;?&gt;&nbsp;child,
+                            <a href="cltype/AbstractCLType.html" title="class in com.casper.sdk.model.clvalue.cltype">AbstractCLType</a>&nbsp;type)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>protected abstract void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setChildTypes(T)">setChildTypes</a></span>&#8203;(<a href="AbstractCLValueWithChildren.html" title="type parameter in AbstractCLValueWithChildren">T</a>&nbsp;value)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setJsonBytes(java.lang.String)">setJsonBytes</a></span>&#8203;(java.lang.String&nbsp;bytes)</code></th>
 <td class="colLast">
@@ -308,6 +314,16 @@ extends <a href="AbstractCLValue.html" title="class in com.casper.sdk.model.clva
  This only happens when whe have CLTypes with children types.
  <p>
  Should always be called in the end of the json setter for ClType within CLValueWithChildren</div>
+</li>
+</ul>
+<a id="populateChildTypesFromParent(com.casper.sdk.model.clvalue.AbstractCLValue,com.casper.sdk.model.clvalue.cltype.AbstractCLType)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>populateChildTypesFromParent</h4>
+<pre class="methodSignature">protected&nbsp;void&nbsp;populateChildTypesFromParent&#8203;(<a href="AbstractCLValue.html" title="class in com.casper.sdk.model.clvalue">AbstractCLValue</a>&lt;?,&#8203;?&gt;&nbsp;child,
+                                            <a href="cltype/AbstractCLType.html" title="class in com.casper.sdk.model.clvalue.cltype">AbstractCLType</a>&nbsp;type)</pre>
 </li>
 </ul>
 <a id="setJsonBytes(java.lang.String)">
