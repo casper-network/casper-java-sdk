@@ -12,6 +12,8 @@ import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueDeserializationException;
 import lombok.*;
 
+import java.util.List;
+
 /**
  * CLType for {@link AbstractCLType#MAP}
  *
@@ -50,6 +52,19 @@ public class CLTypeMap extends AbstractCLTypeWithChildren {
             });
         } else {
             return getKeyValueTypes().keyType.isDeserializable() || getKeyValueTypes().valueType.isDeserializable();
+        }
+    }
+
+    /**
+     * Allows generic setting of child types so we don't need specialized code for byte deserialization.
+     *
+     * @param childTypes the child types
+     */
+    @Override
+    public void setChildTypes(final List<AbstractCLType> childTypes) {
+        super.setChildTypes(childTypes);
+        if (childTypes.size() >= 2) {
+            setKeyValueTypes(new CLTypeMapEntryType(childTypes.get(0), childTypes.get(1)));
         }
     }
 
