@@ -1,6 +1,5 @@
 package com.casper.sdk.model.clvalue;
 
-import com.casper.sdk.model.clvalue.cltype.AbstractCLTypeWithChildren;
 import com.casper.sdk.model.clvalue.cltype.CLTypeData;
 import com.casper.sdk.model.clvalue.cltype.CLTypeTuple1;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -57,13 +56,10 @@ public class CLValueTuple1 extends AbstractCLValueWithChildren<Unit<? extends Ab
 
     @Override
     public void deserializeCustom(final DeserializerBuffer deser) throws Exception {
-        CLTypeData childTypeData1 = clType.getChildClTypeData(0);
+        final CLTypeData childTypeData1 = clType.getChildClTypeData(0);
 
-        AbstractCLValue<?, ?> child1 = CLTypeData.createCLValueFromCLTypeData(childTypeData1);
-        if (child1.getClType() instanceof AbstractCLTypeWithChildren) {
-            ((AbstractCLTypeWithChildren) child1.getClType())
-                    .setChildTypes(((AbstractCLTypeWithChildren) clType.getChildTypes().get(0)).getChildTypes());
-        }
+        final AbstractCLValue<?, ?> child1 = CLTypeData.createCLValueFromCLTypeData(childTypeData1);
+        populateChildTypesFromParent(child1, clType.getChildTypes().get(0));
         child1.deserializeCustom(deser);
 
         setValue(new Unit<>(child1));

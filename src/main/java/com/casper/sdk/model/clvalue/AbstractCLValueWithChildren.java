@@ -1,7 +1,9 @@
 package com.casper.sdk.model.clvalue;
 
 import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
+import com.casper.sdk.model.clvalue.cltype.AbstractCLType;
 import com.casper.sdk.model.clvalue.cltype.AbstractCLTypeWithChildren;
+import com.casper.sdk.model.clvalue.cltype.CLTypeByteArray;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import dev.oak3.sbs4j.DeserializerBuffer;
 import dev.oak3.sbs4j.exception.ValueDeserializationException;
@@ -30,6 +32,16 @@ public abstract class AbstractCLValueWithChildren<T, P extends AbstractCLTypeWit
     protected void childTypesSet() {
         if (!getBytes().isEmpty()) {
             this.deserialize(new DeserializerBuffer(this.getBytes()));
+        }
+    }
+
+    protected void populateChildTypesFromParent(final AbstractCLValue<?, ?> child, final AbstractCLType type) {
+        if (type instanceof AbstractCLTypeWithChildren) {
+            if (child.getClType() instanceof AbstractCLTypeWithChildren) {
+                ((AbstractCLTypeWithChildren) child.getClType()).setChildTypes(((AbstractCLTypeWithChildren)type).getChildTypes());
+            } else if (child instanceof CLValueByteArray) {
+                ((CLValueByteArray) child).setClType((CLTypeByteArray) ((AbstractCLTypeWithChildren)type).getChildTypes().get(0));
+            }
         }
     }
 

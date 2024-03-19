@@ -1,6 +1,5 @@
 package com.casper.sdk.model.clvalue;
 
-import com.casper.sdk.model.clvalue.cltype.AbstractCLTypeWithChildren;
 import com.casper.sdk.model.clvalue.cltype.CLTypeData;
 import com.casper.sdk.model.clvalue.cltype.CLTypeTuple2;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -64,17 +63,11 @@ public class CLValueTuple2
         final CLTypeData childTypeData2 = clType.getChildClTypeData(1);
 
         final AbstractCLValue<?, ?> child1 = CLTypeData.createCLValueFromCLTypeData(childTypeData1);
-        if (child1.getClType() instanceof AbstractCLTypeWithChildren) {
-            ((AbstractCLTypeWithChildren) child1.getClType())
-                    .setChildTypes(((AbstractCLTypeWithChildren) clType.getChildTypes().get(0)).getChildTypes());
-        }
+        populateChildTypesFromParent(child1, clType.getChildTypes().get(0));
         child1.deserializeCustom(deser);
 
         final AbstractCLValue<?, ?> child2 = CLTypeData.createCLValueFromCLTypeData(childTypeData2);
-        if (child2.getClType() instanceof AbstractCLTypeWithChildren) {
-            ((AbstractCLTypeWithChildren) child2.getClType())
-                    .setChildTypes(((AbstractCLTypeWithChildren) clType.getChildTypes().get(1)).getChildTypes());
-        }
+        populateChildTypesFromParent(child2, clType.getChildTypes().get(1));
         child2.deserializeCustom(deser);
 
         setValue(new Pair<>(child1, child2));

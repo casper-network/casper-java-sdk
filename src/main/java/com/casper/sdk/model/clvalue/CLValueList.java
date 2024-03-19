@@ -1,9 +1,7 @@
 package com.casper.sdk.model.clvalue;
 
-import com.casper.sdk.model.clvalue.cltype.AbstractCLTypeWithChildren;
 import com.casper.sdk.model.clvalue.cltype.CLTypeData;
 import com.casper.sdk.model.clvalue.cltype.CLTypeList;
-import com.casper.sdk.model.clvalue.cltype.CLTypeMap;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import dev.oak3.sbs4j.DeserializerBuffer;
@@ -78,13 +76,7 @@ public class CLValueList extends AbstractCLValueWithChildren<List<? extends Abst
         final List<AbstractCLValue<?, ?>> list = new ArrayList<>();
         for (int i = 0; i < length.getValue(); i++) {
             final AbstractCLValue<?, ?> child = CLTypeData.createCLValueFromCLTypeData(childrenType);
-            if (child.getClType() instanceof CLTypeMap) {
-                ((CLTypeMap) child.getClType())
-                        .setKeyValueTypes(((CLTypeMap) clType.getListType()).getKeyValueTypes());
-            } else if (child.getClType() instanceof AbstractCLTypeWithChildren) {
-                ((AbstractCLTypeWithChildren) child.getClType())
-                        .setChildTypes(((AbstractCLTypeWithChildren) clType.getListType()).getChildTypes());
-            }
+            populateChildTypesFromParent(child, clType.getListType());
             child.deserializeCustom(deser);
             list.add(child);
         }
