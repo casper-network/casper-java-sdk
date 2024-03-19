@@ -1,6 +1,8 @@
 package com.casper.sdk.model.clvalue;
 
-import com.casper.sdk.model.clvalue.cltype.*;
+import com.casper.sdk.model.clvalue.cltype.AbstractCLTypeWithChildren;
+import com.casper.sdk.model.clvalue.cltype.CLTypeData;
+import com.casper.sdk.model.clvalue.cltype.CLTypeOption;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import dev.oak3.sbs4j.DeserializerBuffer;
@@ -70,19 +72,8 @@ public class CLValueOption extends AbstractCLValueWithChildren<Optional<Abstract
         isPresent.deserializeCustom(deser);
 
         final CLTypeData childTypeData = clType.getOptionType().getClTypeData();
-
         final AbstractCLValue<?, ?> child = CLTypeData.createCLValueFromCLTypeData(childTypeData);
-
-        if (child.getClType() instanceof CLTypeList) {
-            ((CLTypeList) child.getClType())
-                    .setListType(((CLTypeList) clType.getOptionType()).getListType());
-        } else if (child.getClType() instanceof AbstractCLTypeWithChildren) {
-            ((AbstractCLTypeWithChildren) child.getClType())
-                    .setChildTypes(((AbstractCLTypeWithChildren) clType.getOptionType()).getChildTypes());
-        } else if (child instanceof CLValueByteArray) {
-            // Byte arrays require their length to be set to correctly deserialize
-            ((CLValueByteArray) child).setClType((CLTypeByteArray) clType.getOptionType());
-        }
+        populateChildTypesFromParent(child, clType.getOptionType());
 
         if (Boolean.TRUE.equals(isPresent.getValue())) {
             child.deserializeCustom(deser);

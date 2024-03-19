@@ -364,4 +364,24 @@ public class CLValueTests {
         assertThat(deserialized.getBytes(), is(clValuePublicKey.getBytes()));
     }
 
+    @Test
+    void nestedOptionWithMap() throws Exception {
+
+        final Map<CLValueString, CLValueU32> map = new HashMap<>();
+        map.put(new CLValueString("ONE"), new CLValueU32(2L));
+        final CLValueMap innerMap = new CLValueMap(map);
+        final CLValueOption innerOption = new CLValueOption(Optional.of(innerMap));
+        CLValueOption clValueOption = new CLValueOption(Optional.of(innerOption));
+
+        assertThat(clValueOption.getBytes(), is("010101000000030000004f4e4502000000"));
+
+        final SerializerBuffer ser = new SerializerBuffer();
+        clValueOption.serialize(ser, Target.BYTE);
+
+        final byte[] bytes = ser.toByteArray();
+        assertThat(bytes, is(Hex.decode("11000000010101000000030000004f4e45020000000d0d110a04")));
+
+        final CLValueOption deserialized = (CLValueOption) clValueOption.deserialize(new DeserializerBuffer(bytes), Target.BYTE);
+        assertThat(deserialized.getBytes(), is(clValueOption.getBytes()));
+    }
 }

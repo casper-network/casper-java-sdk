@@ -1,6 +1,5 @@
 package com.casper.sdk.model.clvalue;
 
-import com.casper.sdk.model.clvalue.cltype.AbstractCLTypeWithChildren;
 import com.casper.sdk.model.clvalue.cltype.CLTypeData;
 import com.casper.sdk.model.clvalue.cltype.CLTypeMap;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -85,23 +84,12 @@ public class CLValueMap extends
 
         for (int i = 0; i < mapLength.getValue(); i++) {
             final AbstractCLValue<?, ?> key = CLTypeData.createCLValueFromCLTypeData(keyType);
-            if (key.getClType() instanceof AbstractCLTypeWithChildren) {
-                ((AbstractCLTypeWithChildren) key.getClType())
-                        .setChildTypes(
-                                ((AbstractCLTypeWithChildren) clType.getKeyValueTypes().getKeyType()).getChildTypes());
-            }
+            // It's very unlikely we have a key that is complex type but adding support
+            populateChildTypesFromParent(key, clType.getKeyValueTypes().getKeyType());
             key.deserializeCustom(deser);
 
             final AbstractCLValue<?, ?> val = CLTypeData.createCLValueFromCLTypeData(valType);
-
-            if (val.getClType() instanceof CLTypeMap) {
-                ((CLTypeMap) val.getClType())
-                        .setKeyValueTypes(((CLTypeMap) clType.getKeyValueTypes().getValueType()).getKeyValueTypes());
-            } else if (val.getClType() instanceof AbstractCLTypeWithChildren) {
-                ((AbstractCLTypeWithChildren) val.getClType())
-                        .setChildTypes(((AbstractCLTypeWithChildren) clType.getKeyValueTypes().getValueType())
-                                .getChildTypes());
-            }
+            populateChildTypesFromParent(val, clType.getKeyValueTypes().getValueType());
             val.deserializeCustom(deser);
 
             map.put(key, val);
