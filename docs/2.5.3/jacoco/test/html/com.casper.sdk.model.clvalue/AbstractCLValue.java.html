@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AbstractCLValue.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">casper-java-sdk</a> &gt; <a href="index.source.html" class="el_package">com.casper.sdk.model.clvalue</a> &gt; <span class="el_source">AbstractCLValue.java</span></div><h1>AbstractCLValue.java</h1><pre class="source lang-java linenums">package com.casper.sdk.model.clvalue;
+
+import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
+import com.casper.sdk.exception.NoSuchTypeException;
+import com.casper.sdk.jackson.resolver.CLValueResolver;
+import com.casper.sdk.model.clvalue.cltype.AbstractCLType;
+import com.casper.sdk.model.clvalue.cltype.AbstractCLTypeWithChildren;
+import com.casper.sdk.model.clvalue.cltype.CLTypeData;
+import com.casper.sdk.model.clvalue.serde.CasperDeserializableObject;
+import com.casper.sdk.model.clvalue.serde.CasperSerializableObject;
+import com.casper.sdk.model.clvalue.serde.Target;
+import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.databind.annotation.JsonTypeResolver;
+import com.syntifi.crypto.key.encdec.Hex;
+import dev.oak3.sbs4j.DeserializerBuffer;
+import dev.oak3.sbs4j.SerializerBuffer;
+import dev.oak3.sbs4j.exception.ValueDeserializationException;
+import dev.oak3.sbs4j.exception.ValueSerializationException;
+import dev.oak3.sbs4j.util.ByteUtils;
+import lombok.*;
+
+/**
+ * Base class for CLValues
+ *
+ * @author Alexandre Carvalho
+ * @author Andre Bertolace
+ * @see CLTypeData
+ * @since 0.0.1
+ */
+@Getter
+@JsonTypeInfo(use = JsonTypeInfo.Id.NONE)
+@JsonTypeResolver(CLValueResolver.class)
+<span class="pc bpc" id="L34" title="11 of 22 branches missed.">@EqualsAndHashCode(of = {&quot;bytes&quot;, &quot;value&quot;})</span>
+<span class="fc" id="L35">public abstract class AbstractCLValue&lt;T, P extends AbstractCLType&gt;</span>
+        implements CasperSerializableObject, CasperDeserializableObject {
+
+<span class="fc" id="L38">    @Setter(AccessLevel.PROTECTED)</span>
+<span class="fc" id="L39">    private String bytes = &quot;&quot;;</span>
+
+<span class="fc" id="L41">    @Setter</span>
+    @JsonProperty(&quot;parsed&quot;)
+    @JsonInclude(Include.NON_NULL)
+<span class="fc" id="L44">    private Object parsed;</span>
+
+    @JsonIgnore
+    private T value;
+
+    public T getValue() {
+<span class="fc" id="L50">        return this.value;</span>
+    }
+
+    public void setValue(final T value) throws ValueSerializationException {
+<span class="fc" id="L54">        this.value = value;</span>
+<span class="fc" id="L55">        this.serialize(new SerializerBuffer());</span>
+<span class="fc" id="L56">    }</span>
+
+    public static AbstractCLValue&lt;?, ?&gt; createInstanceFromBytes(final DeserializerBuffer deser) throws ValueDeserializationException {
+<span class="fc" id="L59">        final int length = deser.readI32();</span>
+<span class="fc" id="L60">        final byte[] bytes = deser.readByteArray(length);</span>
+<span class="fc" id="L61">        final byte clType = deser.readU8();</span>
+
+        try {
+<span class="fc" id="L64">            CLTypeData clTypeData = CLTypeData.getTypeBySerializationTag(clType);</span>
+<span class="fc" id="L65">            final AbstractCLValue&lt;?, ?&gt; clValue = clTypeData.getClazz().getDeclaredConstructor().newInstance();</span>
+<span class="fc bfc" id="L66" title="All 2 branches covered.">            if (clValue instanceof AbstractCLValueWithChildren) {</span>
+                // We have only obtained the parent type from the buffer now we need to read the child types
+<span class="fc" id="L68">                ((AbstractCLTypeWithChildren) clValue.getClType()).deserializeChildTypes(deser);</span>
+            }
+
+<span class="fc" id="L71">            clValue.deserializeCustom(new DeserializerBuffer(Hex.encode(bytes)));</span>
+<span class="fc" id="L72">            return clValue;</span>
+<span class="nc" id="L73">        } catch (Exception e) {</span>
+<span class="nc" id="L74">            throw new ValueDeserializationException(&quot;Error while instantiating CLValue&quot;, e);</span>
+        }
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+<span class="nc" id="L80">        return super.clone();</span>
+    }
+
+    @SneakyThrows({ValueSerializationException.class, NoSuchTypeException.class})
+    @JsonGetter(value = &quot;bytes&quot;)
+    @ExcludeFromJacocoGeneratedReport
+    protected String getJsonBytes() {
+        final SerializerBuffer ser = new SerializerBuffer();
+        this.serialize(ser, Target.JSON);
+
+        this.bytes = ByteUtils.encodeHexString(ser.toByteArray());
+
+        return this.bytes;
+    }
+
+    @SneakyThrows({ValueDeserializationException.class})
+    @JsonSetter(value = &quot;bytes&quot;)
+    @ExcludeFromJacocoGeneratedReport
+    protected void setJsonBytes(final String bytes) {
+        this.bytes = bytes;
+        this.deserialize(new DeserializerBuffer(this.bytes));
+    }
+
+    @JsonIgnore
+    public abstract P getClType();
+
+    public abstract void setClType(P value);
+
+
+    protected void serializePrefixWithLength(final SerializerBuffer ser) throws ValueSerializationException {
+<span class="fc" id="L110">        final SerializerBuffer localSer = new SerializerBuffer();</span>
+<span class="fc" id="L111">        serialize(localSer);</span>
+<span class="fc" id="L112">        final int size = localSer.toByteArray().length;</span>
+<span class="fc" id="L113">        ser.writeI32(size);</span>
+<span class="fc" id="L114">    }</span>
+
+    @Override
+    public AbstractCLValue&lt;?, ?&gt; deserialize(final DeserializerBuffer deser, final Target target) throws ValueDeserializationException {
+<span class="fc bfc" id="L118" title="All 2 branches covered.">        if (target.equals(Target.BYTE)) {</span>
+<span class="fc" id="L119">            return AbstractCLValue.createInstanceFromBytes(deser);</span>
+        } else {
+<span class="fc" id="L121">            deserialize(deser);</span>
+<span class="fc" id="L122">            return this;</span>
+        }
+    }
+
+    @Override
+    public void serialize(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {
+<span class="fc bfc" id="L128" title="All 2 branches covered.">        if (this.getValue() == null) return;</span>
+
+<span class="fc bfc" id="L130" title="All 2 branches covered.">        if (Target.BYTE.equals(target)) {</span>
+<span class="fc" id="L131">            serializePrefixWithLength(ser);</span>
+        }
+
+<span class="fc" id="L134">        serializeValue(ser);</span>
+
+<span class="fc bfc" id="L136" title="All 2 branches covered.">        if (Target.BYTE.equals(target)) {</span>
+<span class="fc" id="L137">            getClType().serialize(ser);</span>
+        }
+<span class="fc" id="L139">    }</span>
+
+    protected abstract void serializeValue(final SerializerBuffer ser) throws ValueSerializationException;
+
+    public abstract void deserializeCustom(final DeserializerBuffer deserializerBuffer) throws Exception;
+
+    @Override
+    public void deserialize(final DeserializerBuffer deserializerBuffer) throws ValueDeserializationException {
+        try {
+<span class="fc" id="L148">            this.deserializeCustom(deserializerBuffer);</span>
+<span class="fc" id="L149">        } catch (Exception e) {</span>
+<span class="fc" id="L150">            throw new ValueDeserializationException(&quot;Error deserializing value&quot;, e);</span>
+<span class="fc" id="L151">        }</span>
+<span class="fc" id="L152">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
