@@ -7,6 +7,7 @@ import com.casper.sdk.model.clvalue.cltype.*;
 import com.casper.sdk.model.clvalue.serde.Target;
 import com.casper.sdk.model.deploy.NamedArg;
 import com.casper.sdk.model.key.PublicKey;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.syntifi.crypto.key.AbstractPublicKey;
 import com.syntifi.crypto.key.Ed25519PrivateKey;
 import com.syntifi.crypto.key.Secp256k1PrivateKey;
@@ -383,5 +384,53 @@ public class CLValueTests {
 
         final CLValueOption deserialized = (CLValueOption) clValueOption.deserialize(new DeserializerBuffer(bytes), Target.BYTE);
         assertThat(deserialized.getBytes(), is(clValueOption.getBytes()));
+    }
+
+    @Test
+    void testOptionByteTypeSerialization() throws Exception {
+
+        final String hexBytes = "d2029649";
+        CLValueOption clValueOption = new CLValueOption(Optional.of(new CLValueByteArray(Hex.decode(hexBytes))));
+        final SerializerBuffer ser = new SerializerBuffer();
+        assertThat(clValueOption.getBytes(), is("01" + hexBytes));
+        clValueOption.serialize(ser, Target.BYTE);
+
+        final byte[] bytes = ser.toByteArray();
+
+        assertThat(bytes, is(Hex.decode("0500000001d20296490D0F04000000")));
+
+        final String json = "{\n" +
+                "  \"cl_type\" : {\n" +
+                "    \"Option\" : {\n" +
+                "      \"ByteArray\" : 4\n" +
+                "    }\n" +
+                "    },\n" +
+                "    \"bytes\" : \"01d2029649\",\n" +
+                "    \"parsed\" : \"d2029649\"\n" +
+                "}";
+
+        final ObjectMapper objectMapper = new ObjectMapper();
+        final CLValueOption fromJson = objectMapper.reader().readValue(json, CLValueOption.class);
+        assertThat(fromJson.getBytes(), is("01" + hexBytes));
+    }
+
+    @Test
+    void testEmptyOptionSerialization() throws Exception {
+
+        CLValueOption clValueOption = new CLValueOption(Optional.empty());
+        clValueOption.getClType().setOptionType(new CLTypeString());
+        final SerializerBuffer ser = new SerializerBuffer();
+        assertThat(clValueOption.getBytes(), is("00"));
+        clValueOption.serialize(ser, Target.BYTE);
+
+        final byte[] bytes = ser.toByteArray();
+        assertThat(bytes, is(Hex.decode("01000000000D0A")));
+
+        final CLValueOption deserialized = (CLValueOption) clValueOption.deserialize(new DeserializerBuffer(bytes), Target.BYTE);
+        assertThat(deserialized.getBytes(), is(clValueOption.getBytes()));
+        assertThat(deserialized.getClType().getOptionType().getClTypeData(), is(CLTypeData.STRING));
+
+        clValueOption = new CLValueOption(Optional.empty());
+        assertThat(clValueOption.getBytes(), is("00"));
     }
 }

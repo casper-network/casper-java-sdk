@@ -69,7 +69,8 @@ public class CLTypeOption extends AbstractCLTypeWithChildren {
     }
 
     @Override
-    public void deserializeChildTypes(final DeserializerBuffer deser) throws ValueDeserializationException, NoSuchTypeException, DynamicInstanceException {
+    public void deserializeChildTypes(final DeserializerBuffer deser) throws
+            ValueDeserializationException, NoSuchTypeException, DynamicInstanceException {
         setOptionType(deserializeChildType(deser));
     }
 }

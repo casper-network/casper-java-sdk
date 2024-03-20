@@ -38,10 +38,10 @@ public abstract class AbstractCLValueWithChildren<T, P extends AbstractCLTypeWit
     protected void populateChildTypesFromParent(final AbstractCLValue<?, ?> child, final AbstractCLType type) {
         if (type instanceof AbstractCLTypeWithChildren) {
             if (child.getClType() instanceof AbstractCLTypeWithChildren) {
-                ((AbstractCLTypeWithChildren) child.getClType()).setChildTypes(((AbstractCLTypeWithChildren)type).getChildTypes());
-            } else if (child instanceof CLValueByteArray) {
-                ((CLValueByteArray) child).setClType((CLTypeByteArray) ((AbstractCLTypeWithChildren)type).getChildTypes().get(0));
+                ((AbstractCLTypeWithChildren) child.getClType()).setChildTypes(((AbstractCLTypeWithChildren) type).getChildTypes());
             }
+        } else if (type instanceof CLTypeByteArray) {
+            ((CLValueByteArray) child).setClType((CLTypeByteArray) type);
         }
     }
 
