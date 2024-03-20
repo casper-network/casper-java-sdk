@@ -30,7 +30,7 @@ import java.util.Map.Entry;
 <span class="fc" id="L30">public abstract class AbstractCLTypeWithChildren extends AbstractCLType {</span>
 
 <span class="fc" id="L32">    @JsonIgnore</span>
-<span class="fc" id="L33">    private List&lt;AbstractCLType&gt; childTypes = new ArrayList&lt;&gt;();</span>
+    private List&lt;AbstractCLType&gt; childTypes = new ArrayList&lt;&gt;();
     private List&lt;Object&gt; childTypeObjects;
 
     protected void setChildTypeObjects(final List&lt;Object&gt; childTypeObjects)
@@ -40,72 +40,76 @@ import java.util.Map.Entry;
 <span class="fc" id="L40">        this.loadCLTypes(childTypeObjects);</span>
 <span class="fc" id="L41">    }</span>
 
+    public List&lt;AbstractCLType&gt; getChildTypes() {
+<span class="fc bfc" id="L44" title="All 2 branches covered.">        return childTypes == null ? this.childTypes = new ArrayList&lt;&gt;() : childTypes;</span>
+    }
+
     protected List&lt;Object&gt; getChildTypeObjects() {
-<span class="fc bfc" id="L44" title="All 2 branches covered.">        if (this.childTypeObjects == null) {</span>
-<span class="fc" id="L45">            this.childTypeObjects = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L48" title="All 2 branches covered.">        if (this.childTypeObjects == null) {</span>
+<span class="fc" id="L49">            this.childTypeObjects = new ArrayList&lt;&gt;();</span>
         }
-<span class="fc" id="L47">        this.childTypeObjects.clear();</span>
+<span class="fc" id="L51">        this.childTypeObjects.clear();</span>
 
-<span class="fc bfc" id="L49" title="All 2 branches covered.">        for (AbstractCLType childType : getChildTypes()) {</span>
-<span class="fc bfc" id="L50" title="All 2 branches covered.">            if (childType instanceof AbstractCLTypeBasic) {</span>
-<span class="fc" id="L51">                this.childTypeObjects.add(childType.getTypeName());</span>
+<span class="fc bfc" id="L53" title="All 2 branches covered.">        for (AbstractCLType childType : getChildTypes()) {</span>
+<span class="fc bfc" id="L54" title="All 2 branches covered.">            if (childType instanceof AbstractCLTypeBasic) {</span>
+<span class="fc" id="L55">                this.childTypeObjects.add(childType.getTypeName());</span>
             } else {
-<span class="fc" id="L53">                this.childTypeObjects.add(childType);</span>
+<span class="fc" id="L57">                this.childTypeObjects.add(childType);</span>
             }
-<span class="fc" id="L55">        }</span>
+<span class="fc" id="L59">        }</span>
 
-<span class="fc" id="L57">        return this.childTypeObjects;</span>
+<span class="fc" id="L61">        return this.childTypeObjects;</span>
     }
 
     @JsonIgnore
     public CLTypeData getChildClTypeData(final int index) throws NoSuchTypeException {
-<span class="fc" id="L62">        return CLTypeData.getTypeByName(getChildTypes().get(index).getTypeName());</span>
+<span class="fc" id="L66">        return CLTypeData.getTypeByName(getChildTypes().get(index).getTypeName());</span>
     }
 
     @Override
     public boolean isDeserializable() {
-<span class="fc" id="L67">        return getChildTypes().stream().allMatch(AbstractCLType::isDeserializable);</span>
+<span class="fc" id="L71">        return getChildTypes().stream().allMatch(AbstractCLType::isDeserializable);</span>
     }
 
     protected void loadCLTypes(final List&lt;Object&gt; childTypeObjects)
             throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException,
             NoSuchMethodException, SecurityException, NoSuchTypeException {
-<span class="fc" id="L73">        childTypes.clear();</span>
+<span class="fc" id="L77">        childTypes.clear();</span>
 
-<span class="pc bpc" id="L75" title="1 of 2 branches missed.">        if (childTypeObjects != null) {</span>
-<span class="fc bfc" id="L76" title="All 2 branches covered.">            for (Object childTypeObject : childTypeObjects) {</span>
-<span class="fc" id="L77">                addChildType(childTypeObject, childTypes);</span>
-<span class="fc" id="L78">            }</span>
+<span class="pc bpc" id="L79" title="1 of 2 branches missed.">        if (childTypeObjects != null) {</span>
+<span class="fc bfc" id="L80" title="All 2 branches covered.">            for (Object childTypeObject : childTypeObjects) {</span>
+<span class="fc" id="L81">                addChildType(childTypeObject, childTypes);</span>
+<span class="fc" id="L82">            }</span>
         }
-<span class="fc" id="L80">    }</span>
+<span class="fc" id="L84">    }</span>
 
     private void addChildType(final Object childTypeObject, final List&lt;AbstractCLType&gt; parent)
             throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException,
             NoSuchMethodException, SecurityException, NoSuchTypeException {
-<span class="fc bfc" id="L85" title="All 2 branches covered.">        if (childTypeObject instanceof String) {</span>
-<span class="fc" id="L86">            parent.add(CLTypeData.getTypeByName(childTypeObject.toString()).getClTypeClass().getConstructor()</span>
-<span class="fc" id="L87">                    .newInstance());</span>
-<span class="fc bfc" id="L88" title="All 2 branches covered.">        } else if (childTypeObject instanceof List) {</span>
-<span class="fc bfc" id="L89" title="All 2 branches covered.">            for (Object child : (List&lt;?&gt;) childTypeObject) {</span>
-<span class="fc" id="L90">                addChildType(child, parent);</span>
-<span class="fc" id="L91">            }</span>
-<span class="pc bpc" id="L92" title="1 of 2 branches missed.">        } else if (childTypeObject instanceof Map) {</span>
-<span class="fc" id="L93">            Map&lt;?, ?&gt; subChildTypes = (LinkedHashMap&lt;?, ?&gt;) childTypeObject;</span>
+<span class="fc bfc" id="L89" title="All 2 branches covered.">        if (childTypeObject instanceof String) {</span>
+<span class="fc" id="L90">            parent.add(CLTypeData.getTypeByName(childTypeObject.toString()).getClTypeClass().getConstructor()</span>
+<span class="fc" id="L91">                    .newInstance());</span>
+<span class="fc bfc" id="L92" title="All 2 branches covered.">        } else if (childTypeObject instanceof List) {</span>
+<span class="fc bfc" id="L93" title="All 2 branches covered.">            for (Object child : (List&lt;?&gt;) childTypeObject) {</span>
+<span class="fc" id="L94">                addChildType(child, parent);</span>
+<span class="fc" id="L95">            }</span>
+<span class="pc bpc" id="L96" title="1 of 2 branches missed.">        } else if (childTypeObject instanceof Map) {</span>
+<span class="fc" id="L97">            Map&lt;?, ?&gt; subChildTypes = (LinkedHashMap&lt;?, ?&gt;) childTypeObject;</span>
 
-<span class="fc bfc" id="L95" title="All 2 branches covered.">            for (Entry&lt;?, ?&gt; entry : subChildTypes.entrySet()) {</span>
-<span class="fc" id="L96">                AbstractCLType nextParent = CLTypeData.getTypeByName(entry.getKey().toString()).getClTypeClass()</span>
-<span class="fc" id="L97">                        .getConstructor().newInstance();</span>
-<span class="fc" id="L98">                parent.add(nextParent);</span>
-<span class="fc" id="L99">                addChildType(entry.getValue(), ((AbstractCLTypeWithChildren) nextParent).getChildTypes());</span>
-<span class="fc" id="L100">            }</span>
+<span class="fc bfc" id="L99" title="All 2 branches covered.">            for (Entry&lt;?, ?&gt; entry : subChildTypes.entrySet()) {</span>
+<span class="fc" id="L100">                AbstractCLType nextParent = CLTypeData.getTypeByName(entry.getKey().toString()).getClTypeClass()</span>
+<span class="fc" id="L101">                        .getConstructor().newInstance();</span>
+<span class="fc" id="L102">                parent.add(nextParent);</span>
+<span class="fc" id="L103">                addChildType(entry.getValue(), ((AbstractCLTypeWithChildren) nextParent).getChildTypes());</span>
+<span class="fc" id="L104">            }</span>
         }
-<span class="fc" id="L102">    }</span>
+<span class="fc" id="L106">    }</span>
 
     @Override
     public void serialize(final SerializerBuffer ser) throws NoSuchTypeException {
-<span class="fc" id="L106">        super.serialize(ser);</span>
-<span class="fc" id="L107">        serializeChildTypes(ser);</span>
-<span class="fc" id="L108">    }</span>
+<span class="fc" id="L110">        super.serialize(ser);</span>
+<span class="fc" id="L111">        serializeChildTypes(ser);</span>
+<span class="fc" id="L112">    }</span>
 
     /**
      * Updates the child types from the deserializer buffer.
@@ -124,15 +128,15 @@ import java.util.Map.Entry;
 
     protected AbstractCLType deserializeChildType(final DeserializerBuffer deser)
             throws ValueDeserializationException, NoSuchTypeException, DynamicInstanceException {
-<span class="fc" id="L127">        final int childTypeTag = deser.readU8();</span>
-<span class="fc" id="L128">        final CLTypeData childType = CLTypeData.getTypeBySerializationTag((byte) childTypeTag);</span>
-<span class="fc" id="L129">        final AbstractCLType clChildType = CLTypeData.createCLTypeFromCLTypeName(childType.getClTypeName());</span>
+<span class="fc" id="L131">        final int childTypeTag = deser.readU8();</span>
+<span class="fc" id="L132">        final CLTypeData childType = CLTypeData.getTypeBySerializationTag((byte) childTypeTag);</span>
+<span class="fc" id="L133">        final AbstractCLType clChildType = CLTypeData.createCLTypeFromCLTypeName(childType.getClTypeName());</span>
 
-<span class="fc bfc" id="L131" title="All 2 branches covered.">        if (clChildType instanceof AbstractCLTypeWithChildren) {</span>
-<span class="fc" id="L132">            ((AbstractCLTypeWithChildren) clChildType).deserializeChildTypes(deser);</span>
+<span class="fc bfc" id="L135" title="All 2 branches covered.">        if (clChildType instanceof AbstractCLTypeWithChildren) {</span>
+<span class="fc" id="L136">            ((AbstractCLTypeWithChildren) clChildType).deserializeChildTypes(deser);</span>
         }
 
-<span class="fc" id="L135">        return clChildType;</span>
+<span class="fc" id="L139">        return clChildType;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

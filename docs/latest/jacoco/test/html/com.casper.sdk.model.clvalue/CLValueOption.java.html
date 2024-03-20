@@ -50,10 +50,10 @@ public class CLValueOption extends AbstractCLValueWithChildren&lt;Optional&lt;Ab
 <span class="fc" id="L50">        final SerializerBuffer serVal = new SerializerBuffer();</span>
 <span class="fc" id="L51">        final Optional&lt;AbstractCLValue&lt;?, ?&gt;&gt; value = getValue();</span>
 
-<span class="pc bpc" id="L53" title="1 of 4 branches missed.">        final CLValueBool isPresent = new CLValueBool(value.isPresent() &amp;&amp; value.get().getValue() != null);</span>
+<span class="fc bfc" id="L53" title="All 4 branches covered.">        final CLValueBool isPresent = new CLValueBool(value.isPresent() &amp;&amp; value.get().getValue() != null);</span>
 <span class="fc" id="L54">        isPresent.serialize(serVal);</span>
 
-<span class="pc bpc" id="L56" title="1 of 4 branches missed.">        if (value.isPresent() &amp;&amp; value.get().getClType() instanceof AbstractCLTypeWithChildren) {</span>
+<span class="fc bfc" id="L56" title="All 4 branches covered.">        if (value.isPresent() &amp;&amp; value.get().getClType() instanceof AbstractCLTypeWithChildren) {</span>
 <span class="fc" id="L57">            ((AbstractCLTypeWithChildren) value.get().getClType())</span>
 <span class="fc" id="L58">                    .setChildTypes(((AbstractCLTypeWithChildren) clType.getOptionType()).getChildTypes());</span>
         }
@@ -84,10 +84,10 @@ public class CLValueOption extends AbstractCLValueWithChildren&lt;Optional&lt;Ab
 
     @Override
     protected void setChildTypes(final Optional&lt;AbstractCLValue&lt;?, ?&gt;&gt; value) {
-<span class="pc bpc" id="L87" title="1 of 2 branches missed.">        if (value.isPresent()) {</span>
+<span class="fc bfc" id="L87" title="All 2 branches covered.">        if (value.isPresent()) {</span>
 <span class="fc" id="L88">            clType.setOptionType(value.get().getClType());</span>
         } else {
-<span class="nc" id="L90">            clType.setChildTypes(null);</span>
+<span class="fc" id="L90">            clType.setChildTypes(null);</span>
         }
 <span class="fc" id="L92">    }</span>
 
