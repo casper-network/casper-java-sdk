@@ -10,7 +10,7 @@ package com.casper.sdk.exception;
 public class CasperClientException extends RuntimeException {
 
     public CasperClientException(final CasperClientErrorData error) {
-        super(String.format("%s (code: %d) %s", error.getMessage(), error.getCode(), error.getData() != null ? error.getData() : ""));
+        super(String.format("%s (code: %d)%s", error.getMessage(), error.getCode(), error.getData() != null ? " " + error.getData() : ""));
     }
 
     public CasperClientException(final String message, final Throwable cause) {
