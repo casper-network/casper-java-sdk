@@ -40,6 +40,10 @@ public abstract class AbstractCLTypeWithChildren extends AbstractCLType {
         this.loadCLTypes(childTypeObjects);
     }
 
+    public List<AbstractCLType> getChildTypes() {
+        return childTypes == null ? this.childTypes = new ArrayList<>() : childTypes;
+    }
+
     protected List<Object> getChildTypeObjects() {
         if (this.childTypeObjects == null) {
             this.childTypeObjects = new ArrayList<>();
