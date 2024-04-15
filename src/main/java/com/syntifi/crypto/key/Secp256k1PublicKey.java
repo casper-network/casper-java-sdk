@@ -41,7 +41,6 @@ public class Secp256k1PublicKey extends AbstractPublicKey {
         } else {
             throw new IOException();
         }
-
     }
 
     @Override

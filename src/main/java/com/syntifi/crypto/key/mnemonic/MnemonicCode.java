@@ -140,7 +140,6 @@ public class MnemonicCode {
         return bits;
     }
 
-
     /**
      * Gets the word list this code uses.
      *

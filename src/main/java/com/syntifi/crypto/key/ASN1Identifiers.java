@@ -12,7 +12,7 @@ import org.bouncycastle.asn1.ASN1ObjectIdentifier;
  * @since 0.1.0
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class ASN1Identifiers{
+public class ASN1Identifiers {
 
     public static final ASN1ObjectIdentifier Secp256k1OIDCurve = new ASN1ObjectIdentifier("1.3.132.0.10");
     public static final ASN1ObjectIdentifier Secp256k1OIDkey = new ASN1ObjectIdentifier("1.2.840.10045.2.1");

@@ -34,5 +34,4 @@ public class MixedCaseChecksumTest {
         assertEquals("51DA5aE5C39880Bfe4f94B0898332d1BD37e647F72f79Cf23475df1Bb1f85bEA",
                 MixedCaseChecksum.checksumEncodeCEP57("51da5ae5c39880bfe4f94b0898332d1bd37e647f72f79cf23475df1bb1f85bea"));
     }
-
 }

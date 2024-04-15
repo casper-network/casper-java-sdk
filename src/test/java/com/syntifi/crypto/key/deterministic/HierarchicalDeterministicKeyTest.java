@@ -17,7 +17,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class HierarchicalDeterministicKeyTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(HierarchicalDeterministicKey.class);
 
-
     @Test
     void getMasterKeyFromSeed_seed_should_match() {
         byte[] init = "ed25519 seed".getBytes(StandardCharsets.UTF_8);
