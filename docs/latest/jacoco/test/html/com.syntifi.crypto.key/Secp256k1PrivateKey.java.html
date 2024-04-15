@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Secp256k1PrivateKey.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">casper-java-sdk</a> &gt; <a href="index.source.html" class="el_package">com.syntifi.crypto.key</a> &gt; <span class="el_source">Secp256k1PrivateKey.java</span></div><h1>Secp256k1PrivateKey.java</h1><pre class="source lang-java linenums">package com.syntifi.crypto.key;
+
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.bouncycastle.asn1.*;
+import org.web3j.crypto.ECKeyPair;
+import org.web3j.crypto.Hash;
+import org.web3j.crypto.Sign;
+import org.web3j.crypto.Sign.SignatureData;
+
+import java.io.*;
+import java.math.BigInteger;
+import java.nio.ByteBuffer;
+import java.security.SecureRandom;
+
+/**
+ * secp256k1 implementation of {@link AbstractPrivateKey}
+ *
+ * @author Alexandre Carvalho
+ * @author Andre Bertolace
+ * @since 0.1.0
+ */
+<span class="fc" id="L25">@NoArgsConstructor</span>
+<span class="nc bnc" id="L26" title="All 16 branches missed.">@EqualsAndHashCode(callSuper = true)</span>
+public class Secp256k1PrivateKey extends AbstractPrivateKey {
+<span class="fc" id="L28">    @Getter</span>
+<span class="fc" id="L29">    @Setter</span>
+    private ECKeyPair keyPair;
+
+    public Secp256k1PrivateKey(final byte[] privateKey) throws IOException {
+<span class="nc" id="L33">        super(privateKey);</span>
+<span class="nc" id="L34">        loadPrivateKey(privateKey);</span>
+<span class="nc" id="L35">    }</span>
+
+    @Override
+    public void loadPrivateKey(final byte[] privateKey) throws IOException {
+<span class="fc" id="L39">        final ASN1Sequence key = (ASN1Sequence) ASN1Primitive.fromByteArray(privateKey);</span>
+<span class="fc" id="L40">        final String algoId = key.getObjectAt(2).toString();</span>
+<span class="pc bpc" id="L41" title="2 of 4 branches missed.">        if (algoId.equals(&quot;[0]&quot; + ASN1Identifiers.Secp256k1OIDCurve) &amp;&amp; key.getObjectAt(0).toString().equals(&quot;1&quot;)) {</span>
+<span class="fc" id="L42">            final DEROctetString pk = (DEROctetString) key.getObjectAt(1);</span>
+<span class="fc" id="L43">            keyPair = ECKeyPair.create(pk.getOctets());</span>
+<span class="fc" id="L44">            this.setKey(keyPair.getPrivateKey().toByteArray());</span>
+        }
+<span class="fc" id="L46">    }</span>
+
+    @Override
+    public void readPrivateKey(final Reader reader) throws IOException {
+<span class="fc" id="L50">        loadPrivateKey(PemFileHelper.readPemFile(reader));</span>
+<span class="fc" id="L51">    }</span>
+
+    @Override
+    public void writePrivateKey(final Writer writer) throws IOException {
+<span class="fc" id="L55">        final DERTaggedObject derPrefix = new DERTaggedObject(0, ASN1Identifiers.Secp256k1OIDCurve);</span>
+<span class="fc" id="L56">        final DEROctetString key = new DEROctetString(getKey());</span>
+<span class="fc" id="L57">        final ASN1EncodableVector vector = new ASN1EncodableVector();</span>
+<span class="fc" id="L58">        vector.add(new ASN1Integer(1));</span>
+<span class="fc" id="L59">        vector.add(key);</span>
+<span class="fc" id="L60">        vector.add(derPrefix);</span>
+<span class="fc" id="L61">        final DERSequence derKey = new DERSequence(vector);</span>
+<span class="fc" id="L62">        PemFileHelper.writePemFile(writer, derKey.getEncoded(), ASN1Identifiers.EC_PRIVATE_KEY_DER_HEADER);</span>
+<span class="fc" id="L63">    }</span>
+
+    /**
+     * When encoded in DER, this becomes the following sequence of bytes:
+     * &lt;p&gt;
+     * 0x30 b1 0x02 b2 (vr) 0x02 b3 (vs)
+     * &lt;p&gt;
+     * where:
+     * &lt;p&gt;
+     * b1 is a single byte value, equal to the length, in bytes, of the remaining
+     * list of bytes (from the first 0x02 to the end of the encoding);
+     * b2 is a single byte value, equal to the length, in bytes, of (vr);
+     * b3 is a single byte value, equal to the length, in bytes, of (vs);
+     * (vr) is the signed big-endian encoding of the value &quot;r
+     * &lt;p&gt;
+     * &quot;, of minimal length;
+     * (vs) is the signed big-endian encoding of the value &quot;s
+     * &quot;, of minimal length.
+     *
+     * @param message message to sign
+     * @return signed message
+     */
+    @Override
+    public byte[] sign(final byte[] message) {
+<span class="fc" id="L87">        final SignatureData signature = Sign.signMessage(Hash.sha256(message), keyPair, false);</span>
+<span class="fc" id="L88">        final ByteBuffer bb = ByteBuffer.allocate(signature.getR().length + signature.getS().length);</span>
+<span class="fc" id="L89">        bb.put(signature.getR());</span>
+<span class="fc" id="L90">        bb.put(signature.getS());</span>
+<span class="fc" id="L91">        return bb.array();</span>
+    }
+
+    /**
+     * Returns a Secp256k1PublicKey object in a compressed format
+     * adding the prefix 02/03 to identify the positive or negative Y followed
+     * by the X value in the elliptic curve
+     */
+    @Override
+    public AbstractPublicKey derivePublicKey() {
+<span class="fc" id="L101">        final BigInteger pubKey = keyPair.getPublicKey();</span>
+<span class="fc" id="L102">        final byte[] pubKeyBytes = Secp256k1PublicKey.getShortKey(pubKey.toByteArray());</span>
+<span class="fc" id="L103">        return new Secp256k1PublicKey(pubKeyBytes);</span>
+    }
+
+    public static Secp256k1PrivateKey deriveRandomKey() {
+<span class="fc" id="L107">        final SecureRandom rnd = new SecureRandom();</span>
+<span class="fc" id="L108">        final ECKeyPair keyPair = ECKeyPair.create(rnd.generateSeed(32));</span>
+<span class="fc" id="L109">        final Secp256k1PrivateKey sk = new Secp256k1PrivateKey();</span>
+<span class="fc" id="L110">        sk.setKeyPair(keyPair);</span>
+<span class="fc" id="L111">        sk.setKey(keyPair.getPrivateKey().toByteArray());</span>
+<span class="fc" id="L112">        return sk;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
