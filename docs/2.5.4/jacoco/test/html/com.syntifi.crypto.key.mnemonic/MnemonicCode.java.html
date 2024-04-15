@@ -140,14 +140,13 @@ public class MnemonicCode {
 <span class="fc" id="L140">        return bits;</span>
     }
 
-
     /**
      * Gets the word list this code uses.
      *
      * @return unmodifiable word list
      */
     public List&lt;String&gt; getWordList() {
-<span class="fc" id="L150">        return wordList;</span>
+<span class="fc" id="L149">        return wordList;</span>
     }
 
     /**
@@ -161,53 +160,53 @@ public class MnemonicCode {
      */
     public byte[] toEntropy(List&lt;String&gt; words) throws MnemonicException.MnemonicLengthException,
             MnemonicException.MnemonicWordException, MnemonicException.MnemonicChecksumException {
-<span class="pc bpc" id="L164" title="1 of 2 branches missed.">        if (words.size() % 3 &gt; 0)</span>
-<span class="nc" id="L165">            throw new MnemonicException.MnemonicLengthException(&quot;Word list size must be multiple of three words.&quot;);</span>
+<span class="pc bpc" id="L163" title="1 of 2 branches missed.">        if (words.size() % 3 &gt; 0)</span>
+<span class="nc" id="L164">            throw new MnemonicException.MnemonicLengthException(&quot;Word list size must be multiple of three words.&quot;);</span>
 
-<span class="pc bpc" id="L167" title="1 of 2 branches missed.">        if (words.size() == 0)</span>
-<span class="nc" id="L168">            throw new MnemonicException.MnemonicLengthException(&quot;Word list is empty.&quot;);</span>
+<span class="pc bpc" id="L166" title="1 of 2 branches missed.">        if (words.size() == 0)</span>
+<span class="nc" id="L167">            throw new MnemonicException.MnemonicLengthException(&quot;Word list is empty.&quot;);</span>
 
         // Look up all the words in the list and construct the
         // concatenation of the original entropy and the checksum.
         //
-<span class="fc" id="L173">        int concatLenBits = words.size() * 11;</span>
-<span class="fc" id="L174">        boolean[] concatBits = new boolean[concatLenBits];</span>
-<span class="fc" id="L175">        int wordindex = 0;</span>
-<span class="fc" id="L176">        Collator collator = Collator.getInstance(language.getLocale());</span>
+<span class="fc" id="L172">        int concatLenBits = words.size() * 11;</span>
+<span class="fc" id="L173">        boolean[] concatBits = new boolean[concatLenBits];</span>
+<span class="fc" id="L174">        int wordindex = 0;</span>
+<span class="fc" id="L175">        Collator collator = Collator.getInstance(language.getLocale());</span>
         //collator.setDecomposition(Collator.FULL_DECOMPOSITION);
         //collator.setStrength(Collator.PRIMARY);
-<span class="fc bfc" id="L179" title="All 2 branches covered.">        for (String word : words) {</span>
+<span class="fc bfc" id="L178" title="All 2 branches covered.">        for (String word : words) {</span>
             // Find the words index in the wordlist.
-<span class="fc" id="L181">            int ndx = Collections.binarySearch(this.wordList, word, collator);</span>
-<span class="pc bpc" id="L182" title="1 of 2 branches missed.">            if (ndx &lt; 0)</span>
-<span class="nc" id="L183">                throw new MnemonicException.MnemonicWordException(word);</span>
+<span class="fc" id="L180">            int ndx = Collections.binarySearch(this.wordList, word, collator);</span>
+<span class="pc bpc" id="L181" title="1 of 2 branches missed.">            if (ndx &lt; 0)</span>
+<span class="nc" id="L182">                throw new MnemonicException.MnemonicWordException(word);</span>
 
             // Set the next 11 bits to the value of the index.
-<span class="fc bfc" id="L186" title="All 2 branches covered.">            for (int ii = 0; ii &lt; 11; ++ii)</span>
-<span class="fc bfc" id="L187" title="All 2 branches covered.">                concatBits[(wordindex * 11) + ii] = (ndx &amp; (1 &lt;&lt; (10 - ii))) != 0;</span>
-<span class="fc" id="L188">            ++wordindex;</span>
-<span class="fc" id="L189">        }</span>
+<span class="fc bfc" id="L185" title="All 2 branches covered.">            for (int ii = 0; ii &lt; 11; ++ii)</span>
+<span class="fc bfc" id="L186" title="All 2 branches covered.">                concatBits[(wordindex * 11) + ii] = (ndx &amp; (1 &lt;&lt; (10 - ii))) != 0;</span>
+<span class="fc" id="L187">            ++wordindex;</span>
+<span class="fc" id="L188">        }</span>
 
-<span class="fc" id="L191">        int checksumLengthBits = concatLenBits / 33;</span>
-<span class="fc" id="L192">        int entropyLengthBits = concatLenBits - checksumLengthBits;</span>
+<span class="fc" id="L190">        int checksumLengthBits = concatLenBits / 33;</span>
+<span class="fc" id="L191">        int entropyLengthBits = concatLenBits - checksumLengthBits;</span>
 
         // Extract original entropy as bytes.
-<span class="fc" id="L195">        byte[] entropy = new byte[entropyLengthBits / 8];</span>
-<span class="fc bfc" id="L196" title="All 2 branches covered.">        for (int ii = 0; ii &lt; entropy.length; ++ii)</span>
-<span class="fc bfc" id="L197" title="All 2 branches covered.">            for (int jj = 0; jj &lt; 8; ++jj)</span>
-<span class="fc bfc" id="L198" title="All 2 branches covered.">                if (concatBits[(ii * 8) + jj])</span>
-<span class="fc" id="L199">                    entropy[ii] |= 1 &lt;&lt; (7 - jj);</span>
+<span class="fc" id="L194">        byte[] entropy = new byte[entropyLengthBits / 8];</span>
+<span class="fc bfc" id="L195" title="All 2 branches covered.">        for (int ii = 0; ii &lt; entropy.length; ++ii)</span>
+<span class="fc bfc" id="L196" title="All 2 branches covered.">            for (int jj = 0; jj &lt; 8; ++jj)</span>
+<span class="fc bfc" id="L197" title="All 2 branches covered.">                if (concatBits[(ii * 8) + jj])</span>
+<span class="fc" id="L198">                    entropy[ii] |= 1 &lt;&lt; (7 - jj);</span>
 
         // Take the digest of the entropy.
-<span class="fc" id="L202">        byte[] hash = Sha256.digest(entropy);</span>
-<span class="fc" id="L203">        boolean[] hashBits = bytesToBits(hash);</span>
+<span class="fc" id="L201">        byte[] hash = Sha256.digest(entropy);</span>
+<span class="fc" id="L202">        boolean[] hashBits = bytesToBits(hash);</span>
 
         // Check all the checksum bits.
-<span class="fc bfc" id="L206" title="All 2 branches covered.">        for (int i = 0; i &lt; checksumLengthBits; ++i)</span>
-<span class="pc bpc" id="L207" title="1 of 2 branches missed.">            if (concatBits[entropyLengthBits + i] != hashBits[i])</span>
-<span class="nc" id="L208">                throw new MnemonicException.MnemonicChecksumException();</span>
+<span class="fc bfc" id="L205" title="All 2 branches covered.">        for (int i = 0; i &lt; checksumLengthBits; ++i)</span>
+<span class="pc bpc" id="L206" title="1 of 2 branches missed.">            if (concatBits[entropyLengthBits + i] != hashBits[i])</span>
+<span class="nc" id="L207">                throw new MnemonicException.MnemonicChecksumException();</span>
 
-<span class="fc" id="L210">        return entropy;</span>
+<span class="fc" id="L209">        return entropy;</span>
     }
 
     /**
@@ -218,44 +217,44 @@ public class MnemonicCode {
      * @throws MnemonicException.MnemonicLengthException if the number of words in the list is not multiple of 3 or empty
      */
     public List&lt;String&gt; toMnemonic(byte[] entropy) throws MnemonicException.MnemonicLengthException {
-<span class="pc bpc" id="L221" title="1 of 2 branches missed.">        if (entropy.length % 4 &gt; 0)</span>
-<span class="nc" id="L222">            throw new MnemonicException.MnemonicLengthException(&quot;Entropy length not multiple of 32 bits.&quot;);</span>
+<span class="pc bpc" id="L220" title="1 of 2 branches missed.">        if (entropy.length % 4 &gt; 0)</span>
+<span class="nc" id="L221">            throw new MnemonicException.MnemonicLengthException(&quot;Entropy length not multiple of 32 bits.&quot;);</span>
 
-<span class="pc bpc" id="L224" title="1 of 2 branches missed.">        if (entropy.length == 0)</span>
-<span class="nc" id="L225">            throw new MnemonicException.MnemonicLengthException(&quot;Entropy is empty.&quot;);</span>
+<span class="pc bpc" id="L223" title="1 of 2 branches missed.">        if (entropy.length == 0)</span>
+<span class="nc" id="L224">            throw new MnemonicException.MnemonicLengthException(&quot;Entropy is empty.&quot;);</span>
 
         // We take initial entropy of ENT bits and compute its
         // checksum by taking first ENT / 32 bits of its SHA256 hash.
 
-<span class="fc" id="L230">        byte[] hash = Sha256.digest(entropy);</span>
-<span class="fc" id="L231">        boolean[] hashBits = bytesToBits(hash);</span>
+<span class="fc" id="L229">        byte[] hash = Sha256.digest(entropy);</span>
+<span class="fc" id="L230">        boolean[] hashBits = bytesToBits(hash);</span>
 
-<span class="fc" id="L233">        boolean[] entropyBits = bytesToBits(entropy);</span>
-<span class="fc" id="L234">        int checksumLengthBits = entropyBits.length / 32;</span>
+<span class="fc" id="L232">        boolean[] entropyBits = bytesToBits(entropy);</span>
+<span class="fc" id="L233">        int checksumLengthBits = entropyBits.length / 32;</span>
 
         // We append these bits to the end of the initial entropy.
-<span class="fc" id="L237">        boolean[] concatBits = new boolean[entropyBits.length + checksumLengthBits];</span>
-<span class="fc" id="L238">        System.arraycopy(entropyBits, 0, concatBits, 0, entropyBits.length);</span>
-<span class="fc" id="L239">        System.arraycopy(hashBits, 0, concatBits, entropyBits.length, checksumLengthBits);</span>
+<span class="fc" id="L236">        boolean[] concatBits = new boolean[entropyBits.length + checksumLengthBits];</span>
+<span class="fc" id="L237">        System.arraycopy(entropyBits, 0, concatBits, 0, entropyBits.length);</span>
+<span class="fc" id="L238">        System.arraycopy(hashBits, 0, concatBits, entropyBits.length, checksumLengthBits);</span>
 
         // Next we take these concatenated bits and split them into
         // groups of 11 bits. Each group encodes number from 0-2047
         // which is a position in a wordlist.  We convert numbers into
         // words and use joined words as mnemonic sentence.
 
-<span class="fc" id="L246">        ArrayList&lt;String&gt; words = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L247">        int nWords = concatBits.length / 11;</span>
-<span class="fc bfc" id="L248" title="All 2 branches covered.">        for (int i = 0; i &lt; nWords; ++i) {</span>
-<span class="fc" id="L249">            int index = 0;</span>
-<span class="fc bfc" id="L250" title="All 2 branches covered.">            for (int j = 0; j &lt; 11; ++j) {</span>
-<span class="fc" id="L251">                index &lt;&lt;= 1;</span>
-<span class="fc bfc" id="L252" title="All 2 branches covered.">                if (concatBits[(i * 11) + j])</span>
-<span class="fc" id="L253">                    index |= 0x1;</span>
+<span class="fc" id="L245">        ArrayList&lt;String&gt; words = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L246">        int nWords = concatBits.length / 11;</span>
+<span class="fc bfc" id="L247" title="All 2 branches covered.">        for (int i = 0; i &lt; nWords; ++i) {</span>
+<span class="fc" id="L248">            int index = 0;</span>
+<span class="fc bfc" id="L249" title="All 2 branches covered.">            for (int j = 0; j &lt; 11; ++j) {</span>
+<span class="fc" id="L250">                index &lt;&lt;= 1;</span>
+<span class="fc bfc" id="L251" title="All 2 branches covered.">                if (concatBits[(i * 11) + j])</span>
+<span class="fc" id="L252">                    index |= 0x1;</span>
             }
-<span class="fc" id="L255">            words.add(this.wordList.get(index));</span>
+<span class="fc" id="L254">            words.add(this.wordList.get(index));</span>
         }
 
-<span class="fc" id="L258">        return words;</span>
+<span class="fc" id="L257">        return words;</span>
     }
 
     /**
@@ -265,8 +264,8 @@ public class MnemonicCode {
      * @throws MnemonicException if an errors occurs on reading the dictionary of on the given words
      */
     public void check(List&lt;String&gt; words) throws MnemonicException {
-<span class="nc" id="L268">        toEntropy(words);</span>
-<span class="nc" id="L269">    }</span>
+<span class="nc" id="L267">        toEntropy(words);</span>
+<span class="nc" id="L268">    }</span>
 
     /**
      * Method to generate words from securerandom entropy
@@ -276,11 +275,11 @@ public class MnemonicCode {
      * @throws MnemonicException.MnemonicLengthException if the number of words in the list is not multiple of 3 or empty
      */
     public List&lt;String&gt; generateSecureRandomWords() throws IOException, MnemonicException.MnemonicLengthException {
-<span class="fc" id="L279">        MnemonicCode mnemonicCode = new MnemonicCode(this.language);</span>
-<span class="fc" id="L280">        SecureRandom rnd = new SecureRandom();</span>
-<span class="fc" id="L281">        byte[] entropy = new byte[16];</span>
-<span class="fc" id="L282">        rnd.nextBytes(entropy);</span>
-<span class="fc" id="L283">        return mnemonicCode.toMnemonic(entropy);</span>
+<span class="fc" id="L278">        MnemonicCode mnemonicCode = new MnemonicCode(this.language);</span>
+<span class="fc" id="L279">        SecureRandom rnd = new SecureRandom();</span>
+<span class="fc" id="L280">        byte[] entropy = new byte[16];</span>
+<span class="fc" id="L281">        rnd.nextBytes(entropy);</span>
+<span class="fc" id="L282">        return mnemonicCode.toMnemonic(entropy);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

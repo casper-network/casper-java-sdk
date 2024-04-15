@@ -41,43 +41,42 @@ public class Secp256k1PublicKey extends AbstractPublicKey {
 <span class="fc" id="L41">        } else {</span>
 <span class="nc" id="L42">            throw new IOException();</span>
         }
-
-<span class="fc" id="L45">    }</span>
+<span class="fc" id="L44">    }</span>
 
     @Override
     public void readPublicKey(final Reader reader) throws IOException {
-<span class="fc" id="L49">        loadPublicKey(PemFileHelper.readPemFile(reader));</span>
-<span class="fc" id="L50">    }</span>
+<span class="fc" id="L48">        loadPublicKey(PemFileHelper.readPemFile(reader));</span>
+<span class="fc" id="L49">    }</span>
 
     @Override
     public void writePublicKey(final Writer writer) throws IOException {
-<span class="fc" id="L54">        final DERBitString key = new DERBitString(getKey());</span>
-<span class="fc" id="L55">        final ASN1EncodableVector v1 = new ASN1EncodableVector();</span>
-<span class="fc" id="L56">        v1.add(ASN1Identifiers.Secp256k1OIDkey);</span>
-<span class="fc" id="L57">        v1.add(ASN1Identifiers.Secp256k1OIDCurve);</span>
-<span class="fc" id="L58">        final DERSequence derPrefix = new DERSequence(v1);</span>
-<span class="fc" id="L59">        final ASN1EncodableVector v2 = new ASN1EncodableVector();</span>
-<span class="fc" id="L60">        v2.add(derPrefix);</span>
-<span class="fc" id="L61">        v2.add(key);</span>
-<span class="fc" id="L62">        final DERSequence derKey = new DERSequence(v2);</span>
-<span class="fc" id="L63">        PemFileHelper.writePemFile(writer, derKey.getEncoded(), ASN1Identifiers.PUBLIC_KEY_DER_HEADER);</span>
-<span class="fc" id="L64">    }</span>
+<span class="fc" id="L53">        final DERBitString key = new DERBitString(getKey());</span>
+<span class="fc" id="L54">        final ASN1EncodableVector v1 = new ASN1EncodableVector();</span>
+<span class="fc" id="L55">        v1.add(ASN1Identifiers.Secp256k1OIDkey);</span>
+<span class="fc" id="L56">        v1.add(ASN1Identifiers.Secp256k1OIDCurve);</span>
+<span class="fc" id="L57">        final DERSequence derPrefix = new DERSequence(v1);</span>
+<span class="fc" id="L58">        final ASN1EncodableVector v2 = new ASN1EncodableVector();</span>
+<span class="fc" id="L59">        v2.add(derPrefix);</span>
+<span class="fc" id="L60">        v2.add(key);</span>
+<span class="fc" id="L61">        final DERSequence derKey = new DERSequence(v2);</span>
+<span class="fc" id="L62">        PemFileHelper.writePemFile(writer, derKey.getEncoded(), ASN1Identifiers.PUBLIC_KEY_DER_HEADER);</span>
+<span class="fc" id="L63">    }</span>
 
     @Override
     public Boolean verify(final byte[] message, final byte[] signature) throws GeneralSecurityException {
         //TODO: Double check the issue the getV(), for now we are trying with both (27 and 28)
-<span class="fc" id="L69">        final SignatureData signatureData1 = new SignatureData(</span>
+<span class="fc" id="L68">        final SignatureData signatureData1 = new SignatureData(</span>
                 (byte) 27,
-<span class="fc" id="L71">                Arrays.copyOfRange(signature, 0, 32),</span>
-<span class="fc" id="L72">                Arrays.copyOfRange(signature, 32, 64));</span>
-<span class="fc" id="L73">        final BigInteger derivedKey1 = Sign.signedMessageHashToKey(Hash.sha256(message), signatureData1);</span>
-<span class="fc" id="L74">        final SignatureData signatureData2 = new SignatureData(</span>
+<span class="fc" id="L70">                Arrays.copyOfRange(signature, 0, 32),</span>
+<span class="fc" id="L71">                Arrays.copyOfRange(signature, 32, 64));</span>
+<span class="fc" id="L72">        final BigInteger derivedKey1 = Sign.signedMessageHashToKey(Hash.sha256(message), signatureData1);</span>
+<span class="fc" id="L73">        final SignatureData signatureData2 = new SignatureData(</span>
                 (byte) 28,
-<span class="fc" id="L76">                Arrays.copyOfRange(signature, 0, 32),</span>
-<span class="fc" id="L77">                Arrays.copyOfRange(signature, 32, 64));</span>
-<span class="fc" id="L78">        final BigInteger derivedKey2 = Sign.signedMessageHashToKey(Hash.sha256(message), signatureData2);</span>
-<span class="fc bfc" id="L79" title="All 2 branches covered.">        return Arrays.equals(Secp256k1PublicKey.getShortKey(derivedKey1.toByteArray()), getKey()) ||</span>
-<span class="pc bpc" id="L80" title="1 of 2 branches missed.">                Arrays.equals(Secp256k1PublicKey.getShortKey(derivedKey2.toByteArray()), getKey());</span>
+<span class="fc" id="L75">                Arrays.copyOfRange(signature, 0, 32),</span>
+<span class="fc" id="L76">                Arrays.copyOfRange(signature, 32, 64));</span>
+<span class="fc" id="L77">        final BigInteger derivedKey2 = Sign.signedMessageHashToKey(Hash.sha256(message), signatureData2);</span>
+<span class="fc bfc" id="L78" title="All 2 branches covered.">        return Arrays.equals(Secp256k1PublicKey.getShortKey(derivedKey1.toByteArray()), getKey()) ||</span>
+<span class="pc bpc" id="L79" title="1 of 2 branches missed.">                Arrays.equals(Secp256k1PublicKey.getShortKey(derivedKey2.toByteArray()), getKey());</span>
     }
 
     /**
@@ -87,10 +86,10 @@ public class Secp256k1PublicKey extends AbstractPublicKey {
      * @return short key as byte array
      */
     public static byte[] getShortKey(final byte[] key) {
-<span class="fc" id="L90">        final BigInteger pubKey = new BigInteger(key);</span>
-<span class="fc bfc" id="L91" title="All 2 branches covered.">        final String pubKeyPrefix = pubKey.testBit(0) ? &quot;03&quot; : &quot;02&quot;;</span>
-<span class="fc" id="L92">        final byte[] pubKeyBytes = Arrays.copyOfRange(key, 0, 32);</span>
-<span class="fc" id="L93">        return Hex.decode(pubKeyPrefix + Hex.encode(pubKeyBytes));</span>
+<span class="fc" id="L89">        final BigInteger pubKey = new BigInteger(key);</span>
+<span class="pc bpc" id="L90" title="1 of 2 branches missed.">        final String pubKeyPrefix = pubKey.testBit(0) ? &quot;03&quot; : &quot;02&quot;;</span>
+<span class="fc" id="L91">        final byte[] pubKeyBytes = Arrays.copyOfRange(key, 0, 32);</span>
+<span class="fc" id="L92">        return Hex.decode(pubKeyPrefix + Hex.encode(pubKeyBytes));</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
