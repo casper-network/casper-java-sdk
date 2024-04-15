@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EventServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">casper-java-sdk</a> &gt; <a href="index.source.html" class="el_package">com.casper.sdk.service.impl.event</a> &gt; <span class="el_source">EventServiceImpl.java</span></div><h1>EventServiceImpl.java</h1><pre class="source lang-java linenums">package com.casper.sdk.service.impl.event;
+
+import com.casper.sdk.exception.CasperSseProcessingException;
+import com.casper.sdk.model.event.Event;
+import com.casper.sdk.model.event.EventTarget;
+import com.casper.sdk.model.event.EventType;
+import com.casper.sdk.service.EventService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.sse.InboundSseEvent;
+import javax.ws.rs.sse.SseEventSource;
+import java.net.URI;
+import java.net.URL;
+import java.util.function.Consumer;
+
+/**
+ * Package local to prevent construction.
+ *
+ * @author ian@meywood.com
+ */
+@SuppressWarnings(&quot;unused&quot;)
+final class EventServiceImpl implements EventService {
+
+    /** The mime type for JSON */
+    private static final String APPLICATION_JSON = &quot;application/json&quot;;
+    public static final String ACCEPT = &quot;Accept&quot;;
+    public static final String CONTENT_TYPE = &quot;Content-Type&quot;;
+    /** Build the URLs for event get requests */
+<span class="fc" id="L34">    private final EventUrlBuilder urlBuilder = new EventUrlBuilder();</span>
+    /** The URI of the node to request events from */
+    private final URI uri;
+    /** The SSE Client */
+<span class="fc" id="L38">    private final Client sssClient = ClientBuilder.newClient();</span>
+<span class="fc" id="L39">    private final Logger logger = LoggerFactory.getLogger(EventServiceImpl.class);</span>
+
+    /**
+     * Constructs a new {@link EventServiceImpl}, is private to prevent API users construction manually. To create the
+     * service user the interface method {@link EventService#usingPeer(URI)}.
+     *
+     * @param uri the URL if the node to connect to must contain protocol, host and port number
+     */
+<span class="fc" id="L47">    private EventServiceImpl(final URI uri) {</span>
+<span class="fc" id="L48">        this.uri = uri;</span>
+<span class="fc" id="L49">    }</span>
+
+    @Override
+    public &lt;EventT extends Event&lt;?&gt;&gt; AutoCloseable consumeEvents(final EventType eventType,
+                                                                 final EventTarget eventTarget,
+                                                                 final Long startFrom,
+                                                                 final Consumer&lt;EventT&gt; onEvent,
+                                                                 final Consumer&lt;Throwable&gt; onFailure) {
+
+<span class="fc" id="L58">        final URL url = urlBuilder.buildUrl(uri, eventType, startFrom);</span>
+<span class="fc" id="L59">        logger.info(&quot;Targeting SSE URL {}&quot;, url);</span>
+<span class="fc" id="L60">        final WebTarget target = sssClient.target(url.toString());</span>
+<span class="fc" id="L61">        final Response response = target.request(&quot;text/plain&quot;, &quot;text/event-stream&quot;).get();</span>
+<span class="fc" id="L62">        final EventBuilder eventBuilder = new EventBuilder(eventType, eventTarget, target.getUri().toString());</span>
+<span class="fc" id="L63">        final SseEventSource source = SseEventSource.target(target).build();</span>
+
+<span class="fc" id="L65">        source.register((inboundSseEvent) -&gt; {</span>
+<span class="fc bfc" id="L66" title="All 2 branches covered.">            if (inboundSseEvent.readData() != null) {</span>
+<span class="fc" id="L67">                logger.debug(&quot;SSE event id: {}, data: {}&quot;, inboundSseEvent.getId(), inboundSseEvent.readData());</span>
+                try {
+<span class="fc" id="L69">                    consumeEvent(eventBuilder, inboundSseEvent, onEvent);</span>
+<span class="nc" id="L70">                } catch (Exception e) {</span>
+<span class="nc" id="L71">                    logger.error(&quot;error in consumeEvent&quot;, e);</span>
+<span class="nc" id="L72">                    onFailure.accept(new CasperSseProcessingException(e, inboundSseEvent));</span>
+<span class="fc" id="L73">                }</span>
+            }
+<span class="fc" id="L75">        }, throwable -&gt; {</span>
+<span class="nc" id="L76">            logger.error(&quot;SSE Event Error on {}&quot;, url, throwable);</span>
+<span class="nc" id="L77">            onFailure.accept(throwable);</span>
+<span class="nc" id="L78">        });</span>
+
+<span class="fc" id="L80">        source.open();</span>
+<span class="fc" id="L81">        return source;</span>
+    }
+
+    private &lt;EventT extends Event&lt;?&gt;&gt; void consumeEvent(final EventBuilder builder,
+                                                        final InboundSseEvent event,
+                                                        final Consumer&lt;EventT&gt; consumer) {
+
+<span class="pc bpc" id="L88" title="1 of 2 branches missed.">        if (builder.processLine(event.getId(), event.readData())) {</span>
+<span class="fc" id="L89">            consumer.accept(builder.buildEvent());</span>
+        }
+<span class="fc" id="L91">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

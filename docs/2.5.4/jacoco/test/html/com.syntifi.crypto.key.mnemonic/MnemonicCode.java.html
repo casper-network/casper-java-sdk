@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MnemonicCode.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">casper-java-sdk</a> &gt; <a href="index.source.html" class="el_package">com.syntifi.crypto.key.mnemonic</a> &gt; <span class="el_source">MnemonicCode.java</span></div><h1>MnemonicCode.java</h1><pre class="source lang-java linenums">package com.syntifi.crypto.key.mnemonic;
+
+/*
+ * Copyright 2013 Ken Sedgwick
+ * Copyright 2014 Andreas Schildbach
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * CHANGES:
+ * - Removing static initializer
+ * - Using own Hex and Sha256 implementations
+ * - Removing logs, watches, ...
+ * - Removing internal dependencies to helper/utils
+ * - Adding method to secure random derive the key
+ * - Adding support for multiple languages
+ *
+ */
+
+import com.syntifi.crypto.key.encdec.Hex;
+import com.syntifi.crypto.key.hash.Sha256;
+import com.syntifi.crypto.key.mnemonic.exception.MnemonicException;
+import org.bouncycastle.crypto.digests.SHA512Digest;
+import org.bouncycastle.crypto.generators.PKCS5S2ParametersGenerator;
+import org.bouncycastle.crypto.params.KeyParameter;
+
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.security.SecureRandom;
+import java.text.Collator;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
+/**
+ * A MnemonicCode object may be used to convert between binary seed values and
+ * lists of words per &lt;a href=&quot;https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki&quot;&gt;the BIP 39
+ * specification&lt;/a&gt;
+ * Original implementation at:
+ * https://github.com/bitcoinj/bitcoinj/blob/master/core/src/main/java/org/bitcoinj/crypto/MnemonicCode.java
+ *
+ * @author Alexandre Carvalho
+ * @author Andre Bertolace
+ * @since 0.3.0
+ */
+public class MnemonicCode {
+    private static final int PBKDF2_ROUNDS = 2048;
+    private final List&lt;String&gt; wordList;
+    private final Language language;
+
+    /**
+     * Creates an MnemonicCode object, initializing with words read from the supplied input stream.
+     * If a wordListDigest is supplied the digest of the words will be checked.
+     *
+     * @param language      words languages
+     * @throws IOException  if an error ocrurs when processing the file buffers
+     */
+<span class="fc" id="L68">    public MnemonicCode(Language language) throws IOException {</span>
+<span class="fc" id="L69">        this.language = language;</span>
+<span class="fc" id="L70">        InputStream wordStream = getClass().getResourceAsStream(&quot;/&quot; + language.getFileName());</span>
+<span class="pc bpc" id="L71" title="1 of 2 branches missed.">        if (wordStream == null)</span>
+<span class="nc" id="L72">            throw new FileNotFoundException(language.getFileName());</span>
+<span class="fc" id="L73">        try (BufferedReader br = new BufferedReader(new InputStreamReader(wordStream, language.getCharset()))) {</span>
+<span class="fc" id="L74">            this.wordList = br.lines()</span>
+<span class="fc" id="L75">                    .collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));</span>
+        }
+
+<span class="pc bpc" id="L78" title="1 of 2 branches missed.">        if (this.wordList.size() != 2048)</span>
+<span class="nc" id="L79">            throw new IllegalArgumentException(&quot;input stream did not contain 2048 bytes&quot;);</span>
+
+        // If a wordListDigest is supplied check to make sure it matches.
+<span class="pc bpc" id="L82" title="1 of 2 branches missed.">        if (language.getCheckSum()!= null) {</span>
+<span class="fc" id="L83">            StringBuilder stringBuilder = new StringBuilder();</span>
+<span class="fc bfc" id="L84" title="All 2 branches covered.">            for (String s : this.getWordList()) {</span>
+<span class="fc" id="L85">                stringBuilder.append(s);</span>
+<span class="fc" id="L86">            }</span>
+<span class="fc" id="L87">            byte[] digest = Sha256.digest(String.valueOf(stringBuilder).getBytes(language.getCharset()));</span>
+<span class="fc" id="L88">            String hexDigest = Hex.encode(digest);</span>
+<span class="pc bpc" id="L89" title="1 of 2 branches missed.">            if (!hexDigest.equals(language.getCheckSum()))</span>
+<span class="nc" id="L90">                throw new IllegalArgumentException(&quot;wordlist checksum mismatch&quot;);</span>
+        }
+<span class="fc" id="L92">    }</span>
+
+    /**
+     * Convert mnemonic word list to seed.
+     *
+     * @param words list of words
+     * @return derived seed in byte array
+     */
+    public byte[] toSeed(List&lt;String&gt; words) {
+<span class="nc" id="L101">        return toSeed(words, &quot;&quot;);</span>
+    }
+
+    /**
+     * Convert mnemonic word list to seed.
+     *
+     * @param words list of words
+     * @param passphrase password, use {@link #toSeed(List)} if not required
+     * @return derived seed in byte array
+     */
+    public byte[] toSeed(List&lt;String&gt; words, String passphrase) {
+<span class="pc bpc" id="L112" title="1 of 2 branches missed.">        if (passphrase == null)</span>
+<span class="nc" id="L113">            throw new RuntimeException(&quot;A null passphrase is not allowed.&quot;);</span>
+
+        // To create binary seed from mnemonic, we use PBKDF2 function
+        // with mnemonic sentence (in UTF-8) used as a password and
+        // string &quot;mnemonic&quot; + passphrase (again in UTF-8) used as a
+        // salt. Iteration count is set to 2048 and HMAC-SHA512 is
+        // used as a pseudo-random function. Desired length of the
+        // derived key is 512 bits (= 64 bytes).
+        //
+<span class="fc" id="L122">        String pass = String.join(&quot; &quot;, words);</span>
+<span class="fc" id="L123">        String salt = &quot;mnemonic&quot; + passphrase;</span>
+
+<span class="fc" id="L125">        final PKCS5S2ParametersGenerator pbkdf2 = new PKCS5S2ParametersGenerator(new SHA512Digest());</span>
+<span class="fc" id="L126">        pbkdf2.init(</span>
+<span class="fc" id="L127">                pass.getBytes(StandardCharsets.UTF_8),</span>
+<span class="fc" id="L128">                salt.getBytes(StandardCharsets.UTF_8),</span>
+                PBKDF2_ROUNDS);
+
+<span class="fc" id="L131">        final KeyParameter key = (KeyParameter) pbkdf2.generateDerivedParameters(512);</span>
+<span class="fc" id="L132">        return key.getKey();</span>
+    }
+
+    private boolean[] bytesToBits(byte[] data) {
+<span class="fc" id="L136">        boolean[] bits = new boolean[data.length * 8];</span>
+<span class="fc bfc" id="L137" title="All 2 branches covered.">        for (int i = 0; i &lt; data.length; ++i)</span>
+<span class="fc bfc" id="L138" title="All 2 branches covered.">            for (int j = 0; j &lt; 8; ++j)</span>
+<span class="fc bfc" id="L139" title="All 2 branches covered.">                bits[(i * 8) + j] = (data[i] &amp; (1 &lt;&lt; (7 - j))) != 0;</span>
+<span class="fc" id="L140">        return bits;</span>
+    }
+
+
+    /**
+     * Gets the word list this code uses.
+     *
+     * @return unmodifiable word list
+     */
+    public List&lt;String&gt; getWordList() {
+<span class="fc" id="L150">        return wordList;</span>
+    }
+
+    /**
+     * Convert mnemonic word list to original entropy value.
+     *
+     * @param words list of words
+     * @return entropy byte array
+     * @throws MnemonicException.MnemonicLengthException if the number of words in the list is not multiple of 3 or empty
+     * @throws MnemonicException.MnemonicWordException   if a word in the list is not part of the dictionary
+     * @throws MnemonicException.MnemonicChecksumException if the checksum of the file does not match the specified one
+     */
+    public byte[] toEntropy(List&lt;String&gt; words) throws MnemonicException.MnemonicLengthException,
+            MnemonicException.MnemonicWordException, MnemonicException.MnemonicChecksumException {
+<span class="pc bpc" id="L164" title="1 of 2 branches missed.">        if (words.size() % 3 &gt; 0)</span>
+<span class="nc" id="L165">            throw new MnemonicException.MnemonicLengthException(&quot;Word list size must be multiple of three words.&quot;);</span>
+
+<span class="pc bpc" id="L167" title="1 of 2 branches missed.">        if (words.size() == 0)</span>
+<span class="nc" id="L168">            throw new MnemonicException.MnemonicLengthException(&quot;Word list is empty.&quot;);</span>
+
+        // Look up all the words in the list and construct the
+        // concatenation of the original entropy and the checksum.
+        //
+<span class="fc" id="L173">        int concatLenBits = words.size() * 11;</span>
+<span class="fc" id="L174">        boolean[] concatBits = new boolean[concatLenBits];</span>
+<span class="fc" id="L175">        int wordindex = 0;</span>
+<span class="fc" id="L176">        Collator collator = Collator.getInstance(language.getLocale());</span>
+        //collator.setDecomposition(Collator.FULL_DECOMPOSITION);
+        //collator.setStrength(Collator.PRIMARY);
+<span class="fc bfc" id="L179" title="All 2 branches covered.">        for (String word : words) {</span>
+            // Find the words index in the wordlist.
+<span class="fc" id="L181">            int ndx = Collections.binarySearch(this.wordList, word, collator);</span>
+<span class="pc bpc" id="L182" title="1 of 2 branches missed.">            if (ndx &lt; 0)</span>
+<span class="nc" id="L183">                throw new MnemonicException.MnemonicWordException(word);</span>
+
+            // Set the next 11 bits to the value of the index.
+<span class="fc bfc" id="L186" title="All 2 branches covered.">            for (int ii = 0; ii &lt; 11; ++ii)</span>
+<span class="fc bfc" id="L187" title="All 2 branches covered.">                concatBits[(wordindex * 11) + ii] = (ndx &amp; (1 &lt;&lt; (10 - ii))) != 0;</span>
+<span class="fc" id="L188">            ++wordindex;</span>
+<span class="fc" id="L189">        }</span>
+
+<span class="fc" id="L191">        int checksumLengthBits = concatLenBits / 33;</span>
+<span class="fc" id="L192">        int entropyLengthBits = concatLenBits - checksumLengthBits;</span>
+
+        // Extract original entropy as bytes.
+<span class="fc" id="L195">        byte[] entropy = new byte[entropyLengthBits / 8];</span>
+<span class="fc bfc" id="L196" title="All 2 branches covered.">        for (int ii = 0; ii &lt; entropy.length; ++ii)</span>
+<span class="fc bfc" id="L197" title="All 2 branches covered.">            for (int jj = 0; jj &lt; 8; ++jj)</span>
+<span class="fc bfc" id="L198" title="All 2 branches covered.">                if (concatBits[(ii * 8) + jj])</span>
+<span class="fc" id="L199">                    entropy[ii] |= 1 &lt;&lt; (7 - jj);</span>
+
+        // Take the digest of the entropy.
+<span class="fc" id="L202">        byte[] hash = Sha256.digest(entropy);</span>
+<span class="fc" id="L203">        boolean[] hashBits = bytesToBits(hash);</span>
+
+        // Check all the checksum bits.
+<span class="fc bfc" id="L206" title="All 2 branches covered.">        for (int i = 0; i &lt; checksumLengthBits; ++i)</span>
+<span class="pc bpc" id="L207" title="1 of 2 branches missed.">            if (concatBits[entropyLengthBits + i] != hashBits[i])</span>
+<span class="nc" id="L208">                throw new MnemonicException.MnemonicChecksumException();</span>
+
+<span class="fc" id="L210">        return entropy;</span>
+    }
+
+    /**
+     * Convert entropy data to mnemonic word list.
+     *
+     * @param entropy byte array
+     * @return list of words
+     * @throws MnemonicException.MnemonicLengthException if the number of words in the list is not multiple of 3 or empty
+     */
+    public List&lt;String&gt; toMnemonic(byte[] entropy) throws MnemonicException.MnemonicLengthException {
+<span class="pc bpc" id="L221" title="1 of 2 branches missed.">        if (entropy.length % 4 &gt; 0)</span>
+<span class="nc" id="L222">            throw new MnemonicException.MnemonicLengthException(&quot;Entropy length not multiple of 32 bits.&quot;);</span>
+
+<span class="pc bpc" id="L224" title="1 of 2 branches missed.">        if (entropy.length == 0)</span>
+<span class="nc" id="L225">            throw new MnemonicException.MnemonicLengthException(&quot;Entropy is empty.&quot;);</span>
+
+        // We take initial entropy of ENT bits and compute its
+        // checksum by taking first ENT / 32 bits of its SHA256 hash.
+
+<span class="fc" id="L230">        byte[] hash = Sha256.digest(entropy);</span>
+<span class="fc" id="L231">        boolean[] hashBits = bytesToBits(hash);</span>
+
+<span class="fc" id="L233">        boolean[] entropyBits = bytesToBits(entropy);</span>
+<span class="fc" id="L234">        int checksumLengthBits = entropyBits.length / 32;</span>
+
+        // We append these bits to the end of the initial entropy.
+<span class="fc" id="L237">        boolean[] concatBits = new boolean[entropyBits.length + checksumLengthBits];</span>
+<span class="fc" id="L238">        System.arraycopy(entropyBits, 0, concatBits, 0, entropyBits.length);</span>
+<span class="fc" id="L239">        System.arraycopy(hashBits, 0, concatBits, entropyBits.length, checksumLengthBits);</span>
+
+        // Next we take these concatenated bits and split them into
+        // groups of 11 bits. Each group encodes number from 0-2047
+        // which is a position in a wordlist.  We convert numbers into
+        // words and use joined words as mnemonic sentence.
+
+<span class="fc" id="L246">        ArrayList&lt;String&gt; words = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L247">        int nWords = concatBits.length / 11;</span>
+<span class="fc bfc" id="L248" title="All 2 branches covered.">        for (int i = 0; i &lt; nWords; ++i) {</span>
+<span class="fc" id="L249">            int index = 0;</span>
+<span class="fc bfc" id="L250" title="All 2 branches covered.">            for (int j = 0; j &lt; 11; ++j) {</span>
+<span class="fc" id="L251">                index &lt;&lt;= 1;</span>
+<span class="fc bfc" id="L252" title="All 2 branches covered.">                if (concatBits[(i * 11) + j])</span>
+<span class="fc" id="L253">                    index |= 0x1;</span>
+            }
+<span class="fc" id="L255">            words.add(this.wordList.get(index));</span>
+        }
+
+<span class="fc" id="L258">        return words;</span>
+    }
+
+    /**
+     * Check to see if a mnemonic word list is valid.
+     *
+     * @param words list of words
+     * @throws MnemonicException if an errors occurs on reading the dictionary of on the given words
+     */
+    public void check(List&lt;String&gt; words) throws MnemonicException {
+<span class="nc" id="L268">        toEntropy(words);</span>
+<span class="nc" id="L269">    }</span>
+
+    /**
+     * Method to generate words from securerandom entropy
+     *
+     * @return list of mnemonic words
+     * @throws IOException if an error occurs in reading the dictionary file
+     * @throws MnemonicException.MnemonicLengthException if the number of words in the list is not multiple of 3 or empty
+     */
+    public List&lt;String&gt; generateSecureRandomWords() throws IOException, MnemonicException.MnemonicLengthException {
+<span class="fc" id="L279">        MnemonicCode mnemonicCode = new MnemonicCode(this.language);</span>
+<span class="fc" id="L280">        SecureRandom rnd = new SecureRandom();</span>
+<span class="fc" id="L281">        byte[] entropy = new byte[16];</span>
+<span class="fc" id="L282">        rnd.nextBytes(entropy);</span>
+<span class="fc" id="L283">        return mnemonicCode.toMnemonic(entropy);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

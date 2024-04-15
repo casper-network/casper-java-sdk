@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ASN1Identifiers.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">casper-java-sdk</a> &gt; <a href="index.source.html" class="el_package">com.syntifi.crypto.key</a> &gt; <span class="el_source">ASN1Identifiers.java</span></div><h1>ASN1Identifiers.java</h1><pre class="source lang-java linenums">package com.syntifi.crypto.key;
+
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import org.bouncycastle.asn1.ASN1ObjectIdentifier;
+
+/**
+ * ASN1 identifiers for working with key cryptography
+ *
+ * @author Alexandre Carvalho
+ * @author Andre Bertolace
+ * @since 0.1.0
+ */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public class ASN1Identifiers{
+
+<span class="fc" id="L17">    public static final ASN1ObjectIdentifier Secp256k1OIDCurve = new ASN1ObjectIdentifier(&quot;1.3.132.0.10&quot;);</span>
+<span class="fc" id="L18">    public static final ASN1ObjectIdentifier Secp256k1OIDkey = new ASN1ObjectIdentifier(&quot;1.2.840.10045.2.1&quot;);</span>
+
+<span class="fc" id="L20">    public static final ASN1ObjectIdentifier Ed25519OID = new ASN1ObjectIdentifier(&quot;1.3.101.112&quot;);</span>
+
+    public static final String PUBLIC_KEY_DER_HEADER = &quot;PUBLIC KEY&quot;;
+    public static final String PRIVATE_KEY_DER_HEADER = &quot;PRIVATE KEY&quot;;
+    public static final String EC_PRIVATE_KEY_DER_HEADER = &quot;EC PRIVATE KEY&quot;;
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

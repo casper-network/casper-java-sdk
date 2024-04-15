@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CasperDeserializableObject.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">casper-java-sdk</a> &gt; <a href="index.source.html" class="el_package">com.casper.sdk.model.clvalue.serde</a> &gt; <span class="el_source">CasperDeserializableObject.java</span></div><h1>CasperDeserializableObject.java</h1><pre class="source lang-java linenums">package com.casper.sdk.model.clvalue.serde;
+
+import com.casper.sdk.exception.NoSuchTypeException;
+import com.casper.sdk.model.clvalue.AbstractCLValue;
+import dev.oak3.sbs4j.DeserializerBuffer;
+import dev.oak3.sbs4j.exception.ValueDeserializationException;
+import dev.oak3.sbs4j.interfaces.DeserializableObject;
+
+/**
+ * Defines an object as being capable of encoding with {@link DeserializerBuffer}
+ *
+ * @author Alexandre Carvalho
+ * @author Andre Bertolace
+ * @since 0.2.2
+ */
+public interface CasperDeserializableObject extends DeserializableObject {
+    /**
+     * Called when the object's values must be deserialized
+     *
+     * @param deser  the deserializer to be used
+     * @param target target deserialization standard
+     * @throws ValueDeserializationException exception holding information of failure to deserialize a value
+     */
+    AbstractCLValue&lt;?, ?&gt; deserialize(DeserializerBuffer deser, Target target) throws ValueDeserializationException, NoSuchTypeException;
+
+    /**
+     * Called when the object's values must be deserialized
+     * &lt;p&gt;
+     * Allows to use the default deserialize with the custom casper deserialize signature, defaulting encodeType to false
+     *
+     * @param deser the deserializer to be used
+     * @throws ValueDeserializationException exception holding information of failure to deserialize a value
+     */
+    @Override
+    default void deserialize(DeserializerBuffer deser) throws ValueDeserializationException {
+        try {
+<span class="nc" id="L37">            deserialize(deser, Target.JSON);</span>
+<span class="nc" id="L38">        } catch (NoSuchTypeException e) {</span>
+<span class="nc" id="L39">            throw new ValueDeserializationException(String.format(&quot;Error deserializing %s&quot;, this.getClass().getSimpleName()), e);</span>
+<span class="nc" id="L40">        }</span>
+<span class="nc" id="L41">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

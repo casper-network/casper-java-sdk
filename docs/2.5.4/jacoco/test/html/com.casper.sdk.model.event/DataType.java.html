@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DataType.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">casper-java-sdk</a> &gt; <a href="index.source.html" class="el_package">com.casper.sdk.model.event</a> &gt; <span class="el_source">DataType.java</span></div><h1>DataType.java</h1><pre class="source lang-java linenums">package com.casper.sdk.model.event;
+
+import com.casper.sdk.model.event.blockadded.BlockAdded;
+import com.casper.sdk.model.event.deployaccepted.DeployAccepted;
+import com.casper.sdk.model.event.deployexpired.DeployExpired;
+import com.casper.sdk.model.event.deployprocessed.DeployProcessed;
+import com.casper.sdk.model.event.fault.Fault;
+import com.casper.sdk.model.event.finalitysignature.FinalitySignature;
+import com.casper.sdk.model.event.shutdown.Shutdown;
+import com.casper.sdk.model.event.step.Step;
+import com.casper.sdk.model.event.version.ApiVersion;
+
+/**
+ * The enums of the allowable data type key names
+ *
+ * @author ian@meywood.com
+ */
+<span class="fc" id="L18">public enum DataType {</span>
+
+<span class="fc" id="L20">    API_VERSION(ApiVersion.class),</span>
+<span class="fc" id="L21">    BLOCK_ADDED(BlockAdded.class),</span>
+<span class="fc" id="L22">    DEPLOY_ACCEPTED(DeployAccepted.class),</span>
+<span class="fc" id="L23">    DEPLOY_EXPIRED(DeployExpired.class),</span>
+<span class="fc" id="L24">    DEPLOY_PROCESSED(DeployProcessed.class),</span>
+<span class="fc" id="L25">    FAULT(Fault.class),</span>
+<span class="fc" id="L26">    FINALITY_SIGNATURE(FinalitySignature.class),</span>
+<span class="fc" id="L27">    SHUTDOWN(Shutdown.class),</span>
+<span class="fc" id="L28">    STEP(Step.class);</span>
+
+    /** The EventData class for the data type */
+    private Class&lt;? extends EventData&gt; dataType;
+
+<span class="fc" id="L33">    DataType(Class&lt;? extends EventData&gt; dataType) {</span>
+<span class="fc" id="L34">        this.dataType = dataType;</span>
+<span class="fc" id="L35">    }</span>
+
+    public static DataType of(final Class dataTypeClass) {
+<span class="pc bpc" id="L38" title="1 of 2 branches missed.">        for (DataType dataType : DataType.values()) {</span>
+<span class="fc bfc" id="L39" title="All 2 branches covered.">            if (dataType.dataType.equals(dataTypeClass)) {</span>
+<span class="fc" id="L40">                return dataType;</span>
+            }
+        }
+<span class="nc" id="L43">        return null;</span>
+    }
+
+    public static DataType of(final String dataTypeSimpleClassName) {
+<span class="pc bpc" id="L47" title="1 of 2 branches missed.">        for (DataType dataType : DataType.values()) {</span>
+<span class="fc bfc" id="L48" title="All 2 branches covered.">            if (dataType.dataType.getSimpleName().equals(dataTypeSimpleClassName)) {</span>
+<span class="fc" id="L49">                return dataType;</span>
+            }
+        }
+<span class="nc" id="L52">        return null;</span>
+    }
+
+    public String getDataTypeName() {
+<span class="nc" id="L56">        return this.dataType.getSimpleName();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
