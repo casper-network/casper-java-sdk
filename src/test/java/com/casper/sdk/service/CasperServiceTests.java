@@ -488,7 +488,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
                 .withBody("$.params.deploy_hash", "abc")
                 .thenDispatch(getClass().getResource("/deploy-samples/info_get_deploy_error.json"));
 
-        final String expectedMessage = "Invalid params (code: -32602)";
+        final String expectedMessage = "Invalid params (code: -32602) Failed to parse 'params' field: could not convert slice to array";
 
         final CasperClientException casperClientException = assertThrows(CasperClientException.class,
                 () -> casperServiceMock.getDeploy("abc"));
