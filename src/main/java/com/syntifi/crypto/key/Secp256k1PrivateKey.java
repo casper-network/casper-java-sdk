@@ -85,8 +85,6 @@ public class Secp256k1PrivateKey extends AbstractPrivateKey {
     @Override
     public byte[] sign(final byte[] message) {
         final SignatureData signature = Sign.signMessage(Hash.sha256(message), keyPair, false);
-        // TODO: Check this conversion
-        //return Hex.toHexString(signature.getR()) + Hex.toHexString(signature.getS());
         final ByteBuffer bb = ByteBuffer.allocate(signature.getR().length + signature.getS().length);
         bb.put(signature.getR());
         bb.put(signature.getS());
