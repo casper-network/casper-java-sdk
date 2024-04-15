@@ -45,22 +45,8 @@ public class Secp256k1PublicKey extends AbstractPublicKey {
     }
 
     @Override
-    public void readPublicKey(final String filename) throws IOException {
-        try (final Reader fileReader = new FileReader(filename)) {
-            readPublicKey(fileReader);
-        }
-    }
-
-    @Override
     public void readPublicKey(final Reader reader) throws IOException {
         loadPublicKey(PemFileHelper.readPemFile(reader));
-    }
-
-    @Override
-    public void writePublicKey(final String filename) throws IOException {
-        try (final FileWriter fileWriter = new FileWriter(filename)) {
-            writePublicKey(fileWriter);
-        }
     }
 
     @Override

@@ -32,18 +32,6 @@ public class Ed25519PublicKey extends AbstractPublicKey {
         publicKeyParameters = new Ed25519PublicKeyParameters(publicKey, 0);
     }
 
-    /*
-     * SEQUENCE (2 elem) SEQUENCE (1 elem) OBJECT IDENTIFIER 1.3.101.112
-     * curveEd25519 (EdDSA 25519 signature algorithm) BIT STRING (256 bit) <KEY
-     * HERE>
-     */
-    @Override
-    public void readPublicKey(final String filename) throws IOException {
-        try (final Reader fileReader = new FileReader(filename)) {
-            readPublicKey(fileReader);
-        }
-    }
-
     @Override
     public void readPublicKey(final Reader reader) throws IOException {
         final ASN1Primitive derKey = ASN1Primitive.fromByteArray(PemFileHelper.readPemFile(reader));
@@ -54,13 +42,6 @@ public class Ed25519PublicKey extends AbstractPublicKey {
             final DERBitString key = DERBitString.getInstance(objBaseSeq.getObjectAt(1));
             publicKeyParameters = new Ed25519PublicKeyParameters(key.getBytes(), 0);
             setKey(publicKeyParameters.getEncoded());
-        }
-    }
-
-    @Override
-    public void writePublicKey(final String filename) throws IOException {
-        try (final Writer fileWriter = new FileWriter(filename)) {
-            writePublicKey(fileWriter);
         }
     }
 

@@ -41,19 +41,6 @@ public class Ed25519PrivateKey extends AbstractPrivateKey {
         privateKeyParameters = new Ed25519PrivateKeyParameters(privateKey, 0);
     }
 
-    /*
-     * SEQUENCE (3 elem) INTEGER 0 SEQUENCE (1 elem) OBJECT IDENTIFIER 1.3.101.112
-     * curveEd25519 (EdDSA 25519 signature algorithm) OCTET STRING (32 byte)
-     * 38AECE974291F14B5FEF97E1B21F684394120B6E7A8AFB04398BBE787E8BC559 OCTET STRING
-     * (32 byte) 38AECE974291F14B5FEF97E1B21F684394120B6E7A8AFB04398BBE787E8BC559
-     */
-    @Override
-    public void readPrivateKey(final String filename) throws IOException {
-        try (final Reader fileReader = new FileReader(filename)) {
-            readPrivateKey(fileReader);
-        }
-    }
-
     @Override
     public void readPrivateKey(final Reader reader) throws IOException {
         final ASN1Primitive key = ASN1Primitive.fromByteArray(PemFileHelper.readPemFile(reader));
@@ -62,13 +49,6 @@ public class Ed25519PrivateKey extends AbstractPrivateKey {
         if (algoId.equals(ASN1Identifiers.Ed25519OID.getId())) {
             privateKeyParameters = new Ed25519PrivateKeyParameters(keyInfo.getPrivateKey().getEncoded(), 4);
             setKey(privateKeyParameters.getEncoded());
-        }
-    }
-
-    @Override
-    public void writePrivateKey(final String filename) throws IOException {
-        try (final Writer fileWriter = new FileWriter(filename)) {
-            writePrivateKey(fileWriter);
         }
     }
 

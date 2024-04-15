@@ -93,4 +93,17 @@ public class Secp256k1PrivateKeyTests extends AbstractCryptoTests {
         LOGGER.info(Hex.encode(signature));
         assertTrue(pk.verify(msg, signature));
     }
+
+    @Test
+    void randomKeyCanBeWrittenToAndReadFromPemFile() throws IOException {
+
+        final Secp256k1PrivateKey secp256k1PrivateKey = Secp256k1PrivateKey.deriveRandomKey();
+        final File pemFile = File.createTempFile("secp256k1", ".pem");
+        pemFile.deleteOnExit();
+        secp256k1PrivateKey.writePrivateKey(pemFile.getPath());
+
+        final Secp256k1PrivateKey readKey = new Secp256k1PrivateKey();
+        readKey.readPrivateKey(pemFile.getPath());
+        assertEquals(Hex.encode(secp256k1PrivateKey.getKey()), Hex.encode(readKey.getKey()));
+    }
 }

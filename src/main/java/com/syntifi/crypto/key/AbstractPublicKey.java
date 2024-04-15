@@ -4,9 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.IOException;
-import java.io.Reader;
-import java.io.Writer;
+import java.io.*;
 import java.security.GeneralSecurityException;
 
 /**
@@ -36,7 +34,11 @@ public abstract class AbstractPublicKey {
      * @param filename the source filename
      * @throws IOException thrown if an error occurs reading the file
      */
-    public abstract void readPublicKey(final String filename) throws IOException;
+    public final void readPublicKey(final String filename) throws IOException {
+        try (final Reader fileReader = new FileReader(filename)) {
+            readPublicKey(fileReader);
+        }
+    }
 
     /**
      * Reads the public key from a file
@@ -46,14 +48,17 @@ public abstract class AbstractPublicKey {
      */
     public abstract void readPublicKey(final Reader reader) throws IOException;
 
-
     /**
      * Writes the public key to a file
      *
      * @param filename the target filename
      * @throws IOException thrown if an error occurs writing the file
      */
-    public abstract void writePublicKey(final String filename) throws IOException;
+    public final void writePublicKey(final String filename) throws IOException {
+        try (final Writer fileWriter = new FileWriter(filename)) {
+            writePublicKey(fileWriter);
+        }
+    }
 
     /**
      * Writes the public key to a file
