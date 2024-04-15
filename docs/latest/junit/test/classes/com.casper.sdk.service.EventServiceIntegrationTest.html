@@ -41,7 +41,7 @@
 </td>
 <td>
 <div class="infoBox" id="duration">
-<div class="counter">15.346s</div>
+<div class="counter">15.384s</div>
 <p>duration</p>
 </div>
 </td>
@@ -79,7 +79,7 @@
 </thead>
 <tr>
 <td class="success">consumeMainRawEvents()</td>
-<td class="success">4.304s</td>
+<td class="success">4.340s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
@@ -89,7 +89,7 @@
 </tr>
 <tr>
 <td class="success">mainPojoEvents()</td>
-<td class="success">2.015s</td>
+<td class="success">2.017s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
@@ -102,21 +102,21 @@
 <div id="tab1" class="tab">
 <h2>Standard output</h2>
 <span class="code">
-<pre>consumeEvents(arg0=MAIN, arg1=RAW, arg2=0, arg3=com.casper.sdk.service.EventServiceIntegrationTest$$Lambda$505/0x00000001004c0440@7cde748f, arg4=com.casper.sdk.service.EventServiceIntegrationTest$$Lambda$506/0x00000001004c0840@7578dfd0)
+<pre>consumeEvents(arg0=MAIN, arg1=RAW, arg2=0, arg3=com.casper.sdk.service.EventServiceIntegrationTest$$Lambda$505/0x00000001004c0440@7578dfd0, arg4=com.casper.sdk.service.EventServiceIntegrationTest$$Lambda$506/0x00000001004c0840@522c56e8)
 Targeting SSE URL http://localhost:28101/events/main?start_from=0
 SSE event id: null, data: {&quot;ApiVersion&quot;:&quot;1.0.0&quot;}
 SSE event id: 2, data: {&quot;BlockAdded&quot;:{&quot;block_hash&quot;:&quot;bb878bcf8827649f070c487800a95c35be3eb2e83b5447921675040cea38af1c&quot;,&quot;block&quot;:{&quot;hash&quot;:&quot;bb878bcf8827649f070c487800a95c35be3eb2e83b5447921675040cea38af1c&quot;,&quot;header&quot;:{&quot;parent_hash&quot;:&quot;0000000000000000000000000000000000000000000000000000000000000000&quot;,&quot;state_root_hash&quot;:&quot;fbd89036ca934a53b14ebc99abcf64351008ac073848c0b384771036121a25cc&quot;,&quot;body_hash&quot;:&quot;5187b7a8021bf4f2c004ea3a54cfece1754f11c7624d2363c7f4cf4fddd1441e&quot;,&quot;random_bit&quot;:false,&quot;accumulated_seed&quot;:&quot;d8908c165dee785924e7421a0fd0418a19d5daeec395fd505a92a0fd3117e428&quot;,&quot;era_end&quot;:{&quot;era_report&quot;:{&quot;equivocators&quot;:[],&quot;rewards&quot;:[],&quot;inactive_validators&quot;:[]},&quot;next_era_validator_weights&quot;:[{&quot;validator&quot;:&quot;010d23984fefcce099679a24496f1d3072a540b95d321f8ba951df0cfe2c0691e5&quot;,&quot;weight&quot;:&quot;2000000000000004&quot;},{&quot;validator&quot;:&quot;011213e00a3bd748278b38a00a4787a7143f28a9d564126566716a53daa9499852&quot;,&quot;weight&quot;:&quot;2000000000000006&quot;},{&quot;validator&quot;:&quot;0180b99ded1d271c61a26d1b18c289ab33fc64355fa90cda4ae18f91786aa6ba4b&quot;,&quot;weight&quot;:&quot;2000000000000010&quot;},{&quot;validator&quot;:&quot;01959d01aa68197e8cb91aa06bcc920f8d4a245dff60ea726bb89255349107a565&quot;,&quot;weight&quot;:&quot;2000000000000002&quot;},{&quot;validator&quot;:&quot;01fcf1392c59c7d89190bfcd1b00902cc0801700eab98034aa4e56816d338f6c25&quot;,&quot;weight&quot;:&quot;2000000000000008&quot;}]},&quot;timestamp&quot;:&quot;2022-07-22T16:56:37.891Z&quot;,&quot;era_id&quot;:0,&quot;height&quot;:0,&quot;protocol_version&quot;:&quot;1.0.0&quot;},&quot;body&quot;:{&quot;proposer&quot;:&quot;00&quot;,&quot;deploy_hashes&quot;:[],&quot;transfer_hashes&quot;:[]},&quot;proofs&quot;:[]}}}
 SSE event id: 7, data: {&quot;BlockAdded&quot;:{&quot;block_hash&quot;:&quot;c77080456598933f9b0a68827314f8da3a0b10d1a7532d1737352d9f3a36a534&quot;,&quot;block&quot;:{&quot;hash&quot;:&quot;c77080456598933f9b0a68827314f8da3a0b10d1a7532d1737352d9f3a36a534&quot;,&quot;header&quot;:{&quot;parent_hash&quot;:&quot;bb878bcf8827649f070c487800a95c35be3eb2e83b5447921675040cea38af1c&quot;,&quot;state_root_hash&quot;:&quot;fbd89036ca934a53b14ebc99abcf64351008ac073848c0b384771036121a25cc&quot;,&quot;body_hash&quot;:&quot;980531392fb02fd03d632abaa17f0a59bc788ea5b86ff9ce4630851cf9c2b4cf&quot;,&quot;random_bit&quot;:true,&quot;accumulated_seed&quot;:&quot;ab5d756563bf09545590bd95f9a8e7978d51760be95ea8e5c9bab58ba1129186&quot;,&quot;era_end&quot;:null,&quot;timestamp&quot;:&quot;2022-07-22T16:56:40.704Z&quot;,&quot;era_id&quot;:1,&quot;height&quot;:1,&quot;protocol_version&quot;:&quot;1.0.0&quot;},&quot;body&quot;:{&quot;proposer&quot;:&quot;010d23984fefcce099679a24496f1d3072a540b95d321f8ba951df0cfe2c0691e5&quot;,&quot;deploy_hashes&quot;:[],&quot;transfer_hashes&quot;:[]},&quot;proofs&quot;:[]}}}
-consumeEvents(arg0=MAIN, arg1=POJO, arg2=0, arg3=com.casper.sdk.service.EventServiceIntegrationTest$$Lambda$523/0x0000000100516840@17bd67e7, arg4=com.casper.sdk.service.EventServiceIntegrationTest$$Lambda$524/0x0000000100516c40@1df2e286)
+consumeEvents(arg0=MAIN, arg1=POJO, arg2=0, arg3=com.casper.sdk.service.EventServiceIntegrationTest$$Lambda$523/0x0000000100516840@1df2e286, arg4=com.casper.sdk.service.EventServiceIntegrationTest$$Lambda$524/0x0000000100516c40@569765c6)
 Targeting SSE URL http://localhost:28101/events/main?start_from=0
 SSE event id: null, data: {&quot;ApiVersion&quot;:&quot;1.0.0&quot;}
 SSE event id: 2, data: {&quot;BlockAdded&quot;:{&quot;block_hash&quot;:&quot;bb878bcf8827649f070c487800a95c35be3eb2e83b5447921675040cea38af1c&quot;,&quot;block&quot;:{&quot;hash&quot;:&quot;bb878bcf8827649f070c487800a95c35be3eb2e83b5447921675040cea38af1c&quot;,&quot;header&quot;:{&quot;parent_hash&quot;:&quot;0000000000000000000000000000000000000000000000000000000000000000&quot;,&quot;state_root_hash&quot;:&quot;fbd89036ca934a53b14ebc99abcf64351008ac073848c0b384771036121a25cc&quot;,&quot;body_hash&quot;:&quot;5187b7a8021bf4f2c004ea3a54cfece1754f11c7624d2363c7f4cf4fddd1441e&quot;,&quot;random_bit&quot;:false,&quot;accumulated_seed&quot;:&quot;d8908c165dee785924e7421a0fd0418a19d5daeec395fd505a92a0fd3117e428&quot;,&quot;era_end&quot;:{&quot;era_report&quot;:{&quot;equivocators&quot;:[],&quot;rewards&quot;:[],&quot;inactive_validators&quot;:[]},&quot;next_era_validator_weights&quot;:[{&quot;validator&quot;:&quot;010d23984fefcce099679a24496f1d3072a540b95d321f8ba951df0cfe2c0691e5&quot;,&quot;weight&quot;:&quot;2000000000000004&quot;},{&quot;validator&quot;:&quot;011213e00a3bd748278b38a00a4787a7143f28a9d564126566716a53daa9499852&quot;,&quot;weight&quot;:&quot;2000000000000006&quot;},{&quot;validator&quot;:&quot;0180b99ded1d271c61a26d1b18c289ab33fc64355fa90cda4ae18f91786aa6ba4b&quot;,&quot;weight&quot;:&quot;2000000000000010&quot;},{&quot;validator&quot;:&quot;01959d01aa68197e8cb91aa06bcc920f8d4a245dff60ea726bb89255349107a565&quot;,&quot;weight&quot;:&quot;2000000000000002&quot;},{&quot;validator&quot;:&quot;01fcf1392c59c7d89190bfcd1b00902cc0801700eab98034aa4e56816d338f6c25&quot;,&quot;weight&quot;:&quot;2000000000000008&quot;}]},&quot;timestamp&quot;:&quot;2022-07-22T16:56:37.891Z&quot;,&quot;era_id&quot;:0,&quot;height&quot;:0,&quot;protocol_version&quot;:&quot;1.0.0&quot;},&quot;body&quot;:{&quot;proposer&quot;:&quot;00&quot;,&quot;deploy_hashes&quot;:[],&quot;transfer_hashes&quot;:[]},&quot;proofs&quot;:[]}}}
 SSE event id: 7, data: {&quot;BlockAdded&quot;:{&quot;block_hash&quot;:&quot;c77080456598933f9b0a68827314f8da3a0b10d1a7532d1737352d9f3a36a534&quot;,&quot;block&quot;:{&quot;hash&quot;:&quot;c77080456598933f9b0a68827314f8da3a0b10d1a7532d1737352d9f3a36a534&quot;,&quot;header&quot;:{&quot;parent_hash&quot;:&quot;bb878bcf8827649f070c487800a95c35be3eb2e83b5447921675040cea38af1c&quot;,&quot;state_root_hash&quot;:&quot;fbd89036ca934a53b14ebc99abcf64351008ac073848c0b384771036121a25cc&quot;,&quot;body_hash&quot;:&quot;980531392fb02fd03d632abaa17f0a59bc788ea5b86ff9ce4630851cf9c2b4cf&quot;,&quot;random_bit&quot;:true,&quot;accumulated_seed&quot;:&quot;ab5d756563bf09545590bd95f9a8e7978d51760be95ea8e5c9bab58ba1129186&quot;,&quot;era_end&quot;:null,&quot;timestamp&quot;:&quot;2022-07-22T16:56:40.704Z&quot;,&quot;era_id&quot;:1,&quot;height&quot;:1,&quot;protocol_version&quot;:&quot;1.0.0&quot;},&quot;body&quot;:{&quot;proposer&quot;:&quot;010d23984fefcce099679a24496f1d3072a540b95d321f8ba951df0cfe2c0691e5&quot;,&quot;deploy_hashes&quot;:[],&quot;transfer_hashes&quot;:[]},&quot;proofs&quot;:[]}}}
-consumeEvents(arg0=DEPLOYS, arg1=RAW, arg2=0, arg3=com.casper.sdk.service.EventServiceIntegrationTest$$Lambda$525/0x0000000100516440@998d4e3, arg4=com.casper.sdk.service.EventServiceIntegrationTest$$Lambda$526/0x0000000100515840@2910f165)
+consumeEvents(arg0=DEPLOYS, arg1=RAW, arg2=0, arg3=com.casper.sdk.service.EventServiceIntegrationTest$$Lambda$525/0x0000000100516440@2910f165, arg4=com.casper.sdk.service.EventServiceIntegrationTest$$Lambda$526/0x0000000100515840@433a1a9f)
 Targeting SSE URL http://localhost:28101/events/deploys?start_from=0
 SSE event id: null, data: {&quot;ApiVersion&quot;:&quot;1.0.0&quot;}
 SSE event id: 2951, data: {&quot;DeployAccepted&quot;:{&quot;hash&quot;:&quot;fb81219f33aa58a2c2f50f7eea20c3065963f61bc3c74810729f10dc21981087&quot;,&quot;header&quot;:{&quot;account&quot;:&quot;01959d01aa68197e8cb91aa06bcc920f8d4a245dff60ea726bb89255349107a565&quot;,&quot;timestamp&quot;:&quot;2022-07-26T14:37:15.150Z&quot;,&quot;ttl&quot;:&quot;30m&quot;,&quot;gas_price&quot;:10,&quot;body_hash&quot;:&quot;c2930c761cdc90241e7bfd2c5bbc5805ec9511845cb4820f997fa57334a33723&quot;,&quot;dependencies&quot;:[],&quot;chain_name&quot;:&quot;casper-net-1&quot;},&quot;payment&quot;:{&quot;ModuleBytes&quot;:{&quot;module_bytes&quot;:&quot;&quot;,&quot;args&quot;:[[&quot;amount&quot;,{&quot;cl_type&quot;:&quot;U512&quot;,&quot;bytes&quot;:&quot;0500e40b5402&quot;,&quot;parsed&quot;:&quot;10000000000&quot;}]]}},&quot;session&quot;:{&quot;Transfer&quot;:{&quot;args&quot;:[[&quot;amount&quot;,{&quot;cl_type&quot;:&quot;U512&quot;,&quot;bytes&quot;:&quot;0400f90295&quot;,&quot;parsed&quot;:&quot;2500000000&quot;}],[&quot;target&quot;,{&quot;cl_type&quot;:{&quot;ByteArray&quot;:32},&quot;bytes&quot;:&quot;a6cdb6f049363f6ab119be0c961c36e4a3c09319589341dd861f405d9836fc67&quot;,&quot;parsed&quot;:&quot;a6cdb6f049363f6ab119be0c961c36e4a3c09319589341dd861f405d9836fc67&quot;}],[&quot;id&quot;,{&quot;cl_type&quot;:{&quot;Option&quot;:&quot;U64&quot;},&quot;bytes&quot;:&quot;010100000000000000&quot;,&quot;parsed&quot;:1}]]}},&quot;approvals&quot;:[{&quot;signer&quot;:&quot;01959d01aa68197e8cb91aa06bcc920f8d4a245dff60ea726bb89255349107a565&quot;,&quot;signature&quot;:&quot;01e57c01fc538fe057eac09d55360c70b6b7830548582c9931832af78149c66a698a41f33ca06904898138bda6767cfc5f60f26a11980ad5f95f489dcccc2fa80d&quot;}]}}
-consumeEvents(arg0=SIGS, arg1=RAW, arg2=0, arg3=com.casper.sdk.service.EventServiceIntegrationTest$$Lambda$527/0x0000000100515c40@231cde25, arg4=com.casper.sdk.service.EventServiceIntegrationTest$$Lambda$528/0x0000000100515040@702c48f)
+consumeEvents(arg0=SIGS, arg1=RAW, arg2=0, arg3=com.casper.sdk.service.EventServiceIntegrationTest$$Lambda$527/0x0000000100515c40@702c48f, arg4=com.casper.sdk.service.EventServiceIntegrationTest$$Lambda$528/0x0000000100515040@292e750c)
 Targeting SSE URL http://localhost:28101/events/sigs?start_from=0
 SSE event id: null, data: {&quot;ApiVersion&quot;:&quot;1.0.0&quot;}
 SSE event id: 1, data: {&quot;FinalitySignature&quot;:{&quot;block_hash&quot;:&quot;bb878bcf8827649f070c487800a95c35be3eb2e83b5447921675040cea38af1c&quot;,&quot;era_id&quot;:0,&quot;signature&quot;:&quot;0141eba160bb11448c663aa574de7a87554adb01531b1c6e93f31d4e998d5e5b4bdd71aa67442e3e5ffd8c75f709ad68ecbec9f116f4c50c49198098d30486dc02&quot;,&quot;public_key&quot;:&quot;01959d01aa68197e8cb91aa06bcc920f8d4a245dff60ea726bb89255349107a565&quot;}}
@@ -134,7 +134,7 @@ SSE event id: 5, data: {&quot;FinalitySignature&quot;:{&quot;block_hash&quot;:&q
 <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
 </label>
 </div>Generated by 
-<a href="http://www.gradle.org">Gradle 7.5.1</a> at Apr 15, 2024, 12:49:24 PM</p>
+<a href="http://www.gradle.org">Gradle 7.5.1</a> at Apr 15, 2024, 3:07:10 PM</p>
 </div>
 </div>
 </body>
