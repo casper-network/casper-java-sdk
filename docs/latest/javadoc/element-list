@@ -44,3 +44,10 @@ com.casper.sdk.model.uref
 com.casper.sdk.model.validator
 com.casper.sdk.service
 com.casper.sdk.service.impl.event
+com.syntifi.crypto.key
+com.syntifi.crypto.key.checksum
+com.syntifi.crypto.key.deterministic
+com.syntifi.crypto.key.encdec
+com.syntifi.crypto.key.hash
+com.syntifi.crypto.key.mnemonic
+com.syntifi.crypto.key.mnemonic.exception
