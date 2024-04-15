@@ -14,7 +14,7 @@ apply plugin: 'java'
 
 group = 'network.casper'
 // Version number update for release
-version='2.5.3'
+version='2.5.4'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
@@ -26,9 +26,11 @@ repositories {
 dependencies {
     implementation "dev.oak3:sbs4j:${sbs4jVersion}"
     implementation "io.github.oak:jsonrpc4j:${jsonrpc4jVersion}"
-    implementation "com.syntifi.crypto:crypto-key-common:${cryptokeyVersion}"
-    implementation "com.syntifi.crypto:crypto-key-ed25519:${cryptokeyVersion}"
-    implementation "com.syntifi.crypto:crypto-key-secp256k1:${cryptokeyVersion}"
+//    implementation "com.syntifi.crypto:crypto-key-common:${cryptokeyVersion}"
+//    implementation "com.syntifi.crypto:crypto-key-ed25519:${cryptokeyVersion}"
+//    implementation "com.syntifi.crypto:crypto-key-secp256k1:${cryptokeyVersion}"
+    implementation "org.bouncycastle:bcpkix-jdk15on:${bouncyCastleVersion}"
+    implementation "org.web3j:core:${web3jVersion}"
     implementation "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
     implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
     implementation "com.fasterxml.jackson.core:jackson-annotations:${jacksonVersion}"
