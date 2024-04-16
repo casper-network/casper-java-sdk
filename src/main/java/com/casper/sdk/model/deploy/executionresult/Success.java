@@ -8,6 +8,8 @@ import lombok.*;
 import java.math.BigInteger;
 import java.util.List;
 
+
+
 /**
  * Abstract Executable Result of type Success containing the details of the
  * contract execution. It shows the result of a successful execution
@@ -23,21 +25,30 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonTypeName("Success")
+@SuppressWarnings("JavadocDeclaration")
 public class Success implements ExecutionResult {
 
     /**
      * The cost of executing the deploy.
+     *
+     * @param cost the cost of executing the deploy
+     * @return the cost of executing the deploy
      */
     @JsonIgnore
     private BigInteger cost;
 
     /**
+     * @param effect the execution effect
+     * @return the execution effect
      * @see ExecutionEffect
      */
     private ExecutionEffect effect;
 
     /**
      * List of Hex-encoded transfer address.
+     *
+     * @param transfers the list of transfers
+     * @return the list of transfers
      */
     private List<String> transfers;
 }

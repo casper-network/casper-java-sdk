@@ -20,10 +20,14 @@ import lombok.Setter;
 @Setter
 @Builder
 @AllArgsConstructor
+@SuppressWarnings("JavadocDeclaration")
 public class HeightBlockIdentifier implements BlockIdentifier {
 
     /**
-     * Block height
+     * Block height.
+     *
+     * @param height the block height
+     * @return the block height
      */
     @JsonProperty("Height")
     private long height;

@@ -24,27 +24,39 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonTypeName("Failure")
+@SuppressWarnings("JavadocDeclaration")
 public class Failure implements ExecutionResult {
 
     /**
      * The cost of executing the deploy.
+     *
+     * @param cost the cost of executing the deploy
+     * @return the cost of executing the deploy
      */
     @JsonIgnore
     private BigInteger cost;
 
     /**
+     * @param effect the execution effect
+     * @return the execution effect
      * @see ExecutionEffect
      */
     private ExecutionEffect effect;
 
     /**
-     * The error message associated with executing the deploy
+     * The error message associated with executing the deploy.
+     *
+     * @param errorMessage the error message
+     * @return the error message
      */
     @JsonProperty("error_message")
     private String errorMessage;
 
     /**
      * List of Hex-encoded transfer address.
+     *
+     * @param transfers the list of transfers
+     * @return the list of transfers
      */
     private List<String> transfers;
 }
