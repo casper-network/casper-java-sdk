@@ -18,6 +18,8 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
 
 /**
+ * Unit tests for the StoredVersionedContractByHash class.
+ *
  * @author ian@meywood.com
  */
 class StoredVersionedContractByHashTest {
