@@ -17,30 +17,29 @@ import java.util.List;
  */
 @Getter
 <span class="fc" id="L19">@Setter</span>
-<span class="nc" id="L20">@Builder(access = AccessLevel.PROTECTED)</span>
-<span class="nc" id="L21">@AllArgsConstructor</span>
-<span class="fc" id="L22">@NoArgsConstructor</span>
+<span class="nc" id="L20">@AllArgsConstructor</span>
+<span class="fc" id="L21">@NoArgsConstructor</span>
 @JsonTypeName(&quot;StoredVersionedContractByName&quot;)
 public class StoredVersionedContractByName extends AbstractStoredVersionedContract {
 
     /** Contract Name */
-<span class="fc" id="L27">    private String name;</span>
+<span class="fc" id="L26">    private String name;</span>
 
-<span class="nc" id="L29">    @Builder</span>
+<span class="nc" id="L28">    @Builder</span>
     public StoredVersionedContractByName(final String name, final Long version, final String entryPoint, final List&lt;NamedArg&lt;?&gt;&gt; args) {
-<span class="nc" id="L31">        super(version, entryPoint, args);</span>
-<span class="nc" id="L32">        this.name = name;</span>
-<span class="nc" id="L33">    }</span>
+<span class="nc" id="L30">        super(version, entryPoint, args);</span>
+<span class="nc" id="L31">        this.name = name;</span>
+<span class="nc" id="L32">    }</span>
 
     /** {@link ExecutableDeployItem} order 4 */
     @Override
     public byte getOrder() {
-<span class="fc" id="L38">        return 0x4;</span>
+<span class="fc" id="L37">        return 0x4;</span>
     }
 
     @Override
     protected void serializeCustom(final SerializerBuffer ser) {
-<span class="fc" id="L43">        ser.writeString(getName());</span>
-<span class="fc" id="L44">    }</span>
+<span class="fc" id="L42">        ser.writeString(getName());</span>
+<span class="fc" id="L43">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
