@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import dev.oak3.sbs4j.SerializerBuffer;
 import lombok.*;
+import org.bouncycastle.util.encoders.Hex;
 
 import java.util.List;
 
@@ -41,6 +42,6 @@ public class StoredVersionedContractByHash extends AbstractStoredVersionedContra
 
     @Override
     protected void serializeCustom(final SerializerBuffer ser) {
-        ser.writeString(getHash());
+        ser.writeByteArray(Hex.decode(getHash()));
     }
 }
