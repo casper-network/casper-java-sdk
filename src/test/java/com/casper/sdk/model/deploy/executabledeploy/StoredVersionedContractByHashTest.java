@@ -27,15 +27,12 @@ class StoredVersionedContractByHashTest {
     @Test
     void jsonSerializeStoredVersionedContractByHash() throws ValueSerializationException, JsonProcessingException {
 
-        final StoredVersionedContractByHash versionedContractByHash = new StoredVersionedContractByHash();
-
-        versionedContractByHash.setHash("92173d49744c790d47e50d011d89e1b5a33ed2d9fae8d9459325224d8f98f3e5");
-        versionedContractByHash.setEntryPoint("counter_inc");
-        versionedContractByHash.setVersion(1L);
-        versionedContractByHash.setArgs(Arrays.asList(
-                new NamedArg<>("one", new CLValueI32(1)),
-                new NamedArg<>("two", new CLValueI32(2))
-        ));
+        final StoredVersionedContractByHash versionedContractByHash = StoredVersionedContractByHash.builder()
+                .hash("92173d49744c790d47e50d011d89e1b5a33ed2d9fae8d9459325224d8f98f3e5")
+                .version(1L)
+                .entryPoint("counter_inc")
+                .args(Arrays.asList(new NamedArg<>("one", new CLValueI32(1)), new NamedArg<>("two", new CLValueI32(2))))
+                .build();
 
         final String json = new ObjectMapper().writeValueAsString(versionedContractByHash);
 
@@ -53,15 +50,12 @@ class StoredVersionedContractByHashTest {
     @Test
     void serializeStoredVersionedContractByHashTest() throws Exception {
 
-        final StoredVersionedContractByHash versionedContractByHash = new StoredVersionedContractByHash();
-
-        versionedContractByHash.setHash("92173d49744c790d47e50d011d89e1b5a33ed2d9fae8d9459325224d8f98f3e5");
-        versionedContractByHash.setVersion(1L);
-        versionedContractByHash.setEntryPoint("transfer");
-        versionedContractByHash.setArgs(Arrays.asList(
-                new NamedArg<>("one", new CLValueI32(1)),
-                new NamedArg<>("two", new CLValueI32(2))
-        ));
+        final StoredVersionedContractByHash versionedContractByHash = StoredVersionedContractByHash.builder()
+                .hash("92173d49744c790d47e50d011d89e1b5a33ed2d9fae8d9459325224d8f98f3e5")
+                .version(1L)
+                .entryPoint("transfer")
+                .args(Arrays.asList(new NamedArg<>("one", new CLValueI32(1)), new NamedArg<>("two", new CLValueI32(2))))
+                .build();
 
         final SerializerBuffer serializerBuffer = new SerializerBuffer();
         versionedContractByHash.serialize(serializerBuffer, Target.BYTE);
