@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":9,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10};
+var data = {"i0":9,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -185,8 +185,9 @@ extends java.lang.Object</pre>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.String,java.util.List,java.util.List,java.util.List)">ContractPackage</a></span>&#8203;(java.lang.String&nbsp;accessKey,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.String,java.util.List,java.lang.String,java.util.List,java.util.List)">ContractPackage</a></span>&#8203;(java.lang.String&nbsp;accessKey,
                java.util.List&lt;<a href="DisabledVersion.html" title="class in com.casper.sdk.model.contract">DisabledVersion</a>&gt;&nbsp;disabledVersions,
+               java.lang.String&nbsp;lockStatus,
                java.util.List&lt;<a href="Groups.html" title="class in com.casper.sdk.model.contract">Groups</a>&gt;&nbsp;groups,
                java.util.List&lt;<a href="ContractVersion.html" title="class in com.casper.sdk.model.contract">ContractVersion</a>&gt;&nbsp;versions)</code></th>
 <td class="colLast">&nbsp;</td>
@@ -236,34 +237,48 @@ extends java.lang.Object</pre>
 </td>
 </tr>
 <tr id="i4" class="altColor">
+<td class="colFirst"><code>java.lang.String</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getLockStatus()">getLockStatus</a></span>()</code></th>
+<td class="colLast">
+<div class="block">The lock status of the contract package</div>
+</td>
+</tr>
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>java.util.List&lt;<a href="ContractVersion.html" title="class in com.casper.sdk.model.contract">ContractVersion</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getVersions()">getVersions</a></span>()</code></th>
 <td class="colLast">
 <div class="block">versions(Array/ContractVersion)</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setAccessKey(java.lang.String)">setAccessKey</a></span>&#8203;(java.lang.String&nbsp;accessKey)</code></th>
 <td class="colLast">
 <div class="block">access_key(string)</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setDisabledVersions(java.util.List)">setDisabledVersions</a></span>&#8203;(java.util.List&lt;<a href="DisabledVersion.html" title="class in com.casper.sdk.model.contract">DisabledVersion</a>&gt;&nbsp;disabledVersions)</code></th>
 <td class="colLast">
 <div class="block">disabled_versions(Array/DisabledVersion)</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setGroups(java.util.List)">setGroups</a></span>&#8203;(java.util.List&lt;<a href="Groups.html" title="class in com.casper.sdk.model.contract">Groups</a>&gt;&nbsp;groups)</code></th>
 <td class="colLast">
 <div class="block">groups(Array/Group)</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setLockStatus(java.lang.String)">setLockStatus</a></span>&#8203;(java.lang.String&nbsp;lockStatus)</code></th>
+<td class="colLast">
+<div class="block">The lock status of the contract package</div>
+</td>
+</tr>
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setVersions(java.util.List)">setVersions</a></span>&#8203;(java.util.List&lt;<a href="ContractVersion.html" title="class in com.casper.sdk.model.contract">ContractVersion</a>&gt;&nbsp;versions)</code></th>
 <td class="colLast">
@@ -294,7 +309,7 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(java.lang.String,java.util.List,java.util.List,java.util.List)">
+<a id="&lt;init&gt;(java.lang.String,java.util.List,java.lang.String,java.util.List,java.util.List)">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -302,6 +317,7 @@ extends java.lang.Object</pre>
 <h4>ContractPackage</h4>
 <pre>public&nbsp;ContractPackage&#8203;(java.lang.String&nbsp;accessKey,
                        java.util.List&lt;<a href="DisabledVersion.html" title="class in com.casper.sdk.model.contract">DisabledVersion</a>&gt;&nbsp;disabledVersions,
+                       java.lang.String&nbsp;lockStatus,
                        java.util.List&lt;<a href="Groups.html" title="class in com.casper.sdk.model.contract">Groups</a>&gt;&nbsp;groups,
                        java.util.List&lt;<a href="ContractVersion.html" title="class in com.casper.sdk.model.contract">ContractVersion</a>&gt;&nbsp;versions)</pre>
 </li>
@@ -354,6 +370,16 @@ extends java.lang.Object</pre>
 <div class="block">disabled_versions(Array/DisabledVersion)</div>
 </li>
 </ul>
+<a id="getLockStatus()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getLockStatus</h4>
+<pre class="methodSignature">public&nbsp;java.lang.String&nbsp;getLockStatus()</pre>
+<div class="block">The lock status of the contract package</div>
+</li>
+</ul>
 <a id="getGroups()">
 <!--   -->
 </a>
@@ -392,6 +418,16 @@ extends java.lang.Object</pre>
 <h4>setDisabledVersions</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setDisabledVersions&#8203;(java.util.List&lt;<a href="DisabledVersion.html" title="class in com.casper.sdk.model.contract">DisabledVersion</a>&gt;&nbsp;disabledVersions)</pre>
 <div class="block">disabled_versions(Array/DisabledVersion)</div>
+</li>
+</ul>
+<a id="setLockStatus(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setLockStatus</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setLockStatus&#8203;(java.lang.String&nbsp;lockStatus)</pre>
+<div class="block">The lock status of the contract package</div>
 </li>
 </ul>
 <a id="setGroups(java.util.List)">
