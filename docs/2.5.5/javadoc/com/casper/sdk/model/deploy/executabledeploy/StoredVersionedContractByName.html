@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":9,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10};
+var data = {"i0":9,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -147,7 +147,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <hr>
 <pre>public class <span class="typeNameLabel">StoredVersionedContractByName</span>
 extends <a href="ExecutableDeployItemWithEntryPoint.html" title="class in com.casper.sdk.model.deploy.executabledeploy">ExecutableDeployItemWithEntryPoint</a></pre>
-<div class="block">Abstract Executable Deploy Item containing the StoredVersionedContractByName.</div>
+<div class="block">Executable Deploy Item containing the StoredVersionedContractByName.</div>
 <dl>
 <dt><span class="simpleTagLabel">Since:</span></dt>
 <dd>0.0.1</dd>
@@ -201,10 +201,7 @@ extends <a href="ExecutableDeployItemWithEntryPoint.html" title="class in com.ca
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.String,java.lang.Long,java.lang.String,java.util.List)">StoredVersionedContractByName</a></span>&#8203;(java.lang.String&nbsp;name,
-                             java.lang.Long&nbsp;version,
-                             java.lang.String&nbsp;entryPoint,
-                             java.util.List&lt;<a href="../NamedArg.html" title="class in com.casper.sdk.model.deploy">NamedArg</a>&lt;?&gt;&gt;&nbsp;args)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.String)">StoredVersionedContractByName</a></span>&#8203;(java.lang.String&nbsp;name)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -233,9 +230,7 @@ extends <a href="ExecutableDeployItemWithEntryPoint.html" title="class in com.ca
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>java.util.List&lt;<a href="../NamedArg.html" title="class in com.casper.sdk.model.deploy">NamedArg</a>&lt;?&gt;&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getArgs()">getArgs</a></span>()</code></th>
-<td class="colLast">
-<div class="block">List of @see NamedArg</div>
-</td>
+<td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>java.lang.String</code></td>
@@ -268,31 +263,34 @@ extends <a href="ExecutableDeployItemWithEntryPoint.html" title="class in com.ca
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#serialize(dev.oak3.sbs4j.SerializerBuffer,com.casper.sdk.model.clvalue.serde.Target)">serialize</a></span>&#8203;(dev.oak3.sbs4j.SerializerBuffer&nbsp;ser,
          <a href="../../clvalue/serde/Target.html" title="enum in com.casper.sdk.model.clvalue.serde">Target</a>&nbsp;target)</code></th>
 <td class="colLast">
-<div class="block">Implements the StoredVersionedContractName encoder</div>
+<div class="block">Called when the object's values must be serialized</div>
 </td>
 </tr>
 <tr id="i7" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setArgs(java.util.List)">setArgs</a></span>&#8203;(java.util.List&lt;<a href="../NamedArg.html" title="class in com.casper.sdk.model.deploy">NamedArg</a>&lt;?&gt;&gt;&nbsp;args)</code></th>
-<td class="colLast">
-<div class="block">List of @see NamedArg</div>
-</td>
+<td class="colFirst"><code>protected void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#serializeCustom(dev.oak3.sbs4j.SerializerBuffer)">serializeCustom</a></span>&#8203;(dev.oak3.sbs4j.SerializerBuffer&nbsp;ser)</code></th>
+<td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i8" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setArgs(java.util.List)">setArgs</a></span>&#8203;(java.util.List&lt;<a href="../NamedArg.html" title="class in com.casper.sdk.model.deploy">NamedArg</a>&lt;?&gt;&gt;&nbsp;args)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setEntryPoint(java.lang.String)">setEntryPoint</a></span>&#8203;(java.lang.String&nbsp;entryPoint)</code></th>
 <td class="colLast">
 <div class="block">Entry Point</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setName(java.lang.String)">setName</a></span>&#8203;(java.lang.String&nbsp;name)</code></th>
 <td class="colLast">
 <div class="block">Contract Name</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setVersion(java.lang.Long)">setVersion</a></span>&#8203;(java.lang.Long&nbsp;version)</code></th>
 <td class="colLast">
@@ -330,16 +328,13 @@ extends <a href="ExecutableDeployItemWithEntryPoint.html" title="class in com.ca
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(java.lang.String,java.lang.Long,java.lang.String,java.util.List)">
+<a id="&lt;init&gt;(java.lang.String)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>StoredVersionedContractByName</h4>
-<pre>public&nbsp;StoredVersionedContractByName&#8203;(java.lang.String&nbsp;name,
-                                     java.lang.Long&nbsp;version,
-                                     java.lang.String&nbsp;entryPoint,
-                                     java.util.List&lt;<a href="../NamedArg.html" title="class in com.casper.sdk.model.deploy">NamedArg</a>&lt;?&gt;&gt;&nbsp;args)</pre>
+<pre>public&nbsp;StoredVersionedContractByName&#8203;(java.lang.String&nbsp;name)</pre>
 </li>
 </ul>
 <a id="&lt;init&gt;()">
@@ -371,34 +366,13 @@ extends <a href="ExecutableDeployItemWithEntryPoint.html" title="class in com.ca
 <div class="block"><a href="ExecutableDeployItem.html" title="class in com.casper.sdk.model.deploy.executabledeploy"><code>ExecutableDeployItem</code></a> order 4</div>
 </li>
 </ul>
-<a id="getVersion()">
+<a id="serializeCustom(dev.oak3.sbs4j.SerializerBuffer)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getVersion</h4>
-<pre class="methodSignature">public&nbsp;java.util.Optional&lt;java.lang.Long&gt;&nbsp;getVersion()</pre>
-</li>
-</ul>
-<a id="serialize(dev.oak3.sbs4j.SerializerBuffer,com.casper.sdk.model.clvalue.serde.Target)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>serialize</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;serialize&#8203;(dev.oak3.sbs4j.SerializerBuffer&nbsp;ser,
-                      <a href="../../clvalue/serde/Target.html" title="enum in com.casper.sdk.model.clvalue.serde">Target</a>&nbsp;target)
-               throws dev.oak3.sbs4j.exception.ValueSerializationException,
-                      <a href="../../../exception/NoSuchTypeException.html" title="class in com.casper.sdk.exception">NoSuchTypeException</a></pre>
-<div class="block">Implements the StoredVersionedContractName encoder</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>ser</code> - the serializer to be used</dd>
-<dd><code>target</code> - target serialization standard</dd>
-<dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code>dev.oak3.sbs4j.exception.ValueSerializationException</code> - exception holding information of failure to serialize a value</dd>
-<dd><code><a href="../../../exception/NoSuchTypeException.html" title="class in com.casper.sdk.exception">NoSuchTypeException</a></code></dd>
-</dl>
+<h4>serializeCustom</h4>
+<pre class="methodSignature">protected&nbsp;void&nbsp;serializeCustom&#8203;(dev.oak3.sbs4j.SerializerBuffer&nbsp;ser)</pre>
 </li>
 </ul>
 <a id="builder()">
@@ -420,6 +394,47 @@ extends <a href="ExecutableDeployItemWithEntryPoint.html" title="class in com.ca
 <div class="block">Contract Name</div>
 </li>
 </ul>
+<a id="setName(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setName</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setName&#8203;(java.lang.String&nbsp;name)</pre>
+<div class="block">Contract Name</div>
+</li>
+</ul>
+<a id="getVersion()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getVersion</h4>
+<pre class="methodSignature">public&nbsp;java.util.Optional&lt;java.lang.Long&gt;&nbsp;getVersion()</pre>
+</li>
+</ul>
+<a id="serialize(dev.oak3.sbs4j.SerializerBuffer,com.casper.sdk.model.clvalue.serde.Target)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>serialize</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;serialize&#8203;(dev.oak3.sbs4j.SerializerBuffer&nbsp;ser,
+                      <a href="../../clvalue/serde/Target.html" title="enum in com.casper.sdk.model.clvalue.serde">Target</a>&nbsp;target)
+               throws <a href="../../../exception/NoSuchTypeException.html" title="class in com.casper.sdk.exception">NoSuchTypeException</a>,
+                      dev.oak3.sbs4j.exception.ValueSerializationException</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../clvalue/serde/CasperSerializableObject.html#serialize(dev.oak3.sbs4j.SerializerBuffer,com.casper.sdk.model.clvalue.serde.Target)">CasperSerializableObject</a></code></span></div>
+<div class="block">Called when the object's values must be serialized</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>ser</code> - the serializer to be used</dd>
+<dd><code>target</code> - target serialization standard</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code>dev.oak3.sbs4j.exception.ValueSerializationException</code> - exception holding information of failure to serialize a value</dd>
+<dd><code><a href="../../../exception/NoSuchTypeException.html" title="class in com.casper.sdk.exception">NoSuchTypeException</a></code></dd>
+</dl>
+</li>
+</ul>
 <a id="getEntryPoint()">
 <!--   -->
 </a>
@@ -437,21 +452,12 @@ extends <a href="ExecutableDeployItemWithEntryPoint.html" title="class in com.ca
 <li class="blockList">
 <h4>getArgs</h4>
 <pre class="methodSignature">public&nbsp;java.util.List&lt;<a href="../NamedArg.html" title="class in com.casper.sdk.model.deploy">NamedArg</a>&lt;?&gt;&gt;&nbsp;getArgs()</pre>
-<div class="block">List of @see NamedArg</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="ExecutableDeployItem.html#getArgs()">getArgs</a></code>&nbsp;in class&nbsp;<code><a href="ExecutableDeployItem.html" title="class in com.casper.sdk.model.deploy.executabledeploy">ExecutableDeployItem</a></code></dd>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="../NamedArg.html" title="class in com.casper.sdk.model.deploy"><code>NamedArg</code></a></dd>
 </dl>
-</li>
-</ul>
-<a id="setName(java.lang.String)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setName</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;setName&#8203;(java.lang.String&nbsp;name)</pre>
-<div class="block">Contract Name</div>
 </li>
 </ul>
 <a id="setVersion(java.lang.Long)">
@@ -481,7 +487,10 @@ extends <a href="ExecutableDeployItemWithEntryPoint.html" title="class in com.ca
 <li class="blockList">
 <h4>setArgs</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setArgs&#8203;(java.util.List&lt;<a href="../NamedArg.html" title="class in com.casper.sdk.model.deploy">NamedArg</a>&lt;?&gt;&gt;&nbsp;args)</pre>
-<div class="block">List of @see NamedArg</div>
+<dl>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="../NamedArg.html" title="class in com.casper.sdk.model.deploy"><code>NamedArg</code></a></dd>
+</dl>
 </li>
 </ul>
 </li>
