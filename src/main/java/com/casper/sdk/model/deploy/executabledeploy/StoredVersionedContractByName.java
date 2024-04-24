@@ -17,7 +17,6 @@ import java.util.List;
  */
 @Getter
 @Setter
-@Builder(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonTypeName("StoredVersionedContractByName")
