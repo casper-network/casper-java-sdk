@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import dev.oak3.sbs4j.SerializerBuffer;
 import lombok.*;
-import org.bouncycastle.util.encoders.Hex;
 
 import java.util.List;
 
@@ -18,31 +17,31 @@ import java.util.List;
  * @since 0.0.1
  */
 @Getter
-<span class="nc" id="L21">@Setter</span>
-<span class="nc" id="L22">@NoArgsConstructor</span>
+<span class="nc" id="L20">@Setter</span>
+<span class="nc" id="L21">@NoArgsConstructor</span>
 @JsonTypeName(&quot;StoredVersionedContractByHash&quot;)
 public class StoredVersionedContractByHash extends AbstractStoredVersionedContract {
 
-<span class="pc" id="L26">    @Builder</span>
+<span class="pc" id="L25">    @Builder</span>
     public StoredVersionedContractByHash(final String hash, final Long version, final String entryPoint, final List&lt;NamedArg&lt;?&gt;&gt; args) {
-<span class="fc" id="L28">        super(version, entryPoint, args);</span>
-<span class="fc" id="L29">        this.hash = hash;</span>
-<span class="fc" id="L30">    }</span>
+<span class="fc" id="L27">        super(version, entryPoint, args);</span>
+<span class="fc" id="L28">        this.hash = hash;</span>
+<span class="fc" id="L29">    }</span>
 
     /** Hex-encoded Hash */
     @JsonProperty(&quot;hash&quot;)
-<span class="fc" id="L34">    private String hash;</span>
+<span class="fc" id="L33">    private String hash;</span>
 
 
     /** {@link ExecutableDeployItem} order 3 */
     @Override
     public byte getOrder() {
-<span class="fc" id="L40">        return 0x3;</span>
+<span class="fc" id="L39">        return 0x3;</span>
     }
 
     @Override
     protected void serializeCustom(final SerializerBuffer ser) {
-<span class="fc" id="L45">        ser.writeByteArray(Hex.decode(getHash()));</span>
-<span class="fc" id="L46">    }</span>
+<span class="fc" id="L44">        ser.writeString(getHash());</span>
+<span class="fc" id="L45">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

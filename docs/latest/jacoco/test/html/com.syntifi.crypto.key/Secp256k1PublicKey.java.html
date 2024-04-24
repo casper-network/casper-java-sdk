@@ -75,8 +75,8 @@ public class Secp256k1PublicKey extends AbstractPublicKey {
 <span class="fc" id="L75">                Arrays.copyOfRange(signature, 0, 32),</span>
 <span class="fc" id="L76">                Arrays.copyOfRange(signature, 32, 64));</span>
 <span class="fc" id="L77">        final BigInteger derivedKey2 = Sign.signedMessageHashToKey(Hash.sha256(message), signatureData2);</span>
-<span class="pc bpc" id="L78" title="1 of 2 branches missed.">        return Arrays.equals(Secp256k1PublicKey.getShortKey(derivedKey1.toByteArray()), getKey()) ||</span>
-<span class="pc bnc" id="L79" title="All 2 branches missed.">                Arrays.equals(Secp256k1PublicKey.getShortKey(derivedKey2.toByteArray()), getKey());</span>
+<span class="fc bfc" id="L78" title="All 2 branches covered.">        return Arrays.equals(Secp256k1PublicKey.getShortKey(derivedKey1.toByteArray()), getKey()) ||</span>
+<span class="pc bpc" id="L79" title="1 of 2 branches missed.">                Arrays.equals(Secp256k1PublicKey.getShortKey(derivedKey2.toByteArray()), getKey());</span>
     }
 
     /**
@@ -87,7 +87,7 @@ public class Secp256k1PublicKey extends AbstractPublicKey {
      */
     public static byte[] getShortKey(final byte[] key) {
 <span class="fc" id="L89">        final BigInteger pubKey = new BigInteger(key);</span>
-<span class="pc bpc" id="L90" title="1 of 2 branches missed.">        final String pubKeyPrefix = pubKey.testBit(0) ? &quot;03&quot; : &quot;02&quot;;</span>
+<span class="fc bfc" id="L90" title="All 2 branches covered.">        final String pubKeyPrefix = pubKey.testBit(0) ? &quot;03&quot; : &quot;02&quot;;</span>
 <span class="fc" id="L91">        final byte[] pubKeyBytes = Arrays.copyOfRange(key, 0, 32);</span>
 <span class="fc" id="L92">        return Hex.decode(pubKeyPrefix + Hex.encode(pubKeyBytes));</span>
     }
