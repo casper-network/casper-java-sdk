@@ -1,11 +1,7 @@
 package com.casper.sdk.model.contract;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
@@ -23,27 +19,23 @@ import java.util.List;
 @NoArgsConstructor
 public class ContractPackage {
 
-    /**
-     * access_key(string)
-     */
+    /** access_key(string) */
     @JsonProperty("access_key")
     private String accessKey;
 
-    /**
-     * disabled_versions(Array/DisabledVersion)
-     */
+    /** disabled_versions(Array/DisabledVersion) */
     @JsonProperty("disabled_versions")
     private List<DisabledVersion> disabledVersions;
 
-    /**
-     * groups(Array/Group)
-     */
+    /** The lock status of the contract package */
+    @JsonProperty("lock_status")
+    private String lockStatus;
+
+    /** groups(Array/Group) */
     @JsonProperty("groups")
     private List<Groups> groups;
 
-    /**
-     * versions(Array/ContractVersion)
-     */
+    /** versions(Array/ContractVersion) */
     @JsonProperty("versions")
     private List<ContractVersion> versions;
 }
