@@ -2,7 +2,6 @@
 
 import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
 import com.casper.sdk.model.key.PublicKey;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.casper.sdk.model.uref.URef;
 import lombok.AllArgsConstructor;
@@ -19,67 +18,64 @@ import java.math.BigInteger;
  * @author Alexandre Carvalho
  * @author Andre Bertolace
  * @since 0.0.1
+ *
+ * Changed 5/24
+ * @author Carl Norburn
+ * Refactored to match the Casper documentation
+ * &lt;a href=&quot;https://docs.casper.network/concepts/serialization-standard/#unbondingpurse&quot;&gt;&lt;/a&gt;
+ *
  */
 @Getter
-<span class="nc" id="L24">@Setter</span>
-<span class="nc" id="L25">@Builder</span>
-<span class="nc" id="L26">@AllArgsConstructor</span>
-<span class="nc" id="L27">@NoArgsConstructor</span>
+<span class="pc" id="L29">@Setter</span>
+<span class="nc" id="L30">@Builder</span>
+<span class="nc" id="L31">@AllArgsConstructor</span>
+<span class="fc" id="L32">@NoArgsConstructor</span>
 public class UnbondingPurse {
 
     /**
      * Unbonding amount
      */
     @JsonProperty(&quot;amount&quot;)
-<span class="nc" id="L34">    private BigInteger unbondingAmount;</span>
+<span class="nc" id="L39">    private BigInteger amount;</span>
 
-    @JsonIgnore
-<span class="nc" id="L37">    private BigInteger amount;</span>
+    @JsonProperty(&quot;new_validator&quot;)
+<span class="fc" id="L42">    private BigInteger newValidator;</span>
 
     /**
      * the bondingPurse's {@link URef}
      */
     @JsonProperty(&quot;bonding_purse&quot;)
-<span class="nc" id="L43">    private URef bondingPurse;</span>
+<span class="fc" id="L48">    private URef bondingPurse;</span>
 
     /**
      * Era in which this unbonding request was created.
      */
     @JsonProperty(&quot;era_of_creation&quot;)
-<span class="nc" id="L49">    private BigInteger eraOfCreation;</span>
+<span class="fc" id="L54">    private BigInteger eraOfCreation;</span>
 
     /**
      * Unbonders {@link PublicKey}
      */
     @JsonProperty(&quot;unbonder_public_key&quot;)
-<span class="nc" id="L55">    private PublicKey unbonderPublicKey;</span>
+<span class="fc" id="L60">    private PublicKey unbonderPublicKey;</span>
 
     /**
      * Validators {@link PublicKey}
      */
     @JsonProperty(&quot;validator_public_key&quot;)
-<span class="nc" id="L61">    private PublicKey validatorPublicKey;</span>
+<span class="fc" id="L66">    private PublicKey validatorPublicKey;</span>
 
-    /**
-     * getter for unbondingAmount json serialization
-     *
-     * @return cost as expected for json serialization
-     */
-    @JsonProperty(&quot;unbonding_amount&quot;)
+    @JsonProperty(&quot;amount&quot;)
     @ExcludeFromJacocoGeneratedReport
-    protected String getJsonUnbondingAmount() {
-        return this.unbondingAmount.toString(10);
+    protected String getJsonAmount() {
+        return this.amount.toString(10);
     }
 
-    /**
-     * setter for unbondingAmount from json deserialized value
-     *
-     * @param value the deserialized value
-     */
-    @JsonProperty(&quot;unbonding_amount&quot;)
+    @JsonProperty(&quot;amount&quot;)
     @ExcludeFromJacocoGeneratedReport
-    protected void setJsonUnbondingAmount(String value) {
-        this.unbondingAmount = new BigInteger(value, 10);
+    protected void setJsonAmount(String value) {
+        this.amount = new BigInteger(value, 10);
     }
+
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

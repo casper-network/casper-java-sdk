@@ -22,15 +22,16 @@ public enum TransformTypeData {
 <span class="fc" id="L22">    WRITE_DEPLOY_INFO(&quot;WriteDeployInfo&quot;, WriteDeployInfo.class),</span>
 <span class="fc" id="L23">    WRITE_ERA_INFO(&quot;WriteEraInfo&quot;, WriteEraInfo.class),</span>
 <span class="fc" id="L24">    WRITE_TRANSFER(&quot;WriteTransfer&quot;, WriteTransfer.class),</span>
-<span class="fc" id="L25">    WRITE_WITHDRAW(&quot;WriteWithdraw&quot;, WriteWithdraw.class);</span>
+<span class="fc" id="L25">    WRITE_WITHDRAW(&quot;WriteWithdraw&quot;, WriteWithdraw.class),</span>
+<span class="fc" id="L26">    WRITE_UNBONDING(&quot;WriteUnbonding&quot;, WriteUnbonding.class);</span>
 
-<span class="nc" id="L27">    private final String name;</span>
-<span class="fc" id="L28">    private final Class&lt;?&gt; clazz;</span>
+<span class="nc" id="L28">    private final String name;</span>
+<span class="fc" id="L29">    private final Class&lt;?&gt; clazz;</span>
 
-<span class="fc" id="L30">    TransformTypeData(String name, Class&lt;?&gt; clazz) {</span>
-<span class="fc" id="L31">        this.name = name;</span>
-<span class="fc" id="L32">        this.clazz = clazz;</span>
-<span class="fc" id="L33">    }</span>
+<span class="fc" id="L31">    TransformTypeData(String name, Class&lt;?&gt; clazz) {</span>
+<span class="fc" id="L32">        this.name = name;</span>
+<span class="fc" id="L33">        this.clazz = clazz;</span>
+<span class="fc" id="L34">    }</span>
 
     /**
      * Retrieve Transform implementation class from Transform name
@@ -40,12 +41,12 @@ public enum TransformTypeData {
      * @throws NoSuchTypeException if no type is found for given name
      */
     public static Class&lt;?&gt; getClassByName(String name) throws NoSuchTypeException {
-<span class="pc bpc" id="L43" title="1 of 2 branches missed.">        for (TransformTypeData t : values()) {</span>
-<span class="fc bfc" id="L44" title="All 2 branches covered.">            if (t.name.equals(name)) {</span>
-<span class="fc" id="L45">                return t.getClazz();</span>
+<span class="pc bpc" id="L44" title="1 of 2 branches missed.">        for (TransformTypeData t : values()) {</span>
+<span class="fc bfc" id="L45" title="All 2 branches covered.">            if (t.name.equals(name)) {</span>
+<span class="fc" id="L46">                return t.getClazz();</span>
             }
         }
-<span class="nc" id="L48">        throw new NoSuchTypeException();</span>
+<span class="nc" id="L49">        throw new NoSuchTypeException();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
