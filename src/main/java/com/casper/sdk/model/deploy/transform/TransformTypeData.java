@@ -22,7 +22,8 @@ public enum TransformTypeData {
     WRITE_DEPLOY_INFO("WriteDeployInfo", WriteDeployInfo.class),
     WRITE_ERA_INFO("WriteEraInfo", WriteEraInfo.class),
     WRITE_TRANSFER("WriteTransfer", WriteTransfer.class),
-    WRITE_WITHDRAW("WriteWithdraw", WriteWithdraw.class);
+    WRITE_WITHDRAW("WriteWithdraw", WriteWithdraw.class),
+    WRITE_UNBONDING("WriteUnbonding", WriteUnbonding.class);
 
     private final String name;
     private final Class<?> clazz;
