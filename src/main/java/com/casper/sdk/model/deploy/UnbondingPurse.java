@@ -2,7 +2,6 @@ package com.casper.sdk.model.deploy;
 
 import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
 import com.casper.sdk.model.key.PublicKey;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.casper.sdk.model.uref.URef;
 import lombok.AllArgsConstructor;
@@ -19,6 +18,12 @@ import java.math.BigInteger;
  * @author Alexandre Carvalho
  * @author Andre Bertolace
  * @since 0.0.1
+ *
+ * Changed 5/24
+ * @author Carl Norburn
+ * Refactored to match the Casper documentation
+ * <a href="https://docs.casper.network/concepts/serialization-standard/#unbondingpurse"></a>
+ *
  */
 @Getter
 @Setter
@@ -31,10 +36,10 @@ public class UnbondingPurse {
      * Unbonding amount
      */
     @JsonProperty("amount")
-    private BigInteger unbondingAmount;
-
-    @JsonIgnore
     private BigInteger amount;
+
+    @JsonProperty("new_validator")
+    private BigInteger newValidator;
 
     /**
      * the bondingPurse's {@link URef}
@@ -60,25 +65,16 @@ public class UnbondingPurse {
     @JsonProperty("validator_public_key")
     private PublicKey validatorPublicKey;
 
-    /**
-     * getter for unbondingAmount json serialization
-     *
-     * @return cost as expected for json serialization
-     */
-    @JsonProperty("unbonding_amount")
+    @JsonProperty("amount")
     @ExcludeFromJacocoGeneratedReport
-    protected String getJsonUnbondingAmount() {
-        return this.unbondingAmount.toString(10);
+    protected String getJsonAmount() {
+        return this.amount.toString(10);
     }
 
-    /**
-     * setter for unbondingAmount from json deserialized value
-     *
-     * @param value the deserialized value
-     */
-    @JsonProperty("unbonding_amount")
+    @JsonProperty("amount")
     @ExcludeFromJacocoGeneratedReport
-    protected void setJsonUnbondingAmount(String value) {
-        this.unbondingAmount = new BigInteger(value, 10);
+    protected void setJsonAmount(String value) {
+        this.amount = new BigInteger(value, 10);
     }
+
 }

@@ -112,6 +112,22 @@ public class DeployDataTests extends AbstractJsonTests {
 
         JSONAssert.assertEquals(inputJson, expectedJson, JSONCompareMode.NON_EXTENSIBLE);
     }
+    @Test
+    void validateDeployDataMapping_6() throws IOException, JSONException {
+        final String inputJson = getPrettyJson(loadJsonFromFile("deploy-samples/deploy-v6.json"));
+
+        LOGGER.debug("Original JSON: {}", inputJson);
+
+        final DeployData dd = OBJECT_MAPPER.readValue(inputJson, DeployData.class);
+
+        assertNotNull(dd.getDeploy());
+
+        final String expectedJson = getPrettyJson(dd);
+
+        LOGGER.debug("Serialized JSON: {}", expectedJson);
+
+        JSONAssert.assertEquals(inputJson, expectedJson, JSONCompareMode.NON_EXTENSIBLE);
+    }
 
     @Test
     void validateDeployResultMapping() throws IOException, JSONException {
