@@ -2,8 +2,8 @@
 
 import com.casper.sdk.model.clvalue.cltype.CLTypeData;
 import com.casper.sdk.model.clvalue.cltype.CLTypeTuple1;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonSetter;
 import dev.oak3.sbs4j.DeserializerBuffer;
 import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
@@ -30,53 +30,62 @@ import java.util.Collections;
 <span class="pc bpc" id="L30" title="10 of 16 branches missed.">@EqualsAndHashCode(callSuper = true)</span>
 <span class="fc" id="L31">@NoArgsConstructor</span>
 public class CLValueTuple1 extends AbstractCLValueWithChildren&lt;Unit&lt;? extends AbstractCLValue&lt;?, ?&gt;&gt;, CLTypeTuple1&gt; {
-<span class="fc" id="L33">    @JsonProperty(&quot;cl_type&quot;)</span>
-<span class="fc" id="L34">    private CLTypeTuple1 clType = new CLTypeTuple1();</span>
 
-    @JsonSetter(&quot;cl_type&quot;)
+<span class="fc" id="L34">    @JsonProperty(&quot;cl_type&quot;)</span>
+<span class="fc" id="L35">    private CLTypeTuple1 clType = new CLTypeTuple1();</span>
+
+    @JsonCreator
+    public CLValueTuple1(@JsonProperty(&quot;cl_type&quot;) final CLTypeTuple1 clType,
+                         @JsonProperty(&quot;bytes&quot;) final String bytes,
+<span class="fc" id="L40">                         @JsonProperty(&quot;parsed&quot;) final Object parsed) {</span>
+<span class="fc" id="L41">        setBytes(bytes);</span>
+<span class="fc" id="L42">        setClType(clType);</span>
+<span class="fc" id="L43">        setParsed(parsed);</span>
+<span class="fc" id="L44">    }</span>
+
     public void setClType(final CLTypeTuple1 clType) {
-<span class="fc" id="L38">        this.clType = clType;</span>
-<span class="fc" id="L39">        childTypesSet();</span>
-<span class="fc" id="L40">    }</span>
+<span class="fc" id="L47">        this.clType = clType;</span>
+<span class="fc" id="L48">        childTypesSet();</span>
+<span class="fc" id="L49">    }</span>
 
-<span class="fc" id="L42">    public CLValueTuple1(final Unit&lt;? extends AbstractCLValue&lt;?, ?&gt;&gt; value) throws ValueSerializationException {</span>
-<span class="fc" id="L43">        setChildTypes(value);</span>
-<span class="fc" id="L44">        this.setValue(value);</span>
-<span class="fc" id="L45">    }</span>
+<span class="fc" id="L51">    public CLValueTuple1(final Unit&lt;? extends AbstractCLValue&lt;?, ?&gt;&gt; value) throws ValueSerializationException {</span>
+<span class="fc" id="L52">        setChildTypes(value);</span>
+<span class="fc" id="L53">        this.setValue(value);</span>
+<span class="fc" id="L54">    }</span>
 
     @Override
     protected void serializeValue(final SerializerBuffer ser) throws ValueSerializationException {
-<span class="fc" id="L49">        final SerializerBuffer serVal = new SerializerBuffer();</span>
-<span class="fc" id="L50">        setChildTypes(this.getValue());</span>
-<span class="fc" id="L51">        getValue().getValue0().serialize(serVal);</span>
-<span class="fc" id="L52">        final byte[] bytes = serVal.toByteArray();</span>
-<span class="fc" id="L53">        ser.writeByteArray(bytes);</span>
-<span class="fc" id="L54">        this.setBytes(Hex.toHexString(bytes));</span>
-<span class="fc" id="L55">    }</span>
+<span class="fc" id="L58">        final SerializerBuffer serVal = new SerializerBuffer();</span>
+<span class="fc" id="L59">        setChildTypes(this.getValue());</span>
+<span class="fc" id="L60">        getValue().getValue0().serialize(serVal);</span>
+<span class="fc" id="L61">        final byte[] bytes = serVal.toByteArray();</span>
+<span class="fc" id="L62">        ser.writeByteArray(bytes);</span>
+<span class="fc" id="L63">        this.setBytes(Hex.toHexString(bytes));</span>
+<span class="fc" id="L64">    }</span>
 
     @Override
     public void deserializeCustom(final DeserializerBuffer deser) throws Exception {
-<span class="fc" id="L59">        final CLTypeData childTypeData1 = clType.getChildClTypeData(0);</span>
+<span class="fc" id="L68">        final CLTypeData childTypeData1 = clType.getChildClTypeData(0);</span>
 
-<span class="fc" id="L61">        final AbstractCLValue&lt;?, ?&gt; child1 = CLTypeData.createCLValueFromCLTypeData(childTypeData1);</span>
-<span class="fc" id="L62">        populateChildTypesFromParent(child1, clType.getChildTypes().get(0));</span>
-<span class="fc" id="L63">        child1.deserializeCustom(deser);</span>
+<span class="fc" id="L70">        final AbstractCLValue&lt;?, ?&gt; child1 = CLTypeData.createCLValueFromCLTypeData(childTypeData1);</span>
+<span class="fc" id="L71">        populateChildTypesFromParent(child1, clType.getChildTypes().get(0));</span>
+<span class="fc" id="L72">        child1.deserializeCustom(deser);</span>
 
-<span class="fc" id="L65">        setValue(new Unit&lt;&gt;(child1));</span>
-<span class="fc" id="L66">    }</span>
-
-    @Override
-    protected void setChildTypes(final Unit&lt;? extends AbstractCLValue&lt;?, ?&gt;&gt; value) {
-<span class="pc bpc" id="L70" title="1 of 2 branches missed.">        if (value.getValue0() != null) {</span>
-<span class="fc" id="L71">            clType.setChildTypes(Collections.singletonList(value.getValue0().getClType()));</span>
-        } else {
-<span class="nc" id="L73">            clType.setChildTypes(new ArrayList&lt;&gt;());</span>
-        }
+<span class="fc" id="L74">        setValue(new Unit&lt;&gt;(child1));</span>
 <span class="fc" id="L75">    }</span>
 
     @Override
+    protected void setChildTypes(final Unit&lt;? extends AbstractCLValue&lt;?, ?&gt;&gt; value) {
+<span class="pc bpc" id="L79" title="1 of 2 branches missed.">        if (value.getValue0() != null) {</span>
+<span class="fc" id="L80">            clType.setChildTypes(Collections.singletonList(value.getValue0().getClType()));</span>
+        } else {
+<span class="nc" id="L82">            clType.setChildTypes(new ArrayList&lt;&gt;());</span>
+        }
+<span class="fc" id="L84">    }</span>
+
+    @Override
     public String toString() {
-<span class="nc bnc" id="L79" title="All 2 branches missed.">        return getValue() != null ? getValue().toString() : null;</span>
+<span class="nc bnc" id="L88" title="All 2 branches missed.">        return getValue() != null ? getValue().toString() : null;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
