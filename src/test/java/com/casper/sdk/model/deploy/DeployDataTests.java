@@ -121,11 +121,7 @@ public class DeployDataTests extends AbstractJsonTests {
 
         final DeployData dd = OBJECT_MAPPER.readValue(inputJson, DeployData.class);
 
-
         assertNotNull(dd.getDeploy());
-
-//        CLValueByteArray b = new CLValueByteArray('3f6f2120bf33f221afc10c1257869f8019384949e1be85b8c4b5ef75153e779c')
-
 
         final String expectedJson = getPrettyJson(dd);
 
