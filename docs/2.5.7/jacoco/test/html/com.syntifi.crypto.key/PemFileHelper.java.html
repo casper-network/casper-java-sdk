@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PemFileHelper.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">casper-java-sdk</a> &gt; <a href="index.source.html" class="el_package">com.syntifi.crypto.key</a> &gt; <span class="el_source">PemFileHelper.java</span></div><h1>PemFileHelper.java</h1><pre class="source lang-java linenums">package com.syntifi.crypto.key;
+
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import org.bouncycastle.util.io.pem.PemObject;
+import org.bouncycastle.util.io.pem.PemReader;
+import org.bouncycastle.util.io.pem.PemWriter;
+
+import java.io.IOException;
+import java.io.Reader;
+import java.io.Writer;
+
+/**
+ * Helper methods for dealing with PEM files
+ *
+ * @author Alexandre Carvalho
+ * @author Andre Bertolace
+ * @since 0.1.0
+ */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public class PemFileHelper {
+    /**
+     * Reads a PEM file
+     *
+     * @param keyReader the reader to load the key from
+     * @return a byte array with file content
+     * @throws IOException thrown if error reading file
+     */
+    public static byte[] readPemFile(final Reader keyReader) throws IOException {
+<span class="fc" id="L30">        try (final PemReader pemReader = new PemReader(keyReader)) {</span>
+<span class="fc" id="L31">            final PemObject pemObject = pemReader.readPemObject();</span>
+<span class="fc" id="L32">            return pemObject.getContent();</span>
+        }
+    }
+
+    /**
+     * Writes a PEM file
+     *
+     * @param fileWriter the writer of the key
+     * @param encodedKey the encoded key
+     * @param keyType    the key type
+     * @throws IOException thrown if error writing file
+     */
+    public static void writePemFile(final Writer fileWriter, final byte[] encodedKey, final String keyType) throws IOException {
+<span class="fc" id="L45">        try (final PemWriter pemWriter = new PemWriter(fileWriter)) {</span>
+<span class="fc" id="L46">            pemWriter.writeObject(new PemObject(keyType, encodedKey));</span>
+        }
+<span class="fc" id="L48">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
