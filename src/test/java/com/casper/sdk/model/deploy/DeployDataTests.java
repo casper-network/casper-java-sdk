@@ -1,7 +1,6 @@
 package com.casper.sdk.model.deploy;
 
 import com.casper.sdk.model.AbstractJsonTests;
-import com.casper.sdk.model.clvalue.CLValueByteArray;
 import org.json.JSONException;
 import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
@@ -113,6 +112,7 @@ public class DeployDataTests extends AbstractJsonTests {
 
         JSONAssert.assertEquals(inputJson, expectedJson, JSONCompareMode.NON_EXTENSIBLE);
     }
+
     @Test
     void validateDeployDataMapping_6() throws IOException, JSONException {
         final String inputJson = getPrettyJson(loadJsonFromFile("deploy-samples/deploy-v6.json"));
@@ -133,15 +133,16 @@ public class DeployDataTests extends AbstractJsonTests {
 
         JSONAssert.assertEquals(inputJson, expectedJson, JSONCompareMode.NON_EXTENSIBLE);
     }
+
     @Test
     void validateDeployDataMapping_7() throws IOException, JSONException {
         final String inputJson = getPrettyJson(loadJsonFromFile("deploy-samples/deploy-v7.json"));
 
         LOGGER.debug("Original JSON: {}", inputJson);
 
-        final DeployData dd = OBJECT_MAPPER.readValue(inputJson, DeployData.class);
+        final Deploy dd = OBJECT_MAPPER.readValue(inputJson, Deploy.class);
 
-        assertNotNull(dd.getDeploy());
+        assertNotNull(dd);
 
         final String expectedJson = getPrettyJson(dd);
 

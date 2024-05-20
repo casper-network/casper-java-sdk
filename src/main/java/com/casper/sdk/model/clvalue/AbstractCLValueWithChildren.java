@@ -20,6 +20,7 @@ import lombok.SneakyThrows;
  */
 @EqualsAndHashCode(callSuper = true)
 public abstract class AbstractCLValueWithChildren<T, P extends AbstractCLTypeWithChildren> extends AbstractCLValue<T, P> {
+
     protected abstract void setChildTypes(T value);
 
     /**
@@ -30,7 +31,7 @@ public abstract class AbstractCLValueWithChildren<T, P extends AbstractCLTypeWit
      */
     @SneakyThrows({ValueDeserializationException.class})
     protected void childTypesSet() {
-        if (!getBytes().isEmpty()) {
+        if (!getBytes().isEmpty() && getClType().isDeserializable()) {
             this.deserialize(new DeserializerBuffer(this.getBytes()));
         }
     }
