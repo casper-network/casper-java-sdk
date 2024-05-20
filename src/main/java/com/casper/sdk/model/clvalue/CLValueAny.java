@@ -2,7 +2,9 @@ package com.casper.sdk.model.clvalue;
 
 import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
 import com.casper.sdk.model.clvalue.cltype.CLTypeAny;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import dev.oak3.sbs4j.DeserializerBuffer;
 import dev.oak3.sbs4j.SerializerBuffer;
@@ -28,7 +30,18 @@ import java.util.Objects;
 @Setter
 @NoArgsConstructor
 public class CLValueAny extends AbstractCLValue<byte[], CLTypeAny> {
+
     private CLTypeAny clType = new CLTypeAny();
+
+    @JsonCreator
+    public CLValueAny(@JsonProperty("cl_type") final CLTypeAny clType,
+                      @JsonProperty("bytes") final String bytes,
+                      @JsonProperty("parsed") final Object parsed) throws ValueSerializationException {
+        setBytes(bytes);
+        setClType(clType);
+        setValue(Hex.decode(bytes));
+        setParsed(parsed);
+    }
 
     @JsonSetter("cl_type")
     @ExcludeFromJacocoGeneratedReport

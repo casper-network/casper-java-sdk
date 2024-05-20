@@ -2,9 +2,9 @@ package com.casper.sdk.model.clvalue;
 
 import com.casper.sdk.model.clvalue.cltype.CLTypeData;
 import com.casper.sdk.model.clvalue.cltype.CLTypeMap;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonSetter;
 import dev.oak3.sbs4j.DeserializerBuffer;
 import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
@@ -33,10 +33,19 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 public class CLValueMap extends
         AbstractCLValueWithChildren<Map<? extends AbstractCLValue<?, ?>, ? extends AbstractCLValue<?, ?>>, CLTypeMap> {
+
     @JsonProperty("cl_type")
     private CLTypeMap clType = new CLTypeMap();
 
-    @JsonSetter("cl_type")
+    @JsonCreator
+    public CLValueMap(@JsonProperty("cl_type") final CLTypeMap clType,
+                      @JsonProperty("bytes") final String bytes,
+                      @JsonProperty("parsed") final Object parsed) {
+        setBytes(bytes);
+        setClType(clType);
+        setParsed(parsed);
+    }
+
     public void setClType(CLTypeMap clType) {
         this.clType = clType;
         childTypesSet();

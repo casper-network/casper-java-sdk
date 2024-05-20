@@ -2,6 +2,7 @@ package com.casper.sdk.model.clvalue;
 
 import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
 import com.casper.sdk.model.clvalue.cltype.CLTypeByteArray;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dev.oak3.sbs4j.DeserializerBuffer;
 import dev.oak3.sbs4j.SerializerBuffer;
@@ -27,8 +28,18 @@ import java.util.Objects;
 @Setter
 @NoArgsConstructor
 public class CLValueByteArray extends AbstractCLValue<byte[], CLTypeByteArray> {
+
     @JsonProperty("cl_type")
     private CLTypeByteArray clType = new CLTypeByteArray();
+
+    @JsonCreator
+    public CLValueByteArray(@JsonProperty("cl_type") final CLTypeByteArray clType,
+                            @JsonProperty("bytes") final String bytes,
+                            @JsonProperty("parsed") final String parsed) throws ValueSerializationException {
+        this.clType = clType;
+        setValue(Hex.decode(bytes));
+        setParsed(parsed);
+    }
 
     public CLValueByteArray(final byte[] value) throws ValueSerializationException {
         this.setValue(value);

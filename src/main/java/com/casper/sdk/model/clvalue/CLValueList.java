@@ -2,8 +2,8 @@ package com.casper.sdk.model.clvalue;
 
 import com.casper.sdk.model.clvalue.cltype.CLTypeData;
 import com.casper.sdk.model.clvalue.cltype.CLTypeList;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonSetter;
 import dev.oak3.sbs4j.DeserializerBuffer;
 import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
@@ -30,18 +30,27 @@ import java.util.stream.Collectors;
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 public class CLValueList extends AbstractCLValueWithChildren<List<? extends AbstractCLValue<?, ?>>, CLTypeList> {
+
     @JsonProperty("cl_type")
     private CLTypeList clType = new CLTypeList();
 
-    @JsonSetter("cl_type")
-    public void setClType(final CLTypeList clType) {
-        this.clType = clType;
-        childTypesSet();
+    @JsonCreator
+    public CLValueList(@JsonProperty("cl_type") final CLTypeList clType,
+                       @JsonProperty("bytes") final String bytes,
+                       @JsonProperty("parsed") final Object parsed)  {
+        setBytes(bytes);
+        setClType(clType);
+        setParsed(parsed);
     }
 
     public CLValueList(final List<? extends AbstractCLValue<?, ?>> value) throws ValueSerializationException {
         setChildTypes(value);
         this.setValue(value);
+    }
+
+    public void setClType(final CLTypeList clType) {
+        this.clType = clType;
+        childTypesSet();
     }
 
     @Override

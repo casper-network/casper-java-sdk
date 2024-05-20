@@ -3,8 +3,8 @@ package com.casper.sdk.model.clvalue;
 import com.casper.sdk.model.clvalue.cltype.AbstractCLTypeWithChildren;
 import com.casper.sdk.model.clvalue.cltype.CLTypeData;
 import com.casper.sdk.model.clvalue.cltype.CLTypeOption;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonSetter;
 import dev.oak3.sbs4j.DeserializerBuffer;
 import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
@@ -29,10 +29,19 @@ import java.util.Optional;
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 public class CLValueOption extends AbstractCLValueWithChildren<Optional<AbstractCLValue<?, ?>>, CLTypeOption> {
+
     @JsonProperty("cl_type")
     private CLTypeOption clType = new CLTypeOption();
 
-    @JsonSetter("cl_type")
+    @JsonCreator
+    public CLValueOption(@JsonProperty("cl_type") final CLTypeOption clType,
+                         @JsonProperty("bytes") final String bytes,
+                         @JsonProperty("parsed") final Object parsed) {
+        setBytes(bytes);
+        setClType(clType);
+        setParsed(parsed);
+    }
+
     public void setClType(final CLTypeOption clType) {
         this.clType = clType;
         childTypesSet();

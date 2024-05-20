@@ -2,8 +2,8 @@ package com.casper.sdk.model.clvalue;
 
 import com.casper.sdk.model.clvalue.cltype.CLTypeData;
 import com.casper.sdk.model.clvalue.cltype.CLTypeTuple1;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonSetter;
 import dev.oak3.sbs4j.DeserializerBuffer;
 import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
@@ -30,10 +30,19 @@ import java.util.Collections;
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 public class CLValueTuple1 extends AbstractCLValueWithChildren<Unit<? extends AbstractCLValue<?, ?>>, CLTypeTuple1> {
+
     @JsonProperty("cl_type")
     private CLTypeTuple1 clType = new CLTypeTuple1();
 
-    @JsonSetter("cl_type")
+    @JsonCreator
+    public CLValueTuple1(@JsonProperty("cl_type") final CLTypeTuple1 clType,
+                         @JsonProperty("bytes") final String bytes,
+                         @JsonProperty("parsed") final Object parsed) {
+        setBytes(bytes);
+        setClType(clType);
+        setParsed(parsed);
+    }
+
     public void setClType(final CLTypeTuple1 clType) {
         this.clType = clType;
         childTypesSet();

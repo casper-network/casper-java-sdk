@@ -2,8 +2,8 @@ package com.casper.sdk.model.clvalue;
 
 import com.casper.sdk.model.clvalue.cltype.CLTypeData;
 import com.casper.sdk.model.clvalue.cltype.CLTypeTuple3;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonSetter;
 import dev.oak3.sbs4j.DeserializerBuffer;
 import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
@@ -31,18 +31,27 @@ import java.util.Arrays;
 @NoArgsConstructor
 public class CLValueTuple3 extends
         AbstractCLValueWithChildren<Triplet<? extends AbstractCLValue<?, ?>, ? extends AbstractCLValue<?, ?>, ? extends AbstractCLValue<?, ?>>, CLTypeTuple3> {
+
     @JsonProperty("cl_type")
     private CLTypeTuple3 clType = new CLTypeTuple3();
 
-    @JsonSetter("cl_type")
-    public void setClType(final CLTypeTuple3 clType) {
-        this.clType = clType;
-        childTypesSet();
+    @JsonCreator
+    public CLValueTuple3(@JsonProperty("cl_type") final CLTypeTuple3 clType,
+                         @JsonProperty("bytes") final String bytes,
+                         @JsonProperty("parsed") final Object parsed) {
+        setBytes(bytes);
+        setClType(clType);
+        setParsed(parsed);
     }
 
     public CLValueTuple3(final Triplet<? extends AbstractCLValue<?, ?>, ? extends AbstractCLValue<?, ?>, ? extends AbstractCLValue<?, ?>> value) throws ValueSerializationException {
         setChildTypes(value);
         this.setValue(value);
+    }
+
+    public void setClType(final CLTypeTuple3 clType) {
+        this.clType = clType;
+        childTypesSet();
     }
 
     @Override
