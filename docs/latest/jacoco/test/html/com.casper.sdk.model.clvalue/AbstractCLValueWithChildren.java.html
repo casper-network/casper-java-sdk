@@ -20,6 +20,7 @@ import lombok.SneakyThrows;
  */
 <span class="pc bpc" id="L21" title="4 of 8 branches missed.">@EqualsAndHashCode(callSuper = true)</span>
 <span class="fc" id="L22">public abstract class AbstractCLValueWithChildren&lt;T, P extends AbstractCLTypeWithChildren&gt; extends AbstractCLValue&lt;T, P&gt; {</span>
+
     protected abstract void setChildTypes(T value);
 
     /**
@@ -28,22 +29,22 @@ import lombok.SneakyThrows;
      * &lt;p&gt;
      * Should always be called in the end of the json setter for ClType within CLValueWithChildren
      */
-<span class="pc" id="L31">    @SneakyThrows({ValueDeserializationException.class})</span>
+<span class="pc" id="L32">    @SneakyThrows({ValueDeserializationException.class})</span>
     protected void childTypesSet() {
-<span class="fc bfc" id="L33" title="All 2 branches covered.">        if (!getBytes().isEmpty()) {</span>
-<span class="fc" id="L34">            this.deserialize(new DeserializerBuffer(this.getBytes()));</span>
+<span class="fc bfc" id="L34" title="All 4 branches covered.">        if (!getBytes().isEmpty() &amp;&amp; getClType().isDeserializable()) {</span>
+<span class="fc" id="L35">            this.deserialize(new DeserializerBuffer(this.getBytes()));</span>
         }
-<span class="fc" id="L36">    }</span>
+<span class="fc" id="L37">    }</span>
 
     protected void populateChildTypesFromParent(final AbstractCLValue&lt;?, ?&gt; child, final AbstractCLType type) {
-<span class="fc bfc" id="L39" title="All 2 branches covered.">        if (type instanceof AbstractCLTypeWithChildren) {</span>
-<span class="pc bpc" id="L40" title="1 of 2 branches missed.">            if (child.getClType() instanceof AbstractCLTypeWithChildren) {</span>
-<span class="fc" id="L41">                ((AbstractCLTypeWithChildren) child.getClType()).setChildTypes(((AbstractCLTypeWithChildren) type).getChildTypes());</span>
+<span class="fc bfc" id="L40" title="All 2 branches covered.">        if (type instanceof AbstractCLTypeWithChildren) {</span>
+<span class="pc bpc" id="L41" title="1 of 2 branches missed.">            if (child.getClType() instanceof AbstractCLTypeWithChildren) {</span>
+<span class="fc" id="L42">                ((AbstractCLTypeWithChildren) child.getClType()).setChildTypes(((AbstractCLTypeWithChildren) type).getChildTypes());</span>
             }
-<span class="fc bfc" id="L43" title="All 2 branches covered.">        } else if (type instanceof CLTypeByteArray) {</span>
-<span class="fc" id="L44">            ((CLValueByteArray) child).setClType((CLTypeByteArray) type);</span>
+<span class="fc bfc" id="L44" title="All 2 branches covered.">        } else if (type instanceof CLTypeByteArray) {</span>
+<span class="fc" id="L45">            ((CLValueByteArray) child).setClType((CLTypeByteArray) type);</span>
         }
-<span class="fc" id="L46">    }</span>
+<span class="fc" id="L47">    }</span>
 
     /**
      * Sets the bytes and if the CLType is already set, fires bytes deserialization
