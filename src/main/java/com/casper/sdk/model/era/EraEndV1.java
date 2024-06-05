@@ -22,7 +22,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class JsonEraEnd {
+public class EraEndV1 {
 
     /**
      * @see JsonEraReport

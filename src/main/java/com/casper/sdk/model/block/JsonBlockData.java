@@ -28,8 +28,8 @@ public class JsonBlockData {
     private String apiVersion;
 
     /**
-     * @see JsonBlock
+     * @see BlockV1
      */
     @JsonProperty("block")
-    private JsonBlock block;
+    private BlockV1 block;
 }

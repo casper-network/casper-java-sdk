@@ -1,7 +1,7 @@
 package com.casper.sdk.model.block;
 
 import com.casper.sdk.model.common.Digest;
-import com.casper.sdk.model.era.JsonEraEnd;
+import com.casper.sdk.model.era.EraEndV1;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -17,7 +17,7 @@ import java.util.Date;
  *
  * @author Alexandre Carvalho
  * @author Andre Bertolace
- * @see JsonBlock
+ * @see BlockV1
  * @since 0.0.1
  */
 @Getter
@@ -25,7 +25,7 @@ import java.util.Date;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class JsonBlockHeader {
+public class JsonBlockHeader extends BlockHeader {
 
     /**
      * Block height
@@ -45,10 +45,10 @@ public class JsonBlockHeader {
     private boolean randomBit;
 
     /**
-     * @see JsonEraEnd
+     * @see EraEndV1
      */
     @JsonProperty("era_end")
-    private JsonEraEnd eraEnd;
+    private EraEndV1 eraEnd;
 
     /**
      * Hex-encoded hash digest

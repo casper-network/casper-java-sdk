@@ -1,5 +1,6 @@
 package com.casper.sdk.model.block;
 
+import com.casper.sdk.model.common.Digest;
 import com.casper.sdk.model.key.PublicKey;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -15,7 +16,7 @@ import java.util.List;
  *
  * @author Alexandre Carvalho
  * @author Andre Bertolace
- * @see JsonBlock
+ * @see BlockV1
  * @since 0.0.1
  */
 @Getter
@@ -23,7 +24,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class JsonBlockBody {
+public class BlockBodyV1 extends BlockBody {
 
     /**
      * @see PublicKey
@@ -43,4 +44,6 @@ public class JsonBlockBody {
     @JsonProperty("transfer_hashes")
     private List<String> transferHashes;
 
+    /** The body's hash. */
+    private Digest hash;
 }

@@ -15,7 +15,6 @@ import com.casper.sdk.model.status.ChainspecData;
 import com.casper.sdk.model.status.StatusData;
 import com.syntifi.crypto.key.AbstractPrivateKey;
 import com.syntifi.crypto.key.Ed25519PrivateKey;
-import org.junit.Ignore;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
