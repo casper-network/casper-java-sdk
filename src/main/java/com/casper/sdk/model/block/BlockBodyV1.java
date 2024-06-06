@@ -27,23 +27,15 @@ import java.util.List;
 public class BlockBodyV1 extends BlockBody {
 
     /**
-     * @see PublicKey
-     */
-    @JsonProperty("proposer")
-    private PublicKey proposer;
-
-    /**
      * List of Hex-encoded hash digest
      */
     @JsonProperty("deploy_hashes")
-    private List<String> deployHashes;
+    private List<Digest> deployHashes;
 
     /**
      * List of Hex-encoded hash digest
      */
     @JsonProperty("transfer_hashes")
-    private List<String> transferHashes;
+    private List<Digest> transferHashes;
 
-    /** The body's hash. */
-    private Digest hash;
 }

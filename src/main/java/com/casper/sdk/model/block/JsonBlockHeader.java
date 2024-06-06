@@ -27,63 +27,9 @@ import java.util.Date;
 @NoArgsConstructor
 public class JsonBlockHeader extends BlockHeader {
 
-    /**
-     * Block height
-     */
-    private long height;
-
-    /**
-     * Hex-encoded hash digest
-     */
-    @JsonProperty("state_root_hash")
-    private Digest stateRootHash;
-
-    /**
-     * boolean
-     */
-    @JsonProperty("random_bit")
-    private boolean randomBit;
-
-    /**
+      /**
      * @see EraEndV1
      */
     @JsonProperty("era_end")
     private EraEndV1 eraEnd;
-
-    /**
-     * Hex-encoded hash digest
-     */
-    @JsonProperty("body_hash")
-    private Digest bodyHash;
-
-    /**
-     * Hex-encoded hash digest.
-     */
-    @JsonProperty("parent_hash")
-    private Digest parentHash;
-
-    /**
-     * Hex-encoded hash digest
-     */
-    @JsonProperty("accumulated_seed")
-    private Digest accumulatedSeed;
-
-    /**
-     * Timestamp formatted as per RFC 3339
-     */
-    @JsonProperty("timestamp")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-    private Date timeStamp;
-
-    /**
-     * Era ID newtype
-     */
-    @JsonProperty("era_id")
-    private long eraId;
-
-    /**
-     * Casper Platform protocol version
-     */
-    @JsonProperty("protocol_version")
-    private String protocolVersion;
 }

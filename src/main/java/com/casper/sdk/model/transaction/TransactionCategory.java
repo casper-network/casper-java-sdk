@@ -1,5 +1,7 @@
 package com.casper.sdk.model.transaction;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 /**
  * The category of a Transaction.
  *
@@ -22,7 +24,9 @@ public enum TransactionCategory {
         this.value = (byte) value;
     }
 
-    public byte getValue() {
+    @JsonValue
+    public byte toValue() {
         return value;
     }
+
 }

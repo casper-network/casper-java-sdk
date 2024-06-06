@@ -1,0 +1,113 @@
+{
+  "jsonrpc": "2.0",
+  "id": "220289335",
+  "result": {
+    "api_version": "2.0.0",
+    "block_with_signatures": {
+      "block": {
+        "Version2": {
+          "hash": "ac043c5da0f074d5f913fc1c4178ea2cc0e5f7863e43d310e9278bf5f8d36d1c",
+          "header": {
+            "parent_hash": "ee2805c35deb5849942987a4e1adc40a36c8ec0600d3a9f70fcb5f8bf4915675",
+            "state_root_hash": "35a4b308043651cc44f117470ad3f8145059e04e4373cba15bfb2ff20a82de77",
+            "body_hash": "18937e8cf4338b5f5fdc2581f8d7d6a47de736d2799e3f3bc9b0ff9f1e7cf106",
+            "random_bit": true,
+            "accumulated_seed": "cbd926711c4097c440c7a64948988ea45d364d3ac3a3b706b8a4faeafd38a2ea",
+            "era_end": {
+              "equivocators": [],
+              "inactive_validators": [],
+              "next_era_validator_weights": [
+                {
+                  "validator": "010b277da84a12c8814d5723eeb57123ff287f22466fd13faca1bb1fae57d2679b",
+                  "weight": "11823890605832274469"
+                },
+                {
+                  "validator": "011c275ac5ab55ecb5c2a9ee25f62a5a6993d6782396f22e09f76b5b5bb73fd31d",
+                  "weight": "11493949855380345241"
+                },
+                {
+                  "validator": "013b129419bde15abad56f43061031ea09652224c8161f61b32c17fcbccfafc47c",
+                  "weight": "11748004807318658120"
+                },
+                {
+                  "validator": "01a65a3672126a5da4ac3be39f437c021e6e84e0da89b16c3a9cf2c9bf782b2dab",
+                  "weight": "11683586140707787858"
+                },
+                {
+                  "validator": "01f6e6e82759da039d479900ad1b930320082d1fc00aea6f5e5f7289c7a6c90536",
+                  "weight": "11990568590760997935"
+                }
+              ],
+              "rewards": {
+                "010b277da84a12c8814d5723eeb57123ff287f22466fd13faca1bb1fae57d2679b": [
+                  "4026058477024681",
+                  "402627925137076"
+                ],
+                "011c275ac5ab55ecb5c2a9ee25f62a5a6993d6782396f22e09f76b5b5bb73fd31d": [
+                  "9913655386582888",
+                  "391483351804192"
+                ],
+                "013b129419bde15abad56f43061031ea09652224c8161f61b32c17fcbccfafc47c": [
+                  "15500205924303788",
+                  "900041009911612"
+                ],
+                "01a65a3672126a5da4ac3be39f437c021e6e84e0da89b16c3a9cf2c9bf782b2dab": [
+                  "9978261258106387",
+                  "397538421238317"
+                ],
+                "01f6e6e82759da039d479900ad1b930320082d1fc00aea6f5e5f7289c7a6c90536": [
+                  "13081818953982388",
+                  "408309291908807"
+                ]
+              },
+              "next_era_gas_price": 1
+            },
+            "timestamp": "2024-06-06T09:54:21.391Z",
+            "era_id": 901,
+            "height": 9759,
+            "protocol_version": "2.0.0",
+            "proposer": "013b129419bde15abad56f43061031ea09652224c8161f61b32c17fcbccfafc47c",
+            "current_gas_price": 1,
+            "last_switch_block_hash": "ab81a70050d1eae2ee8a909efa875fc94e499573e7875e5385a8026f7119bc7e"
+          },
+          "body": {
+            "transactions": {},
+            "rewarded_signatures": [
+              [
+                248
+              ],
+              [
+                0
+              ],
+              [
+                0
+              ]
+            ]
+          }
+        }
+      },
+      "proofs": [
+        {
+          "public_key": "010b277da84a12c8814d5723eeb57123ff287f22466fd13faca1bb1fae57d2679b",
+          "signature": "014094d5f3e6a7034b959d291e8c82e0cce2083ea348c5f819829bf40639e89e51244c917b771d72e9901e8f3dbc32d6b846fbfb96a1c6b2df91f473883d497c06"
+        },
+        {
+          "public_key": "011c275ac5ab55ecb5c2a9ee25f62a5a6993d6782396f22e09f76b5b5bb73fd31d",
+          "signature": "015673df438b181b01b6c5603ec17ecae8f059d85888adbf79111b0434f27e1ab48728c0eaf96b742e7e262547f740e4344fd41ef7c8beb51210d3ed3da2704f0a"
+        },
+        {
+          "public_key": "013b129419bde15abad56f43061031ea09652224c8161f61b32c17fcbccfafc47c",
+          "signature": "017597ec959a28a159b3a8815fddd695f9c45f53a78cce723c832139e6c544320fa822841c8b78e07d8a5b82aa1d06fbea0e5d4a7d9c1f877082df7caac182f802"
+        },
+        {
+          "public_key": "01a65a3672126a5da4ac3be39f437c021e6e84e0da89b16c3a9cf2c9bf782b2dab",
+          "signature": "01f3aaf2b2ba485dcd7de73b4fd2d074c3af0208a6901882bd7b364bcde2b2e1d7eb63719d9ebc5557b0b4deadfba2f0fae76976d0bb430af3ee783372ecd39a03"
+        },
+        {
+          "public_key": "01f6e6e82759da039d479900ad1b930320082d1fc00aea6f5e5f7289c7a6c90536",
+          "signature": "01fba6778472986ada82474452640926bf7c3d183f3f682a8414a1fb0b7e3ae5dbb1d30f06a8d3d5af4fb571ee7f2d124012bfa2932183f60910113db0398d9900"
+        }
+      ]
+    }
+  }
+}
