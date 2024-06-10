@@ -17,7 +17,7 @@ import java.math.BigInteger;
  *
  * @author Alexandre Carvalho
  * @author Andre Bertolace
- * @see JsonEraEnd
+ * @see EraEndV1
  * @since 0.0.1
  */
 @Getter

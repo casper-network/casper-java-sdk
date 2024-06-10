@@ -9,13 +9,14 @@ import com.casper.sdk.identifier.global.GlobalStateIdentifier;
 import com.casper.sdk.model.account.AccountData;
 import com.casper.sdk.model.auction.AuctionData;
 import com.casper.sdk.model.balance.GetBalanceData;
-import com.casper.sdk.model.block.JsonBlock;
-import com.casper.sdk.model.block.JsonBlockData;
+import com.casper.sdk.model.block.*;
 import com.casper.sdk.model.clvalue.CLValueString;
+import com.casper.sdk.model.common.Digest;
 import com.casper.sdk.model.deploy.DeployData;
 import com.casper.sdk.model.deploy.executabledeploy.ModuleBytes;
 import com.casper.sdk.model.deploy.executabledeploy.StoredContractByHash;
 import com.casper.sdk.model.deploy.executionresult.Success;
+import com.casper.sdk.model.era.EraEndV2;
 import com.casper.sdk.model.era.EraInfoData;
 import com.casper.sdk.model.globalstate.GlobalStateData;
 import com.casper.sdk.model.key.AlgorithmTag;
@@ -32,6 +33,7 @@ import com.casper.sdk.model.uref.URef;
 import com.casper.sdk.model.validator.ValidatorChangeData;
 import com.casper.sdk.test.MockNode;
 import com.casper.sdk.test.RcpResponseDispatcher;
+import org.joda.time.DateTime;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,6 +42,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -47,6 +50,10 @@ import java.util.List;
 import static com.jayway.jsonassert.impl.matcher.IsCollectionWithSize.hasSize;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsInstanceOf.instanceOf;
+import static org.hamcrest.core.IsIterableContaining.hasItems;
+import static org.hamcrest.core.IsNull.notNullValue;
+import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -150,7 +157,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
         final JsonBlockData blockData = casperServiceMock.getBlock(new HashBlockIdentifier("709a31cbaff23da43995e78d2209e7f5980905cf70ef850f6744b8d3cec9af13"));
         assertNotNull(blockData);
 
-        final JsonBlock block = blockData.getBlock();
+        final BlockV1 block = blockData.getBlock();
         assertEquals("ee3da162c775f921e836ec6d41dedcb006bb972224d1058738e9413dea61fd5e", block.getHeader().getParentHash().toString());
         assertEquals(2346915, block.getHeader().getHeight());
     }
@@ -165,7 +172,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
 
         JsonBlockData blockData = casperServiceMock.getBlock(new HeightBlockIdentifier(2346915));
         assertNotNull(blockData);
-        JsonBlock block = blockData.getBlock();
+        BlockV1 block = blockData.getBlock();
         assertEquals("ee3da162c775f921e836ec6d41dedcb006bb972224d1058738e9413dea61fd5e", block.getHeader().getParentHash().toString());
         assertEquals("709a31cbaff23da43995e78d2209e7f5980905cf70ef850f6744b8d3cec9af13", block.getHash().toString());
     }
@@ -494,5 +501,74 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
                 () -> casperServiceMock.getDeploy("abc"));
 
         assertEquals(expectedMessage, casperClientException.getMessage());
+    }
+
+    @Test
+    void chainGetBlockV2() {
+        mockNode.withRcpResponseDispatcher()
+                .withMethod("chain_get_block")
+                //.withBody("$.params.deploy_hash", "abc")
+                .thenDispatch(getClass().getResource("/block-samples/chain_get_block_v2.json"));
+
+        final ChainGetBlockResponse blockWithSignatures = casperServiceMock.getBlockV2();
+        assertThat(blockWithSignatures, is(notNullValue()));
+        assertThat(blockWithSignatures.getApiVersion(), is("2.0.0"));
+        assertThat(blockWithSignatures.getBlockWithSignatures(), is(notNullValue()));
+        assertThat(blockWithSignatures.getBlockWithSignatures().getBlock(), is(instanceOf(BlockV2.class)));
+
+        BlockV2 block = blockWithSignatures.getBlockWithSignatures().getBlock();
+
+        assertThat(block.getHeader(), is(instanceOf(BlockHeaderV2.class)));
+        BlockHeaderV2 header = block.getHeader();
+        assertThat(header.getParentHash(), is(new Digest("714787cd96712bdfe0815e85f12b44b6551fdeb1021b55c9efe94639ad744a97")));
+        assertThat(header.getStateRootHash(), is(new Digest("9cf8fd13904d7143ad2f9e2dc716ef3bd53a8cde7cbad707b8f44041a711a747")));
+        assertThat(header.getBodyHash(), is(new Digest("18937e8cf4338b5f5fdc2581f8d7d6a47de736d2799e3f3bc9b0ff9f1e7cf106")));
+        assertThat(header.isRandomBit(), is(true));
+        assertThat(header.getAccumulatedSeed(), is(new Digest("9aec85a8a66302e9679ea269bf344958848d4a00a565c8f5c9f576a8a2ac68a0")));
+        assertThat(header.getEraEnd(), is(nullValue()));
+        assertThat(header.getTimeStamp(), is(new DateTime("2024-06-05T10:55:38.908Z").toDate()));
+        assertThat(header.getEraId(), is(18L));
+        assertThat(header.getEraId(), is(18L));
+        assertThat(header.getProtocolVersion(), is("2.0.0"));
+        assertThat(header.getProposer(), is(new Digest("010b277da84a12c8814d5723eeb57123ff287f22466fd13faca1bb1fae57d2679b")));
+        assertThat(header.getCurrentGasPrice(), is(1L));
+        assertThat(header.getLastSwitchBlockHash(), is(new Digest("56ae7d9b11d0bc21134e10fd86918c8e66a7bc69066fafa7070e77eca25f7d3e")));
+
+        assertThat(blockWithSignatures.getBlockWithSignatures().getBlock().getBody(), is(instanceOf(BlockBodyV2.class)));
+        BlockBodyV2 blockBody = block.getBody();
+        assertThat(blockBody.getRewardedSignatures(), hasSize(3));
+        assertThat(blockBody.getRewardedSignatures().get(0), hasSize(1));
+        assertThat(blockBody.getRewardedSignatures().get(0).get(0), is(248L));
+        assertThat(blockBody.getRewardedSignatures().get(1).get(0), is(0L));
+        assertThat(blockBody.getRewardedSignatures().get(2).get(0), is(0L));
+    }
+
+    @Test
+    void chainGetBlockEraEndV2() throws NoSuchAlgorithmException {
+
+        mockNode.withRcpResponseDispatcher()
+                .withMethod("chain_get_block")
+                //.withBody("$.params.deploy_hash", "abc")
+                .thenDispatch(getClass().getResource("/block-samples/chain_get_block_era_end_v2.json"));
+
+        final ChainGetBlockResponse blockWithSignatures = casperServiceMock.getBlockV2();
+        assertThat(blockWithSignatures, is(notNullValue()));
+        assertThat(blockWithSignatures.getApiVersion(), is("2.0.0"));
+        assertThat(blockWithSignatures.getBlockWithSignatures(), is(notNullValue()));
+        assertThat(blockWithSignatures.getBlockWithSignatures().getBlock(), is(instanceOf(BlockV2.class)));
+
+
+        BlockV2 block = blockWithSignatures.getBlockWithSignatures().getBlock();
+        EraEndV2 eraEnd = block.getHeader().getEraEnd();
+        assertThat(eraEnd, is(notNullValue()));
+        assertThat(eraEnd.getNextEraGasPrice(), is(1));
+        assertThat(eraEnd.getInactiveValidators(), hasSize(0));
+
+        assertThat(eraEnd.getNextEraValidatorWeights(), hasSize(5));
+        assertThat(eraEnd.getNextEraValidatorWeights().get(0).getValidator(), is(PublicKey.fromTaggedHexString("010b277da84a12c8814d5723eeb57123ff287f22466fd13faca1bb1fae57d2679b")));
+        assertThat(eraEnd.getNextEraValidatorWeights().get(0).getWeight(), is(new BigInteger("11823890605832274469")));
+
+        assertThat(eraEnd.getRewards().size(), is(5));
+        assertThat(eraEnd.getRewards().get(PublicKey.fromTaggedHexString("010b277da84a12c8814d5723eeb57123ff287f22466fd13faca1bb1fae57d2679b")), hasItems(new BigInteger("4026058477024681"), new BigInteger("402627925137076")));
     }
 }

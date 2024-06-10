@@ -1,12 +1,7 @@
 package com.casper.sdk.model.block;
 
-import com.casper.sdk.model.common.Digest;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
@@ -23,29 +18,17 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class JsonBlock {
+public class BlockV1 extends Block<JsonBlockHeader, BlockBodyV1> {
 
-    /**
-     * The block's hash.
-     */
-    @JsonProperty("hash")
-    private Digest hash;
-
-    /**
-     * {@link JsonBlockHeader}
-     */
+    /** {@link JsonBlockHeader} */
     @JsonProperty("header")
     private JsonBlockHeader header;
 
-    /**
-     * {@link JsonBlockBody}
-     */
+    /** {@link BlockBodyV1} */
     @JsonProperty("body")
-    private JsonBlockBody body;
+    private BlockBodyV1 body;
 
-    /**
-     * List of {@link JsonProof}
-     */
+    /** List of {@link JsonProof} */
     @JsonProperty("proofs")
     private List<JsonProof> proofs;
 }

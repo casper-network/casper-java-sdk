@@ -11,6 +11,7 @@ import com.syntifi.crypto.key.hash.Blake2b;
 import dev.oak3.sbs4j.DeserializerBuffer;
 import dev.oak3.sbs4j.exception.ValueDeserializationException;
 import dev.oak3.sbs4j.util.ByteUtils;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.io.ByteArrayOutputStream;

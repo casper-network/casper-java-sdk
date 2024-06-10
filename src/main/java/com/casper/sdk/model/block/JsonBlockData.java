@@ -21,15 +21,11 @@ import lombok.Setter;
 @NoArgsConstructor
 public class JsonBlockData {
 
-    /**
-     * The RPC API version
-     */
+    /** The RPC API version */
     @JsonProperty("api_version")
     private String apiVersion;
 
-    /**
-     * @see JsonBlock
-     */
+    /** @see BlockV1 */
     @JsonProperty("block")
-    private JsonBlock block;
+    private BlockV1 block;
 }

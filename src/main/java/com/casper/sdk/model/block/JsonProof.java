@@ -14,7 +14,7 @@ import lombok.Setter;
  *
  * @author Alexandre Carvalho
  * @author Andre Bertolace
- * @see JsonBlock
+ * @see BlockV1
  * @since 0.0.1
  */
 @Getter

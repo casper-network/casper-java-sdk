@@ -9,6 +9,7 @@ import com.casper.sdk.model.account.AccountData;
 import com.casper.sdk.model.auction.AuctionData;
 import com.casper.sdk.model.balance.GetBalanceData;
 import com.casper.sdk.model.balance.QueryBalanceData;
+import com.casper.sdk.model.block.ChainGetBlockResponse;
 import com.casper.sdk.model.block.JsonBlockData;
 import com.casper.sdk.model.deploy.Deploy;
 import com.casper.sdk.model.deploy.DeployData;
@@ -90,6 +91,10 @@ public interface CasperService {
     @JsonRpcMethod("chain_get_block")
     JsonBlockData getBlock();
 
+    @JsonRpcMethod("chain_get_block")
+    ChainGetBlockResponse getBlockV2();
+
+
     /**
      * Retrieve block info by its {@link BlockIdentifier}
      *
@@ -146,7 +151,7 @@ public interface CasperService {
     /**
      * Returns the global state data given a {@link GlobalStateIdentifier}, key and paths
      *
-     * @param stateIdentifier GlobalStateIndentifier: block hash or state root hash
+     * @param stateIdentifier GlobalStateIdentifier: block hash or state root hash
      * @param key             casper_types::Key as a formatted string.
      * @param path            The path components starting from the key as base.
      * @return Object holding the api version, block header, merkle proof and stored values
@@ -202,7 +207,7 @@ public interface CasperService {
     /**
      * Returns the current status of the node
      *
-     * @return Object holding the apiversion, minimal block information, build
+     * @return Object holding the api version, minimal block information, build
      * version and other properties
      */
     @JsonRpcMethod("info_get_status")
@@ -286,7 +291,7 @@ public interface CasperService {
     /**
      * Fetches balance value
      *
-     * @param stateIdentifier GlobalStateIndentifier: block hash or state root hash
+     * @param stateIdentifier GlobalStateIdentifier: block hash or state root hash
      * @param purseIdentifier The identifier to obtain the purse corresponding to balance query.
      * @return Result for "query_balance" RPC response
      */

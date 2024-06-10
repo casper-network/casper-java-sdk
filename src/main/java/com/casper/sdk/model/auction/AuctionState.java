@@ -51,5 +51,4 @@ public class AuctionState {
      */
     @JsonProperty("state_root_hash")
     private String stateRootHash;
-
 }
