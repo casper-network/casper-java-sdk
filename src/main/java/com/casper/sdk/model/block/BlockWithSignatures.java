@@ -6,6 +6,8 @@ import lombok.*;
 import java.util.List;
 
 /**
+ * Block and its associated signatures.
+ *
  * @author ian@meywood.com
  */
 @Getter
@@ -16,12 +18,12 @@ import java.util.List;
 public class BlockWithSignatures {
 
     @JsonProperty("block")
-    private Block<?,?> block;
+    private Block<?, ?> block;
 
     @JsonProperty("proofs")
     private List<JsonProof> proofs;
 
-    public <BlockT extends Block<?,?>> BlockT getBlock() {
+    public <BlockT extends Block<?, ?>> BlockT getBlock() {
         //noinspection unchecked
         return (BlockT) block;
     }

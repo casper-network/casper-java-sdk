@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * V2 of the block body
+ *
  * @author ian@meywood.com
  */
 @Getter
@@ -29,7 +31,6 @@ public class BlockBodyV2 extends BlockBody {
     @JsonProperty("rewarded_signatures")
     private List<List<Long>> rewardedSignatures;
 
-    // TODO - Obtain test data for this field
     @JsonProperty("transactions")
     private Map<TransactionCategory, List<Digest>> transactions;
 }

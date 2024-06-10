@@ -10,7 +10,7 @@ import lombok.Setter;
 import java.util.List;
 
 /**
- * Casper block root Era data
+ * Casper block root V2 Era data
  *
  * @author Alexandre Carvalho
  * @author Andre Bertolace

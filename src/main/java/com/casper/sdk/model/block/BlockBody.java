@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
+ * Abstract class for block body.
+ *
  * @author ian@meywood.com
  */
 @Getter

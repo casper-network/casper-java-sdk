@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 /**
+ * V2 Block
+ *
  * @author ian@meywood.com
  */
 @Getter

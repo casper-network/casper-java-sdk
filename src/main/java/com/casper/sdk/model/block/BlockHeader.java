@@ -9,11 +9,13 @@ import lombok.Setter;
 import java.util.Date;
 
 /**
+ * Abstract class for block header.
+ *
  * @author ian@meywood.com
  */
 @Getter
 @Setter
-public class BlockHeader {
+public abstract class BlockHeader {
 
     @JsonProperty("parent_hash")
     private Digest parentHash;

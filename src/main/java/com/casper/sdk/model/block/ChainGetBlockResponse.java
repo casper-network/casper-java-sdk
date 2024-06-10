@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
+ * The response for a V2 chain_get_block RPC request.
+ *
  * @author ian@meywood.com
  */
 @NoArgsConstructor

@@ -6,6 +6,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 /**
+ * V2 Block header.
+ *
  * @author ian@meywood.com
  */
 @Getter
