@@ -1,11 +1,9 @@
 package com.casper.sdk.model.block;
 
 import com.casper.sdk.model.common.Digest;
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.casper.sdk.model.era.EraEndV2;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
-
-import java.util.Date;
 
 /**
  * @author ian@meywood.com
@@ -28,6 +26,4 @@ public class BlockHeaderV2 extends BlockHeader {
 
     @JsonProperty("last_switch_block_hash")
     private Digest lastSwitchBlockHash;
-
-
 }

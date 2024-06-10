@@ -1,13 +1,8 @@
 package com.casper.sdk.model.block;
 
 import com.casper.sdk.model.common.Digest;
-import com.casper.sdk.model.key.PublicKey;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
@@ -26,16 +21,11 @@ import java.util.List;
 @NoArgsConstructor
 public class BlockBodyV1 extends BlockBody {
 
-    /**
-     * List of Hex-encoded hash digest
-     */
+    /** List of Hex-encoded hash digest */
     @JsonProperty("deploy_hashes")
     private List<Digest> deployHashes;
 
-    /**
-     * List of Hex-encoded hash digest
-     */
+    /** List of Hex-encoded hash digest */
     @JsonProperty("transfer_hashes")
     private List<Digest> transferHashes;
-
 }

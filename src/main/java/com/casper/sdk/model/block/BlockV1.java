@@ -20,21 +20,15 @@ import java.util.List;
 @NoArgsConstructor
 public class BlockV1 extends Block<JsonBlockHeader, BlockBodyV1> {
 
-    /**
-     * {@link JsonBlockHeader}
-     */
+    /** {@link JsonBlockHeader} */
     @JsonProperty("header")
     private JsonBlockHeader header;
 
-    /**
-     * {@link BlockBodyV1}
-     */
+    /** {@link BlockBodyV1} */
     @JsonProperty("body")
     private BlockBodyV1 body;
 
-    /**
-     * List of {@link JsonProof}
-     */
+    /** List of {@link JsonProof} */
     @JsonProperty("proofs")
     private List<JsonProof> proofs;
 }

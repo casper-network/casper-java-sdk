@@ -13,9 +13,7 @@ import lombok.Setter;
 @Setter
 public abstract class BlockBody {
 
-    /**
-     * @see PublicKey
-     */
+    /** @see PublicKey */
     @JsonProperty("proposer")
     private PublicKey proposer;
 

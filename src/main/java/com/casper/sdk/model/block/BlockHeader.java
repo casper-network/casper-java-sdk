@@ -33,22 +33,16 @@ public class BlockHeader {
     @JsonProperty("accumulated_seed")
     private Digest accumulatedSeed;
 
-    /**
-     * Era ID newtype
-     */
+    /** Era ID newtype */
     @JsonProperty("era_id")
     private long eraId;
 
-    /**
-     * Timestamp formatted as per RFC 3339
-     */
+    /** Timestamp formatted as per RFC 3339 */
     @JsonProperty("timestamp")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     private Date timeStamp;
 
-    /**
-     * Casper Platform protocol version
-     */
+    /** Casper Platform protocol version */
     @JsonProperty("protocol_version")
     private String protocolVersion;
 }

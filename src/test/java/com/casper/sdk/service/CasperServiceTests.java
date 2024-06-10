@@ -16,6 +16,7 @@ import com.casper.sdk.model.deploy.DeployData;
 import com.casper.sdk.model.deploy.executabledeploy.ModuleBytes;
 import com.casper.sdk.model.deploy.executabledeploy.StoredContractByHash;
 import com.casper.sdk.model.deploy.executionresult.Success;
+import com.casper.sdk.model.era.EraEndV2;
 import com.casper.sdk.model.era.EraInfoData;
 import com.casper.sdk.model.globalstate.GlobalStateData;
 import com.casper.sdk.model.key.AlgorithmTag;
@@ -568,6 +569,6 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
         assertThat(eraEnd.getNextEraValidatorWeights().get(0).getWeight(), is(new BigInteger("11823890605832274469")));
 
         assertThat(eraEnd.getRewards().size(), is(5));
-        assertThat(eraEnd.getRewards().get("010b277da84a12c8814d5723eeb57123ff287f22466fd13faca1bb1fae57d2679b"), hasItems(new BigInteger("4026058477024681"), new BigInteger("402627925137076")));
+        assertThat(eraEnd.getRewards().get(PublicKey.fromTaggedHexString("010b277da84a12c8814d5723eeb57123ff287f22466fd13faca1bb1fae57d2679b")), hasItems(new BigInteger("4026058477024681"), new BigInteger("402627925137076")));
     }
 }
