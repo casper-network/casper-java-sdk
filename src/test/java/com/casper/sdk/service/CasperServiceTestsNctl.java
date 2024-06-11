@@ -8,7 +8,7 @@ import com.casper.sdk.identifier.global.StateRootHashIdentifier;
 import com.casper.sdk.identifier.purse.MainPurseUnderPublickey;
 import com.casper.sdk.identifier.purse.PurseIdentifier;
 import com.casper.sdk.model.balance.QueryBalanceData;
-import com.casper.sdk.model.block.JsonBlockData;
+import com.casper.sdk.model.block.ChainGetBlockResponse;
 import com.casper.sdk.model.era.EraInfoData;
 import com.casper.sdk.model.key.PublicKey;
 import com.casper.sdk.model.status.ChainspecData;
@@ -28,7 +28,7 @@ import java.nio.file.Path;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Disabled
-public class CasperServiceTestsNctl  extends AbstractJsonRpcTests {
+public class CasperServiceTestsNctl extends AbstractJsonRpcTests {
 
     /**
      * Test if get block matches requested by height
@@ -37,8 +37,8 @@ public class CasperServiceTestsNctl  extends AbstractJsonRpcTests {
     void testIfBlockReturnedMatchesRequestedByHeight() {
         int blocks_to_check = 3;
         for (int i = 0; i < blocks_to_check; i++) {
-            JsonBlockData result = casperServiceNctl.getBlock(new HeightBlockIdentifier(i));
-            assertEquals(result.getBlock().getHeader().getHeight(), i);
+            ChainGetBlockResponse result = casperServiceNctl.getBlock(new HeightBlockIdentifier(i));
+            assertEquals(result.getBlockWithSignatures().getBlock().getHeader().getHeight(), i);
         }
     }
 
@@ -52,8 +52,8 @@ public class CasperServiceTestsNctl  extends AbstractJsonRpcTests {
 
     @Test
     void getEraSummaryByHash() {
-        JsonBlockData block = casperServiceNctl.getBlock(new HeightBlockIdentifier(10));
-        EraInfoData eraInfoData = casperServiceNctl.getEraSummary(new HashBlockIdentifier(block.getBlock().getHash().toString()));
+        ChainGetBlockResponse block = casperServiceNctl.getBlock(new HeightBlockIdentifier(10));
+        EraInfoData eraInfoData = casperServiceNctl.getEraSummary(new HashBlockIdentifier(block.getBlockWithSignatures().getBlock().getHash().toString()));
 
         assertNotNull(eraInfoData);
         assertNotNull(eraInfoData.getEraSummary());
@@ -157,7 +157,7 @@ public class CasperServiceTestsNctl  extends AbstractJsonRpcTests {
             assertTrue(Files.size(temp) > 0);
 
             String fileContent = new String(Files.readAllBytes(temp));
-            assertTrue(fileContent.length() > 0);
+            assertTrue(!fileContent.isEmpty());
         } else {
             assertThrowsExactly(CasperInvalidStateException.class, () -> chainspec.saveGlobalState(temp));
         }
