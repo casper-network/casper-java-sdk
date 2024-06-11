@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * Version 2 of the era end data.
+ *
  * @author ian@meywood.com
  */
 @AllArgsConstructor
@@ -26,6 +28,7 @@ import java.util.Map;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class EraEndV2 {
 
+    @JsonProperty("equivocators")
     private List<PublicKey> equivocators;
     @JsonProperty("inactive_validators")
     private List<PublicKey> inactiveValidators;
