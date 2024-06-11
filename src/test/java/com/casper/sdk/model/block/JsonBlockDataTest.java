@@ -32,9 +32,10 @@ public class JsonBlockDataTest extends AbstractJsonTests {
 
         LOGGER.debug("Original JSON: {}", inputJson);
 
-        final JsonBlockData block = OBJECT_MAPPER.readValue(inputJson, JsonBlockData.class);
+        //noinspection VulnerableCodeUsages
+        final ChainGetBlockResponse block = OBJECT_MAPPER.readValue(inputJson, ChainGetBlockResponse.class);
 
-        assertNotNull(block.getBlock());
+        assertNotNull(block.getBlockWithSignatures().getBlock());
 
         final String expectedJson = getPrettyJson(block);
 

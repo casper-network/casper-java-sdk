@@ -3,8 +3,6 @@ package com.casper.sdk.model.block;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
-import java.util.List;
-
 /**
  * A JSON-friendly representation of `Block`
  *
@@ -27,8 +25,4 @@ public class BlockV1 extends Block<JsonBlockHeader, BlockBodyV1> {
     /** {@link BlockBodyV1} */
     @JsonProperty("body")
     private BlockBodyV1 body;
-
-    /** List of {@link JsonProof} */
-    @JsonProperty("proofs")
-    private List<JsonProof> proofs;
 }

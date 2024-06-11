@@ -19,6 +19,9 @@ import java.util.Map;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BlockBodyV2 extends BlockBody {
+    /** The body's hash. */
+    @JsonProperty("hash")
+    private Digest hash;
 
     /** List of Hex-encoded hash digest */
     @JsonProperty("deploy_hashes")

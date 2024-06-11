@@ -10,7 +10,6 @@ import com.casper.sdk.model.auction.AuctionData;
 import com.casper.sdk.model.balance.GetBalanceData;
 import com.casper.sdk.model.balance.QueryBalanceData;
 import com.casper.sdk.model.block.ChainGetBlockResponse;
-import com.casper.sdk.model.block.JsonBlockData;
 import com.casper.sdk.model.deploy.Deploy;
 import com.casper.sdk.model.deploy.DeployData;
 import com.casper.sdk.model.deploy.DeployResult;
@@ -89,11 +88,7 @@ public interface CasperService {
      * @return Object holding the api version and block
      */
     @JsonRpcMethod("chain_get_block")
-    JsonBlockData getBlock();
-
-    @JsonRpcMethod("chain_get_block")
-    ChainGetBlockResponse getBlockV2();
-
+    ChainGetBlockResponse getBlock();
 
     /**
      * Retrieve block info by its {@link BlockIdentifier}
@@ -102,7 +97,7 @@ public interface CasperService {
      * @return Object holding the api version and block
      */
     @JsonRpcMethod("chain_get_block")
-    JsonBlockData getBlock(@JsonRpcParam("block_identifier") BlockIdentifier blockIdentifier);
+    ChainGetBlockResponse getBlock(@JsonRpcParam("block_identifier") BlockIdentifier blockIdentifier);
 
     /**
      * Retrieve last block's transfers

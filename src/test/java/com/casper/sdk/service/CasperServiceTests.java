@@ -89,16 +89,16 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
                 .withBody("$.params.block_identifier.Height", "2346915")
                 .thenDispatch(getClass().getResource("/block-samples/chain_get_block.json"));
 
-        final JsonBlockData resultByHeight = casperServiceMock.getBlock(new HeightBlockIdentifier(2346915));
-        final String hash = resultByHeight.getBlock().getHash().toString();
+        final ChainGetBlockResponse resultByHeight = casperServiceMock.getBlock(new HeightBlockIdentifier(2346915));
+        final String hash = resultByHeight.getBlockWithSignatures().getBlock().getHash().toString();
 
         when.clear()
                 .withMethod("chain_get_block")
                 .withBody("$.params.block_identifier.Hash", hash)
                 .thenDispatch(getClass().getResource("/block-samples/chain_get_block.json"));
 
-        final JsonBlockData resultByHash = casperServiceMock.getBlock(new HashBlockIdentifier(hash));
-        assertEquals(resultByHash.getBlock().getHash().toString(), hash);
+        final ChainGetBlockResponse resultByHash = casperServiceMock.getBlock(new HashBlockIdentifier(hash));
+        assertEquals(resultByHash.getBlockWithSignatures().getBlock().getHash().toString(), hash);
     }
 
     /**
@@ -112,8 +112,8 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
                 .withBody("$.params.block_identifier.Height", "23469150")
                 .thenDispatch(getClass().getResource("/block-samples/chain_get_block.json"));
 
-        final JsonBlockData result = casperServiceMock.getBlock(new HeightBlockIdentifier(23469150));
-        final PublicKey key = result.getBlock().getBody().getProposer();
+        final ChainGetBlockResponse result = casperServiceMock.getBlock(new HeightBlockIdentifier(23469150));
+        final PublicKey key = result.getBlockWithSignatures().getBlock().getBody().getProposer();
 
         assertEquals(AlgorithmTag.ED25519, key.getTag());
         assertEquals("01753af321afc6906fcd9c897e5328f66190b5842671f16b022b69f2ddb7619c32", key.getAlgoTaggedHex());
@@ -142,8 +142,9 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
                 .withMethod("chain_get_block")
                 .thenDispatch(getClass().getResource("/block-samples/chain_get_block.json"));
 
-        final JsonBlockData blockData = casperServiceMock.getBlock();
+        final ChainGetBlockResponse blockData = casperServiceMock.getBlock();
         assertNotNull(blockData);
+        assertThat(blockData.getBlockWithSignatures().getBlock().getHash(), is(new Digest("709a31cbaff23da43995e78d2209e7f5980905cf70ef850f6744b8d3cec9af13")));
     }
 
     @Test
@@ -154,10 +155,11 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
                 .withBody("$.params.block_identifier.Hash", "709a31cbaff23da43995e78d2209e7f5980905cf70ef850f6744b8d3cec9af13")
                 .thenDispatch(getClass().getResource("/block-samples/chain_get_block.json"));
 
-        final JsonBlockData blockData = casperServiceMock.getBlock(new HashBlockIdentifier("709a31cbaff23da43995e78d2209e7f5980905cf70ef850f6744b8d3cec9af13"));
+        final ChainGetBlockResponse  blockData = casperServiceMock.getBlock(new HashBlockIdentifier("709a31cbaff23da43995e78d2209e7f5980905cf70ef850f6744b8d3cec9af13"));
         assertNotNull(blockData);
 
-        final BlockV1 block = blockData.getBlock();
+        final BlockV1 block = blockData.getBlockWithSignatures().getBlock();
+
         assertEquals("ee3da162c775f921e836ec6d41dedcb006bb972224d1058738e9413dea61fd5e", block.getHeader().getParentHash().toString());
         assertEquals(2346915, block.getHeader().getHeight());
     }
@@ -170,9 +172,9 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
                 .withBody("$.params.block_identifier.Height", "2346915")
                 .thenDispatch(getClass().getResource("/block-samples/chain_get_block.json"));
 
-        JsonBlockData blockData = casperServiceMock.getBlock(new HeightBlockIdentifier(2346915));
+        ChainGetBlockResponse blockData = casperServiceMock.getBlock(new HeightBlockIdentifier(2346915));
         assertNotNull(blockData);
-        BlockV1 block = blockData.getBlock();
+        BlockV1 block = blockData.getBlockWithSignatures().getBlock();
         assertEquals("ee3da162c775f921e836ec6d41dedcb006bb972224d1058738e9413dea61fd5e", block.getHeader().getParentHash().toString());
         assertEquals("709a31cbaff23da43995e78d2209e7f5980905cf70ef850f6744b8d3cec9af13", block.getHash().toString());
     }
@@ -510,7 +512,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
                 //.withBody("$.params.deploy_hash", "abc")
                 .thenDispatch(getClass().getResource("/block-samples/chain_get_block_v2.json"));
 
-        final ChainGetBlockResponse blockWithSignatures = casperServiceMock.getBlockV2();
+        final ChainGetBlockResponse blockWithSignatures = casperServiceMock.getBlock();
         assertThat(blockWithSignatures, is(notNullValue()));
         assertThat(blockWithSignatures.getApiVersion(), is("2.0.0"));
         assertThat(blockWithSignatures.getBlockWithSignatures(), is(notNullValue()));
@@ -551,7 +553,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
                 //.withBody("$.params.deploy_hash", "abc")
                 .thenDispatch(getClass().getResource("/block-samples/chain_get_block_era_end_v2.json"));
 
-        final ChainGetBlockResponse blockWithSignatures = casperServiceMock.getBlockV2();
+        final ChainGetBlockResponse blockWithSignatures = casperServiceMock.getBlock();
         assertThat(blockWithSignatures, is(notNullValue()));
         assertThat(blockWithSignatures.getApiVersion(), is("2.0.0"));
         assertThat(blockWithSignatures.getBlockWithSignatures(), is(notNullValue()));
