@@ -76,13 +76,11 @@ public class Secp256k1PublicKey extends AbstractPublicKey {
     @Override
     public Boolean verify(byte[] message, byte[] signature) {
 
-        boolean keyFound = false;
-
         //We need the Public key's short key
         byte[] keyToFind = (getKey().length > 33) ? getShortKey(getKey()) : getKey();
 
         //Looping possible v's of the signature
-        for (int i = 27; i <=34; i++) {
+        for (int i = 27; i <= 34; i++) {
 
             final Sign.SignatureData signatureData =
                     new Sign.SignatureData(
@@ -102,16 +100,14 @@ public class Secp256k1PublicKey extends AbstractPublicKey {
                     final byte[] keyFromSignature = getShortKey(recoveredKey.toByteArray());
 
                     if (Arrays.equals(keyFromSignature, keyToFind)) {
-                        keyFound = true;
-                        break;
+                        return true;
                     }
                 }
             }
 
-            if (keyFound) break;
         }
 
-        return keyFound;
+        return false;
 
     }
 
