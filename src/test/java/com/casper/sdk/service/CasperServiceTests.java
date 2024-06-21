@@ -31,6 +31,7 @@ import com.casper.sdk.model.storedvalue.StoredValueDeployInfo;
 import com.casper.sdk.model.transaction.ExecutionResultV2;
 import com.casper.sdk.model.transaction.GetTransactionResult;
 import com.casper.sdk.model.transaction.TransactionHashDeploy;
+import com.casper.sdk.model.transfer.Transfer;
 import com.casper.sdk.model.transfer.TransferData;
 import com.casper.sdk.model.transfer.TransferV1;
 import com.casper.sdk.model.transfer.TransferV2;
@@ -195,7 +196,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
 
         assertNotNull(transferData);
         assertEquals(1, transferData.getTransfers().size());
-        assertEquals(BigInteger.valueOf(445989400000L), transferData.getTransfers().get(0).getAmount());
+        assertEquals(BigInteger.valueOf(445989400000L),((TransferV1) transferData.getTransfers().get(0)).getAmount());
     }
 
     @Test
@@ -210,7 +211,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
         assertNotNull(transferData);
         assertEquals(1, transferData.getTransfers().size());
 
-        final TransferV1 transaction = transferData.getTransfers().get(0);
+        final TransferV1 transaction = (TransferV1) transferData.getTransfers().get(0);
         assertEquals("c709e727b7eaadb3b7f76450aa5d3ac3dd28b0271b7471a6dcc828cfd29f745a", transaction.getDeployHash());
         assertEquals("account-hash-496d542527e1a29f576ab7c3f4c947bfcdc9b4145f75f6ec40e36089432d7351", transaction.getFrom());
         assertEquals("account-hash-8a35e688eac33089b13f91a78c94221b669a0b13a6ed199228b1da018ecfa9df", transaction.getTo());
@@ -229,7 +230,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
         assertNotNull(transferData);
         assertEquals(1, transferData.getTransfers().size());
 
-        final TransferV1 transaction = transferData.getTransfers().get(0);
+        final TransferV1 transaction = (TransferV1) transferData.getTransfers().get(0);
         assertEquals("c709e727b7eaadb3b7f76450aa5d3ac3dd28b0271b7471a6dcc828cfd29f745a", transaction.getDeployHash());
         assertEquals("account-hash-496d542527e1a29f576ab7c3f4c947bfcdc9b4145f75f6ec40e36089432d7351", transaction.getFrom());
         assertEquals("account-hash-8a35e688eac33089b13f91a78c94221b669a0b13a6ed199228b1da018ecfa9df", transaction.getTo());
