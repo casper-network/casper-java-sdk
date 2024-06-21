@@ -1,95 +1,14 @@
 package com.casper.sdk.model.transfer;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-import java.math.BigInteger;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 /**
- * Represents a transfer from one purse to another
- *
- * @author Alexandre Carvalho
- * @author Andre Bertolace
- * @since 0.0.1
+ * @author ian@meywood.com
  */
-@Getter
-@Setter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-public class Transfer {
-    @JsonProperty("id")
-    private BigInteger id;
-
-    /**
-     * Hex-encoded account hash.
-     */
-    @JsonProperty("to")
-    private String to;
-
-    /**
-     * Hex-encoded account hash.
-     */
-    @JsonProperty("from")
-    private String from;
-
-    /**
-     * Amount transfered
-     */
-    @JsonIgnore
-    private BigInteger amount;
-
-    /**
-     * Hex-encoded hash
-     */
-    @JsonProperty("deploy_hash")
-    private String deployHash;
-
-    /**
-     * Hex-encoded, formatted URef
-     */
-    @JsonProperty("source")
-    private String source;
-
-    /**
-     * Hex-encoded, formatted URef
-     */
-    @JsonProperty("target")
-    private String target;
-
-    /**
-     * Decimal representation of a 512-bit integer.
-     */
-    @JsonIgnore
-    private BigInteger gas;
-
-    @JsonProperty("amount")
-    @ExcludeFromJacocoGeneratedReport
-    protected String getJsonAmount() {
-        return this.amount.toString(10);
-    }
-
-    @JsonProperty("amount")
-    @ExcludeFromJacocoGeneratedReport
-    protected void setJsonAmount(String value) {
-        this.amount = new BigInteger(value, 10);
-    }
-
-    @JsonProperty("gas")
-    @ExcludeFromJacocoGeneratedReport
-    protected String getJsonGas() {
-        return this.gas.toString(10);
-    }
-
-    @JsonProperty("gas")
-    @ExcludeFromJacocoGeneratedReport
-    protected void setJsonGas(String value) {
-        this.gas = new BigInteger(value, 10);
-    }
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.WRAPPER_OBJECT)
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = TransferV1.class, name = "Version1"),
+        @JsonSubTypes.Type(value = TransferV2.class, name = "Version2")})
+public interface Transfer {
 }

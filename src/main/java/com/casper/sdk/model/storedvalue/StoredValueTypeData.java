@@ -1,6 +1,7 @@
 package com.casper.sdk.model.storedvalue;
 
 import com.casper.sdk.exception.NoSuchTypeException;
+import com.casper.sdk.model.bid.StoredValueBidKind;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,6 +25,7 @@ public enum StoredValueTypeData {
     STORED_VALUE_DEPLOY_INFO("DeployInfo", StoredValueDeployInfo.class),
     STORED_VALUE_ERA_INFO("EraInfo", StoredValueEraInfo.class),
     STORED_VALUE_BID("Bid", StoredValueBid.class),
+    STORED_VALUE_BID_KIND("BidKind", StoredValueBidKind.class),
     STORED_VALUE_WITHDRAW("Withdraw", StoredValueWithdraw.class);
 
     private final String name;

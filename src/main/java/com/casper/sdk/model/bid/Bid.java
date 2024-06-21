@@ -30,7 +30,7 @@ import java.util.Map;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Bid {
+public class Bid implements BidKind {
 
     /**
      * The purse that was used for bonding.

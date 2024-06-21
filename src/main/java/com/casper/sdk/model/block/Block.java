@@ -30,5 +30,4 @@ public abstract class Block<HeaderT extends BlockHeader, BodyT extends BlockBody
     public abstract HeaderT getHeader();
 
     public abstract BodyT getBody();
-
 }

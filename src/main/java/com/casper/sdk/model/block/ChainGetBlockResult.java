@@ -1,5 +1,6 @@
 package com.casper.sdk.model.block;
 
+import com.casper.sdk.model.common.RpcResult;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,10 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class ChainGetBlockResponse {
-
-    @JsonProperty("api_version")
-    private String apiVersion;
+public class ChainGetBlockResult extends RpcResult {
 
     @JsonProperty("block_with_signatures")
     private BlockWithSignatures blockWithSignatures;

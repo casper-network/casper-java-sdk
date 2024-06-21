@@ -1,6 +1,6 @@
 package com.casper.sdk.model.deploy.transform;
 
-import com.casper.sdk.model.transfer.Transfer;
+import com.casper.sdk.model.transfer.TransferV1;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.AllArgsConstructor;
@@ -26,8 +26,8 @@ import lombok.Setter;
 public class WriteTransfer implements Transform {
 
     /**
-     * @see Transfer
+     * @see TransferV1
      */
     @JsonProperty("WriteTransfer")
-    private Transfer transfer;
+    private TransferV1 transfer;
 }
