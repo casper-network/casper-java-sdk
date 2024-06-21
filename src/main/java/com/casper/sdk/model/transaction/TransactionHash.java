@@ -19,10 +19,10 @@ import lombok.Setter;
 @Setter
 public abstract class TransactionHash extends Digest {
 
-    public TransactionHash(final String digest) {
+    protected TransactionHash(final String digest) {
         super(digest);
     }
 
-    public TransactionHash() {
+    protected TransactionHash() {
     }
 }

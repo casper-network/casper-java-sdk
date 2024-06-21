@@ -92,5 +92,4 @@ public enum TransformKindV2 {
         }
         throw new NoSuchTypeException();
     }
-
 }

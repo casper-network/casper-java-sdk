@@ -16,5 +16,4 @@ public class InitiatorAccountHash extends InitiatorAddr<Digest> {
     public InitiatorAccountHash(final Digest address) {
         super(address);
     }
-
 }
