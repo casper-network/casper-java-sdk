@@ -11,6 +11,8 @@ import java.math.BigInteger;
 import java.util.List;
 
 /**
+ * The result of executing a single transaction V2.
+ *
  * @author ian@meywood.com
  */
 @NoArgsConstructor
@@ -19,6 +21,7 @@ import java.util.List;
 @Setter
 public class ExecutionResultV2 extends ExecutionResult {
 
+    @SuppressWarnings("rawtypes")
     @JsonProperty("initiator")
     private InitiatorAddr initiator;
     /** If error_message is null, the execution was successful */

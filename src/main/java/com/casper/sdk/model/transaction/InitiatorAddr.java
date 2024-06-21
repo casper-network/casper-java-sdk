@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
+ * The address of the transaction initiator.
+ *
  * @author ian@meywood.com
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.WRAPPER_OBJECT)
@@ -19,7 +21,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public abstract  class InitiatorAddr<T> {
+public abstract class InitiatorAddr<T> {
     @JsonValue
     private T address;
 }

@@ -17,7 +17,4 @@ public abstract class BlockBody {
     /** @see PublicKey */
     @JsonProperty("proposer")
     private PublicKey proposer;
-
-
 }
-

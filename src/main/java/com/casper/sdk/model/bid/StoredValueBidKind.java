@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.*;
 
 /**
+ * Represents a stored value of BidKind.
  *
  * @author ian@meywood.com
  */

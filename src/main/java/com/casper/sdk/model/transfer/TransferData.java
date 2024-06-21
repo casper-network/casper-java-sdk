@@ -39,5 +39,5 @@ public class TransferData {
      * List of @see Transfer
      */
     @JsonProperty("transfers")
-    private List<TransferV1> transfers;
+    private List<Transfer> transfers;
 }

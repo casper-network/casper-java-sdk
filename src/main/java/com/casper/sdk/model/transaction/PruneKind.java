@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
+ * The kind for a Prune.
+ *
  * @author ian@meywood.com
  */
 @NoArgsConstructor

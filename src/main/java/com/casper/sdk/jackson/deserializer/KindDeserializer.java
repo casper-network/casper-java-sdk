@@ -9,6 +9,8 @@ import com.fasterxml.jackson.databind.jsontype.TypeIdResolver;
 import com.fasterxml.jackson.databind.jsontype.impl.AsPropertyTypeDeserializer;
 
 /**
+ * Deserializer for {@link TransformKindV2} types.
+ *
  * @author ian@meywood.com
  */
 public class KindDeserializer extends AbstractAnyOfDeserializer {

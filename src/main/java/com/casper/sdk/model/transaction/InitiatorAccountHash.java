@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.NoArgsConstructor;
 
 /**
+ * The InitiatorAddr for an account hash.
+ *
  * @author ian@meywood.com
  */
 @NoArgsConstructor(force = true)

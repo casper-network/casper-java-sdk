@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
+ * The Kind for a write
+ *
  * @author ian@meywood.com
  */
 @NoArgsConstructor

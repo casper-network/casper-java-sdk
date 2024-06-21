@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 /**
+ * Effects describe things that the creator of the effect intends to happen, producing a value upon completion.
+ *
  * @author ian@meywood.com
  */
 @NoArgsConstructor
@@ -15,7 +17,6 @@ public class Effect {
 
     @JsonProperty("key")
     private String key;
-
     @JsonProperty("kind")
     private Kind kind;
 

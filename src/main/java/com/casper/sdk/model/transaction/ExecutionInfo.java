@@ -10,6 +10,8 @@ import lombok.Setter;
 import java.math.BigInteger;
 
 /**
+ * The block hash and height in which a given deploy was executed, along with the execution result if known.
+ *
  * @author ian@meywood.com
  */
 @AllArgsConstructor
@@ -26,6 +28,6 @@ public class ExecutionInfo {
 
     public <T extends ExecutionResult> T getExecutionResult() {
         //noinspection unchecked
-        return (T)executionResult;
+        return (T) executionResult;
     }
 }
