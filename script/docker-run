@@ -1,3 +1,5 @@
 #!/usr/bin/env bash
+#CONTAINER_NAME="cspr-nctl"
+CONTAINER_NAME="cspr-nctl-condor"
 # run the cspr-nctl container in docker
-docker run --rm -it --name cspr-nctl-condor -d -p 25101:25101 -p 11101:11101 -p 14101:14101 -p 18101:18101 casper-nctl:feat-2.0
+docker run --rm -it --name ${CONTAINER_NAME} -d -p 25101:25101 -p 11101:11101 -p 14101:14101 -p 18101:18101 casper-nctl:feat-2.0

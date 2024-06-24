@@ -1,0 +1,152 @@
+{
+  "jsonrpc": "2.0",
+  "id": "383766003",
+  "result": {
+    "api_version": "2.0.0",
+    "deploy": {
+      "hash": "cb04018ad3a09fc15fda0e5c18def392a135652c73c864c25968be9b2376c139",
+      "header": {
+        "account": "010b42b381f087e65a1b6d4c9538027502307ebeff02044c9507f30ddffdb02ebd",
+        "timestamp": "2024-06-12T14:02:17.798Z",
+        "ttl": "30m",
+        "gas_price": 1,
+        "body_hash": "9fae773a27a4aafb161321c0779031a077b63f608f0743a2abbc4359c080a965",
+        "dependencies": [],
+        "chain_name": "casper-net-1"
+      },
+      "payment": {
+        "ModuleBytes": {
+          "module_bytes": "",
+          "args": [
+            [
+              "amount",
+              {
+                "cl_type": "U512",
+                "bytes": "0400e1f505",
+                "parsed": "100000000"
+              }
+            ]
+          ]
+        }
+      },
+      "session": {
+        "Transfer": {
+          "args": [
+            [
+              "amount",
+              {
+                "cl_type": "U512",
+                "bytes": "0400f90295",
+                "parsed": "2500000000"
+              }
+            ],
+            [
+              "target",
+              {
+                "cl_type": "PublicKey",
+                "bytes": "019774edff6119e46306a9011d30aae073d066ca5b31a0f5715a60dabf9734cf1d",
+                "parsed": "019774edff6119e46306a9011d30aae073d066ca5b31a0f5715a60dabf9734cf1d"
+              }
+            ],
+            [
+              "id",
+              {
+                "cl_type": {
+                  "Option": "U64"
+                },
+                "bytes": "0121e3af89b14cc051",
+                "parsed": 5890792638003536673
+              }
+            ]
+          ]
+        }
+      },
+      "approvals": [
+        {
+          "signer": "010b42b381f087e65a1b6d4c9538027502307ebeff02044c9507f30ddffdb02ebd",
+          "signature": "017503d672f7b226efd923e126d26cc916e3f36dc8a582829995fe7fa49c43202f985ff8097b1256c21ae662cd5e506ec3d9367e7a5f015ade06474c41313b8a09"
+        }
+      ]
+    },
+    "execution_info": {
+      "block_hash": "3ad051b1df071e4d539eab28986bb55ec4fb5fd31f63942ed788738186709303",
+      "block_height": 4139,
+      "execution_result": {
+        "Version2": {
+          "initiator": {
+            "PublicKey": "010b42b381f087e65a1b6d4c9538027502307ebeff02044c9507f30ddffdb02ebd"
+          },
+          "error_message": "unsupported mode for deploy-hash(cb04..c139) attempting transfer",
+          "limit": "10000",
+          "consumed": "0",
+          "cost": "10000",
+          "payment": [],
+          "transfers": [],
+          "size_estimate": 366,
+          "effects": [
+            {
+              "key": "balance-hold-01fe139a5aa36aa69c04a6b630c9993bc03d868ffde46d3f60c3fbe6e6e762016f78bec10c90010000",
+              "kind": {
+                "Write": {
+                  "CLValue": {
+                    "cl_type": "U512",
+                    "bytes": "021027",
+                    "parsed": "10000"
+                  }
+                }
+              }
+            },
+            {
+              "key": "balance-hold-01fe139a5aa36aa69c04a6b630c9993bc03d868ffde46d3f60c3fbe6e6e762016f78bec10c90010000",
+              "kind": {
+                "Prune": "balance-hold-01fe139a5aa36aa69c04a6b630c9993bc03d868ffde46d3f60c3fbe6e6e762016f78bec10c90010000"
+              }
+            },
+            {
+              "key": "balance-hold-00fe139a5aa36aa69c04a6b630c9993bc03d868ffde46d3f60c3fbe6e6e762016f78bec10c90010000",
+              "kind": {
+                "Write": {
+                  "CLValue": {
+                    "cl_type": "U512",
+                    "bytes": "021027",
+                    "parsed": "10000"
+                  }
+                }
+              }
+            },
+            {
+              "key": "entity-system-86c4525a60cb6532342f5f598666711219f3bdcc6a8936152ec1c670c510c75f",
+              "kind": "Identity"
+            },
+            {
+              "key": "entity-system-8ed30bde19e3365495deb556d1fc80adad1f541efe0e20ce438d8e9904925229",
+              "kind": "Identity"
+            },
+            {
+              "key": "entity-system-0de8bb23cff464d6ebbf3a7947d49f18dcb2dc9d2a164e6e8091d43c8d87a4c4",
+              "kind": "Identity"
+            },
+            {
+              "key": "bid-addr-013bb47b19ea663fe884d9e474f6420c2fd681d3b60d18ace600067f9b8d8fd086",
+              "kind": "Identity"
+            },
+            {
+              "key": "bid-addr-043bb47b19ea663fe884d9e474f6420c2fd681d3b60d18ace600067f9b8d8fd0867901000000000000",
+              "kind": {
+                "Write": {
+                  "BidKind": {
+                    "Credit": {
+                      "validator_public_key": "01284a8cd097808afdea9876ccb91f28702143c04266dea057cc19b8fc382cc258",
+                      "era_id": 377,
+                      "amount": "10000"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+}

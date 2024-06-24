@@ -9,7 +9,7 @@ import com.casper.sdk.model.account.AccountData;
 import com.casper.sdk.model.auction.AuctionData;
 import com.casper.sdk.model.balance.GetBalanceData;
 import com.casper.sdk.model.balance.QueryBalanceData;
-import com.casper.sdk.model.block.ChainGetBlockResponse;
+import com.casper.sdk.model.block.ChainGetBlockResult;
 import com.casper.sdk.model.deploy.Deploy;
 import com.casper.sdk.model.deploy.DeployData;
 import com.casper.sdk.model.deploy.DeployResult;
@@ -22,6 +22,8 @@ import com.casper.sdk.model.stateroothash.StateRootHashData;
 import com.casper.sdk.model.status.ChainspecData;
 import com.casper.sdk.model.status.StatusData;
 import com.casper.sdk.model.storedvalue.StoredValueData;
+import com.casper.sdk.model.transaction.GetTransactionResult;
+import com.casper.sdk.model.transaction.TransactionHash;
 import com.casper.sdk.model.transfer.TransferData;
 import com.casper.sdk.model.uref.URef;
 import com.casper.sdk.model.validator.ValidatorChangeData;
@@ -88,7 +90,7 @@ public interface CasperService {
      * @return Object holding the api version and block
      */
     @JsonRpcMethod("chain_get_block")
-    ChainGetBlockResponse getBlock();
+    ChainGetBlockResult getBlock();
 
     /**
      * Retrieve block info by its {@link BlockIdentifier}
@@ -97,7 +99,7 @@ public interface CasperService {
      * @return Object holding the api version and block
      */
     @JsonRpcMethod("chain_get_block")
-    ChainGetBlockResponse getBlock(@JsonRpcParam("block_identifier") BlockIdentifier blockIdentifier);
+    ChainGetBlockResult getBlock(@JsonRpcParam("block_identifier") BlockIdentifier blockIdentifier);
 
     /**
      * Retrieve last block's transfers
@@ -141,7 +143,10 @@ public interface CasperService {
      * to execution result
      */
     @JsonRpcMethod("info_get_deploy")
-    DeployData getDeploy(@JsonRpcParam("deploy_hash") String deployHash);
+    DeployData getDeploy(@JsonRpcParam("deploy_hash") final String deployHash);
+
+    @JsonRpcMethod("info_get_transaction")
+    GetTransactionResult getTransaction(@JsonRpcParam("transaction_hash") final TransactionHash transactionHash);
 
     /**
      * Returns the global state data given a {@link GlobalStateIdentifier}, key and paths

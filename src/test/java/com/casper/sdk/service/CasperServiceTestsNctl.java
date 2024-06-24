@@ -8,7 +8,7 @@ import com.casper.sdk.identifier.global.StateRootHashIdentifier;
 import com.casper.sdk.identifier.purse.MainPurseUnderPublickey;
 import com.casper.sdk.identifier.purse.PurseIdentifier;
 import com.casper.sdk.model.balance.QueryBalanceData;
-import com.casper.sdk.model.block.ChainGetBlockResponse;
+import com.casper.sdk.model.block.ChainGetBlockResult;
 import com.casper.sdk.model.era.EraInfoData;
 import com.casper.sdk.model.key.PublicKey;
 import com.casper.sdk.model.status.ChainspecData;
@@ -37,7 +37,7 @@ public class CasperServiceTestsNctl extends AbstractJsonRpcTests {
     void testIfBlockReturnedMatchesRequestedByHeight() {
         int blocks_to_check = 3;
         for (int i = 0; i < blocks_to_check; i++) {
-            ChainGetBlockResponse result = casperServiceNctl.getBlock(new HeightBlockIdentifier(i));
+            ChainGetBlockResult result = casperServiceNctl.getBlock(new HeightBlockIdentifier(i));
             assertEquals(result.getBlockWithSignatures().getBlock().getHeader().getHeight(), i);
         }
     }
@@ -52,7 +52,7 @@ public class CasperServiceTestsNctl extends AbstractJsonRpcTests {
 
     @Test
     void getEraSummaryByHash() {
-        ChainGetBlockResponse block = casperServiceNctl.getBlock(new HeightBlockIdentifier(10));
+        ChainGetBlockResult block = casperServiceNctl.getBlock(new HeightBlockIdentifier(10));
         EraInfoData eraInfoData = casperServiceNctl.getEraSummary(new HashBlockIdentifier(block.getBlockWithSignatures().getBlock().getHash().toString()));
 
         assertNotNull(eraInfoData);
@@ -80,10 +80,10 @@ public class CasperServiceTestsNctl extends AbstractJsonRpcTests {
         GlobalStateIdentifier stateRootHashIdentifier = StateRootHashIdentifier.builder()
                 .hash(casperServiceNctl.getStateRootHash().getStateRootHash())
                 .build();
-        PurseIdentifier mainPurseUnderPublickey = MainPurseUnderPublickey.builder()
+        PurseIdentifier mainPurseUnderPublicKey = MainPurseUnderPublickey.builder()
                 .publicKey(publicKeyAccount1)
                 .build();
-        QueryBalanceData balanceData = casperServiceNctl.queryBalance(stateRootHashIdentifier, mainPurseUnderPublickey);
+        QueryBalanceData balanceData = casperServiceNctl.queryBalance(stateRootHashIdentifier, mainPurseUnderPublicKey);
         assertNotNull(balanceData);
         assertNotEquals(balanceData.getBalance(), BigInteger.ZERO);
     }
@@ -157,7 +157,7 @@ public class CasperServiceTestsNctl extends AbstractJsonRpcTests {
             assertTrue(Files.size(temp) > 0);
 
             String fileContent = new String(Files.readAllBytes(temp));
-            assertTrue(!fileContent.isEmpty());
+            assertFalse(fileContent.isEmpty());
         } else {
             assertThrowsExactly(CasperInvalidStateException.class, () -> chainspec.saveGlobalState(temp));
         }

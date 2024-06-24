@@ -25,7 +25,7 @@ import java.math.BigInteger;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Delegator {
+public class Delegator implements BidKind {
     /**
      * @see PublicKey
      */

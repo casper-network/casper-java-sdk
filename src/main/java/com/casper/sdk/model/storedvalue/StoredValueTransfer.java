@@ -2,7 +2,7 @@ package com.casper.sdk.model.storedvalue;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.casper.sdk.model.transfer.Transfer;
+import com.casper.sdk.model.transfer.TransferV1;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * Stored Value for {@link Transfer}
+ * Stored Value for {@link TransferV1}
  *
  * @author Alexandre Carvalho
  * @author Andre Bertolace
@@ -25,7 +25,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @EqualsAndHashCode
 @JsonTypeName("Transfer")
-public class StoredValueTransfer implements StoredValue<Transfer> {
+public class StoredValueTransfer implements StoredValue<TransferV1> {
     @JsonProperty("Transfer")
-    public Transfer value;
+    public TransferV1 value;
 }

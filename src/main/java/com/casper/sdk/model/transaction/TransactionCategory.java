@@ -11,7 +11,7 @@ public enum TransactionCategory {
 
     /** Standard transaction (the default). */
     STANDARD(0),
-    /** Native mint interaction.. */
+    /** Native mint interaction. */
     MINT(1),
     /** Native auction interaction. */
     AUCTION(2),
@@ -28,5 +28,4 @@ public enum TransactionCategory {
     public byte toValue() {
         return value;
     }
-
 }
