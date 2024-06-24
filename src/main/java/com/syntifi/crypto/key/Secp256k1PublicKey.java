@@ -4,13 +4,14 @@ import com.syntifi.crypto.key.encdec.Hex;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.bouncycastle.asn1.*;
+import org.web3j.crypto.ECDSASignature;
 import org.web3j.crypto.Hash;
 import org.web3j.crypto.Sign;
-import org.web3j.crypto.Sign.SignatureData;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.Writer;
 import java.math.BigInteger;
-import java.security.GeneralSecurityException;
 import java.util.Arrays;
 
 /**
@@ -62,21 +63,52 @@ public class Secp256k1PublicKey extends AbstractPublicKey {
         PemFileHelper.writePemFile(writer, derKey.getEncoded(), ASN1Identifiers.PUBLIC_KEY_DER_HEADER);
     }
 
+    /**
+     * Iterates possible signature combinations and possible recovery id's
+     * Casper does not use signature.v so we have to iterate v
+     * We don't know v so we have to iterate the possible recover id's
+     * Converts to short public key for comparison
+     *
+     * @param message   the signed message
+     * @param signature the signature to check against
+     * @return true|false public key found
+     */
     @Override
-    public Boolean verify(final byte[] message, final byte[] signature) throws GeneralSecurityException {
-        //TODO: Double check the issue the getV(), for now we are trying with both (27 and 28)
-        final SignatureData signatureData1 = new SignatureData(
-                (byte) 27,
-                Arrays.copyOfRange(signature, 0, 32),
-                Arrays.copyOfRange(signature, 32, 64));
-        final BigInteger derivedKey1 = Sign.signedMessageHashToKey(Hash.sha256(message), signatureData1);
-        final SignatureData signatureData2 = new SignatureData(
-                (byte) 28,
-                Arrays.copyOfRange(signature, 0, 32),
-                Arrays.copyOfRange(signature, 32, 64));
-        final BigInteger derivedKey2 = Sign.signedMessageHashToKey(Hash.sha256(message), signatureData2);
-        return Arrays.equals(Secp256k1PublicKey.getShortKey(derivedKey1.toByteArray()), getKey()) ||
-                Arrays.equals(Secp256k1PublicKey.getShortKey(derivedKey2.toByteArray()), getKey());
+    public Boolean verify(byte[] message, byte[] signature) {
+
+        //We need the Public key's short key
+        byte[] keyToFind = (getKey().length > 33) ? getShortKey(getKey()) : getKey();
+
+        //Looping possible v's of the signature
+        for (int i = 27; i <= 34; i++) {
+
+            final Sign.SignatureData signatureData =
+                    new Sign.SignatureData(
+                            (byte) (i),
+                            Arrays.copyOfRange(signature, 0, 32),
+                            Arrays.copyOfRange(signature, 32, 64));
+
+            //iterate the recovery id's
+            for (int j = 0; j < 4; j++) {
+
+                final ECDSASignature ecdsaSignature = new ECDSASignature(new BigInteger(1, signatureData.getR()),
+                        new BigInteger(1, signatureData.getS()));
+                final BigInteger recoveredKey = Sign.recoverFromSignature((byte) j, ecdsaSignature, Hash.sha256(message));
+
+                if (recoveredKey != null) {
+
+                    final byte[] keyFromSignature = getShortKey(recoveredKey.toByteArray());
+
+                    if (Arrays.equals(keyFromSignature, keyToFind)) {
+                        return true;
+                    }
+                }
+            }
+
+        }
+
+        return false;
+
     }
 
     /**
