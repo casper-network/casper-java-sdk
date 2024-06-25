@@ -10,6 +10,8 @@ import org.joda.time.Period;
 import org.joda.time.format.PeriodFormatter;
 import org.joda.time.format.PeriodFormatterBuilder;
 
+import java.util.Objects;
+
 /**
  * TTL wrapper
  *
@@ -43,5 +45,23 @@ public class Ttl implements CasperSerializableObject {
     @Override
     public void serialize(SerializerBuffer ser, Target target) {
         ser.writeI64(getTtl());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Ttl ttl1 = (Ttl) o;
+        return Objects.equals(ttl, ttl1.ttl);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(ttl);
+    }
+
+    @Override
+    public String toString() {
+        return ttl;
     }
 }

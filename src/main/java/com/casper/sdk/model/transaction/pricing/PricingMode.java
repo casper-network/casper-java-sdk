@@ -1,4 +1,4 @@
-package com.casper.sdk.model.transaction;
+package com.casper.sdk.model.transaction.pricing;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
