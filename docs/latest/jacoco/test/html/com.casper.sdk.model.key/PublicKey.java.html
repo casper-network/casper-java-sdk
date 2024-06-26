@@ -71,17 +71,17 @@ public class PublicKey extends AbstractSerializedKeyTaggedHex&lt;AlgorithmTag&gt
 
     @JsonCreator
     public void createPublicKey(final String key) throws NoSuchAlgorithmException, IllegalArgumentException {
-<span class="nc" id="L74">        final PublicKey obj = PublicKey.fromTaggedHexString(key);</span>
-<span class="nc" id="L75">        this.setTag(obj.getTag());</span>
-<span class="nc" id="L76">        this.setKey(obj.getKey());</span>
-<span class="nc" id="L77">    }</span>
+<span class="fc" id="L74">        final PublicKey obj = PublicKey.fromTaggedHexString(key);</span>
+<span class="fc" id="L75">        this.setTag(obj.getTag());</span>
+<span class="fc" id="L76">        this.setKey(obj.getKey());</span>
+<span class="fc" id="L77">    }</span>
 
     @JsonIgnore
     public AbstractPublicKey getPubKey() throws NoSuchAlgorithmException {
-<span class="nc bnc" id="L81" title="All 2 branches missed.">        if (getTag().equals(AlgorithmTag.ED25519)) {</span>
+<span class="pc bpc" id="L81" title="1 of 2 branches missed.">        if (getTag().equals(AlgorithmTag.ED25519)) {</span>
 <span class="nc" id="L82">            return new Ed25519PublicKey(getKey());</span>
-<span class="nc bnc" id="L83" title="All 2 branches missed.">        } else if (getTag().equals(AlgorithmTag.SECP256K1)) {</span>
-<span class="nc" id="L84">            return new Secp256k1PublicKey(getKey());</span>
+<span class="pc bpc" id="L83" title="1 of 2 branches missed.">        } else if (getTag().equals(AlgorithmTag.SECP256K1)) {</span>
+<span class="fc" id="L84">            return new Secp256k1PublicKey(getKey());</span>
         } else {
 <span class="nc" id="L86">            throw new NoSuchAlgorithmException();</span>
         }
