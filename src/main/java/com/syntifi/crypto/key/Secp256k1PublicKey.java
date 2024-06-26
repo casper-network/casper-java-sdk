@@ -135,9 +135,11 @@ public class Secp256k1PublicKey extends AbstractPublicKey {
      * @return short key as byte array
      */
     public static byte[] getRecoveredShortKey(final byte[] key){
-        return (key[0] == (byte) 0)
-            ? getShortKey(Arrays.copyOfRange(key, 1, (key.length - 1)))
-            : getShortKey(key);
+        if (key[0] == (byte) 0) {
+            return getShortKey(Arrays.copyOfRange(key, 1, (key.length - 1)));
+        } else {
+            return getShortKey(key);
+        }
     }
 
 }
