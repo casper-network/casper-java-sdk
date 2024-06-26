@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Secp256k1PublicKey.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">casper-java-sdk</a> &gt; <a href="index.source.html" class="el_package">com.syntifi.crypto.key</a> &gt; <span class="el_source">Secp256k1PublicKey.java</span></div><h1>Secp256k1PublicKey.java</h1><pre class="source lang-java linenums">package com.syntifi.crypto.key;
 
+import com.casper.sdk.model.key.AlgorithmTag;
 import com.syntifi.crypto.key.encdec.Hex;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -21,47 +22,47 @@ import java.util.Arrays;
  * @author Andre Bertolace
  * @since 0.1.0
  */
-<span class="fc" id="L24">@NoArgsConstructor</span>
-<span class="nc bnc" id="L25" title="All 8 branches missed.">@EqualsAndHashCode(callSuper = true)</span>
+<span class="fc" id="L25">@NoArgsConstructor</span>
+<span class="nc bnc" id="L26" title="All 8 branches missed.">@EqualsAndHashCode(callSuper = true)</span>
 public class Secp256k1PublicKey extends AbstractPublicKey {
 
     public Secp256k1PublicKey(final byte[] bytes) {
-<span class="fc" id="L29">        super(bytes);</span>
-<span class="fc" id="L30">    }</span>
+<span class="fc" id="L30">        super(bytes);</span>
+<span class="fc" id="L31">    }</span>
 
     @Override
     public void loadPublicKey(final byte[] publicKey) throws IOException {
-<span class="fc" id="L34">        final ASN1Primitive derKey = ASN1Primitive.fromByteArray(publicKey);</span>
-<span class="fc" id="L35">        final ASN1Sequence objBaseSeq = ASN1Sequence.getInstance(derKey);</span>
-<span class="fc" id="L36">        final String keyId = ASN1ObjectIdentifier.getInstance(ASN1Sequence.getInstance(objBaseSeq.getObjectAt(0)).getObjectAt(0)).getId();</span>
-<span class="fc" id="L37">        final String curveId = ASN1ObjectIdentifier.getInstance(ASN1Sequence.getInstance(objBaseSeq.getObjectAt(0)).getObjectAt(1)).getId();</span>
-<span class="pc bpc" id="L38" title="1 of 2 branches missed.">        if (curveId.equals(ASN1Identifiers.Secp256k1OIDCurve.getId())</span>
-<span class="pc bpc" id="L39" title="1 of 2 branches missed.">                &amp;&amp; keyId.equals(ASN1Identifiers.Secp256k1OIDkey.getId())) {</span>
-<span class="fc" id="L40">            final DERBitString key = DERBitString.getInstance(objBaseSeq.getObjectAt(1));</span>
-<span class="fc" id="L41">            setKey(key.getBytes());</span>
-<span class="fc" id="L42">        } else {</span>
-<span class="nc" id="L43">            throw new IOException();</span>
+<span class="fc" id="L35">        final ASN1Primitive derKey = ASN1Primitive.fromByteArray(publicKey);</span>
+<span class="fc" id="L36">        final ASN1Sequence objBaseSeq = ASN1Sequence.getInstance(derKey);</span>
+<span class="fc" id="L37">        final String keyId = ASN1ObjectIdentifier.getInstance(ASN1Sequence.getInstance(objBaseSeq.getObjectAt(0)).getObjectAt(0)).getId();</span>
+<span class="fc" id="L38">        final String curveId = ASN1ObjectIdentifier.getInstance(ASN1Sequence.getInstance(objBaseSeq.getObjectAt(0)).getObjectAt(1)).getId();</span>
+<span class="pc bpc" id="L39" title="1 of 2 branches missed.">        if (curveId.equals(ASN1Identifiers.Secp256k1OIDCurve.getId())</span>
+<span class="pc bpc" id="L40" title="1 of 2 branches missed.">                &amp;&amp; keyId.equals(ASN1Identifiers.Secp256k1OIDkey.getId())) {</span>
+<span class="fc" id="L41">            final DERBitString key = DERBitString.getInstance(objBaseSeq.getObjectAt(1));</span>
+<span class="fc" id="L42">            setKey(key.getBytes());</span>
+<span class="fc" id="L43">        } else {</span>
+<span class="nc" id="L44">            throw new IOException();</span>
         }
-<span class="fc" id="L45">    }</span>
+<span class="fc" id="L46">    }</span>
 
     @Override
     public void readPublicKey(final Reader reader) throws IOException {
-<span class="fc" id="L49">        loadPublicKey(PemFileHelper.readPemFile(reader));</span>
-<span class="fc" id="L50">    }</span>
+<span class="fc" id="L50">        loadPublicKey(PemFileHelper.readPemFile(reader));</span>
+<span class="fc" id="L51">    }</span>
 
     @Override
     public void writePublicKey(final Writer writer) throws IOException {
-<span class="fc" id="L54">        final DERBitString key = new DERBitString(getKey());</span>
-<span class="fc" id="L55">        final ASN1EncodableVector v1 = new ASN1EncodableVector();</span>
-<span class="fc" id="L56">        v1.add(ASN1Identifiers.Secp256k1OIDkey);</span>
-<span class="fc" id="L57">        v1.add(ASN1Identifiers.Secp256k1OIDCurve);</span>
-<span class="fc" id="L58">        final DERSequence derPrefix = new DERSequence(v1);</span>
-<span class="fc" id="L59">        final ASN1EncodableVector v2 = new ASN1EncodableVector();</span>
-<span class="fc" id="L60">        v2.add(derPrefix);</span>
-<span class="fc" id="L61">        v2.add(key);</span>
-<span class="fc" id="L62">        final DERSequence derKey = new DERSequence(v2);</span>
-<span class="fc" id="L63">        PemFileHelper.writePemFile(writer, derKey.getEncoded(), ASN1Identifiers.PUBLIC_KEY_DER_HEADER);</span>
-<span class="fc" id="L64">    }</span>
+<span class="fc" id="L55">        final DERBitString key = new DERBitString(getKey());</span>
+<span class="fc" id="L56">        final ASN1EncodableVector v1 = new ASN1EncodableVector();</span>
+<span class="fc" id="L57">        v1.add(ASN1Identifiers.Secp256k1OIDkey);</span>
+<span class="fc" id="L58">        v1.add(ASN1Identifiers.Secp256k1OIDCurve);</span>
+<span class="fc" id="L59">        final DERSequence derPrefix = new DERSequence(v1);</span>
+<span class="fc" id="L60">        final ASN1EncodableVector v2 = new ASN1EncodableVector();</span>
+<span class="fc" id="L61">        v2.add(derPrefix);</span>
+<span class="fc" id="L62">        v2.add(key);</span>
+<span class="fc" id="L63">        final DERSequence derKey = new DERSequence(v2);</span>
+<span class="fc" id="L64">        PemFileHelper.writePemFile(writer, derKey.getEncoded(), ASN1Identifiers.PUBLIC_KEY_DER_HEADER);</span>
+<span class="fc" id="L65">    }</span>
 
     /**
      * Iterates possible signature combinations and possible recovery id's
@@ -77,37 +78,37 @@ public class Secp256k1PublicKey extends AbstractPublicKey {
     public Boolean verify(byte[] message, byte[] signature) {
 
         //We need the Public key's short key
-<span class="pc bpc" id="L80" title="1 of 2 branches missed.">        byte[] keyToFind = (getKey().length &gt; 33) ? getShortKey(getKey()) : getKey();</span>
+<span class="pc bpc" id="L81" title="1 of 2 branches missed.">        byte[] keyToFind = (getKey().length &gt; AlgorithmTag.SECP256K1.getLength()) ? getShortKey(getKey()) : getKey();</span>
 
         //Looping possible v's of the signature
-<span class="fc bfc" id="L83" title="All 2 branches covered.">        for (int i = 27; i &lt;= 34; i++) {</span>
+<span class="fc bfc" id="L84" title="All 2 branches covered.">        for (int i = 27; i &lt;= 34; i++) {</span>
 
-<span class="fc" id="L85">            final Sign.SignatureData signatureData =</span>
+<span class="fc" id="L86">            final Sign.SignatureData signatureData =</span>
                     new Sign.SignatureData(
                             (byte) (i),
-<span class="fc" id="L88">                            Arrays.copyOfRange(signature, 0, 32),</span>
-<span class="fc" id="L89">                            Arrays.copyOfRange(signature, 32, 64));</span>
+<span class="fc" id="L89">                            Arrays.copyOfRange(signature, 0, 32),</span>
+<span class="fc" id="L90">                            Arrays.copyOfRange(signature, 32, 64));</span>
 
             //iterate the recovery id's
-<span class="fc bfc" id="L92" title="All 2 branches covered.">            for (int j = 0; j &lt; 4; j++) {</span>
+<span class="fc bfc" id="L93" title="All 2 branches covered.">            for (int j = 0; j &lt; 4; j++) {</span>
 
-<span class="fc" id="L94">                final ECDSASignature ecdsaSignature = new ECDSASignature(new BigInteger(1, signatureData.getR()),</span>
-<span class="fc" id="L95">                        new BigInteger(1, signatureData.getS()));</span>
-<span class="fc" id="L96">                final BigInteger recoveredKey = Sign.recoverFromSignature((byte) j, ecdsaSignature, Hash.sha256(message));</span>
+<span class="fc" id="L95">                final ECDSASignature ecdsaSignature = new ECDSASignature(new BigInteger(1, signatureData.getR()),</span>
+<span class="fc" id="L96">                        new BigInteger(1, signatureData.getS()));</span>
+<span class="fc" id="L97">                final BigInteger recoveredKey = Sign.recoverFromSignature((byte) j, ecdsaSignature, Hash.sha256(message));</span>
 
-<span class="fc bfc" id="L98" title="All 2 branches covered.">                if (recoveredKey != null) {</span>
+<span class="fc bfc" id="L99" title="All 2 branches covered.">                if (recoveredKey != null) {</span>
 
-<span class="fc" id="L100">                    final byte[] keyFromSignature = getShortKey(recoveredKey.toByteArray());</span>
+<span class="fc" id="L101">                    final byte[] keyFromSignature = getRecoveredShortKey(recoveredKey.toByteArray());</span>
 
-<span class="fc bfc" id="L102" title="All 2 branches covered.">                    if (Arrays.equals(keyFromSignature, keyToFind)) {</span>
-<span class="fc" id="L103">                        return true;</span>
+<span class="fc bfc" id="L103" title="All 2 branches covered.">                    if (Arrays.equals(keyFromSignature, keyToFind)) {</span>
+<span class="fc" id="L104">                        return true;</span>
                     }
                 }
             }
 
         }
 
-<span class="fc" id="L110">        return false;</span>
+<span class="fc" id="L111">        return false;</span>
 
     }
 
@@ -118,10 +119,28 @@ public class Secp256k1PublicKey extends AbstractPublicKey {
      * @return short key as byte array
      */
     public static byte[] getShortKey(final byte[] key) {
-<span class="fc" id="L121">        final BigInteger pubKey = new BigInteger(key);</span>
-<span class="fc bfc" id="L122" title="All 2 branches covered.">        final String pubKeyPrefix = pubKey.testBit(0) ? &quot;03&quot; : &quot;02&quot;;</span>
-<span class="fc" id="L123">        final byte[] pubKeyBytes = Arrays.copyOfRange(key, 0, 32);</span>
-<span class="fc" id="L124">        return Hex.decode(pubKeyPrefix + Hex.encode(pubKeyBytes));</span>
+<span class="fc" id="L122">        final BigInteger pubKey = new BigInteger(key);</span>
+<span class="fc bfc" id="L123" title="All 2 branches covered.">        final String pubKeyPrefix = pubKey.testBit(0) ? &quot;03&quot; : &quot;02&quot;;</span>
+<span class="fc" id="L124">        final byte[] pubKeyBytes = Arrays.copyOfRange(key, 0, (AlgorithmTag.SECP256K1.getLength() - 1));</span>
+<span class="fc" id="L125">        return Hex.decode(pubKeyPrefix + Hex.encode(pubKeyBytes));</span>
     }
+
+    /**
+     * There's around a 50% chance the elliptical curve algo will generate a 65 byte
+     * public key instead of 66 byte.
+     * Luckily the algo pads the first byte as zero when this happens
+     * Determine this and then return the byte array to be shortened
+     *
+     * @param key the key as a byte array
+     * @return short key as byte array
+     */
+    public static byte[] getRecoveredShortKey(final byte[] key){
+<span class="fc bfc" id="L138" title="All 2 branches covered.">        if (key[0] == (byte) 0) {</span>
+<span class="fc" id="L139">            return getShortKey(Arrays.copyOfRange(key, 1, (key.length - 1)));</span>
+        } else {
+<span class="fc" id="L141">            return getShortKey(key);</span>
+        }
+    }
+
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
