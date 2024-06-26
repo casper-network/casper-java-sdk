@@ -11,6 +11,8 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
 
 /**
+ * Unit tests for {@link TransactionScheduling}.
+ *
  * @author ian@meywood.com
  */
 class TransactionSchedulingTest {

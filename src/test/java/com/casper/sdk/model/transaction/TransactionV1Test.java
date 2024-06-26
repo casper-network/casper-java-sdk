@@ -5,6 +5,7 @@ import com.casper.sdk.model.clvalue.CLValueU512;
 import com.casper.sdk.model.clvalue.CLValueURef;
 import com.casper.sdk.model.common.Digest;
 import com.casper.sdk.model.common.Ttl;
+import com.casper.sdk.model.key.PublicKey;
 import com.casper.sdk.model.transaction.pricing.FixedPricingMode;
 import com.casper.sdk.model.transaction.scheduling.FutureTimestamp;
 import com.casper.sdk.model.transaction.target.Native;
@@ -76,6 +77,10 @@ class TransactionV1Test {
         assertThat(transactionV1.getBody().getArgs().get(2).getClValue(), is(instanceOf(CLValueU512.class)));
         assertThat(transactionV1.getBody().getArgs().get(2).getClValue().getValue(), is(new BigInteger("11501403317070719246")));
         assertThat(transactionV1.getBody().getArgs().get(2).getClValue().getBytes(), is("080ee97f3c61319d9f"));
+
+        assertThat(transactionV1.getApprovals(), hasSize(1));
+        assertThat(transactionV1.getApprovals().get(0).getSignature().getAlgoTaggedHex(), is("0299741626a3360a315ef0dc7b8ce91183928bc3267ac6a87688458948bc95bb92569f777d9335234ee2a9e657f81cdf1ca8c4df41a3b292a81d5b2b9e64277417"));
+        assertThat(transactionV1.getApprovals().get(0).getSigner(), is(PublicKey.fromTaggedHexString("02023f63b32437c2f964e1d1951060ad63e7d26c0ab921e359d9900743db940a9298")));
 
         final String writtenJson = new ObjectMapper().writeValueAsString(transactionV1);
         JSONAssert.assertEquals(json, writtenJson, false);

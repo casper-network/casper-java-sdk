@@ -1,5 +1,7 @@
-package com.casper.sdk.model.transaction;
+package com.casper.sdk.model.transaction.execution;
 
+import com.casper.sdk.model.transaction.InitiatorAddr;
+import com.casper.sdk.model.transaction.PaymentInfo;
 import com.casper.sdk.model.transfer.Transfer;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

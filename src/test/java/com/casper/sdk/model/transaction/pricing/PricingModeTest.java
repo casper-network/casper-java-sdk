@@ -12,6 +12,8 @@ import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.core.Is.is;
 
 /**
+ * Unit tests for {@link PricingMode}.
+ *
  * @author ian@meywood.com
  */
 class PricingModeTest {
@@ -46,7 +48,6 @@ class PricingModeTest {
         final String writtenJson = new ObjectMapper().writeValueAsString(pricingMode);
         JSONAssert.assertEquals(json, writtenJson, false);
     }
-
 
     @Test
     void reservedPricingMode() throws Exception {

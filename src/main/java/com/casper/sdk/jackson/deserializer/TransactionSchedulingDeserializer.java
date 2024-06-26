@@ -15,7 +15,8 @@ import java.math.BigInteger;
 import java.util.Iterator;
 
 /**
- * Custom deserializer for {@link TransactionScheduling} objects.
+ * Custom deserializer for {@link TransactionScheduling} objects as Jackson in not able match nested Rust enum types
+ * using annotations.
  *
  * @author ian@meywood.com
  */

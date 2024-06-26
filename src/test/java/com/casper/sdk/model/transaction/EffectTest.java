@@ -7,6 +7,7 @@ import com.casper.sdk.model.bid.Delegator;
 import com.casper.sdk.model.bid.ValidatorCredit;
 import com.casper.sdk.model.clvalue.AbstractCLValue;
 import com.casper.sdk.model.key.PublicKey;
+import com.casper.sdk.model.transaction.execution.Effect;
 import com.casper.sdk.model.transaction.kind.IdentityKind;
 import com.casper.sdk.model.transaction.kind.PruneKind;
 import com.casper.sdk.model.transaction.kind.WriteKind;

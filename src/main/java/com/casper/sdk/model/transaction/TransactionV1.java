@@ -20,7 +20,6 @@ import java.util.List;
 @Getter
 @Setter
 public class TransactionV1 extends Transaction {
-
     @JsonProperty("hash")
     private Digest hash;
     @JsonProperty("header")

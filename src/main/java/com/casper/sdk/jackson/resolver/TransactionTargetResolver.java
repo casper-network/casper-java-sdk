@@ -10,6 +10,8 @@ import com.fasterxml.jackson.databind.jsontype.impl.StdTypeResolverBuilder;
 import java.util.Collection;
 
 /**
+ * Resolves the TransactionTarget object type.
+ *
  * @author ian@meywood.com
  */
 public class TransactionTargetResolver extends StdTypeResolverBuilder {
