@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":9,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10};
+var data = {"i0":10,"i1":10,"i2":9,"i3":9,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -200,31 +200,39 @@ extends <a href="AbstractPublicKey.html" title="class in com.syntifi.crypto.key"
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>static byte[]</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getRecoveredShortKey(byte%5B%5D)">getRecoveredShortKey</a></span>&#8203;(byte[]&nbsp;key)</code></th>
+<td class="colLast">
+<div class="block">There's around a 50% chance the elliptical curve algo will generate a 65 byte
+ public key instead of 66 byte.</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>static byte[]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getShortKey(byte%5B%5D)">getShortKey</a></span>&#8203;(byte[]&nbsp;key)</code></th>
 <td class="colLast">
 <div class="block">Gets a short key</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hashCode()">hashCode</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#loadPublicKey(byte%5B%5D)">loadPublicKey</a></span>&#8203;(byte[]&nbsp;publicKey)</code></th>
 <td class="colLast">
 <div class="block">Loads a public key from a byte array</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readPublicKey(java.io.Reader)">readPublicKey</a></span>&#8203;(java.io.Reader&nbsp;reader)</code></th>
 <td class="colLast">
 <div class="block">Reads the public key from a file</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>java.lang.Boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#verify(byte%5B%5D,byte%5B%5D)">verify</a></span>&#8203;(byte[]&nbsp;message,
       byte[]&nbsp;signature)</code></th>
@@ -235,7 +243,7 @@ extends <a href="AbstractPublicKey.html" title="class in com.syntifi.crypto.key"
  Converts to short public key for comparison</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writePublicKey(java.io.Writer)">writePublicKey</a></span>&#8203;(java.io.Writer&nbsp;writer)</code></th>
 <td class="colLast">
@@ -392,6 +400,25 @@ extends <a href="AbstractPublicKey.html" title="class in com.syntifi.crypto.key"
 <h4>getShortKey</h4>
 <pre class="methodSignature">public static&nbsp;byte[]&nbsp;getShortKey&#8203;(byte[]&nbsp;key)</pre>
 <div class="block">Gets a short key</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>key</code> - the key as a byte array</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>short key as byte array</dd>
+</dl>
+</li>
+</ul>
+<a id="getRecoveredShortKey(byte[])">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getRecoveredShortKey</h4>
+<pre class="methodSignature">public static&nbsp;byte[]&nbsp;getRecoveredShortKey&#8203;(byte[]&nbsp;key)</pre>
+<div class="block">There's around a 50% chance the elliptical curve algo will generate a 65 byte
+ public key instead of 66 byte.
+ Luckily the algo pads the first byte as zero when this happens
+ Determine this and then return the byte array to be shortened</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>key</code> - the key as a byte array</dd>
