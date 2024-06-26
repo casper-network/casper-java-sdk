@@ -1,5 +1,6 @@
 package com.syntifi.crypto.key;
 
+import com.casper.sdk.model.key.AlgorithmTag;
 import com.syntifi.crypto.key.encdec.Hex;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -77,7 +78,7 @@ public class Secp256k1PublicKey extends AbstractPublicKey {
     public Boolean verify(byte[] message, byte[] signature) {
 
         //We need the Public key's short key
-        byte[] keyToFind = (getKey().length > 33) ? getShortKey(getKey()) : getKey();
+        byte[] keyToFind = (getKey().length > AlgorithmTag.SECP256K1.getLength()) ? getShortKey(getKey()) : getKey();
 
         //Looping possible v's of the signature
         for (int i = 27; i <= 34; i++) {
@@ -97,7 +98,7 @@ public class Secp256k1PublicKey extends AbstractPublicKey {
 
                 if (recoveredKey != null) {
 
-                    final byte[] keyFromSignature = getShortKey(recoveredKey.toByteArray());
+                    final byte[] keyFromSignature = getRecoveredShortKey(recoveredKey.toByteArray());
 
                     if (Arrays.equals(keyFromSignature, keyToFind)) {
                         return true;
@@ -120,7 +121,25 @@ public class Secp256k1PublicKey extends AbstractPublicKey {
     public static byte[] getShortKey(final byte[] key) {
         final BigInteger pubKey = new BigInteger(key);
         final String pubKeyPrefix = pubKey.testBit(0) ? "03" : "02";
-        final byte[] pubKeyBytes = Arrays.copyOfRange(key, 0, 32);
+        final byte[] pubKeyBytes = Arrays.copyOfRange(key, 0, (AlgorithmTag.SECP256K1.getLength() - 1));
         return Hex.decode(pubKeyPrefix + Hex.encode(pubKeyBytes));
     }
+
+    /**
+     * There's around a 50% chance the elliptical curve algo will generate a 65 byte
+     * public key instead of 66 byte.
+     * Luckily the algo pads the first byte as zero when this happens
+     * Determine this and then return the byte array to be shortened
+     *
+     * @param key the key as a byte array
+     * @return short key as byte array
+     */
+    public static byte[] getRecoveredShortKey(final byte[] key){
+        if (key[0] == (byte) 0) {
+            return getShortKey(Arrays.copyOfRange(key, 1, (key.length - 1)));
+        } else {
+            return getShortKey(key);
+        }
+    }
+
 }
