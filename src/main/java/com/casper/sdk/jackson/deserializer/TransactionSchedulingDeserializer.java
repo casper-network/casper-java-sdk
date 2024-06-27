@@ -24,7 +24,7 @@ public class TransactionSchedulingDeserializer extends JsonDeserializer<Transact
     @Override
     public TransactionScheduling deserialize(final JsonParser p, final DeserializationContext ctxt) throws IOException {
 
-        // Nested rust enums are  represented as objects in JSON
+        // Nested rust enums are represented as objects in JSON
         if (p.getCurrentToken() == JsonToken.START_OBJECT) {
             final ObjectNode treeNode = p.readValueAsTree();
             final Iterator<String> stringIterator = treeNode.fieldNames();
