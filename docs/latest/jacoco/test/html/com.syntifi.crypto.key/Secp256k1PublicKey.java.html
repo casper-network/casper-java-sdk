@@ -98,7 +98,7 @@ public class Secp256k1PublicKey extends AbstractPublicKey {
 
 <span class="fc bfc" id="L99" title="All 2 branches covered.">                if (recoveredKey != null) {</span>
 
-<span class="fc" id="L101">                    final byte[] keyFromSignature = getRecoveredShortKey(recoveredKey.toByteArray());</span>
+<span class="fc" id="L101">                    final byte[] keyFromSignature = getShortKey(recoveredKey.toByteArray());</span>
 
 <span class="fc bfc" id="L103" title="All 2 branches covered.">                    if (Arrays.equals(keyFromSignature, keyToFind)) {</span>
 <span class="fc" id="L104">                        return true;</span>
@@ -114,32 +114,22 @@ public class Secp256k1PublicKey extends AbstractPublicKey {
 
     /**
      * Gets a short key
+     * There's around a 50% chance the elliptical curve algo will generate a 65 byte
+     * public key instead of 66 byte.
+     * Luckily the algo pads the first byte as zero when this happens
+     * startBit determines this
      *
      * @param key the key as a byte array
      * @return short key as byte array
      */
     public static byte[] getShortKey(final byte[] key) {
-<span class="fc" id="L122">        final BigInteger pubKey = new BigInteger(key);</span>
-<span class="fc bfc" id="L123" title="All 2 branches covered.">        final String pubKeyPrefix = pubKey.testBit(0) ? &quot;03&quot; : &quot;02&quot;;</span>
-<span class="fc" id="L124">        final byte[] pubKeyBytes = Arrays.copyOfRange(key, 0, (AlgorithmTag.SECP256K1.getLength() - 1));</span>
-<span class="fc" id="L125">        return Hex.decode(pubKeyPrefix + Hex.encode(pubKeyBytes));</span>
-    }
+<span class="fc" id="L126">        final BigInteger pubKey = new BigInteger(key);</span>
+<span class="fc bfc" id="L127" title="All 2 branches covered.">        final String pubKeyPrefix = pubKey.testBit(0) ? &quot;03&quot; : &quot;02&quot;;</span>
 
-    /**
-     * There's around a 50% chance the elliptical curve algo will generate a 65 byte
-     * public key instead of 66 byte.
-     * Luckily the algo pads the first byte as zero when this happens
-     * Determine this and then return the byte array to be shortened
-     *
-     * @param key the key as a byte array
-     * @return short key as byte array
-     */
-    public static byte[] getRecoveredShortKey(final byte[] key){
-<span class="fc bfc" id="L138" title="All 2 branches covered.">        if (key[0] == (byte) 0) {</span>
-<span class="fc" id="L139">            return getShortKey(Arrays.copyOfRange(key, 1, (key.length - 1)));</span>
-        } else {
-<span class="fc" id="L141">            return getShortKey(key);</span>
-        }
+<span class="fc bfc" id="L129" title="All 2 branches covered.">        final int startBit = key[0] == (byte) 0 ? 1 : 0;</span>
+
+<span class="fc" id="L131">        final byte[] pubKeyBytes = Arrays.copyOfRange(key, startBit, (AlgorithmTag.SECP256K1.getLength() - 1) + startBit);</span>
+<span class="fc" id="L132">        return Hex.decode(pubKeyPrefix + Hex.encode(pubKeyBytes));</span>
     }
 
 }
