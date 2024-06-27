@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Ed25519PrivateKey.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">casper-java-sdk</a> &gt; <a href="index.source.html" class="el_package">com.syntifi.crypto.key</a> &gt; <span class="el_source">Ed25519PrivateKey.java</span></div><h1>Ed25519PrivateKey.java</h1><pre class="source lang-java linenums">package com.syntifi.crypto.key;
+
+import com.syntifi.crypto.key.deterministic.HierarchicalDeterministicKey;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import org.bouncycastle.asn1.*;
+import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
+import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
+import org.bouncycastle.crypto.CryptoException;
+import org.bouncycastle.crypto.DataLengthException;
+import org.bouncycastle.crypto.Signer;
+import org.bouncycastle.crypto.generators.Ed25519KeyPairGenerator;
+import org.bouncycastle.crypto.params.Ed25519KeyGenerationParameters;
+import org.bouncycastle.crypto.params.Ed25519PrivateKeyParameters;
+import org.bouncycastle.crypto.signers.Ed25519Signer;
+
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.security.SecureRandom;
+
+/**
+ * ed25519 implementation of {@link AbstractPrivateKey}
+ *
+ * @author Alexandre Carvalho
+ * @author Andre Bertolace
+ * @since 0.1.0
+ */
+<span class="fc" id="L28">@NoArgsConstructor</span>
+<span class="nc bnc" id="L29" title="All 16 branches missed.">@EqualsAndHashCode(callSuper = true)</span>
+public class Ed25519PrivateKey extends AbstractPrivateKey {
+
+    private Ed25519PrivateKeyParameters privateKeyParameters;
+
+    public Ed25519PrivateKey(final byte[] privateKey) {
+<span class="fc" id="L35">        super(privateKey);</span>
+<span class="fc" id="L36">        loadPrivateKey(privateKey);</span>
+<span class="fc" id="L37">    }</span>
+
+    @Override
+    public void loadPrivateKey(final byte[] privateKey) {
+<span class="fc" id="L41">        privateKeyParameters = new Ed25519PrivateKeyParameters(privateKey, 0);</span>
+<span class="fc" id="L42">    }</span>
+
+    @Override
+    public void readPrivateKey(final Reader reader) throws IOException {
+<span class="fc" id="L46">        final ASN1Primitive key = ASN1Primitive.fromByteArray(PemFileHelper.readPemFile(reader));</span>
+<span class="fc" id="L47">        final PrivateKeyInfo keyInfo = PrivateKeyInfo.getInstance(key);</span>
+<span class="fc" id="L48">        final String algoId = keyInfo.getPrivateKeyAlgorithm().getAlgorithm().toString();</span>
+<span class="pc bpc" id="L49" title="1 of 2 branches missed.">        if (algoId.equals(ASN1Identifiers.Ed25519OID.getId())) {</span>
+<span class="fc" id="L50">            privateKeyParameters = new Ed25519PrivateKeyParameters(keyInfo.getPrivateKey().getEncoded(), 4);</span>
+<span class="fc" id="L51">            setKey(privateKeyParameters.getEncoded());</span>
+        }
+<span class="fc" id="L53">    }</span>
+
+    @Override
+    public void writePrivateKey(final Writer writer) throws IOException {
+<span class="fc" id="L57">        final DERSequence derPrefix = new DERSequence(ASN1Identifiers.Ed25519OID);</span>
+<span class="fc" id="L58">        final DEROctetString key = new DEROctetString(new DEROctetString(getKey()));</span>
+<span class="fc" id="L59">        final ASN1EncodableVector vector = new ASN1EncodableVector();</span>
+<span class="fc" id="L60">        vector.add(new ASN1Integer(0));</span>
+<span class="fc" id="L61">        vector.add(derPrefix);</span>
+<span class="fc" id="L62">        vector.add(key);</span>
+<span class="fc" id="L63">        final DERSequence derKey = new DERSequence(vector);</span>
+<span class="fc" id="L64">        PemFileHelper.writePemFile(writer, derKey.getEncoded(), ASN1Identifiers.PRIVATE_KEY_DER_HEADER);</span>
+<span class="fc" id="L65">    }</span>
+
+    @Override
+    public byte[] sign(final byte[] message) {
+<span class="fc" id="L69">        final Signer signer = new Ed25519Signer();</span>
+<span class="fc" id="L70">        signer.init(true, privateKeyParameters);</span>
+<span class="fc" id="L71">        signer.update(message, 0, message.length);</span>
+        byte[] signature;
+        try {
+<span class="fc" id="L74">            signature = signer.generateSignature();</span>
+<span class="fc" id="L75">            return signature;</span>
+<span class="nc" id="L76">        } catch (DataLengthException | CryptoException e) {</span>
+            // TODO: throw new SomeException();
+<span class="nc" id="L78">            return null;</span>
+        }
+    }
+
+    @Override
+    public AbstractPublicKey derivePublicKey() {
+<span class="fc" id="L84">        return new Ed25519PublicKey(privateKeyParameters.generatePublicKey().getEncoded());</span>
+    }
+
+    public static Ed25519PrivateKey deriveFromSeed(final byte[] seed, final int[] path) throws IOException {
+<span class="fc" id="L88">        final byte[] init = &quot;ed25519 seed&quot;.getBytes(StandardCharsets.UTF_8);</span>
+<span class="fc" id="L89">        final byte[] key = HierarchicalDeterministicKey.getFromSeed(seed, init, path);</span>
+<span class="fc" id="L90">        return new Ed25519PrivateKey(key);</span>
+    }
+
+    public static Ed25519PrivateKey deriveRandomKey() {
+<span class="fc" id="L94">        final SecureRandom rnd = new SecureRandom();</span>
+<span class="fc" id="L95">        final Ed25519KeyPairGenerator keyPairGenerator = new Ed25519KeyPairGenerator();</span>
+<span class="fc" id="L96">        keyPairGenerator.init(new Ed25519KeyGenerationParameters(rnd));</span>
+<span class="fc" id="L97">        final AsymmetricCipherKeyPair asymmetricCipherKeyPair = keyPairGenerator.generateKeyPair();</span>
+<span class="fc" id="L98">        final Ed25519PrivateKeyParameters privateKeyParameters = (Ed25519PrivateKeyParameters) asymmetricCipherKeyPair.getPrivate();</span>
+<span class="fc" id="L99">        return new Ed25519PrivateKey(privateKeyParameters.getEncoded());</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

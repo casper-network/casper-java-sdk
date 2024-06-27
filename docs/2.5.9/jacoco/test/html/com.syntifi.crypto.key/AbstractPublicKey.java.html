@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AbstractPublicKey.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">casper-java-sdk</a> &gt; <a href="index.source.html" class="el_package">com.syntifi.crypto.key</a> &gt; <span class="el_source">AbstractPublicKey.java</span></div><h1>AbstractPublicKey.java</h1><pre class="source lang-java linenums">package com.syntifi.crypto.key;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.io.*;
+import java.security.GeneralSecurityException;
+
+/**
+ * Abstract class for needed shared functionalities
+ *
+ * @author Alexandre Carvalho
+ * @author Andre Bertolace
+ * @since 0.1.0
+ */
+<span class="pc bnc" id="L17" title="All 8 branches missed.">@Data</span>
+<span class="fc" id="L18">@NoArgsConstructor</span>
+<span class="fc" id="L19">@AllArgsConstructor</span>
+public abstract class AbstractPublicKey {
+
+<span class="fc" id="L22">    private byte[] key;</span>
+
+    /**
+     * Loads a public key from a byte array
+     *
+     * @param publicKey the public key bytes
+     */
+    public abstract void loadPublicKey(final byte[] publicKey) throws IOException;
+
+    /**
+     * Reads the public key from a file
+     *
+     * @param filename the source filename
+     * @throws IOException thrown if an error occurs reading the file
+     */
+    public final void readPublicKey(final String filename) throws IOException {
+<span class="fc" id="L38">        try (final Reader fileReader = new FileReader(filename)) {</span>
+<span class="fc" id="L39">            readPublicKey(fileReader);</span>
+        }
+<span class="fc" id="L41">    }</span>
+
+    /**
+     * Reads the public key from a file
+     *
+     * @param reader the source filename
+     * @throws IOException thrown if an error occurs reading the file
+     */
+    public abstract void readPublicKey(final Reader reader) throws IOException;
+
+    /**
+     * Writes the public key to a file
+     *
+     * @param filename the target filename
+     * @throws IOException thrown if an error occurs writing the file
+     */
+    public final void writePublicKey(final String filename) throws IOException {
+<span class="fc" id="L58">        try (final Writer fileWriter = new FileWriter(filename)) {</span>
+<span class="fc" id="L59">            writePublicKey(fileWriter);</span>
+        }
+<span class="fc" id="L61">    }</span>
+
+    /**
+     * Writes the public key to a file
+     *
+     * @param writer the target to write the public key
+     * @throws IOException thrown if an error occurs writing the file
+     */
+    public abstract void writePublicKey(final Writer writer) throws IOException;
+
+    /**
+     * Verifies message with given signature
+     *
+     * @param message   the signed message
+     * @param signature the signature to check against
+     * @return true if matches, false otherwise
+     * @throws GeneralSecurityException thrown if an error occurs processing message and signature
+     */
+    public abstract Boolean verify(final byte[] message, final byte[] signature) throws GeneralSecurityException;
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

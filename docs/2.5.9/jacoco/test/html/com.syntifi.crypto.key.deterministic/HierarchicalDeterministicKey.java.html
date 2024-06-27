@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>HierarchicalDeterministicKey.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">casper-java-sdk</a> &gt; <a href="index.source.html" class="el_package">com.syntifi.crypto.key.deterministic</a> &gt; <span class="el_source">HierarchicalDeterministicKey.java</span></div><h1>HierarchicalDeterministicKey.java</h1><pre class="source lang-java linenums">package com.syntifi.crypto.key.deterministic;
+
+import com.syntifi.crypto.key.encdec.Hex;
+import org.bouncycastle.crypto.digests.SHA512Digest;
+import org.bouncycastle.crypto.macs.HMac;
+import org.bouncycastle.crypto.params.KeyParameter;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.util.Arrays;
+
+/**
+ * The procedure to implement BIP32 or SLIP 10 to generate deterministic keys hierarchically
+ * https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki
+ * https://github.com/satoshilabs/slips/blob/master/slip-0010.md
+ *
+ * @author Alexandre Carvalho
+ * @author Andre Bertolace
+ * @since 0.3.0
+ */
+<span class="nc" id="L22">public class HierarchicalDeterministicKey {</span>
+<span class="fc" id="L23">    private final static Long MAX_VALUE_INDEX = 2147483648L;</span>
+
+    /**
+     *
+     * @param seed           byte array containing the seed
+     * @param init           chaincode, that is the rightmost 32 bytes of the key
+     * @param derivationPath path to follow when deriving the key
+     * @return derived key in byte array
+     * @throws IOException if an error occurs when processing the bytestream
+     */
+    public static byte[] getFromSeed(byte[] seed, byte[] init, int[] derivationPath) throws IOException {
+<span class="fc" id="L34">        byte[] key = HierarchicalDeterministicKey.getMasterKeyFromSeed(seed, init);</span>
+        byte[] iL;
+        byte[] iR;
+<span class="fc" id="L37">        iL = Arrays.copyOfRange(key, 0, 32);</span>
+<span class="fc" id="L38">        iR = Arrays.copyOfRange(key, 32, 64);</span>
+<span class="fc bfc" id="L39" title="All 2 branches covered.">        for (int i : derivationPath) {</span>
+<span class="fc" id="L40">            key = HierarchicalDeterministicKey.childKeyDerivation(</span>
+<span class="fc" id="L41">                    iL, iR, HierarchicalDeterministicKey.longToBytes(MAX_VALUE_INDEX + i));</span>
+<span class="fc" id="L42">            iL = Arrays.copyOfRange(key, 0, 32);</span>
+<span class="fc" id="L43">            iR = Arrays.copyOfRange(key, 32, 64);</span>
+        }
+<span class="fc" id="L45">        return key;</span>
+    }
+
+    /**
+     * Derives the masterkey given a seed byte array
+     *
+     * @param seed byte array containing the seed
+     * @param key initial Hmac value
+     * @return master key as a byte array
+     */
+    public static byte[] getMasterKeyFromSeed(byte[] seed, byte[] key) {
+<span class="fc" id="L56">        HMac hMac = new HMac(new SHA512Digest());</span>
+<span class="fc" id="L57">        hMac.init(new KeyParameter(key));</span>
+<span class="fc" id="L58">        hMac.update(seed, 0, seed.length);</span>
+<span class="fc" id="L59">        byte[] result = new byte[hMac.getMacSize()];</span>
+<span class="fc" id="L60">        hMac.doFinal(result, 0);</span>
+<span class="fc" id="L61">        return result;</span>
+    }
+
+    /**
+     * CKD function in Bipt32 and Slip10
+     *
+     * @param key        master key, that is the leftmost 32 bytes of the key
+     * @param chainCode  hierarchical chain code 'a/b/c' but in array format: { a, b, c}
+     * @param init       chaincode, that is the rightmost 32 bytes of the key
+     * @return master key as a byte array
+     * @throws IOException if an error occurs when processing the bytestream
+     */
+    public static byte[] childKeyDerivation(byte[] key, byte[] chainCode, byte[] init) throws IOException {
+<span class="fc" id="L74">        ByteArrayOutputStream os = new ByteArrayOutputStream();</span>
+<span class="fc" id="L75">        os.write(Hex.decode(&quot;00&quot;));</span>
+<span class="fc" id="L76">        os.write(key);</span>
+<span class="fc" id="L77">        os.write(Arrays.copyOfRange(init, 4, 8));</span>
+<span class="fc" id="L78">        HMac hMac = new HMac(new SHA512Digest());</span>
+<span class="fc" id="L79">        hMac.init(new KeyParameter(chainCode));</span>
+<span class="fc" id="L80">        hMac.update(os.toByteArray(), 0, os.size());</span>
+<span class="fc" id="L81">        byte[] result = new byte[hMac.getMacSize()];</span>
+<span class="fc" id="L82">        hMac.doFinal(result, 0);</span>
+<span class="fc" id="L83">        return result;</span>
+    }
+
+    private static byte[] longToBytes(long x) {
+<span class="fc" id="L87">        ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);</span>
+<span class="fc" id="L88">        buffer.putLong(x);</span>
+<span class="fc" id="L89">        return buffer.array();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
