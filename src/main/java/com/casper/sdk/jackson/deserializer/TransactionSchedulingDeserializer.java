@@ -24,6 +24,7 @@ public class TransactionSchedulingDeserializer extends JsonDeserializer<Transact
     @Override
     public TransactionScheduling deserialize(final JsonParser p, final DeserializationContext ctxt) throws IOException {
 
+        // Nested rust enums are  represented as objects in JSON
         if (p.getCurrentToken() == JsonToken.START_OBJECT) {
             final ObjectNode treeNode = p.readValueAsTree();
             final Iterator<String> stringIterator = treeNode.fieldNames();
@@ -36,6 +37,7 @@ public class TransactionSchedulingDeserializer extends JsonDeserializer<Transact
                 throw new IllegalArgumentException("Unknown scheduling type: " + next);
             }
         } else if (p.getCurrentToken() == JsonToken.VALUE_STRING) {
+            // Normal enum
             return new Standard();
         } else {
             throw new IllegalArgumentException("Unknown scheduling type: " + p);
