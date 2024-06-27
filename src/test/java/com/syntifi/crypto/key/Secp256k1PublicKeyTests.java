@@ -63,7 +63,31 @@ public class Secp256k1PublicKeyTests extends AbstractCryptoTests {
     }
 
     @Test
-    void signAndRecoverPublicKey_1() throws URISyntaxException, IOException {
+    void signAndRecoverPublicKeyWithPaddedPK() throws URISyntaxException, IOException {
+
+        //Get the private key
+        Secp256k1PrivateKey privKey = new Secp256k1PrivateKey();
+        String filePath = getResourcesKeyPath("secp256k1/private-padded.pem");
+        privKey.readPrivateKey(filePath);
+
+        //Check that the public key is padded with a 0 byte
+        assert privKey.getKeyPair().getPublicKey().toByteArray()[0] == (byte) 0;
+
+
+        //Derive the public key
+        Secp256k1PublicKey publicKey = (Secp256k1PublicKey) privKey.derivePublicKey();
+
+        String message = "bc81ca4de9b3a991a6514eddf0e994e0035c7ba58f333c4d7ba5dd18b4c9c547";
+
+        //Generate the signature
+        byte[] signature = privKey.sign(message.getBytes());
+
+        //Test
+        assert publicKey.verify(message.getBytes(), signature);
+
+    }
+   @Test
+   void signAndRecoverPublicKey_1() throws URISyntaxException, IOException {
 
         //Get the private key
         Secp256k1PrivateKey privKey = new Secp256k1PrivateKey();

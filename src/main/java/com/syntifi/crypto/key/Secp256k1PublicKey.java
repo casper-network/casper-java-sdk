@@ -98,7 +98,7 @@ public class Secp256k1PublicKey extends AbstractPublicKey {
 
                 if (recoveredKey != null) {
 
-                    final byte[] keyFromSignature = getRecoveredShortKey(recoveredKey.toByteArray());
+                    final byte[] keyFromSignature = getShortKey(recoveredKey.toByteArray());
 
                     if (Arrays.equals(keyFromSignature, keyToFind)) {
                         return true;
@@ -114,6 +114,10 @@ public class Secp256k1PublicKey extends AbstractPublicKey {
 
     /**
      * Gets a short key
+     * There's around a 50% chance the elliptical curve algo will generate a 65 byte
+     * public key instead of 66 byte.
+     * Luckily the algo pads the first byte as zero when this happens
+     * startBit determines this
      *
      * @param key the key as a byte array
      * @return short key as byte array
@@ -121,25 +125,11 @@ public class Secp256k1PublicKey extends AbstractPublicKey {
     public static byte[] getShortKey(final byte[] key) {
         final BigInteger pubKey = new BigInteger(key);
         final String pubKeyPrefix = pubKey.testBit(0) ? "03" : "02";
-        final byte[] pubKeyBytes = Arrays.copyOfRange(key, 0, (AlgorithmTag.SECP256K1.getLength() - 1));
-        return Hex.decode(pubKeyPrefix + Hex.encode(pubKeyBytes));
-    }
 
-    /**
-     * There's around a 50% chance the elliptical curve algo will generate a 65 byte
-     * public key instead of 66 byte.
-     * Luckily the algo pads the first byte as zero when this happens
-     * Determine this and then return the byte array to be shortened
-     *
-     * @param key the key as a byte array
-     * @return short key as byte array
-     */
-    public static byte[] getRecoveredShortKey(final byte[] key){
-        if (key[0] == (byte) 0) {
-            return getShortKey(Arrays.copyOfRange(key, 1, (key.length - 1)));
-        } else {
-            return getShortKey(key);
-        }
+        final int startBit = key[0] == (byte) 0 ? 1 : 0;
+
+        final byte[] pubKeyBytes = Arrays.copyOfRange(key, startBit, (AlgorithmTag.SECP256K1.getLength() - 1) + startBit);
+        return Hex.decode(pubKeyPrefix + Hex.encode(pubKeyBytes));
     }
 
 }
