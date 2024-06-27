@@ -1,9 +1,9 @@
 package com.casper.sdk.model.deploy.transform;
 
 import com.casper.sdk.exception.NoSuchTypeException;
-import com.casper.sdk.model.transaction.IdentityKind;
-import com.casper.sdk.model.transaction.PruneKind;
-import com.casper.sdk.model.transaction.WriteKind;
+import com.casper.sdk.model.transaction.kind.IdentityKind;
+import com.casper.sdk.model.transaction.kind.PruneKind;
+import com.casper.sdk.model.transaction.kind.WriteKind;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**

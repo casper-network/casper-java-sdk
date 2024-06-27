@@ -1,4 +1,4 @@
-package com.casper.sdk.model.transaction;
+package com.casper.sdk.model.transaction.execution;
 
 import com.casper.sdk.model.common.Digest;
 import com.fasterxml.jackson.annotation.JsonProperty;

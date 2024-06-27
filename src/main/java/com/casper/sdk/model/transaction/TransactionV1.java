@@ -1,5 +1,6 @@
 package com.casper.sdk.model.transaction;
 
+import com.casper.sdk.model.common.Digest;
 import com.casper.sdk.model.deploy.Approval;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -19,9 +20,8 @@ import java.util.List;
 @Getter
 @Setter
 public class TransactionV1 extends Transaction {
-
     @JsonProperty("hash")
-    private TransactionHash hash;
+    private Digest hash;
     @JsonProperty("header")
     private TransactionV1Header header;
     @JsonProperty("body")

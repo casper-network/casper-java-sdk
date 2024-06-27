@@ -1,4 +1,4 @@
-package com.casper.sdk.model.transaction;
+package com.casper.sdk.model.transaction.kind;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

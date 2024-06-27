@@ -1,5 +1,6 @@
-package com.casper.sdk.model.transaction;
+package com.casper.sdk.model.transaction.execution;
 
+import com.casper.sdk.model.transaction.kind.Kind;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 

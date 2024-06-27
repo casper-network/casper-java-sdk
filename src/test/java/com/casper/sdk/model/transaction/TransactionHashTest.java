@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
+import static org.hamcrest.core.IsNot.not;
 
 /**
  * Unit tests for {@link TransactionHash}
@@ -44,8 +45,10 @@ class TransactionHashTest {
         final TransactionHash transactionHash = new ObjectMapper().readValue(json, TransactionHash.class);
         assertThat(transactionHash, is(instanceOf(TransactionHashV1.class)));
         assertThat(transactionHash.getDigest(), is(Hex.decode("cb04018ad3a09fc15fda0e5c18def392a135652c73c864c25968be9b2376c139")));
-
+        assertThat(transactionHash, is(new TransactionHashV1("cb04018ad3a09fc15fda0e5c18def392a135652c73c864c25968be9b2376c139")));
         final String written = new ObjectMapper().writeValueAsString(transactionHash);
         assertThat(written, is(json));
+
+        assertThat(new TransactionV1(), is(not(new TransactionHashV1("cb04018ad3a09fc15fda0e5c18def392a135652c73c864c25968be9b2376c139"))));
     }
 }

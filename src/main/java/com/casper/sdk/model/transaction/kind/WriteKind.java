@@ -1,5 +1,6 @@
-package com.casper.sdk.model.transaction;
+package com.casper.sdk.model.transaction.kind;
 
+import com.casper.sdk.model.storedvalue.StoredValue;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,7 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * The kind for a Prune.
+ * The Kind for write.
  *
  * @author ian@meywood.com
  */
@@ -15,8 +16,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class PruneKind implements Kind {
+public class WriteKind<T> implements Kind {
 
-    @JsonProperty("Prune")
-    private String prune;
+    @JsonProperty("Write")
+    private StoredValue<T> write;
 }

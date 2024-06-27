@@ -1,4 +1,4 @@
-package com.casper.sdk.model.transaction;
+package com.casper.sdk.model.transaction.pricing;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -22,5 +22,5 @@ public class FixedPricingMode implements PricingMode {
      * if the current gas price is greater than this number"
      */
     @JsonProperty("gas_price_tolerance")
-    private byte gasPriceTolerance;
+    private int gasPriceTolerance;
 }

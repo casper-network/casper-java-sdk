@@ -2,6 +2,8 @@ package com.casper.sdk.model.transaction;
 
 import com.casper.sdk.model.common.Digest;
 import com.casper.sdk.model.common.Ttl;
+import com.casper.sdk.model.transaction.pricing.PricingMode;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,6 +25,7 @@ public class TransactionV1Header {
     @JsonProperty("chain_name")
     private String chainName;
     @JsonProperty("timestamp")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     private Date timestamp;
     @JsonProperty("ttl")
     private Ttl ttl;
@@ -30,6 +33,7 @@ public class TransactionV1Header {
     private Digest bodyHash;
     @JsonProperty("pricing_mode")
     private PricingMode pricingMode;
+    @SuppressWarnings("rawtypes")
     @JsonProperty("initiator_addr")
     private InitiatorAddr initiatorAddr;
 }

@@ -1,0 +1,16 @@
+package com.casper.sdk.model.transaction.target;
+
+import com.casper.sdk.jackson.resolver.TransactionTargetResolver;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.databind.annotation.JsonTypeResolver;
+
+/**
+ * The execution target of a `Transaction`.
+ *
+ * @author ian@meywood.com
+ */
+@JsonTypeInfo(use = JsonTypeInfo.Id.NONE)
+@JsonTypeResolver(TransactionTargetResolver.class)
+public interface TransactionTarget {
+}
+

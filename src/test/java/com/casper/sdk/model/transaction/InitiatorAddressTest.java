@@ -13,6 +13,8 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
 
 /**
+ * Unit tests for {@link InitiatorAddr}.
+ *
  * @author ian@meywood.com
  */
 class InitiatorAddressTest {

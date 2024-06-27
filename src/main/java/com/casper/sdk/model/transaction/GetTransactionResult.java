@@ -1,6 +1,7 @@
 package com.casper.sdk.model.transaction;
 
 import com.casper.sdk.model.common.RpcResult;
+import com.casper.sdk.model.transaction.execution.ExecutionInfo;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
