@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
+ * The address identifying the invocable entity.
+ *
  * @author ian@meywood.com
  */
 @NoArgsConstructor

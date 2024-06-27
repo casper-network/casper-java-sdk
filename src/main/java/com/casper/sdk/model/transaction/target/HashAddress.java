@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
+ * An alias for Keys hash variant.
+ *
  * @author ian@meywood.com
  */
 @NoArgsConstructor

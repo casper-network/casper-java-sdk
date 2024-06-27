@@ -21,13 +21,13 @@ import java.util.Objects;
 @Setter
 public class Native implements TransactionTarget {
 
+    @JsonValue
+    private String target;
+
     @JsonCreator
     public Native(String target) {
         this.target = target;
     }
-
-    @JsonValue
-    private String target;
 
     @Override
     public boolean equals(Object o) {
