@@ -1,7 +1,6 @@
 package com.syntifi.crypto.key;
 
 import com.casper.sdk.model.key.AlgorithmTag;
-import com.syntifi.crypto.key.encdec.Hex;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.bouncycastle.asn1.*;
@@ -123,11 +122,16 @@ public class Secp256k1PublicKey extends AbstractPublicKey {
      * @return short key as byte array
      */
     public static byte[] getShortKey(final byte[] key) {
-        final BigInteger pubKey = new BigInteger(key);
-        final String pubKeyPrefix = pubKey.testBit(0) ? "03" : "02";
+
         final int startBit = key[0] == (byte) 0 ? 1 : 0;
-        final byte[] pubKeyBytes = Arrays.copyOfRange(key, startBit, (AlgorithmTag.SECP256K1.getLength() - 1) + startBit);
-        return Hex.decode(pubKeyPrefix + Hex.encode(pubKeyBytes));
+
+        final byte[] shortKey = new byte[AlgorithmTag.SECP256K1.getLength()];
+        shortKey[0] = (byte) (new BigInteger(key).testBit(0) ? 3 : 2);
+
+        System.arraycopy(key, startBit, shortKey, 1, AlgorithmTag.SECP256K1.getLength() - 1);
+
+        return shortKey;
+
     }
 
 }
