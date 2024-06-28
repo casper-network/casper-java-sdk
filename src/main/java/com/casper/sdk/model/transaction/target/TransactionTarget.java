@@ -1,6 +1,8 @@
 package com.casper.sdk.model.transaction.target;
 
 import com.casper.sdk.jackson.resolver.TransactionTargetResolver;
+import com.casper.sdk.model.clvalue.serde.CasperSerializableObject;
+import com.casper.sdk.model.key.Tag;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonTypeResolver;
 
@@ -11,6 +13,6 @@ import com.fasterxml.jackson.databind.annotation.JsonTypeResolver;
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NONE)
 @JsonTypeResolver(TransactionTargetResolver.class)
-public interface TransactionTarget {
+public interface TransactionTarget extends CasperSerializableObject, Tag {
 }
 

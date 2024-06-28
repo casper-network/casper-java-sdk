@@ -6,9 +6,11 @@ import com.casper.sdk.model.clvalue.CLValueURef;
 import com.casper.sdk.model.common.Digest;
 import com.casper.sdk.model.common.Ttl;
 import com.casper.sdk.model.key.PublicKey;
+import com.casper.sdk.model.transaction.entrypoint.TransferEntryPoint;
 import com.casper.sdk.model.transaction.pricing.FixedPricingMode;
 import com.casper.sdk.model.transaction.scheduling.FutureTimestamp;
 import com.casper.sdk.model.transaction.target.Native;
+import com.casper.sdk.model.transfer.Transfer;
 import com.casper.sdk.model.uref.URef;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.IOUtils;
@@ -52,7 +54,7 @@ class TransactionV1Test {
         assertThat(((FixedPricingMode) transactionV1.getHeader().getPricingMode()).getGasPriceTolerance(), is(5));
 
         assertThat(transactionV1.getBody().getTransactionCategory(), is(TransactionCategory.STANDARD));
-        assertThat(transactionV1.getBody().getEntryPoint(), is("Transfer"));
+        assertThat(transactionV1.getBody().getEntryPoint(), is(new TransferEntryPoint()));
         assertThat(transactionV1.getBody().getTarget(), is(new Native()));
         assertThat(transactionV1.getBody().getScheduling(), is(instanceOf(FutureTimestamp.class)));
         assertThat(((FutureTimestamp) transactionV1.getBody().getScheduling()).asDate(), is(new DateTime("2020-08-07T01:20:22.207Z").toDate()));

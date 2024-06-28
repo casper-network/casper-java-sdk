@@ -1,8 +1,12 @@
 package com.casper.sdk.model.transaction.target;
 
+import com.casper.sdk.exception.NoSuchTypeException;
+import com.casper.sdk.model.clvalue.serde.Target;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import dev.oak3.sbs4j.SerializerBuffer;
+import dev.oak3.sbs4j.exception.ValueSerializationException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -38,5 +42,15 @@ public class Native implements TransactionTarget {
     @Override
     public int hashCode() {
         return Objects.hashCode(getClass().getSimpleName());
+    }
+
+    @Override
+    public void serialize(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {
+        ser.writeU8(getByteTag());
+    }
+
+    @Override
+    public byte getByteTag() {
+        return 0;
     }
 }
