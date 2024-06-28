@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+cd "$(dirname "$0")/.."|| exit 1
+./gradlew --stop
+./gradlew cleanTest test -Dorg.gradle.jvmargs='-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005' --no-daemon --debug-jvm

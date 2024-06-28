@@ -125,9 +125,7 @@ public class Secp256k1PublicKey extends AbstractPublicKey {
     public static byte[] getShortKey(final byte[] key) {
         final BigInteger pubKey = new BigInteger(key);
         final String pubKeyPrefix = pubKey.testBit(0) ? "03" : "02";
-
         final int startBit = key[0] == (byte) 0 ? 1 : 0;
-
         final byte[] pubKeyBytes = Arrays.copyOfRange(key, startBit, (AlgorithmTag.SECP256K1.getLength() - 1) + startBit);
         return Hex.decode(pubKeyPrefix + Hex.encode(pubKeyBytes));
     }

@@ -70,7 +70,7 @@ public class Secp256k1PublicKeyTests extends AbstractCryptoTests {
         String filePath = getResourcesKeyPath("secp256k1/private-padded.pem");
         privKey.readPrivateKey(filePath);
 
-        //Check that the public key is padded with a 0 byte
+        //Check that the public key is private-padded.pem with a 0 byte
         assert privKey.getKeyPair().getPublicKey().toByteArray()[0] == (byte) 0;
 
 
