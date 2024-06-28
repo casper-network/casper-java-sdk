@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.security.GeneralSecurityException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -82,7 +81,7 @@ public class Secp256k1PrivateKeyTests extends AbstractCryptoTests {
     }
 
     @Test
-    void create_random_key() throws GeneralSecurityException, IOException {
+    void create_random_key() {
         Secp256k1PrivateKey sk = Secp256k1PrivateKey.deriveRandomKey();
         Secp256k1PublicKey pk = (Secp256k1PublicKey) sk.derivePublicKey();
         LOGGER.info(sk.getKeyPair().getPrivateKey().toString(16));
