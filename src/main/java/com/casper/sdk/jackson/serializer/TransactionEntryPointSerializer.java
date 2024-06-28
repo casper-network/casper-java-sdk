@@ -19,10 +19,10 @@ public class TransactionEntryPointSerializer extends JsonSerializer<TransactionE
 
         if (value instanceof CustomEntryPoint) {
             gen.writeStartObject();
-            gen.writeStringField(CustomEntryPoint.class.getSimpleName(), ((CustomEntryPoint) value).getCustom());
+            gen.writeStringField(value.getName(), ((CustomEntryPoint) value).getCustom());
             gen.writeEndObject();
         } else {
-            gen.writeString(value.toString());
+            gen.writeString(value.getName());
         }
     }
 }

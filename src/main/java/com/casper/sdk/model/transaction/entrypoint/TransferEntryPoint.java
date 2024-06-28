@@ -5,13 +5,13 @@ package com.casper.sdk.model.transaction.entrypoint;
  * purse.
  * <p>
  * Requires the following runtime args:
- * * "source": `URef`
- * * "target": `URef`
- * * "amount": `U512`
+ * <ul><li>source": `URef`</li>
+ * <li>"target": `URef`</li>
+ * <li>"amount": `U512`</li></ul>
  * <p>
  * The following optional runtime args can also be provided:
- * * "to": `Option<AccountHash>`
- * * "id": `Option<u64>`
+ * <ul><li>to": `Option<AccountHash>`</li>
+ * <li>"id": `Option<u64>`</li></ul>
  *
  * @author ian@meywood.com
  */

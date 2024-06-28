@@ -6,10 +6,10 @@ package com.casper.sdk.model.transaction.entrypoint;
  * delegate to a new validator.
  * <p>
  * Requires the following runtime args:
- * * "delegator": `PublicKey`
- * * "validator": `PublicKey`
- * * "amount": `U512`
- * * "new_validator": `PublicKey`
+ * <ul><li>delegator": `PublicKey`</li>
+ * <li>"validator": `PublicKey`</li>
+ * <li>"amount": `U512`</li>
+ * <li>"new_validator": `PublicKey`</li></ul>
  *
  * @author ian@meywood.com
  */

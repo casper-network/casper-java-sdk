@@ -11,6 +11,7 @@ import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
@@ -23,6 +24,7 @@ import lombok.NoArgsConstructor;
 @JsonSerialize(using = TransactionEntryPointSerializer.class)
 @JsonDeserialize(using = TransactionEntryPointDeserializer.class)
 @EqualsAndHashCode(callSuper = false)
+@Getter
 public abstract class TransactionEntryPoint implements CasperSerializableObject, Tag {
 
     private final byte tag;

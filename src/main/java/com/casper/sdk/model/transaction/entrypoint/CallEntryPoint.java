@@ -5,9 +5,9 @@ package com.casper.sdk.model.transaction.entrypoint;
  *
  * @author ian@meywood.com
  */
-public class CallnEntryPoint extends TransactionEntryPoint {
+public class CallEntryPoint extends TransactionEntryPoint {
 
-    public CallnEntryPoint() {
+    public CallEntryPoint() {
         super((byte)0, "Call");
     }
 }

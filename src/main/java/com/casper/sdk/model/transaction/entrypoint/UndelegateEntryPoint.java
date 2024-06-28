@@ -5,9 +5,9 @@ package com.casper.sdk.model.transaction.entrypoint;
  * delegator if the remaining stake is 0.
  * <p>
  * Requires the following runtime args:
- * * "delegator": `PublicKey`
- * * "validator": `PublicKey`
- * * "amount": `U512`
+ * <ul><li>delegator": `PublicKey`</li>
+ * <li>"validator": `PublicKey`</li>
+ * <li>"amount": `U512`</li></ul>
  *
  * @author ian@meywood.com
  */

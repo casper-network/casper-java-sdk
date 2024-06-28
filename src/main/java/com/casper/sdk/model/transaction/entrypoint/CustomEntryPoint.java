@@ -3,7 +3,9 @@ package com.casper.sdk.model.transaction.entrypoint;
 import com.casper.sdk.model.clvalue.serde.Target;
 import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 /**
  * A non-native, arbitrary entry point.
@@ -11,6 +13,8 @@ import lombok.Getter;
  * @author ian@meywood.com
  */
 @Getter
+@Setter
+@Builder
 public class CustomEntryPoint extends TransactionEntryPoint {
 
     private String custom;
@@ -32,6 +36,6 @@ public class CustomEntryPoint extends TransactionEntryPoint {
 
     @Override
     public String toString() {
-        return "{ \"Custom\": {\"" + custom + "\"}";
+        return "{\"Custom\":\"" + custom + "\"}";
     }
 }

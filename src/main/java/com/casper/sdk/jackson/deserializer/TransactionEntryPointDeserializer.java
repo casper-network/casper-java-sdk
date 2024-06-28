@@ -3,13 +3,11 @@ package com.casper.sdk.jackson.deserializer;
 import com.casper.sdk.exception.CasperClientException;
 import com.casper.sdk.model.transaction.entrypoint.CustomEntryPoint;
 import com.casper.sdk.model.transaction.entrypoint.TransactionEntryPoint;
-import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -22,7 +20,7 @@ import java.util.Iterator;
 public class TransactionEntryPointDeserializer extends JsonDeserializer<TransactionEntryPoint> {
 
     @Override
-    public TransactionEntryPoint deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JacksonException {
+    public TransactionEntryPoint deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
 
         if (p.getCurrentToken() == JsonToken.START_OBJECT) {
             // Nested rust enums are represented as objects in JSON
@@ -35,15 +33,10 @@ public class TransactionEntryPointDeserializer extends JsonDeserializer<Transact
         }
     }
 
-    private static @NotNull CustomEntryPoint createNestedEntryPoint(final ObjectNode objectNode) throws IOException {
+    private CustomEntryPoint createNestedEntryPoint(final ObjectNode objectNode) {
         final Iterator<String> stringIterator = objectNode.fieldNames();
         final String next = stringIterator.next();
-
-        if (next.equals(CustomEntryPoint.class.getSimpleName())) {
-            return new CustomEntryPoint(objectNode.get(next).asText());
-        } else {
-            throw new IllegalArgumentException("Unknown scheduling type: " + next);
-        }
+        return new CustomEntryPoint(objectNode.get(next).asText());
     }
 
     private TransactionEntryPoint createSimpleEntryPoint(final String name) {
