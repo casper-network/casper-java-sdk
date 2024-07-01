@@ -16,6 +16,6 @@ package com.casper.sdk.model.transaction.entrypoint;
 public class AddBidEntryPoint extends TransactionEntryPoint {
 
     public AddBidEntryPoint() {
-        super((byte) 3, "AddBid");
+        super((byte) ADD_BID_TAG, "AddBid");
     }
 }

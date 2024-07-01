@@ -15,14 +15,18 @@ import dev.oak3.sbs4j.exception.ValueSerializationException;
  */
 public enum TransactionCategory implements CasperSerializableObject, Tag {
 
-    /** Standard transaction (the default). */
-    STANDARD(0),
     /** Native mint interaction. */
-    MINT(1),
+    MINT(0),
     /** Native auction interaction. */
-    AUCTION(2),
+    AUCTION(1),
     /** Install or Upgrade. */
-    INSTALL_UPGRADE(3);
+    INSTALL_UPGRADE(2),
+    /** A large Wasm based transaction. */
+    LARGE(3),
+    /** A medium Wasm based transaction. */
+    MEDIUM(4),
+    /** A small Wasm based transaction. */
+    SMALL(5);
 
     private final byte tag;
 

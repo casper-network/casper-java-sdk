@@ -13,6 +13,6 @@ package com.casper.sdk.model.transaction.entrypoint;
  */
 public class UndelegateEntryPoint extends TransactionEntryPoint {
     public UndelegateEntryPoint() {
-        super((byte) 6, "Undelegate");
+        super((byte) UNDELEGATE_TAG, "Undelegate");
     }
 }

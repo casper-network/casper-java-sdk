@@ -10,6 +10,6 @@ package com.casper.sdk.model.transaction.entrypoint;
  */
 public class ActivateBidEntryPoint extends TransactionEntryPoint {
     public ActivateBidEntryPoint() {
-        super((byte) 8, "ActivateBid");
+        super((byte) ACTIVATE_BID_TAG, "ActivateBid");
     }
 }

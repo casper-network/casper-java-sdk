@@ -37,10 +37,10 @@ public class TransactionV1Body implements CasperSerializableObject {
     public void serialize(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {
 
         serializeNamedArgs(ser, target);
-      //  this.target.serialize(ser, target);
-        //ser.writeString(this.entryPoint);
-        //this.transactionCategory.serialize(ser, target);
-      //  this.scheduling.serialize(ser, target);
+        this.target.serialize(ser, target);
+        this.entryPoint.serialize(ser, target);
+        this.transactionCategory.serialize(ser, target);
+        this.scheduling.serialize(ser, target);
     }
 
     void serializeNamedArgs(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {

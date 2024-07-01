@@ -23,7 +23,7 @@ class TransferEntryPointTest {
         assertThat(entryPoint, is(instanceOf(ActivateBidEntryPoint.class)));
 
         assertThat(entryPoint.toString(), is("ActivateBid"));
-        assertThat(entryPoint.getByteTag(), is((byte) 8));
+        assertThat(entryPoint.getByteTag(), is((byte) 7));
         assertThat(new ObjectMapper().writeValueAsString(entryPoint), is(json));
     }
 
@@ -35,7 +35,7 @@ class TransferEntryPointTest {
         assertThat(entryPoint, is(instanceOf(AddBidEntryPoint.class)));
 
         assertThat(entryPoint.getName(), is("AddBid"));
-        assertThat(entryPoint.getByteTag(), is((byte) 3));
+        assertThat(entryPoint.getByteTag(), is((byte) 2));
         assertThat(new ObjectMapper().writeValueAsString(entryPoint), is(json));
     }
 
@@ -47,7 +47,7 @@ class TransferEntryPointTest {
         assertThat(entryPoint, is(instanceOf(CallEntryPoint.class)));
 
         assertThat(entryPoint.getName(), is("Call"));
-        assertThat(entryPoint.getByteTag(), is((byte) 0));
+        assertThat(entryPoint.getByteTag(), is((byte) 9));
         assertThat(new ObjectMapper().writeValueAsString(entryPoint), is(json));
     }
 
@@ -59,7 +59,7 @@ class TransferEntryPointTest {
         assertThat(entryPoint, is(instanceOf(ChangeBidPublicKeyEntryPoint.class)));
 
         assertThat(entryPoint.getName(), is("ChangeBidPublicKey"));
-        assertThat(entryPoint.getByteTag(), is((byte) 9));
+        assertThat(entryPoint.getByteTag(), is((byte) 8));
         assertThat(new ObjectMapper().writeValueAsString(entryPoint), is(json));
     }
 
@@ -71,7 +71,7 @@ class TransferEntryPointTest {
         assertThat(entryPoint, is(instanceOf(CustomEntryPoint.class)));
 
         assertThat(entryPoint.getName(), is("Custom"));
-        assertThat(entryPoint.getByteTag(), is((byte) 1));
+        assertThat(entryPoint.getByteTag(), is((byte) 0));
         assertThat(new ObjectMapper().writeValueAsString(entryPoint), is(json));
     }
 
@@ -83,7 +83,7 @@ class TransferEntryPointTest {
         assertThat(entryPoint, is(instanceOf(DelegateEntryPoint.class)));
 
         assertThat(entryPoint.getName(), is("Delegate"));
-        assertThat(entryPoint.getByteTag(), is((byte) 5));
+        assertThat(entryPoint.getByteTag(), is((byte) 4));
         assertThat(new ObjectMapper().writeValueAsString(entryPoint), is(json));
     }
 
@@ -95,7 +95,7 @@ class TransferEntryPointTest {
         assertThat(entryPoint, is(instanceOf(RedelegateEntryPoint.class)));
 
         assertThat(entryPoint.getName(), is("Redelegate"));
-        assertThat(entryPoint.getByteTag(), is((byte) 7));
+        assertThat(entryPoint.getByteTag(), is((byte) 6));
         assertThat(new ObjectMapper().writeValueAsString(entryPoint), is(json));
     }
 
@@ -107,7 +107,7 @@ class TransferEntryPointTest {
         assertThat(entryPoint, is(instanceOf(TransferEntryPoint.class)));
 
         assertThat(entryPoint.getName(), is("Transfer"));
-        assertThat(entryPoint.getByteTag(), is((byte) 2));
+        assertThat(entryPoint.getByteTag(), is((byte) 1));
         assertThat(new ObjectMapper().writeValueAsString(entryPoint), is(json));
     }
 
@@ -119,7 +119,7 @@ class TransferEntryPointTest {
         assertThat(entryPoint, is(instanceOf(UndelegateEntryPoint.class)));
 
         assertThat(entryPoint.getName(), is("Undelegate"));
-        assertThat(entryPoint.getByteTag(), is((byte) 6));
+        assertThat(entryPoint.getByteTag(), is((byte) 5));
         assertThat(new ObjectMapper().writeValueAsString(entryPoint), is(json));
     }
 
@@ -131,7 +131,7 @@ class TransferEntryPointTest {
         assertThat(entryPoint, is(instanceOf(WithdrawBidEntryPoint.class)));
 
         assertThat(entryPoint.getName(), is("WithdrawBid"));
-        assertThat(entryPoint.getByteTag(), is((byte) 4));
+        assertThat(entryPoint.getByteTag(), is((byte) 3));
         assertThat(new ObjectMapper().writeValueAsString(entryPoint), is(json));
     }
 }

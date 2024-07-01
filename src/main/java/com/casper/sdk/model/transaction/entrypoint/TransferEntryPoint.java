@@ -18,6 +18,6 @@ package com.casper.sdk.model.transaction.entrypoint;
 public class TransferEntryPoint extends TransactionEntryPoint {
 
     public TransferEntryPoint() {
-        super((byte) 2, "Transfer");
+        super((byte) TRANSFER_TAG, "Transfer");
     }
 }

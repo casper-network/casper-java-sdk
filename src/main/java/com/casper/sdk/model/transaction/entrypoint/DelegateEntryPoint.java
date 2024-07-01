@@ -13,6 +13,6 @@ package com.casper.sdk.model.transaction.entrypoint;
  */
 public class DelegateEntryPoint extends TransactionEntryPoint {
     public DelegateEntryPoint() {
-        super((byte) 5, "Delegate");
+        super((byte) DELEGATE_TAG, "Delegate");
     }
 }

@@ -8,6 +8,7 @@ package com.casper.sdk.model.transaction.entrypoint;
 public class CallEntryPoint extends TransactionEntryPoint {
 
     public CallEntryPoint() {
-        super((byte)0, "Call");
+        super((byte)CALL_TAG, "Call");
+
     }
 }

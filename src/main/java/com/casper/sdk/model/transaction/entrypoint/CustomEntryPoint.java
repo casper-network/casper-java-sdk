@@ -20,7 +20,7 @@ public class CustomEntryPoint extends TransactionEntryPoint {
     private String custom;
 
     public CustomEntryPoint(final String custom) {
-        super((byte) 1, "Custom");
+        super((byte) CUSTOM_TAG, "Custom");
         this.custom = custom;
     }
 

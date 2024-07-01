@@ -15,6 +15,6 @@ package com.casper.sdk.model.transaction.entrypoint;
  */
 public class RedelegateEntryPoint extends TransactionEntryPoint {
     public RedelegateEntryPoint() {
-        super((byte) 7, "Redelegate");
+        super((byte) REDELEGATE_TAG, "Redelegate");
     }
 }

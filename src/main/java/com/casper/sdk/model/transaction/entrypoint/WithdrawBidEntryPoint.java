@@ -14,6 +14,6 @@ package com.casper.sdk.model.transaction.entrypoint;
 public class WithdrawBidEntryPoint extends TransactionEntryPoint {
 
     public WithdrawBidEntryPoint() {
-        super((byte) 4, "WithdrawBid");
+        super((byte) WITHDRAW_BID_TAG, "WithdrawBid");
     }
 }

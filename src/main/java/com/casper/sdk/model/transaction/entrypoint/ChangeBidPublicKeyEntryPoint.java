@@ -11,6 +11,6 @@ package com.casper.sdk.model.transaction.entrypoint;
  */
 public class ChangeBidPublicKeyEntryPoint extends TransactionEntryPoint {
     public ChangeBidPublicKeyEntryPoint() {
-        super((byte) 9,"ChangeBidPublicKey");
+        super((byte) CHANGE_BID_PUBLIC_KEY_TAG,"ChangeBidPublicKey");
     }
 }
