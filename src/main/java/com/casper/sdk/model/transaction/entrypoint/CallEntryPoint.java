@@ -9,6 +9,5 @@ public class CallEntryPoint extends TransactionEntryPoint {
 
     public CallEntryPoint() {
         super((byte)CALL_TAG, "Call");
-
     }
 }

@@ -18,7 +18,7 @@ class TransferEntryPointTest {
     @Test
     void activationBidEntryPoint() throws JsonProcessingException {
 
-        String json = "\"ActivateBid\"";
+        final String json = "\"ActivateBid\"";
         final TransactionEntryPoint entryPoint = new ObjectMapper().readValue(json, TransactionEntryPoint.class);
         assertThat(entryPoint, is(instanceOf(ActivateBidEntryPoint.class)));
 
@@ -30,7 +30,7 @@ class TransferEntryPointTest {
     @Test
     void addBidEntryPoint() throws JsonProcessingException {
 
-        String json = "\"AddBid\"";
+        final String json = "\"AddBid\"";
         final TransactionEntryPoint entryPoint = new ObjectMapper().readValue(json, TransactionEntryPoint.class);
         assertThat(entryPoint, is(instanceOf(AddBidEntryPoint.class)));
 
@@ -42,7 +42,7 @@ class TransferEntryPointTest {
     @Test
     void callEntryPoint() throws JsonProcessingException {
 
-        String json = "\"Call\"";
+        final String json = "\"Call\"";
         final TransactionEntryPoint entryPoint = new ObjectMapper().readValue(json, TransactionEntryPoint.class);
         assertThat(entryPoint, is(instanceOf(CallEntryPoint.class)));
 
@@ -54,7 +54,7 @@ class TransferEntryPointTest {
     @Test
     void changeBidPublicKeyEntryPoint() throws JsonProcessingException {
 
-        String json = "\"ChangeBidPublicKey\"";
+        final String json = "\"ChangeBidPublicKey\"";
         final TransactionEntryPoint entryPoint = new ObjectMapper().readValue(json, TransactionEntryPoint.class);
         assertThat(entryPoint, is(instanceOf(ChangeBidPublicKeyEntryPoint.class)));
 
@@ -66,7 +66,7 @@ class TransferEntryPointTest {
     @Test
     void customEntryPoint() throws JsonProcessingException {
 
-        String json = "{\"Custom\":\"I'm a custom entry point\"}";
+        final String json = "{\"Custom\":\"I'm a custom entry point\"}";
         final TransactionEntryPoint entryPoint = new ObjectMapper().readValue(json, TransactionEntryPoint.class);
         assertThat(entryPoint, is(instanceOf(CustomEntryPoint.class)));
 
@@ -78,7 +78,7 @@ class TransferEntryPointTest {
     @Test
     void delegateEntryPoint() throws JsonProcessingException {
 
-        String json = "\"Delegate\"";
+        final String json = "\"Delegate\"";
         final TransactionEntryPoint entryPoint = new ObjectMapper().readValue(json, TransactionEntryPoint.class);
         assertThat(entryPoint, is(instanceOf(DelegateEntryPoint.class)));
 
@@ -90,7 +90,7 @@ class TransferEntryPointTest {
     @Test
     void redelegateEntryPoint() throws JsonProcessingException {
 
-        String json = "\"Redelegate\"";
+        final String json = "\"Redelegate\"";
         final TransactionEntryPoint entryPoint = new ObjectMapper().readValue(json, TransactionEntryPoint.class);
         assertThat(entryPoint, is(instanceOf(RedelegateEntryPoint.class)));
 
@@ -102,7 +102,7 @@ class TransferEntryPointTest {
     @Test
     void transferEntryPoint() throws JsonProcessingException {
 
-        String json = "\"Transfer\"";
+        final String json = "\"Transfer\"";
         final TransactionEntryPoint entryPoint = new ObjectMapper().readValue(json, TransactionEntryPoint.class);
         assertThat(entryPoint, is(instanceOf(TransferEntryPoint.class)));
 
@@ -114,7 +114,7 @@ class TransferEntryPointTest {
     @Test
     void undelegateEntryPoint() throws JsonProcessingException {
 
-        String json = "\"Undelegate\"";
+        final String json = "\"Undelegate\"";
         final TransactionEntryPoint entryPoint = new ObjectMapper().readValue(json, TransactionEntryPoint.class);
         assertThat(entryPoint, is(instanceOf(UndelegateEntryPoint.class)));
 
@@ -126,7 +126,7 @@ class TransferEntryPointTest {
     @Test
     void withdrawBidEntryPoint() throws JsonProcessingException {
 
-        String json = "\"WithdrawBid\"";
+        final String json = "\"WithdrawBid\"";
         final TransactionEntryPoint entryPoint = new ObjectMapper().readValue(json, TransactionEntryPoint.class);
         assertThat(entryPoint, is(instanceOf(WithdrawBidEntryPoint.class)));
 

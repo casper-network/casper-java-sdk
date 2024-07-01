@@ -49,5 +49,4 @@ public class TransactionV1Body implements CasperSerializableObject {
             namedArg.serialize(ser, target);
         }
     }
-
 }

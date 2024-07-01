@@ -76,7 +76,5 @@ class TransactionV1BodyTest {
         String hexActual = Hex.encode(actual);
         String hexExpected = Hex.encode(expectedBytes);
         assertThat(hexActual, is(hexExpected));
-
     }
 }
-

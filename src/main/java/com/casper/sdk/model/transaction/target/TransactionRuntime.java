@@ -23,7 +23,7 @@ public enum TransactionRuntime implements CasperSerializableObject, Tag {
 
     private final byte tag;
 
-    TransactionRuntime(int tag) {
+    TransactionRuntime(final int tag) {
         this.tag = (byte) tag;
     }
 
@@ -33,7 +33,7 @@ public enum TransactionRuntime implements CasperSerializableObject, Tag {
     }
 
     @Override
-    public void serialize(SerializerBuffer ser, Target target) throws ValueSerializationException, NoSuchTypeException {
+    public void serialize(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {
         ser.writeU8(getByteTag());
     }
 }

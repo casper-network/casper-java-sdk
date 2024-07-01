@@ -29,7 +29,7 @@ public class Session implements TransactionTarget {
     private TransactionRuntime runtime;
 
     @Override
-    public void serialize(SerializerBuffer ser, Target target) throws ValueSerializationException, NoSuchTypeException {
+    public void serialize(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {
         ser.writeU8(getByteTag());
         if (moduleBytes != null) {
             ser.writeI32(moduleBytes.length);

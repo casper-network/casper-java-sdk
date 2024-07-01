@@ -9,6 +9,8 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import java.io.IOException;
 
 /**
+ * Transaction entry point JSON serializer, needed to match rust nested enums JSON serialization.
+ *
  * @author ian@meywood.com
  */
 public class TransactionEntryPointSerializer extends JsonSerializer<TransactionEntryPoint> {
