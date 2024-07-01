@@ -16,4 +16,9 @@ public class InitiatorAccountHash extends InitiatorAddr<Digest> {
     public InitiatorAccountHash(final Digest address) {
         super(address);
     }
+
+    @Override
+    public byte getByteTag() {
+        return ACCOUNT_HASH_TAG;
+    }
 }

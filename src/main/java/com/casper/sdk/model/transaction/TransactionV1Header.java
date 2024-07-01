@@ -1,14 +1,17 @@
 package com.casper.sdk.model.transaction;
 
+import com.casper.sdk.exception.NoSuchTypeException;
+import com.casper.sdk.model.clvalue.serde.CasperSerializableObject;
+import com.casper.sdk.model.clvalue.serde.Target;
 import com.casper.sdk.model.common.Digest;
 import com.casper.sdk.model.common.Ttl;
+import com.casper.sdk.model.key.Tag;
 import com.casper.sdk.model.transaction.pricing.PricingMode;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import dev.oak3.sbs4j.SerializerBuffer;
+import dev.oak3.sbs4j.exception.ValueSerializationException;
+import lombok.*;
 
 import java.util.Date;
 
@@ -21,7 +24,8 @@ import java.util.Date;
 @AllArgsConstructor
 @Getter
 @Setter
-public class TransactionV1Header {
+@Builder
+public class TransactionV1Header implements CasperSerializableObject, Tag {
     @JsonProperty("chain_name")
     private String chainName;
     @JsonProperty("timestamp")
@@ -36,5 +40,21 @@ public class TransactionV1Header {
     @SuppressWarnings("rawtypes")
     @JsonProperty("initiator_addr")
     private InitiatorAddr initiatorAddr;
+
+    @Override
+    public void serialize(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {
+        ser.writeU8(getByteTag());
+        ser.writeString(chainName);
+        ser.writeI64(timestamp.getTime());
+        ttl.serialize(ser, target);
+        bodyHash.serialize(ser, target);
+        pricingMode.serialize(ser, target);
+        initiatorAddr.serialize(ser, target);
+    }
+
+    @Override
+    public byte getByteTag() {
+        return 1;
+    }
 }
 
