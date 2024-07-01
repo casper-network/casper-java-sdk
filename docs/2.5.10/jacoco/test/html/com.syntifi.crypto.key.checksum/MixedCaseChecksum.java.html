@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MixedCaseChecksum.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">casper-java-sdk</a> &gt; <a href="index.source.html" class="el_package">com.syntifi.crypto.key.checksum</a> &gt; <span class="el_source">MixedCaseChecksum.java</span></div><h1>MixedCaseChecksum.java</h1><pre class="source lang-java linenums">package com.syntifi.crypto.key.checksum;
+
+import com.syntifi.crypto.key.encdec.Hex;
+import com.syntifi.crypto.key.hash.Blake2b;
+import com.syntifi.crypto.key.hash.Keccak256;
+
+/**
+ * Mixed checksumEncoding
+ *
+ * @author Alexandre Carvalho
+ * @author Andre Bertolace
+ * @since 0.5.0
+ */
+<span class="nc" id="L14">public class MixedCaseChecksum {</span>
+
+    /**
+     * Implementation of the EIP-55: Mixed-case checksum address encoding
+     * Documentation available at: https://eips.ethereum.org/EIPS/eip-55
+     *
+     * @param value Hex string
+     * @return
+     */
+    public static String checksumEncodeEIP55(String value) {
+<span class="fc" id="L24">        char[] hash = Hex.encode(Keccak256.digest(value.toLowerCase().getBytes())).toCharArray();</span>
+<span class="fc" id="L25">        char[] chars = value.toCharArray();</span>
+<span class="fc" id="L26">        char[] encoded = new char[chars.length];</span>
+<span class="fc bfc" id="L27" title="All 2 branches covered.">        for (int i = 0; i &lt; chars.length; i++) {</span>
+<span class="fc bfc" id="L28" title="All 2 branches covered.">            encoded[i] = Character.digit(hash[i], 16) &gt; 7</span>
+<span class="fc" id="L29">                    ? Character.toUpperCase(chars[i])</span>
+<span class="fc" id="L30">                    : Character.toLowerCase(chars[i]);</span>
+        }
+<span class="fc" id="L32">        return String.valueOf(encoded);</span>
+    }
+
+    /**
+     * Implementation of the CEP-57
+     * Documentation available at: https://github.com/casper-network/ceps/blob/master/text/0057-checksummed-addresses.md
+     *
+     * @param value Hex string
+     * @return
+     */
+    public static String checksumEncodeCEP57(String value) {
+<span class="fc" id="L43">        byte[] hash = Blake2b.digest(Hex.decode(value), 32);</span>
+<span class="fc" id="L44">        char[] chars = value.toCharArray();</span>
+<span class="fc" id="L45">        char[] encoded = new char[chars.length];</span>
+<span class="fc" id="L46">        int whichByte = 0;</span>
+<span class="fc" id="L47">        int whichBit = 0;</span>
+<span class="fc bfc" id="L48" title="All 2 branches covered.">        for (int i = 0; i &lt; chars.length; i++) {</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">            boolean bitSet = (Byte.toUnsignedInt(hash[whichByte]) &amp; (1&lt;&lt;whichBit)) != 0;</span>
+<span class="fc bfc" id="L50" title="All 2 branches covered.">            if (Character.isAlphabetic(chars[i])) {</span>
+<span class="fc bfc" id="L51" title="All 2 branches covered.">                encoded[i] = bitSet ? Character.toUpperCase(chars[i]) : Character.toLowerCase(chars[i]);</span>
+<span class="fc" id="L52">                whichByte = (whichByte + whichBit/7) % hash.length;</span>
+<span class="fc" id="L53">                whichBit = (whichBit + 1) % 8;</span>
+            } else {
+<span class="fc" id="L55">                encoded[i] = chars[i];</span>
+            }
+        }
+<span class="fc" id="L58">        return String.valueOf(encoded);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

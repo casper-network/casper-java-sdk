@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Ed25519PublicKey.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">casper-java-sdk</a> &gt; <a href="index.source.html" class="el_package">com.syntifi.crypto.key</a> &gt; <span class="el_source">Ed25519PublicKey.java</span></div><h1>Ed25519PublicKey.java</h1><pre class="source lang-java linenums">package com.syntifi.crypto.key;
+
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import org.bouncycastle.asn1.*;
+import org.bouncycastle.crypto.Signer;
+import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
+import org.bouncycastle.crypto.signers.Ed25519Signer;
+
+import java.io.*;
+
+/**
+ * ed25519 implementation of {@link AbstractPublicKey}
+ *
+ * @author Alexandre Carvalho
+ * @author Andre Bertolace
+ * @since 0.1.0
+ */
+<span class="fc" id="L19">@NoArgsConstructor</span>
+<span class="nc bnc" id="L20" title="All 16 branches missed.">@EqualsAndHashCode(callSuper = true)</span>
+public class Ed25519PublicKey extends AbstractPublicKey {
+
+    private Ed25519PublicKeyParameters publicKeyParameters;
+
+    public Ed25519PublicKey(final byte[] publicKey) {
+<span class="fc" id="L26">        super(publicKey);</span>
+<span class="fc" id="L27">        loadPublicKey(publicKey);</span>
+<span class="fc" id="L28">    }</span>
+
+    @Override
+    public void loadPublicKey(final byte[] publicKey) {
+<span class="fc" id="L32">        publicKeyParameters = new Ed25519PublicKeyParameters(publicKey, 0);</span>
+<span class="fc" id="L33">    }</span>
+
+    @Override
+    public void readPublicKey(final Reader reader) throws IOException {
+<span class="fc" id="L37">        final ASN1Primitive derKey = ASN1Primitive.fromByteArray(PemFileHelper.readPemFile(reader));</span>
+<span class="fc" id="L38">        final ASN1Sequence objBaseSeq = ASN1Sequence.getInstance(derKey);</span>
+<span class="fc" id="L39">        final String objId = ASN1ObjectIdentifier</span>
+<span class="fc" id="L40">                .getInstance(ASN1Sequence.getInstance(objBaseSeq.getObjectAt(0)).getObjectAt(0)).getId();</span>
+<span class="pc bpc" id="L41" title="1 of 2 branches missed.">        if (objId.equals(ASN1Identifiers.Ed25519OID.getId())) {</span>
+<span class="fc" id="L42">            final DERBitString key = DERBitString.getInstance(objBaseSeq.getObjectAt(1));</span>
+<span class="fc" id="L43">            publicKeyParameters = new Ed25519PublicKeyParameters(key.getBytes(), 0);</span>
+<span class="fc" id="L44">            setKey(publicKeyParameters.getEncoded());</span>
+        }
+<span class="fc" id="L46">    }</span>
+
+    @Override
+    public void writePublicKey(final Writer writer) throws IOException {
+<span class="fc" id="L50">        final DERSequence derPrefix = new DERSequence(ASN1Identifiers.Ed25519OID);</span>
+<span class="fc" id="L51">        final DERBitString key = new DERBitString(getKey());</span>
+<span class="fc" id="L52">        final ASN1EncodableVector vector = new ASN1EncodableVector();</span>
+<span class="fc" id="L53">        vector.add(derPrefix);</span>
+<span class="fc" id="L54">        vector.add(key);</span>
+<span class="fc" id="L55">        final DERSequence derKey = new DERSequence(vector);</span>
+<span class="fc" id="L56">        PemFileHelper.writePemFile(writer, derKey.getEncoded(), ASN1Identifiers.PUBLIC_KEY_DER_HEADER);</span>
+<span class="fc" id="L57">    }</span>
+
+    @Override
+    public Boolean verify(final byte[] message, final byte[] signature) {
+<span class="fc" id="L61">        final Signer verifier = new Ed25519Signer();</span>
+<span class="fc" id="L62">        verifier.init(false, publicKeyParameters);</span>
+<span class="fc" id="L63">        verifier.update(message, 0, message.length);</span>
+<span class="fc" id="L64">        return verifier.verifySignature(signature);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
