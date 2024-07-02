@@ -69,7 +69,6 @@ public class Deploy extends Transaction implements CasperSerializableObject {
 
     @Override
     protected void calculateHash() {
-
         try {
             header.setBodyHash(calculateSessionAndPaymentHash());
             setHash(header.buildHash());

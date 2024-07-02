@@ -40,7 +40,6 @@ public class TransactionV1 extends Transaction implements CasperSerializableObje
         this.body = body;
     }
 
-
     @Override
     public void serialize(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {
         getHash().serialize(ser, target);
@@ -57,7 +56,7 @@ public class TransactionV1 extends Transaction implements CasperSerializableObje
             header.setBodyHash(body.buildHash());
             setHash(header.buildHash());
         } catch (Exception e) {
-            throw new CasperClientException("Error calculation hash", e);
+            throw new CasperClientException("Error calculating hash", e);
         }
     }
 }
