@@ -53,6 +53,9 @@ public abstract class Transaction {
         }
     }
 
+    /**
+     * Calculate the hash of the transaction
+     */
     protected abstract void calculateHash();
 
     /**
@@ -80,5 +83,4 @@ public abstract class Transaction {
             throw new CasperClientException("Error signing transaction", e);
         }
     }
-
 }

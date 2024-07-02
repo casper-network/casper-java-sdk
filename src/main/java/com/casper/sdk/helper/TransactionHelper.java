@@ -2,7 +2,6 @@ package com.casper.sdk.helper;
 
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.serde.Target;
-import com.casper.sdk.model.common.Digest;
 import com.casper.sdk.model.common.Ttl;
 import com.casper.sdk.model.deploy.NamedArg;
 import com.casper.sdk.model.transaction.*;
@@ -10,7 +9,6 @@ import com.casper.sdk.model.transaction.entrypoint.TransactionEntryPoint;
 import com.casper.sdk.model.transaction.pricing.PricingMode;
 import com.casper.sdk.model.transaction.scheduling.TransactionScheduling;
 import com.casper.sdk.model.transaction.target.TransactionTarget;
-import com.syntifi.crypto.key.hash.Blake2b;
 import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
 
@@ -33,10 +31,8 @@ public class TransactionHelper {
         final SerializerBuffer serializerBuffer = new SerializerBuffer();
         body.serialize(serializerBuffer, Target.BYTE);
 
-        final Digest bodyHash = Digest.digestFromBytes(Blake2b.digest(serializerBuffer.toByteArray(), 32));
-
         return TransactionV1.builder()
-                .header(buildTransactionHeader(initiatorAddr, new Date(), ttl, chainName, pricingMode, bodyHash))
+                .header(buildTransactionHeader(initiatorAddr, new Date(), ttl, chainName, pricingMode))
                 .body(body)
                 .build();
     }
@@ -59,15 +55,13 @@ public class TransactionHelper {
                                                               final Date timestamp,
                                                               final Ttl ttl,
                                                               final String chainName,
-                                                              final PricingMode pricingMode,
-                                                              final Digest bodyHash) {
+                                                              final PricingMode pricingMode) {
         return TransactionV1Header.builder()
                 .initiatorAddr(initiatorAddr)
                 .timestamp(timestamp)
                 .ttl(ttl)
                 .chainName(chainName)
                 .pricingMode(pricingMode)
-                .bodyHash(bodyHash)
                 .build();
     }
 

@@ -4,14 +4,9 @@ import com.casper.sdk.model.clvalue.serde.CasperSerializableObject;
 import com.casper.sdk.model.clvalue.serde.Target;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.syntifi.crypto.key.hash.Blake2b;
 import dev.oak3.sbs4j.SerializerBuffer;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
+import lombok.*;
 import org.bouncycastle.util.encoders.DecoderException;
 import org.bouncycastle.util.encoders.Hex;
 
@@ -46,6 +41,10 @@ public class Digest implements CasperSerializableObject {
         return digest;
     }
 
+    public static Digest blake2bDigestFromBytes(final byte[] bytes) {
+        return digestFromBytes(Blake2b.digest(bytes, 32));
+    }
+
     /**
      * Implements Digest encoder
      */
@@ -60,11 +59,11 @@ public class Digest implements CasperSerializableObject {
     }
 
     @JsonIgnore
-    public boolean isValid(){
+    public boolean isValid() {
         try {
             Hex.decode(this.digest);
             return true;
-        } catch (DecoderException e){
+        } catch (DecoderException e) {
             return false;
         }
     }

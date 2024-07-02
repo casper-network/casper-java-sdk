@@ -7,7 +7,6 @@ import com.casper.sdk.model.clvalue.serde.Target;
 import com.casper.sdk.model.common.Digest;
 import com.casper.sdk.model.deploy.executabledeploy.ExecutableDeployItem;
 import com.casper.sdk.model.transaction.Transaction;
-import com.syntifi.crypto.key.hash.Blake2b;
 import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
 import lombok.*;
@@ -28,7 +27,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Deploy extends Transaction implements CasperSerializableObject {
-
 
     /**
      * @see DeployHeader
@@ -56,7 +54,6 @@ public class Deploy extends Transaction implements CasperSerializableObject {
         this.payment = payment;
         this.session = session;
     }
-
 
     /**
      * Implements Deploy encoder
@@ -86,11 +83,10 @@ public class Deploy extends Transaction implements CasperSerializableObject {
             final SerializerBuffer ser = new SerializerBuffer();
             session.serialize(ser, Target.BYTE);
             payment.serialize(ser, Target.BYTE);
-            return Digest.digestFromBytes(Blake2b.digest(ser.toByteArray(), 32));
+            return Digest.blake2bDigestFromBytes(ser.toByteArray());
         } catch (Exception e) {
             throw new CasperClientException("Error calculation session and payment hash", e);
         }
     }
-
 }
 
