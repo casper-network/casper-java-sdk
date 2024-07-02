@@ -1,7 +1,5 @@
 package com.casper.sdk.helper;
 
-import com.casper.sdk.exception.NoSuchTypeException;
-import com.casper.sdk.model.clvalue.serde.Target;
 import com.casper.sdk.model.common.Ttl;
 import com.casper.sdk.model.deploy.NamedArg;
 import com.casper.sdk.model.transaction.*;
@@ -9,8 +7,6 @@ import com.casper.sdk.model.transaction.entrypoint.TransactionEntryPoint;
 import com.casper.sdk.model.transaction.pricing.PricingMode;
 import com.casper.sdk.model.transaction.scheduling.TransactionScheduling;
 import com.casper.sdk.model.transaction.target.TransactionTarget;
-import dev.oak3.sbs4j.SerializerBuffer;
-import dev.oak3.sbs4j.exception.ValueSerializationException;
 
 import java.util.Date;
 import java.util.List;
@@ -26,10 +22,7 @@ public class TransactionHelper {
                                                  final Ttl ttl,
                                                  final String chainName,
                                                  final PricingMode pricingMode,
-                                                 final TransactionV1Body body) throws NoSuchTypeException, ValueSerializationException {
-
-        final SerializerBuffer serializerBuffer = new SerializerBuffer();
-        body.serialize(serializerBuffer, Target.BYTE);
+                                                 final TransactionV1Body body) {
 
         return TransactionV1.builder()
                 .header(buildTransactionHeader(initiatorAddr, new Date(), ttl, chainName, pricingMode))
