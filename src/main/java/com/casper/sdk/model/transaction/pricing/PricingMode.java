@@ -1,5 +1,7 @@
 package com.casper.sdk.model.transaction.pricing;
 
+import com.casper.sdk.model.clvalue.serde.CasperSerializableObject;
+import com.casper.sdk.model.key.Tag;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
@@ -13,5 +15,9 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @JsonSubTypes.Type(value = ClassicPricingMode.class, name = "Classic"),
         @JsonSubTypes.Type(value = FixedPricingMode.class, name = "Fixed"),
         @JsonSubTypes.Type(value = ReservedPricingMode.class, name = "Reserved"),})
-public interface PricingMode {
+public interface PricingMode extends CasperSerializableObject, Tag {
+
+    int CLASSIC_TAG = 0;
+    int FIXED_TAG = 1;
+    int RESERVED_TAG = 2;
 }

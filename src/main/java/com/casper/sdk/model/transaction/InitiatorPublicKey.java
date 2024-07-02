@@ -16,4 +16,9 @@ public class InitiatorPublicKey extends InitiatorAddr<PublicKey> {
     public InitiatorPublicKey(final PublicKey address) {
         super(address);
     }
+
+    @Override
+    public byte getByteTag() {
+        return PUBLIC_KEY_TAG;
+    }
 }

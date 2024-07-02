@@ -1,8 +1,12 @@
 package com.casper.sdk.model.transaction.pricing;
 
+import com.casper.sdk.exception.NoSuchTypeException;
+import com.casper.sdk.model.clvalue.serde.Target;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import dev.oak3.sbs4j.SerializerBuffer;
+import dev.oak3.sbs4j.exception.ValueSerializationException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,4 +37,17 @@ public class ClassicPricingMode implements PricingMode {
     /** Standard payment. */
     @JsonProperty("standard_payment")
     private boolean standardPayment;
+
+    @Override
+    public void serialize(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {
+        ser.writeU8(getByteTag());
+        ser.writeU64(paymentAmount);
+        ser.writeU8((byte) gasPriceTolerance);
+        ser.writeBool(standardPayment);
+    }
+
+    @Override
+    public byte getByteTag() {
+        return CLASSIC_TAG;
+    }
 }

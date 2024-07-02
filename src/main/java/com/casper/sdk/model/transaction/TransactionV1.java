@@ -1,8 +1,13 @@
 package com.casper.sdk.model.transaction;
 
+import com.casper.sdk.exception.NoSuchTypeException;
+import com.casper.sdk.model.clvalue.serde.CasperSerializableObject;
+import com.casper.sdk.model.clvalue.serde.Target;
 import com.casper.sdk.model.common.Digest;
 import com.casper.sdk.model.deploy.Approval;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import dev.oak3.sbs4j.SerializerBuffer;
+import dev.oak3.sbs4j.exception.ValueSerializationException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,7 +24,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
-public class TransactionV1 extends Transaction {
+public class TransactionV1 extends Transaction implements CasperSerializableObject {
     @JsonProperty("hash")
     private Digest hash;
     @JsonProperty("header")
@@ -28,4 +33,15 @@ public class TransactionV1 extends Transaction {
     private TransactionV1Body body;
     @JsonProperty("approvals")
     private List<Approval> approvals;
+
+    @Override
+    public void serialize(SerializerBuffer ser, Target target) throws ValueSerializationException, NoSuchTypeException {
+        hash.serialize(ser, target);
+        header.serialize(ser, target);
+        body.serialize(ser, target);
+        ser.writeI32(approvals.size());
+        for (Approval approval : approvals) {
+            approval.serialize(ser, Target.BYTE);
+        }
+    }
 }
