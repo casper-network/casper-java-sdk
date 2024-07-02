@@ -3,6 +3,7 @@ package com.casper.sdk.model.transaction;
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.serde.CasperSerializableObject;
 import com.casper.sdk.model.clvalue.serde.Target;
+import com.casper.sdk.model.common.Digest;
 import com.casper.sdk.model.deploy.NamedArg;
 import com.casper.sdk.model.transaction.entrypoint.TransactionEntryPoint;
 import com.casper.sdk.model.transaction.scheduling.TransactionScheduling;
@@ -48,5 +49,11 @@ public class TransactionV1Body implements CasperSerializableObject {
         for (NamedArg<?> namedArg : getArgs()) {
             namedArg.serialize(ser, target);
         }
+    }
+
+    public Digest buildHash() throws NoSuchTypeException, ValueSerializationException {
+        SerializerBuffer serializerBuffer = new SerializerBuffer();
+        this.serialize(serializerBuffer, Target.BYTE);
+        return Digest.blake2bDigestFromBytes(serializerBuffer.toByteArray());
     }
 }

@@ -3,6 +3,7 @@ package com.casper.sdk.model.transaction.target;
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.serde.Target;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
 import dev.oak3.sbs4j.SerializerBuffer;
@@ -26,10 +27,10 @@ import java.util.Objects;
 public class Native implements TransactionTarget {
 
     @JsonValue
-    private String target;
+    private String target = "Native";
 
     @JsonCreator
-    public Native(String target) {
+    public Native(final String target) {
         this.target = target;
     }
 
@@ -50,6 +51,7 @@ public class Native implements TransactionTarget {
     }
 
     @Override
+    @JsonIgnore
     public byte getByteTag() {
         return 0;
     }

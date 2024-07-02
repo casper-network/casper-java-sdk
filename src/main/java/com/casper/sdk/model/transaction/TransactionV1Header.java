@@ -56,5 +56,12 @@ public class TransactionV1Header implements CasperSerializableObject, Tag {
     public byte getByteTag() {
         return 1;
     }
+
+    public Digest buildHash() throws NoSuchTypeException, ValueSerializationException {
+        SerializerBuffer serializerBuffer = new SerializerBuffer();
+        this.serialize(serializerBuffer, Target.BYTE);
+        return Digest.blake2bDigestFromBytes(serializerBuffer.toByteArray());
+    }
+
 }
 

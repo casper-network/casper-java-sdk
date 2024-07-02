@@ -23,6 +23,8 @@ import com.casper.sdk.model.status.ChainspecData;
 import com.casper.sdk.model.status.StatusData;
 import com.casper.sdk.model.storedvalue.StoredValueData;
 import com.casper.sdk.model.transaction.GetTransactionResult;
+import com.casper.sdk.model.transaction.PutTransactionResult;
+import com.casper.sdk.model.transaction.Transaction;
 import com.casper.sdk.model.transaction.TransactionHash;
 import com.casper.sdk.model.transfer.TransferData;
 import com.casper.sdk.model.uref.URef;
@@ -145,6 +147,12 @@ public interface CasperService {
     @JsonRpcMethod("info_get_deploy")
     DeployData getDeploy(@JsonRpcParam("deploy_hash") final String deployHash);
 
+    /**
+     * Returns a Transaction from the network
+     *
+     * @param transactionHash the hash of the transaction to obtain
+     * @return Object holding the api version, the transaction and execution info
+     */
     @JsonRpcMethod("info_get_transaction")
     GetTransactionResult getTransaction(@JsonRpcParam("transaction_hash") final TransactionHash transactionHash);
 
@@ -217,13 +225,14 @@ public interface CasperService {
     //region TRANSACTIONAL METHODS
 
     /**
-     * Sends a deploy to be received by the network
+     * Sends a transaction to be received by the network
      *
-     * @param deploy the deploy object to send to the network
+     * @param transaction the deploy object to send to the network
      * @return Object holding the api version and the deploy hash
      */
-    @JsonRpcMethod(value = "account_put_deploy", paramsPassMode = JsonRpcParamsPassMode.ARRAY)
-    DeployResult putDeploy(Deploy deploy);
+    @JsonRpcMethod(value = "account_put_transaction", paramsPassMode = JsonRpcParamsPassMode.ARRAY)
+    PutTransactionResult putTransaction(final Transaction transaction);
+
 
     /**
      * The speculative_exec endpoint provides a method to execute a Deploy
@@ -323,5 +332,17 @@ public interface CasperService {
     @JsonRpcMethod("state_get_item")
     StoredValueData getStateItem(@JsonRpcParam("state_root_hash") String stateRootHash,
                                  @JsonRpcParam("key") String key, @JsonRpcParam("path") List<String> path);
+
+    /**
+     * Sends a deploy to be received by the network
+     *
+     * @param deploy the deploy object to send to the network
+     * @return Object holding the api version and the deploy hash
+     * @deprecated use {@link #putTransaction(Transaction)} instead
+     */
+    @Deprecated
+    @JsonRpcMethod(value = "account_put_deploy", paramsPassMode = JsonRpcParamsPassMode.ARRAY)
+    DeployResult putDeploy(Deploy deploy);
+
     //endregion
 }
