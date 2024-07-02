@@ -1,5 +1,6 @@
 package com.casper.sdk.model.transaction;
 
+import com.casper.sdk.exception.CasperClientException;
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.serde.CasperSerializableObject;
 import com.casper.sdk.model.clvalue.serde.Target;
@@ -8,10 +9,7 @@ import com.casper.sdk.model.deploy.Approval;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
@@ -24,24 +22,42 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 public class TransactionV1 extends Transaction implements CasperSerializableObject {
-    @JsonProperty("hash")
-    private Digest hash;
+
     @JsonProperty("header")
     private TransactionV1Header header;
     @JsonProperty("body")
     private TransactionV1Body body;
-    @JsonProperty("approvals")
-    private List<Approval> approvals;
+
+    @Builder
+    public TransactionV1(final Digest hash,
+                         final TransactionV1Header header,
+                         final TransactionV1Body body,
+                         final List<Approval> approvals) {
+      super(hash, approvals);
+        this.header = header;
+        this.body = body;
+    }
+
 
     @Override
-    public void serialize(SerializerBuffer ser, Target target) throws ValueSerializationException, NoSuchTypeException {
-        hash.serialize(ser, target);
+    public void serialize(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {
+        getHash().serialize(ser, target);
         header.serialize(ser, target);
         body.serialize(ser, target);
-        ser.writeI32(approvals.size());
-        for (Approval approval : approvals) {
-            approval.serialize(ser, Target.BYTE);
+        serializeApprovals(ser, target);
+    }
+
+    /**
+     * Calculates the body and header hashes and sets the transaction hash.
+     */
+    public void calculateHash() {
+        try {
+            header.setBodyHash(body.buildHash());
+            setHash(header.buildHash());
+        } catch (Exception e) {
+            throw new CasperClientException("Error calculation hash", e);
         }
     }
 }

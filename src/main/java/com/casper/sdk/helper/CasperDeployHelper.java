@@ -6,7 +6,6 @@ import com.casper.sdk.model.clvalue.cltype.CLTypeU512;
 import com.casper.sdk.model.clvalue.serde.Target;
 import com.casper.sdk.model.common.Digest;
 import com.casper.sdk.model.common.Ttl;
-import com.casper.sdk.model.deploy.Approval;
 import com.casper.sdk.model.deploy.Deploy;
 import com.casper.sdk.model.deploy.DeployHeader;
 import com.casper.sdk.model.deploy.NamedArg;
@@ -58,6 +57,12 @@ public class CasperDeployHelper {
                 .build();
     }
 
+    /**
+     * Signs a deploy header.
+     *
+     * @deprecated Use {@link Deploy#sign(AbstractPrivateKey)} instead
+     */
+    @Deprecated
     public static HashAndSignature signDeployHeader(final AbstractPrivateKey privateKey, final DeployHeader deployHeader)
             throws GeneralSecurityException, NoSuchTypeException, ValueSerializationException {
         final SerializerBuffer serializerBuffer = new SerializerBuffer();
@@ -114,7 +119,7 @@ public class CasperDeployHelper {
                                      final Ttl ttl,
                                      final Date date,
                                      final List<Digest> dependencies)
-            throws NoSuchTypeException, GeneralSecurityException, ValueSerializationException {
+            throws NoSuchTypeException, ValueSerializationException {
 
         final byte[] sessionAnPaymentHash = getDeployItemAndModuleBytesHash(session, payment);
 
@@ -130,21 +135,14 @@ public class CasperDeployHelper {
                 sessionAnPaymentHash
         );
 
-        final HashAndSignature hashAndSignature = signDeployHeader(fromPrivateKey, deployHeader);
-
-        final List<Approval> approvals = new LinkedList<>();
-        approvals.add(Approval.builder()
-                .signer(PublicKey.fromAbstractPublicKey(fromPrivateKey.derivePublicKey()))
-                .signature(hashAndSignature.getSignature())
-                .build());
-
-        return Deploy.builder()
-                .hash(Digest.digestFromBytes(hashAndSignature.getHash()))
+        final Deploy deploy = Deploy.builder()
                 .header(deployHeader)
                 .payment(payment)
                 .session(session)
-                .approvals(approvals)
                 .build();
+
+        return deploy.sign(fromPrivateKey);
+
     }
 
     @Getter

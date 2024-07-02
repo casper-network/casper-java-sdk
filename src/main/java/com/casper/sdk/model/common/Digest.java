@@ -36,11 +36,11 @@ public class Digest implements CasperSerializableObject {
         return Hex.decode(this.digest);
     }
 
-    public void setDigest(byte[] hash) {
+    public void setDigest(final byte[] hash) {
         this.digest = Hex.toHexString(hash);
     }
 
-    public static Digest digestFromBytes(byte[] bytes) {
+    public static Digest digestFromBytes(final byte[] bytes) {
         Digest digest = new Digest();
         digest.setDigest(bytes);
         return digest;
@@ -50,7 +50,7 @@ public class Digest implements CasperSerializableObject {
      * Implements Digest encoder
      */
     @Override
-    public void serialize(SerializerBuffer ser, Target target) {
+    public void serialize(final SerializerBuffer ser, final Target target) {
         ser.writeByteArray(getDigest());
     }
 

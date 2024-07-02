@@ -9,6 +9,7 @@ import com.casper.sdk.model.key.Tag;
 import com.casper.sdk.model.transaction.pricing.PricingMode;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.syntifi.crypto.key.hash.Blake2b;
 import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
 import lombok.*;
@@ -56,5 +57,12 @@ public class TransactionV1Header implements CasperSerializableObject, Tag {
     public byte getByteTag() {
         return 1;
     }
+
+    public Digest buildHash() throws NoSuchTypeException, ValueSerializationException {
+        SerializerBuffer serializerBuffer = new SerializerBuffer();
+        this.serialize(serializerBuffer, Target.BYTE);
+        return Digest.digestFromBytes(Blake2b.digest(serializerBuffer.toByteArray(), 32));
+    }
+
 }
 

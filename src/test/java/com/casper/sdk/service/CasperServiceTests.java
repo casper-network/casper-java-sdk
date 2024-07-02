@@ -2,6 +2,7 @@ package com.casper.sdk.service;
 
 import com.casper.sdk.exception.CasperClientException;
 import com.casper.sdk.exception.DynamicInstanceException;
+import com.casper.sdk.helper.TransactionHelper;
 import com.casper.sdk.identifier.block.HashBlockIdentifier;
 import com.casper.sdk.identifier.block.HeightBlockIdentifier;
 import com.casper.sdk.identifier.global.BlockHashIdentifier;
@@ -10,10 +11,14 @@ import com.casper.sdk.model.account.AccountData;
 import com.casper.sdk.model.auction.AuctionData;
 import com.casper.sdk.model.balance.GetBalanceData;
 import com.casper.sdk.model.block.*;
+import com.casper.sdk.model.clvalue.CLValuePublicKey;
 import com.casper.sdk.model.clvalue.CLValueString;
+import com.casper.sdk.model.clvalue.CLValueU512;
 import com.casper.sdk.model.common.Digest;
+import com.casper.sdk.model.common.Ttl;
 import com.casper.sdk.model.deploy.Deploy;
 import com.casper.sdk.model.deploy.DeployData;
+import com.casper.sdk.model.deploy.NamedArg;
 import com.casper.sdk.model.deploy.executabledeploy.ModuleBytes;
 import com.casper.sdk.model.deploy.executabledeploy.StoredContractByHash;
 import com.casper.sdk.model.deploy.executionresult.Success;
@@ -28,9 +33,12 @@ import com.casper.sdk.model.storedvalue.StoredValueAccount;
 import com.casper.sdk.model.storedvalue.StoredValueContract;
 import com.casper.sdk.model.storedvalue.StoredValueData;
 import com.casper.sdk.model.storedvalue.StoredValueDeployInfo;
+import com.casper.sdk.model.transaction.*;
+import com.casper.sdk.model.transaction.entrypoint.TransferEntryPoint;
 import com.casper.sdk.model.transaction.execution.ExecutionResultV2;
-import com.casper.sdk.model.transaction.GetTransactionResult;
-import com.casper.sdk.model.transaction.TransactionHashDeploy;
+import com.casper.sdk.model.transaction.pricing.FixedPricingMode;
+import com.casper.sdk.model.transaction.scheduling.Standard;
+import com.casper.sdk.model.transaction.target.Native;
 import com.casper.sdk.model.transfer.TransferData;
 import com.casper.sdk.model.transfer.TransferV1;
 import com.casper.sdk.model.transfer.TransferV2;
@@ -38,6 +46,8 @@ import com.casper.sdk.model.uref.URef;
 import com.casper.sdk.model.validator.ValidatorChangeData;
 import com.casper.sdk.test.MockNode;
 import com.casper.sdk.test.RcpResponseDispatcher;
+import com.syntifi.crypto.key.Secp256k1PrivateKey;
+import com.syntifi.crypto.key.Secp256k1PublicKey;
 import org.joda.time.DateTime;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -49,6 +59,7 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -195,7 +206,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
 
         assertNotNull(transferData);
         assertEquals(1, transferData.getTransfers().size());
-        assertEquals(BigInteger.valueOf(445989400000L),((TransferV1) transferData.getTransfers().get(0)).getAmount());
+        assertEquals(BigInteger.valueOf(445989400000L), ((TransferV1) transferData.getTransfers().get(0)).getAmount());
     }
 
     @Test
@@ -584,12 +595,12 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
         mockNode.withRcpResponseDispatcher()
                 .withMethod("info_get_transaction")
                 .withBody("$.params.transaction_hash.Deploy", "cb04018ad3a09fc15fda0e5c18def392a135652c73c864c25968be9b2376c139")
-                .thenDispatch(getClass().getResource("/deploy-samples/info_get_transaction.json"));
+                .thenDispatch(getClass().getResource("/transaction-samples/info_get_transaction.json"));
 
         final GetTransactionResult result = casperServiceMock.getTransaction(new TransactionHashDeploy("cb04018ad3a09fc15fda0e5c18def392a135652c73c864c25968be9b2376c139"));
         assertNotNull(result);
         assertThat(result.getTransaction(), is(instanceOf(Deploy.class)));
-        assertThat(((Deploy) result.getTransaction()).getHash(), is(new Digest("cb04018ad3a09fc15fda0e5c18def392a135652c73c864c25968be9b2376c139")));
+        assertThat(result.getTransaction().getHash(), is(new Digest("cb04018ad3a09fc15fda0e5c18def392a135652c73c864c25968be9b2376c139")));
         assertThat(((Deploy) result.getTransaction()).getHeader().getBodyHash(), is(new Digest("9fae773a27a4aafb161321c0779031a077b63f608f0743a2abbc4359c080a965")));
         assertThat(result.getExecutionInfo().getBlockHash(), is(new Digest("3ad051b1df071e4d539eab28986bb55ec4fb5fd31f63942ed788738186709303")));
         assertThat(result.getExecutionInfo().getBlockHeight(), is(new BigInteger("4139")));
@@ -618,5 +629,63 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
         assertThat(transfer.getAmount(), is(new BigInteger("2500000000")));
         assertThat(transfer.getGas(), is(1));
         assertThat(transfer.getId(), is(12345L));
+    }
+
+    @Test
+    void accountPutTransferV1() throws Exception {
+
+        final Secp256k1PublicKey delegator = (Secp256k1PublicKey) Secp256k1PrivateKey.deriveRandomKey().derivePublicKey();
+        final Secp256k1PrivateKey privateKey = Secp256k1PrivateKey.deriveRandomKey();
+
+        PublicKey address = PublicKey.fromAbstractPublicKey(privateKey.derivePublicKey());
+        final List<NamedArg<?>> args = Arrays.asList(
+                new NamedArg<>("amount", new CLValueU512(BigInteger.valueOf(2500000000L))),
+                new NamedArg<>("delegator", new CLValuePublicKey(PublicKey.fromAbstractPublicKey(delegator))),
+                new NamedArg<>("validator", new CLValuePublicKey(address)),
+                new NamedArg<>("amount", new CLValueU512(new BigInteger("2500000000")))
+        );
+
+        final TransactionV1Body body = TransactionV1Body.builder()
+                .args(args)
+                .target(new Native())
+                .entryPoint(new TransferEntryPoint())
+                .transactionCategory(TransactionCategory.MINT)
+                .scheduling(new Standard())
+                .build();
+
+        final TransactionV1 transaction = TransactionHelper.buildTransaction(
+                new InitiatorPublicKey(address),
+                Ttl.builder().ttl("30m").build(),
+                "test-chain-name",
+                new FixedPricingMode(5),
+                body
+        );
+
+        // generate hashes and sign transaction
+        transaction.sign(privateKey);
+
+        assertThat(transaction.getApprovals(), hasSize(1));
+        assertThat(transaction.getHash().isValid(), is(true));
+        assertThat(transaction.getHeader().getBodyHash().isValid(), is(true));
+
+        mockNode.withRcpResponseDispatcher()
+                .withMethod("account_put_transaction")
+                .withBody("$.params.[0].Version1.hash", transaction.getHash().toString())
+                .withBody("$.params.[0].Version1.header.chain_name", "test-chain-name")
+                .withBody("$.params.[0].Version1.header.ttl", "30m")
+                .withBody("$.params.[0].Version1.header.initiator_addr.PublicKey", address.getAlgoTaggedHex())
+                .withBody("$.params.[0].Version1.header.pricing_mode.Fixed.gas_price_tolerance", "5")
+                .withBody("$.params.[0].Version1.body.target", "Native")
+                .withBody("$.params.[0].Version1.body.entry_point", "Transfer")
+                .withBody("$.params.[0].Version1.body.scheduling", "Standard")
+                .withBody("$.params.[0].Version1.body.transaction_category", "0")
+                .withBody("params.[0].Version1.body.args.[0].[0]", "amount")
+                .withBody("params.[0].Version1.body.args.[0].[1].bytes", "0400f90295")
+                .withBody("$.params.[0].Version1.body.args.[0].[1].cl_type", "U512")
+                .thenDispatch(getClass().getResource("/transaction-samples/put-transaction-result.json"));
+
+        final PutTransactionResult result = casperServiceMock.putTransaction(transaction);
+        assertThat(result.getApiVersion(), is("2.0.0"));
+        assertThat(result.getTransactionHash().toString(), is("52a75f3651e450cc2c3ed534bf130bae2515950707d70bb60067aada30b97ca8"));
     }
 }

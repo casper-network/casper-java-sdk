@@ -2,6 +2,7 @@ package com.casper.sdk.model.transaction.pricing;
 
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.serde.Target;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
@@ -47,6 +48,7 @@ public class ClassicPricingMode implements PricingMode {
     }
 
     @Override
+    @JsonIgnore
     public byte getByteTag() {
         return CLASSIC_TAG;
     }
