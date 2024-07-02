@@ -8,7 +8,6 @@ import com.casper.sdk.model.common.Ttl;
 import com.casper.sdk.model.key.PublicKey;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.syntifi.crypto.key.hash.Blake2b;
 import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
 import lombok.*;
@@ -92,6 +91,6 @@ public class DeployHeader implements CasperSerializableObject {
     public Digest buildHash() throws NoSuchTypeException, ValueSerializationException {
         SerializerBuffer serializerBuffer = new SerializerBuffer();
         this.serialize(serializerBuffer, Target.BYTE);
-        return Digest.digestFromBytes(Blake2b.digest(serializerBuffer.toByteArray(), 32));
+        return Digest.blake2bDigestFromBytes(serializerBuffer.toByteArray());
     }
 }
