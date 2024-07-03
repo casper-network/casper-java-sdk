@@ -143,7 +143,7 @@ public class CasperTransferHelperTests extends AbstractJsonRpcTests {
                 new ArrayList<>());
         SpeculativeDeployData deployData = speculativeCasperServiceNctl.speculativeExec(deploy);
         assertNotNull(deployData);
-        assertTrue(deployData.getExecutionResult().getCost().compareTo(BigInteger.ZERO) == 1);
+        assertEquals(1, deployData.getExecutionResult().getCost().compareTo(BigInteger.ZERO));
     }
 
     @Test

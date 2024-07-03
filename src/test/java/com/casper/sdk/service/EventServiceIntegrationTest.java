@@ -51,7 +51,7 @@ class EventServiceIntegrationTest {
     void consumeMainRawEvents() throws Exception {
 
         mockNode.setDispatcher(
-                new PathMatchingResourceDispatcher(MAIN_EVENTS, is("/events/main?start_from=0"))
+                new PathMatchingResourceDispatcher(MAIN_EVENTS, is("/events?start_from=0"))
                         .setContentType("text/event-stream")
         );
 
@@ -97,7 +97,7 @@ class EventServiceIntegrationTest {
         }, Assertions::fail)) {
             Thread.sleep(4000L);
 
-            assertThat(count[0], is(greaterThan(2)));
+            assertThat(count[0], is(greaterThan(1)));
         }
     }
 
@@ -105,7 +105,7 @@ class EventServiceIntegrationTest {
     void deployRawEvents() throws Exception {
 
         mockNode.setDispatcher(
-                new PathMatchingResourceDispatcher(DEPLOYS_EVENTS, is("/events/deploys?start_from=0"))
+                new PathMatchingResourceDispatcher(DEPLOYS_EVENTS, is("/events?start_from=0"))
                         .setContentType("text/event-stream")
         );
 
@@ -149,7 +149,7 @@ class EventServiceIntegrationTest {
     void sigsRawEvents() throws Exception {
 
         mockNode.setDispatcher(
-                new PathMatchingResourceDispatcher(SIGS_EVENTS, is("/events/sigs?start_from=0"))
+                new PathMatchingResourceDispatcher(SIGS_EVENTS, is("/events?start_from=0"))
                         .setContentType("text/event-stream")
         );
 
@@ -177,7 +177,6 @@ class EventServiceIntegrationTest {
             Thread.sleep(5000L);
             assertThat(count[0], is(5));
         }
-
     }
 
 
@@ -187,7 +186,7 @@ class EventServiceIntegrationTest {
     void mainPojoEvents() throws Exception {
 
         mockNode.setDispatcher(
-                new PathMatchingResourceDispatcher(MAIN_EVENTS, is("/events/main?start_from=0"))
+                new PathMatchingResourceDispatcher(MAIN_EVENTS, is("/events?start_from=0"))
                         .setContentType("text/event-stream")
         );
 

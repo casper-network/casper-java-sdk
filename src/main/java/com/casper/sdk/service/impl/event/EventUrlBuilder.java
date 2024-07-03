@@ -14,7 +14,7 @@ final class EventUrlBuilder {
     /**
      * The root path to the events stream
      */
-    private static final String EVENTS = "/events/";
+    private static final String PATH = "/events";
     /**
      * The start_from parameter that allow the specification of which ID to start from
      */
@@ -30,7 +30,7 @@ final class EventUrlBuilder {
     URL buildUrl(final URI uri, final Long startFrom) {
 
         try {
-            return new URL(uri.toString() + EVENTS + buildParams(startFrom));
+            return new URL(uri.toString() + PATH + buildParams(startFrom));
         } catch (MalformedURLException e) {
             throw new CasperClientException("Error building URL for " + uri, e);
         }
