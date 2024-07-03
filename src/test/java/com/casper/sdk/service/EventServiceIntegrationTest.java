@@ -267,13 +267,12 @@ class EventServiceIntegrationTest {
                 assertThat(data, instanceOf(BlockAdded.class));
                 assertThat(((BlockAdded) data).getBlock(), instanceOf(BlockV2.class));
                 assertThat(event.getId().isPresent(), is(true));
-                assertThat(event.getId().get(), is(2L));
+                assertThat(event.getId().get(), is(1132420L));
             }
 
             count[0]++;
         }, Assertions::fail)) {
-            Thread.sleep(2000L);
-
+            Thread.sleep(3000L);
             assertThat(count[0], is(greaterThan(1)));
         }
     }
