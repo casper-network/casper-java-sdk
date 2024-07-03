@@ -6,7 +6,6 @@ package com.casper.sdk.model.event;
  * @author ian@meywood.com
  */
 public enum EventTarget {
-
     /** The event data is obtained as a raw JSON string */
     RAW,
     /** The event data in parsed from JSON to a Pojo */
