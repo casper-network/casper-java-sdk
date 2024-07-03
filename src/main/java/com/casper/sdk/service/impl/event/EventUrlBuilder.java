@@ -1,6 +1,5 @@
 package com.casper.sdk.service.impl.event;
 
-import com.casper.sdk.model.event.EventType;
 import com.casper.sdk.exception.CasperClientException;
 
 import java.net.MalformedURLException;
@@ -25,14 +24,13 @@ final class EventUrlBuilder {
      * Builds an event URL
      *
      * @param uri       the URI to the host
-     * @param eventType the type of event to build a URL for
      * @param startFrom the optional 'start_from' URL query parameter will be omitted if null
      * @return the URL for the requested parameters
      */
-    URL buildUrl(final URI uri, final EventType eventType, final Long startFrom) {
+    URL buildUrl(final URI uri, final Long startFrom) {
 
         try {
-            return new URL(uri.toString() + EVENTS + eventType.toString().toLowerCase() + buildParams(startFrom));
+            return new URL(uri.toString() + EVENTS + buildParams(startFrom));
         } catch (MalformedURLException e) {
             throw new CasperClientException("Error building URL for " + uri, e);
         }

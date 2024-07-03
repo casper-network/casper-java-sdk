@@ -4,7 +4,6 @@ package com.casper.sdk.service;
 import com.casper.sdk.model.event.Event;
 import com.casper.sdk.model.event.EventData;
 import com.casper.sdk.model.event.EventTarget;
-import com.casper.sdk.model.event.EventType;
 import com.casper.sdk.model.event.blockadded.BlockAdded;
 import com.casper.sdk.model.event.version.ApiVersion;
 import com.casper.sdk.test.MockNode;
@@ -59,12 +58,11 @@ class EventServiceIntegrationTest {
         int[] count = {0};
 
         //noinspection unused
-        try (AutoCloseable closeable = eventService.consumeEvents(EventType.MAIN, EventTarget.RAW, 0L, (Consumer<Event<String>>) event -> {
+        try (AutoCloseable closeable = eventService.consumeEvents(EventTarget.RAW, 0L, (Consumer<Event<String>>) event -> {
 
             assertThat(event, instanceOf(Event.class));
             assertThat(event.getClass().getSimpleName(), is("RawEvent"));
 
-            assertThat(event.getEventType(), is(EventType.MAIN));
             assertThat(event.getVersion(), is("1.0.0"));
 
             if (count[0] == 0) {
@@ -114,9 +112,7 @@ class EventServiceIntegrationTest {
         int[] count = {0};
 
         //noinspection unused
-        try (AutoCloseable closeable = eventService.consumeEvents(EventType.DEPLOYS, EventTarget.RAW, 0L, (Consumer<Event<String>>) event -> {
-
-            assertThat(event.getEventType(), is(EventType.DEPLOYS));
+        try (AutoCloseable closeable = eventService.consumeEvents(EventTarget.RAW, 0L, (Consumer<Event<String>>) event -> {
 
             if (count[0] == 0) {
                 assertThat(event.getData(), is("{\"ApiVersion\":\"1.0.0\"}"));
@@ -160,9 +156,7 @@ class EventServiceIntegrationTest {
         int[] count = {0};
 
         //noinspection unused
-        try (AutoCloseable closeable = eventService.consumeEvents(EventType.SIGS, EventTarget.RAW, 0L, (Consumer<Event<String>>) event -> {
-
-            assertThat(event.getEventType(), is(EventType.SIGS));
+        try (AutoCloseable closeable = eventService.consumeEvents(EventTarget.RAW, 0L, (Consumer<Event<String>>) event -> {
 
             if (count[0] == 0) {
                 assertThat(event.getData(), is("{\"ApiVersion\":\"1.0.0\"}"));
@@ -200,9 +194,7 @@ class EventServiceIntegrationTest {
         int[] count = {0};
 
         //noinspection unused
-        try (AutoCloseable closeable = eventService.consumeEvents(EventType.MAIN, EventTarget.POJO, 0L, (Consumer<Event<EventData>>) event -> {
-
-            assertThat(event.getEventType(), is(EventType.MAIN));
+        try (AutoCloseable closeable = eventService.consumeEvents(EventTarget.POJO, 0L, (Consumer<Event<EventData>>) event -> {
 
             final EventData data = event.getData();
 

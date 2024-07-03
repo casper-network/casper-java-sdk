@@ -3,7 +3,6 @@ package com.casper.sdk.service.impl.event;
 import com.casper.sdk.exception.CasperSseProcessingException;
 import com.casper.sdk.model.event.Event;
 import com.casper.sdk.model.event.EventTarget;
-import com.casper.sdk.model.event.EventType;
 import com.casper.sdk.service.EventService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,17 +48,16 @@ final class EventServiceImpl implements EventService {
     }
 
     @Override
-    public <EventT extends Event<?>> AutoCloseable consumeEvents(final EventType eventType,
-                                                                 final EventTarget eventTarget,
+    public <EventT extends Event<?>> AutoCloseable consumeEvents(final EventTarget eventTarget,
                                                                  final Long startFrom,
                                                                  final Consumer<EventT> onEvent,
                                                                  final Consumer<Throwable> onFailure) {
 
-        final URL url = urlBuilder.buildUrl(uri, eventType, startFrom);
+        final URL url = urlBuilder.buildUrl(uri, startFrom);
         logger.info("Targeting SSE URL {}", url);
         final WebTarget target = sssClient.target(url.toString());
         final Response response = target.request("text/plain", "text/event-stream").get();
-        final EventBuilder eventBuilder = new EventBuilder(eventType, eventTarget, target.getUri().toString());
+        final EventBuilder eventBuilder = new EventBuilder(eventTarget, target.getUri().toString());
         final SseEventSource source = SseEventSource.target(target).build();
 
         source.register((inboundSseEvent) -> {
