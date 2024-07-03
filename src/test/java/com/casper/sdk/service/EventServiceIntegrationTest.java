@@ -1,6 +1,8 @@
 package com.casper.sdk.service;
 
 
+import com.casper.sdk.model.block.BlockV1;
+import com.casper.sdk.model.block.BlockV2;
 import com.casper.sdk.model.event.Event;
 import com.casper.sdk.model.event.EventData;
 import com.casper.sdk.model.event.EventTarget;
@@ -27,6 +29,7 @@ class EventServiceIntegrationTest {
 
     private static final String MAIN_EVENTS = "/event-samples/main-events.txt";
     private static final String SIGS_EVENTS = "/event-samples/sigs-events.txt";
+    private static final String V2_BLOCK_EVENTS = "/event-samples/block-added-v2.txt";
 
     private static final String DEPLOYS_EVENTS = "/event-samples/deploys-events.txt";
     private final MockNode mockNode = new MockNode();
@@ -63,10 +66,10 @@ class EventServiceIntegrationTest {
             assertThat(event, instanceOf(Event.class));
             assertThat(event.getClass().getSimpleName(), is("RawEvent"));
 
-            assertThat(event.getVersion(), is("1.0.0"));
+            assertThat(event.getVersion(), is("2.0.0"));
 
             if (count[0] == 0) {
-                assertThat(event.getData(), is("{\"ApiVersion\":\"1.0.0\"}"));
+                assertThat(event.getData(), is("{\"ApiVersion\":\"2.0.0\"}"));
                 assertThat(event.getId().isPresent(), is(false));
             } else if (count[0] == -1) {
                 // TODO REINSTATE ONCE STEP CAN BE READ
@@ -199,10 +202,70 @@ class EventServiceIntegrationTest {
 
             if (count[0] == 0) {
                 assertThat(data, instanceOf(ApiVersion.class));
-                assertThat(((ApiVersion) data).getApiVersion(), is("1.0.0"));
+                assertThat(((ApiVersion) data).getApiVersion(), is("2.0.0"));
                 assertThat(event.getId().isPresent(), is(false));
             } else if (count[0] == 1) {
                 assertThat(data, instanceOf(BlockAdded.class));
+                assertThat(((BlockAdded) data).getBlock(), instanceOf(BlockV1.class));
+                assertThat(event.getId().isPresent(), is(true));
+                assertThat(event.getId().get(), is(2L));
+            }
+
+            count[0]++;
+        }, Assertions::fail)) {
+            Thread.sleep(2000L);
+
+            assertThat(count[0], is(greaterThan(1)));
+        }
+    }
+
+    @Test
+    void blockAddedEventVersion2Raw() throws Exception {
+        mockNode.setDispatcher(
+                new PathMatchingResourceDispatcher(V2_BLOCK_EVENTS, is("/events?start_from=0"))
+                        .setContentType("text/event-stream")
+        );
+
+        int[] count = {0};
+
+        //noinspection unused
+        try (AutoCloseable closeable = eventService.consumeEvents(EventTarget.RAW, 0L, (Consumer<Event<EventData>>) event -> {
+
+            if (count[0] == 0) {
+                assertThat(event.getData(), is("{\"ApiVersion\":\"2.0.0\"}"));
+                assertThat(event.getId().isPresent(), is(false));
+            } else if (count[0] == 1) {
+                assertThat("" + event.getData(), containsString("\"block\":{\"Version2\""));
+            }
+
+            count[0]++;
+        }, Assertions::fail)) {
+            Thread.sleep(2000L);
+            assertThat(count[0], is(greaterThan(1)));
+        }
+    }
+
+    @Test
+    void blockAddedEventVersion2Pojo() throws Exception {
+        mockNode.setDispatcher(
+                new PathMatchingResourceDispatcher(V2_BLOCK_EVENTS, is("/events?start_from=0"))
+                        .setContentType("text/event-stream")
+        );
+
+        int[] count = {0};
+
+        //noinspection unused
+        try (AutoCloseable closeable = eventService.consumeEvents(EventTarget.POJO, 0L, (Consumer<Event<EventData>>) event -> {
+
+            final EventData data = event.getData();
+
+            if (count[0] == 0) {
+                assertThat(data, instanceOf(ApiVersion.class));
+                assertThat(((ApiVersion) data).getApiVersion(), is("2.0.0"));
+                assertThat(event.getId().isPresent(), is(false));
+            } else if (count[0] == 1) {
+                assertThat(data, instanceOf(BlockAdded.class));
+                assertThat(((BlockAdded) data).getBlock(), instanceOf(BlockV2.class));
                 assertThat(event.getId().isPresent(), is(true));
                 assertThat(event.getId().get(), is(2L));
             }
