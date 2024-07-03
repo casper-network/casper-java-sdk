@@ -87,4 +87,10 @@ public class DeployHeader implements CasperSerializableObject {
         }
         ser.writeString(chainName);
     }
+
+    public Digest buildHash() throws NoSuchTypeException, ValueSerializationException {
+        SerializerBuffer serializerBuffer = new SerializerBuffer();
+        this.serialize(serializerBuffer, Target.BYTE);
+        return Digest.blake2bDigestFromBytes(serializerBuffer.toByteArray());
+    }
 }

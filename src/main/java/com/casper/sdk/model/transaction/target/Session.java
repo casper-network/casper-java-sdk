@@ -2,6 +2,7 @@ package com.casper.sdk.model.transaction.target;
 
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.serde.Target;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import dev.oak3.sbs4j.SerializerBuffer;
@@ -41,6 +42,7 @@ public class Session implements TransactionTarget {
     }
 
     @Override
+    @JsonIgnore
     public byte getByteTag() {
         return 2;
     }

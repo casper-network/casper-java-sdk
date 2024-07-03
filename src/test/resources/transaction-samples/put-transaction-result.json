@@ -1,0 +1,10 @@
+{
+  "jsonrpc": "2.0",
+  "id": "383766003",
+  "result": {
+    "api_version": "2.0.0",
+    "transaction_hash": {
+      "Version1": "52a75f3651e450cc2c3ed534bf130bae2515950707d70bb60067aada30b97ca8"
+    }
+  }
+}
