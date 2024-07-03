@@ -108,7 +108,6 @@ public class CasperDeployHelper {
      * @param dependencies   list of digest dependencies
      * @return the built deploy
      * @throws NoSuchTypeException
-     * @throws GeneralSecurityException
      * @throws ValueSerializationException
      */
     public static Deploy buildDeploy(final AbstractPrivateKey fromPrivateKey,
@@ -142,7 +141,6 @@ public class CasperDeployHelper {
                 .build();
 
         return deploy.sign(fromPrivateKey);
-
     }
 
     @Getter

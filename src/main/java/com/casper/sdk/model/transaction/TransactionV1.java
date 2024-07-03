@@ -35,7 +35,7 @@ public class TransactionV1 extends Transaction implements CasperSerializableObje
                          final TransactionV1Header header,
                          final TransactionV1Body body,
                          final List<Approval> approvals) {
-      super(hash, approvals);
+        super(hash, approvals);
         this.header = header;
         this.body = body;
     }
