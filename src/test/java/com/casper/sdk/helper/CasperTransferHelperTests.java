@@ -10,7 +10,6 @@ import com.casper.sdk.service.AbstractJsonRpcTests;
 import com.syntifi.crypto.key.Ed25519PrivateKey;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
 import org.bouncycastle.util.encoders.Hex;
-import org.junit.Ignore;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
