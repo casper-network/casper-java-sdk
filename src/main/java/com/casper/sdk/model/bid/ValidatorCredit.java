@@ -19,12 +19,15 @@ import java.math.BigInteger;
 @Getter
 @Setter
 public class ValidatorCredit implements BidKind {
+
     /** Validator public key */
     @JsonProperty("validator_public_key")
     private PublicKey validatorPublicKey;
+
     /* The era id the credit was created. */
     @JsonProperty("era_id")
     private long eraId;
+
     /* The credit amount. */
     @JsonProperty("amount")
     private BigInteger amount;
