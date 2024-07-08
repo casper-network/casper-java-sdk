@@ -19,8 +19,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * <pre>{ BlockAdded: { block_hash: "6fa8d0ad18289e9a0f45993b9201560820b70d92521c5670b02dc2cf7d512ab8"}}</pre>
  *
  * @param <T> the type of the data
- *           
- * @author ian@meywood.com 
+ * @author ian@meywood.com
  */
 final class EventRoot<T extends EventData> {
 

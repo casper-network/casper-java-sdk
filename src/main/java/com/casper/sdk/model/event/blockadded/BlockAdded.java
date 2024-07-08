@@ -27,4 +27,7 @@ public class BlockAdded implements EventData {
     /** A JSON-friendly representation of `Block`. */
     @JsonProperty("block")
     private Block<?, ?> block;
+
+    @JsonProperty("next_era_gas_price")
+    private int nextEraGasPrice;
 }
