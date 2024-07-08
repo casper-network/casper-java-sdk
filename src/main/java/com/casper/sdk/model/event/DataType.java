@@ -8,6 +8,9 @@ import com.casper.sdk.model.event.fault.Fault;
 import com.casper.sdk.model.event.finalitysignature.FinalitySignatureV1;
 import com.casper.sdk.model.event.shutdown.Shutdown;
 import com.casper.sdk.model.event.step.Step;
+import com.casper.sdk.model.event.transaction.TransactionAccepted;
+import com.casper.sdk.model.event.transaction.TransactionExpired;
+import com.casper.sdk.model.event.transaction.TransactionProcessed;
 import com.casper.sdk.model.event.version.ApiVersion;
 
 /**
@@ -25,7 +28,10 @@ public enum DataType {
     FAULT(Fault.class),
     FINALITY_SIGNATURE(FinalitySignatureV1.class),
     SHUTDOWN(Shutdown.class),
-    STEP(Step.class);
+    STEP(Step.class),
+    TRANSACTION_ACCEPTED(TransactionAccepted.class),
+    TRANSACTION_EXPIRED(TransactionExpired.class),
+    TRANSACTION_PROCESSED(TransactionProcessed.class);
 
     /** The EventData class for the data type */
     private Class<? extends EventData> dataType;

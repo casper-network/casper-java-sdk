@@ -2,6 +2,7 @@ package com.casper.sdk.model.event.transaction;
 
 import com.casper.sdk.model.common.Digest;
 import com.casper.sdk.model.common.Ttl;
+import com.casper.sdk.model.event.EventData;
 import com.casper.sdk.model.transaction.InitiatorAddr;
 import com.casper.sdk.model.transaction.TransactionHash;
 import com.casper.sdk.model.transaction.execution.ExecutionResult;
@@ -25,7 +26,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonTypeName("TransactionProcessed")
-public class TransactionProcessed {
+public class TransactionProcessed implements EventData {
     @JsonProperty("transaction_hash")
     private TransactionHash transactionHash;
     @JsonProperty("initiator_addr")
