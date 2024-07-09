@@ -5,7 +5,7 @@ import com.casper.sdk.model.event.deployaccepted.DeployAccepted;
 import com.casper.sdk.model.event.deployexpired.DeployExpired;
 import com.casper.sdk.model.event.deployprocessed.DeployProcessed;
 import com.casper.sdk.model.event.fault.Fault;
-import com.casper.sdk.model.event.finalitysignature.FinalitySignatureV1;
+import com.casper.sdk.model.event.finalitysignature.FinalitySignature;
 import com.casper.sdk.model.event.shutdown.Shutdown;
 import com.casper.sdk.model.event.step.Step;
 import com.casper.sdk.model.event.transaction.TransactionAccepted;
@@ -26,7 +26,7 @@ public enum DataType {
     DEPLOY_EXPIRED(DeployExpired.class),
     DEPLOY_PROCESSED(DeployProcessed.class),
     FAULT(Fault.class),
-    FINALITY_SIGNATURE(FinalitySignatureV1.class),
+    FINALITY_SIGNATURE(FinalitySignature.class),
     SHUTDOWN(Shutdown.class),
     STEP(Step.class),
     TRANSACTION_ACCEPTED(TransactionAccepted.class),

@@ -1,10 +1,10 @@
 package com.casper.sdk.model.event.finalitysignature;
 
-import com.casper.sdk.model.common.Digest;
-import com.casper.sdk.model.key.PublicKey;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * A validator's signature of a block, to confirm it is finalized. Clients and joining nodes should wait until the
@@ -14,19 +14,8 @@ import lombok.*;
 @Setter
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor
+//@NoArgsConstructor(force = true)
 @JsonTypeName("V1")
-public class FinalitySignatureV1 implements FinalitySignature {
+public class FinalitySignatureV1 extends FinalitySignature {
 
-    @JsonProperty("block_hash")
-    private Digest blockHash;
-
-    @JsonProperty("era_id")
-    private long eraId;
-
-    @JsonProperty("public_key")
-    private PublicKey publicKey;
-
-    @JsonProperty("signature")
-    private String signature;
 }

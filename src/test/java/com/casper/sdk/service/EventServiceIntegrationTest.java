@@ -237,8 +237,8 @@ class EventServiceIntegrationTest {
                 FinalitySignatureV1 sig = (FinalitySignatureV1) data;
                 assertThat(sig.getBlockHash(), is(new Digest("bb878bcf8827649f070c487800a95c35be3eb2e83b5447921675040cea38af1c")));
                 assertThat(sig.getEraId(), is(0L));
-                assertThat(sig.getSignature(), is("0141eba160bb11448c663aa574de7a87554adb01531b1c6e93f31d4e998d5e5b4bdd71aa67442e3e5ffd8c75f709ad68ecbec9f116f4c50c49198098d30486dc02"));
                 try {
+                    assertThat(sig.getSignature(), is(Signature.fromHex("0141eba160bb11448c663aa574de7a87554adb01531b1c6e93f31d4e998d5e5b4bdd71aa67442e3e5ffd8c75f709ad68ecbec9f116f4c50c49198098d30486dc02")));
                     assertThat(sig.getPublicKey(), is(PublicKey.fromTaggedHexString("01959d01aa68197e8cb91aa06bcc920f8d4a245dff60ea726bb89255349107a565")));
                 } catch (NoSuchAlgorithmException e) {
                     throw new RuntimeException(e);
