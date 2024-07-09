@@ -20,7 +20,7 @@ public class Message {
     @JsonProperty("entity_hash")
     private String entityAddr;
     @JsonProperty("message")
-    private MessagePayload message;
+    private MessagePayload<?> message;
     /** The name of the topic on which the message was emitted on. */
     @JsonProperty("topic_name")
     private String topicName;
@@ -33,4 +33,9 @@ public class Message {
     /** Message index in the block. */
     @JsonProperty("block_index")
     private long blockIndex;
+
+    public <T extends MessagePayload<?>> T getMessage() {
+        //noinspection unchecked
+        return (T) message;
+    }
 }

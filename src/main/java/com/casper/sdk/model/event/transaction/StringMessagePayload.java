@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * Human readable string message.
+ * Human-readable string message.
  *
  * @author ian@meywood.com
  */

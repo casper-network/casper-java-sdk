@@ -34,13 +34,13 @@ public enum DataType {
     TRANSACTION_PROCESSED(TransactionProcessed.class);
 
     /** The EventData class for the data type */
-    private Class<? extends EventData> dataType;
+    private final Class<? extends EventData> dataType;
 
     DataType(Class<? extends EventData> dataType) {
         this.dataType = dataType;
     }
 
-    public static DataType of(final Class dataTypeClass) {
+    public static DataType of(final Class<?> dataTypeClass) {
         for (DataType dataType : DataType.values()) {
             if (dataType.dataType.equals(dataTypeClass)) {
                 return dataType;

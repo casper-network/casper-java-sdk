@@ -30,7 +30,7 @@ public class TransactionProcessed implements EventData {
     @JsonProperty("transaction_hash")
     private TransactionHash transactionHash;
     @JsonProperty("initiator_addr")
-    private InitiatorAddr initiatorAddr;
+    private InitiatorAddr<?> initiatorAddr;
     private Date timestamp;
     private Ttl ttl;
     @JsonProperty("block_hash")
@@ -38,4 +38,9 @@ public class TransactionProcessed implements EventData {
     @JsonProperty("execution_result")
     private ExecutionResult executionResult;
     private List<Message> messages;
+
+    public <T extends InitiatorAddr<?>> T getInitiatorAddr() {
+        //noinspection unchecked
+        return (T) initiatorAddr;
+    }
 }
