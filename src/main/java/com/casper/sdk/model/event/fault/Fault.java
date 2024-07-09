@@ -2,12 +2,15 @@ package com.casper.sdk.model.event.fault;
 
 import com.casper.sdk.model.event.EventData;
 import com.casper.sdk.model.key.PublicKey;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.Date;
 
 @Getter
 @Setter
@@ -26,5 +29,6 @@ public class Fault implements EventData {
 
     /** A timestamp type, representing a concrete moment in time of the fault. */
     @JsonProperty("timestamp")
-    private String timestamp; // TODO convert to date
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+    private Date timestamp;
 }

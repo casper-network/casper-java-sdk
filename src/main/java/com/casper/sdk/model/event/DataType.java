@@ -8,6 +8,9 @@ import com.casper.sdk.model.event.fault.Fault;
 import com.casper.sdk.model.event.finalitysignature.FinalitySignature;
 import com.casper.sdk.model.event.shutdown.Shutdown;
 import com.casper.sdk.model.event.step.Step;
+import com.casper.sdk.model.event.transaction.TransactionAccepted;
+import com.casper.sdk.model.event.transaction.TransactionExpired;
+import com.casper.sdk.model.event.transaction.TransactionProcessed;
 import com.casper.sdk.model.event.version.ApiVersion;
 
 /**
@@ -25,16 +28,19 @@ public enum DataType {
     FAULT(Fault.class),
     FINALITY_SIGNATURE(FinalitySignature.class),
     SHUTDOWN(Shutdown.class),
-    STEP(Step.class);
+    STEP(Step.class),
+    TRANSACTION_ACCEPTED(TransactionAccepted.class),
+    TRANSACTION_EXPIRED(TransactionExpired.class),
+    TRANSACTION_PROCESSED(TransactionProcessed.class);
 
     /** The EventData class for the data type */
-    private Class<? extends EventData> dataType;
+    private final Class<? extends EventData> dataType;
 
     DataType(Class<? extends EventData> dataType) {
         this.dataType = dataType;
     }
 
-    public static DataType of(final Class dataTypeClass) {
+    public static DataType of(final Class<?> dataTypeClass) {
         for (DataType dataType : DataType.values()) {
             if (dataType.dataType.equals(dataTypeClass)) {
                 return dataType;

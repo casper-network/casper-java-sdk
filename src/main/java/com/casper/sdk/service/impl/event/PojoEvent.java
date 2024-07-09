@@ -1,7 +1,6 @@
 package com.casper.sdk.service.impl.event;
 
 import com.casper.sdk.model.event.DataType;
-import com.casper.sdk.model.event.EventType;
 import com.casper.sdk.model.event.EventData;
 import com.casper.sdk.model.event.EventTarget;
 import lombok.ToString;
@@ -16,8 +15,8 @@ import lombok.ToString;
 @ToString(doNotUseGetters = true, callSuper = true)
 final class PojoEvent<T extends EventData> extends AbstractEvent<T> {
 
-    PojoEvent(final EventType eventType, final String source, final Long id, T data, final String version) {
-        super(eventType, getDataType(data), source, id, data, version);
+    PojoEvent(final String source, final Long id, T data, final String version) {
+        super(getDataType(data), source, id, data, version);
     }
 
     private static DataType getDataType(final Object data) {

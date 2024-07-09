@@ -10,7 +10,6 @@ import com.casper.sdk.service.AbstractJsonRpcTests;
 import com.syntifi.crypto.key.Ed25519PrivateKey;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
 import org.bouncycastle.util.encoders.Hex;
-import org.junit.Ignore;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -26,7 +25,8 @@ import java.util.Date;
 import java.util.Objects;
 import java.util.Random;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * Casper Deploy Service test
@@ -144,7 +144,7 @@ public class CasperTransferHelperTests extends AbstractJsonRpcTests {
                 new ArrayList<>());
         SpeculativeDeployData deployData = speculativeCasperServiceNctl.speculativeExec(deploy);
         assertNotNull(deployData);
-        assertTrue(deployData.getExecutionResult().getCost().compareTo(BigInteger.ZERO) == 1);
+        assertEquals(1, deployData.getExecutionResult().getCost().compareTo(BigInteger.ZERO));
     }
 
     @Test
@@ -175,7 +175,7 @@ public class CasperTransferHelperTests extends AbstractJsonRpcTests {
                 null, BigInteger.valueOf(100000000L), 1L, ttl, new Date(),
                 new ArrayList<>());
         DeployResult deployResult = casperServiceTestnet.putDeploy(deploy);
-        LOGGER.debug("deploy hash: " + deployResult.getDeployHash());
+        LOGGER.debug("deploy hash: {}", deployResult.getDeployHash());
         assertEquals(deployResult.getDeployHash(), Hex.toHexString(deploy.getHash().getDigest()));
     }
 
