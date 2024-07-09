@@ -10,8 +10,8 @@ package com.casper.sdk.model.transaction.entrypoint;
  * <li>"amount": `U512`</li></ul>
  * <p>
  * The following optional runtime args can also be provided:
- * <ul><li>to": `Option<AccountHash>`</li>
- * <li>"id": `Option<u64>`</li></ul>
+ * <ul><li>to": `Option(AccountHash)`</li>
+ * <li>"id": `Option(u64)`</li></ul>
  *
  * @author ian@meywood.com
  */

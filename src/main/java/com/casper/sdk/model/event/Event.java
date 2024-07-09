@@ -17,13 +17,6 @@ public interface Event<T> {
     String getSource();
 
     /**
-     * The type of the event
-     *
-     * @return the type of the event
-     */
-    EventType getEventType();
-
-    /**
      * The key name of the data field.
      *
      * @return the key name of the data field

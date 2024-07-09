@@ -1,0 +1,5 @@
+data:{"ApiVersion":"2.0.0"}
+
+data:{"BlockAdded":{"block_hash":"76442d29f2eda721f05c91feea4f9794d500b2f43dce8e18cd37206092696dc2","block":{"Version2":{"hash":"76442d29f2eda721f05c91feea4f9794d500b2f43dce8e18cd37206092696dc2","header":{"parent_hash":"174fd7f1b27055954917962bff013b23aaae7a2ac00fb5e2e0aa67ab8e8512cf","state_root_hash":"e31a40cddc7f479e271eaad04a455ac274737e54b0d897a5c364ae11bd537cc0","body_hash":"18937e8cf4338b5f5fdc2581f8d7d6a47de736d2799e3f3bc9b0ff9f1e7cf106","random_bit":false,"accumulated_seed":"f952dac35b239b10ff6fc600b939e8e33b1c0f95ef78e8577d793f028afd2f49","era_end":null,"timestamp":"2024-07-03T09:45:36.447Z","era_id":17259,"height":185859,"protocol_version":"2.0.0","proposer":"01284a8cd097808afdea9876ccb91f28702143c04266dea057cc19b8fc382cc258","current_gas_price":1,"last_switch_block_hash":"191cfe49d38fb8c2d214f2d6959a7b0cb8da77321ffad6d8a11a92c469d61ad4"},"body":{"transactions":{},"rewarded_signatures":[[248],[0],[0]]}}}}}
+id:1132420
+

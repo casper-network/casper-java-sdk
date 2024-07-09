@@ -1,6 +1,6 @@
 package com.casper.sdk.model.event.blockadded;
 
-import com.casper.sdk.model.block.BlockV1;
+import com.casper.sdk.model.block.Block;
 import com.casper.sdk.model.common.Digest;
 import com.casper.sdk.model.event.EventData;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -26,5 +26,8 @@ public class BlockAdded implements EventData {
 
     /** A JSON-friendly representation of `Block`. */
     @JsonProperty("block")
-    private BlockV1 block;
+    private Block<?, ?> block;
+
+    @JsonProperty("next_era_gas_price")
+    private int nextEraGasPrice;
 }

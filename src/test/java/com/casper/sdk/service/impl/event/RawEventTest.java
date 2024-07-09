@@ -1,7 +1,6 @@
 package com.casper.sdk.service.impl.event;
 
 import com.casper.sdk.model.event.DataType;
-import com.casper.sdk.model.event.EventType;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -19,9 +18,8 @@ class RawEventTest {
         final String data = "{\"ApiVersion\":\"1.0.0\"}";
         final String version = "1.2.3";
 
-        final RawEvent rawEvent = new RawEvent(EventType.MAIN, source, 1L, data, version);
+        final RawEvent rawEvent = new RawEvent(source, 1L, data, version);
 
-        assertThat(rawEvent.getEventType(), is(EventType.MAIN));
         assertThat(rawEvent.getSource(), is(source));
         assertThat(rawEvent.getId().isPresent(), is(true));
         assertThat(rawEvent.getId().get(), is(1L));
