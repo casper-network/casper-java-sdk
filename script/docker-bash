@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+CONTAINER_NAME="cspr-cctl"
+#CONTAINER_NAME="cspr-nctl-condor"
+docker exec -it ${CONTAINER_NAME} bash

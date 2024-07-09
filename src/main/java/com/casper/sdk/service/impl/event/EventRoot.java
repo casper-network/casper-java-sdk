@@ -10,6 +10,9 @@ import com.casper.sdk.model.event.fault.Fault;
 import com.casper.sdk.model.event.finalitysignature.FinalitySignature;
 import com.casper.sdk.model.event.shutdown.Shutdown;
 import com.casper.sdk.model.event.step.Step;
+import com.casper.sdk.model.event.transaction.TransactionAccepted;
+import com.casper.sdk.model.event.transaction.TransactionExpired;
+import com.casper.sdk.model.event.transaction.TransactionProcessed;
 import com.casper.sdk.model.event.version.ApiVersion;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -72,6 +75,7 @@ final class EventRoot<T extends EventData> {
      *
      * @param deployAccepted the deployAccepted to set as data
      */
+    @Deprecated
     @JsonProperty("DeployAccepted")
     public void setDeployAccepted(final DeployAccepted deployAccepted) {
         //noinspection unchecked
@@ -83,6 +87,7 @@ final class EventRoot<T extends EventData> {
      *
      * @param deployProcessed the deployProcessed to set as data
      */
+    @Deprecated
     @JsonProperty("DeployProcessed")
     public void setDeployProcessed(final DeployProcessed deployProcessed) {
         //noinspection unchecked
@@ -94,10 +99,44 @@ final class EventRoot<T extends EventData> {
      *
      * @param deployExpired the deployExpired to set as data
      */
+    @Deprecated
     @JsonProperty("DeployExpired")
     public void setDeployExpired(final DeployExpired deployExpired) {
         //noinspection unchecked
         this.data = (T) deployExpired;
+    }
+
+    /**
+     * Setter for TransactionAccepted due to @JsonAlias not working as expected
+     *
+     * @param transactionAccepted the transactionAccepted to set as data
+     */
+    @JsonProperty("TransactionAccepted")
+    public void setTransactionAccepted(final TransactionAccepted transactionAccepted) {
+        //noinspection unchecked
+        this.data = (T) transactionAccepted;
+    }
+
+    /**
+     * Setter for TransactionProcessed due to @JsonAlias not working as expected
+     *
+     * @param transactionProcessed the transactionProcessed to set as data
+     */
+    @JsonProperty("TransactionProcessed")
+    public void setDeployProcessed(final TransactionProcessed transactionProcessed) {
+        //noinspection unchecked
+        this.data = (T) transactionProcessed;
+    }
+
+    /**
+     * Setter for TransactionExpired due to @JsonAlias not working as expected
+     *
+     * @param transactionExpired the transactionExpired to set as data
+     */
+    @JsonProperty("TransactionExpired")
+    public void setDeployExpired(final TransactionExpired transactionExpired) {
+        //noinspection unchecked
+        this.data = (T) transactionExpired;
     }
 
     /**

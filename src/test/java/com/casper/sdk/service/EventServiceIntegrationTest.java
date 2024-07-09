@@ -7,6 +7,7 @@ import com.casper.sdk.model.clvalue.CLValueMap;
 import com.casper.sdk.model.clvalue.CLValueU64;
 import com.casper.sdk.model.clvalue.cltype.AbstractCLType;
 import com.casper.sdk.model.common.Digest;
+import com.casper.sdk.model.deploy.Deploy;
 import com.casper.sdk.model.event.Event;
 import com.casper.sdk.model.event.EventData;
 import com.casper.sdk.model.event.EventTarget;
@@ -14,13 +15,18 @@ import com.casper.sdk.model.event.blockadded.BlockAdded;
 import com.casper.sdk.model.event.finalitysignature.FinalitySignatureV1;
 import com.casper.sdk.model.event.finalitysignature.FinalitySignatureV2;
 import com.casper.sdk.model.event.step.Step;
+import com.casper.sdk.model.event.transaction.StringMessagePayload;
+import com.casper.sdk.model.event.transaction.TransactionAccepted;
+import com.casper.sdk.model.event.transaction.TransactionProcessed;
 import com.casper.sdk.model.event.version.ApiVersion;
 import com.casper.sdk.model.key.PublicKey;
 import com.casper.sdk.model.key.Signature;
+import com.casper.sdk.model.transaction.execution.ExecutionResultV2;
 import com.casper.sdk.model.transaction.kind.IdentityKind;
 import com.casper.sdk.model.transaction.kind.WriteKind;
 import com.casper.sdk.test.MockNode;
 import com.casper.sdk.test.PathMatchingResourceDispatcher;
+import org.joda.time.DateTime;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -44,8 +50,10 @@ class EventServiceIntegrationTest {
     private static final String SIGS_EVENTS = "/event-samples/sigs-events.txt";
     private static final String V2_BLOCK_EVENTS = "/event-samples/block-added-v2.txt";
     private static final String V2_STEP_EVENT = "/event-samples/step-event-v2.txt";
-
     private static final String DEPLOYS_EVENTS = "/event-samples/deploys-events.txt";
+    private static final String TRANSACTION_ACCEPTED = "/event-samples/transaction_accepted.txt";
+    private static final String TRANSACTION_PROCESSED = "/event-samples/transaction_processed.txt";
+
     private final MockNode mockNode = new MockNode();
     private final EventService eventService;
 
@@ -387,6 +395,81 @@ class EventServiceIntegrationTest {
                 CLValueU64 clValueU64 = (CLValueU64) ((WriteKind) step.getExecutionEffects().get(36).getKind()).getWrite().getValue();
                 assertThat(clValueU64.getValue(), is(new BigInteger("1720017392950")));
                 assertThat(clValueU64.getBytes(), is("3695067990010000"));
+            }
+
+            count[0]++;
+        }, Assertions::fail)) {
+            Thread.sleep(3000L);
+            assertThat(count[0], is(greaterThan(0)));
+        }
+    }
+
+    @Test
+    void transactionAccepted() throws Exception {
+        mockNode.setDispatcher(
+                new PathMatchingResourceDispatcher(TRANSACTION_ACCEPTED, is("/events?start_from=0"))
+                        .setContentType("text/event-stream")
+        );
+
+        int[] count = {0};
+
+        //noinspection unused
+        try (AutoCloseable closeable = eventService.consumeEvents(EventTarget.POJO, 0L, (Consumer<Event<EventData>>) event -> {
+
+            final EventData data = event.getData();
+
+            if (count[0] == 0) {
+                assertThat(data, instanceOf(TransactionAccepted.class));
+                final TransactionAccepted transactionAccepted = (TransactionAccepted) data;
+                assertThat(transactionAccepted.getTransaction(), is(instanceOf(Deploy.class)));
+                final Deploy deploy = (Deploy) transactionAccepted.getTransaction();
+                assertThat(deploy.getHash(), is(new Digest("37c80db9d769cb23ab482f44c2e8d8a73d9e24a1801e81d423953b8ba04b275d")));
+                try {
+                    assertThat(deploy.getHeader().getAccount(), is(PublicKey.fromTaggedHexString("01197debef24d5abef5251c35925d79b21fada5bca6b0afd212216b5c63c22be6f")));
+                } catch (NoSuchAlgorithmException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
+            count[0]++;
+        }, Assertions::fail)) {
+            Thread.sleep(3000L);
+            assertThat(count[0], is(greaterThan(0)));
+        }
+    }
+
+    @Test
+    void transactionProcessed() throws Exception {
+        mockNode.setDispatcher(
+                new PathMatchingResourceDispatcher(TRANSACTION_PROCESSED, is("/events?start_from=0"))
+                        .setContentType("text/event-stream")
+        );
+
+        int[] count = {0};
+
+        //noinspection unused
+        try (AutoCloseable closeable = eventService.consumeEvents(EventTarget.POJO, 0L, (Consumer<Event<EventData>>) event -> {
+
+            final EventData data = event.getData();
+
+            if (count[0] == 0) {
+                assertThat(data, instanceOf(TransactionProcessed.class));
+                final TransactionProcessed transactionProcessed = (TransactionProcessed) data;
+                assertThat(transactionProcessed.getTransactionHash(), is(new Digest("7141f95d3336e63be9fc166e14effea44dd90f5845acff34966c4f950e56c3f9")));
+                try {
+                    assertThat(transactionProcessed.getInitiatorAddr().getAddress(), is(PublicKey.fromTaggedHexString("0138329930033bca4773a6623574ad7870ee39c554f153f15609e200e50049a7de")));
+                } catch (NoSuchAlgorithmException e) {
+                    throw new RuntimeException(e);
+                }
+                assertThat(transactionProcessed.getTimestamp(), is(new DateTime("2024-07-09T09:48:14.752Z").toDate()));
+                assertThat(transactionProcessed.getBlockHash(), is(new Digest("b1d2019c39f2f4897e79f8b460e9862d523e40c675378e23ba308a2e58483a09")));
+                assertThat(transactionProcessed.getExecutionResult(), is(instanceOf(ExecutionResultV2.class)));
+                ExecutionResultV2 resultV2 = (ExecutionResultV2) transactionProcessed.getExecutionResult();
+                assertThat(resultV2.getErrorMessage(), is("unsupported mode for deploy-hash(7141..c3f9) attempting transfer"));
+                assertThat(resultV2.getEffects(), hasSize(9));
+                assertThat(transactionProcessed.getMessages(), hasSize(1));
+                assertThat(transactionProcessed.getMessages().get(0).getMessage(), is(instanceOf(StringMessagePayload.class)));
+                assertThat(transactionProcessed.getMessages().get(0).getMessage().getMessage(), is("Thequickbrownfoxjumpsoverthelazydog"));
             }
 
             count[0]++;
