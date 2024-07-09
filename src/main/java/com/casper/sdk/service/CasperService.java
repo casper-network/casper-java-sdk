@@ -170,7 +170,13 @@ public interface CasperService {
                                      @JsonRpcParam("key") String key,
                                      @JsonRpcParam("path") String[] path);
 
-
+    /**
+     * Query for full balance information using a purse identifier and a state identifier.
+     *
+     * @param purseIdentifier The identifier to obtain the purse corresponding to balance query
+     * @param stateIdentifier The identifier for the state used for the query, if none is passed, the latest block will be used.
+     * @return the result for "query_balance_details" RPC response.
+     */
     @JsonRpcMethod("query_balance_details")
     QueryBalanceDetailsResult queryBalanceDetails(@JsonRpcParam("purse_identifier") PurseIdentifier purseIdentifier,
                                                   @JsonRpcParam("state_identifier") GlobalStateIdentifier stateIdentifier);

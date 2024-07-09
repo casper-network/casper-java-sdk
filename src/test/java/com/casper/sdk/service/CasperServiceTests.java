@@ -707,7 +707,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
         );
 
         assertThat(result.getApiVersion(), is("2.0.0"));
-        assertThat(result.getTotalBalance(), is(new BigInteger("1000000000000000000000000000000000")));
+        assertThat(result.getTotalBalance(), is(new BigInteger("2000000000000000000000000000000000")));
         assertThat(result.getAvailableBalance(), is(new BigInteger("1000000000000000000000000000000000")));
         assertThat(result.getTotalBalanceProof(), is("0100000006328c317bc7f9fd7d2b5fa9cf3b4c09fc5a8f"));
         assertThat(result.getHolds(), hasSize(1));
