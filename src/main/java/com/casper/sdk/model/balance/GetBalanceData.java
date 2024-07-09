@@ -1,13 +1,10 @@
 package com.casper.sdk.model.balance;
 
+import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
+import com.casper.sdk.model.common.RpcResult;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigInteger;
 
@@ -24,23 +21,13 @@ import java.math.BigInteger;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class GetBalanceData {
+public class GetBalanceData extends RpcResult {
 
-    /**
-     * The RPC API version
-     */
-    @JsonProperty("api_version")
-    private String apiVersion;
-
-    /**
-     * The balance value
-     */
+    /** The balance value */
     @JsonIgnore
     private BigInteger value;
 
-    /**
-     * The merkle proof
-     */
+    /** * The merkle proof */
     @JsonProperty("merkle_proof")
     private String merkleProof;
 

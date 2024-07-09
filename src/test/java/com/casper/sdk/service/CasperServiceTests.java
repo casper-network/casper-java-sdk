@@ -7,9 +7,12 @@ import com.casper.sdk.identifier.block.HashBlockIdentifier;
 import com.casper.sdk.identifier.block.HeightBlockIdentifier;
 import com.casper.sdk.identifier.global.BlockHashIdentifier;
 import com.casper.sdk.identifier.global.GlobalStateIdentifier;
+import com.casper.sdk.identifier.global.StateRootHashIdentifier;
+import com.casper.sdk.identifier.purse.PurseUref;
 import com.casper.sdk.model.account.AccountData;
 import com.casper.sdk.model.auction.AuctionData;
 import com.casper.sdk.model.balance.GetBalanceData;
+import com.casper.sdk.model.balance.QueryBalanceDetailsResult;
 import com.casper.sdk.model.block.*;
 import com.casper.sdk.model.clvalue.CLValuePublicKey;
 import com.casper.sdk.model.clvalue.CLValueString;
@@ -687,5 +690,29 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
         final PutTransactionResult result = casperServiceMock.putTransaction(transaction);
         assertThat(result.getApiVersion(), is("2.0.0"));
         assertThat(result.getTransactionHash().toString(), is("52a75f3651e450cc2c3ed534bf130bae2515950707d70bb60067aada30b97ca8"));
+    }
+
+    @Test
+    void queryBalanceDetails() throws IOException, DynamicInstanceException {
+
+        mockNode.withRcpResponseDispatcher()
+                .withMethod("query_balance_details")
+                .withBody("$.params.purse_identifier.purse_uref", "uref-328c317bc7f9fd7d2b5fa9cf3b4c09fc5a8fb59b012b367f096d2426b768179a-007")
+                .withBody("$.params.state_identifier.StateRootHash", "a47d8d8bf5226707cc34c4d869e89b6e02096a6dc50b247f34f0b7260050714f")
+                .thenDispatch(getClass().getResource("/balance/query_balance_details_result.json"));
+
+        final QueryBalanceDetailsResult result = casperServiceMock.queryBalanceDetails(
+                new PurseUref(URef.fromString("uref-328c317bc7f9fd7d2b5fa9cf3b4c09fc5a8fb59b012b367f096d2426b768179a-007")),
+                new StateRootHashIdentifier("a47d8d8bf5226707cc34c4d869e89b6e02096a6dc50b247f34f0b7260050714f")
+        );
+
+        assertThat(result.getApiVersion(), is("2.0.0"));
+        assertThat(result.getTotalBalance(), is(new BigInteger("1000000000000000000000000000000000")));
+        assertThat(result.getAvailableBalance(), is(new BigInteger("1000000000000000000000000000000000")));
+        assertThat(result.getTotalBalanceProof(), is("0100000006328c317bc7f9fd7d2b5fa9cf3b4c09fc5a8f"));
+        assertThat(result.getHolds(), hasSize(1));
+        assertThat(result.getHolds().get(0).getTime(), is(1234567890L));
+        assertThat(result.getHolds().get(0).getAmount(), is(new BigInteger("1000000000000000000000000000000000")));
+        assertThat(result.getHolds().get(0).getProof(), is("0100000006328c317bc7f9fd7d2b5fa9cf3b4c09fc5a8f"));
     }
 }

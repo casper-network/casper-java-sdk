@@ -9,6 +9,7 @@ import com.casper.sdk.model.account.AccountData;
 import com.casper.sdk.model.auction.AuctionData;
 import com.casper.sdk.model.balance.GetBalanceData;
 import com.casper.sdk.model.balance.QueryBalanceData;
+import com.casper.sdk.model.balance.QueryBalanceDetailsResult;
 import com.casper.sdk.model.block.ChainGetBlockResult;
 import com.casper.sdk.model.deploy.Deploy;
 import com.casper.sdk.model.deploy.DeployData;
@@ -169,6 +170,11 @@ public interface CasperService {
                                      @JsonRpcParam("key") String key,
                                      @JsonRpcParam("path") String[] path);
 
+
+    @JsonRpcMethod("query_balance_details")
+    QueryBalanceDetailsResult queryBalanceDetails(@JsonRpcParam("purse_identifier") PurseIdentifier purseIdentifier,
+                                                  @JsonRpcParam("state_identifier") GlobalStateIdentifier stateIdentifier);
+
     /**
      * Returns an Account from the network
      *
@@ -320,7 +326,7 @@ public interface CasperService {
     //region DEPRECATED METHODS
 
     /**
-     * Returns a stored value from the network. This RPC is deprecated, use `query_global_state` instead"
+     * Returns a stored value from the network. This RPC is deprecated, use `query_global_state` instead.
      *
      * @param stateRootHash Hash of the state root
      * @param key           `casper_types::Key` as formatted string

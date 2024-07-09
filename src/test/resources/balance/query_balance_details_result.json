@@ -1,0 +1,17 @@
+{
+  "jsonrpc": "2.0",
+  "id": "1702467347489",
+  "result": {
+    "api_version": "2.0.0",
+    "total_balance": "1000000000000000000000000000000000",
+    "available_balance": "1000000000000000000000000000000000",
+    "total_balance_proof": "0100000006328c317bc7f9fd7d2b5fa9cf3b4c09fc5a8f",
+    "holds": [
+      {
+        "time": 1234567890,
+        "amount": "1000000000000000000000000000000000",
+        "proof": "0100000006328c317bc7f9fd7d2b5fa9cf3b4c09fc5a8f"
+      }
+    ]
+  }
+}

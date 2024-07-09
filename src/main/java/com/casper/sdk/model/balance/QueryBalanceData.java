@@ -1,14 +1,10 @@
 package com.casper.sdk.model.balance;
 
 import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
+import com.casper.sdk.model.common.RpcResult;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigInteger;
 
@@ -25,17 +21,9 @@ import java.math.BigInteger;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class QueryBalanceData {
+public class QueryBalanceData extends RpcResult {
 
-    /**
-     * The RPC API version
-     */
-    @JsonProperty("api_version")
-    private String apiVersion;
-
-    /**
-     * The balance value
-     */
+    /** The balance value */
     @JsonIgnore
     private BigInteger balance;
 
@@ -50,5 +38,5 @@ public class QueryBalanceData {
     protected void setJsonValue(String value) {
         this.balance = new BigInteger(value, 10);
     }
-   
+
 }
