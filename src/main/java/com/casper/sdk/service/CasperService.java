@@ -237,11 +237,12 @@ public interface CasperService {
     StatusData getStatus();
 
     /**
-     * Obtains validator and delegator rewards.
+     * Obtains validator or delegator rewards.
      *
-     * @param eraIdentifier the optional era identifier
+     * @param eraIdentifier the optional era identifier. If omitted, the last finalized era is used.
      * @param validator     the required public key
-     * @param delegator     the optional delegator public key
+     * @param delegator     the optional delegator public key.  If provided, the rewards for the delegator are returned.
+     *                      If omitted, the rewards for the validator are returned.
      * @return the result for "info_get_reward" RPC request
      */
     @JsonRpcMethod("info_get_reward")

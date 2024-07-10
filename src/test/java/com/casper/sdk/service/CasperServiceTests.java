@@ -718,7 +718,6 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
         assertThat(result.getHolds().get(0).getProof(), is("0100000006328c317bc7f9fd7d2b5fa9cf3b4c09fc5a8f"));
     }
 
-
     @Test
     void infoGetReward() throws NoSuchAlgorithmException {
 
