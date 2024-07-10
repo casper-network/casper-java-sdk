@@ -9,6 +9,7 @@ import com.casper.sdk.model.account.AccountData;
 import com.casper.sdk.model.auction.AuctionData;
 import com.casper.sdk.model.balance.GetBalanceData;
 import com.casper.sdk.model.balance.QueryBalanceData;
+import com.casper.sdk.model.balance.QueryBalanceDetailsResult;
 import com.casper.sdk.model.block.ChainGetBlockResult;
 import com.casper.sdk.model.deploy.Deploy;
 import com.casper.sdk.model.deploy.DeployData;
@@ -170,6 +171,17 @@ public interface CasperService {
                                      @JsonRpcParam("path") String[] path);
 
     /**
+     * Query for full balance information using a purse identifier and a state identifier.
+     *
+     * @param purseIdentifier The identifier to obtain the purse corresponding to balance query
+     * @param stateIdentifier The identifier for the state used for the query, if none is passed, the latest block will be used.
+     * @return the result for "query_balance_details" RPC response.
+     */
+    @JsonRpcMethod("query_balance_details")
+    QueryBalanceDetailsResult queryBalanceDetails(@JsonRpcParam("purse_identifier") PurseIdentifier purseIdentifier,
+                                                  @JsonRpcParam("state_identifier") GlobalStateIdentifier stateIdentifier);
+
+    /**
      * Returns an Account from the network
      *
      * @param publicKey       the account's public key
@@ -320,7 +332,7 @@ public interface CasperService {
     //region DEPRECATED METHODS
 
     /**
-     * Returns a stored value from the network. This RPC is deprecated, use `query_global_state` instead"
+     * Returns a stored value from the network. This RPC is deprecated, use `query_global_state` instead.
      *
      * @param stateRootHash Hash of the state root
      * @param key           `casper_types::Key` as formatted string

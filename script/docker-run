@@ -4,5 +4,4 @@ CONTAINER_NAME="cspr-cctl"
 IMAGE_VERSION="feat-2.0"
 # run the cspr-nctl container in docker
 #docker run --rm -it --name ${CONTAINER_NAME} -d -p 25101:25101 -p 11101:11101 -p 14101:14101 -p 18101:18101 casper-nctl:${IMAGE_VERSION}
-
-docker run --rm -it --name ${CONTAINER_NAME} -d -p 25101:25101 -p 11101:11101 -p 14101:14101 -p 18101:18101 stormeye2000/cspr-cctl:${IMAGE_VERSION}
+docker run --rm -it --name ${CONTAINER_NAME} -d -p 25101:25101 -p 11101:11101 -p 14101:14101 -p 18101:18101 -p21101:21101 stormeye2000/cspr-cctl:${IMAGE_VERSION}
