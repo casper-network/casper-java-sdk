@@ -3,6 +3,7 @@ package com.casper.sdk.service;
 import com.casper.sdk.exception.CasperClientExceptionResolver;
 import com.casper.sdk.identifier.block.BlockIdentifier;
 import com.casper.sdk.identifier.dictionary.DictionaryIdentifier;
+import com.casper.sdk.identifier.era.EraIdentifier;
 import com.casper.sdk.identifier.global.GlobalStateIdentifier;
 import com.casper.sdk.identifier.purse.PurseIdentifier;
 import com.casper.sdk.model.account.AccountData;
@@ -18,7 +19,9 @@ import com.casper.sdk.model.deploy.SpeculativeDeployData;
 import com.casper.sdk.model.dictionary.DictionaryData;
 import com.casper.sdk.model.era.EraInfoData;
 import com.casper.sdk.model.globalstate.GlobalStateData;
+import com.casper.sdk.model.key.PublicKey;
 import com.casper.sdk.model.peer.PeerData;
+import com.casper.sdk.model.reward.GetRewardResult;
 import com.casper.sdk.model.stateroothash.StateRootHashData;
 import com.casper.sdk.model.status.ChainspecData;
 import com.casper.sdk.model.status.StatusData;
@@ -232,6 +235,19 @@ public interface CasperService {
      */
     @JsonRpcMethod("info_get_status")
     StatusData getStatus();
+
+    /**
+     * Obtains validator and delegator rewards.
+     *
+     * @param eraIdentifier the optional era identifier
+     * @param validator     the required public key
+     * @param delegator     the optional delegator public key
+     * @return the result for "info_get_reward" RPC request
+     */
+    @JsonRpcMethod("info_get_reward")
+    GetRewardResult getReward(@JsonRpcParam("era_identifier") EraIdentifier eraIdentifier,
+                              @JsonRpcParam("validator") PublicKey validator,
+                              @JsonRpcParam("delegator") PublicKey delegator);
     //endregion
 
     //region TRANSACTIONAL METHODS
