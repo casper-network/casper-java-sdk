@@ -619,4 +619,9 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
         assertThat(transfer.getGas(), is(1));
         assertThat(transfer.getId(), is(12345L));
     }
+
+
+
+
+
 }

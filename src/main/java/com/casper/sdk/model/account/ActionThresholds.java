@@ -32,4 +32,8 @@ public class ActionThresholds {
      */
     @JsonProperty("key_management")
     private int keyManagement;
+
+    @JsonProperty("upgrade_management")
+    private int upgradeManagement;
+
 }

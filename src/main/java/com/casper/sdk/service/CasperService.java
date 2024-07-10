@@ -3,6 +3,7 @@ package com.casper.sdk.service;
 import com.casper.sdk.exception.CasperClientExceptionResolver;
 import com.casper.sdk.identifier.block.BlockIdentifier;
 import com.casper.sdk.identifier.dictionary.DictionaryIdentifier;
+import com.casper.sdk.identifier.entity.EntityIdentifier;
 import com.casper.sdk.identifier.global.GlobalStateIdentifier;
 import com.casper.sdk.identifier.purse.PurseIdentifier;
 import com.casper.sdk.model.account.AccountData;
@@ -15,6 +16,7 @@ import com.casper.sdk.model.deploy.DeployData;
 import com.casper.sdk.model.deploy.DeployResult;
 import com.casper.sdk.model.deploy.SpeculativeDeployData;
 import com.casper.sdk.model.dictionary.DictionaryData;
+import com.casper.sdk.model.entity.AddressableEntity;
 import com.casper.sdk.model.era.EraInfoData;
 import com.casper.sdk.model.globalstate.GlobalStateData;
 import com.casper.sdk.model.peer.PeerData;
@@ -212,6 +214,19 @@ public interface CasperService {
      */
     @JsonRpcMethod("info_get_status")
     StatusData getStatus();
+
+
+    /**
+     * TODO
+     * @param entityIdentifier entity identifier
+     * @param blockIdentifier optional block identifier
+     * @return object holding teh Addressable Entity
+     */
+    @JsonRpcMethod("state_get_entity")
+    AddressableEntity getStateEntity(@JsonRpcParam("entity_identifier") EntityIdentifier entityIdentifier,
+                                    @JsonRpcParam("block_identifier") BlockIdentifier blockIdentifier);
+
+
     //endregion
 
     //region TRANSACTIONAL METHODS
