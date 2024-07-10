@@ -40,6 +40,7 @@ public abstract class AbstractSerializedKeyTaggedHex<T extends Tag> implements C
                 + ByteUtils.encodeHexString(this.getKey());
     }
 
+
     /**
      * Implements TaggedHEx encoder
      */

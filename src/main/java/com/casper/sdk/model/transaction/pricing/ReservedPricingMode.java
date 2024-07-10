@@ -3,6 +3,7 @@ package com.casper.sdk.model.transaction.pricing;
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.serde.Target;
 import com.casper.sdk.model.common.Digest;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
@@ -32,6 +33,7 @@ public class ReservedPricingMode implements PricingMode {
     }
 
     @Override
+    @JsonIgnore
     public byte getByteTag() {
         return RESERVED_TAG;
     }

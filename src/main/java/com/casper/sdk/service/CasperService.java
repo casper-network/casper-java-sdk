@@ -10,6 +10,7 @@ import com.casper.sdk.model.account.AccountData;
 import com.casper.sdk.model.auction.AuctionData;
 import com.casper.sdk.model.balance.GetBalanceData;
 import com.casper.sdk.model.balance.QueryBalanceData;
+import com.casper.sdk.model.balance.QueryBalanceDetailsResult;
 import com.casper.sdk.model.block.ChainGetBlockResult;
 import com.casper.sdk.model.deploy.Deploy;
 import com.casper.sdk.model.deploy.DeployData;
@@ -25,6 +26,8 @@ import com.casper.sdk.model.status.ChainspecData;
 import com.casper.sdk.model.status.StatusData;
 import com.casper.sdk.model.storedvalue.StoredValueData;
 import com.casper.sdk.model.transaction.GetTransactionResult;
+import com.casper.sdk.model.transaction.PutTransactionResult;
+import com.casper.sdk.model.transaction.Transaction;
 import com.casper.sdk.model.transaction.TransactionHash;
 import com.casper.sdk.model.transfer.TransferData;
 import com.casper.sdk.model.uref.URef;
@@ -147,6 +150,12 @@ public interface CasperService {
     @JsonRpcMethod("info_get_deploy")
     DeployData getDeploy(@JsonRpcParam("deploy_hash") final String deployHash);
 
+    /**
+     * Returns a Transaction from the network
+     *
+     * @param transactionHash the hash of the transaction to obtain
+     * @return Object holding the api version, the transaction and execution info
+     */
     @JsonRpcMethod("info_get_transaction")
     GetTransactionResult getTransaction(@JsonRpcParam("transaction_hash") final TransactionHash transactionHash);
 
@@ -162,6 +171,17 @@ public interface CasperService {
     GlobalStateData queryGlobalState(@JsonRpcParam("state_identifier") GlobalStateIdentifier stateIdentifier,
                                      @JsonRpcParam("key") String key,
                                      @JsonRpcParam("path") String[] path);
+
+    /**
+     * Query for full balance information using a purse identifier and a state identifier.
+     *
+     * @param purseIdentifier The identifier to obtain the purse corresponding to balance query
+     * @param stateIdentifier The identifier for the state used for the query, if none is passed, the latest block will be used.
+     * @return the result for "query_balance_details" RPC response.
+     */
+    @JsonRpcMethod("query_balance_details")
+    QueryBalanceDetailsResult queryBalanceDetails(@JsonRpcParam("purse_identifier") PurseIdentifier purseIdentifier,
+                                                  @JsonRpcParam("state_identifier") GlobalStateIdentifier stateIdentifier);
 
     /**
      * Returns an Account from the network
@@ -232,13 +252,14 @@ public interface CasperService {
     //region TRANSACTIONAL METHODS
 
     /**
-     * Sends a deploy to be received by the network
+     * Sends a transaction to be received by the network
      *
-     * @param deploy the deploy object to send to the network
+     * @param transaction the deploy object to send to the network
      * @return Object holding the api version and the deploy hash
      */
-    @JsonRpcMethod(value = "account_put_deploy", paramsPassMode = JsonRpcParamsPassMode.ARRAY)
-    DeployResult putDeploy(Deploy deploy);
+    @JsonRpcMethod(value = "account_put_transaction", paramsPassMode = JsonRpcParamsPassMode.ARRAY)
+    PutTransactionResult putTransaction(final Transaction transaction);
+
 
     /**
      * The speculative_exec endpoint provides a method to execute a Deploy
@@ -326,7 +347,7 @@ public interface CasperService {
     //region DEPRECATED METHODS
 
     /**
-     * Returns a stored value from the network. This RPC is deprecated, use `query_global_state` instead"
+     * Returns a stored value from the network. This RPC is deprecated, use `query_global_state` instead.
      *
      * @param stateRootHash Hash of the state root
      * @param key           `casper_types::Key` as formatted string
@@ -338,5 +359,17 @@ public interface CasperService {
     @JsonRpcMethod("state_get_item")
     StoredValueData getStateItem(@JsonRpcParam("state_root_hash") String stateRootHash,
                                  @JsonRpcParam("key") String key, @JsonRpcParam("path") List<String> path);
+
+    /**
+     * Sends a deploy to be received by the network
+     *
+     * @param deploy the deploy object to send to the network
+     * @return Object holding the api version and the deploy hash
+     * @deprecated use {@link #putTransaction(Transaction)} instead
+     */
+    @Deprecated
+    @JsonRpcMethod(value = "account_put_deploy", paramsPassMode = JsonRpcParamsPassMode.ARRAY)
+    DeployResult putDeploy(Deploy deploy);
+
     //endregion
 }

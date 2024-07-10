@@ -2,7 +2,6 @@ package com.casper.sdk.service.impl.event;
 
 import com.casper.sdk.model.event.DataType;
 import com.casper.sdk.model.event.Event;
-import com.casper.sdk.model.event.EventType;
 import lombok.*;
 
 import java.util.Optional;
@@ -19,8 +18,6 @@ import java.util.Optional;
 @EqualsAndHashCode(of = {"source", "id"})
 abstract class AbstractEvent<T> implements Event<T> {
 
-    /** The type of event RAW or POJO */
-    private final EventType eventType;
     /** The type of the data field */
     private final DataType dataType;
     /** The source node of the event */

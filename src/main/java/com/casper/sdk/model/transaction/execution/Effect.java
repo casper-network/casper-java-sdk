@@ -16,6 +16,7 @@ import lombok.*;
 @Builder
 public class Effect {
 
+    // TODO convert EntityAddr
     @JsonProperty("key")
     private String key;
     @JsonProperty("kind")
