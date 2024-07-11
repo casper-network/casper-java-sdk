@@ -8,6 +8,7 @@ import com.casper.sdk.identifier.block.HeightBlockIdentifier;
 import com.casper.sdk.identifier.entity.AccountHashEntityIdentifier;
 import com.casper.sdk.identifier.entity.EntityAddrIdentifier;
 import com.casper.sdk.identifier.entity.PublicKeyEntityIdentifier;
+import com.casper.sdk.identifier.era.BlockEraIdentifier;
 import com.casper.sdk.identifier.global.BlockHashIdentifier;
 import com.casper.sdk.identifier.global.GlobalStateIdentifier;
 import com.casper.sdk.identifier.global.StateRootHashIdentifier;
@@ -41,6 +42,7 @@ import com.casper.sdk.model.globalstate.GlobalStateData;
 import com.casper.sdk.model.key.AlgorithmTag;
 import com.casper.sdk.model.key.PublicKey;
 import com.casper.sdk.model.peer.PeerData;
+import com.casper.sdk.model.reward.GetRewardResult;
 import com.casper.sdk.model.stateroothash.StateRootHashData;
 import com.casper.sdk.model.storedvalue.StoredValueAccount;
 import com.casper.sdk.model.storedvalue.StoredValueContract;
@@ -725,6 +727,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
         assertThat(result.getHolds().get(0).getAmount(), is(new BigInteger("1000000000000000000000000000000000")));
         assertThat(result.getHolds().get(0).getProof(), is("0100000006328c317bc7f9fd7d2b5fa9cf3b4c09fc5a8f"));
     }
+
     @Test
     void stateGetEntityAccount() throws NoSuchAlgorithmException {
 
@@ -943,6 +946,29 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
         assertThat(entity.getEntity().getActionThresholds().getDeployment(), is(1));
         assertThat(entity.getEntity().getActionThresholds().getKeyManagement(), is(1));
         assertThat(entity.getEntity().getActionThresholds().getUpgradeManagement(), is(1));
+
+
+    @Test
+    void infoGetReward() throws NoSuchAlgorithmException {
+
+        mockNode.withRcpResponseDispatcher()
+                .withMethod("info_get_reward")
+                .withBody("$.params.validator", "010b277da84a12c8814d5723eeb57123ff287f22466fd13faca1bb1fae57d2679b")
+                .withBody("$.params.delegator", "01098d1758f1ca75350dfec8a1c4c1984a88d1ea5eab5590fbc9e856d67cde31eb")
+                .withBody("$.params.era_identifier.Block.Hash", "709a31cbaff23da43995e78d2209e7f5980905cf70ef850f6744b8d3cec9af13")
+                .thenDispatch(getClass().getResource("/reward/info_get_reward_result.json"));
+
+        final GetRewardResult rewardInfo = casperServiceMock.getReward(
+                BlockEraIdentifier.builder().blockIdentifier(
+                        HashBlockIdentifier.builder().hash("709a31cbaff23da43995e78d2209e7f5980905cf70ef850f6744b8d3cec9af13").build()
+                ).build(),
+                PublicKey.fromTaggedHexString("010b277da84a12c8814d5723eeb57123ff287f22466fd13faca1bb1fae57d2679b"),
+                PublicKey.fromTaggedHexString("01098d1758f1ca75350dfec8a1c4c1984a88d1ea5eab5590fbc9e856d67cde31eb")
+        );
+
+        assertThat(rewardInfo.getApiVersion(), is("2.0.0"));
+        assertThat(rewardInfo.getRewardAmount(), is(new BigInteger("100000000000000")));
+        assertThat(rewardInfo.getEraId(), is(123456L));
 
     }
 }
