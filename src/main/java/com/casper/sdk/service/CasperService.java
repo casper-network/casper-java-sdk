@@ -17,7 +17,7 @@ import com.casper.sdk.model.deploy.DeployData;
 import com.casper.sdk.model.deploy.DeployResult;
 import com.casper.sdk.model.deploy.SpeculativeDeployData;
 import com.casper.sdk.model.dictionary.DictionaryData;
-import com.casper.sdk.model.entity.AddressableEntity;
+import com.casper.sdk.model.entity.StateEntityResult;
 import com.casper.sdk.model.era.EraInfoData;
 import com.casper.sdk.model.globalstate.GlobalStateData;
 import com.casper.sdk.model.peer.PeerData;
@@ -237,14 +237,24 @@ public interface CasperService {
 
 
     /**
-     * TODO
+     * Returns an AddressableEntity from the network
+     *
      * @param entityIdentifier entity identifier
-     * @param blockIdentifier optional block identifier
-     * @return object holding teh Addressable Entity
+     * @return object holding the AddressableEntity or LegacyAccount
      */
     @JsonRpcMethod("state_get_entity")
-    AddressableEntity getStateEntity(@JsonRpcParam("entity_identifier") EntityIdentifier entityIdentifier,
-                                    @JsonRpcParam("block_identifier") BlockIdentifier blockIdentifier);
+    StateEntityResult getStateEntity(@JsonRpcParam("entity_identifier") EntityIdentifier entityIdentifier);
+
+    /**
+     * Returns an AddressableEntity from the network
+     *
+     * @param entityIdentifier entity identifier
+     * @param blockIdentifier block identifier
+     * @return object holding the AddressableEntity or LegacyAccount
+     */
+    @JsonRpcMethod("state_get_entity")
+    StateEntityResult getStateEntity(@JsonRpcParam("entity_identifier") EntityIdentifier entityIdentifier,
+                                     @JsonRpcParam("block_identifier") BlockIdentifier blockIdentifier);
 
 
     //endregion

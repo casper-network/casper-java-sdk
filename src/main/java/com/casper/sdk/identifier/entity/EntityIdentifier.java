@@ -1,7 +1,8 @@
 package com.casper.sdk.identifier.entity;
 
-public interface EntityIdentifier {
-
-//    `PublicKey`, `AccountHash`, `EntityAddr`"
-
-}
+/**
+ *  Identifier of an addressable entity.
+ *
+ *  @author carl@stormeye.co.uk
+ */
+public interface EntityIdentifier {}

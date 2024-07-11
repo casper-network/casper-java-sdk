@@ -61,19 +61,27 @@ public class EntryPointV1 implements EntryPoint {
         SESSION,
         @JsonProperty("Contract")
         CONTRACT,
+        // Runs using the called entity's context.
         @JsonProperty("Called")
         CALLED,
+        // Runs using the calling entity's context.
         @JsonProperty("Caller")
         CALLER,
         @JsonProperty("Factory")
         FACTORY
     }
 
+    /**
+     * An enum specifying who pays for the invocation and execution of the entrypoint.
+     */
     public enum EntryPointPayment {
+        // Will cover cost to execute self but not cost of any subsequent invoked contracts
         @JsonProperty("SelfOnly")
         SELFONLY,
+        // The caller must cover cost
         @JsonProperty("Caller")
         CALLER,
+        // Will cover cost to execute self and the cost of any subsequent invoked contracts
         @JsonProperty("SelfOnward")
         SELFONWARD
     }

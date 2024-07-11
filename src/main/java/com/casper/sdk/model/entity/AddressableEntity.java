@@ -7,6 +7,11 @@ import lombok.*;
 
 import java.util.List;
 
+/**
+ * An addressable entity.
+ *
+ * @author carl@stormeye.co.uk
+ */
 @Getter
 @Setter
 @Builder
@@ -14,12 +19,21 @@ import java.util.List;
 @AllArgsConstructor
 public class AddressableEntity implements StateEntity {
 
+    /**
+     * The addressable entity.
+     */
     @JsonProperty("entity")
     private Entity entity;
 
+    /**
+     * The named keys of the addressable entity.
+     */
     @JsonProperty("named_keys")
     private List<NamedKey> namedKeys;
 
+    /**
+     * The entry points of the addressable entity.
+     */
     @JsonProperty("entry_points")
     private List<EntryPoint> entryPoints;
 

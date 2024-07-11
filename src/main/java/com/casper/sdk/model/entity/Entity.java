@@ -8,6 +8,11 @@ import lombok.*;
 
 import java.util.List;
 
+/**
+ * Methods and type signatures supported by a contract.
+ * 
+ * @author carl@stormeye.co.uk
+ */
 @Getter
 @Setter
 @Builder
@@ -15,28 +20,50 @@ import java.util.List;
 @AllArgsConstructor
 public class Entity {
 
+    /** Casper Platform protocol version */
     @JsonProperty("protocol_version")
     private String protocolVersion;
 
+    /**
+     * The type of Package.
+     */
     @JsonProperty("entity_kind")
     private EntityAddressKind entityAddressKind;
 
+    /**
+     * a Package in the global state.
+     */
     @JsonProperty("package_hash")
     private String packageHash;
 
+    /**
+     *  HashAddr which is the raw bytes of the ByteCodeHash
+     */
     @JsonProperty("byte_code_hash")
     private String byteCodeHash;
 
+    /**
+     * Purse address
+     */
     @JsonProperty("main_purse")
     private URef mainPurse;
 
+    /**
+     * A collection of weighted public keys (represented as account hashes) associated with an account.
+     */
     @JsonProperty("associated_keys")
     private List<AssociatedKey> associatedKeys;
 
+    /**
+     * Thresholds that have to be met when executing an action of a certain type.
+     */
     @JsonProperty("action_thresholds")
     private ActionThresholds actionThresholds;
 
+    /**
+     * Collection of named message topics.
+     */
     @JsonProperty("message_topics")
-    private List<String> messageTopics;
+    private List<MessageTopic> messageTopics;
 
 }

@@ -3,43 +3,35 @@ package com.casper.sdk.model.entity;
 import com.casper.sdk.model.AbstractJsonTests;
 import com.casper.sdk.model.contract.EntryPointV1;
 import com.casper.sdk.model.contract.EntryPointV2;
-import com.casper.sdk.model.transaction.execution.Effect;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsNull.notNullValue;
 
 import java.io.IOException;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 public class StateGetEntityTest extends AbstractJsonTests {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(StateGetEntityTest.class);
-
     @Test
     void validateGetStateEntityAccount() throws IOException {
 
-        final String inputJson = getPrettyJson(loadJsonFromFile("entity/getstateentity-account-result.json"));
+        final String inputJson = getPrettyJson(loadJsonFromFile("entity/getstateentity-account-test.json"));
 
-        JsonEntity addressableEntity = OBJECT_MAPPER.readValue(inputJson, JsonEntity.class);
+        StateEntityResult addressableEntity = OBJECT_MAPPER.readValue(inputJson, StateEntityResult.class);
 
         assertThat(addressableEntity.getEntity(), is(instanceOf(AddressableEntity.class)));
 
         assertThat(((AddressableEntity)addressableEntity.getEntity()).getEntity().getEntityAddressKind(), is(instanceOf(Account.class)));
 
     }
-
     @Test
     void validateGetStateEntitySmartContract() throws IOException {
 
-        final String inputJson = getPrettyJson(loadJsonFromFile("entity/getstateentity-smartcontract-result.json"));
+        final String inputJson = getPrettyJson(loadJsonFromFile("entity/getstateentity-smartcontract-test.json"));
 
-        JsonEntity addressableEntity = OBJECT_MAPPER.readValue(inputJson, JsonEntity.class);
+        StateEntityResult addressableEntity = OBJECT_MAPPER.readValue(inputJson, StateEntityResult.class);
 
         assertThat(addressableEntity.getEntity(), is(instanceOf(AddressableEntity.class)));
 
@@ -49,9 +41,9 @@ public class StateGetEntityTest extends AbstractJsonTests {
     @Test
     void validateGetStateEntitySystemEntryPointV1() throws IOException {
 
-        final String inputJson = getPrettyJson(loadJsonFromFile("entity/getstateentity-system-entry-point-v1-result.json"));
+        final String inputJson = getPrettyJson(loadJsonFromFile("entity/getstateentity-system-entry-point-v1-test.json"));
 
-        JsonEntity addressableEntity = OBJECT_MAPPER.readValue(inputJson, JsonEntity.class);
+        StateEntityResult addressableEntity = OBJECT_MAPPER.readValue(inputJson, StateEntityResult.class);
 
         assertThat(addressableEntity.getEntity(), is(instanceOf(AddressableEntity.class)));
 
@@ -66,9 +58,9 @@ public class StateGetEntityTest extends AbstractJsonTests {
     @Test
     void validateGetStateEntitySystemEntryPointV2() throws IOException {
 
-        final String inputJson = getPrettyJson(loadJsonFromFile("entity/getstateentity-system-entry-point-v2-result.json"));
+        final String inputJson = getPrettyJson(loadJsonFromFile("entity/getstateentity-system-entry-point-v2-test.json"));
 
-        JsonEntity addressableEntity = OBJECT_MAPPER.readValue(inputJson, JsonEntity.class);
+        StateEntityResult addressableEntity = OBJECT_MAPPER.readValue(inputJson, StateEntityResult.class);
 
         assertInstanceOf(AddressableEntity.class, addressableEntity.getEntity());
 
@@ -78,5 +70,14 @@ public class StateGetEntityTest extends AbstractJsonTests {
         assertThat(entity.getEntryPoints().get(0), is(instanceOf(EntryPointV2.class)));
 
     }
+   @Test
+   void validateGetStateEntityLegacyAccount() throws IOException {
 
+        final String inputJson = getPrettyJson(loadJsonFromFile("entity/getstateentity-legacy-account-test.json"));
+
+        StateEntityResult entity = OBJECT_MAPPER.readValue(inputJson, StateEntityResult.class);
+
+        assertInstanceOf(com.casper.sdk.model.account.Account.class, entity.getEntity());
+
+    }
 }

@@ -1,6 +1,5 @@
 package com.casper.sdk.identifier.entity;
 
-import com.casper.sdk.model.key.PublicKey;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,7 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * The public key of an account.
+ * The address of an addressable entity.
  *
  * @author carl@stormeye.co.uk
  */
@@ -16,12 +15,10 @@ import lombok.Setter;
 @Setter
 @Builder
 @AllArgsConstructor
-public class PublicKeyEntityIdentifier implements EntityIdentifier{
-
+public class EntityAddrIdentifier implements EntityIdentifier{
     /**
-     * Public key hash
+     * Entity Address
      */
-    @JsonProperty("PublicKey")
-    private PublicKey publicKey;
-
+    @JsonProperty("EntityAddr")
+    private String entityAddr;
 }
