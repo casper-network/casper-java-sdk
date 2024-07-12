@@ -16,9 +16,8 @@ import lombok.Setter;
 @Builder
 @AllArgsConstructor
 public class EntityAddrIdentifier implements EntityIdentifier{
-    /**
-     * Entity Address
-     */
+
+    /** Entity Address */
     @JsonProperty("EntityAddr")
     private String entityAddr;
 }

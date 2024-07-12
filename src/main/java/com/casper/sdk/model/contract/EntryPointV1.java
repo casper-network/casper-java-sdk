@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * No description available
+ * Entry points to be executed against the V1 Casper VM.
  *
  * @author Alexandre Carvalho
  * @author Andre Bertolace
@@ -53,9 +53,7 @@ public class EntryPointV1 implements EntryPoint {
         }
     }
 
-    /**
-     * Context of method execution
-     */
+    /** Context of method execution */
     public enum EntryPointType {
         @JsonProperty("Session")
         SESSION,
@@ -71,51 +69,37 @@ public class EntryPointV1 implements EntryPoint {
         FACTORY
     }
 
-    /**
-     * An enum specifying who pays for the invocation and execution of the entrypoint.
-     */
+    /** An enum specifying who pays for the invocation and execution of the entrypoint. */
     public enum EntryPointPayment {
         // Will cover cost to execute self but not cost of any subsequent invoked contracts
         @JsonProperty("SelfOnly")
-        SELFONLY,
+        SELF_ONLY,
         // The caller must cover cost
         @JsonProperty("Caller")
         CALLER,
         // Will cover cost to execute self and the cost of any subsequent invoked contracts
         @JsonProperty("SelfOnward")
-        SELFONWARD
+        SELF_ONWARD
     }
 
-    /**
-     * the {@link EntryPointAccess}
-     */
+    /** the {@link EntryPointAccess} */
     @JsonIgnore
     private EntryPointAccess access;
 
-    /**
-     * a list of {@link Parameter}
-     */
-    @JsonProperty("args")
+    /** a list of {@link Parameter} */
     private List<Parameter> args;
 
-    /**
-     * the {@link EntryPointType} Context of method execution
-     */
+    /** the {@link EntryPointType} Context of method execution */
     @JsonProperty("entry_point_type")
     private EntryPointType type;
 
     @JsonProperty("entry_point_payment")
     private EntryPointPayment payment;
 
-    /**
-     * the name
-     */
-    @JsonProperty("name")
+    /** the name */
     private String name;
 
-    /**
-     * the return as {@link AbstractCLType}
-     */
+    /** the return as {@link AbstractCLType} */
     @JsonIgnore
     private AbstractCLType ret;
 

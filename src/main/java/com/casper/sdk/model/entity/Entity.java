@@ -10,7 +10,7 @@ import java.util.List;
 
 /**
  * Methods and type signatures supported by a contract.
- * 
+ *
  * @author carl@stormeye.co.uk
  */
 @Getter
@@ -24,45 +24,31 @@ public class Entity {
     @JsonProperty("protocol_version")
     private String protocolVersion;
 
-    /**
-     * The type of Package.
-     */
+    /** The type of Package. */
     @JsonProperty("entity_kind")
     private EntityAddressKind entityAddressKind;
 
-    /**
-     * a Package in the global state.
-     */
+    /** A Package in the global state. */
     @JsonProperty("package_hash")
     private String packageHash;
 
-    /**
-     *  HashAddr which is the raw bytes of the ByteCodeHash
-     */
+    /** HashAddr which is the raw bytes of the ByteCodeHash */
     @JsonProperty("byte_code_hash")
     private String byteCodeHash;
 
-    /**
-     * Purse address
-     */
+    /** Purse address */
     @JsonProperty("main_purse")
     private URef mainPurse;
 
-    /**
-     * A collection of weighted public keys (represented as account hashes) associated with an account.
-     */
+    /** A collection of weighted public keys (represented as account hashes) associated with an account. */
     @JsonProperty("associated_keys")
     private List<AssociatedKey> associatedKeys;
 
-    /**
-     * Thresholds that have to be met when executing an action of a certain type.
-     */
+    /** Thresholds that have to be met when executing an action of a certain type. */
     @JsonProperty("action_thresholds")
     private ActionThresholds actionThresholds;
 
-    /**
-     * Collection of named message topics.
-     */
+    /** Collection of named message topics. */
     @JsonProperty("message_topics")
     private List<MessageTopic> messageTopics;
 

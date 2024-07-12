@@ -16,11 +16,9 @@ import lombok.Setter;
 @Setter
 @Builder
 @AllArgsConstructor
-public class PublicKeyEntityIdentifier implements EntityIdentifier{
+public class PublicKeyEntityIdentifier implements EntityIdentifier {
 
-    /**
-     * Public key hash
-     */
+    /** Public key hash */
     @JsonProperty("PublicKey")
     private PublicKey publicKey;
 

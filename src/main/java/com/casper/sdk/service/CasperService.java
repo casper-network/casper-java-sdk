@@ -235,21 +235,11 @@ public interface CasperService {
     @JsonRpcMethod("info_get_status")
     StatusData getStatus();
 
-
     /**
      * Returns an AddressableEntity from the network
      *
      * @param entityIdentifier entity identifier
-     * @return object holding the AddressableEntity or LegacyAccount
-     */
-    @JsonRpcMethod("state_get_entity")
-    StateEntityResult getStateEntity(@JsonRpcParam("entity_identifier") EntityIdentifier entityIdentifier);
-
-    /**
-     * Returns an AddressableEntity from the network
-     *
-     * @param entityIdentifier entity identifier
-     * @param blockIdentifier block identifier
+     * @param blockIdentifier  block identifier
      * @return object holding the AddressableEntity or LegacyAccount
      */
     @JsonRpcMethod("state_get_entity")
@@ -332,8 +322,6 @@ public interface CasperService {
     EraInfoData getEraSummary(@JsonRpcParam("block_identifier") BlockIdentifier blockIdentifier);
     //endregion
 
-    //region TO BE IMPLEMENTED ON 1.5.0
-
     /**
      * Fetches balance value
      *
@@ -381,5 +369,4 @@ public interface CasperService {
     @JsonRpcMethod(value = "account_put_deploy", paramsPassMode = JsonRpcParamsPassMode.ARRAY)
     DeployResult putDeploy(Deploy deploy);
 
-    //endregion
 }

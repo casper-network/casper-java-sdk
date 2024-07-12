@@ -12,11 +12,9 @@ import lombok.*;
 @Setter
 @Builder
 @AllArgsConstructor
-public class AccountHashEntityIdentifier implements EntityIdentifier{
+public class AccountHashEntityIdentifier implements EntityIdentifier {
 
-    /**
-     * Account hash
-     */
+    /** Account hash */
     @JsonProperty("AccountHash")
     private String accountHash;
 

@@ -725,6 +725,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
         assertThat(result.getHolds().get(0).getAmount(), is(new BigInteger("1000000000000000000000000000000000")));
         assertThat(result.getHolds().get(0).getProof(), is("0100000006328c317bc7f9fd7d2b5fa9cf3b4c09fc5a8f"));
     }
+
     @Test
     void stateGetEntityAccount() throws NoSuchAlgorithmException {
 
@@ -734,14 +735,15 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
                 .thenDispatch(getClass().getResource("/entity/getstateentity-account-result.json"));
 
         final StateEntityResult stateEntityResult = casperServiceMock.getStateEntity(
-                new PublicKeyEntityIdentifier(PublicKey.fromTaggedHexString("0138329930033bca4773a6623574ad7870ee39c554f153f15609e200e50049a7de"))
+                new PublicKeyEntityIdentifier(PublicKey.fromTaggedHexString("0138329930033bca4773a6623574ad7870ee39c554f153f15609e200e50049a7de")),
+                null
         );
 
         assertThat(stateEntityResult.getApiVersion(), is("2.0.0"));
 
         assertInstanceOf(AddressableEntity.class, stateEntityResult.getEntity());
 
-        AddressableEntity entity = (AddressableEntity)stateEntityResult.getEntity();
+        AddressableEntity entity = (AddressableEntity) stateEntityResult.getEntity();
 
         assertInstanceOf(Account.class, entity.getEntity().getEntityAddressKind());
 
@@ -759,6 +761,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
         assertThat(entity.getEntity().getActionThresholds().getUpgradeManagement(), is(1));
 
     }
+
     @Test
     void stateGetEntitySmartContract() {
 
@@ -768,14 +771,15 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
                 .thenDispatch(getClass().getResource("/entity/getstateentity-smartcontract-result.json"));
 
         final StateEntityResult stateEntityResult = casperServiceMock.getStateEntity(
-                new EntityAddrIdentifier("entity-system-8edaacea88a5bd982c0c1d8cb54ac89564ffb116c1c2fb4475170755a88a6f5")
+                new EntityAddrIdentifier("entity-system-8edaacea88a5bd982c0c1d8cb54ac89564ffb116c1c2fb4475170755a88a6f5"),
+                null
         );
 
         assertThat(stateEntityResult.getApiVersion(), is("2.0.0"));
 
         assertInstanceOf(AddressableEntity.class, stateEntityResult.getEntity());
 
-        AddressableEntity entity = (AddressableEntity)stateEntityResult.getEntity();
+        AddressableEntity entity = (AddressableEntity) stateEntityResult.getEntity();
 
         assertInstanceOf(SmartContract.class, entity.getEntity().getEntityAddressKind());
 
@@ -793,6 +797,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
         assertThat(entity.getEntity().getActionThresholds().getUpgradeManagement(), is(1));
 
     }
+
     @Test
     void stateGetEntitySystemEntryPointV1() {
 
@@ -802,14 +807,15 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
                 .thenDispatch(getClass().getResource("/entity/getstateentity-system-entry-point-v1-result.json"));
 
         final StateEntityResult stateEntityResult = casperServiceMock.getStateEntity(
-                new EntityAddrIdentifier("entity-system-8edaacea88a5bd982c0c1d8cb54ac89564ffb116c1c2fb4475170755a88a6f5")
+                new EntityAddrIdentifier("entity-system-8edaacea88a5bd982c0c1d8cb54ac89564ffb116c1c2fb4475170755a88a6f5"),
+                null
         );
 
         assertThat(stateEntityResult.getApiVersion(), is("2.0.0"));
 
         assertInstanceOf(AddressableEntity.class, stateEntityResult.getEntity());
 
-        AddressableEntity entity = (AddressableEntity)stateEntityResult.getEntity();
+        AddressableEntity entity = (AddressableEntity) stateEntityResult.getEntity();
 
         assertInstanceOf(System.class, entity.getEntity().getEntityAddressKind());
 
@@ -842,6 +848,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
         assertThat(entity.getNamedKeys().size(), is(7));
         assertInstanceOf(NamedKey.class, entity.getNamedKeys().get(0));
     }
+
     @Test
     void stateGetEntitySystemEntryPointV2() {
 
@@ -851,14 +858,15 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
                 .thenDispatch(getClass().getResource("/entity/getstateentity-system-entry-point-v2-result.json"));
 
         final StateEntityResult stateEntityResult = casperServiceMock.getStateEntity(
-                new EntityAddrIdentifier("entity-system-8edaacea88a5bd982c0c1d8cb54ac89564ffb116c1c2fb4475170755a88a6f5")
+                new EntityAddrIdentifier("entity-system-8edaacea88a5bd982c0c1d8cb54ac89564ffb116c1c2fb4475170755a88a6f5"),
+                null
         );
 
         assertThat(stateEntityResult.getApiVersion(), is("2.0.0"));
 
         assertInstanceOf(AddressableEntity.class, stateEntityResult.getEntity());
 
-        AddressableEntity entity = (AddressableEntity)stateEntityResult.getEntity();
+        AddressableEntity entity = (AddressableEntity) stateEntityResult.getEntity();
 
         assertInstanceOf(System.class, entity.getEntity().getEntityAddressKind());
 
@@ -884,6 +892,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
         assertInstanceOf(NamedKey.class, entity.getNamedKeys().get(0));
 
     }
+
     @Test
     void stateGetEntityLegacyAccount() {
 
@@ -893,7 +902,8 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
                 .thenDispatch(getClass().getResource("/entity/getstateentity-legacy-account-result.json"));
 
         final StateEntityResult stateEntityResult = casperServiceMock.getStateEntity(
-                new AccountHashEntityIdentifier("account-hash-f1075fce3b8cd4eab748b8705ca02444a5e35c0248662649013d8a5cb2b1a87c")
+                new AccountHashEntityIdentifier("account-hash-f1075fce3b8cd4eab748b8705ca02444a5e35c0248662649013d8a5cb2b1a87c"),
+                null
         );
 
         assertThat(stateEntityResult.getApiVersion(), is("2.0.0"));
@@ -908,6 +918,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
         assertThat(account.getAssociatedKeys().get(0).getWeight(), is(1));
 
     }
+
     @Test
     void stateGetEntityAccountWithHashBlockIdentifier() {
 
@@ -927,7 +938,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
 
         assertInstanceOf(AddressableEntity.class, stateEntityResult.getEntity());
 
-        AddressableEntity entity = (AddressableEntity)stateEntityResult.getEntity();
+        AddressableEntity entity = (AddressableEntity) stateEntityResult.getEntity();
 
         assertInstanceOf(Account.class, entity.getEntity().getEntityAddressKind());
 

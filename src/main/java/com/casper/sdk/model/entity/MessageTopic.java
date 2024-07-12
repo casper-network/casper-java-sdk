@@ -24,6 +24,4 @@ public class MessageTopic {
     /** The hash of the name of the topic. */
     @JsonProperty("topic_name_hash")
     private String topicNameHash;
-
-
 }

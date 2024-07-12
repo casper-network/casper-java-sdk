@@ -16,10 +16,11 @@ import lombok.*;
 public class SmartContract implements EntityAddressKind {
 
     @JsonCreator
-    public static SmartContract create(final TransactionRuntime value){
+    public static SmartContract create(final TransactionRuntime value) {
         return new SmartContract(value);
     }
 
+    /** The runtime used to execute a Transaction. */
     public enum TransactionRuntime {
         @JsonProperty("VmCasperV1")
         VMCASPERV1,

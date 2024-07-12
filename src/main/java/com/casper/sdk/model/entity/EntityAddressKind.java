@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 
 /**
- *  The type of Package.
+ * The type of Package.
  *
  * @author carl@stormeye.co.uk
  */
@@ -15,4 +15,5 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @JsonSubTypes.Type(value = System.class, name = "System"),
         @JsonSubTypes.Type(value = SmartContract.class, name = "SmartContract")
 })
-public interface EntityAddressKind {}
+public interface EntityAddressKind {
+}

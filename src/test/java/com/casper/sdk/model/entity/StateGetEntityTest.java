@@ -23,9 +23,10 @@ public class StateGetEntityTest extends AbstractJsonTests {
 
         assertThat(addressableEntity.getEntity(), is(instanceOf(AddressableEntity.class)));
 
-        assertThat(((AddressableEntity)addressableEntity.getEntity()).getEntity().getEntityAddressKind(), is(instanceOf(Account.class)));
+        assertThat(((AddressableEntity) addressableEntity.getEntity()).getEntity().getEntityAddressKind(), is(instanceOf(Account.class)));
 
     }
+
     @Test
     void validateGetStateEntitySmartContract() throws IOException {
 
@@ -35,9 +36,10 @@ public class StateGetEntityTest extends AbstractJsonTests {
 
         assertThat(addressableEntity.getEntity(), is(instanceOf(AddressableEntity.class)));
 
-        assertThat(((AddressableEntity)addressableEntity.getEntity()).getEntity().getEntityAddressKind(), is(instanceOf(SmartContract.class)));
+        assertThat(((AddressableEntity) addressableEntity.getEntity()).getEntity().getEntityAddressKind(), is(instanceOf(SmartContract.class)));
 
     }
+
     @Test
     void validateGetStateEntitySystemEntryPointV1() throws IOException {
 
@@ -47,14 +49,15 @@ public class StateGetEntityTest extends AbstractJsonTests {
 
         assertThat(addressableEntity.getEntity(), is(instanceOf(AddressableEntity.class)));
 
-        assertThat(((AddressableEntity)addressableEntity.getEntity()).getEntity().getEntityAddressKind(), is(instanceOf(System.class)));
+        assertThat(((AddressableEntity) addressableEntity.getEntity()).getEntity().getEntityAddressKind(), is(instanceOf(System.class)));
 
-        assertThat(((AddressableEntity)addressableEntity.getEntity()).getEntryPoints().size(), is(greaterThan(0)));
+        assertThat(((AddressableEntity) addressableEntity.getEntity()).getEntryPoints().size(), is(greaterThan(0)));
 
-        AddressableEntity entity = (AddressableEntity)addressableEntity.getEntity();
+        AddressableEntity entity = (AddressableEntity) addressableEntity.getEntity();
         assertThat(entity.getEntryPoints().get(0), is(instanceOf(EntryPointV1.class)));
 
     }
+
     @Test
     void validateGetStateEntitySystemEntryPointV2() throws IOException {
 
@@ -64,14 +67,15 @@ public class StateGetEntityTest extends AbstractJsonTests {
 
         assertInstanceOf(AddressableEntity.class, addressableEntity.getEntity());
 
-        assertThat(((AddressableEntity)addressableEntity.getEntity()).getEntryPoints().size(), is(greaterThan(0)));
+        assertThat(((AddressableEntity) addressableEntity.getEntity()).getEntryPoints().size(), is(greaterThan(0)));
 
-        AddressableEntity entity = (AddressableEntity)addressableEntity.getEntity();
+        AddressableEntity entity = (AddressableEntity) addressableEntity.getEntity();
         assertThat(entity.getEntryPoints().get(0), is(instanceOf(EntryPointV2.class)));
 
     }
-   @Test
-   void validateGetStateEntityLegacyAccount() throws IOException {
+
+    @Test
+    void validateGetStateEntityLegacyAccount() throws IOException {
 
         final String inputJson = getPrettyJson(loadJsonFromFile("entity/getstateentity-legacy-account-test.json"));
 

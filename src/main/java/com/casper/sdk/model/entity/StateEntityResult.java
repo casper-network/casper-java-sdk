@@ -16,7 +16,7 @@ import lombok.*;
 @AllArgsConstructor
 public class StateEntityResult extends RpcResult {
 
-    @JsonProperty("entity")
+    /** Addressable entity or a legacy account */
     private StateEntity entity;
 
     @JsonProperty("merkle_proof")

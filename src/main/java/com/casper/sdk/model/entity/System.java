@@ -17,10 +17,11 @@ import lombok.*;
 public class System implements EntityAddressKind {
 
     @JsonCreator
-    public static System create(final SystemEntityType value){
+    public static System create(final SystemEntityType value) {
         return new System(value);
     }
 
+    /** System contract types. */
     public enum SystemEntityType {
         // Mint contract.
         @JsonProperty("Mint")
