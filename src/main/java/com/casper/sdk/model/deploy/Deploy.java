@@ -2,11 +2,13 @@ package com.casper.sdk.model.deploy;
 
 import com.casper.sdk.exception.CasperClientException;
 import com.casper.sdk.exception.NoSuchTypeException;
+import com.casper.sdk.jackson.resolver.TransactionResolver;
 import com.casper.sdk.model.clvalue.serde.CasperSerializableObject;
 import com.casper.sdk.model.clvalue.serde.Target;
 import com.casper.sdk.model.common.Digest;
 import com.casper.sdk.model.deploy.executabledeploy.ExecutableDeployItem;
 import com.casper.sdk.model.transaction.Transaction;
+import com.fasterxml.jackson.databind.annotation.JsonTypeResolver;
 import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
 import lombok.*;
@@ -26,6 +28,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonTypeResolver(TransactionResolver.class)
 public class Deploy extends Transaction implements CasperSerializableObject {
 
     /**
@@ -59,7 +62,8 @@ public class Deploy extends Transaction implements CasperSerializableObject {
      * Implements Deploy encoder
      */
     @Override
-    public void serialize(SerializerBuffer ser, Target target) throws NoSuchTypeException, ValueSerializationException {
+    public void serialize(final SerializerBuffer ser,
+                          final Target target) throws NoSuchTypeException, ValueSerializationException {
         header.serialize(ser, Target.BYTE);
         getHash().serialize(ser, Target.BYTE);
         payment.serialize(ser, Target.BYTE);
@@ -80,8 +84,8 @@ public class Deploy extends Transaction implements CasperSerializableObject {
     protected Digest calculateSessionAndPaymentHash() {
         try {
             final SerializerBuffer ser = new SerializerBuffer();
-            session.serialize(ser, Target.BYTE);
             payment.serialize(ser, Target.BYTE);
+            session.serialize(ser, Target.BYTE);
             return Digest.blake2bDigestFromBytes(ser.toByteArray());
         } catch (Exception e) {
             throw new CasperClientException("Error calculation session and payment hash", e);
