@@ -13,7 +13,7 @@ import static org.hamcrest.core.IsInstanceOf.instanceOf;
  *
  * @author ian@meywood.com
  */
-class TransferEntryPointTest {
+class TransferEntryPointV1Test {
 
     @Test
     void activationBidEntryPoint() throws JsonProcessingException {

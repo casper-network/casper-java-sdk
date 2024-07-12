@@ -13,6 +13,7 @@ import lombok.Setter;
  * @author Alexandre Carvalho
  * @author Andre Bertolace
  * @since 0.0.1
+ *
  */
 @Getter
 @Setter
@@ -22,14 +23,21 @@ import lombok.Setter;
 public class ActionThresholds {
 
     /**
-     * deployment(Integer)
+     *  Threshold for deploy execution.
      */
     @JsonProperty("deployment")
     private int deployment;
 
     /**
-     * key_management(Integer)
+     * Threshold for managing action threshold.
      */
     @JsonProperty("key_management")
     private int keyManagement;
+
+    /**
+     * Threshold for upgrading contracts.
+     */
+    @JsonProperty("upgrade_management")
+    private int upgradeManagement;
+
 }

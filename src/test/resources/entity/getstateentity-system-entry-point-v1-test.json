@@ -1,0 +1,277 @@
+ {
+    "api_version": "2.0.0",
+    "entity": {
+      "AddressableEntity": {
+        "entity": {
+          "protocol_version": "2.0.0",
+          "entity_kind": {
+            "System": "Auction"
+          },
+          "package_hash": "package-a8935ee5e02c22cf74f3c6b2b323517897635efc38ea4c03d8aa70a2822f5ac1",
+          "byte_code_hash": "byte-code-0000000000000000000000000000000000000000000000000000000000000000",
+          "main_purse": "uref-990cc2d56f85eb4640ce1207644d1b7a4d3c884584f81df0441aa879ce6c83e5-007",
+          "associated_keys": [],
+          "action_thresholds": {
+            "deployment": 1,
+            "upgrade_management": 1,
+            "key_management": 1
+          },
+          "message_topics": []
+        },
+        "named_keys": [
+          {
+            "name": "auction_delay",
+            "key": "uref-ac5f03489e1dfa1e8af96cc82dd81d730b351972b8b45d183199a867b2d74edf-007"
+          },
+          {
+            "name": "era_end_timestamp_millis",
+            "key": "uref-f5ad5cc9acd88fea1796cc541f56ab7825fe3a0fb4594c49b033ce402d751908-007"
+          },
+          {
+            "name": "era_id",
+            "key": "uref-cb9cc530a2afb22ade3db4a5161bdd011867fbba8378542595ac92fa716fea72-007"
+          },
+          {
+            "name": "locked_funds_period",
+            "key": "uref-6a157d04044e25935ee5f092bb05e118f122565c0f79865f137c627b4e5d8bde-007"
+          },
+          {
+            "name": "seigniorage_recipients_snapshot",
+            "key": "uref-30392a75cc0fd0128b937278cc1190c833ecfc3be0389456fa47afbddd433156-007"
+          },
+          {
+            "name": "unbonding_delay",
+            "key": "uref-61ed15bec5ba5af103d528a950106822b84bac1ddcf1aa68f9ede2682102a840-007"
+          },
+          {
+            "name": "validator_slots",
+            "key": "uref-1fd3316786cbd14af3c644782ab959178f770159dc7aed7e8dff96f550b12bd3-007"
+          }
+        ],
+        "entry_points": [
+          {
+            "V1CasperVm": {
+              "name": "activate_bid",
+              "args": [
+                {
+                  "name": "validator",
+                  "cl_type": "PublicKey"
+                }
+              ],
+              "ret": "Unit",
+              "access": "Public",
+              "entry_point_type": "Called",
+              "entry_point_payment": "Caller"
+            }
+          },
+          {
+            "V1CasperVm": {
+              "name": "delegate",
+              "args": [
+                {
+                  "name": "delegator",
+                  "cl_type": "PublicKey"
+                },
+                {
+                  "name": "validator",
+                  "cl_type": "PublicKey"
+                },
+                {
+                  "name": "amount",
+                  "cl_type": "U512"
+                }
+              ],
+              "ret": "U512",
+              "access": "Public",
+              "entry_point_type": "Called",
+              "entry_point_payment": "Caller"
+            }
+          },
+          {
+            "V1CasperVm": {
+              "name": "add_bid",
+              "args": [
+                {
+                  "name": "public_key",
+                  "cl_type": "PublicKey"
+                },
+                {
+                  "name": "delegation_rate",
+                  "cl_type": "U8"
+                },
+                {
+                  "name": "amount",
+                  "cl_type": "U512"
+                }
+              ],
+              "ret": "U512",
+              "access": "Public",
+              "entry_point_type": "Called",
+              "entry_point_payment": "Caller"
+            }
+          },
+          {
+            "V1CasperVm": {
+              "name": "withdraw_bid",
+              "args": [
+                {
+                  "name": "public_key",
+                  "cl_type": "PublicKey"
+                },
+                {
+                  "name": "amount",
+                  "cl_type": "U512"
+                }
+              ],
+              "ret": "U512",
+              "access": "Public",
+              "entry_point_type": "Called",
+              "entry_point_payment": "Caller"
+            }
+          },
+          {
+            "V1CasperVm": {
+              "name": "run_auction",
+              "args": [
+                {
+                  "name": "era_end_timestamp_millis",
+                  "cl_type": "U64"
+                }
+              ],
+              "ret": "Unit",
+              "access": "Public",
+              "entry_point_type": "Called",
+              "entry_point_payment": "Caller"
+            }
+          },
+          {
+            "V1CasperVm": {
+              "name": "distribute",
+              "args": [
+                {
+                  "name": "rewards_map",
+                  "cl_type": {
+                    "Map": {
+                      "key": "PublicKey",
+                      "value": "U512"
+                    }
+                  }
+                }
+              ],
+              "ret": "Unit",
+              "access": "Public",
+              "entry_point_type": "Called",
+              "entry_point_payment": "Caller"
+            }
+          },
+          {
+            "V1CasperVm": {
+              "name": "slash",
+              "args": [],
+              "ret": "Unit",
+              "access": "Public",
+              "entry_point_type": "Called",
+              "entry_point_payment": "Caller"
+            }
+          },
+          {
+            "V1CasperVm": {
+              "name": "read_era_id",
+              "args": [],
+              "ret": "U64",
+              "access": "Public",
+              "entry_point_type": "Called",
+              "entry_point_payment": "Caller"
+            }
+          },
+          {
+            "V1CasperVm": {
+              "name": "redelegate",
+              "args": [
+                {
+                  "name": "delegator",
+                  "cl_type": "PublicKey"
+                },
+                {
+                  "name": "validator",
+                  "cl_type": "PublicKey"
+                },
+                {
+                  "name": "amount",
+                  "cl_type": "U512"
+                },
+                {
+                  "name": "new_validator",
+                  "cl_type": "PublicKey"
+                }
+              ],
+              "ret": "U512",
+              "access": "Public",
+              "entry_point_type": "Called",
+              "entry_point_payment": "Caller"
+            }
+          },
+          {
+            "V1CasperVm": {
+              "name": "get_era_validators",
+              "args": [],
+              "ret": {
+                "Option": {
+                  "Map": {
+                    "key": "PublicKey",
+                    "value": "U512"
+                  }
+                }
+              },
+              "access": "Public",
+              "entry_point_type": "Called",
+              "entry_point_payment": "Caller"
+            }
+          },
+          {
+            "V1CasperVm": {
+              "name": " change_bid_public_key",
+              "args": [
+                {
+                  "name": "public_key",
+                  "cl_type": "PublicKey"
+                },
+                {
+                  "name": "new_public_key",
+                  "cl_type": "PublicKey"
+                }
+              ],
+              "ret": "Unit",
+              "access": "Public",
+              "entry_point_type": "Called",
+              "entry_point_payment": "Caller"
+            }
+          },
+          {
+            "V1CasperVm": {
+              "name": "undelegate",
+              "args": [
+                {
+                  "name": "delegator",
+                  "cl_type": "PublicKey"
+                },
+                {
+                  "name": "validator",
+                  "cl_type": "PublicKey"
+                },
+                {
+                  "name": "amount",
+                  "cl_type": "U512"
+                }
+              ],
+              "ret": "U512",
+              "access": "Public",
+              "entry_point_type": "Called",
+              "entry_point_payment": "Caller"
+            }
+          }
+        ]
+      }
+    },
+    "merkle_proof": "0100000011008edaacea88a5bd982c0c1d8cb54ac89564ffb116c1c2fb4475170755a88a6f5b0da8935ee5e02c22cf74f3c6b2b323517897635efc38ea4c03d8aa70a2822f5ac10000000000000000000000000000000000000000000000000000000000000000020000000000000000000000990cc2d56f85eb4640ce1207644d1b7a4d3c884584f81df0441aa879ce6c83e5070000000001010100000000000303000000008e020000007e0083e4387e07d703b9617ff521f75391861446559491a8518da50235cd67116542de0068bf9286a12f977bc32653d104b4b01988a76d74c70262ed525e7ec5ec3d022200000100000001015f9a6b1df81f2c29112a86175fc51045b4a016a79c2dbf4ca3d3a3f7ed02752500110e0000000001e6ff8a3299c52f8c3f1a402f78af3c2bb5c01243087671b27a6295cced8fa2180201f17cfef35497110baa540f2e0d97cf44741c6d5101f375cc3f4e46a4d26fd200060172cd5b1206ca289d1c6a264bf3e934ceba5ce916a861a761760d399d76da1bb40a006e77dbfdb64557ecb97ea38793b94084d23e8d197faccc352f66c29625d2a2550b0071a491771951dc7bd419cf99878bc5b7e94384b1dd2b580d4fe46aea004ecb880d006c4d32cc17c23e0fae5fcca7e39265025c5a573e290813bbc7f1ae878e25963f0e0043d39741a6e7b395eace3b1fbbbd5bbf288f7a788e80745a2e2bb0f2173a8b4f0f0154fef9faeb25b58684b45e2114de05091061726c64033cd407a37148e433b3921001e001764822fb30feef2407d27780517e2c6a460f86e91dcf1da92275d0c83dba1200693fff58318fbd94674eb111fbc49ea8ab66ece1cd614b0008d387f228d778ee140182ed975a42df80d95ea0f77a65be6a9a2340cc79ad5838f42d426198f4dc240515001f0bade25f603a9784a6bd9eb3c50a8106be218da0d8f2b5ddb5cf42b63b72e41601a11f8e4517f593a51dac84fad247df54be555aa020f0e660824928f2d3c85c7a1701141941a2dccaebbbf83bd2d3cbc9596ef3b5f187d91648acbf03ef688325dc64"
+  }

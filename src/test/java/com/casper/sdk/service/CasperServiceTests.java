@@ -5,6 +5,9 @@ import com.casper.sdk.exception.DynamicInstanceException;
 import com.casper.sdk.helper.TransactionHelper;
 import com.casper.sdk.identifier.block.HashBlockIdentifier;
 import com.casper.sdk.identifier.block.HeightBlockIdentifier;
+import com.casper.sdk.identifier.entity.AccountHashEntityIdentifier;
+import com.casper.sdk.identifier.entity.EntityAddrIdentifier;
+import com.casper.sdk.identifier.entity.PublicKeyEntityIdentifier;
 import com.casper.sdk.identifier.era.BlockEraIdentifier;
 import com.casper.sdk.identifier.global.BlockHashIdentifier;
 import com.casper.sdk.identifier.global.GlobalStateIdentifier;
@@ -18,14 +21,21 @@ import com.casper.sdk.model.block.*;
 import com.casper.sdk.model.clvalue.CLValuePublicKey;
 import com.casper.sdk.model.clvalue.CLValueString;
 import com.casper.sdk.model.clvalue.CLValueU512;
+import com.casper.sdk.model.clvalue.cltype.CLTypePublicKey;
+import com.casper.sdk.model.clvalue.cltype.CLTypeUnit;
 import com.casper.sdk.model.common.Digest;
 import com.casper.sdk.model.common.Ttl;
+import com.casper.sdk.model.contract.EntryPointV1;
+import com.casper.sdk.model.contract.EntryPointV2;
+import com.casper.sdk.model.contract.NamedKey;
 import com.casper.sdk.model.deploy.Deploy;
 import com.casper.sdk.model.deploy.DeployData;
 import com.casper.sdk.model.deploy.NamedArg;
 import com.casper.sdk.model.deploy.executabledeploy.ModuleBytes;
 import com.casper.sdk.model.deploy.executabledeploy.StoredContractByHash;
 import com.casper.sdk.model.deploy.executionresult.Success;
+import com.casper.sdk.model.entity.System;
+import com.casper.sdk.model.entity.*;
 import com.casper.sdk.model.era.EraEndV2;
 import com.casper.sdk.model.era.EraInfoData;
 import com.casper.sdk.model.globalstate.GlobalStateData;
@@ -719,6 +729,236 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
     }
 
     @Test
+    void stateGetEntityAccount() throws NoSuchAlgorithmException {
+
+        mockNode.withRcpResponseDispatcher()
+                .withMethod("state_get_entity")
+                .withBody("$.params.entity_identifier.PublicKey", "0138329930033bca4773a6623574ad7870ee39c554f153f15609e200e50049a7de")
+                .thenDispatch(getClass().getResource("/entity/getstateentity-account-result.json"));
+
+        final StateEntityResult stateEntityResult = casperServiceMock.getStateEntity(
+                new PublicKeyEntityIdentifier(PublicKey.fromTaggedHexString("0138329930033bca4773a6623574ad7870ee39c554f153f15609e200e50049a7de")),
+                null
+        );
+
+        assertThat(stateEntityResult.getApiVersion(), is("2.0.0"));
+
+        assertInstanceOf(AddressableEntity.class, stateEntityResult.getEntity());
+
+        AddressableEntity entity = (AddressableEntity) stateEntityResult.getEntity();
+
+        assertInstanceOf(Account.class, entity.getEntity().getEntityAddressKind());
+
+        assertThat(entity.getEntity().getByteCodeHash(), is("byte-code-0000000000000000000000000000000000000000000000000000000000000000"));
+        assertThat(entity.getEntity().getPackageHash(), is("package-22138fb22c624016fd73cd2abd3285ccd27cb80e20c29f3d94d34e95ee182030"));
+
+        Account account = (Account) entity.getEntity().getEntityAddressKind();
+        assertThat(account.getAccount(), is("account-hash-aab0da01340446cee477f28410f8af5d6e0f3a88fb26c0cafb8d1625f5cc9c10"));
+
+        assertThat(entity.getEntity().getMainPurse().getJsonURef(), is("uref-3dfdbde34845bd2e731cf39fba450745eba645b75d5feb3dcf953fd06d69bf14-007"));
+        assertThat(entity.getEntity().getAssociatedKeys().get(0).getAccountHash(), is("account-hash-aab0da01340446cee477f28410f8af5d6e0f3a88fb26c0cafb8d1625f5cc9c10"));
+        assertThat(entity.getEntity().getAssociatedKeys().get(0).getWeight(), is(1));
+        assertThat(entity.getEntity().getActionThresholds().getDeployment(), is(1));
+        assertThat(entity.getEntity().getActionThresholds().getKeyManagement(), is(1));
+        assertThat(entity.getEntity().getActionThresholds().getUpgradeManagement(), is(1));
+
+    }
+
+    @Test
+    void stateGetEntitySmartContract() {
+
+        mockNode.withRcpResponseDispatcher()
+                .withMethod("state_get_entity")
+                .withBody("$.params.entity_identifier.EntityAddr", "entity-system-8edaacea88a5bd982c0c1d8cb54ac89564ffb116c1c2fb4475170755a88a6f5")
+                .thenDispatch(getClass().getResource("/entity/getstateentity-smartcontract-result.json"));
+
+        final StateEntityResult stateEntityResult = casperServiceMock.getStateEntity(
+                new EntityAddrIdentifier("entity-system-8edaacea88a5bd982c0c1d8cb54ac89564ffb116c1c2fb4475170755a88a6f5"),
+                null
+        );
+
+        assertThat(stateEntityResult.getApiVersion(), is("2.0.0"));
+
+        assertInstanceOf(AddressableEntity.class, stateEntityResult.getEntity());
+
+        AddressableEntity entity = (AddressableEntity) stateEntityResult.getEntity();
+
+        assertInstanceOf(SmartContract.class, entity.getEntity().getEntityAddressKind());
+
+        assertThat(entity.getEntity().getByteCodeHash(), is("byte-code-0000000000000000000000000000000000000000000000000000000000000000"));
+        assertThat(entity.getEntity().getPackageHash(), is("package-22138fb22c624016fd73cd2abd3285ccd27cb80e20c29f3d94d34e95ee182030"));
+
+        SmartContract smartContract = (SmartContract) entity.getEntity().getEntityAddressKind();
+        assertThat(smartContract.getSmartContract().name(), is((SmartContract.TransactionRuntime.VMCASPERV1.name())));
+
+        assertThat(entity.getEntity().getMainPurse().getJsonURef(), is("uref-3dfdbde34845bd2e731cf39fba450745eba645b75d5feb3dcf953fd06d69bf14-007"));
+        assertThat(entity.getEntity().getAssociatedKeys().get(0).getAccountHash(), is("account-hash-aab0da01340446cee477f28410f8af5d6e0f3a88fb26c0cafb8d1625f5cc9c10"));
+        assertThat(entity.getEntity().getAssociatedKeys().get(0).getWeight(), is(1));
+        assertThat(entity.getEntity().getActionThresholds().getDeployment(), is(1));
+        assertThat(entity.getEntity().getActionThresholds().getKeyManagement(), is(1));
+        assertThat(entity.getEntity().getActionThresholds().getUpgradeManagement(), is(1));
+
+    }
+
+    @Test
+    void stateGetEntitySystemEntryPointV1() {
+
+        mockNode.withRcpResponseDispatcher()
+                .withMethod("state_get_entity")
+                .withBody("$.params.entity_identifier.EntityAddr", "entity-system-8edaacea88a5bd982c0c1d8cb54ac89564ffb116c1c2fb4475170755a88a6f5")
+                .thenDispatch(getClass().getResource("/entity/getstateentity-system-entry-point-v1-result.json"));
+
+        final StateEntityResult stateEntityResult = casperServiceMock.getStateEntity(
+                new EntityAddrIdentifier("entity-system-8edaacea88a5bd982c0c1d8cb54ac89564ffb116c1c2fb4475170755a88a6f5"),
+                null
+        );
+
+        assertThat(stateEntityResult.getApiVersion(), is("2.0.0"));
+
+        assertInstanceOf(AddressableEntity.class, stateEntityResult.getEntity());
+
+        AddressableEntity entity = (AddressableEntity) stateEntityResult.getEntity();
+
+        assertInstanceOf(System.class, entity.getEntity().getEntityAddressKind());
+
+        assertThat(entity.getEntity().getByteCodeHash(), is("byte-code-0000000000000000000000000000000000000000000000000000000000000000"));
+        assertThat(entity.getEntity().getPackageHash(), is("package-a8935ee5e02c22cf74f3c6b2b323517897635efc38ea4c03d8aa70a2822f5ac1"));
+
+        System system = (System) entity.getEntity().getEntityAddressKind();
+        assertThat(system.getSystem().name(), is(System.SystemEntityType.AUCTION.name()));
+
+        assertThat(entity.getEntity().getActionThresholds().getDeployment(), is(1));
+        assertThat(entity.getEntity().getActionThresholds().getKeyManagement(), is(1));
+        assertThat(entity.getEntity().getActionThresholds().getUpgradeManagement(), is(1));
+
+
+        assertThat(entity.getEntryPoints().size(), is(12));
+        assertInstanceOf(EntryPointV1.class, entity.getEntryPoints().get(0));
+        EntryPointV1 entryPointV1 = (EntryPointV1) entity.getEntryPoints().get(0);
+
+        assertThat(entryPointV1.getAccess().getValue().toString(), is(EntryPointV1.EntryPointAccessEnum.PUBLIC.name()));
+
+        assertThat(entryPointV1.getArgs().get(0).getName(), is("validator"));
+        assertInstanceOf(CLTypePublicKey.class, entryPointV1.getArgs().get(0).getClType());
+
+        assertThat(entryPointV1.getType().name(), is(EntryPointV1.EntryPointType.CALLED.name()));
+        assertThat(entryPointV1.getPayment().name(), is(EntryPointV1.EntryPointPayment.CALLER.name()));
+        assertThat(entryPointV1.getName(), is("activate_bid"));
+
+        assertInstanceOf(CLTypeUnit.class, entryPointV1.getRet());
+
+        assertThat(entity.getNamedKeys().size(), is(7));
+        assertInstanceOf(NamedKey.class, entity.getNamedKeys().get(0));
+    }
+
+    @Test
+    void stateGetEntitySystemEntryPointV2() {
+
+        mockNode.withRcpResponseDispatcher()
+                .withMethod("state_get_entity")
+                .withBody("$.params.entity_identifier.EntityAddr", "entity-system-8edaacea88a5bd982c0c1d8cb54ac89564ffb116c1c2fb4475170755a88a6f5")
+                .thenDispatch(getClass().getResource("/entity/getstateentity-system-entry-point-v2-result.json"));
+
+        final StateEntityResult stateEntityResult = casperServiceMock.getStateEntity(
+                new EntityAddrIdentifier("entity-system-8edaacea88a5bd982c0c1d8cb54ac89564ffb116c1c2fb4475170755a88a6f5"),
+                null
+        );
+
+        assertThat(stateEntityResult.getApiVersion(), is("2.0.0"));
+
+        assertInstanceOf(AddressableEntity.class, stateEntityResult.getEntity());
+
+        AddressableEntity entity = (AddressableEntity) stateEntityResult.getEntity();
+
+        assertInstanceOf(System.class, entity.getEntity().getEntityAddressKind());
+
+        assertThat(entity.getEntity().getByteCodeHash(), is("byte-code-0000000000000000000000000000000000000000000000000000000000000000"));
+        assertThat(entity.getEntity().getPackageHash(), is("package-a8935ee5e02c22cf74f3c6b2b323517897635efc38ea4c03d8aa70a2822f5ac1"));
+
+        System system = (System) entity.getEntity().getEntityAddressKind();
+        assertThat(system.getSystem().name(), is(System.SystemEntityType.AUCTION.name()));
+
+        assertThat(entity.getEntity().getActionThresholds().getDeployment(), is(1));
+        assertThat(entity.getEntity().getActionThresholds().getKeyManagement(), is(1));
+        assertThat(entity.getEntity().getActionThresholds().getUpgradeManagement(), is(1));
+
+
+        assertThat(entity.getEntryPoints().size(), is(4));
+        assertInstanceOf(EntryPointV2.class, entity.getEntryPoints().get(0));
+        EntryPointV2 entryPointV2 = (EntryPointV2) entity.getEntryPoints().get(0);
+
+        assertThat(entryPointV2.getFlags(), is(0));
+        assertThat(entryPointV2.getFunctionIndex(), is(1));
+
+        assertThat(entity.getNamedKeys().size(), is(7));
+        assertInstanceOf(NamedKey.class, entity.getNamedKeys().get(0));
+
+    }
+
+    @Test
+    void stateGetEntityLegacyAccount() {
+
+        mockNode.withRcpResponseDispatcher()
+                .withMethod("state_get_entity")
+                .withBody("$.params.entity_identifier.AccountHash", "account-hash-f1075fce3b8cd4eab748b8705ca02444a5e35c0248662649013d8a5cb2b1a87c")
+                .thenDispatch(getClass().getResource("/entity/getstateentity-legacy-account-result.json"));
+
+        final StateEntityResult stateEntityResult = casperServiceMock.getStateEntity(
+                new AccountHashEntityIdentifier("account-hash-f1075fce3b8cd4eab748b8705ca02444a5e35c0248662649013d8a5cb2b1a87c"),
+                null
+        );
+
+        assertThat(stateEntityResult.getApiVersion(), is("2.0.0"));
+
+        assertInstanceOf(LegacyAccount.class, stateEntityResult.getEntity());
+
+        LegacyAccount account = (LegacyAccount) stateEntityResult.getEntity();
+
+        assertThat(account.getHash(), is("account-hash-f1075fce3b8cd4eab748b8705ca02444a5e35c0248662649013d8a5cb2b1a87c"));
+        assertThat(account.getMainPurse(), is("uref-b22bc80d357df47447074e243b4d888de67c1cc7565fa82d0bb2b9b023146748-007"));
+        assertThat(account.getAssociatedKeys().get(0).getAccountHash(), is("account-hash-f1075fce3b8cd4eab748b8705ca02444a5e35c0248662649013d8a5cb2b1a87c"));
+        assertThat(account.getAssociatedKeys().get(0).getWeight(), is(1));
+
+    }
+
+    @Test
+    void stateGetEntityAccountWithHashBlockIdentifier() {
+
+        mockNode.withRcpResponseDispatcher()
+                .withMethod("state_get_entity")
+                .withBody("$.params.entity_identifier.AccountHash", "account-hash-f1075fce3b8cd4eab748b8705ca02444a5e35c0248662649013d8a5cb2b1a87c")
+                .withBody("$.params.block_identifier.Hash", "b0b28b6e89522a2c9476d477208f603cb9911dae77dad61da66346d56764ee8b")
+                .thenDispatch(getClass().getResource("/entity/getstateentity-account-result.json"));
+
+        final StateEntityResult stateEntityResult = casperServiceMock.getStateEntity(
+                new AccountHashEntityIdentifier("account-hash-f1075fce3b8cd4eab748b8705ca02444a5e35c0248662649013d8a5cb2b1a87c"),
+                new HashBlockIdentifier("b0b28b6e89522a2c9476d477208f603cb9911dae77dad61da66346d56764ee8b") {
+                }
+        );
+
+        assertThat(stateEntityResult.getApiVersion(), is("2.0.0"));
+
+        assertInstanceOf(AddressableEntity.class, stateEntityResult.getEntity());
+
+        AddressableEntity entity = (AddressableEntity) stateEntityResult.getEntity();
+
+        assertInstanceOf(Account.class, entity.getEntity().getEntityAddressKind());
+
+        assertThat(entity.getEntity().getByteCodeHash(), is("byte-code-0000000000000000000000000000000000000000000000000000000000000000"));
+        assertThat(entity.getEntity().getPackageHash(), is("package-22138fb22c624016fd73cd2abd3285ccd27cb80e20c29f3d94d34e95ee182030"));
+
+        Account account = (Account) entity.getEntity().getEntityAddressKind();
+        assertThat(account.getAccount(), is("account-hash-aab0da01340446cee477f28410f8af5d6e0f3a88fb26c0cafb8d1625f5cc9c10"));
+
+        assertThat(entity.getEntity().getMainPurse().getJsonURef(), is("uref-3dfdbde34845bd2e731cf39fba450745eba645b75d5feb3dcf953fd06d69bf14-007"));
+        assertThat(entity.getEntity().getAssociatedKeys().get(0).getAccountHash(), is("account-hash-aab0da01340446cee477f28410f8af5d6e0f3a88fb26c0cafb8d1625f5cc9c10"));
+        assertThat(entity.getEntity().getAssociatedKeys().get(0).getWeight(), is(1));
+        assertThat(entity.getEntity().getActionThresholds().getDeployment(), is(1));
+        assertThat(entity.getEntity().getActionThresholds().getKeyManagement(), is(1));
+        assertThat(entity.getEntity().getActionThresholds().getUpgradeManagement(), is(1));
+
+
+    @Test
     void infoGetReward() throws NoSuchAlgorithmException {
 
         mockNode.withRcpResponseDispatcher()
@@ -739,5 +979,6 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
         assertThat(rewardInfo.getApiVersion(), is("2.0.0"));
         assertThat(rewardInfo.getRewardAmount(), is(new BigInteger("100000000000000")));
         assertThat(rewardInfo.getEraId(), is(123456L));
+
     }
 }
