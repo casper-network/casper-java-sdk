@@ -241,8 +241,9 @@ public interface CasperService {
     /**
      * Returns an AddressableEntity from the network
      *
-     * @param entityIdentifier entity identifier
-     * @param blockIdentifier  block identifier
+     * @param entityIdentifier the entity identifier
+     * @param blockIdentifier  the optional block identifier, if provided will obtain the entity from a specific block
+     *                         if omitted will provide the entity from the latest block.
      * @return object holding the AddressableEntity or LegacyAccount
      */
     @JsonRpcMethod("state_get_entity")
