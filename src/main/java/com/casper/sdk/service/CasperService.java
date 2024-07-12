@@ -3,6 +3,7 @@ package com.casper.sdk.service;
 import com.casper.sdk.exception.CasperClientExceptionResolver;
 import com.casper.sdk.identifier.block.BlockIdentifier;
 import com.casper.sdk.identifier.dictionary.DictionaryIdentifier;
+import com.casper.sdk.identifier.entity.EntityIdentifier;
 import com.casper.sdk.identifier.era.EraIdentifier;
 import com.casper.sdk.identifier.global.GlobalStateIdentifier;
 import com.casper.sdk.identifier.purse.PurseIdentifier;
@@ -17,6 +18,7 @@ import com.casper.sdk.model.deploy.DeployData;
 import com.casper.sdk.model.deploy.DeployResult;
 import com.casper.sdk.model.deploy.SpeculativeDeployData;
 import com.casper.sdk.model.dictionary.DictionaryData;
+import com.casper.sdk.model.entity.StateEntityResult;
 import com.casper.sdk.model.era.EraInfoData;
 import com.casper.sdk.model.globalstate.GlobalStateData;
 import com.casper.sdk.model.key.PublicKey;
@@ -237,6 +239,19 @@ public interface CasperService {
     StatusData getStatus();
 
     /**
+     * Returns an AddressableEntity from the network
+     *
+     * @param entityIdentifier the entity identifier
+     * @param blockIdentifier  the optional block identifier, if provided will obtain the entity from a specific block
+     *                         if omitted will provide the entity from the latest block.
+     * @return object holding the AddressableEntity or LegacyAccount
+     */
+    @JsonRpcMethod("state_get_entity")
+    StateEntityResult getStateEntity(@JsonRpcParam("entity_identifier") EntityIdentifier entityIdentifier,
+                                     @JsonRpcParam("block_identifier") BlockIdentifier blockIdentifier);
+
+
+    /**
      * Obtains validator or delegator rewards.
      *
      * @param eraIdentifier the optional era identifier. If omitted, the last finalized era is used.
@@ -249,6 +264,7 @@ public interface CasperService {
     GetRewardResult getReward(@JsonRpcParam("era_identifier") EraIdentifier eraIdentifier,
                               @JsonRpcParam("validator") PublicKey validator,
                               @JsonRpcParam("delegator") PublicKey delegator);
+
     //endregion
 
     //region TRANSACTIONAL METHODS
@@ -324,8 +340,6 @@ public interface CasperService {
     EraInfoData getEraSummary(@JsonRpcParam("block_identifier") BlockIdentifier blockIdentifier);
     //endregion
 
-    //region TO BE IMPLEMENTED ON 1.5.0
-
     /**
      * Fetches balance value
      *
@@ -373,5 +387,4 @@ public interface CasperService {
     @JsonRpcMethod(value = "account_put_deploy", paramsPassMode = JsonRpcParamsPassMode.ARRAY)
     DeployResult putDeploy(Deploy deploy);
 
-    //endregion
 }
