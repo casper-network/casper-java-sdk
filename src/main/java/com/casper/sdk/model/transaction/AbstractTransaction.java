@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Transaction response obtained using the info_get_transaction RPC call.
+ * Base class for transaction response obtained using the info_get_transaction RPC call.
  *
  * @author ian@meywood.com
  */

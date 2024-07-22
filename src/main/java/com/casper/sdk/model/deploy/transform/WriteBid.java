@@ -21,9 +21,7 @@ import lombok.*;
 @JsonTypeName("WriteBid")
 public class WriteBid implements Transform {
 
-    /**
-     * @see Bid
-     */
+    /** @see Bid */
     @JsonProperty("WriteBid")
     private Bid bid;
 }

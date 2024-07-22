@@ -27,25 +27,17 @@ import java.util.List;
 @JsonTypeName("Failure")
 public class Failure {
 
-    /**
-     * The cost of executing the deploy.
-     */
+    /** The cost of executing the deploy. */
     @JsonSerialize(using = ToStringSerializer.class)
     private BigInteger cost;
 
-    /**
-     * @see ExecutionEffect
-     */
+    /** @see ExecutionEffect */
     private ExecutionEffect effect;
 
-    /**
-     * The error message associated with executing the deploy
-     */
+    /** The error message associated with executing the deploy */
     @JsonProperty("error_message")
     private String errorMessage;
 
-    /**
-     * List of Hex-encoded transfer address.
-     */
+    /** List of Hex-encoded transfer address. */
     private List<String> transfers;
 }

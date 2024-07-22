@@ -26,19 +26,13 @@ import java.util.List;
 @JsonTypeName("Success")
 public class Success {
 
-    /**
-     * @see ExecutionEffect
-     */
+    /** @see ExecutionEffect */
     private ExecutionEffect effect;
 
-    /**
-     * List of Hex-encoded transfer address.
-     */
+    /** List of Hex-encoded transfer address. */
     private List<String> transfers;
 
-    /**
-     * The cost of executing the deploy.
-     */
+    /** The cost of executing the deploy. */
     @JsonSerialize(using = ToStringSerializer.class)
     private BigInteger cost;
 }
