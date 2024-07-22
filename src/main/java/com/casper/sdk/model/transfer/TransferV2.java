@@ -21,7 +21,7 @@ import java.math.BigInteger;
 @NoArgsConstructor
 @Getter
 @Setter
-public class TransferV2 implements Transfer {
+public class TransferV2 {
 
     /** Transaction that created the transfer. */
     @JsonProperty("transaction_hash")
@@ -46,10 +46,10 @@ public class TransferV2 implements Transfer {
     private int gas;
     /** User-defined ID. */
     @JsonProperty("id")
-    private Long id;
+    private BigInteger id;
 
     public <T> InitiatorAddr<T> getFrom() {
         //noinspection unchecked
-        return  from;
+        return from;
     }
 }

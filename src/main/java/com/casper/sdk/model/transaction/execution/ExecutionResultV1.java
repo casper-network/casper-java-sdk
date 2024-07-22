@@ -2,8 +2,8 @@ package com.casper.sdk.model.transaction.execution;
 
 import com.casper.sdk.model.deploy.executionresult.Failure;
 import com.casper.sdk.model.deploy.executionresult.Success;
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,12 +13,14 @@ import lombok.Setter;
  *
  * @author ian@meywood.com
  */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.WRAPPER_OBJECT)
-@JsonSubTypes({
-        @JsonSubTypes.Type(value = Failure.class, name = "Failure"),
-        @JsonSubTypes.Type(value = Success.class, name = "Success")})
 @NoArgsConstructor
 @Getter
 @Setter
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ExecutionResultV1 extends ExecutionResult {
+
+    @JsonProperty("Success")
+    private Success success;
+    @JsonProperty("Failure")
+    private Failure failure;
 }

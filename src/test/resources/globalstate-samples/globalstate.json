@@ -47,7 +47,8 @@
       "account_hash": "account-hash-e94daaff79c2ab8d9c31d9c3058d7d0a0dd31204a5638dc1451fa67b2e3fb88c",
       "action_thresholds": {
         "deployment": 1,
-        "key_management": 1
+        "key_management": 1,
+        "upgrade_management": 2
       },
       "associated_keys": [
         {

@@ -50,10 +50,12 @@ import com.casper.sdk.model.storedvalue.StoredValueData;
 import com.casper.sdk.model.storedvalue.StoredValueDeployInfo;
 import com.casper.sdk.model.transaction.*;
 import com.casper.sdk.model.transaction.entrypoint.TransferEntryPoint;
+import com.casper.sdk.model.transaction.execution.ExecutionResultV1;
 import com.casper.sdk.model.transaction.execution.ExecutionResultV2;
 import com.casper.sdk.model.transaction.pricing.FixedPricingMode;
 import com.casper.sdk.model.transaction.scheduling.Standard;
 import com.casper.sdk.model.transaction.target.Native;
+import com.casper.sdk.model.transaction.target.Transaction;
 import com.casper.sdk.model.transfer.TransferData;
 import com.casper.sdk.model.transfer.TransferV1;
 import com.casper.sdk.model.transfer.TransferV2;
@@ -221,7 +223,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
 
         assertNotNull(transferData);
         assertEquals(1, transferData.getTransfers().size());
-        assertEquals(BigInteger.valueOf(445989400000L), ((TransferV1) transferData.getTransfers().get(0)).getAmount());
+        assertEquals(BigInteger.valueOf(445989400000L), transferData.getTransfers().get(0).getTransferV1().getAmount());
     }
 
     @Test
@@ -236,7 +238,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
         assertNotNull(transferData);
         assertEquals(1, transferData.getTransfers().size());
 
-        final TransferV1 transaction = (TransferV1) transferData.getTransfers().get(0);
+        final TransferV1 transaction = transferData.getTransfers().get(0).getTransferV1();
         assertEquals("c709e727b7eaadb3b7f76450aa5d3ac3dd28b0271b7471a6dcc828cfd29f745a", transaction.getDeployHash());
         assertEquals("account-hash-496d542527e1a29f576ab7c3f4c947bfcdc9b4145f75f6ec40e36089432d7351", transaction.getFrom());
         assertEquals("account-hash-8a35e688eac33089b13f91a78c94221b669a0b13a6ed199228b1da018ecfa9df", transaction.getTo());
@@ -255,7 +257,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
         assertNotNull(transferData);
         assertEquals(1, transferData.getTransfers().size());
 
-        final TransferV1 transaction = (TransferV1) transferData.getTransfers().get(0);
+        final TransferV1 transaction = transferData.getTransfers().get(0).getTransferV1();
         assertEquals("c709e727b7eaadb3b7f76450aa5d3ac3dd28b0271b7471a6dcc828cfd29f745a", transaction.getDeployHash());
         assertEquals("account-hash-496d542527e1a29f576ab7c3f4c947bfcdc9b4145f75f6ec40e36089432d7351", transaction.getFrom());
         assertEquals("account-hash-8a35e688eac33089b13f91a78c94221b669a0b13a6ed199228b1da018ecfa9df", transaction.getTo());
@@ -334,7 +336,8 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
         assertNotNull(deployData);
         assertNotNull(deployData.getDeploy());
         assertInstanceOf(StoredContractByHash.class, deployData.getDeploy().getSession());
-        assertInstanceOf(Success.class, deployData.getExecutionResults().get(0).getResult());
+        assertInstanceOf(ExecutionResultV1.class, deployData.getExecutionInfo().getExecutionResult());
+        assertThat(((ExecutionResultV1) deployData.getExecutionInfo().getExecutionResult()).getSuccess(), is(notNullValue(Success.class)));
         assertInstanceOf(ModuleBytes.class, deployData.getDeploy().getPayment());
 
         final String sessionHash = ((StoredContractByHash) deployData.getDeploy().getSession()).getHash();
@@ -614,9 +617,9 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
 
         final GetTransactionResult result = casperServiceMock.getTransaction(new TransactionHashDeploy("cb04018ad3a09fc15fda0e5c18def392a135652c73c864c25968be9b2376c139"));
         assertNotNull(result);
-        assertThat(result.getTransaction(), is(instanceOf(Deploy.class)));
-        assertThat(result.getTransaction().getHash(), is(new Digest("cb04018ad3a09fc15fda0e5c18def392a135652c73c864c25968be9b2376c139")));
-        assertThat(((Deploy) result.getTransaction()).getHeader().getBodyHash(), is(new Digest("9fae773a27a4aafb161321c0779031a077b63f608f0743a2abbc4359c080a965")));
+        assertThat(result.getTransaction().get(), is(instanceOf(Deploy.class)));
+        assertThat(result.getTransaction().get().getHash(), is(new Digest("cb04018ad3a09fc15fda0e5c18def392a135652c73c864c25968be9b2376c139")));
+        assertThat(((Deploy) result.getTransaction().get()).getHeader().getBodyHash(), is(new Digest("9fae773a27a4aafb161321c0779031a077b63f608f0743a2abbc4359c080a965")));
         assertThat(result.getExecutionInfo().getBlockHash(), is(new Digest("3ad051b1df071e4d539eab28986bb55ec4fb5fd31f63942ed788738186709303")));
         assertThat(result.getExecutionInfo().getBlockHeight(), is(new BigInteger("4139")));
         assertThat(result.getExecutionInfo().getExecutionResult(), is(instanceOf(ExecutionResultV2.class)));
@@ -635,15 +638,15 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
         assertThat(executionResult.getPayment().get(0).getSource(), is(URef.fromString("uref-575de810398cc4f39e88c56f3684965b82a5c79e14df8d5fbe74a62962de0bb5-007")));
 
         assertThat(executionResult.getTransfers(), hasSize(1));
-        assertThat(executionResult.getTransfers().get(0), is(instanceOf(TransferV2.class)));
-        final TransferV2 transfer = (TransferV2) executionResult.getTransfers().get(0);
+        assertThat(executionResult.getTransfers().get(0).getTransferV2(), is(instanceOf(TransferV2.class)));
+        final TransferV2 transfer = executionResult.getTransfers().get(0).getTransferV2();
         assertThat(transfer.getTransactionHash(), is(new Digest("cb04018ad3a09fc15fda0e5c18def392a135652c73c864c25968be9b2376c139")));
         assertThat(transfer.getSource(), is(URef.fromString("uref-b22bc80d357df47447074e243b4d888de67c1cc7565fa82d0bb2b9b023146748-007")));
         assertThat(transfer.getTarget(), is(URef.fromString("uref-575de810398cc4f39e88c56f3684965b82a5c79e14df8d5fbe74a62962de0bb5-007")));
         assertThat(transfer.getFrom().getAddress(), is(PublicKey.fromTaggedHexString("010b42b381f087e65a1b6d4c9538027502307ebeff02044c9507f30ddffdb02ebd")));
         assertThat(transfer.getAmount(), is(new BigInteger("2500000000")));
         assertThat(transfer.getGas(), is(1));
-        assertThat(transfer.getId(), is(12345L));
+        assertThat(transfer.getId(), is(BigInteger.valueOf(12345L)));
     }
 
     @Test
@@ -679,6 +682,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
         // generate hashes and sign transaction
         transaction.sign(privateKey);
 
+
         assertThat(transaction.getApprovals(), hasSize(1));
         assertThat(transaction.getHash().isValid(), is(true));
         assertThat(transaction.getHeader().getBodyHash().isValid(), is(true));
@@ -699,7 +703,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
                 .withBody("$.params.[0].Version1.body.args.[0].[1].cl_type", "U512")
                 .thenDispatch(getClass().getResource("/transaction-samples/put-transaction-result.json"));
 
-        final PutTransactionResult result = casperServiceMock.putTransaction(transaction);
+        final PutTransactionResult result = casperServiceMock.putTransaction(new Transaction(transaction));
         assertThat(result.getApiVersion(), is("2.0.0"));
         assertThat(result.getTransactionHash().toString(), is("52a75f3651e450cc2c3ed534bf130bae2515950707d70bb60067aada30b97ca8"));
     }

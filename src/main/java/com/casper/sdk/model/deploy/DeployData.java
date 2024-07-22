@@ -1,10 +1,9 @@
 package com.casper.sdk.model.deploy;
 
+import com.casper.sdk.model.transaction.execution.ExecutionInfo;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
-
-import java.util.List;
 
 /**
  * Root class for a Casper deploy request
@@ -20,22 +19,16 @@ import java.util.List;
 @NoArgsConstructor
 public class DeployData {
 
-    /**
-     * The RPC API version
-     */
+    /** The RPC API version */
     @JsonProperty("api_version")
     private String apiVersion;
 
-    /**
-     * the {@link Deploy}
-     */
+    /** the {@link Deploy} */
     @JsonProperty("deploy")
     private Deploy deploy;
 
-    /**
-     * a list of {@link JsonExecutionResult}
-     */
-    @JsonProperty("execution_results")
+    /** Execution info, if available. */
+    @JsonProperty(value = "execution_info")
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private List<JsonExecutionResult> executionResults;
+    private ExecutionInfo executionInfo;
 }

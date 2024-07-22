@@ -7,11 +7,7 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
@@ -30,47 +26,33 @@ import java.util.Map;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Bid implements BidKind {
+public class Bid {
 
-    /**
-     * The purse that was used for bonding.
-     */
+    /** The purse that was used for bonding. */
     @JsonProperty("bonding_purse")
     private URef bondingPurse;
 
-    /**
-     * Delegation rate
-     */
+    /** Delegation rate */
     @JsonProperty("delegation_rate")
     private int delegationRate;
 
-    /**
-     * This validator's delegators, indexed by their public keys
-     */
+    /** This validator's delegators, indexed by their public keys */
     @JsonIgnore
     @Builder.Default
     private Map<PublicKey, Delegator> delegators = new LinkedHashMap<>();
 
-    /**
-     * `true` if validator has been \"evicted\"
-     */
+    /** `true` if validator has been \"evicted\" */
     private boolean inactive;
 
-    /**
-     * The amount of tokens staked by a validator (not including delegators).
-     */
+    /** The amount of tokens staked by a validator (not including delegators). */
     @JsonIgnore
     private BigInteger stakedAmount;
 
-    /**
-     * Validator PublicKey
-     */
+    /** Validator PublicKey */
     @JsonProperty("validator_public_key")
     private PublicKey validatorPublicKey;
 
-    /**
-     * Vesting schedule for a genesis validator. `None` if non-genesis validator.
-     */
+    /** Vesting schedule for a genesis validator. `None` if non-genesis validator. */
     @JsonProperty("vesting_schedule")
     private VestingSchedule vestingSchedule;
 

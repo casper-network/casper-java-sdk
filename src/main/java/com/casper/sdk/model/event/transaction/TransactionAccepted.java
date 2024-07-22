@@ -1,7 +1,7 @@
 package com.casper.sdk.model.event.transaction;
 
 import com.casper.sdk.model.event.EventData;
-import com.casper.sdk.model.transaction.Transaction;
+import com.casper.sdk.model.transaction.AbstractTransaction;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.Getter;
@@ -19,10 +19,10 @@ import lombok.Setter;
 @JsonTypeName("TransactionAccepted")
 public class TransactionAccepted implements EventData {
 
-    private Transaction transaction;
+    private AbstractTransaction transaction;
 
     @JsonCreator
-    public TransactionAccepted(final Transaction transaction) {
+    public TransactionAccepted(final AbstractTransaction transaction) {
         this.transaction = transaction;
     }
 }

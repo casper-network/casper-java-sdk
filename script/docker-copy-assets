@@ -1,13 +1,35 @@
 #!/usr/bin/env bash
 BASEDIR=$(builtin cd .. || exit 1; pwd)
-#CONTAINER_NAME="cspr-nctl"
-CONTAINER_NAME="cspr-nctl-condor"
+CONTAINER_NAME="cspr-cctl"
+CCTL_ASSETS=/home/cctl/cctl/assets
+#CONTAINER_NAME="cspr-nctl-condor"
 # clear the assets folder
-rm -rf  "${BASEDIR}/assets"
-mkdir "${BASEDIR}/assets"
-# copy net-1 users
-docker cp ${CONTAINER_NAME}:/home/casper/casper-nctl/assets/net-1/users "${BASEDIR}/assets/net-1"
-# copy net-1 chainspec
-docker cp ${CONTAINER_NAME}:/home/casper/casper-nctl/assets/net-1/chainspec "${BASEDIR}/assets/net-1"
-# copy faucet keys
-docker cp ${CONTAINER_NAME}:/home/casper/casper-nctl/assets/net-1/faucet "${BASEDIR}/assets/net-1"
+#rm -rf  "${BASEDIR}/assets"
+#mkdir "${BASEDIR}/assets"
+## copy net-1 users
+#docker cp ${CONTAINER_NAME}:/home/casper/casper-nctl/assets/net-1/users "${BASEDIR}/assets/net-1"
+## copy net-1 chainspec
+#docker cp ${CONTAINER_NAME}:/home/casper/casper-nctl/assets/net-1/chainspec "${BASEDIR}/assets/net-1"
+## copy faucet keys
+#docker cp ${CONTAINER_NAME}:/home/casper/casper-nctl/assets/net-1/faucet "${BASEDIR}/assets/net-1"
+#
+
+
+
+echo -e "Starting assets\n"
+echo -e "[  Copying the test node assets to a local directory  ]\n"
+
+  # clear the assets folder
+  rm -rf  "${BASEDIR}"/assets
+  mkdir "${BASEDIR}"/assets
+  mkdir "${BASEDIR}"/assets/net-1
+  #mkdir "${BASEDIR}"/assets/chainspec
+  #mkdir "${BASEDIR}"/assets/faucet
+  # copy net-1 users
+  docker cp cspr-cctl:$CCTL_ASSETS/users/. "${BASEDIR}"/assets/net-1 > /dev/null 2>&1
+  # copy net-1 chainspec
+  docker cp cspr-cctl:$CCTL_ASSETS/genesis "${BASEDIR}"/assets/net-1/chainspec > /dev/null 2>&1
+  # copy faucet keys
+  docker cp cspr-cctl:$CCTL_ASSETS/faucet/ "${BASEDIR}"/assets/net-1/faucet > /dev/null 2>&1
+
+  echo -e "Finished assets\n"

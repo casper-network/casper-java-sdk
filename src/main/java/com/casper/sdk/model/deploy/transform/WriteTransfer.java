@@ -3,11 +3,7 @@ package com.casper.sdk.model.deploy.transform;
 import com.casper.sdk.model.transfer.TransferV1;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 /**
  * An implementation of Transform that Writes the given Transfer to global state.

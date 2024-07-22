@@ -19,7 +19,7 @@ import java.math.BigInteger;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class TransferV1 implements Transfer {
+public class TransferV1 {
     @JsonProperty("id")
     private BigInteger id;
 

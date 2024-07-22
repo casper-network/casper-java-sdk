@@ -1,6 +1,7 @@
 package com.casper.sdk.model.transaction.execution;
 
 import com.casper.sdk.model.common.Digest;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,6 +19,7 @@ import java.math.BigInteger;
 @NoArgsConstructor
 @Getter
 @Setter
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ExecutionInfo {
     @JsonProperty("block_hash")
     private Digest blockHash;

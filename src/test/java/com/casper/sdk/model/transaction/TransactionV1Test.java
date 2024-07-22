@@ -10,6 +10,7 @@ import com.casper.sdk.model.transaction.entrypoint.TransferEntryPoint;
 import com.casper.sdk.model.transaction.pricing.FixedPricingMode;
 import com.casper.sdk.model.transaction.scheduling.FutureTimestamp;
 import com.casper.sdk.model.transaction.target.Native;
+import com.casper.sdk.model.transaction.target.Transaction;
 import com.casper.sdk.model.uref.URef;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.IOUtils;
@@ -38,10 +39,12 @@ class TransactionV1Test {
     public void transactionV1jsonRoundTrip() throws Exception {
 
         final String json = IOUtils.toString(getClass().getResource("/transaction-samples/transaction-v1.json").openStream(), StandardCharsets.UTF_8);
+        final Transaction transaction = new ObjectMapper().readValue(json, Transaction.class);
 
-        final TransactionV1 transactionV1 = new ObjectMapper().readValue(json, TransactionV1.class);
+        assertThat(transaction, is(notNullValue()));
+        assertThat(transaction.get(), is(notNullValue(TransactionV1.class)));
 
-        assertThat(transactionV1, is(notNullValue()));
+        final TransactionV1 transactionV1 = transaction.getVersion1();
 
         assertThat(transactionV1.getHash(), is(new Digest("b7188ee3a749e6504d11708e23e41d16d98bdb2359d413a3bb84b48b5cc215d4")));
 
@@ -83,7 +86,7 @@ class TransactionV1Test {
         assertThat(transactionV1.getApprovals().get(0).getSignature().getAlgoTaggedHex(), is("0299741626a3360a315ef0dc7b8ce91183928bc3267ac6a87688458948bc95bb92569f777d9335234ee2a9e657f81cdf1ca8c4df41a3b292a81d5b2b9e64277417"));
         assertThat(transactionV1.getApprovals().get(0).getSigner(), is(PublicKey.fromTaggedHexString("02023f63b32437c2f964e1d1951060ad63e7d26c0ab921e359d9900743db940a9298")));
 
-        final String writtenJson = new ObjectMapper().writeValueAsString(transactionV1);
+        final String writtenJson = new ObjectMapper().writeValueAsString(transaction);
         JSONAssert.assertEquals(json, writtenJson, false);
     }
 }
