@@ -23,7 +23,7 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
-public class TransactionV1 extends Transaction implements CasperSerializableObject {
+public class TransactionV1 extends AbstractTransaction implements CasperSerializableObject {
 
     @JsonProperty("header")
     private TransactionV1Header header;

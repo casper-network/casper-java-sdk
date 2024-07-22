@@ -36,7 +36,7 @@ public class DeployDataTests extends AbstractJsonTests {
         DeployData dd = OBJECT_MAPPER.readValue(inputJson, DeployData.class);
 
         assertNotNull(dd.getDeploy());
-        assertNotNull(dd.getExecutionResults().get(0));
+        assertNotNull(dd.getExecutionInfo().getExecutionResult());
 
         String expectedJson = getPrettyJson(dd);
 

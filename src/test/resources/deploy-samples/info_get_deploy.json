@@ -68,10 +68,10 @@
         }
       ]
     },
-    "execution_results": [
-      {
-        "block_hash": "6e389117f70f76c3dbe7a9fc7508f0e43138a3eb7cfb48961186f24f6dc9fb37",
-        "result": {
+    "execution_info": {
+      "block_hash": "6e389117f70f76c3dbe7a9fc7508f0e43138a3eb7cfb48961186f24f6dc9fb37",
+      "execution_result": {
+        "Version1": {
           "Success": {
             "effect": {
               "operations": [],
@@ -6579,6 +6579,6 @@
           }
         }
       }
-    ]
+    }
   }
 }

@@ -30,8 +30,8 @@ import com.casper.sdk.model.status.StatusData;
 import com.casper.sdk.model.storedvalue.StoredValueData;
 import com.casper.sdk.model.transaction.GetTransactionResult;
 import com.casper.sdk.model.transaction.PutTransactionResult;
-import com.casper.sdk.model.transaction.Transaction;
 import com.casper.sdk.model.transaction.TransactionHash;
+import com.casper.sdk.model.transaction.target.Transaction;
 import com.casper.sdk.model.transfer.TransferData;
 import com.casper.sdk.model.uref.URef;
 import com.casper.sdk.model.validator.ValidatorChangeData;
@@ -386,5 +386,5 @@ public interface CasperService {
     @Deprecated
     @JsonRpcMethod(value = "account_put_deploy", paramsPassMode = JsonRpcParamsPassMode.ARRAY)
     DeployResult putDeploy(Deploy deploy);
-
+    //endregion
 }

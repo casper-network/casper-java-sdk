@@ -13,18 +13,13 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class EntryPointV2 implements EntryPoint{
+public class EntryPointV2 {
 
-    /**
-     * The flags
-     */
+    /** The flags */
     @JsonProperty("flags")
     private int flags;
 
-    /**
-     * The selector.
-     */
+    /** The selector. */
     @JsonProperty("function_index")
     private int functionIndex;
-
 }

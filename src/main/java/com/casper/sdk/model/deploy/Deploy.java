@@ -2,13 +2,11 @@ package com.casper.sdk.model.deploy;
 
 import com.casper.sdk.exception.CasperClientException;
 import com.casper.sdk.exception.NoSuchTypeException;
-import com.casper.sdk.jackson.resolver.TransactionResolver;
 import com.casper.sdk.model.clvalue.serde.CasperSerializableObject;
 import com.casper.sdk.model.clvalue.serde.Target;
 import com.casper.sdk.model.common.Digest;
 import com.casper.sdk.model.deploy.executabledeploy.ExecutableDeployItem;
-import com.casper.sdk.model.transaction.Transaction;
-import com.fasterxml.jackson.databind.annotation.JsonTypeResolver;
+import com.casper.sdk.model.transaction.AbstractTransaction;
 import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
 import lombok.*;
@@ -28,22 +26,15 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonTypeResolver(TransactionResolver.class)
-public class Deploy extends Transaction implements CasperSerializableObject {
+public class Deploy extends AbstractTransaction implements CasperSerializableObject {
 
-    /**
-     * @see DeployHeader
-     */
+    /** @see DeployHeader */
     private DeployHeader header;
 
-    /**
-     * @see ExecutableDeployItem
-     */
+    /** @see ExecutableDeployItem */
     private ExecutableDeployItem payment;
 
-    /**
-     * @see ExecutableDeployItem
-     */
+    /** @see ExecutableDeployItem */
     private ExecutableDeployItem session;
 
     @Builder

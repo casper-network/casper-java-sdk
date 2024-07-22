@@ -5,12 +5,9 @@ import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.serde.Target;
 import com.casper.sdk.model.common.Digest;
 import com.casper.sdk.model.deploy.Approval;
-import com.casper.sdk.model.deploy.Deploy;
 import com.casper.sdk.model.key.PublicKey;
 import com.casper.sdk.model.key.Signature;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.syntifi.crypto.key.AbstractPrivateKey;
 import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
@@ -24,19 +21,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Transaction response obtained using the info_get_transaction RPC call.
+ * Base class for transaction response obtained using the info_get_transaction RPC call.
  *
  * @author ian@meywood.com
  */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.WRAPPER_OBJECT)
-@JsonSubTypes({
-        @JsonSubTypes.Type(value = Deploy.class, name = "Deploy"),
-        @JsonSubTypes.Type(value = TransactionV1.class, name = "Version1")})
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public abstract class Transaction {
+public abstract class AbstractTransaction {
 
     @JsonProperty("hash")
     private Digest hash;
@@ -64,7 +57,7 @@ public abstract class Transaction {
      * @param signer the approver's private key
      * @return the signed transaction
      */
-    public <T extends Transaction> T sign(final AbstractPrivateKey signer) {
+    public <T extends AbstractTransaction> T sign(final AbstractPrivateKey signer) {
 
         try {
             if (hash == null) {

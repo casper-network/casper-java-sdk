@@ -6,14 +6,16 @@
     "block_hash": "cdbbe893b5033093b64e73b18555dae1e90bd046a68c79a74e8239b4aed53535",
     "transfers": [
       {
-        "deploy_hash": "c709e727b7eaadb3b7f76450aa5d3ac3dd28b0271b7471a6dcc828cfd29f745a",
-        "from": "account-hash-496d542527e1a29f576ab7c3f4c947bfcdc9b4145f75f6ec40e36089432d7351",
-        "to": "account-hash-8a35e688eac33089b13f91a78c94221b669a0b13a6ed199228b1da018ecfa9df",
-        "source": "uref-7950bf87377371651e0927198e2bc73074a43a804037cc4e20f4a2c21115b7ef-007",
-        "target": "uref-88c9cb212e433508aa3e4d66a8e04ab2214a78d15efb5515eae8705f1b895207-004",
-        "amount": "445989400000",
-        "gas": "0",
-        "id": 1
+        "Version1": {
+          "deploy_hash": "c709e727b7eaadb3b7f76450aa5d3ac3dd28b0271b7471a6dcc828cfd29f745a",
+          "from": "account-hash-496d542527e1a29f576ab7c3f4c947bfcdc9b4145f75f6ec40e36089432d7351",
+          "to": "account-hash-8a35e688eac33089b13f91a78c94221b669a0b13a6ed199228b1da018ecfa9df",
+          "source": "uref-7950bf87377371651e0927198e2bc73074a43a804037cc4e20f4a2c21115b7ef-007",
+          "target": "uref-88c9cb212e433508aa3e4d66a8e04ab2214a78d15efb5515eae8705f1b895207-004",
+          "amount": "445989400000",
+          "gas": "0",
+          "id": 1
+        }
       }
     ]
   }

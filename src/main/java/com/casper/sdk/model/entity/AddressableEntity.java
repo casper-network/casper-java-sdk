@@ -1,6 +1,6 @@
 package com.casper.sdk.model.entity;
 
-import com.casper.sdk.model.contract.EntryPoint;
+import com.casper.sdk.model.contract.EntryPointValue;
 import com.casper.sdk.model.contract.NamedKey;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
@@ -28,6 +28,6 @@ public class AddressableEntity implements StateEntity {
 
     /** The entry points of the addressable entity. */
     @JsonProperty("entry_points")
-    private List<EntryPoint> entryPoints;
+    private List<EntryPointValue> entryPoints;
 
 }

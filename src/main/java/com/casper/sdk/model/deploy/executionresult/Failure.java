@@ -1,9 +1,10 @@
 package com.casper.sdk.model.deploy.executionresult;
 
 import com.casper.sdk.model.deploy.ExecutionEffect;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.*;
 
 import java.math.BigInteger;
@@ -24,27 +25,19 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonTypeName("Failure")
-public class Failure implements ExecutionResult {
+public class Failure {
 
-    /**
-     * The cost of executing the deploy.
-     */
-    @JsonIgnore
+    /** The cost of executing the deploy. */
+    @JsonSerialize(using = ToStringSerializer.class)
     private BigInteger cost;
 
-    /**
-     * @see ExecutionEffect
-     */
+    /** @see ExecutionEffect */
     private ExecutionEffect effect;
 
-    /**
-     * The error message associated with executing the deploy
-     */
+    /** The error message associated with executing the deploy */
     @JsonProperty("error_message")
     private String errorMessage;
 
-    /**
-     * List of Hex-encoded transfer address.
-     */
+    /** List of Hex-encoded transfer address. */
     private List<String> transfers;
 }

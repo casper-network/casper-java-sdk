@@ -1,7 +1,7 @@
 package com.casper.sdk.model.event.transaction;
 
 import com.casper.sdk.model.event.EventData;
-import com.casper.sdk.model.transaction.Transaction;
+import com.casper.sdk.model.transaction.target.Transaction;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.Getter;

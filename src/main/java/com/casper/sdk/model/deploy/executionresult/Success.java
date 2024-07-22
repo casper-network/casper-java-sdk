@@ -1,8 +1,9 @@
 package com.casper.sdk.model.deploy.executionresult;
 
 import com.casper.sdk.model.deploy.ExecutionEffect;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.*;
 
 import java.math.BigInteger;
@@ -23,21 +24,15 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonTypeName("Success")
-public class Success implements ExecutionResult {
+public class Success {
 
-    /**
-     * The cost of executing the deploy.
-     */
-    @JsonIgnore
-    private BigInteger cost;
-
-    /**
-     * @see ExecutionEffect
-     */
+    /** @see ExecutionEffect */
     private ExecutionEffect effect;
 
-    /**
-     * List of Hex-encoded transfer address.
-     */
+    /** List of Hex-encoded transfer address. */
     private List<String> transfers;
+
+    /** The cost of executing the deploy. */
+    @JsonSerialize(using = ToStringSerializer.class)
+    private BigInteger cost;
 }
