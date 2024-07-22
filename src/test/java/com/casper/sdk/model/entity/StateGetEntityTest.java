@@ -1,8 +1,9 @@
 package com.casper.sdk.model.entity;
 
 import com.casper.sdk.model.AbstractJsonTests;
-import com.casper.sdk.model.contract.EntryPointV1;
+import com.casper.sdk.model.contract.EntryPoint;
 import com.casper.sdk.model.contract.EntryPointV2;
+import com.casper.sdk.model.contract.EntryPointValue;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -19,12 +20,9 @@ public class StateGetEntityTest extends AbstractJsonTests {
 
         final String inputJson = getPrettyJson(loadJsonFromFile("entity/getstateentity-account-test.json"));
 
-        StateEntityResult addressableEntity = OBJECT_MAPPER.readValue(inputJson, StateEntityResult.class);
-
+        final StateEntityResult addressableEntity = OBJECT_MAPPER.readValue(inputJson, StateEntityResult.class);
         assertThat(addressableEntity.getEntity(), is(instanceOf(AddressableEntity.class)));
-
         assertThat(((AddressableEntity) addressableEntity.getEntity()).getEntity().getEntityAddressKind(), is(instanceOf(Account.class)));
-
     }
 
     @Test
@@ -32,12 +30,9 @@ public class StateGetEntityTest extends AbstractJsonTests {
 
         final String inputJson = getPrettyJson(loadJsonFromFile("entity/getstateentity-smartcontract-test.json"));
 
-        StateEntityResult addressableEntity = OBJECT_MAPPER.readValue(inputJson, StateEntityResult.class);
-
+        final StateEntityResult addressableEntity = OBJECT_MAPPER.readValue(inputJson, StateEntityResult.class);
         assertThat(addressableEntity.getEntity(), is(instanceOf(AddressableEntity.class)));
-
         assertThat(((AddressableEntity) addressableEntity.getEntity()).getEntity().getEntityAddressKind(), is(instanceOf(SmartContract.class)));
-
     }
 
     @Test
@@ -45,17 +40,14 @@ public class StateGetEntityTest extends AbstractJsonTests {
 
         final String inputJson = getPrettyJson(loadJsonFromFile("entity/getstateentity-system-entry-point-v1-test.json"));
 
-        StateEntityResult addressableEntity = OBJECT_MAPPER.readValue(inputJson, StateEntityResult.class);
-
+        final StateEntityResult addressableEntity = OBJECT_MAPPER.readValue(inputJson, StateEntityResult.class);
         assertThat(addressableEntity.getEntity(), is(instanceOf(AddressableEntity.class)));
-
         assertThat(((AddressableEntity) addressableEntity.getEntity()).getEntity().getEntityAddressKind(), is(instanceOf(System.class)));
-
         assertThat(((AddressableEntity) addressableEntity.getEntity()).getEntryPoints().size(), is(greaterThan(0)));
 
-        AddressableEntity entity = (AddressableEntity) addressableEntity.getEntity();
-        assertThat(entity.getEntryPoints().get(0), is(instanceOf(EntryPointV1.class)));
-
+        final AddressableEntity entity = (AddressableEntity) addressableEntity.getEntity();
+        assertThat(entity.getEntryPoints().get(0), is(instanceOf(EntryPointValue.class)));
+        assertThat(entity.getEntryPoints().get(0).getV1(), is(instanceOf(EntryPoint.class)));
     }
 
     @Test
@@ -63,15 +55,13 @@ public class StateGetEntityTest extends AbstractJsonTests {
 
         final String inputJson = getPrettyJson(loadJsonFromFile("entity/getstateentity-system-entry-point-v2-test.json"));
 
-        StateEntityResult addressableEntity = OBJECT_MAPPER.readValue(inputJson, StateEntityResult.class);
-
+        final StateEntityResult addressableEntity = OBJECT_MAPPER.readValue(inputJson, StateEntityResult.class);
         assertInstanceOf(AddressableEntity.class, addressableEntity.getEntity());
-
         assertThat(((AddressableEntity) addressableEntity.getEntity()).getEntryPoints().size(), is(greaterThan(0)));
 
-        AddressableEntity entity = (AddressableEntity) addressableEntity.getEntity();
-        assertThat(entity.getEntryPoints().get(0), is(instanceOf(EntryPointV2.class)));
-
+        final AddressableEntity entity = (AddressableEntity) addressableEntity.getEntity();
+        assertThat(entity.getEntryPoints().get(0), is(instanceOf(EntryPointValue.class)));
+        assertThat(entity.getEntryPoints().get(0).getV2(), is(instanceOf(EntryPointV2.class)));
     }
 
     @Test
@@ -79,9 +69,7 @@ public class StateGetEntityTest extends AbstractJsonTests {
 
         final String inputJson = getPrettyJson(loadJsonFromFile("entity/getstateentity-legacy-account-test.json"));
 
-        StateEntityResult entity = OBJECT_MAPPER.readValue(inputJson, StateEntityResult.class);
-
+        final StateEntityResult entity = OBJECT_MAPPER.readValue(inputJson, StateEntityResult.class);
         assertInstanceOf(com.casper.sdk.model.account.Account.class, entity.getEntity());
-
     }
 }

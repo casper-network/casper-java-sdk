@@ -15,58 +15,50 @@
         ],
         "entry_points": [
           {
-            "V1CasperVm": {
-              "name": "finalize_payment",
-              "args": [
-                {
-                  "name": "amount",
-                  "cl_type": "U512"
-                },
-                {
-                  "name": "account",
-                  "cl_type": {
-                    "ByteArray": 32
-                  }
-                }
-              ],
-              "ret": "Unit",
-              "access": "Public",
-              "entry_point_type": "Contract"
-            }
-          },
-          {
-            "V1CasperVm": {
-              "name": "get_payment_purse",
-              "args": [],
-              "ret": "URef",
-              "access": "Public",
-              "entry_point_type": "Contract"
-            }
-          },
-          {
-            "V1CasperVm": {
-              "name": "get_refund_purse",
-              "args": [],
-              "ret": {
-                "Option": "URef"
+            "name": "finalize_payment",
+            "args": [
+              {
+                "name": "amount",
+                "cl_type": "U512"
               },
-              "access": "Public",
-              "entry_point_type": "Contract"
-            }
+              {
+                "name": "account",
+                "cl_type": {
+                  "ByteArray": 32
+                }
+              }
+            ],
+            "ret": "Unit",
+            "access": "Public",
+            "entry_point_type": "Contract"
           },
           {
-            "V1CasperVm": {
-              "name": "set_refund_purse",
-              "args": [
-                {
-                  "name": "purse",
-                  "cl_type": "URef"
-                }
-              ],
-              "ret": "Unit",
-              "access": "Public",
-              "entry_point_type": "Contract"
-            }
+            "name": "get_payment_purse",
+            "args": [],
+            "ret": "URef",
+            "access": "Public",
+            "entry_point_type": "Contract"
+          },
+          {
+            "name": "get_refund_purse",
+            "args": [],
+            "ret": {
+              "Option": "URef"
+            },
+            "access": "Public",
+            "entry_point_type": "Contract"
+          },
+          {
+            "name": "set_refund_purse",
+            "args": [
+              {
+                "name": "purse",
+                "cl_type": "URef"
+              }
+            ],
+            "ret": "Unit",
+            "access": "Public",
+            "entry_point_type": "Contract"
           }
         ],
         "protocol_version": "1.0.0"

@@ -41,6 +41,7 @@ public class Contract {
     @JsonProperty("entry_points")
     private List<EntryPoint> entryPoints;
 
+
     /**
      * named_keys(Array) - A list of named keys.
      */
