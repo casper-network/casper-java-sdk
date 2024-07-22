@@ -421,8 +421,7 @@ class EventServiceIntegrationTest {
             if (count[0] == 0) {
                 assertThat(data, instanceOf(TransactionAccepted.class));
                 final TransactionAccepted transactionAccepted = (TransactionAccepted) data;
-                assertThat(transactionAccepted.getTransaction(), is(instanceOf(Deploy.class)));
-                final Deploy deploy = (Deploy) transactionAccepted.getTransaction();
+                final Deploy deploy =  transactionAccepted.getTransaction().get();
                 assertThat(deploy.getHash(), is(new Digest("37c80db9d769cb23ab482f44c2e8d8a73d9e24a1801e81d423953b8ba04b275d")));
                 try {
                     assertThat(deploy.getHeader().getAccount(), is(PublicKey.fromTaggedHexString("01197debef24d5abef5251c35925d79b21fada5bca6b0afd212216b5c63c22be6f")));

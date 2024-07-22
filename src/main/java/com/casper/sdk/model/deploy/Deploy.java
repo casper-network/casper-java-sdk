@@ -28,19 +28,13 @@ import java.util.List;
 @NoArgsConstructor
 public class Deploy extends AbstractTransaction implements CasperSerializableObject {
 
-    /**
-     * @see DeployHeader
-     */
+    /** @see DeployHeader */
     private DeployHeader header;
 
-    /**
-     * @see ExecutableDeployItem
-     */
+    /** @see ExecutableDeployItem */
     private ExecutableDeployItem payment;
 
-    /**
-     * @see ExecutableDeployItem
-     */
+    /** @see ExecutableDeployItem */
     private ExecutableDeployItem session;
 
     @Builder
