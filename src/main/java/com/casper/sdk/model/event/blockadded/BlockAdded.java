@@ -30,4 +30,9 @@ public class BlockAdded implements EventData {
 
     @JsonProperty("next_era_gas_price")
     private int nextEraGasPrice;
+
+    public <T extends Block<?,?>> T getBlock() {
+        //noinspection unchecked
+        return (T) block;
+    }
 }
