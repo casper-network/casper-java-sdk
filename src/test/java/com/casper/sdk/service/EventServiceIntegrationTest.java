@@ -309,13 +309,14 @@ class EventServiceIntegrationTest {
         int[] count = {0};
 
         //noinspection unused
-        try (AutoCloseable closeable = eventService.consumeEvents(EventTarget.RAW, 0L, (Consumer<Event<EventData>>) event -> {
+        try (AutoCloseable closeable = eventService.consumeEvents(EventTarget.RAW, 0L, (Consumer<Event<String>>) event -> {
 
             if (count[0] == 0) {
                 assertThat(event.getData(), is("{\"ApiVersion\":\"2.0.0\"}"));
                 assertThat(event.getId().isPresent(), is(false));
             } else if (count[0] == 1) {
-                assertThat("" + event.getData(), containsString("\"block\":{\"Version2\""));
+                assertThat(event.getData(), containsString("\"block\":{\"Version2\""));
+                assertThat(event.getId().isPresent(), is(true));
             }
 
             count[0]++;
