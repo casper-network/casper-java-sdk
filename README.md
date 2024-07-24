@@ -3,8 +3,10 @@
 [![Project license](https://img.shields.io/badge/license-Apache%202-blue)](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
 # Casper Java SDK
- 
-This project implements the SDK to interact with a Casper Node. It wraps the Json-RPC requests and maps the results to Java objects. 
+
+This project implements the Java SDK that allows developers to interact with a Casper Node. It wraps the Json-RPC requests and maps the results to Java objects. 
+
+This version is compatable with Casper Node 2.0 (Condor)
 
 ## Dependencies
 - Java 8 
@@ -12,7 +14,9 @@ This project implements the SDK to interact with a Casper Node. It wraps the Jso
 - [crypto-keys](https://github.com/crypto-keys)
 
 ## Build instructions
-```
+```bash
+git clone https://github.com/casper-network/casper-java-sdk.git
+cd casper-java-sdk
 ./gradlew build
 ```
 
@@ -21,7 +25,7 @@ This project implements the SDK to interact with a Casper Node. It wraps the Jso
 Using gradle:
 
 ```gradle
-implementation 'network.casper:casper-java-sdk:2.4.1'
+implementation 'network.casper:casper-java-sdk:2.7.0-BETA.2'
 ```
 
 Using maven:
@@ -30,9 +34,87 @@ Using maven:
 <dependency>
     <groupId>network.casper</groupId>
     <artifactId>casper-java-sdk</artifactId>
-    <version>2.4.1</version>
+    <version>2.7.0-BETA.2</version>
 </dependency>
 ```
+
+
+
+## Quick Start
+
+Tools are provided for Casper Node developers to start coding quickly.
+
+[CCTL](https://github.com/casper-network/cctl) is Casper's local node network. This is a bash utility which can be used to test node queries. It can be used in one of three ways:
+
+#### Build Local
+
+This will build the node on the local os. Follow the instructions [here](https://github.com/casper-network/cctl/blob/main/docs/setup.md). And usage [here](https://github.com/casper-network/cctl/blob/main/docs/usage.md)
+
+#### Build Docker Image Locally
+
+This will clone the CCTL repo and build a local docker image. More detail [here](https://github.com/casper-network/cctl/tree/dev/docker)
+
+```bash
+bash
+git clone https://github.com/casper-network/cctl.git -b dev
+cd cctl
+docker compose up -d
+docker exec -t -i cspr-cctl /bin/bash
+cctl-infra-net-status
+```
+
+#### Run Docker Container from Docker Hub
+
+```bash
+docker run --rm -it --name cspr-cctl -d -p 25101:25101 -p 11101:11101 -p 14101:14101 -p 18101:18101 -p 21101:21101 stormeye2000/cspr-cctl:feat-2.0
+docker exec -t -i cspr-cctl /bin/bash
+cctl-infra-net-status
+```
+
+The above CCTL command *cctl-infra-net-status* will produce the following output:
+
+```bash
+cctl@8abc69431a4b:~$ cctl-infra-net-status
+validator-group-1:cctl-node-1            RUNNING   pid 887, uptime 0:04:34
+validator-group-1:cctl-node-1-sidecar    RUNNING   pid 884, uptime 0:04:34
+validator-group-1:cctl-node-2            RUNNING   pid 886, uptime 0:04:34
+validator-group-1:cctl-node-2-sidecar    RUNNING   pid 889, uptime 0:04:34
+validator-group-1:cctl-node-3            RUNNING   pid 885, uptime 0:04:34
+validator-group-1:cctl-node-3-sidecar    RUNNING   pid 888, uptime 0:04:34
+validator-group-2:cctl-node-4            RUNNING   pid 975, uptime 0:04:33
+validator-group-2:cctl-node-4-sidecar    RUNNING   pid 977, uptime 0:04:33
+validator-group-2:cctl-node-5            RUNNING   pid 974, uptime 0:04:33
+validator-group-2:cctl-node-5-sidecar    RUNNING   pid 976, uptime 0:04:33
+```
+
+Type cctl-[tab] to see the full list of commands
+
+#### Assets
+
+CCTL is built with a set of generated user assets, including user and faucet keys. These are located here:
+
+```bash
+docker exec cspr-cctl ls /home/cctl/cctl/assets -lt
+
+drwxr-xr-x  2 cctl cctl 4096 Jul 23 10:57 genesis
+drwxr-xr-x  2 cctl cctl 4096 Jul 23 10:57 faucet
+drwxr-xr-x  2 cctl cctl 4096 Jul 23 10:57 bin
+drwxr-xr-x 12 cctl cctl 4096 Jul 23 10:57 users
+drwxr-xr-x 12 cctl cctl 4096 Jul 23 10:57 sidecars
+drwxr-xr-x 12 cctl cctl 4096 Jul 23 10:57 nodes
+drwxr-xr-x  5 cctl cctl 4096 Jul 23 10:57 daemon
+```
+
+Copy from the image the required assets:
+
+```bash
+docker cp cspr-cctl:/home/cctl/cctl/assets/users/. [your-local-folder]
+docker cp cspr-cctl:/home/cctl/cctl/assets/faucet/ [your-local-folder]
+```
+
+
+
+
 
 ## How to
 
