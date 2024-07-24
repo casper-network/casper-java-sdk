@@ -42,5 +42,6 @@
   "block_sync": {
     "historical": null,
     "forward": null
-  }
+  },
+  "latest_switch_block_hash": "8766b74fd72f66861b68bf78587e082995b64a0c1be5b47a383b2f74af3f9846"
 }

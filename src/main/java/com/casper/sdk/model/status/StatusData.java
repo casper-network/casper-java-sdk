@@ -1,5 +1,7 @@
 package com.casper.sdk.model.status;
 
+import com.casper.sdk.model.common.Digest;
+import com.casper.sdk.model.common.RpcResult;
 import com.casper.sdk.model.key.PublicKey;
 import com.casper.sdk.model.peer.PeerEntry;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -22,13 +24,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class StatusData {
-
-    /**
-     * The RPC API version
-     */
-    @JsonProperty("api_version")
-    private String apiVersion;
+public class StatusData extends RpcResult {
 
     /**
      * The compiled node version
@@ -117,5 +113,6 @@ public class StatusData {
     @JsonProperty("block_sync")
     private BlockSynchronizerStatus blockSynchronizerStatus;
 
-
+    @JsonProperty("latest_switch_block_hash")
+    private Digest lastSwitchBlockHash;
 }
