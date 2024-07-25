@@ -118,13 +118,18 @@ docker cp cspr-cctl:/home/cctl/cctl/assets/faucet/ [your-local-folder]
 
 ## How to
 
-### 1. [Set-up a connection](https://github.com/casper-network/casper-java-sdk/blob/main/src/test/java/com/casper/sdk/service/AbstractJsonRpcTests.java#L23-L39)
+The following methods are running against the above CCTL test node.
+
+#### [Set-up a connection](https://github.com/casper-network/casper-java-sdk/blob/main/src/test/java/com/casper/sdk/service/AbstractJsonRpcTests.java#L23-L39)
 
 ```Java
-casperService = CasperService.usingPeer("127.0.0.1","7777");
+casperService = CasperService.usingPeer("127.0.0.1","11101");
 ```
 
-### 2. Query a block
+## Informational
+
+### Query a block
+
 Retrieve block info by a block identifier
 
 #### [Last block](https://github.com/casper-network/casper-java-sdk/blob/main/src/test/java/com/casper/sdk/service/CasperServiceTests.java#L119)
@@ -140,7 +145,7 @@ JsonBlockData result = casperService.getBlock(new HeightBlockIdentifier(1234));
 JsonBlockData blockData = casperService.getBlock(new HashBlockIdentifier("--hash--"));
 ```
 
-### 3. Query transfers
+### Query transfers
 Retrieve block transfers by a block identifier
 
 #### [Last block](https://github.com/casper-network/casper-java-sdk/blob/main/src/test/java/com/casper/sdk/service/CasperServiceTests.java#L148)
@@ -156,7 +161,24 @@ TransferData transferData = casperService.getBlockTransfers(new HeightBlockIdent
 TransferData transferData = casperService.getBlockTransfers(new HashBlockIdentifier("--hash--"));
 ```
 
-### 3. Query state root hash
+### Query era
+
+Returns an Era Info from the network
+
+#### [By block hash](https://github.com/casper-network/casper-java-sdk/blob/35cabe4e4e5eb689c1c500b3c1dc521acf5ee517/src/test/java/com/casper/sdk/service/CasperServiceTestsNctl.java#L63)
+
+```java
+EraInfoData eraInfoData = casperService.getEraSummary(new HashBlockIdentifier("--hash--"));
+```
+
+#### [By block height](https://github.com/casper-network/casper-java-sdk/blob/35cabe4e4e5eb689c1c500b3c1dc521acf5ee517/src/test/java/com/casper/sdk/service/CasperServiceTestsNctl.java#L73)
+
+```java
+EraInfoData eraInfoData = casperServiceNctl.getEraSummary(new HeightBlockIdentifier(1234));
+```
+
+### Query state root hash
+
 Retrieve the state root hash given the BlockIdentifier
 #### [Last block](https://github.com/casper-network/casper-java-sdk/blob/main/src/test/java/com/casper/sdk/service/CasperServiceTests.java#L186)
 ```Java
@@ -171,13 +193,107 @@ StateRootHashData stateRootData = casperService.getStateRootHash(new HeightBlock
 StateRootHashData stateRootData = casperService.getStateRootHash(new HashBlockIdentifier("--hash--"));
 ```
 
-### 4. [Query deploy](https://github.com/casper-network/casper-java-sdk/blob/main/src/test/java/com/casper/sdk/service/CasperServiceTests.java#L225-L226)
-Get a Deploy from the network
-```Java
-DeployData deployData = casperService.getDeploy("--hash--");
+#### [Get Chain Spec](https://github.com/casper-network/casper-java-sdk/blob/35cabe4e4e5eb689c1c500b3c1dc521acf5ee517/src/test/java/com/casper/sdk/service/CasperServiceTestsNctl.java#L102)
+
+```
+ChainspecData chainspec = casperService.getChainspec();
 ```
 
+#### [Get Reward](https://github.com/casper-network/casper-java-sdk/blob/b8b86f392ad22484303968740459577a98dc0c3a/src/test/java/com/casper/sdk/service/CasperServiceTests.java#L888)
+
+This method returns the reward for a given era and a validator or delegator.
+
+##### By validator, era identifier and delegator
+
+```java
+GetRewardResult rewardInfo = casperService.getReward(BlockEraIdentifier.builder().blockIdentifier(HashBlockIdentifier.builder().hash("--hash--").build()).build(), PublicKey.fromTaggedHexString("--hash--"), PublicKey.fromTaggedHexString("--hash--"));
+
+```
+
+##### By validator [todo]
+
+##### By validator and era [todo]
+
+##### By validator and delegator [todo]
+
+### [Query transaction](https://github.com/casper-network/casper-java-sdk/blob/b8b86f392ad22484303968740459577a98dc0c3a/src/test/java/com/casper/sdk/service/CasperServiceTests.java#L616)
+
+Get a transaction from the network
+```Java
+GetTransactionResult transactionResult = casperService.getTransaction(new TransactionHashDeploy("--hash--"));
+```
+
+#### [Query balance](https://github.com/casper-network/casper-java-sdk/blob/35cabe4e4e5eb689c1c500b3c1dc521acf5ee517/src/test/java/com/casper/sdk/service/CasperServiceTestsNctl.java#L96)
+
+This method allows you to query for the balance of a purse using a `PurseIdentifier` and optional `StateIdentifier`
+
+##### By PurseIdentifier and StateIdentifier
+
+```java
+QueryBalanceData balanceData = casperService.queryBalance(new StateRootHashIdentifier("--hash--"), new PurseUref(URef.fromString("--purse uref--")))
+
+```
+
+##### By PurseIdentifier [todo]
+
+#### [Query balance details](https://github.com/casper-network/casper-java-sdk/blob/b8b86f392ad22484303968740459577a98dc0c3a/src/test/java/com/casper/sdk/service/CasperServiceTests.java#L678)
+
+This method allows you to query for full balance information using a `PurseIdentifier` and optional `StateIdentifier`.
+
+##### By PurseIdentifier and StateIdentifier
+
+```java
+QueryBalanceDetailsResult result = casperServiceMock.queryBalanceDetails(new PurseUref(URef.fromString("--purse uref--")), new StateRootHashIdentifier("--hash--"));	
+```
+
+##### By PurseIdentifier [todo]
+
+#### [Query Global State](https://github.com/casper-network/casper-java-sdk/blob/35cabe4e4e5eb689c1c500b3c1dc521acf5ee517/src/test/java/com/casper/sdk/service/CasperServiceTests.java#L460)
+
+This method allows for you to query for a value stored under certain keys in global state. You may query using either a [Block hash](https://github.com/casper-network/docs/blob/feat-2.0_docs/source/docs/casper/concepts/design/casper-design.md#block_hash) or state root hash.
+
+##### By Block Identifiier and Key
+
+```java
+GlobalStateData globalState = casperService.queryGlobalState(new BlockHashIdentifier("--hash--", '--deploy-hash--', new String[0]);
+```
+
+##### By Block Identifiier and Path [todo]
+
+##### By Key [todo]
+
+### Get account info
+
+Returns an Account from the network
+
+##### [By block height](https://github.com/casper-network/casper-java-sdk/blob/main/src/test/java/com/casper/sdk/service/CasperServiceTests.java#L280-L282)
+
+```Java
+AccountData account = casperService.getStateAccountInfo("--publicKey--", new HeightBlockIdentifier(1234));
+```
+
+##### [By block hash](https://github.com/casper-network/casper-java-sdk/blob/main/src/test/java/com/casper/sdk/service/CasperServiceTests.java#L268-L270)
+
+```Java
+AccountData account = casperService.getStateAccountInfo("--publicKey--", new HashBlockIdentifier("--hash--"));
+```
+
+### 
+
+
+
+
+
+
+
+
+
+
+
+### 
+
 ### 5. [Query peers](https://github.com/casper-network/casper-java-sdk/blob/main/src/test/java/com/casper/sdk/service/CasperServiceTests.java#L111)
+
 Get network peers data
 ```Java
 PeerData peerData = casperService.getPeerData();
@@ -193,17 +309,6 @@ StoredValueData result = casperService.getStateItem("--stateRootHash--", "key", 
 Return the current status of the node
 ```Java
 StatusData status = casperService.getStatus()
-```
-
-### 8. Get account info
-Returns an Account from the network
-#### [By block height](https://github.com/casper-network/casper-java-sdk/blob/main/src/test/java/com/casper/sdk/service/CasperServiceTests.java#L280-L282)
-```Java
-AccountData account = casperService.getStateAccountInfo("--publicKey--", new HeightBlockIdentifier(1234));
-```
-#### [By block hash](https://github.com/casper-network/casper-java-sdk/blob/main/src/test/java/com/casper/sdk/service/CasperServiceTests.java#L268-L270)
-```Java
-AccountData account = casperService.getStateAccountInfo("--publicKey--", new HashBlockIdentifier("--hash--"));
 ```
 
 ### 9. Get auction info
