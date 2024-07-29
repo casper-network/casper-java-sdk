@@ -3,6 +3,7 @@ package com.casper.sdk.model.bid;
 import java.math.BigInteger;
 import java.util.List;
 
+import com.casper.sdk.model.key.PublicKey;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
@@ -28,6 +29,9 @@ import lombok.Setter;
 @NoArgsConstructor
 public class JsonBid {
 
+    @JsonProperty("validator_public_key")
+    private PublicKey validatorPublicKey;
+
     /**
      * The purse that was used for bonding.
      */
@@ -40,12 +44,15 @@ public class JsonBid {
     @JsonProperty("delegation_rate")
     private int delegationRate;
 
+    @JsonProperty("vesting_schedule")
+    private VestingSchedule vestingSchedule;
+
     /**
      * The delegators
      * 
      * @see JsonDelegator
      */
-    private List<JsonDelegator> delegators;
+    private List<DelegatorEntry> delegators;
 
     /**
      * Is this an inactive validator?
