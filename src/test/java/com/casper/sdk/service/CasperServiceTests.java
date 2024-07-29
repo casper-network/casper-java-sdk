@@ -387,7 +387,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
 
         mockNode.withRcpResponseDispatcher()
                 .withMethod("state_get_account_info")
-                .withBody("$.params.account_identifier", "0202f6a9be4f3a65371bb229f34c56de42667ffcfe43defffdc959db256f0ad99c1a")
+                .withBody("$.params.public_key", "0202f6a9be4f3a65371bb229f34c56de42667ffcfe43defffdc959db256f0ad99c1a")
                 .withBody("$.params.block_identifier.Hash", "8a029e8920e3d1644eba29fa080c92e90ee0033bd1179da04288ad56c372a121")
                 .thenDispatch(getClass().getResource("/status-samples/state_get_account_info.json"));
 
