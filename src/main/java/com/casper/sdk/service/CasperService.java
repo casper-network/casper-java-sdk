@@ -7,6 +7,7 @@ import com.casper.sdk.identifier.entity.EntityIdentifier;
 import com.casper.sdk.identifier.era.EraIdentifier;
 import com.casper.sdk.identifier.global.GlobalStateIdentifier;
 import com.casper.sdk.identifier.purse.PurseIdentifier;
+import com.casper.sdk.model.account.AccountData;
 import com.casper.sdk.model.auction.AuctionData;
 import com.casper.sdk.model.balance.GetBalanceData;
 import com.casper.sdk.model.balance.QueryBalanceData;
@@ -374,5 +375,17 @@ public interface CasperService {
     @Deprecated
     @JsonRpcMethod(value = "account_put_deploy", paramsPassMode = JsonRpcParamsPassMode.ARRAY)
     DeployResult putDeploy(Deploy deploy);
+
+    /**
+     * Returns an Account from the network
+     *
+     * @param accountIdentifier the account's public key or account hash
+     * @param blockIdentifier   BlockIdentifier data
+     * @return Object holding the api version, the account data and the merkle proof
+     */
+    @Deprecated
+    @JsonRpcMethod("state_get_account_info")
+    AccountData getStateAccountInfo(@JsonRpcParam("account_identifier") String accountIdentifier,
+                                    @JsonRpcParam("block_identifier") BlockIdentifier blockIdentifier);
     //endregion
 }

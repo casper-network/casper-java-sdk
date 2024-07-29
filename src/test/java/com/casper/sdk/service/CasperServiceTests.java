@@ -5,15 +5,15 @@ import com.casper.sdk.exception.DynamicInstanceException;
 import com.casper.sdk.helper.TransactionHelper;
 import com.casper.sdk.identifier.block.HashBlockIdentifier;
 import com.casper.sdk.identifier.block.HeightBlockIdentifier;
-import com.casper.sdk.identifier.entity.AccountHashEntityIdentifier;
 import com.casper.sdk.identifier.entity.EntityAddrIdentifier;
-import com.casper.sdk.identifier.entity.PublicKeyEntityIdentifier;
 import com.casper.sdk.identifier.era.BlockEraIdentifier;
 import com.casper.sdk.identifier.global.BlockHashIdentifier;
 import com.casper.sdk.identifier.global.GlobalStateIdentifier;
 import com.casper.sdk.identifier.global.StateRootHashIdentifier;
 import com.casper.sdk.identifier.purse.PurseUref;
 import com.casper.sdk.model.account.AccountData;
+import com.casper.sdk.model.account.AccountHashIdentifier;
+import com.casper.sdk.model.account.PublicKeyIdentifier;
 import com.casper.sdk.model.auction.AuctionData;
 import com.casper.sdk.model.balance.GetBalanceData;
 import com.casper.sdk.model.balance.QueryBalanceDetailsResult;
@@ -696,7 +696,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
 
         mockNode.withRcpResponseDispatcher().withMethod("state_get_entity").withBody("$.params.entity_identifier.PublicKey", "0138329930033bca4773a6623574ad7870ee39c554f153f15609e200e50049a7de").thenDispatch(getClass().getResource("/entity/getstateentity-account-result.json"));
 
-        final StateEntityResult stateEntityResult = casperServiceMock.getStateEntity(new PublicKeyEntityIdentifier(PublicKey.fromTaggedHexString("0138329930033bca4773a6623574ad7870ee39c554f153f15609e200e50049a7de")), null);
+        final StateEntityResult stateEntityResult = casperServiceMock.getStateEntity(new PublicKeyIdentifier(PublicKey.fromTaggedHexString("0138329930033bca4773a6623574ad7870ee39c554f153f15609e200e50049a7de")), null);
 
         assertThat(stateEntityResult.getApiVersion(), is("2.0.0"));
 
@@ -839,7 +839,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
 
         mockNode.withRcpResponseDispatcher().withMethod("state_get_entity").withBody("$.params.entity_identifier.AccountHash", "account-hash-f1075fce3b8cd4eab748b8705ca02444a5e35c0248662649013d8a5cb2b1a87c").thenDispatch(getClass().getResource("/entity/getstateentity-legacy-account-result.json"));
 
-        final StateEntityResult stateEntityResult = casperServiceMock.getStateEntity(new AccountHashEntityIdentifier("account-hash-f1075fce3b8cd4eab748b8705ca02444a5e35c0248662649013d8a5cb2b1a87c"), null);
+        final StateEntityResult stateEntityResult = casperServiceMock.getStateEntity(new AccountHashIdentifier("account-hash-f1075fce3b8cd4eab748b8705ca02444a5e35c0248662649013d8a5cb2b1a87c"), null);
 
         assertThat(stateEntityResult.getApiVersion(), is("2.0.0"));
 
@@ -859,7 +859,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
 
         mockNode.withRcpResponseDispatcher().withMethod("state_get_entity").withBody("$.params.entity_identifier.AccountHash", "account-hash-f1075fce3b8cd4eab748b8705ca02444a5e35c0248662649013d8a5cb2b1a87c").withBody("$.params.block_identifier.Hash", "b0b28b6e89522a2c9476d477208f603cb9911dae77dad61da66346d56764ee8b").thenDispatch(getClass().getResource("/entity/getstateentity-account-result.json"));
 
-        final StateEntityResult stateEntityResult = casperServiceMock.getStateEntity(new AccountHashEntityIdentifier("account-hash-f1075fce3b8cd4eab748b8705ca02444a5e35c0248662649013d8a5cb2b1a87c"), new HashBlockIdentifier("b0b28b6e89522a2c9476d477208f603cb9911dae77dad61da66346d56764ee8b") {
+        final StateEntityResult stateEntityResult = casperServiceMock.getStateEntity(new AccountHashIdentifier("account-hash-f1075fce3b8cd4eab748b8705ca02444a5e35c0248662649013d8a5cb2b1a87c"), new HashBlockIdentifier("b0b28b6e89522a2c9476d477208f603cb9911dae77dad61da66346d56764ee8b") {
         });
 
         assertThat(stateEntityResult.getApiVersion(), is("2.0.0"));
