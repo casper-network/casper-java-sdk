@@ -20,6 +20,7 @@ import com.casper.sdk.model.uref.URef;
 import com.syntifi.crypto.key.AbstractPublicKey;
 import com.syntifi.crypto.key.Ed25519PrivateKey;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -34,12 +35,12 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
 
 /**
- * Integration tests for the Transactions against a node
+ * Integration tests for the Transactions against a cctl node
  *
  * @author ian@meywood.com
  */
+@Disabled
 public class TransactionTests {
-
 
     @Test
     void chainPutTransactionNativeTransfer() throws IOException, ValueSerializationException {
@@ -98,5 +99,6 @@ public class TransactionTests {
         final PutTransactionResult result = casperService.putTransaction(transaction);
 
         assertThat(result, is(notNullValue()));
+        assertThat(result.getTransactionHash(), is(transaction.get().getHash()));
     }
 }

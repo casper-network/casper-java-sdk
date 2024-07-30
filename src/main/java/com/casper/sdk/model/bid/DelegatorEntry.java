@@ -20,7 +20,5 @@ public class DelegatorEntry {
 
     @JsonProperty("delegator_public_key")
     private PublicKey delegatorPublicKey;
-
     private JsonDelegator delegator;
-
 }
