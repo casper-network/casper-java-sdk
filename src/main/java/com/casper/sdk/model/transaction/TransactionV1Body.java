@@ -32,7 +32,7 @@ public class TransactionV1Body implements CasperSerializableObject {
     private TransactionEntryPoint entryPoint;
     @JsonProperty("transaction_category")
     private TransactionCategory transactionCategory;
-    private TransactionScheduling scheduling;
+    private TransactionScheduling    scheduling;
 
     @Override
     public void serialize(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {

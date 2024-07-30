@@ -42,6 +42,7 @@ public class CLValueI64 extends AbstractCLValue<Long, CLTypeI64> {
 
     public CLValueI64(final Long value) throws ValueSerializationException {
         this.setValue(value);
+        this.setParsed(value);
     }
 
     @Override

@@ -42,6 +42,7 @@ public class CLValuePublicKey extends AbstractCLValue<PublicKey, CLTypePublicKey
 
     public CLValuePublicKey(final PublicKey value) throws ValueSerializationException {
         this.setValue(value);
+        this.setParsed(value.getAlgoTaggedHex());
     }
 
     @Override

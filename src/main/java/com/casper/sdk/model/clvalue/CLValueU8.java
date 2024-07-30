@@ -42,6 +42,7 @@ public class CLValueU8 extends AbstractCLValue<Byte, CLTypeU8> {
 
     public CLValueU8(final Byte value) throws ValueSerializationException {
         this.setValue(value);
+        this.setParsed(value);
     }
 
     @Override

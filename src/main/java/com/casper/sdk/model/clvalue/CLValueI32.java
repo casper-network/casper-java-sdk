@@ -40,6 +40,7 @@ public class CLValueI32 extends AbstractCLValue<Integer, CLTypeI32> {
 
     public CLValueI32(final Integer value) throws ValueSerializationException {
         this.setValue(value);
+        this.setParsed(value);
     }
 
     @Override
