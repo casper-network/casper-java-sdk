@@ -42,6 +42,7 @@ public class CLValueBool extends AbstractCLValue<Boolean, CLTypeBool> {
 
     public CLValueBool(final Boolean value) throws ValueSerializationException {
         this.setValue(value);
+        this.setParsed(value);
     }
 
     @Override

@@ -8,6 +8,7 @@ import com.casper.sdk.model.common.Ttl;
 import com.casper.sdk.model.key.Tag;
 import com.casper.sdk.model.transaction.pricing.PricingMode;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
@@ -45,6 +46,9 @@ public class TransactionV1Header implements CasperSerializableObject, Tag {
     public void serialize(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {
         ser.writeU8(getByteTag());
         ser.writeString(chainName);
+        if (timestamp == null) {
+            timestamp = new Date();
+        }
         ser.writeI64(timestamp.getTime());
         ttl.serialize(ser, target);
         bodyHash.serialize(ser, target);
@@ -52,6 +56,7 @@ public class TransactionV1Header implements CasperSerializableObject, Tag {
         initiatorAddr.serialize(ser, target);
     }
 
+    @JsonIgnore
     @Override
     public byte getByteTag() {
         return 1;

@@ -9,6 +9,7 @@ import com.casper.sdk.model.transaction.entrypoint.TransactionEntryPoint;
 import com.casper.sdk.model.transaction.scheduling.TransactionScheduling;
 import com.casper.sdk.model.transaction.target.TransactionTarget;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
 import lombok.*;
@@ -25,6 +26,7 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
+@JsonPropertyOrder({"args", "target", "entry_point", "transaction_category", "scheduling"})
 public class TransactionV1Body implements CasperSerializableObject {
     private List<NamedArg<?>> args;
     private TransactionTarget target;

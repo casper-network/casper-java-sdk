@@ -42,6 +42,7 @@ public class CLValueU64 extends AbstractCLValue<BigInteger, CLTypeU64> {
 
     public CLValueU64(final BigInteger value) throws ValueSerializationException {
         this.setValue(value);
+        this.setParsed(String.valueOf(value));
     }
 
     @Override
