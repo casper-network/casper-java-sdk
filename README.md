@@ -25,7 +25,7 @@ cd casper-java-sdk
 Using gradle:
 
 ```gradle
-implementation 'network.casper:casper-java-sdk:2.7.0-BETA.2'
+implementation 'network.casper:casper-java-sdk:[latest:version]'
 ```
 
 Using maven:
@@ -34,7 +34,7 @@ Using maven:
 <dependency>
     <groupId>network.casper</groupId>
     <artifactId>casper-java-sdk</artifactId>
-    <version>2.7.0-BETA.2</version>
+    <version>[latest:version]</version>
 </dependency>
 ```
 
@@ -138,11 +138,11 @@ JsonBlockData result = casperService.getBlock();
 ```
 #### [By height](https://github.com/casper-network/casper-java-sdk/blob/main/src/test/java/com/casper/sdk/service/CasperServiceTests.java#L138-L139)
 ```Java
-JsonBlockData result = casperService.getBlock(new HeightBlockIdentifier(1234));
+JsonBlockData result = casperService.getBlock(new HeightBlockIdentifier(3329412));
 ```
 #### [By hash](https://github.com/casper-network/casper-java-sdk/blob/main/src/test/java/com/casper/sdk/service/CasperServiceTests.java#L126-L127)
 ```Java
-JsonBlockData blockData = casperService.getBlock(new HashBlockIdentifier("--hash--"));
+JsonBlockData blockData = casperService.getBlock(new HashBlockIdentifier("f2bcca7fd8f94fad8c61201c72ea1c478a0b43de1688e5c0a487f50efaa7261e"));
 ```
 
 ### Query transfers
@@ -154,11 +154,11 @@ TransferData transferData = casperService.getBlockTransfers();
 ```
 #### [By block height](https://github.com/casper-network/casper-java-sdk/blob/main/src/test/java/com/casper/sdk/service/CasperServiceTests.java#L155)
 ```Java
-TransferData transferData = casperService.getBlockTransfers(new HeightBlockIdentifier(1234));
+TransferData transferData = casperService.getBlockTransfers(new HeightBlockIdentifier(3329355));
 ```
 #### [By block hash](https://github.com/casper-network/casper-java-sdk/blob/main/src/test/java/com/casper/sdk/service/CasperServiceTests.java#L170-L171)
 ```Java
-TransferData transferData = casperService.getBlockTransfers(new HashBlockIdentifier("--hash--"));
+TransferData transferData = casperService.getBlockTransfers(new HashBlockIdentifier("64d67823919ed422fa13c08f8bb4c8920f9efd8151472464af3a1c14dacb2e68"));
 ```
 
 ### Query era
@@ -168,13 +168,13 @@ Returns an Era Info from the network
 #### [By block hash](https://github.com/casper-network/casper-java-sdk/blob/35cabe4e4e5eb689c1c500b3c1dc521acf5ee517/src/test/java/com/casper/sdk/service/CasperServiceTestsNctl.java#L63)
 
 ```java
-EraInfoData eraInfoData = casperService.getEraSummary(new HashBlockIdentifier("--hash--"));
+EraInfoData eraInfoData = casperService.getEraSummary(new HashBlockIdentifier("a6cfabab196b7ceb6f7d5e6f66ae4156b13e46dc9a605c178a669a27c65c1259"));
 ```
 
 #### [By block height](https://github.com/casper-network/casper-java-sdk/blob/35cabe4e4e5eb689c1c500b3c1dc521acf5ee517/src/test/java/com/casper/sdk/service/CasperServiceTestsNctl.java#L73)
 
 ```java
-EraInfoData eraInfoData = casperServiceNctl.getEraSummary(new HeightBlockIdentifier(1234));
+EraInfoData eraInfoData = casperServiceNctl.getEraSummary(new HeightBlockIdentifier(3329276));
 ```
 
 ### Query state root hash
@@ -186,11 +186,11 @@ StateRootHashData stateRootData = casperService.getStateRootHash();
 ```
 #### [By block height](https://github.com/casper-network/casper-java-sdk/blob/main/src/test/java/com/casper/sdk/service/CasperServiceTests.java#L193)
 ```Java
-StateRootHashData stateRootData = casperService.getStateRootHash(new HeightBlockIdentifier(1234));
+StateRootHashData stateRootData = casperService.getStateRootHash(new HeightBlockIdentifier(3329249));
 ```
 #### [By block hash](https://github.com/casper-network/casper-java-sdk/blob/main/src/test/java/com/casper/sdk/service/CasperServiceTests.java#L201-L202)
 ```Java
-StateRootHashData stateRootData = casperService.getStateRootHash(new HashBlockIdentifier("--hash--"));
+StateRootHashData stateRootData = casperService.getStateRootHash(new HashBlockIdentifier("2830d6bcb58ad48e145560df430ca981ef8b29606d9297ccd9e59f67aebadbc4"));
 ```
 
 #### [Get Chain Spec](https://github.com/casper-network/casper-java-sdk/blob/35cabe4e4e5eb689c1c500b3c1dc521acf5ee517/src/test/java/com/casper/sdk/service/CasperServiceTestsNctl.java#L102)
