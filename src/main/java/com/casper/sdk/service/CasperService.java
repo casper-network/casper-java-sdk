@@ -187,17 +187,6 @@ public interface CasperService {
                                                   @JsonRpcParam("state_identifier") GlobalStateIdentifier stateIdentifier);
 
     /**
-     * Returns an Account from the network
-     *
-     * @param publicKey       the account's public key
-     * @param blockIdentifier BlockIdentifier data
-     * @return Object holding the api version, the account data and the merkle proof
-     */
-    @JsonRpcMethod("state_get_account_info")
-    AccountData getStateAccountInfo(@JsonRpcParam("public_key") String publicKey,
-                                    @JsonRpcParam("block_identifier") BlockIdentifier blockIdentifier);
-
-    /**
      * Fetches balance value
      *
      * @param stateRootHash the hash of state root
@@ -386,5 +375,17 @@ public interface CasperService {
     @Deprecated
     @JsonRpcMethod(value = "account_put_deploy", paramsPassMode = JsonRpcParamsPassMode.ARRAY)
     DeployResult putDeploy(Deploy deploy);
+
+    /**
+     * Returns an Account from the network
+     *
+     * @param accountIdentifier the account's public key or account hash
+     * @param blockIdentifier   BlockIdentifier data
+     * @return Object holding the api version, the account data and the merkle proof
+     */
+    @Deprecated
+    @JsonRpcMethod("state_get_account_info")
+    AccountData getStateAccountInfo(@JsonRpcParam("account_identifier") String accountIdentifier,
+                                    @JsonRpcParam("block_identifier") BlockIdentifier blockIdentifier);
     //endregion
 }

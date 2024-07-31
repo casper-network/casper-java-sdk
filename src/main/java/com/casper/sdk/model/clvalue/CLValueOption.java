@@ -51,6 +51,7 @@ public class CLValueOption extends AbstractCLValueWithChildren<Optional<Abstract
     public CLValueOption(final Optional<AbstractCLValue<?, ?>> value) throws ValueSerializationException {
         setChildTypes(value);
         this.setValue(value);
+        this.setParsed(value.map(AbstractCLValue::getParsed).orElse(null));
     }
 
     @Override

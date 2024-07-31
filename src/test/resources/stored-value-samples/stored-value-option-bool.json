@@ -5,7 +5,8 @@
       "cl_type" : {
         "Option" : "Bool"
       },
-      "bytes" : "0101"
+      "bytes" : "0101",
+      "parsed" : true
     }
   },
   "merkle_proof" : "-- erased --"

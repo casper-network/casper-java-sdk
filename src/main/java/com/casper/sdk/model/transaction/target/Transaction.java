@@ -28,12 +28,9 @@ public class Transaction {
     @JsonProperty("Version1")
     private TransactionV1 version1;
 
-    public Transaction(final TransactionV1 transactionV1) {
-        this.version1 = transactionV1;
-    }
-
-    public Transaction(final Deploy deploy) {
-        this.deploy = deploy;
+    public Transaction(final AbstractTransaction transaction) {
+        this.deploy = transaction instanceof Deploy ? (Deploy) transaction : null;
+        this.version1 = transaction instanceof TransactionV1 ? (TransactionV1) transaction : null;
     }
 
     @JsonIgnore

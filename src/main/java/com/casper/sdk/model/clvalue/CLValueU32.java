@@ -42,6 +42,7 @@ public class CLValueU32 extends AbstractCLValue<Long, CLTypeU32> {
 
     public CLValueU32(final Long value) throws ValueSerializationException {
         this.setValue(value);
+        this.setParsed(value);
     }
 
     @Override

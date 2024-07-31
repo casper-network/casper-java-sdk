@@ -7,6 +7,7 @@ import com.casper.sdk.model.clvalue.serde.Target;
 import com.casper.sdk.model.common.Digest;
 import com.casper.sdk.model.deploy.Approval;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
 import lombok.*;
@@ -23,6 +24,7 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
+@JsonPropertyOrder({"hash", "header", "body", "approvals"})
 public class TransactionV1 extends AbstractTransaction implements CasperSerializableObject {
 
     @JsonProperty("header")

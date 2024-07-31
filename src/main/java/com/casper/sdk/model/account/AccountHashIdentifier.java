@@ -1,4 +1,4 @@
-package com.casper.sdk.identifier.entity;
+package com.casper.sdk.model.account;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
@@ -12,7 +12,7 @@ import lombok.*;
 @Setter
 @Builder
 @AllArgsConstructor
-public class AccountHashEntityIdentifier implements EntityIdentifier {
+public class AccountHashIdentifier implements AccountIdentifier {
 
     /** Account hash */
     @JsonProperty("AccountHash")

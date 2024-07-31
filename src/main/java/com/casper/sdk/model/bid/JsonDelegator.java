@@ -36,13 +36,17 @@ public class JsonDelegator {
     /**
      * @see PublicKey
      */
-    private PublicKey delegatee;
+    @JsonProperty("validator_public_key")
+    private PublicKey validatorPublicKey;
 
     /**
      * @see PublicKey
      */
-    @JsonProperty("public_key")
-    private PublicKey publicKey;
+    @JsonProperty("delegator_public_key")
+    private PublicKey delegatorPublicKey;
+
+    @JsonProperty("vesting_schedule")
+    private VestingSchedule vestingSchedule;
 
     /**
      * amount

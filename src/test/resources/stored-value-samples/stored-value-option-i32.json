@@ -5,7 +5,8 @@
       "cl_type" : {
         "Option" : "I32"
       },
-      "bytes" : "010a000000"
+      "bytes" : "010a000000",
+        "parsed" : 10
     }
   },
   "merkle_proof" : "-- erased --"

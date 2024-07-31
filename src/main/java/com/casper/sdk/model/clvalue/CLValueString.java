@@ -42,6 +42,7 @@ public class CLValueString extends AbstractCLValue<String, CLTypeString> {
 
     public CLValueString(final String value) throws ValueSerializationException {
         this.setValue(value);
+        this.setParsed(value);
     }
 
     @Override

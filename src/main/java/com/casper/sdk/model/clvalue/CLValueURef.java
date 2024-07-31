@@ -37,6 +37,7 @@ public class CLValueURef extends AbstractCLValue<URef, CLTypeURef> {
 
     public CLValueURef(final URef value) throws ValueSerializationException {
         this.setValue(value);
+        this.setParsed(value.getJsonURef());
     }
 
     @JsonGetter("cl_type")

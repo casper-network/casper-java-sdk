@@ -32,6 +32,7 @@ import lombok.*;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NONE)
 @JsonTypeResolver(CLValueResolver.class)
 @EqualsAndHashCode(of = {"bytes", "value"})
+@JsonPropertyOrder({"cl_type", "bytes", "parsed"})
 public abstract class AbstractCLValue<T, P extends AbstractCLType>
         implements CasperSerializableObject, CasperDeserializableObject {
 
@@ -46,6 +47,7 @@ public abstract class AbstractCLValue<T, P extends AbstractCLType>
     @JsonIgnore
     private T value;
 
+    @SuppressWarnings("LombokGetterMayBeUsed")
     public T getValue() {
         return this.value;
     }
