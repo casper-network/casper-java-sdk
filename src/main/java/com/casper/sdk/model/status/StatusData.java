@@ -117,5 +117,8 @@ public class StatusData {
     @JsonProperty("block_sync")
     private BlockSynchronizerStatus blockSynchronizerStatus;
 
+    @JsonProperty("latest_switch_block_hash")
+    private String latestSwitchBlockHash;
+
 
 }

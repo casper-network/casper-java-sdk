@@ -206,7 +206,7 @@ This method returns the reward for a given era and a validator or delegator.
 ##### By validator, era identifier and delegator
 
 ```java
-GetRewardResult rewardInfo = casperService.getReward(BlockEraIdentifier.builder().blockIdentifier(HashBlockIdentifier.builder().hash("--hash--").build()).build(), PublicKey.fromTaggedHexString("--hash--"), PublicKey.fromTaggedHexString("--hash--"));
+GetRewardResult rewardInfo = casperService.getReward(BlockEraIdentifier.builder().blockIdentifier(HashBlockIdentifier.builder().hash("79ca34174812ea172449ec3222afea0309e1feafd29356533c14520442b3bc17").build()).build(), PublicKey.fromTaggedHexString("0140a48b549ae33cf28e39241a33dd5e22f491d8811f9d83981f3549d418e06da0"), PublicKey.fromTaggedHexString("016470ae57b0a3ad5a679d2e0422909bfb9ded445e20cbe6b4c9806f844c94d401"));
 
 ```
 
