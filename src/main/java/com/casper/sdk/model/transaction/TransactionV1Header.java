@@ -44,7 +44,6 @@ public class TransactionV1Header implements CasperSerializableObject, Tag {
 
     @Override
     public void serialize(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {
-        ser.writeU8(getByteTag());
         ser.writeString(chainName);
         if (timestamp == null) {
             timestamp = new Date();
