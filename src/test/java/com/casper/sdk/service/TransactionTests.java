@@ -73,12 +73,11 @@ public class TransactionTests {
                 .initiatorAddr(new InitiatorPublicKey(faucetPublicKey))
                 .build();
 
-
         final List<NamedArg<?>> args = Arrays.asList(
                 new NamedArg<>("source", new CLValueOption(Optional.of(new CLValueURef(faucetPurse)))),
                 new NamedArg<>("target", new CLValueURef(userOnePurse)),
                 new NamedArg<>("amount", new CLValueU512(new BigInteger("2500000000"))),
-                new NamedArg<>("id", new CLValueU64(BigInteger.valueOf(System.currentTimeMillis())))
+                new NamedArg<>("id", new CLValueOption(Optional.of(new CLValueU64(BigInteger.valueOf(System.currentTimeMillis())))))
         );
 
         final TransactionV1Body body = TransactionV1Body.builder()
