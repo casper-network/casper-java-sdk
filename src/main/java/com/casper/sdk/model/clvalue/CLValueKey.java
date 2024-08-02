@@ -8,7 +8,6 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import dev.oak3.sbs4j.DeserializerBuffer;
 import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
-import dev.oak3.sbs4j.util.ByteUtils;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -54,7 +53,7 @@ public class CLValueKey extends AbstractCLValue<Key, CLTypeKey> {
 
     @Override
     public void deserializeCustom(final DeserializerBuffer deser) throws Exception {
-        this.setValue(Key.fromTaggedHexString(ByteUtils.encodeHexString(deser.readByteArray(33))));
+        this.setValue(Key.deserialize(deser));
     }
 
     @Override

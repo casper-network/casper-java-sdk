@@ -1,6 +1,9 @@
 package com.casper.sdk.model.transaction;
 
 import com.casper.sdk.exception.NoSuchTypeException;
+import com.casper.sdk.model.clvalue.AbstractCLValue;
+import com.casper.sdk.model.clvalue.CLValueOption;
+import com.casper.sdk.model.clvalue.CLValueU64;
 import com.casper.sdk.model.clvalue.serde.CasperSerializableObject;
 import com.casper.sdk.model.clvalue.serde.Target;
 import com.casper.sdk.model.common.Digest;
@@ -48,14 +51,29 @@ public class TransactionV1Body implements CasperSerializableObject {
 
     void serializeNamedArgs(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {
         ser.writeI32(getArgs().size());
+
         for (NamedArg<?> namedArg : getArgs()) {
+            if ("id".equals(namedArg.getType())) {
+                validateId(namedArg.getClValue());
+            }
             namedArg.serialize(ser, target);
         }
     }
 
     public Digest buildHash() throws NoSuchTypeException, ValueSerializationException {
-        SerializerBuffer serializerBuffer = new SerializerBuffer();
+        final SerializerBuffer serializerBuffer = new SerializerBuffer();
         this.serialize(serializerBuffer, Target.BYTE);
         return Digest.blake2bDigestFromBytes(serializerBuffer.toByteArray());
+    }
+
+    private static void validateId(final AbstractCLValue<?,?> idNamedArgValue) {
+        if (!(idNamedArgValue instanceof CLValueOption)) {
+            throw new IllegalArgumentException("NamedArg type 'id' must be of type CLValueOption");
+        } else {
+            final CLValueOption id = (CLValueOption) idNamedArgValue;
+            if (id.getValue().isPresent() && !(id.getValue().get() instanceof CLValueU64)) {
+                throw new IllegalArgumentException("NamedArg type 'id' must be of type CLValueOption(CLValueU64)");
+            }
+        }
     }
 }
