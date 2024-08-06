@@ -35,7 +35,6 @@ public class EntryPointKey extends Key {
         this.entryPointAddr = EntryPointAddr.getByTag(deser.readU8());
         this.entityAddr = EntityAddr.getByTag(deser.readU8());
         this.hashAddr = deser.readByteArray(32);
-
         final SerializerBuffer ser = new SerializerBuffer();
         ser.writeU8(entryPointAddr.getByteTag());
         ser.writeU8(entityAddr.getByteTag());

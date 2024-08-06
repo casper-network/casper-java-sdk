@@ -271,7 +271,7 @@ class CLValueKeyTest {
         assertThat(clValueKey.getValue().getTag(), is(KeyTag.ENTRY_POINT));
         assertThat(clValueKey.getValue(), is(instanceOf(EntryPointKey.class)));
         assertThat(clValueKey.getBytes(), is("17000100000000000000000000000000000000000000000000000000000000000000000202020202020202020202020202020202020202020202020202020202020202"));
-        assertThat(clValueKey.getParsed(), is("entry-point-v2-0000000000000000000000000000000000000000000000000000000000000000-0202020202020202020202020202020202020202020202020202020202020202"));
+        assertThat(clValueKey.getParsed(), is("entry-point-v1-0000000000000000000000000000000000000000000000000000000000000000-0202020202020202020202020202020202020202020202020202020202020202"));
         final EntryPointKey key = (EntryPointKey) clValueKey.getValue();
         assertThat(key.getEntryPointAddr(), is(EntryPointAddr.VM_CASPER_V1));
         assertThat(key.getEntityAddr(), is(EntityAddr.ACCOUNT));
@@ -283,18 +283,18 @@ class CLValueKeyTest {
     void clValueKeyEntryPointV2AccountKey() throws JsonProcessingException {
         final String json = " {\n" +
                 "        \"cl_type\": \"Key\",\n" +
-                "        \"bytes\": \"17000100000000000000000000000000000000000000000000000000000000000000000202020202020202020202020202020202020202020202020202020202020202\",\n" +
-                "        \"parsed\": \"entry-point-v2-0000000000000000000000000000000000000000000000000000000000000000-0202020202020202020202020202020202020202020202020202020202020202\"\n" +
+                "        \"bytes\": \"170101000000000000000000000000000000000000000000000000000000000000000040e20100\",\n" +
+                "        \"parsed\": \"entry-point-v2-0000000000000000000000000000000000000000000000000000000000000000-123456\"\n" +
                 "      }";
         final CLValueKey clValueKey = new ObjectMapper().readValue(json, CLValueKey.class);
         assertThat(clValueKey.getValue().getTag(), is(KeyTag.ENTRY_POINT));
         assertThat(clValueKey.getValue(), is(instanceOf(EntryPointKey.class)));
-        assertThat(clValueKey.getBytes(), is("17000100000000000000000000000000000000000000000000000000000000000000000202020202020202020202020202020202020202020202020202020202020202"));
-        assertThat(clValueKey.getParsed(), is("entry-point-v2-0000000000000000000000000000000000000000000000000000000000000000-0202020202020202020202020202020202020202020202020202020202020202"));
+        assertThat(clValueKey.getBytes(), is("170101000000000000000000000000000000000000000000000000000000000000000040e20100"));
+        assertThat(clValueKey.getParsed(), is("entry-point-v2-0000000000000000000000000000000000000000000000000000000000000000-123456"));
         final EntryPointKey key = (EntryPointKey) clValueKey.getValue();
         assertThat(key.getEntryPointAddr(), is(EntryPointAddr.VM_CASPER_V2));
         assertThat(key.getEntityAddr(), is(EntityAddr.ACCOUNT));
         assertThat(key.getHashAddr(), is(Hex.decode("0000000000000000000000000000000000000000000000000000000000000000")));
-        assertThat(key.getSelector(), is(Hex.decode("0202020202020202020202020202020202020202020202020202020202020202")));
+        assertThat(key.getSelector(), is(123456L));
     }
 }
