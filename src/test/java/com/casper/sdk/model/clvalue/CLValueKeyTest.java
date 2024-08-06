@@ -47,7 +47,7 @@ class CLValueKeyTest {
 
 
     @Test
-    void clValueKeyByteCodeKeyEmptyJsonRoundTrip() throws JsonProcessingException {
+    void clValueKeyByteCodeKeyEmptyJsonRoundTrip() throws JsonProcessingException, JSONException {
         final String json = " {\n" +
                 "        \"cl_type\": \"Key\",\n" +
                 "        \"bytes\": \"12010000000000000000000000000000000000000000000000000000000000000000\",\n" +
@@ -61,10 +61,13 @@ class CLValueKeyTest {
         assertThat(clValueKey.getBytes(), is("12010000000000000000000000000000000000000000000000000000000000000000"));
         final ByteCodeKey key = (ByteCodeKey) clValueKey.getValue();
         assertThat(key.getByteCodeAddr(), is(ByteCodeAddr.EMPTY));
+
+        final String written = new ObjectMapper().writeValueAsString(clValueKey);
+        JSONAssert.assertEquals(json, written, true);
     }
 
     @Test
-    void clValueKeyByteCodeKeyV1CasperWasmJsonRoundTrip() throws JsonProcessingException {
+    void clValueKeyByteCodeKeyV1CasperWasmJsonRoundTrip() throws JsonProcessingException, JSONException {
         final String json = " {\n" +
                 "        \"cl_type\": \"Key\",\n" +
                 "        \"bytes\": \"12003beb396c91ff7ae62d08857cc8a787146cd4f0771b8a21d385b3f4ac6077854a\",\n" +
@@ -78,10 +81,13 @@ class CLValueKeyTest {
         assertThat(clValueKey.getBytes(), is("12003beb396c91ff7ae62d08857cc8a787146cd4f0771b8a21d385b3f4ac6077854a"));
         final ByteCodeKey key = (ByteCodeKey) clValueKey.getValue();
         assertThat(key.getByteCodeAddr(), is(ByteCodeAddr.V1_CASPER_WASM));
+
+        final String written = new ObjectMapper().writeValueAsString(clValueKey);
+        JSONAssert.assertEquals(json, written, true);
     }
 
     @Test
-    void clValueKeyBidAddrKeyUnifiedJsonRoundTrip() throws JsonProcessingException {
+    void clValueKeyBidAddrKeyUnifiedJsonRoundTrip() throws JsonProcessingException, JSONException {
         final String json = " {\n" +
                 "        \"cl_type\": \"Key\",\n" +
                 "        \"bytes\": \"0f003beb396c91ff7ae62d08857cc8a787146cd4f0771b8a21d385b3f4ac6077854a\",\n" +
@@ -95,10 +101,13 @@ class CLValueKeyTest {
         assertThat(clValueKey.getBytes(), is("0f003beb396c91ff7ae62d08857cc8a787146cd4f0771b8a21d385b3f4ac6077854a"));
         final BidAddrKey key = (BidAddrKey) clValueKey.getValue();
         assertThat(key.getBidAddr(), is(BidAddr.UNIFIED));
+
+        final String written = new ObjectMapper().writeValueAsString(clValueKey);
+        JSONAssert.assertEquals(json, written, true);
     }
 
     @Test
-    void clValueKeyBidAddrKeyValidatorJsonRoundTrip() throws JsonProcessingException {
+    void clValueKeyBidAddrKeyValidatorJsonRoundTrip() throws JsonProcessingException, JSONException {
         final String json = " {\n" +
                 "        \"cl_type\": \"Key\",\n" +
                 "        \"bytes\": \"0f013beb396c91ff7ae62d08857cc8a787146cd4f0771b8a21d385b3f4ac6077854a\",\n" +
@@ -112,10 +121,13 @@ class CLValueKeyTest {
         assertThat(clValueKey.getBytes(), is("0f013beb396c91ff7ae62d08857cc8a787146cd4f0771b8a21d385b3f4ac6077854a"));
         final BidAddrKey key = (BidAddrKey) clValueKey.getValue();
         assertThat(key.getBidAddr(), is(BidAddr.VALIDATOR));
+
+        final String written = new ObjectMapper().writeValueAsString(clValueKey);
+        JSONAssert.assertEquals(json, written, true);
     }
 
     @Test
-    void clValueKeyBidAddrKeyDelegatorJsonRoundTrip() throws JsonProcessingException {
+    void clValueKeyBidAddrKeyDelegatorJsonRoundTrip() throws JsonProcessingException, JSONException {
         final String json = " {\n" +
                 "        \"cl_type\": \"Key\",\n" +
                 "        \"bytes\": \"0f02022f3fb80d362ad0a922f446915a259c9aaec9ba99292b3e50ff2359c4580073099fa1fc0808d3a5b9ea9f3af4ca7c8c3655568fdf378d8afdf8a7e56e58abbfd4\",\n" +
@@ -129,10 +141,13 @@ class CLValueKeyTest {
         assertThat(clValueKey.getBytes(), is("0f02022f3fb80d362ad0a922f446915a259c9aaec9ba99292b3e50ff2359c4580073099fa1fc0808d3a5b9ea9f3af4ca7c8c3655568fdf378d8afdf8a7e56e58abbfd4"));
         final BidAddrKey key = (BidAddrKey) clValueKey.getValue();
         assertThat(key.getBidAddr(), is(BidAddr.DELEGATOR));
+
+        final String written = new ObjectMapper().writeValueAsString(clValueKey);
+        JSONAssert.assertEquals(json, written, true);
     }
 
     @Test
-    void clValueKeyBidAddrKeyCreditJsonRoundTrip() throws JsonProcessingException {
+    void clValueKeyBidAddrKeyCreditJsonRoundTrip() throws JsonProcessingException, JSONException {
         final String json = " {\n" +
                 "        \"cl_type\": \"Key\",\n" +
                 "        \"bytes\": \"0f0304520037cd249ccbcfeb0b9feae07d8d4f7d922cf88adc4f3e8691f9d34ccc8d097f00000000000000\",\n" +
@@ -146,10 +161,13 @@ class CLValueKeyTest {
         assertThat(clValueKey.getBytes(), is("0f0304520037cd249ccbcfeb0b9feae07d8d4f7d922cf88adc4f3e8691f9d34ccc8d097f00000000000000"));
         final BidAddrKey key = (BidAddrKey) clValueKey.getValue();
         assertThat(key.getBidAddr(), is(BidAddr.CREDIT));
+
+        final String written = new ObjectMapper().writeValueAsString(clValueKey);
+        JSONAssert.assertEquals(json, written, true);
     }
 
     @Test
-    void clValueKeyMessageKeyEntityContract() throws JsonProcessingException {
+    void clValueKeyMessageKeyEntityContract() throws JsonProcessingException, JSONException {
         final String json = " {\n" +
                 "        \"cl_type\": \"Key\",\n" +
                 "        \"bytes\": \"1302000000000000000000000000000000000000000000000000000000000000000009090909090909090909090909090909090909090909090909090909090909090101000000\",\n" +
@@ -166,10 +184,13 @@ class CLValueKeyTest {
         assertThat(key.getMessageIndex().get(), is(1L));
         assertThat(key.getEntityAddrHash(), is(new Digest("0000000000000000000000000000000000000000000000000000000000000000")));
         assertThat(key.getTopicHash(), is(new Digest("0909090909090909090909090909090909090909090909090909090909090909")));
+
+        final String written = new ObjectMapper().writeValueAsString(clValueKey);
+        JSONAssert.assertEquals(json, written, true);
     }
 
     @Test
-    void clValueKeyNamedKey() throws JsonProcessingException {
+    void clValueKeyNamedKey() throws JsonProcessingException, JSONException {
 
         final String namdedEntiryContract = "named-key-entity-contract-0101010101010101010101010101010101010101010101010101010101010101-0202020202020202020202020202020202020202020202020202020202020202";
 
@@ -190,10 +211,13 @@ class CLValueKeyTest {
         assertThat(key.getBaseAddr().getEntityAddressTag(), is(EntityAddr.SMART_CONTRACT));
         assertThat(key.getBaseAddr().getKey(), is(Hex.decode("020101010101010101010101010101010101010101010101010101010101010101")));
         assertThat(key.getStringBytes(), is(Hex.decode("0202020202020202020202020202020202020202020202020202020202020202")));
+
+        final String written = new ObjectMapper().writeValueAsString(clValueKey);
+        JSONAssert.assertEquals(json, written, true);
     }
 
     @Test
-    void clValueKeyBlockGlobalKeyMessageCount() throws JsonProcessingException {
+    void clValueKeyBlockGlobalKeyMessageCount() throws JsonProcessingException, JSONException {
         final String json = " {\n" +
                 "        \"cl_type\": \"Key\",\n" +
                 "        \"bytes\": \"15010000000000000000000000000000000000000000000000000000000000000000\",\n" +
@@ -206,10 +230,13 @@ class CLValueKeyTest {
         assertThat(clValueKey.getBytes(), is("15010000000000000000000000000000000000000000000000000000000000000000"));
         final BlockGlobalKey key = (BlockGlobalKey) clValueKey.getValue();
         assertThat(key.getBlockGlobalAddr(), is(BlockGlobalAddr.MESSAGE_COUNT));
+
+        final String written = new ObjectMapper().writeValueAsString(clValueKey);
+        JSONAssert.assertEquals(json, written, true);
     }
 
     @Test
-    void clValueKeyBlockGlobalKeyBlockTime() throws JsonProcessingException {
+    void clValueKeyBlockGlobalKeyBlockTime() throws JsonProcessingException, JSONException {
         final String json = " {\n" +
                 "        \"cl_type\": \"Key\",\n" +
                 "        \"bytes\": \"15000000000000000000000000000000000000000000000000000000000000000000\",\n" +
@@ -222,10 +249,13 @@ class CLValueKeyTest {
         assertThat(clValueKey.getBytes(), is("15000000000000000000000000000000000000000000000000000000000000000000"));
         final BlockGlobalKey key = (BlockGlobalKey) clValueKey.getValue();
         assertThat(key.getBlockGlobalAddr(), is(BlockGlobalAddr.BLOCK_TIME));
+
+        final String written = new ObjectMapper().writeValueAsString(clValueKey);
+        JSONAssert.assertEquals(json, written, true);
     }
 
     @Test
-    void clValueKeyBalanceHoldKeyGas() throws JsonProcessingException {
+    void clValueKeyBalanceHoldKeyGas() throws JsonProcessingException, JSONException {
         final String json = " {\n" +
                 "        \"cl_type\": \"Key\",\n" +
                 "        \"bytes\": \"160001010101010101010101010101010101010101010101010101010101010101018b215c2791010000\",\n" +
@@ -240,10 +270,13 @@ class CLValueKeyTest {
         assertThat(key.getBalanceHoldAddr(), is(BalanceHoldAddr.GAS));
         assertThat(key.getUrefAddr(), is(Hex.decode("0101010101010101010101010101010101010101010101010101010101010101")));
         assertThat(key.getBlockTime(), is(new BigInteger("1722942235019")));
+
+        final String written = new ObjectMapper().writeValueAsString(clValueKey);
+        JSONAssert.assertEquals(json, written, true);
     }
 
     @Test
-    void clValueKeyBalanceHoldKeyProcessing() throws JsonProcessingException {
+    void clValueKeyBalanceHoldKeyProcessing() throws JsonProcessingException, JSONException {
         final String json = " {\n" +
                 "        \"cl_type\": \"Key\",\n" +
                 "        \"bytes\": \"160101010101010101010101010101010101010101010101010101010101010101018b215c2791010000\",\n" +
@@ -258,10 +291,13 @@ class CLValueKeyTest {
         assertThat(key.getBalanceHoldAddr(), is(BalanceHoldAddr.PROCESSING));
         assertThat(key.getUrefAddr(), is(Hex.decode("0101010101010101010101010101010101010101010101010101010101010101")));
         assertThat(key.getBlockTime(), is(new BigInteger("1722942235019")));
+
+        final String written = new ObjectMapper().writeValueAsString(clValueKey);
+        JSONAssert.assertEquals(json, written, true);
     }
 
     @Test
-    void clValueKeyEntryPointV1AccountKey() throws JsonProcessingException {
+    void clValueKeyEntryPointV1AccountKey() throws JsonProcessingException, JSONException {
         final String json = " {\n" +
                 "        \"cl_type\": \"Key\",\n" +
                 "        \"bytes\": \"17000100000000000000000000000000000000000000000000000000000000000000000202020202020202020202020202020202020202020202020202020202020202\",\n" +
@@ -277,10 +313,13 @@ class CLValueKeyTest {
         assertThat(key.getEntityAddr(), is(EntityAddr.ACCOUNT));
         assertThat(key.getHashAddr(), is(Hex.decode("0000000000000000000000000000000000000000000000000000000000000000")));
         assertThat(key.getNamedBytes(), is(Hex.decode("0202020202020202020202020202020202020202020202020202020202020202")));
+
+        final String written = new ObjectMapper().writeValueAsString(clValueKey);
+        JSONAssert.assertEquals(json, written, true);
     }
 
     @Test
-    void clValueKeyEntryPointV2AccountKey() throws JsonProcessingException {
+    void clValueKeyEntryPointV2AccountKey() throws JsonProcessingException, JSONException {
         final String json = " {\n" +
                 "        \"cl_type\": \"Key\",\n" +
                 "        \"bytes\": \"170101000000000000000000000000000000000000000000000000000000000000000040e20100\",\n" +
@@ -296,5 +335,8 @@ class CLValueKeyTest {
         assertThat(key.getEntityAddr(), is(EntityAddr.ACCOUNT));
         assertThat(key.getHashAddr(), is(Hex.decode("0000000000000000000000000000000000000000000000000000000000000000")));
         assertThat(key.getSelector(), is(123456L));
+
+        final String written = new ObjectMapper().writeValueAsString(clValueKey);
+        JSONAssert.assertEquals(json, written, true);
     }
 }

@@ -51,7 +51,6 @@ public abstract class AbstractSerializedKeyTaggedHex<T extends Tag> implements C
 
     @Override
     public String toString() {
-        // TODO implement the key string representation here not hex
         return getAlgoTaggedHex();
     }
 }
