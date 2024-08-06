@@ -32,7 +32,6 @@ public class MessageKey extends Key {
     @Override
     protected void deserializeCustom(final DeserializerBuffer deser) throws Exception {
 
-        // TODO create objects from bytes
         final SerializerBuffer serializerBuffer = new SerializerBuffer();
 
         // EntityAddr key entity_addr - inc has
