@@ -1,12 +1,16 @@
 package com.casper.sdk.model.clvalue;
 
+import com.casper.sdk.model.common.Digest;
 import com.casper.sdk.model.entity.EntityAddr;
 import com.casper.sdk.model.key.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.syntifi.crypto.key.encdec.Hex;
 import org.json.JSONException;
 import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
+
+import java.math.BigInteger;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -145,7 +149,152 @@ class CLValueKeyTest {
     }
 
     @Test
-    void messageKeyEntityContract() {
-        String json = "message-entity-contract-0000000000000000000000000000000000000000000000000000000000000000-0909090909090909090909090909090909090909090909090909090909090909-1";
+    void clValueKeyMessageKeyEntityContract() throws JsonProcessingException {
+        final String json = " {\n" +
+                "        \"cl_type\": \"Key\",\n" +
+                "        \"bytes\": \"1302000000000000000000000000000000000000000000000000000000000000000009090909090909090909090909090909090909090909090909090909090909090101000000\",\n" +
+                "        \"parsed\": \"message-entity-contract-0000000000000000000000000000000000000000000000000000000000000000-0909090909090909090909090909090909090909090909090909090909090909\"\n" +
+                "      }";
+        final CLValueKey clValueKey = new ObjectMapper().readValue(json, CLValueKey.class);
+        assertThat(clValueKey.getValue().getTag(), is(KeyTag.MESSAGE));
+        assertThat(clValueKey.getValue(), is(instanceOf(MessageKey.class)));
+        assertThat(clValueKey.getParsed(), is("message-entity-contract-0000000000000000000000000000000000000000000000000000000000000000-0909090909090909090909090909090909090909090909090909090909090909"));
+        assertThat(clValueKey.getBytes(), is("1302000000000000000000000000000000000000000000000000000000000000000009090909090909090909090909090909090909090909090909090909090909090101000000"));
+        final MessageKey key = (MessageKey) clValueKey.getValue();
+        assertThat(key.getEntityAddr(), is(EntityAddr.SMART_CONTRACT));
+        assertThat(key.getMessageIndex().isPresent(), is(true));
+        assertThat(key.getMessageIndex().get(), is(1L));
+        assertThat(key.getEntityAddrHash(), is(new Digest("0000000000000000000000000000000000000000000000000000000000000000")));
+        assertThat(key.getTopicHash(), is(new Digest("0909090909090909090909090909090909090909090909090909090909090909")));
+    }
+
+    @Test
+    void clValueKeyNamedKey() throws JsonProcessingException {
+
+        final String namdedEntiryContract = "named-key-entity-contract-0101010101010101010101010101010101010101010101010101010101010101-0202020202020202020202020202020202020202020202020202020202020202";
+
+        final String json = " {\n" +
+                "        \"cl_type\": \"Key\",\n" +
+                "        \"bytes\": \"140201010101010101010101010101010101010101010101010101010101010101010202020202020202020202020202020202020202020202020202020202020202\",\n" +
+                "        \"parsed\": \"" + namdedEntiryContract + "\"\n" +
+                "      }";
+
+
+        final CLValueKey clValueKey = new ObjectMapper().readValue(json, CLValueKey.class);
+        assertThat(clValueKey.getValue().getTag(), is(KeyTag.NAMED_KEY));
+        assertThat(clValueKey.getValue(), is(instanceOf(NamedKeyKey.class)));
+        assertThat(clValueKey.getParsed(), is("named-key-entity-contract-0101010101010101010101010101010101010101010101010101010101010101-0202020202020202020202020202020202020202020202020202020202020202"));
+        assertThat(clValueKey.getBytes(), is("140201010101010101010101010101010101010101010101010101010101010101010202020202020202020202020202020202020202020202020202020202020202"));
+
+        final NamedKeyKey key = (NamedKeyKey) clValueKey.getValue();
+        assertThat(key.getBaseAddr().getEntityAddressTag(), is(EntityAddr.SMART_CONTRACT));
+        assertThat(key.getBaseAddr().getKey(), is(Hex.decode("020101010101010101010101010101010101010101010101010101010101010101")));
+        assertThat(key.getStringBytes(), is(Hex.decode("0202020202020202020202020202020202020202020202020202020202020202")));
+    }
+
+    @Test
+    void clValueKeyBlockGlobalKeyMessageCount() throws JsonProcessingException {
+        final String json = " {\n" +
+                "        \"cl_type\": \"Key\",\n" +
+                "        \"bytes\": \"15010000000000000000000000000000000000000000000000000000000000000000\",\n" +
+                "        \"parsed\": \"block-message-count-000000000000000000000000000000000000000000000000000000000000000\"\n" +
+                "      }";
+        final CLValueKey clValueKey = new ObjectMapper().readValue(json, CLValueKey.class);
+        assertThat(clValueKey.getValue().getTag(), is(KeyTag.BLOCK_GLOBAL));
+        assertThat(clValueKey.getValue(), is(instanceOf(BlockGlobalKey.class)));
+        assertThat(clValueKey.getParsed(), is("block-message-count-000000000000000000000000000000000000000000000000000000000000000"));
+        assertThat(clValueKey.getBytes(), is("15010000000000000000000000000000000000000000000000000000000000000000"));
+        final BlockGlobalKey key = (BlockGlobalKey) clValueKey.getValue();
+        assertThat(key.getBlockGlobalAddr(), is(BlockGlobalAddr.MESSAGE_COUNT));
+    }
+
+    @Test
+    void clValueKeyBlockGlobalKeyBlockTime() throws JsonProcessingException {
+        final String json = " {\n" +
+                "        \"cl_type\": \"Key\",\n" +
+                "        \"bytes\": \"15000000000000000000000000000000000000000000000000000000000000000000\",\n" +
+                "        \"parsed\": \"block-time-000000000000000000000000000000000000000000000000000000000000000\"\n" +
+                "      }";
+        final CLValueKey clValueKey = new ObjectMapper().readValue(json, CLValueKey.class);
+        assertThat(clValueKey.getValue().getTag(), is(KeyTag.BLOCK_GLOBAL));
+        assertThat(clValueKey.getValue(), is(instanceOf(BlockGlobalKey.class)));
+        assertThat(clValueKey.getParsed(), is("block-time-000000000000000000000000000000000000000000000000000000000000000"));
+        assertThat(clValueKey.getBytes(), is("15000000000000000000000000000000000000000000000000000000000000000000"));
+        final BlockGlobalKey key = (BlockGlobalKey) clValueKey.getValue();
+        assertThat(key.getBlockGlobalAddr(), is(BlockGlobalAddr.BLOCK_TIME));
+    }
+
+    @Test
+    void clValueKeyBalanceHoldKeyGas() throws JsonProcessingException {
+        final String json = " {\n" +
+                "        \"cl_type\": \"Key\",\n" +
+                "        \"bytes\": \"160001010101010101010101010101010101010101010101010101010101010101018b215c2791010000\",\n" +
+                "        \"parsed\": \"balance-hold-0001010101010101010101010101010101010101010101010101010101010101018b215c2791010000\"\n" +
+                "      }";
+        final CLValueKey clValueKey = new ObjectMapper().readValue(json, CLValueKey.class);
+        assertThat(clValueKey.getValue().getTag(), is(KeyTag.BALANCE_HOLD));
+        assertThat(clValueKey.getValue(), is(instanceOf(BalanceHoldKey.class)));
+        assertThat(clValueKey.getParsed(), is("balance-hold-0001010101010101010101010101010101010101010101010101010101010101018b215c2791010000"));
+        assertThat(clValueKey.getBytes(), is("160001010101010101010101010101010101010101010101010101010101010101018b215c2791010000"));
+        final BalanceHoldKey key = (BalanceHoldKey) clValueKey.getValue();
+        assertThat(key.getBalanceHoldAddr(), is(BalanceHoldAddr.GAS));
+        assertThat(key.getUrefAddr(), is(Hex.decode("0101010101010101010101010101010101010101010101010101010101010101")));
+        assertThat(key.getBlockTime(), is(new BigInteger("1722942235019")));
+    }
+
+    @Test
+    void clValueKeyBalanceHoldKeyProcessing() throws JsonProcessingException {
+        final String json = " {\n" +
+                "        \"cl_type\": \"Key\",\n" +
+                "        \"bytes\": \"160101010101010101010101010101010101010101010101010101010101010101018b215c2791010000\",\n" +
+                "        \"parsed\": \"balance-hold-0101010101010101010101010101010101010101010101010101010101010101018b215c2791010000\"\n" +
+                "      }";
+        final CLValueKey clValueKey = new ObjectMapper().readValue(json, CLValueKey.class);
+        assertThat(clValueKey.getValue().getTag(), is(KeyTag.BALANCE_HOLD));
+        assertThat(clValueKey.getValue(), is(instanceOf(BalanceHoldKey.class)));
+        assertThat(clValueKey.getParsed(), is("balance-hold-0101010101010101010101010101010101010101010101010101010101010101018b215c2791010000"));
+        assertThat(clValueKey.getBytes(), is("160101010101010101010101010101010101010101010101010101010101010101018b215c2791010000"));
+        final BalanceHoldKey key = (BalanceHoldKey) clValueKey.getValue();
+        assertThat(key.getBalanceHoldAddr(), is(BalanceHoldAddr.PROCESSING));
+        assertThat(key.getUrefAddr(), is(Hex.decode("0101010101010101010101010101010101010101010101010101010101010101")));
+        assertThat(key.getBlockTime(), is(new BigInteger("1722942235019")));
+    }
+
+    @Test
+    void clValueKeyEntryPointV1AccountKey() throws JsonProcessingException {
+        final String json = " {\n" +
+                "        \"cl_type\": \"Key\",\n" +
+                "        \"bytes\": \"17000100000000000000000000000000000000000000000000000000000000000000000202020202020202020202020202020202020202020202020202020202020202\",\n" +
+                "        \"parsed\": \"entry-point-v1-0000000000000000000000000000000000000000000000000000000000000000-0202020202020202020202020202020202020202020202020202020202020202\"\n" +
+                "      }";
+        final CLValueKey clValueKey = new ObjectMapper().readValue(json, CLValueKey.class);
+        assertThat(clValueKey.getValue().getTag(), is(KeyTag.ENTRY_POINT));
+        assertThat(clValueKey.getValue(), is(instanceOf(EntryPointKey.class)));
+        assertThat(clValueKey.getBytes(), is("17000100000000000000000000000000000000000000000000000000000000000000000202020202020202020202020202020202020202020202020202020202020202"));
+        assertThat(clValueKey.getParsed(), is("entry-point-v2-0000000000000000000000000000000000000000000000000000000000000000-0202020202020202020202020202020202020202020202020202020202020202"));
+        final EntryPointKey key = (EntryPointKey) clValueKey.getValue();
+        assertThat(key.getEntryPointAddr(), is(EntryPointAddr.VM_CASPER_V1));
+        assertThat(key.getEntityAddr(), is(EntityAddr.ACCOUNT));
+        assertThat(key.getHashAddr(), is(Hex.decode("0000000000000000000000000000000000000000000000000000000000000000")));
+        assertThat(key.getNamedBytes(), is(Hex.decode("0202020202020202020202020202020202020202020202020202020202020202")));
+    }
+
+    @Test
+    void clValueKeyEntryPointV2AccountKey() throws JsonProcessingException {
+        final String json = " {\n" +
+                "        \"cl_type\": \"Key\",\n" +
+                "        \"bytes\": \"17000100000000000000000000000000000000000000000000000000000000000000000202020202020202020202020202020202020202020202020202020202020202\",\n" +
+                "        \"parsed\": \"entry-point-v2-0000000000000000000000000000000000000000000000000000000000000000-0202020202020202020202020202020202020202020202020202020202020202\"\n" +
+                "      }";
+        final CLValueKey clValueKey = new ObjectMapper().readValue(json, CLValueKey.class);
+        assertThat(clValueKey.getValue().getTag(), is(KeyTag.ENTRY_POINT));
+        assertThat(clValueKey.getValue(), is(instanceOf(EntryPointKey.class)));
+        assertThat(clValueKey.getBytes(), is("17000100000000000000000000000000000000000000000000000000000000000000000202020202020202020202020202020202020202020202020202020202020202"));
+        assertThat(clValueKey.getParsed(), is("entry-point-v2-0000000000000000000000000000000000000000000000000000000000000000-0202020202020202020202020202020202020202020202020202020202020202"));
+        final EntryPointKey key = (EntryPointKey) clValueKey.getValue();
+        assertThat(key.getEntryPointAddr(), is(EntryPointAddr.VM_CASPER_V2));
+        assertThat(key.getEntityAddr(), is(EntityAddr.ACCOUNT));
+        assertThat(key.getHashAddr(), is(Hex.decode("0000000000000000000000000000000000000000000000000000000000000000")));
+        assertThat(key.getSelector(), is(Hex.decode("0202020202020202020202020202020202020202020202020202020202020202")));
     }
 }

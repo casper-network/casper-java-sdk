@@ -20,7 +20,7 @@ public enum KeyTag implements Tag {
     UREF((byte) 0x02, Key.class),
     TRANSFER((byte) 0x03, Key.class),
     DEPLOY_INFO((byte) 0x04, Key.class),
-    ERAI_NFO((byte) 0x05, Key.class),
+    ERA_INFO((byte) 0x05, Key.class),
     BALANCE((byte) 0x06, Key.class),
     BID((byte) 0x07, Key.class),
     WITHDRAW((byte) 0x08, Key.class),
@@ -34,11 +34,11 @@ public enum KeyTag implements Tag {
     PACKAGE((byte) 0x10, Key.class),
     ADDRESSABLE_ENTITY((byte) 0x11, AddressableEntityKey.class),
     BYTE_CODE((byte) 0x12, ByteCodeKey.class),
-    MESSAGE((byte) 0x13, Key.class),
-    NAMED_KEY((byte) 0x14, Key.class),
-    BLOCK_GLOBAL((byte) 0x15, Key.class),
-    BALANCE_HOLD((byte) 0x16, Key.class),
-    ENTRY_POINT((byte) 0x17, Key.class);
+    MESSAGE((byte) 0x13, MessageKey.class),
+    NAMED_KEY((byte) 0x14, NamedKeyKey.class),
+    BLOCK_GLOBAL((byte) 0x15, BlockGlobalKey.class),
+    BALANCE_HOLD((byte) 0x16, BalanceHoldKey.class),
+    ENTRY_POINT((byte) 0x17, EntryPointKey.class);
 
     private final byte byteTag;
     private final Class<? extends Key> keyClass;

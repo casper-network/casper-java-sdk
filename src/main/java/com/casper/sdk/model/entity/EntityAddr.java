@@ -1,6 +1,7 @@
 package com.casper.sdk.model.entity;
 
 import com.casper.sdk.exception.NoSuchKeyTagException;
+import com.casper.sdk.model.key.Tag;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -11,7 +12,7 @@ import lombok.Getter;
  */
 @AllArgsConstructor
 @Getter
-public enum EntityAddr {
+public enum EntityAddr implements Tag {
     /** The address for a system entity account or contract. */
     SYSTEM((byte) 0),
     /** The address of an entity that corresponds to an Account. */

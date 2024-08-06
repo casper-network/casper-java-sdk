@@ -1,26 +1,28 @@
 package com.casper.sdk.model.key;
 
-import com.casper.sdk.model.entity.EntityAddr;
 import dev.oak3.sbs4j.DeserializerBuffer;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
- * A key for an Addressable entity.
+ * A `Key` under which per-block details are stored to global state.
  *
  * @author ian@meywood.com
  */
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class AddressableEntityKey extends Key {
+@Setter
+public class BlockGlobalKey extends Key {
 
-    private EntityAddr entityAddressTag;
+    private BlockGlobalAddr blockGlobalAddr;
 
+    @Override
     protected void deserializeCustom(final DeserializerBuffer deser) throws Exception {
-        this.setTag(KeyTag.ADDRESSABLE_ENTITY);
+        this.setTag(KeyTag.BLOCK_GLOBAL);
         this.setKey(deser.readByteArray(33));
-        this.entityAddressTag = EntityAddr.getByTag(getKey()[0]);
+        this.blockGlobalAddr = BlockGlobalAddr.getByTag(getKey()[0]);
     }
 }
