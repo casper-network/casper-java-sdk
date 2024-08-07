@@ -19,7 +19,7 @@ public enum BidAddr {
     /// Delegator BidAddr.
     DELEGATOR((byte) 2),
     /// Validator credit BidAddr.
-    CREDIT((byte) 3);
+    CREDIT((byte) 4);
 
     private final byte byteTag;
 

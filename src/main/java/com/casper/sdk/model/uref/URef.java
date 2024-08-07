@@ -10,6 +10,8 @@ import dev.oak3.sbs4j.util.ByteUtils;
 import lombok.*;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * URef is a tuple that contains the address of the URef and the access rights
@@ -27,7 +29,6 @@ import java.io.IOException;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode
 public class URef {
 
     @JsonIgnore
@@ -55,6 +56,19 @@ public class URef {
         URef obj = URef.fromString(uref);
         this.accessRight = obj.getAccessRight();
         this.address = obj.getAddress();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        URef uRef = (URef) o;
+        return Objects.deepEquals(address, uRef.address) && accessRight == uRef.accessRight;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(Arrays.hashCode(address), accessRight);
     }
 
     @JsonValue

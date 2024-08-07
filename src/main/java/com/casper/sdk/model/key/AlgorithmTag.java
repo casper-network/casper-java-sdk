@@ -18,7 +18,9 @@ import java.security.NoSuchAlgorithmException;
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public enum AlgorithmTag implements Tag {
-    SECP256K1((byte) 0x02, 33), ED25519((byte) 0x01, 32);
+
+    SECP256K1((byte) 0x02, 33),
+    ED25519((byte) 0x01, 32);
 
     private final byte byteTag;
     /** The number of bytes for a key excluding the tag byte */
