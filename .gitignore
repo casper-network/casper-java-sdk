@@ -40,3 +40,4 @@ out/
 !.vscode/tasks.json
 !.vscode/launch.json
 /assets/
+/src/test/resources/howto/keys/secret_key.pem

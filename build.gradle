@@ -49,6 +49,8 @@ dependencies {
     testImplementation "org.junit.jupiter:junit-jupiter:${jupiterVersion}"
     // Used to compare json strings while testing
     testImplementation "org.skyscreamer:jsonassert:${jsonassertVersion}"
+
+    testImplementation files('assets')
 }
 
 java {
