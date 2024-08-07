@@ -40,12 +40,11 @@ public abstract class AbstractSerializedKeyTaggedHex<T extends Tag> implements C
                 + ByteUtils.encodeHexString(this.getKey());
     }
 
-
     /**
      * Implements TaggedHEx encoder
      */
     @Override
-    public void serialize(SerializerBuffer ser, Target target) {
+    public void serialize(final SerializerBuffer ser, final Target target) {
         ser.writeU8(getTag().getByteTag());
         ser.writeByteArray(getKey());
     }
