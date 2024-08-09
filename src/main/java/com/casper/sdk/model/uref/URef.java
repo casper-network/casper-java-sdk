@@ -32,10 +32,10 @@ import java.util.Objects;
 public class URef {
 
     @JsonIgnore
-    byte[] address;
+    private byte[] address;
 
     @JsonIgnore
-    URefAccessRight accessRight;
+    private URefAccessRight accessRight;
 
     public static URef fromString(String uref)
             throws IOException, DynamicInstanceException, IllegalArgumentException {
@@ -43,8 +43,8 @@ public class URef {
         if (!urefParts[0].equals("uref") || urefParts.length != 3) {
             throw new IOException("Not a valid Uref");
         }
-        byte[] address = ByteUtils.parseHexString(urefParts[1]);
-        byte[] accessRightByte = ByteUtils.parseHexString(urefParts[2].substring(1));
+        final byte[] address = ByteUtils.parseHexString(urefParts[1]);
+        final byte[] accessRightByte = ByteUtils.parseHexString(urefParts[2].substring(1));
         URefAccessRight accessRight = URefAccessRight
                 .getTypeBySerializationTag(accessRightByte[accessRightByte.length - 1]);
         return new URef(address, accessRight);
@@ -53,7 +53,7 @@ public class URef {
 
     @JsonCreator
     public void createURef(String uref) throws IOException, DynamicInstanceException, IllegalArgumentException {
-        URef obj = URef.fromString(uref);
+        final URef obj = URef.fromString(uref);
         this.accessRight = obj.getAccessRight();
         this.address = obj.getAddress();
     }
@@ -62,7 +62,7 @@ public class URef {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        URef uRef = (URef) o;
+        final URef uRef = (URef) o;
         return Objects.deepEquals(address, uRef.address) && accessRight == uRef.accessRight;
     }
 

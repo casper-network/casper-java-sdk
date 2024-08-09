@@ -2,6 +2,7 @@ package com.casper.sdk.model.key;
 
 import com.casper.sdk.exception.DynamicInstanceException;
 import com.casper.sdk.exception.NoSuchKeyTagException;
+import com.casper.sdk.model.common.Digest;
 import com.casper.sdk.model.entity.EntityAddr;
 import com.casper.sdk.model.uref.URef;
 import com.syntifi.crypto.key.encdec.Hex;
@@ -318,7 +319,7 @@ class KeyTest {
         assertThat(key, is(instanceOf(AddressableEntityKey.class)));
         assertThat(key.getTag(), is(KeyTag.ADDRESSABLE_ENTITY));
         assertThat(key.getKey(), is(Hex.decode("0101010101010101010101010101010101010101010101010101010101010101")));
-         assertThat(key.toString(), is("entity-system-0101010101010101010101010101010101010101010101010101010101010101"));
+        assertThat(key.toString(), is("entity-system-0101010101010101010101010101010101010101010101010101010101010101"));
         assertThat(key.getAlgoTaggedHex(), is("11000101010101010101010101010101010101010101010101010101010101010101"));
         assertThat(((AddressableEntityKey) key).getEntityAddressTag(), is(EntityAddr.SYSTEM));
     }
@@ -359,7 +360,7 @@ class KeyTest {
         assertThat(key.getKey(), is(Hex.decode("0101010101010101010101010101010101010101010101010101010101010101")));
         assertThat(key.toString(), is("byte-code-empty-0101010101010101010101010101010101010101010101010101010101010101"));
         assertThat(key.getAlgoTaggedHex(), is("12010101010101010101010101010101010101010101010101010101010101010101"));
-       assertThat(((ByteCodeKey) key).getByteCodeAddr(), is(ByteCodeAddr.EMPTY));
+        assertThat(((ByteCodeKey) key).getByteCodeAddr(), is(ByteCodeAddr.EMPTY));
     }
 
     @Test
@@ -374,4 +375,39 @@ class KeyTest {
         assertThat(key.getAlgoTaggedHex(), is("12000101010101010101010101010101010101010101010101010101010101010101"));
         assertThat(((ByteCodeKey) key).getByteCodeAddr(), is(ByteCodeAddr.V1_CASPER_WASM));
     }
+
+    //
+
+    @Test
+    void messageTopicKeyFromKeyString() throws NoSuchKeyTagException {
+
+        final String strKey = "message-topic-entity-contract-55d4a6915291da12afded37fa5bc01f0803a2f0faf6acb7ec4c7ca6ab76f3330-5721a6d9d7a9afe5dfdb35276fb823bed0f825350e4d865a5ec0110c380de4e1";
+        final Key key = Key.fromKeyString(strKey);
+        assertThat(key, is(instanceOf(MessageKey.class)));
+        assertThat(key.getTag(), is(KeyTag.MESSAGE));
+        assertThat(key.getKey(), is(Hex.decode("0255d4a6915291da12afded37fa5bc01f0803a2f0faf6acb7ec4c7ca6ab76f33305721a6d9d7a9afe5dfdb35276fb823bed0f825350e4d865a5ec0110c380de4e100")));
+        assertThat(key.toString(), is("message-topic-entity-contract-55d4a6915291da12afded37fa5bc01f0803a2f0faf6acb7ec4c7ca6ab76f3330-5721a6d9d7a9afe5dfdb35276fb823bed0f825350e4d865a5ec0110c380de4e1"));
+        assertThat(key.getAlgoTaggedHex(), is("130255d4a6915291da12afded37fa5bc01f0803a2f0faf6acb7ec4c7ca6ab76f33305721a6d9d7a9afe5dfdb35276fb823bed0f825350e4d865a5ec0110c380de4e100"));
+        assertThat(((MessageKey) key).getEntityAddrHash(), is(new Digest("55d4a6915291da12afded37fa5bc01f0803a2f0faf6acb7ec4c7ca6ab76f3330")));
+        assertThat(((MessageKey) key).getTopicHash(), is(new Digest("5721a6d9d7a9afe5dfdb35276fb823bed0f825350e4d865a5ec0110c380de4e1")));
+        assertThat(((MessageKey) key).getMessageIndex().isPresent(), is(false));
+    }
+
+
+    @Test
+    void messageIndexKeyFromKeyString() throws NoSuchKeyTagException {
+
+        final String strKey = "message-entity-contract-55d4a6915291da12afded37fa5bc01f0803a2f0faf6acb7ec4c7ca6ab76f3330-5721a6d9d7a9afe5dfdb35276fb823bed0f825350e4d865a5ec0110c380de4e1-f";
+        final Key key = Key.fromKeyString(strKey);
+        assertThat(key, is(instanceOf(MessageKey.class)));
+        assertThat(key.getTag(), is(KeyTag.MESSAGE));
+        assertThat(key.toString(), is("message-entity-contract-55d4a6915291da12afded37fa5bc01f0803a2f0faf6acb7ec4c7ca6ab76f3330-5721a6d9d7a9afe5dfdb35276fb823bed0f825350e4d865a5ec0110c380de4e1-f"));
+        assertThat(key.getAlgoTaggedHex(), is("130255d4a6915291da12afded37fa5bc01f0803a2f0faf6acb7ec4c7ca6ab76f33305721a6d9d7a9afe5dfdb35276fb823bed0f825350e4d865a5ec0110c380de4e1010f000000"));
+        assertThat(((MessageKey) key).getEntityAddrHash(), is(new Digest("55d4a6915291da12afded37fa5bc01f0803a2f0faf6acb7ec4c7ca6ab76f3330")));
+        assertThat(((MessageKey) key).getTopicHash(), is(new Digest("5721a6d9d7a9afe5dfdb35276fb823bed0f825350e4d865a5ec0110c380de4e1")));
+        assertThat(((MessageKey) key).getMessageIndex().isPresent(), is(true));
+        assertThat(((MessageKey) key).getMessageIndex().get(), is(15L));
+        assertThat(key.getKey(), is(Hex.decode("0255d4a6915291da12afded37fa5bc01f0803a2f0faf6acb7ec4c7ca6ab76f33305721a6d9d7a9afe5dfdb35276fb823bed0f825350e4d865a5ec0110c380de4e1010f000000")));
+    }
 }
+

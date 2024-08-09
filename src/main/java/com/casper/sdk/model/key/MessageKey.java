@@ -1,5 +1,6 @@
 package com.casper.sdk.model.key;
 
+import com.casper.sdk.exception.NoSuchKeyTagException;
 import com.casper.sdk.model.common.Digest;
 import com.casper.sdk.model.entity.EntityAddr;
 import dev.oak3.sbs4j.DeserializerBuffer;
@@ -18,7 +19,9 @@ import java.util.Optional;
 @Getter
 @Setter
 public class MessageKey extends Key {
+    public static final String TOPIC = "topic";
 
+    // TODO Change to addressable entity key
     /** The entity addr. */
     private EntityAddr entityAddr;
     /** The hash of the entity address. */
@@ -64,4 +67,75 @@ public class MessageKey extends Key {
     public Optional<Long> getMessageIndex() {
         return Optional.ofNullable(messageIndex);
     }
+
+    @Override
+    public String toString() {
+
+        final StringBuilder builder = new StringBuilder(getTag().getKeyName());
+        if (messageIndex == null) {
+            builder.append(TOPIC).append('-');
+        }
+
+        builder.append("entity")
+                .append('-')
+                .append(entityAddr.getKeyName())
+                .append('-')
+                .append(entityAddrHash)
+                .append('-')
+                .append(topicHash);
+
+        if (messageIndex != null) {
+            builder.append('-').append(String.format("%x", messageIndex));
+        }
+
+        return builder.toString();
+    }
+
+    @Override
+    protected void fromStringCustom(final String strKey) {
+
+        final SerializerBuffer serializerBuffer = new SerializerBuffer();
+
+        final String[] split = strKey.split("-");
+
+        if (TOPIC.equals(split[1])) {
+            if (split.length != 6) {
+                throw new IllegalArgumentException("Invalid message key: " + strKey);
+            }
+
+            try {
+                entityAddr = EntityAddr.getByKeyName(split[3]);
+            } catch (NoSuchKeyTagException e) {
+                throw new IllegalArgumentException(e);
+            }
+            entityAddrHash = new Digest(split[4]);
+            topicHash = new Digest(split[5]);
+        } else {
+            try {
+                entityAddr = EntityAddr.getByKeyName(split[2]);
+            } catch (NoSuchKeyTagException e) {
+                throw new IllegalArgumentException(e);
+            }
+            entityAddrHash = new Digest(split[3]);
+            topicHash = new Digest(split[4]);
+
+            if (split.length > 5) {
+                messageIndex = Long.parseLong(split[5], 16);
+            }
+        }
+
+        serializerBuffer.writeU8(entityAddr.getByteTag());
+        serializerBuffer.writeByteArray(entityAddrHash.getDigest());
+        serializerBuffer.writeByteArray(topicHash.getDigest());
+        if (messageIndex != null) {
+            serializerBuffer.writeBool(true);
+            serializerBuffer.writeU32(messageIndex);
+        } else {
+            serializerBuffer.writeBool(false);
+        }
+
+        setKey(serializerBuffer.toByteArray());
+    }
+
+
 }

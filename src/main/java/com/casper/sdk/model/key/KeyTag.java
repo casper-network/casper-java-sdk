@@ -19,7 +19,6 @@ import static java.util.Arrays.asList;
 public enum KeyTag implements Tag {
     ACCOUNT((byte) 0x00, Key.class, "account-hash-"),
     HASH((byte) 0x01, Key.class, "hash-", "contract-"),
-    // FIXME Make URef a key
     UREF((byte) 0x02, URefKey.class, "uref-"),
     TRANSFER((byte) 0x03, Key.class, "transfer-"),
     DEPLOY_INFO((byte) 0x04, Key.class, "deploy-"),
@@ -47,7 +46,7 @@ public enum KeyTag implements Tag {
     private final Class<? extends Key> keyClass;
     private final String[] keyNames;
 
-    KeyTag(byte byteTag, Class<? extends Key> keyClass, String... keyNames) {
+    KeyTag(final byte byteTag, final Class<? extends Key> keyClass, final String... keyNames) {
         this.byteTag = byteTag;
         this.keyClass = keyClass;
         this.keyNames = keyNames;
