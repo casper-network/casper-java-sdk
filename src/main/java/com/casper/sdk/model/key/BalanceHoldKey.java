@@ -31,9 +31,8 @@ public class BalanceHoldKey extends Key {
     @Override
     protected void fromStringCustom(final String strKey) {
         final String[] split = strKey.split("-");
-        this.balanceHoldAddr = BalanceHoldAddr.getByKeyName(split[1]);
         try {
-            this.deserializeCustom(new DeserializerBuffer(Hex.decode("0" + this.balanceHoldAddr.getByteTag() + split[2])));
+            this.deserializeCustom(new DeserializerBuffer(Hex.decode(split[split.length - 1])));
         } catch (Exception e) {
             throw new IllegalArgumentException("Invalid key: " + strKey, e);
         }
