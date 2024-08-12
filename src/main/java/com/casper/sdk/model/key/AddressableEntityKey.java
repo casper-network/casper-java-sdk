@@ -25,8 +25,12 @@ public class AddressableEntityKey extends Key {
     @Override
     protected void fromStringCustom(final String strKey) {
         try {
-            entityAddressTag = EntityAddr.getByKeyName(strKey.split("-")[1]);
-            super.fromStringCustom(strKey);
+            final String[] split = strKey.split("-");
+            entityAddressTag = EntityAddr.getByKeyName(split[1]);
+            final byte[] key = new byte[33];
+            key[0] = entityAddressTag.getByteTag();
+            System.arraycopy(Hex.decode(split[split.length - 1]), 0, key, 1, 32);
+            setKey(key);
         } catch (NoSuchKeyTagException e) {
             throw new IllegalArgumentException("Invalid key: " + strKey, e);
         }
@@ -40,13 +44,12 @@ public class AddressableEntityKey extends Key {
 
     @Override
     public String toString() {
-        return this.getTag().getKeyName() + entityAddressTag.getKeyName() + "-" + Hex.encode(this.getKey());
+        return this.getTag().getKeyName() + entityAddressTag.getKeyName() + "-" + Hex.encode(this.getKey()).substring(2);
     }
 
     @JsonValue
     public String getAlgoTaggedHex() {
         return ByteUtils.encodeHexString(new byte[]{this.getTag().getByteTag()})
-                + ByteUtils.encodeHexString(new byte[]{this.getEntityAddressTag().getByteTag()})
                 + ByteUtils.encodeHexString(this.getKey());
     }
 }

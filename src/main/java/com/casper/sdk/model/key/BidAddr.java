@@ -23,7 +23,7 @@ public enum BidAddr {
 
     private final byte byteTag;
 
-    public static BidAddr getByTag(byte tag) throws NoSuchKeyTagException {
+    public static BidAddr getByTag(final byte tag) throws NoSuchKeyTagException {
         for (BidAddr a : values()) {
             if (a.byteTag == tag)
                 return a;

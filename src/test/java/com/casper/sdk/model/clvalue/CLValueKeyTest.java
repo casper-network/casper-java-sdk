@@ -150,7 +150,7 @@ class CLValueKeyTest {
     void clValueKeyBidAddrKeyCreditJsonRoundTrip() throws JsonProcessingException, JSONException {
         final String json = " {\n" +
                 "        \"cl_type\": \"Key\",\n" +
-                "        \"bytes\": \"0f0304520037cd249ccbcfeb0b9feae07d8d4f7d922cf88adc4f3e8691f9d34ccc8d097f00000000000000\",\n" +
+                "        \"bytes\": \"0f0404520037cd249ccbcfeb0b9feae07d8d4f7d922cf88adc4f3e8691f9d34ccc8d097f00000000000000\",\n" +
                 "        \"parsed\": \"bid-addr-04520037cd249ccbcfeb0b9feae07d8d4f7d922cf88adc4f3e8691f9d34ccc8d097f00000000000000\"\n" +
                 "      }";
 
@@ -158,7 +158,7 @@ class CLValueKeyTest {
         assertThat(clValueKey.getValue().getTag(), is(KeyTag.BID_ADDR));
         assertThat(clValueKey.getValue(), is(instanceOf(BidAddrKey.class)));
         assertThat(clValueKey.getParsed(), is("bid-addr-04520037cd249ccbcfeb0b9feae07d8d4f7d922cf88adc4f3e8691f9d34ccc8d097f00000000000000"));
-        assertThat(clValueKey.getBytes(), is("0f0304520037cd249ccbcfeb0b9feae07d8d4f7d922cf88adc4f3e8691f9d34ccc8d097f00000000000000"));
+        assertThat(clValueKey.getBytes(), is("0f0404520037cd249ccbcfeb0b9feae07d8d4f7d922cf88adc4f3e8691f9d34ccc8d097f00000000000000"));
         final BidAddrKey key = (BidAddrKey) clValueKey.getValue();
         assertThat(key.getBidAddr(), is(BidAddr.CREDIT));
 

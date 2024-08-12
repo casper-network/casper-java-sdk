@@ -318,7 +318,7 @@ class KeyTest {
         final Key key = Key.fromKeyString(strKey);
         assertThat(key, is(instanceOf(AddressableEntityKey.class)));
         assertThat(key.getTag(), is(KeyTag.ADDRESSABLE_ENTITY));
-        assertThat(key.getKey(), is(Hex.decode("0101010101010101010101010101010101010101010101010101010101010101")));
+        assertThat(key.getKey(), is(Hex.decode("000101010101010101010101010101010101010101010101010101010101010101")));
         assertThat(key.toString(), is(strKey));
         assertThat(key.getAlgoTaggedHex(), is("11000101010101010101010101010101010101010101010101010101010101010101"));
         assertThat(((AddressableEntityKey) key).getEntityAddressTag(), is(EntityAddr.SYSTEM));
@@ -331,7 +331,7 @@ class KeyTest {
         final Key key = Key.fromKeyString(strKey);
         assertThat(key, is(instanceOf(AddressableEntityKey.class)));
         assertThat(key.getTag(), is(KeyTag.ADDRESSABLE_ENTITY));
-        assertThat(key.getKey(), is(Hex.decode("0101010101010101010101010101010101010101010101010101010101010101")));
+        assertThat(key.getKey(), is(Hex.decode("010101010101010101010101010101010101010101010101010101010101010101")));
         assertThat(key.toString(), is(strKey));
         assertThat(key.getAlgoTaggedHex(), is("11010101010101010101010101010101010101010101010101010101010101010101"));
         assertThat(((AddressableEntityKey) key).getEntityAddressTag(), is(EntityAddr.ACCOUNT));
@@ -344,7 +344,7 @@ class KeyTest {
         final Key key = Key.fromKeyString(strKey);
         assertThat(key, is(instanceOf(AddressableEntityKey.class)));
         assertThat(key.getTag(), is(KeyTag.ADDRESSABLE_ENTITY));
-        assertThat(key.getKey(), is(Hex.decode("0101010101010101010101010101010101010101010101010101010101010101")));
+        assertThat(key.getKey(), is(Hex.decode("020101010101010101010101010101010101010101010101010101010101010101")));
         assertThat(key.toString(), is(strKey));
         assertThat(key.getAlgoTaggedHex(), is("11020101010101010101010101010101010101010101010101010101010101010101"));
         assertThat(((AddressableEntityKey) key).getEntityAddressTag(), is(EntityAddr.SMART_CONTRACT));
@@ -357,7 +357,7 @@ class KeyTest {
         final Key key = Key.fromKeyString(strKey);
         assertThat(key, is(instanceOf(ByteCodeKey.class)));
         assertThat(key.getTag(), is(KeyTag.BYTE_CODE));
-        assertThat(key.getKey(), is(Hex.decode("0101010101010101010101010101010101010101010101010101010101010101")));
+        assertThat(key.getKey(), is(Hex.decode("010101010101010101010101010101010101010101010101010101010101010101")));
         assertThat(key.toString(), is(strKey));
         assertThat(key.getAlgoTaggedHex(), is("12010101010101010101010101010101010101010101010101010101010101010101"));
         assertThat(((ByteCodeKey) key).getByteCodeAddr(), is(ByteCodeAddr.EMPTY));
@@ -370,7 +370,7 @@ class KeyTest {
         final Key key = Key.fromKeyString(strKey);
         assertThat(key, is(instanceOf(ByteCodeKey.class)));
         assertThat(key.getTag(), is(KeyTag.BYTE_CODE));
-        assertThat(key.getKey(), is(Hex.decode("0101010101010101010101010101010101010101010101010101010101010101")));
+        assertThat(key.getKey(), is(Hex.decode("000101010101010101010101010101010101010101010101010101010101010101")));
         assertThat(key.toString(), is(strKey));
         assertThat(key.getAlgoTaggedHex(), is("12000101010101010101010101010101010101010101010101010101010101010101"));
         assertThat(((ByteCodeKey) key).getByteCodeAddr(), is(ByteCodeAddr.V1_CASPER_WASM));
@@ -418,10 +418,10 @@ class KeyTest {
         assertThat(key, is(instanceOf(NamedKeyKey.class)));
         assertThat(key.getTag(), is(KeyTag.NAMED_KEY));
         assertThat(key.toString(), is(strKey));
-        assertThat(key.getAlgoTaggedHex(), is("140001010101010101010101010101010101010101010101010101010101010101010202020202020202020202020202020202020202020202020202020202020202"));
-        assertThat(((NamedKeyKey) key).getBaseAddr().getKey(), is(Hex.decode("0101010101010101010101010101010101010101010101010101010101010101")));
+        assertThat(key.getAlgoTaggedHex(), is("14000001010101010101010101010101010101010101010101010101010101010101010202020202020202020202020202020202020202020202020202020202020202"));
+        assertThat(((NamedKeyKey) key).getBaseAddr().getKey(), is(Hex.decode("000101010101010101010101010101010101010101010101010101010101010101")));
         assertThat(((NamedKeyKey) key).getStringBytes(), is(Hex.decode("0202020202020202020202020202020202020202020202020202020202020202")));
-        assertThat(key.getKey(), is(Hex.decode("0001010101010101010101010101010101010101010101010101010101010101010202020202020202020202020202020202020202020202020202020202020202")));
+        assertThat(key.getKey(), is(Hex.decode("000001010101010101010101010101010101010101010101010101010101010101010202020202020202020202020202020202020202020202020202020202020202")));
     }
 
     @Test

@@ -24,19 +24,22 @@ public class ByteCodeKey extends Key {
     @JsonValue
     public String getAlgoTaggedHex() {
         return ByteUtils.encodeHexString(new byte[]{this.getTag().getByteTag()})
-                + ByteUtils.encodeHexString(new byte[]{this.getByteCodeAddr().getByteTag()})
                 + ByteUtils.encodeHexString(this.getKey());
     }
 
     @Override
-    protected void fromStringCustom(String strKey) {
-        super.fromStringCustom(strKey);
+    protected void fromStringCustom(final String strKey) {
         this.byteCodeAddr = ByteCodeAddr.getByKeyName(strKey);
+        final byte[] key = new byte[33];
+        final String[] split = strKey.split("-");
+        key[0] = byteCodeAddr.getByteTag();
+        System.arraycopy(Hex.decode(split[split.length - 1]), 0, key, 1, 32);
+        setKey(key);
     }
 
     @Override
     public String toString() {
-        return this.getTag().getKeyName() + byteCodeAddr.getKeyName() + "-" + Hex.encode(this.getKey());
+        return this.getTag().getKeyName() + byteCodeAddr.getKeyName() + "-" + Hex.encode(this.getKey()).substring(2);
     }
 
     protected void deserializeCustom(final DeserializerBuffer deser) throws Exception {
