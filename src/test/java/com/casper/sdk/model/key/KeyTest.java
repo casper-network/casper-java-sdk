@@ -254,7 +254,7 @@ class KeyTest {
         assertThat(key, is(instanceOf(BidAddrKey.class)));
         assertThat(key.getTag(), is(KeyTag.BID_ADDR));
         assertThat(key.getKey(), is(Hex.decode("002f3fb80d362ad0a922f446915a259c9aaec9ba99292b3e50ff2359c458007309")));
-        assertThat(key.toString(), is("bid-addr-002f3fb80d362ad0a922f446915a259c9aaec9ba99292b3e50ff2359c458007309"));
+        assertThat(key.toString(), is(strKey));
         assertThat(key.getAlgoTaggedHex(), is("0f002f3fb80d362ad0a922f446915a259c9aaec9ba99292b3e50ff2359c458007309"));
         assertThat(((BidAddrKey) key).getBidAddr(), is(BidAddr.UNIFIED));
     }
@@ -268,7 +268,7 @@ class KeyTest {
         assertThat(key, is(instanceOf(BidAddrKey.class)));
         assertThat(key.getTag(), is(KeyTag.BID_ADDR));
         assertThat(key.getKey(), is(Hex.decode("012f3fb80d362ad0a922f446915a259c9aaec9ba99292b3e50ff2359c458007309")));
-        assertThat(key.toString(), is("bid-addr-012f3fb80d362ad0a922f446915a259c9aaec9ba99292b3e50ff2359c458007309"));
+        assertThat(key.toString(), is(strKey));
         assertThat(key.getAlgoTaggedHex(), is("0f012f3fb80d362ad0a922f446915a259c9aaec9ba99292b3e50ff2359c458007309"));
         assertThat(((BidAddrKey) key).getBidAddr(), is(BidAddr.VALIDATOR));
     }
@@ -281,7 +281,7 @@ class KeyTest {
         assertThat(key, is(instanceOf(BidAddrKey.class)));
         assertThat(key.getTag(), is(KeyTag.BID_ADDR));
         assertThat(key.getKey(), is(Hex.decode("022f3fb80d362ad0a922f446915a259c9aaec9ba99292b3e50ff2359c4580073099fa1fc0808d3a5b9ea9f3af4ca7c8c3655568fdf378d8afdf8a7e56e58abbfd4")));
-        assertThat(key.toString(), is("bid-addr-022f3fb80d362ad0a922f446915a259c9aaec9ba99292b3e50ff2359c4580073099fa1fc0808d3a5b9ea9f3af4ca7c8c3655568fdf378d8afdf8a7e56e58abbfd4"));
+        assertThat(key.toString(), is(strKey));
         assertThat(key.getAlgoTaggedHex(), is("0f022f3fb80d362ad0a922f446915a259c9aaec9ba99292b3e50ff2359c4580073099fa1fc0808d3a5b9ea9f3af4ca7c8c3655568fdf378d8afdf8a7e56e58abbfd4"));
         assertThat(((BidAddrKey) key).getBidAddr(), is(BidAddr.DELEGATOR));
     }
@@ -294,7 +294,7 @@ class KeyTest {
         assertThat(key, is(instanceOf(BidAddrKey.class)));
         assertThat(key.getTag(), is(KeyTag.BID_ADDR));
         assertThat(key.getKey(), is(Hex.decode("04520037cd249ccbcfeb0b9feae07d8d4f7d922cf88adc4f3e8691f9d34ccc8d097f00000000000000")));
-        assertThat(key.toString(), is("bid-addr-04520037cd249ccbcfeb0b9feae07d8d4f7d922cf88adc4f3e8691f9d34ccc8d097f00000000000000"));
+        assertThat(key.toString(), is(strKey));
         assertThat(key.getAlgoTaggedHex(), is("0f04520037cd249ccbcfeb0b9feae07d8d4f7d922cf88adc4f3e8691f9d34ccc8d097f00000000000000"));
         assertThat(((BidAddrKey) key).getBidAddr(), is(BidAddr.CREDIT));
     }
@@ -307,7 +307,7 @@ class KeyTest {
         assertThat(key, is(instanceOf(Key.class)));
         assertThat(key.getTag(), is(KeyTag.PACKAGE));
         assertThat(key.getKey(), is(Hex.decode("0909090909090909090909090909090909090909090909090909090909090909")));
-        assertThat(key.toString(), is("package-0909090909090909090909090909090909090909090909090909090909090909"));
+        assertThat(key.toString(), is(strKey));
         assertThat(key.getAlgoTaggedHex(), is("100909090909090909090909090909090909090909090909090909090909090909"));
     }
 
@@ -319,7 +319,7 @@ class KeyTest {
         assertThat(key, is(instanceOf(AddressableEntityKey.class)));
         assertThat(key.getTag(), is(KeyTag.ADDRESSABLE_ENTITY));
         assertThat(key.getKey(), is(Hex.decode("0101010101010101010101010101010101010101010101010101010101010101")));
-        assertThat(key.toString(), is("entity-system-0101010101010101010101010101010101010101010101010101010101010101"));
+        assertThat(key.toString(), is(strKey));
         assertThat(key.getAlgoTaggedHex(), is("11000101010101010101010101010101010101010101010101010101010101010101"));
         assertThat(((AddressableEntityKey) key).getEntityAddressTag(), is(EntityAddr.SYSTEM));
     }
@@ -332,7 +332,7 @@ class KeyTest {
         assertThat(key, is(instanceOf(AddressableEntityKey.class)));
         assertThat(key.getTag(), is(KeyTag.ADDRESSABLE_ENTITY));
         assertThat(key.getKey(), is(Hex.decode("0101010101010101010101010101010101010101010101010101010101010101")));
-        assertThat(key.toString(), is("entity-account-0101010101010101010101010101010101010101010101010101010101010101"));
+        assertThat(key.toString(), is(strKey));
         assertThat(key.getAlgoTaggedHex(), is("11010101010101010101010101010101010101010101010101010101010101010101"));
         assertThat(((AddressableEntityKey) key).getEntityAddressTag(), is(EntityAddr.ACCOUNT));
     }
@@ -345,7 +345,7 @@ class KeyTest {
         assertThat(key, is(instanceOf(AddressableEntityKey.class)));
         assertThat(key.getTag(), is(KeyTag.ADDRESSABLE_ENTITY));
         assertThat(key.getKey(), is(Hex.decode("0101010101010101010101010101010101010101010101010101010101010101")));
-        assertThat(key.toString(), is("entity-contract-0101010101010101010101010101010101010101010101010101010101010101"));
+        assertThat(key.toString(), is(strKey));
         assertThat(key.getAlgoTaggedHex(), is("11020101010101010101010101010101010101010101010101010101010101010101"));
         assertThat(((AddressableEntityKey) key).getEntityAddressTag(), is(EntityAddr.SMART_CONTRACT));
     }
@@ -358,7 +358,7 @@ class KeyTest {
         assertThat(key, is(instanceOf(ByteCodeKey.class)));
         assertThat(key.getTag(), is(KeyTag.BYTE_CODE));
         assertThat(key.getKey(), is(Hex.decode("0101010101010101010101010101010101010101010101010101010101010101")));
-        assertThat(key.toString(), is("byte-code-empty-0101010101010101010101010101010101010101010101010101010101010101"));
+        assertThat(key.toString(), is(strKey));
         assertThat(key.getAlgoTaggedHex(), is("12010101010101010101010101010101010101010101010101010101010101010101"));
         assertThat(((ByteCodeKey) key).getByteCodeAddr(), is(ByteCodeAddr.EMPTY));
     }
@@ -371,7 +371,7 @@ class KeyTest {
         assertThat(key, is(instanceOf(ByteCodeKey.class)));
         assertThat(key.getTag(), is(KeyTag.BYTE_CODE));
         assertThat(key.getKey(), is(Hex.decode("0101010101010101010101010101010101010101010101010101010101010101")));
-        assertThat(key.toString(), is("byte-code-v1-wasm-0101010101010101010101010101010101010101010101010101010101010101"));
+        assertThat(key.toString(), is(strKey));
         assertThat(key.getAlgoTaggedHex(), is("12000101010101010101010101010101010101010101010101010101010101010101"));
         assertThat(((ByteCodeKey) key).getByteCodeAddr(), is(ByteCodeAddr.V1_CASPER_WASM));
     }
@@ -386,7 +386,7 @@ class KeyTest {
         assertThat(key, is(instanceOf(MessageKey.class)));
         assertThat(key.getTag(), is(KeyTag.MESSAGE));
         assertThat(key.getKey(), is(Hex.decode("0255d4a6915291da12afded37fa5bc01f0803a2f0faf6acb7ec4c7ca6ab76f33305721a6d9d7a9afe5dfdb35276fb823bed0f825350e4d865a5ec0110c380de4e100")));
-        assertThat(key.toString(), is("message-topic-entity-contract-55d4a6915291da12afded37fa5bc01f0803a2f0faf6acb7ec4c7ca6ab76f3330-5721a6d9d7a9afe5dfdb35276fb823bed0f825350e4d865a5ec0110c380de4e1"));
+        assertThat(key.toString(), is(strKey));
         assertThat(key.getAlgoTaggedHex(), is("130255d4a6915291da12afded37fa5bc01f0803a2f0faf6acb7ec4c7ca6ab76f33305721a6d9d7a9afe5dfdb35276fb823bed0f825350e4d865a5ec0110c380de4e100"));
         assertThat(((MessageKey) key).getEntityAddrHash(), is(new Digest("55d4a6915291da12afded37fa5bc01f0803a2f0faf6acb7ec4c7ca6ab76f3330")));
         assertThat(((MessageKey) key).getTopicHash(), is(new Digest("5721a6d9d7a9afe5dfdb35276fb823bed0f825350e4d865a5ec0110c380de4e1")));
@@ -401,7 +401,7 @@ class KeyTest {
         final Key key = Key.fromKeyString(strKey);
         assertThat(key, is(instanceOf(MessageKey.class)));
         assertThat(key.getTag(), is(KeyTag.MESSAGE));
-        assertThat(key.toString(), is("message-entity-contract-55d4a6915291da12afded37fa5bc01f0803a2f0faf6acb7ec4c7ca6ab76f3330-5721a6d9d7a9afe5dfdb35276fb823bed0f825350e4d865a5ec0110c380de4e1-f"));
+        assertThat(key.toString(), is(strKey));
         assertThat(key.getAlgoTaggedHex(), is("130255d4a6915291da12afded37fa5bc01f0803a2f0faf6acb7ec4c7ca6ab76f33305721a6d9d7a9afe5dfdb35276fb823bed0f825350e4d865a5ec0110c380de4e1010f000000"));
         assertThat(((MessageKey) key).getEntityAddrHash(), is(new Digest("55d4a6915291da12afded37fa5bc01f0803a2f0faf6acb7ec4c7ca6ab76f3330")));
         assertThat(((MessageKey) key).getTopicHash(), is(new Digest("5721a6d9d7a9afe5dfdb35276fb823bed0f825350e4d865a5ec0110c380de4e1")));
@@ -417,11 +417,65 @@ class KeyTest {
         final Key key = Key.fromKeyString(strKey);
         assertThat(key, is(instanceOf(NamedKeyKey.class)));
         assertThat(key.getTag(), is(KeyTag.NAMED_KEY));
-        assertThat(key.toString(), is("named-key-entity-system-0101010101010101010101010101010101010101010101010101010101010101-0202020202020202020202020202020202020202020202020202020202020202"));
+        assertThat(key.toString(), is(strKey));
         assertThat(key.getAlgoTaggedHex(), is("140001010101010101010101010101010101010101010101010101010101010101010202020202020202020202020202020202020202020202020202020202020202"));
         assertThat(((NamedKeyKey) key).getBaseAddr().getKey(), is(Hex.decode("0101010101010101010101010101010101010101010101010101010101010101")));
         assertThat(((NamedKeyKey) key).getStringBytes(), is(Hex.decode("0202020202020202020202020202020202020202020202020202020202020202")));
         assertThat(key.getKey(), is(Hex.decode("0001010101010101010101010101010101010101010101010101010101010101010202020202020202020202020202020202020202020202020202020202020202")));
+    }
+
+    @Test
+    void blockTimeKeyFromKeyString() throws NoSuchKeyTagException {
+
+        final String strKey = "block-time-0909090909090909090909090909090909090909090909090909090909090909";
+        final Key key = Key.fromKeyString(strKey);
+        assertThat(key, is(instanceOf(BlockGlobalKey.class)));
+        assertThat(key.getTag(), is(KeyTag.BLOCK_GLOBAL));
+        assertThat(key.toString(), is("block-time-0909090909090909090909090909090909090909090909090909090909090909"));
+        assertThat(key.getAlgoTaggedHex(), is("15000909090909090909090909090909090909090909090909090909090909090909"));
+        assertThat(((BlockGlobalKey) key).getBlockGlobalAddr(), is(BlockGlobalAddr.BLOCK_TIME));
+        assertThat(key.getKey(), is(Hex.decode("000909090909090909090909090909090909090909090909090909090909090909")));
+    }
+
+    @Test
+    void blockMessageCountKeyFromKeyString() throws NoSuchKeyTagException {
+
+        final String strKey = "block-message-count-0909090909090909090909090909090909090909090909090909090909090909";
+        final Key key = Key.fromKeyString(strKey);
+        assertThat(key, is(instanceOf(BlockGlobalKey.class)));
+        assertThat(key.getTag(), is(KeyTag.BLOCK_GLOBAL));
+        assertThat(key.toString(), is(strKey));
+        assertThat(key.getAlgoTaggedHex(), is("15010909090909090909090909090909090909090909090909090909090909090909"));
+        assertThat(((BlockGlobalKey) key).getBlockGlobalAddr(), is(BlockGlobalAddr.MESSAGE_COUNT));
+        assertThat(key.getKey(), is(Hex.decode("010909090909090909090909090909090909090909090909090909090909090909")));
+    }
+
+    @Test
+    void entryPointKeyFromKeyString() throws NoSuchKeyTagException {
+
+        final String strKey = "entry-point-v2-entity-contract-2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a-1";
+        final Key key = Key.fromKeyString(strKey);
+        assertThat(key, is(instanceOf(EntryPointKey.class)));
+        assertThat(key.getTag(), is(KeyTag.ENTRY_POINT));
+        assertThat(key.toString(), is(strKey));
+        assertThat(key.getAlgoTaggedHex(), is("1701022a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a01000000"));
+        assertThat(((EntryPointKey) key).getEntryPointAddr(), is(EntryPointAddr.VM_CASPER_V2));
+        assertThat(((EntryPointKey) key).getHashAddr(), is(Hex.decode("2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a")));
+        assertThat(((EntryPointKey) key).getSelector(), is(1L));
+        assertThat(key.getKey(), is(Hex.decode("01022a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a01000000")));
+    }
+
+    @Test
+    void balanceHoldKeyFromKeyString() throws NoSuchKeyTagException {
+
+        final String strKey = "balance-hold-0000000000000000000000000000000000000000000000000000000000000000000000000000000000";
+        final Key key = Key.fromKeyString(strKey);
+        assertThat(key, is(instanceOf(BalanceHoldKey.class)));
+        assertThat(key.getTag(), is(KeyTag.BALANCE_HOLD));
+        assertThat(key.toString(), is(strKey));
+        assertThat(key.getAlgoTaggedHex(), is("160000000000000000000000000000000000000000000000000000000000000000000000000000000000"));
+        assertThat(((BalanceHoldKey) key).getBalanceHoldAddr(), is(BalanceHoldAddr.GAS));
+        assertThat(key.getKey(), is(Hex.decode("0000000000000000000000000000000000000000000000000000000000000000000000000000000000")));
     }
 }
 
