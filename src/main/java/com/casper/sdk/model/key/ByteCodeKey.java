@@ -43,5 +43,4 @@ public class ByteCodeKey extends Key {
         this.setKey(deser.readByteArray(33));
         this.byteCodeAddr = ByteCodeAddr.getByTag(this.getKey()[0]);
     }
-
 }

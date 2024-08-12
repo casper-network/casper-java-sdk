@@ -37,9 +37,9 @@ public class URef {
     @JsonIgnore
     private URefAccessRight accessRight;
 
-    public static URef fromString(String uref)
+    public static URef fromString(final String uref)
             throws IOException, DynamicInstanceException, IllegalArgumentException {
-        String[] urefParts = uref.split("-");
+        final String[] urefParts = uref.split("-");
         if (!urefParts[0].equals("uref") || urefParts.length != 3) {
             throw new IOException("Not a valid Uref");
         }
@@ -52,14 +52,14 @@ public class URef {
     }
 
     @JsonCreator
-    public void createURef(String uref) throws IOException, DynamicInstanceException, IllegalArgumentException {
+    public void createURef(final String uref) throws IOException, DynamicInstanceException, IllegalArgumentException {
         final URef obj = URef.fromString(uref);
         this.accessRight = obj.getAccessRight();
         this.address = obj.getAddress();
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         final URef uRef = (URef) o;

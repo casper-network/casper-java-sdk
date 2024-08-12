@@ -19,12 +19,12 @@ import lombok.Setter;
 @Setter
 public class BlockGlobalKey extends Key {
 
+    private BlockGlobalAddr blockGlobalAddr;
+
     @Override
     public String toString() {
         return getTag().getKeyName() + blockGlobalAddr.getKeyName() + "-" + Hex.encode(getKey()).substring(2);
     }
-
-    private BlockGlobalAddr blockGlobalAddr;
 
     @Override
     protected void fromStringCustom(final String strKey) {

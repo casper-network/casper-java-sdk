@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 
 
 /**
+ * A `Key` under which bid information is stored.
+ *
  * @author ian@meywood.com
  */
 @AllArgsConstructor
@@ -18,13 +20,12 @@ public class BidAddrKey extends Key {
 
     private BidAddr bidAddr;
 
-
     @Override
     protected void fromStringCustom(String strKey) {
         final String[] parts = strKey.split("-");
         try {
-            this.bidAddr = BidAddr.getByTag(Hex.decode(parts[parts.length-1].substring(0,2))[0]);
-            this.setKey(Hex.decode(parts[parts.length-1]));
+            this.bidAddr = BidAddr.getByTag(Hex.decode(parts[parts.length - 1].substring(0, 2))[0]);
+            this.setKey(Hex.decode(parts[parts.length - 1]));
         } catch (NoSuchKeyTagException e) {
             throw new IllegalArgumentException(e);
         }

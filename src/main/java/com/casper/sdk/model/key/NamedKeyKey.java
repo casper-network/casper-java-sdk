@@ -34,24 +34,15 @@ public class NamedKeyKey extends Key {
             final String baseAddrStr = split[2] + "-" + split[3] + "-" + split[4];
             baseAddr = (AddressableEntityKey) Key.fromKeyString(baseAddrStr);
             stringBytes = Hex.decode(split[5]);
-
-            final SerializerBuffer ser = new SerializerBuffer();
-            ser.writeU8(baseAddr.getEntityAddressTag().getByteTag());
-            ser.writeByteArray(baseAddr.getKey());
-            ser.writeByteArray(stringBytes);
-            setKey(ser.toByteArray());
+            refreshKey();
         } catch (NoSuchKeyTagException e) {
             throw new IllegalArgumentException(e);
         }
     }
 
-
-
     @Override
     public String toString() {
-        return this.getTag().getKeyName() +
-                baseAddr + "-" +
-                Hex.encode(stringBytes);
+        return this.getTag().getKeyName() + baseAddr + "-" + Hex.encode(stringBytes);
     }
 
     @Override
@@ -60,5 +51,13 @@ public class NamedKeyKey extends Key {
         baseAddr = new AddressableEntityKey();
         baseAddr.deserializeCustom(new DeserializerBuffer(Arrays.copyOfRange(getKey(), 0, 33)));
         stringBytes = Arrays.copyOfRange(getKey(), 33, 65);
+    }
+
+    private void refreshKey() {
+        final SerializerBuffer ser = new SerializerBuffer();
+        ser.writeU8(baseAddr.getEntityAddressTag().getByteTag());
+        ser.writeByteArray(baseAddr.getKey());
+        ser.writeByteArray(stringBytes);
+        setKey(ser.toByteArray());
     }
 }

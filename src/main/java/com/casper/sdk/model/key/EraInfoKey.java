@@ -11,6 +11,8 @@ import lombok.Setter;
 import java.math.BigInteger;
 
 /**
+ * A `Key` under which an era info is stored.
+ *
  * @author ian@meywood.com
  */
 @AllArgsConstructor
@@ -24,9 +26,7 @@ public class EraInfoKey extends Key {
     @Override
     protected void deserializeCustom(final DeserializerBuffer deser) throws Exception {
         eraId = deser.readU64();
-        final SerializerBuffer ser = new SerializerBuffer();
-        ser.writeU64(eraId);
-        setKey(ser.toByteArray());
+        refreshKey();
     }
 
     @Override
@@ -34,9 +34,7 @@ public class EraInfoKey extends Key {
         try {
             final String[] split = strKey.split("-");
             eraId = new BigInteger(split[split.length - 1]);
-            final SerializerBuffer ser = new SerializerBuffer();
-            ser.writeU64(eraId);
-            setKey(ser.toByteArray());
+            refreshKey();
         } catch (ValueSerializationException e) {
             throw new IllegalArgumentException(e);
         }
@@ -45,5 +43,11 @@ public class EraInfoKey extends Key {
     @Override
     public String toString() {
         return this.getTag().getKeyName() + eraId;
+    }
+
+    private void refreshKey() throws ValueSerializationException {
+        final SerializerBuffer ser = new SerializerBuffer();
+        ser.writeU64(eraId);
+        setKey(ser.toByteArray());
     }
 }

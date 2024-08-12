@@ -32,7 +32,6 @@ public class EntryPointKey extends Key {
     /** The selector for a V2 entry point. */
     private long selector;
 
-
     @Override
     protected void fromStringCustom(final String strKey) {
         final String[] split = strKey.split("-");
@@ -76,11 +75,10 @@ public class EntryPointKey extends Key {
             sb.append(Hex.encode(this.namedBytes));
         }
 
-        updateKey();
+        refreshKey();
 
         return sb.toString();
     }
-
 
     @Override
     protected void deserializeCustom(final DeserializerBuffer deser) throws Exception {
@@ -93,10 +91,10 @@ public class EntryPointKey extends Key {
         } else {
             this.selector = deser.readU32();
         }
-        updateKey();
+        refreshKey();
     }
 
-    private void updateKey() {
+    private void refreshKey() {
         final SerializerBuffer ser = new SerializerBuffer();
         ser.writeU8(entryPointAddr.getByteTag());
         ser.writeU8(entityAddr.getByteTag());

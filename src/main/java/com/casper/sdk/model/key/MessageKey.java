@@ -35,33 +35,26 @@ public class MessageKey extends Key {
     @Override
     protected void deserializeCustom(final DeserializerBuffer deser) throws Exception {
 
-        final SerializerBuffer serializerBuffer = new SerializerBuffer();
 
         // EntityAddr key entity_addr - inc has
         entityAddr = EntityAddr.getByTag(deser.readU8());
-        serializerBuffer.writeU8(entityAddr.getByteTag());
 
         // EntityAddr Hash entity_addr_hash
         final byte[] entityAddrHash = deser.readByteArray(32);
-        serializerBuffer.writeByteArray(entityAddrHash);
         this.entityAddrHash = new Digest();
         this.entityAddrHash.setDigest(entityAddrHash);
 
         // Topic name Hash topic_name_hash
         final byte[] topicNameHash = deser.readByteArray(32);
-        serializerBuffer.writeByteArray(topicNameHash);
         this.topicHash = new Digest();
         this.topicHash.setDigest(topicNameHash);
 
         // Optional U32 message_index
         final Boolean isMessageIndexPresent = deser.readBool();
-        serializerBuffer.writeBool(isMessageIndexPresent);
         if (isMessageIndexPresent) {
             messageIndex = deser.readU32();
-            serializerBuffer.writeU32(messageIndex);
         }
-
-        setKey(serializerBuffer.toByteArray());
+        refreshKey();
     }
 
     public Optional<Long> getMessageIndex() {
@@ -94,8 +87,6 @@ public class MessageKey extends Key {
     @Override
     protected void fromStringCustom(final String strKey) {
 
-        final SerializerBuffer serializerBuffer = new SerializerBuffer();
-
         final String[] split = strKey.split("-");
 
         if (TOPIC.equals(split[1])) {
@@ -123,7 +114,11 @@ public class MessageKey extends Key {
                 messageIndex = Long.parseLong(split[5], 16);
             }
         }
+        refreshKey();
+    }
 
+    private void refreshKey() {
+        final SerializerBuffer serializerBuffer = new SerializerBuffer();
         serializerBuffer.writeU8(entityAddr.getByteTag());
         serializerBuffer.writeByteArray(entityAddrHash.getDigest());
         serializerBuffer.writeByteArray(topicHash.getDigest());
@@ -136,6 +131,4 @@ public class MessageKey extends Key {
 
         setKey(serializerBuffer.toByteArray());
     }
-
-
 }

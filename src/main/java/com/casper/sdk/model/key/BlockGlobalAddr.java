@@ -33,8 +33,9 @@ public enum BlockGlobalAddr implements Tag {
 
     public static BlockGlobalAddr getByKeyName(final String keyName) {
         for (BlockGlobalAddr addr : values()) {
-            if (keyName.contains(addr.keyName))
+            if (keyName.contains(addr.keyName)) {
                 return addr;
+            }
         }
         throw new IllegalArgumentException("No such BlockGlobalAddr: " + keyName);
     }

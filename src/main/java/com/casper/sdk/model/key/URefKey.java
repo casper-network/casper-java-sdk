@@ -11,6 +11,8 @@ import lombok.Setter;
 import java.util.Arrays;
 
 /**
+ * / A `Key` which is a `URef`, under which most types of data can be stored.
+ *
  * @author ian@meywood.com
  */
 @AllArgsConstructor
@@ -42,7 +44,6 @@ public class URefKey extends Key {
             throw new IllegalArgumentException("Error deserializing URefKey: " + strKey, e);
         }
     }
-
 
     @Override
     public String toString() {
