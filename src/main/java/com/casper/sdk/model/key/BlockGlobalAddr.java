@@ -15,11 +15,13 @@ import lombok.Getter;
 public enum BlockGlobalAddr implements Tag {
 
     /** Block time variant */
-    BLOCK_TIME((byte) 0),
+    BLOCK_TIME((byte) 0, "time"),
     /** Message count variant. */
-    MESSAGE_COUNT((byte) 1);
+    MESSAGE_COUNT((byte) 1, "message-count");
+
 
     private final byte byteTag;
+    private final String keyName;
 
     public static BlockGlobalAddr getByTag(final byte byteTag) {
         for (BlockGlobalAddr addr : values()) {
@@ -27,5 +29,14 @@ public enum BlockGlobalAddr implements Tag {
                 return addr;
         }
         throw new IllegalArgumentException("No such BlockGlobalAddr: " + byteTag);
+    }
+
+    public static BlockGlobalAddr getByKeyName(final String keyName) {
+        for (BlockGlobalAddr addr : values()) {
+            if (keyName.contains(addr.keyName)) {
+                return addr;
+            }
+        }
+        throw new IllegalArgumentException("No such BlockGlobalAddr: " + keyName);
     }
 }

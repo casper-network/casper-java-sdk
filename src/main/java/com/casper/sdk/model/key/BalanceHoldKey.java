@@ -1,5 +1,6 @@
 package com.casper.sdk.model.key;
 
+import com.syntifi.crypto.key.encdec.Hex;
 import dev.oak3.sbs4j.DeserializerBuffer;
 import dev.oak3.sbs4j.SerializerBuffer;
 import lombok.AllArgsConstructor;
@@ -20,12 +21,22 @@ import java.math.BigInteger;
 @Setter
 public class BalanceHoldKey extends Key {
 
-    /**  Gas hold variant. */
+    /** Gas hold variant. */
     private BalanceHoldAddr balanceHoldAddr;
-    /**  The address of the purse this hold is on. */
+    /** The address of the purse this hold is on. */
     private byte[] urefAddr;
-    /**  The block time this hold was placed. */
+    /** The block time this hold was placed. */
     private BigInteger blockTime;
+
+    @Override
+    protected void fromStringCustom(final String strKey) {
+        final String[] split = strKey.split("-");
+        try {
+            this.deserializeCustom(new DeserializerBuffer(Hex.decode(split[split.length - 1])));
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Invalid key: " + strKey, e);
+        }
+    }
 
     @Override
     protected void deserializeCustom(final DeserializerBuffer deser) throws Exception {
@@ -39,4 +50,5 @@ public class BalanceHoldKey extends Key {
         ser.writeU64(this.blockTime);
         this.setKey(ser.toByteArray());
     }
+
 }
