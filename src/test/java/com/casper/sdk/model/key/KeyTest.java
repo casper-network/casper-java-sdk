@@ -56,12 +56,10 @@ class KeyTest {
         assertThat(key.getKey(), is(Hex.decode("030303030303030303030303030303030303030303030303030303030303030301")));
         assertThat(key.toString(), is(strKey));
         assertThat(key.getAlgoTaggedHex(), is("02030303030303030303030303030303030303030303030303030303030303030301"));
-
         assertThat(((URefKey) key).getURef(), is(URef.fromString("uref-0303030303030303030303030303030303030303030303030303030303030303-001")));
 
         final String hexKey = "02030303030303030303030303030303030303030303030303030303030303030301";
-
-        Key fromTaggedHexString = Key.fromTaggedHexString(hexKey);
+        final Key fromTaggedHexString = Key.fromTaggedHexString(hexKey);
         assertThat(key, is(instanceOf(URefKey.class)));
         assertThat(((URefKey) key).getURef(), is(((URefKey) fromTaggedHexString).getURef()));
     }
@@ -259,7 +257,6 @@ class KeyTest {
         assertThat(((BidAddrKey) key).getBidAddr(), is(BidAddr.UNIFIED));
     }
 
-
     @Test
     void bidAddrKeyValidatorFromKeyString() throws NoSuchKeyTagException {
 
@@ -376,8 +373,6 @@ class KeyTest {
         assertThat(((ByteCodeKey) key).getByteCodeAddr(), is(ByteCodeAddr.V1_CASPER_WASM));
     }
 
-    //
-
     @Test
     void messageTopicKeyFromKeyString() throws NoSuchKeyTagException {
 
@@ -392,7 +387,6 @@ class KeyTest {
         assertThat(((MessageKey) key).getTopicHash(), is(new Digest("5721a6d9d7a9afe5dfdb35276fb823bed0f825350e4d865a5ec0110c380de4e1")));
         assertThat(((MessageKey) key).getMessageIndex().isPresent(), is(false));
     }
-
 
     @Test
     void messageIndexKeyFromKeyString() throws NoSuchKeyTagException {
