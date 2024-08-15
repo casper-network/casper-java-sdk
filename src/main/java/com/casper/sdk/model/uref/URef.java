@@ -10,6 +10,8 @@ import dev.oak3.sbs4j.util.ByteUtils;
 import lombok.*;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * URef is a tuple that contains the address of the URef and the access rights
@@ -27,23 +29,22 @@ import java.io.IOException;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode
 public class URef {
 
     @JsonIgnore
-    byte[] address;
+    private byte[] address;
 
     @JsonIgnore
-    URefAccessRight accessRight;
+    private URefAccessRight accessRight;
 
-    public static URef fromString(String uref)
+    public static URef fromString(final String uref)
             throws IOException, DynamicInstanceException, IllegalArgumentException {
-        String[] urefParts = uref.split("-");
+        final String[] urefParts = uref.split("-");
         if (!urefParts[0].equals("uref") || urefParts.length != 3) {
             throw new IOException("Not a valid Uref");
         }
-        byte[] address = ByteUtils.parseHexString(urefParts[1]);
-        byte[] accessRightByte = ByteUtils.parseHexString(urefParts[2].substring(1));
+        final byte[] address = ByteUtils.parseHexString(urefParts[1]);
+        final byte[] accessRightByte = ByteUtils.parseHexString(urefParts[2].substring(1));
         URefAccessRight accessRight = URefAccessRight
                 .getTypeBySerializationTag(accessRightByte[accessRightByte.length - 1]);
         return new URef(address, accessRight);
@@ -51,10 +52,23 @@ public class URef {
     }
 
     @JsonCreator
-    public void createURef(String uref) throws IOException, DynamicInstanceException, IllegalArgumentException {
-        URef obj = URef.fromString(uref);
+    public void createURef(final String uref) throws IOException, DynamicInstanceException, IllegalArgumentException {
+        final URef obj = URef.fromString(uref);
         this.accessRight = obj.getAccessRight();
         this.address = obj.getAddress();
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        final URef uRef = (URef) o;
+        return Objects.deepEquals(address, uRef.address) && accessRight == uRef.accessRight;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(Arrays.hashCode(address), accessRight);
     }
 
     @JsonValue
