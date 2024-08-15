@@ -48,6 +48,4 @@ public class TransactionTargetDeserializer extends JsonDeserializer<TransactionT
         throw new IllegalArgumentException("Unknown transaction runtime type: " + runtime);
 
     }
-
-
 }

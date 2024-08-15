@@ -15,4 +15,3 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 @JsonSerialize(using = TransactionTargetSerializer.class)
 @JsonDeserialize(using = TransactionTargetDeserializer.class)
 public interface TransactionTarget extends CasperSerializableObject, Tag {}
-
