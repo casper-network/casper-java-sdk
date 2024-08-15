@@ -33,14 +33,25 @@ public class Key extends AbstractSerializedKeyTaggedHex<KeyTag> {
             key.setTag(keyTag);
             key.deserializeCustom(deser);
             return key;
+        } catch (NoSuchKeyTagException e) {
+            throw e;
         } catch (Exception e) {
             throw new NoSuchKeyTagException("Error deserializing key", e);
         }
     }
 
-    protected void deserializeCustom(final DeserializerBuffer deser) throws Exception {
-        this.setKey(deser.readByteArray(32));
+    public static Key fromKeyString(final String strKey) throws NoSuchKeyTagException {
+        final KeyTag keyTag = KeyTag.getByKeyName(strKey);
+        try {
+            final Key key = keyTag.getKeyClass().getDeclaredConstructor().newInstance();
+            key.setTag(keyTag);
+            key.fromStringCustom(strKey);
+            return key;
+        } catch (Exception e) {
+            throw new NoSuchKeyTagException("Error deserializing key: " + strKey, e);
+        }
     }
+
 
     public static Key fromTaggedHexString(final String hex) throws NoSuchKeyTagException {
         byte[] bytes = ByteUtils.parseHexString(hex);
@@ -62,4 +73,19 @@ public class Key extends AbstractSerializedKeyTaggedHex<KeyTag> {
         this.setTag(obj.getTag());
         this.setKey(obj.getKey());
     }
+
+    @Override
+    public String toString() {
+        return getTag().getKeyName() + ByteUtils.encodeHexString(this.getKey());
+    }
+
+    protected void deserializeCustom(final DeserializerBuffer deser) throws Exception {
+        this.setKey(deser.readByteArray(32));
+    }
+
+    protected void fromStringCustom(final String strKey) {
+        final String[] split = strKey.split("-");
+        this.setKey(ByteUtils.parseHexString(split[split.length - 1]));
+    }
+
 }

@@ -2,9 +2,7 @@ package com.casper.sdk.model.transaction.target;
 
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.serde.Target;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.*;
 import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
 import lombok.*;
@@ -18,9 +16,11 @@ import lombok.*;
 @AllArgsConstructor
 @Getter
 @Setter
-@Builder
 @JsonTypeName("Session")
 public class Session implements TransactionTarget {
+
+    @JsonValue
+    private String target;
 
     /** The compiled Wasm. */
     @JsonProperty("module_bytes")
@@ -28,6 +28,11 @@ public class Session implements TransactionTarget {
     /** The execution runtime to use. */
     @JsonProperty("runtime")
     private TransactionRuntime runtime;
+
+    public Session(final byte[] moduleBytes, final TransactionRuntime runtime) {
+        this.moduleBytes = moduleBytes;
+        this.runtime = runtime;
+    }
 
     @Override
     public void serialize(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {

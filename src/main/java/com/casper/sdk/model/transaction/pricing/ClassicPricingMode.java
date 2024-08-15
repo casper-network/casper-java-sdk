@@ -8,10 +8,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigInteger;
 
@@ -24,6 +21,7 @@ import java.math.BigInteger;
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 public class ClassicPricingMode implements PricingMode {
     /** User-specified payment amount. */
     @JsonProperty("payment_amount")
