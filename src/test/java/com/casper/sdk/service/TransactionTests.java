@@ -3,18 +3,14 @@ package com.casper.sdk.service;
 import com.casper.sdk.model.account.PublicKeyIdentifier;
 import com.casper.sdk.model.clvalue.*;
 import com.casper.sdk.model.common.Ttl;
-import com.casper.sdk.model.contract.Contract;
 import com.casper.sdk.model.deploy.NamedArg;
-import com.casper.sdk.model.deploy.executabledeploy.ModuleBytes;
 import com.casper.sdk.model.entity.AddressableEntity;
 import com.casper.sdk.model.entity.StateEntityResult;
 import com.casper.sdk.model.key.PublicKey;
 import com.casper.sdk.model.transaction.*;
 import com.casper.sdk.model.transaction.entrypoint.CallEntryPoint;
 import com.casper.sdk.model.transaction.entrypoint.TransferEntryPoint;
-import com.casper.sdk.model.transaction.pricing.ClassicPricingMode;
 import com.casper.sdk.model.transaction.pricing.FixedPricingMode;
-import com.casper.sdk.model.transaction.pricing.ReservedPricingMode;
 import com.casper.sdk.model.transaction.scheduling.Standard;
 import com.casper.sdk.model.transaction.target.Native;
 import com.casper.sdk.model.transaction.target.Session;
@@ -24,21 +20,21 @@ import com.casper.sdk.model.uref.URef;
 import com.syntifi.crypto.key.AbstractPrivateKey;
 import com.syntifi.crypto.key.AbstractPublicKey;
 import com.syntifi.crypto.key.Ed25519PrivateKey;
-import com.syntifi.crypto.key.encdec.Hex;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
 import org.apache.cxf.helpers.IOUtils;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
-import static com.casper.sdk.helper.CasperDeployHelper.getPaymentModuleBytes;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
@@ -48,7 +44,7 @@ import static org.hamcrest.core.IsNull.notNullValue;
  *
  * @author ian@meywood.com
  */
-//@Disabled
+@Disabled
 public class TransactionTests {
 
     @Test
