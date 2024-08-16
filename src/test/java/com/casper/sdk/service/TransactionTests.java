@@ -1,5 +1,6 @@
 package com.casper.sdk.service;
 
+import com.casper.sdk.identifier.entity.EntityAddrIdentifier;
 import com.casper.sdk.model.account.PublicKeyIdentifier;
 import com.casper.sdk.model.clvalue.*;
 import com.casper.sdk.model.common.Ttl;
@@ -20,6 +21,7 @@ import com.casper.sdk.model.uref.URef;
 import com.syntifi.crypto.key.AbstractPrivateKey;
 import com.syntifi.crypto.key.AbstractPublicKey;
 import com.syntifi.crypto.key.Ed25519PrivateKey;
+import com.syntifi.crypto.key.encdec.Hex;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
 import org.apache.cxf.helpers.IOUtils;
 import org.junit.jupiter.api.Disabled;
@@ -30,10 +32,12 @@ import java.math.BigInteger;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Paths;
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.TimeoutException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -44,11 +48,11 @@ import static org.hamcrest.core.IsNull.notNullValue;
  *
  * @author ian@meywood.com
  */
-@Disabled
+//@Disabled
 public class TransactionTests {
 
     @Test
-    void chainPutTransactionNativeTransfer() throws IOException, ValueSerializationException {
+    void chainPutTransactionNativeTransfer() throws IOException, ValueSerializationException, TimeoutException {
 
         final CasperService casperService = CasperService.usingPeer(new URL("http://localhost:21101/rpc"), null);
 
@@ -108,10 +112,15 @@ public class TransactionTests {
 
         assertThat(result, is(notNullValue()));
         assertThat(result.getTransactionHash(), is(transaction.get().getHash()));
+
+        final GetTransactionResult getTransactionResult = waitForTransaction(result.getTransactionHash(), casperService);
+        assertThat(getTransactionResult, is(notNullValue()));
+
+
     }
 
     @Test
-    void chainPutContractCep18() throws IOException, ValueSerializationException, URISyntaxException {
+    void chainPutContractCep18() throws IOException, ValueSerializationException, URISyntaxException, TimeoutException, NoSuchAlgorithmException {
 
         final CasperService casperService = CasperService.usingPeer(new URL("http://localhost:21101/rpc"), null);
 
@@ -160,6 +169,43 @@ public class TransactionTests {
         assert result != null;
         assert result.getTransactionHash() != null;
 
+        final GetTransactionResult getTransactionResult = waitForTransaction(result.getTransactionHash(), casperService);
+        assertThat(getTransactionResult, is(notNullValue()));
+
+
+        //TODO Wait for era end, query the block and get the contract details through get_state_entity
+
     }
+
+
+    private GetTransactionResult waitForTransaction(final TransactionHash hash, final CasperService casperService) throws TimeoutException {
+
+        final long timeout = 300 * 1000L;
+        final long now = System.currentTimeMillis();
+
+        GetTransactionResult result = null;
+
+        while (result == null || result.getExecutionInfo() == null){
+
+            result = casperService.getTransaction(hash);
+
+            if (result.getExecutionInfo() != null && System.currentTimeMillis() > now + timeout) {
+                throw new TimeoutException("Timed-out waiting for transaction deploy " + hash);
+            }
+
+            try {
+                //noinspection BusyWait
+                Thread.sleep(1000L);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+
+        }
+
+        return result;
+
+    }
+
+
 
 }

@@ -1,22 +1,22 @@
 package com;
 
-import com.casper.sdk.identifier.block.BlockIdentifier;
 import com.casper.sdk.identifier.block.HashBlockIdentifier;
 import com.casper.sdk.identifier.block.HeightBlockIdentifier;
-import com.casper.sdk.identifier.dictionary.AccountNamedKeyDictionaryIdentifier;
 import com.casper.sdk.identifier.dictionary.StringDictionaryIdentifier;
 import com.casper.sdk.identifier.entity.EntityAddrIdentifier;
-import com.casper.sdk.identifier.entity.PublicKeyEntityIdentifier;
 import com.casper.sdk.identifier.era.IdEraIdentifier;
 import com.casper.sdk.identifier.global.StateRootHashIdentifier;
 import com.casper.sdk.identifier.purse.MainPurseUnderPublickey;
 import com.casper.sdk.identifier.purse.PurseIdentifier;
 import com.casper.sdk.model.account.AccountData;
+import com.casper.sdk.model.account.PublicKeyIdentifier;
 import com.casper.sdk.model.balance.QueryBalanceData;
 import com.casper.sdk.model.balance.QueryBalanceDetailsResult;
 import com.casper.sdk.model.block.ChainGetBlockResult;
+import com.casper.sdk.model.clvalue.*;
+import com.casper.sdk.model.common.Ttl;
 import com.casper.sdk.model.deploy.Delegator;
-import com.casper.sdk.model.deploy.Validator;
+import com.casper.sdk.model.deploy.NamedArg;
 import com.casper.sdk.model.dictionary.DictionaryData;
 import com.casper.sdk.model.entity.AddressableEntity;
 import com.casper.sdk.model.entity.StateEntityResult;
@@ -26,15 +26,42 @@ import com.casper.sdk.model.reward.GetRewardResult;
 import com.casper.sdk.model.stateroothash.StateRootHashData;
 import com.casper.sdk.model.status.ChainspecData;
 import com.casper.sdk.model.status.StatusData;
+import com.casper.sdk.model.transaction.*;
+import com.casper.sdk.model.transaction.entrypoint.CallEntryPoint;
+import com.casper.sdk.model.transaction.entrypoint.TransferEntryPoint;
+import com.casper.sdk.model.transaction.pricing.FixedPricingMode;
+import com.casper.sdk.model.transaction.scheduling.Standard;
+import com.casper.sdk.model.transaction.target.Native;
+import com.casper.sdk.model.transaction.target.Session;
+import com.casper.sdk.model.transaction.target.Transaction;
+import com.casper.sdk.model.transaction.target.TransactionRuntime;
 import com.casper.sdk.model.transfer.TransferData;
+import com.casper.sdk.model.uref.URef;
 import com.casper.sdk.service.CasperService;
-import org.junit.Before;
+import com.casper.sdk.service.TransactionTests;
+import com.syntifi.crypto.key.AbstractPublicKey;
+import com.syntifi.crypto.key.Ed25519PrivateKey;
+import dev.oak3.sbs4j.exception.ValueSerializationException;
+import org.apache.cxf.helpers.IOUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.concurrent.TimeoutException;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsNull.notNullValue;
 
 /**
  * @author carl@stormeye.co.uk
@@ -132,7 +159,7 @@ public class HowTo {
 
         final StatusData status = casperService.getStatus();
 
-        final EraInfoData eraSummaryBlockHash = casperService.getEraSummary(new HashBlockIdentifier(status.getLatestSwitchBlockHash()));
+        final EraInfoData eraSummaryBlockHash = casperService.getEraSummary(new HashBlockIdentifier(status.getLastSwitchBlockHash().toString()));
         assert eraSummaryBlockHash.getEraSummary().getEraId() != null;
 
         //By validator, era identifier and delegator
@@ -167,19 +194,10 @@ public class HowTo {
         assert reward.getRewardAmount() != null;
     }
 
-
-    @Test
-    /* TODO - When put transaction is working in the SDK */
-    void queryTransaction() {}
-
-    @Test
-    /* TODO - When put transaction is working in the SDK */
-    void putTransaction() {}
-
     @Test
     void queryBalance() {
         final StatusData status = casperService.getStatus();
-        final EraInfoData eraSummaryBlockHash = casperService.getEraSummary(new HashBlockIdentifier(status.getLatestSwitchBlockHash()));
+        final EraInfoData eraSummaryBlockHash = casperService.getEraSummary(new HashBlockIdentifier(status.getLastSwitchBlockHash().toString()));
         final PublicKey delegator = ((Delegator) eraSummaryBlockHash.getEraSummary().getStoredValue().getValue().getSeigniorageAllocations().get(0)).getDelegatorPublicKey();
         final PurseIdentifier purseIdentifier = new MainPurseUnderPublickey(delegator);
         final StateRootHashIdentifier stateRootHashIdentifier = new StateRootHashIdentifier(casperService.getStateRootHash().getStateRootHash());
@@ -197,7 +215,7 @@ public class HowTo {
     @Test
     void queryBalanceDetails() {
         final StatusData status = casperService.getStatus();
-        final EraInfoData eraSummaryBlockHash = casperService.getEraSummary(new HashBlockIdentifier(status.getLatestSwitchBlockHash()));
+        final EraInfoData eraSummaryBlockHash = casperService.getEraSummary(new HashBlockIdentifier(status.getLastSwitchBlockHash().toString()));
         final PublicKey delegator = ((Delegator) eraSummaryBlockHash.getEraSummary().getStoredValue().getValue().getSeigniorageAllocations().get(0)).getDelegatorPublicKey();
         final PurseIdentifier purseIdentifier = new MainPurseUnderPublickey(delegator);
         final StateRootHashIdentifier stateRootHashIdentifier = new StateRootHashIdentifier(casperService.getStateRootHash().getStateRootHash());
@@ -221,11 +239,11 @@ public class HowTo {
     void getAccountInfo() {
 
         final StatusData status = casperService.getStatus();
-        final EraInfoData eraSummaryBlockHash = casperService.getEraSummary(new HashBlockIdentifier(status.getLatestSwitchBlockHash()));
+        final EraInfoData eraSummaryBlockHash = casperService.getEraSummary(new HashBlockIdentifier(status.getLastSwitchBlockHash().toString()));
         final PublicKey delegator = ((Delegator) eraSummaryBlockHash.getEraSummary().getStoredValue().getValue().getSeigniorageAllocations().get(0)).getDelegatorPublicKey();
 
         //By public key and block hash
-        final AccountData stateAccountInfoKeyAndHash = casperService.getStateAccountInfo(delegator.toString(), new HashBlockIdentifier(status.getLatestSwitchBlockHash()));
+        final AccountData stateAccountInfoKeyAndHash = casperService.getStateAccountInfo(delegator.toString(), new HashBlockIdentifier(status.getLastSwitchBlockHash().toString()));
         assert stateAccountInfoKeyAndHash.getAccount().getMainPurse() != null;
 
         //By public key
@@ -239,7 +257,7 @@ public class HowTo {
     void getDictionaryItem() throws IOException {
 
         final StatusData status = casperService.getStatus();
-        final EraInfoData eraSummaryBlockHash = casperService.getEraSummary(new HashBlockIdentifier(status.getLatestSwitchBlockHash()));
+        final EraInfoData eraSummaryBlockHash = casperService.getEraSummary(new HashBlockIdentifier(status.getLastSwitchBlockHash().toString()));
         final PublicKey delegator = ((Delegator) eraSummaryBlockHash.getEraSummary().getStoredValue().getValue().getSeigniorageAllocations().get(0)).getDelegatorPublicKey();
 
         String accountHash = delegator.generateAccountHash(true);
@@ -259,9 +277,9 @@ public class HowTo {
     @Test
     void getStateEntity() {
         final StatusData status = casperService.getStatus();
-        final EraInfoData eraSummaryBlockHash = casperService.getEraSummary(new HashBlockIdentifier(status.getLatestSwitchBlockHash()));
+        final EraInfoData eraSummaryBlockHash = casperService.getEraSummary(new HashBlockIdentifier(status.getLastSwitchBlockHash().toString()));
         final PublicKey delegator = ((Delegator) eraSummaryBlockHash.getEraSummary().getStoredValue().getValue().getSeigniorageAllocations().get(0)).getDelegatorPublicKey();
-        final PublicKeyEntityIdentifier publicKeyEntityIdentifier = new PublicKeyEntityIdentifier(delegator);
+        final PublicKeyIdentifier publicKeyEntityIdentifier = new PublicKeyIdentifier(delegator);
 
         //By public key
         final StateEntityResult stateEntityPublicKey = casperService.getStateEntity(publicKeyEntityIdentifier, null);
@@ -273,6 +291,171 @@ public class HowTo {
         assert stateEntityContract.getEntity() != null;
 
     }
+
+
+    @Test
+    void putTransactionNative() throws IOException, ValueSerializationException, TimeoutException, URISyntaxException, NoSuchAlgorithmException {
+
+        //Get the senders private key
+        //Add your own private key here
+        final String secretKeyPath = Paths.get(Objects.requireNonNull(getClass().getClassLoader().getResource("howto/keys/secret_key.pem")).toURI()).toString();
+        final Ed25519PrivateKey senderPrivateKey = new Ed25519PrivateKey();
+        senderPrivateKey.readPrivateKey(secretKeyPath);
+
+        //Derive the senders public key from the private key
+        final AbstractPublicKey senderAbstractPublicKey = senderPrivateKey.derivePublicKey();
+        assertThat(senderAbstractPublicKey, is(notNullValue()));
+        final PublicKey senderPublicKey = PublicKey.fromAbstractPublicKey(senderAbstractPublicKey);
+
+        //Get the senders purse
+        StateEntityResult stateEntity = casperService.getStateEntity(new PublicKeyIdentifier(senderPublicKey), null);
+        assertThat(stateEntity, is(notNullValue()));
+        final URef senderPurse = ((AddressableEntity) stateEntity.getEntity()).getEntity().getMainPurse();
+        assertThat(senderPurse, is(notNullValue()));
+
+        //Get a receivers public key - random delegator from last block
+        final StatusData status = casperService.getStatus();
+        final EraInfoData eraSummaryBlockHash = casperService.getEraSummary(new HashBlockIdentifier(status.getLastSwitchBlockHash().toString()));
+        final PublicKey delegator = ((Delegator) eraSummaryBlockHash.getEraSummary().getStoredValue().getValue().getSeigniorageAllocations().get(0)).getDelegatorPublicKey();
+        final PublicKey receiverPublicKey = PublicKey.fromAbstractPublicKey(delegator.getPubKey());
+
+        //Get the receivers purse
+        stateEntity = casperService.getStateEntity(new PublicKeyIdentifier(PublicKey.fromAbstractPublicKey(receiverPublicKey.getPubKey())), null);
+        assertThat(stateEntity, is(notNullValue()));
+        final URef receiverPurse = ((AddressableEntity) stateEntity.getEntity()).getEntity().getMainPurse();
+        assertThat(receiverPurse, is(notNullValue()));
+
+        //Build the transaction header
+        final TransactionV1Header header = TransactionV1Header.builder()
+                .chainName(status.getChainSpecName())
+                .ttl(Ttl.builder().ttl("30m").build())
+                .pricingMode(new FixedPricingMode(1))
+                .initiatorAddr(new InitiatorPublicKey(senderPublicKey))
+                .build();
+
+        //Add the required arguments
+        final List<NamedArg<?>> args = Arrays.asList(
+                new NamedArg<>("source", new CLValueOption(Optional.of(new CLValueURef(senderPurse)))),
+                new NamedArg<>("target", new CLValueURef(receiverPurse)),
+                new NamedArg<>("amount", new CLValueU512(new BigInteger("2500000000"))),
+                new NamedArg<>("id", new CLValueOption(Optional.of(new CLValueU64(BigInteger.valueOf(System.currentTimeMillis())))))
+        );
+
+        //Build the transaction body
+        final TransactionV1Body body = TransactionV1Body.builder()
+                .args(args)
+                .target(new Native())
+                .entryPoint(new TransferEntryPoint())
+                .scheduling(new Standard())
+                .transactionCategory(TransactionCategory.MINT)
+                .build();
+
+        //Build the transaction
+        final TransactionV1 transactionV1 = TransactionV1.builder()
+                .header(header)
+                .body(body)
+                .build();
+
+        //Sign the transaction
+        final Transaction transaction = new Transaction(transactionV1.sign(senderPrivateKey));
+
+        //Deploy the transaction
+        final PutTransactionResult result = casperService.putTransaction(transaction);
+
+        assertThat(result, is(notNullValue()));
+        assertThat(result.getTransactionHash(), is(transaction.get().getHash()));
+
+        final GetTransactionResult transactionResult = waitForTransaction(result.getTransactionHash());
+        assertThat(transactionResult, is(notNullValue()));
+
+    }
+
+    @Test
+    void putTransactionContractCep18() throws IOException, URISyntaxException, ValueSerializationException, TimeoutException {
+
+        //Get the senders private key
+        //Add your own private key here
+        final String secretKeyPath = Paths.get(Objects.requireNonNull(getClass().getClassLoader().getResource("howto/keys/secret_key.pem")).toURI()).toString();
+        final Ed25519PrivateKey senderPrivateKey = new Ed25519PrivateKey();
+        senderPrivateKey.readPrivateKey(secretKeyPath);
+
+        final String wasmPath = Paths.get(Objects.requireNonNull(getClass().getClassLoader().getResource("howto/contracts/cep18.wasm")).toURI()).toString();
+        final URL wasmUrl = new URL("file://" + wasmPath);
+        final byte[] wasmBytes = IOUtils.readBytesFromStream(wasmUrl.openStream());
+
+
+        final TransactionV1Header header = TransactionV1Header.builder()
+                .chainName(casperService.getStatus().getChainSpecName())
+                .ttl(Ttl.builder().ttl("30m").build())
+                .pricingMode(new FixedPricingMode(8))
+                .initiatorAddr(new InitiatorPublicKey(PublicKey.fromAbstractPublicKey(senderPrivateKey.derivePublicKey())))
+                .build();
+
+
+        final List<NamedArg<?>> args = Arrays.asList(
+                new NamedArg<>("decimals", new CLValueU8((byte) 11)),
+                new NamedArg<>("name", new CLValueString("Acme Token")),
+                new NamedArg<>("symbol", new CLValueString("ACME")),
+                new NamedArg<>("events_mode", new CLValueU8((byte) 0)),
+                new NamedArg<>("id", new CLValueOption(Optional.of(new CLValueU64(BigInteger.valueOf(System.currentTimeMillis())))))
+        );
+
+        final TransactionV1Body body = TransactionV1Body.builder()
+                .args(args)
+                .target(new Session(wasmBytes, TransactionRuntime.VM_CASPER_V2))
+                .entryPoint(new CallEntryPoint())
+                .scheduling(new Standard())
+                .transactionCategory(TransactionCategory.INSTALL_UPGRADE)
+                .build();
+
+        final TransactionV1 transactionV1 = TransactionV1.builder()
+                .header(header)
+                .body(body)
+                .build();
+
+
+        final Transaction transaction = new Transaction(transactionV1.sign(senderPrivateKey));
+
+        final PutTransactionResult result = casperService.putTransaction(transaction);
+
+        assert result != null;
+        assert result.getTransactionHash() != null;
+
+        final GetTransactionResult transactionResult = waitForTransaction(result.getTransactionHash());
+        assertThat(transactionResult, is(notNullValue()));
+
+    }
+
+    private GetTransactionResult waitForTransaction(final TransactionHash hash) throws TimeoutException {
+
+        final long timeout = 300 * 1000L;
+        final long now = System.currentTimeMillis();
+
+        GetTransactionResult result = null;
+
+        while (result == null || result.getExecutionInfo() == null){
+
+            result = casperService.getTransaction(hash);
+
+            if (result.getExecutionInfo() != null && System.currentTimeMillis() > now + timeout) {
+                throw new TimeoutException("Timed-out waiting for transaction deploy " + hash);
+            }
+
+            try {
+                //noinspection BusyWait
+                Thread.sleep(1000L);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+
+        }
+
+        return result;
+
+    }
+
+
+
 
 
 }
