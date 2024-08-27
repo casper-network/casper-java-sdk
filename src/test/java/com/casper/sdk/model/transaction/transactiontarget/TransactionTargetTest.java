@@ -6,6 +6,7 @@ import com.casper.sdk.model.transaction.target.TransactionRuntime;
 import com.casper.sdk.model.transaction.target.TransactionTarget;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.syntifi.crypto.key.encdec.Hex;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -35,7 +36,7 @@ public class TransactionTargetTest {
     @Test
     void transactionSession() throws JsonProcessingException {
 
-        final String json = "{\"Session\":{\"module_bytes\": \"aab0da01340446cee477f28410f8af5d6e0f3a88fb26c0cafb8d1625f5cc9c10\", \"runtime\": \"VmCasperV2\"}}";
+        final String json = "{\"Session\":{\"module_bytes\":\"aab0da01340446cee477f28410f8af5d6e0f3a88fb26c0cafb8d1625f5cc9c10\",\"runtime\":\"VmCasperV2\"}}";
 
         final TransactionTarget sessionTransactionTarget = new ObjectMapper().readValue(json, TransactionTarget.class);
 
@@ -43,7 +44,9 @@ public class TransactionTargetTest {
         final Session session = (Session) sessionTransactionTarget;
 
         assertThat(session.getRuntime().name(), is(TransactionRuntime.VM_CASPER_V2.name()));
-        assertThat(session.getTarget(), is("Session"));
+        assertThat(session.getModuleBytes(), is(Hex.decode("aab0da01340446cee477f28410f8af5d6e0f3a88fb26c0cafb8d1625f5cc9c10")));
+        assertThat(new ObjectMapper().writeValueAsString(session), is(json));
+
     }
 
     @Test

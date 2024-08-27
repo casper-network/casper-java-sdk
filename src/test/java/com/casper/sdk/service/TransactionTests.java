@@ -1,6 +1,5 @@
 package com.casper.sdk.service;
 
-import com.casper.sdk.identifier.entity.EntityAddrIdentifier;
 import com.casper.sdk.model.account.PublicKeyIdentifier;
 import com.casper.sdk.model.clvalue.*;
 import com.casper.sdk.model.common.Ttl;
@@ -21,10 +20,8 @@ import com.casper.sdk.model.uref.URef;
 import com.syntifi.crypto.key.AbstractPrivateKey;
 import com.syntifi.crypto.key.AbstractPublicKey;
 import com.syntifi.crypto.key.Ed25519PrivateKey;
-import com.syntifi.crypto.key.encdec.Hex;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
 import org.apache.cxf.helpers.IOUtils;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -32,7 +29,6 @@ import java.math.BigInteger;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Paths;
-import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -120,7 +116,7 @@ public class TransactionTests {
     }
 
     @Test
-    void chainPutContractCep18() throws IOException, ValueSerializationException, URISyntaxException, TimeoutException, NoSuchAlgorithmException {
+    void chainPutContractCep18() throws IOException, ValueSerializationException, URISyntaxException, TimeoutException {
 
         final CasperService casperService = CasperService.usingPeer(new URL("http://localhost:21101/rpc"), null);
 

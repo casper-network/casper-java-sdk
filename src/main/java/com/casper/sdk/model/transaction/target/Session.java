@@ -13,14 +13,10 @@ import lombok.*;
  * @author ian@meywood.com
  */
 @NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
 @JsonTypeName("Session")
 public class Session implements TransactionTarget {
-
-    @JsonValue
-    private String target;
 
     /** The compiled Wasm. */
     @JsonProperty("module_bytes")
