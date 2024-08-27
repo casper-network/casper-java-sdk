@@ -25,7 +25,7 @@ public enum TransactionRuntime implements CasperSerializableObject, Tag {
     private final byte tag;
     private final String jsonName;
 
-    TransactionRuntime(final int tag, String jsonName) {
+    TransactionRuntime(final int tag, final String jsonName) {
         this.tag = (byte) tag;
         this.jsonName = jsonName;
     }
