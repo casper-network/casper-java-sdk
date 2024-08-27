@@ -31,6 +31,7 @@ public class TransactionTargetTest {
 
         assertThat(nativeType.getTarget(), is("Native"));
 
+        assertThat(new ObjectMapper().writeValueAsString(nativeTransactionTarget), is(json));
     }
 
     @Test
@@ -45,6 +46,7 @@ public class TransactionTargetTest {
 
         assertThat(session.getRuntime().name(), is(TransactionRuntime.VM_CASPER_V2.name()));
         assertThat(session.getModuleBytes(), is(Hex.decode("aab0da01340446cee477f28410f8af5d6e0f3a88fb26c0cafb8d1625f5cc9c10")));
+
         assertThat(new ObjectMapper().writeValueAsString(session), is(json));
 
     }

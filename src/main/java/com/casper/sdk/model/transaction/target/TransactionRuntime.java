@@ -45,7 +45,7 @@ public enum TransactionRuntime implements CasperSerializableObject, Tag {
                 return t;
             }
         }
-        throw new NoSuchTypeException();
+        throw new NoSuchTypeException(name);
     }
 
     @Override

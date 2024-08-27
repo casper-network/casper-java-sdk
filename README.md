@@ -278,19 +278,6 @@ AccountData account = casperService.getStateAccountInfo("--publicKey--", new Hei
 AccountData account = casperService.getStateAccountInfo("--publicKey--", new HashBlockIdentifier("--hash--"));
 ```
 
-### 
-
-
-
-
-
-
-
-
-
-
-
-### 
 
 ### 5. [Query peers](https://github.com/casper-network/casper-java-sdk/blob/main/src/test/java/com/casper/sdk/service/CasperServiceTests.java#L111)
 

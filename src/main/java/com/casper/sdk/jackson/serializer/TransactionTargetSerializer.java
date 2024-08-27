@@ -30,6 +30,7 @@ public class TransactionTargetSerializer extends JsonSerializer<TransactionTarge
             gen.writeString("Native");
         } else if (value instanceof Stored){
             //TODO
+            throw new IllegalArgumentException("Stored is not yet implemented");
         } else {
             throw new IllegalArgumentException("Unknown transaction target type: " + value.getClass().getName());
         }
