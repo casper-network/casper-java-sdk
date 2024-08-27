@@ -6,6 +6,8 @@ import com.casper.sdk.model.bid.Bridge;
 import com.casper.sdk.model.bid.Delegator;
 import com.casper.sdk.model.bid.ValidatorCredit;
 import com.casper.sdk.model.clvalue.AbstractCLValue;
+import com.casper.sdk.model.deploy.transform.AddUInt512;
+import com.casper.sdk.model.deploy.transform.Transform;
 import com.casper.sdk.model.key.PublicKey;
 import com.casper.sdk.model.transaction.execution.Effect;
 import com.casper.sdk.model.transaction.kind.IdentityKind;
@@ -203,4 +205,22 @@ class EffectTest {
         assertThat(identityEffect, is(notNullValue()));
         assertThat(identityEffect.getKind(), is(instanceOf(IdentityKind.class)));
     }
+
+    @Test
+    void identityKindAddUint512() throws JsonProcessingException {
+
+        final String json = "{\n" +
+                "  \"key\": \"balance-1c29560834540520e147468c3bf86f09e5bd60cda2cb8380d94ee1c348a4281d\",\n" +
+                "  \"kind\": {\n" +
+                     "  \"AddUInt512\" : 2500000000\n" +
+                    "}\n" +
+                "}";
+
+        final Effect identityEffect = new ObjectMapper().readValue(json, Effect.class);
+        assertThat(identityEffect.getKey(), is("balance-1c29560834540520e147468c3bf86f09e5bd60cda2cb8380d94ee1c348a4281d"));
+        assertThat(identityEffect, is(notNullValue()));
+        assertThat(identityEffect.getKind(), is(instanceOf(Transform.class)));
+
+    }
+
 }

@@ -1,6 +1,7 @@
 package com.casper.sdk.model.deploy.transform;
 
 import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
+import com.casper.sdk.model.transaction.kind.Kind;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
@@ -26,7 +27,7 @@ import java.math.BigInteger;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonTypeName("AddUInt512")
-public class AddUInt512 implements Transform {
+public class AddUInt512 implements Transform, Kind {
 
     /**
      * u512
