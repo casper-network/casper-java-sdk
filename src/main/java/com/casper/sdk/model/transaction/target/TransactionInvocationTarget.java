@@ -1,5 +1,7 @@
 package com.casper.sdk.model.transaction.target;
 
+import com.casper.sdk.model.clvalue.serde.CasperSerializableObject;
+import com.casper.sdk.model.key.Tag;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
@@ -15,5 +17,5 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @JsonSubTypes.Type(value = ByPackageName.class, name = "ByPackageName"),
         @JsonSubTypes.Type(value = ByPackageHash.class, name = "ByPackageHash")
 })
-public interface TransactionInvocationTarget {
+public interface TransactionInvocationTarget extends CasperSerializableObject, Tag {
 }

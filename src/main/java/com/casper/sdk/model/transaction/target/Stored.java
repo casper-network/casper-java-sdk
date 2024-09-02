@@ -21,7 +21,7 @@ import lombok.*;
 @Builder
 @JsonTypeName("Stored")
 public class Stored implements TransactionTarget {
-    /**  The identifier of the stored execution target. */
+    /** The identifier of the stored execution target. */
     private TransactionInvocationTarget id;
 
     /** The execution runtime to use. */
@@ -31,6 +31,7 @@ public class Stored implements TransactionTarget {
     @Override
     public void serialize(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {
         ser.writeU8(getByteTag());
+        id.serialize(ser, target);
         ser.writeU8(runtime.getByteTag());
     }
 
