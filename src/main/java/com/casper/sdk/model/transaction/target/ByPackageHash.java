@@ -45,6 +45,7 @@ public class ByPackageHash implements TransactionInvocationTarget {
         }
     }
 
+    @JsonIgnore
     @Override
     public byte getByteTag() {
         return 2;

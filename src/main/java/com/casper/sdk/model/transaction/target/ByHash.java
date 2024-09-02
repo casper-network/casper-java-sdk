@@ -3,6 +3,8 @@ package com.casper.sdk.model.transaction.target;
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.serde.Target;
 import com.casper.sdk.model.common.Digest;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonValue;
 import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
@@ -24,12 +26,18 @@ public class ByHash implements TransactionInvocationTarget {
     @JsonValue
     private Digest hashAddress;
 
+    @JsonCreator
+    public ByHash(String hashAddress) {
+        this.hashAddress = new Digest(hashAddress);
+    }
+
     @Override
     public void serialize(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {
         ser.writeU8(getByteTag());
         ser.writeByteArray(hashAddress.getDigest());
     }
 
+    @JsonIgnore
     @Override
     public byte getByteTag() {
         return 0;

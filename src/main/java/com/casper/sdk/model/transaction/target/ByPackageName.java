@@ -44,6 +44,7 @@ public class ByPackageName implements TransactionInvocationTarget {
         }
     }
 
+    @JsonIgnore
     @Override
     public byte getByteTag() {
         return 3;
