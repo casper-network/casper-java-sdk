@@ -56,7 +56,7 @@ public class TransactionTargetDeserializer extends JsonDeserializer<TransactionT
     }
 
     private TransactionInvocationTarget createInvocationTarget(final JsonNode node, final DeserializationContext ctx) throws IOException {
-        try (JsonParser parser = node.get("id").traverse()) {
+        try (final JsonParser parser = node.get("id").traverse()) {
             parser.setCodec(ctx.getParser().getCodec());
             return parser.readValueAs(TransactionInvocationTarget.class);
         }
