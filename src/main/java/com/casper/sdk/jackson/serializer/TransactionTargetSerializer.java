@@ -48,7 +48,7 @@ public class TransactionTargetSerializer extends JsonSerializer<TransactionTarge
         gen.writeFieldName("Session");
         gen.writeStartObject();
         gen.writeStringField("module_bytes", Hex.encode(value.getModuleBytes()));
-        gen.writeStringField("runtime", TransactionRuntime.getJsonName(value.getRuntime()));
+        gen.writeStringField("runtime", TransactionRuntime.toJson(value.getRuntime()));
         gen.writeEndObject();
         gen.writeEndObject();
     }

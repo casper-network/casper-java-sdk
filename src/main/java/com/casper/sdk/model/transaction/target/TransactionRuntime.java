@@ -36,11 +36,11 @@ public enum TransactionRuntime implements CasperSerializableObject, Tag {
         return tag;
     }
 
-    public static String getJsonName(final TransactionRuntime runtime) {
+    public static String toJson(final TransactionRuntime runtime) {
         return runtime != null ? runtime.jsonName : null;
     }
 
-    public static TransactionRuntime getJsonRuntime(final String name) throws NoSuchTypeException {
+    public static TransactionRuntime fromJson(final String name) throws NoSuchTypeException {
         for (TransactionRuntime t : values()) {
             if (t.jsonName.equals(name)) {
                 return t;

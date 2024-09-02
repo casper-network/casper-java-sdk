@@ -12,7 +12,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.syntifi.crypto.key.encdec.Hex;
 
 import java.io.IOException;
-import java.util.Iterator;
 
 /**
  * Deserializer for {@link TransactionTarget} types.
@@ -31,45 +30,43 @@ public class TransactionTargetDeserializer extends JsonDeserializer<TransactionT
     public TransactionTarget deserialize(final JsonParser p, final DeserializationContext ctxt) throws IOException {
         if (p.getCurrentToken() == JsonToken.START_OBJECT) {
             final ObjectNode treeNode = p.readValueAsTree();
-            final Iterator<String> stringIterator = treeNode.fieldNames();
-            final String next = stringIterator.next();
-            if (SESSION.equals(next)) {
-                return createSession(treeNode.get(next));
-            } else if (STORED.equals(next)) {
-                return createStored(treeNode.get(next), ctxt);
+            final String fieldName = treeNode.fieldNames().next();
+            if (SESSION.equals(fieldName)) {
+                return createSession(treeNode.get(fieldName));
+            } else if (STORED.equals(fieldName)) {
+                return createStored(treeNode.get(fieldName), ctxt);
             } else {
-                throw new IllegalArgumentException("Unknown transaction target type: " + next);
+                throw new IllegalArgumentException("Unknown transaction target type: " + fieldName);
             }
         } else if (p.getCurrentToken() == JsonToken.VALUE_STRING && NATIVE.equals(p.readValueAsTree().toString())) {
             return new Native();
         } else {
-            throw new IllegalArgumentException("Unknown  transaction target type: " + p);
+            throw new IllegalArgumentException("Unknown  transaction target type: " + p.readValueAsTree());
         }
     }
 
     private Stored createStored(final JsonNode node, final DeserializationContext ctx) throws IOException {
         try {
-
             return new Stored(
                     createInvocationTarget(node, ctx),
-                    TransactionRuntime.getJsonRuntime(node.get(RUNTIME).asText()));
+                    TransactionRuntime.fromJson(node.get(RUNTIME).asText()));
         } catch (NoSuchTypeException e) {
             throw new DeserializationException("Unable to find 'runtime'", e);
         }
     }
 
     private TransactionInvocationTarget createInvocationTarget(final JsonNode node, final DeserializationContext ctx) throws IOException {
-        final JsonNode jsonNode = node.get("id");
-        final JsonParser parser = jsonNode.traverse();
-        parser.setCodec(ctx.getParser().getCodec());
-        return parser.readValueAs(TransactionInvocationTarget.class);
+        try (JsonParser parser = node.get("id").traverse()) {
+            parser.setCodec(ctx.getParser().getCodec());
+            return parser.readValueAs(TransactionInvocationTarget.class);
+        }
     }
 
     private Session createSession(final JsonNode node) throws DeserializationException {
         try {
             return new Session(
                     Hex.decode(node.get(MODULE_BYTES).asText()),
-                    TransactionRuntime.getJsonRuntime(node.get(RUNTIME).asText())
+                    TransactionRuntime.fromJson(node.get(RUNTIME).asText())
             );
         } catch (NoSuchTypeException e) {
             throw new DeserializationException("Unable to find required fields", e);

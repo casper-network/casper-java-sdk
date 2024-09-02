@@ -8,6 +8,8 @@ import lombok.*;
 import java.util.Optional;
 
 /**
+ * The address and optional version identifying the package.
+ *
  * @author ian@meywood.com
  */
 @NoArgsConstructor
