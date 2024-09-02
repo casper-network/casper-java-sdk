@@ -14,7 +14,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @Setter
 @Getter
-public class TransactionInvocationTargetByHash implements TransactionInvocationTarget {
-
+public class ByHash implements TransactionInvocationTarget {
     private HashAddress hashAddress;
 }

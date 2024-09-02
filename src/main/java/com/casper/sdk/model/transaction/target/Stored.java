@@ -21,6 +21,8 @@ import lombok.*;
 @Builder
 @JsonTypeName("Stored")
 public class Stored implements TransactionTarget {
+    /**  The identifier of the stored execution target. */
+    private TransactionInvocationTarget id;
 
     /** The execution runtime to use. */
     @JsonProperty("runtime")

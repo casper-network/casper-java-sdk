@@ -7,13 +7,14 @@ import com.casper.sdk.model.key.Tag;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
+import lombok.Getter;
 
 /**
  * The runtime used to execute a `Transaction`.
  *
  * @author ian@meywood.com
  */
-
+@Getter
 public enum TransactionRuntime implements CasperSerializableObject, Tag {
     /** The Casper Version 1 Virtual Machine. */
     @JsonProperty("VmCasperV1")
@@ -36,12 +37,12 @@ public enum TransactionRuntime implements CasperSerializableObject, Tag {
     }
 
     public static String getJsonName(final TransactionRuntime runtime) {
-        return runtime.jsonName;
+        return runtime != null ? runtime.jsonName : null;
     }
 
     public static TransactionRuntime getJsonRuntime(final String name) throws NoSuchTypeException {
-        for (TransactionRuntime t: values()){
-            if (t.jsonName.equals(name)){
+        for (TransactionRuntime t : values()) {
+            if (t.jsonName.equals(name)) {
                 return t;
             }
         }

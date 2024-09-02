@@ -1,9 +1,7 @@
 package com.casper.sdk.model.transaction.transactiontarget;
 
-import com.casper.sdk.model.transaction.target.Native;
-import com.casper.sdk.model.transaction.target.Session;
-import com.casper.sdk.model.transaction.target.TransactionRuntime;
-import com.casper.sdk.model.transaction.target.TransactionTarget;
+import com.casper.sdk.model.common.Digest;
+import com.casper.sdk.model.transaction.target.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.syntifi.crypto.key.encdec.Hex;
@@ -52,6 +50,27 @@ public class TransactionTargetTest {
     }
 
     @Test
-    void transactionStored() {}
+    void transactionStored() throws Exception {
 
+        final String json = "{\"Stored\":{\"id\":{\"ByPackageHash\":{\"addr\":\"4b83ad1c5d842e5af75f5e77c56f11372217d8a5473a380fa9dfa96b8cd4c5e2\",\"version\":10}},\"runtime\":\"VmCasperV1\"}}";
+
+        final TransactionTarget stored = new ObjectMapper().readValue(json, TransactionTarget.class);
+        assertThat(stored, is(instanceOf(Stored.class)));
+
+        assertThat(((Stored) stored).getRuntime().name(), is(TransactionRuntime.VM_CASPER_V1.name()));
+        assertThat(((Stored) stored).getId(), is(instanceOf(ByPackageHash.class)));
+        assertThat(
+                ((ByPackageHash) ((Stored) stored).getId()).getAddr(),
+                is(new Digest("4b83ad1c5d842e5af75f5e77c56f11372217d8a5473a380fa9dfa96b8cd4c5e2"))
+        );
+        assertThat(
+                ((ByPackageHash) ((Stored) stored).getId()).getVersion().isPresent(),
+                is(true)
+        );
+        assertThat(
+                ((ByPackageHash) ((Stored) stored).getId()).getVersion().get(),
+                is(10L)
+        );
+        assertThat(new ObjectMapper().writeValueAsString(stored), is(json));
+    }
 }
