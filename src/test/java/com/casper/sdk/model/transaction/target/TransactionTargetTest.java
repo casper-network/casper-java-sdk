@@ -15,6 +15,8 @@ import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.core.Is.is;
 
 /**
+ * Unit tests for the {@link TransactionTarget} classes
+ *
  * @author carl@stormeye.co.uk
  */
 public class TransactionTargetTest {
