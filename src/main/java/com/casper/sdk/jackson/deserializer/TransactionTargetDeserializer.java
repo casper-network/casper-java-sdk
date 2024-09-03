@@ -13,6 +13,8 @@ import com.syntifi.crypto.key.encdec.Hex;
 
 import java.io.IOException;
 
+import static com.casper.sdk.model.transaction.target.TargetConstants.*;
+
 /**
  * Deserializer for {@link TransactionTarget} types.
  *
@@ -20,11 +22,7 @@ import java.io.IOException;
  */
 public class TransactionTargetDeserializer extends JsonDeserializer<TransactionTarget> {
 
-    public static final String SESSION = Session.class.getSimpleName();
-    public static final String STORED = Stored.class.getSimpleName();
-    public static final String RUNTIME = "runtime";
-    public static final String MODULE_BYTES = "module_bytes";
-    public static final String NATIVE = "\"Native\"";
+    private static final String NATIVE_JSON = "\"Native\"";
 
     @Override
     public TransactionTarget deserialize(final JsonParser p, final DeserializationContext ctxt) throws IOException {
@@ -38,7 +36,7 @@ public class TransactionTargetDeserializer extends JsonDeserializer<TransactionT
             } else {
                 throw new IllegalArgumentException("Unknown transaction target type: " + fieldName);
             }
-        } else if (p.getCurrentToken() == JsonToken.VALUE_STRING && NATIVE.equals(p.readValueAsTree().toString())) {
+        } else if (p.getCurrentToken() == JsonToken.VALUE_STRING && NATIVE_JSON.equals(p.readValueAsTree().toString())) {
             return new Native();
         } else {
             throw new IllegalArgumentException("Unknown  transaction target type: " + p.readValueAsTree());
@@ -56,7 +54,7 @@ public class TransactionTargetDeserializer extends JsonDeserializer<TransactionT
     }
 
     private TransactionInvocationTarget createInvocationTarget(final JsonNode node, final DeserializationContext ctx) throws IOException {
-        try (final JsonParser parser = node.get("id").traverse()) {
+        try (final JsonParser parser = node.get(ID).traverse()) {
             parser.setCodec(ctx.getParser().getCodec());
             return parser.readValueAs(TransactionInvocationTarget.class);
         }

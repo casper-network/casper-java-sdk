@@ -8,6 +8,8 @@ import com.syntifi.crypto.key.encdec.Hex;
 
 import java.io.IOException;
 
+import static com.casper.sdk.model.transaction.target.TargetConstants.*;
+
 /**
  * Serializes {@link TransactionTarget} objects.
  *
@@ -21,7 +23,7 @@ public class TransactionTargetSerializer extends JsonSerializer<TransactionTarge
         if (value instanceof Session) {
             serializeSession((Session) value, gen);
         } else if (value instanceof Native) {
-            gen.writeString("Native");
+            gen.writeString(NATIVE);
         } else if (value instanceof Stored) {
             serializeStored((Stored) value, gen);
         } else {
@@ -31,12 +33,12 @@ public class TransactionTargetSerializer extends JsonSerializer<TransactionTarge
 
     private static void serializeStored(final Stored value, final JsonGenerator gen) throws IOException {
         gen.writeStartObject();
-        gen.writeFieldName("Stored");
+        gen.writeFieldName(STORED);
         gen.writeStartObject();
-        gen.writeFieldName("id");
+        gen.writeFieldName(ID);
         gen.writeObject(value.getId());
         if (value.getRuntime() != null) {
-            gen.writeFieldName("runtime");
+            gen.writeFieldName(RUNTIME);
             gen.writeString(value.getRuntime().getJsonName());
         }
         gen.writeEndObject();
@@ -45,12 +47,11 @@ public class TransactionTargetSerializer extends JsonSerializer<TransactionTarge
 
     private static void serializeSession(final Session value, final JsonGenerator gen) throws IOException {
         gen.writeStartObject();
-        gen.writeFieldName("Session");
+        gen.writeFieldName(SESSION);
         gen.writeStartObject();
-        gen.writeStringField("module_bytes", Hex.encode(value.getModuleBytes()));
-        gen.writeStringField("runtime", TransactionRuntime.toJson(value.getRuntime()));
+        gen.writeStringField(MODULE_BYTES, Hex.encode(value.getModuleBytes()));
+        gen.writeStringField(RUNTIME, TransactionRuntime.toJson(value.getRuntime()));
         gen.writeEndObject();
         gen.writeEndObject();
     }
-
 }
