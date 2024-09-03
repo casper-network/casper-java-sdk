@@ -16,7 +16,7 @@ import lombok.*;
 @Getter
 @Setter
 @JsonTypeName("Session")
-public class Session implements TransactionTarget {
+public class  Session implements TransactionTarget {
 
     /** The compiled Wasm. */
     @JsonProperty("module_bytes")
