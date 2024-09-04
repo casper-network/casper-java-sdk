@@ -4,40 +4,49 @@ import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.serde.Target;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeName;
 import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
 import lombok.*;
 
+import java.util.Optional;
+
 /**
- * The execution target is a stored entity or package.
+ * The address and optional version identifying the package.
  *
  * @author ian@meywood.com
  */
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
 @Setter
-@Builder
-@JsonTypeName("Stored")
-public class Stored implements TransactionTarget {
-    /** The identifier of the stored execution target. */
-    private TransactionInvocationTarget id;
+@Getter
+public class ByPackageName implements TransactionInvocationTarget {
+    /** the package name */
+    private String name;
+    /** If `None`, the latest enabled version is implied. */
+    @Getter(AccessLevel.NONE)
+    @JsonProperty("version")
+    private Long version;
 
-    /** The execution runtime to use. */
-    @JsonProperty("runtime")
-    private TransactionRuntime runtime;
+    @JsonIgnore
+    public Optional<Long> getVersion() {
+        return Optional.ofNullable(version);
+    }
 
     @Override
     public void serialize(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {
         ser.writeU8(getByteTag());
-        id.serialize(ser, target);
-        ser.writeU8(runtime.getByteTag());
+        ser.writeString(name);
+        if (getVersion().isPresent()) {
+            ser.writeBool(true);
+            ser.writeU32(version);
+        } else {
+            ser.writeBool(false);
+        }
     }
 
-    @Override
     @JsonIgnore
+    @Override
     public byte getByteTag() {
-        return 1;
+        return 3;
     }
 }

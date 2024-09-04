@@ -8,6 +8,8 @@ import com.syntifi.crypto.key.encdec.Hex;
 
 import java.io.IOException;
 
+import static com.casper.sdk.model.transaction.target.TargetConstants.*;
+
 /**
  * Serializes {@link TransactionTarget} objects.
  *
@@ -19,21 +21,37 @@ public class TransactionTargetSerializer extends JsonSerializer<TransactionTarge
     public void serialize(final TransactionTarget value, final JsonGenerator gen, final SerializerProvider serializers) throws IOException {
 
         if (value instanceof Session) {
-            gen.writeStartObject();
-            gen.writeFieldName("Session");
-            gen.writeStartObject();
-            gen.writeStringField("module_bytes", Hex.encode(((Session) value).getModuleBytes()));
-            gen.writeStringField("runtime", TransactionRuntime.getJsonName(((Session) value).getRuntime()));
-            gen.writeEndObject();
-            gen.writeEndObject();
+            serializeSession((Session) value, gen);
         } else if (value instanceof Native) {
-            gen.writeString("Native");
-        } else if (value instanceof Stored){
-            //TODO
-            throw new IllegalArgumentException("Stored is not yet implemented");
+            gen.writeString(NATIVE);
+        } else if (value instanceof Stored) {
+            serializeStored((Stored) value, gen);
         } else {
             throw new IllegalArgumentException("Unknown transaction target type: " + value.getClass().getName());
         }
     }
 
+    private static void serializeStored(final Stored value, final JsonGenerator gen) throws IOException {
+        gen.writeStartObject();
+        gen.writeFieldName(STORED);
+        gen.writeStartObject();
+        gen.writeFieldName(ID);
+        gen.writeObject(value.getId());
+        if (value.getRuntime() != null) {
+            gen.writeFieldName(RUNTIME);
+            gen.writeString(value.getRuntime().getJsonName());
+        }
+        gen.writeEndObject();
+        gen.writeEndObject();
+    }
+
+    private static void serializeSession(final Session value, final JsonGenerator gen) throws IOException {
+        gen.writeStartObject();
+        gen.writeFieldName(SESSION);
+        gen.writeStartObject();
+        gen.writeStringField(MODULE_BYTES, Hex.encode(value.getModuleBytes()));
+        gen.writeStringField(RUNTIME, TransactionRuntime.toJson(value.getRuntime()));
+        gen.writeEndObject();
+        gen.writeEndObject();
+    }
 }

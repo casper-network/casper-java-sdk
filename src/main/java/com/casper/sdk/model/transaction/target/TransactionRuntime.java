@@ -4,16 +4,18 @@ import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.serde.CasperSerializableObject;
 import com.casper.sdk.model.clvalue.serde.Target;
 import com.casper.sdk.model.key.Tag;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
+import lombok.Getter;
 
 /**
  * The runtime used to execute a `Transaction`.
  *
  * @author ian@meywood.com
  */
-
+@Getter
 public enum TransactionRuntime implements CasperSerializableObject, Tag {
     /** The Casper Version 1 Virtual Machine. */
     @JsonProperty("VmCasperV1")
@@ -30,18 +32,19 @@ public enum TransactionRuntime implements CasperSerializableObject, Tag {
         this.jsonName = jsonName;
     }
 
+    @JsonIgnore
     @Override
     public byte getByteTag() {
         return tag;
     }
 
-    public static String getJsonName(final TransactionRuntime runtime) {
-        return runtime.jsonName;
+    public static String toJson(final TransactionRuntime runtime) {
+        return runtime != null ? runtime.jsonName : null;
     }
 
-    public static TransactionRuntime getJsonRuntime(final String name) throws NoSuchTypeException {
-        for (TransactionRuntime t: values()){
-            if (t.jsonName.equals(name)){
+    public static TransactionRuntime fromJson(final String name) throws NoSuchTypeException {
+        for (TransactionRuntime t : values()) {
+            if (t.jsonName.equals(name)) {
                 return t;
             }
         }

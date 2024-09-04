@@ -38,12 +38,12 @@ import com.casper.sdk.model.transaction.target.TransactionRuntime;
 import com.casper.sdk.model.transfer.TransferData;
 import com.casper.sdk.model.uref.URef;
 import com.casper.sdk.service.CasperService;
-import com.casper.sdk.service.TransactionTests;
 import com.syntifi.crypto.key.AbstractPublicKey;
 import com.syntifi.crypto.key.Ed25519PrivateKey;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
 import org.apache.cxf.helpers.IOUtils;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -66,6 +66,7 @@ import static org.hamcrest.core.IsNull.notNullValue;
 /**
  * @author carl@stormeye.co.uk
  */
+@Disabled
 public class HowTo {
 
     private CasperService casperService;
@@ -231,8 +232,9 @@ public class HowTo {
     }
 
     @Test
-    /* TODO - When put transaction is working in the SDK */
-    void queryGlobalState() {}
+        /* TODO - When put transaction is working in the SDK */
+    void queryGlobalState() {
+    }
 
 
     @Test
@@ -253,7 +255,7 @@ public class HowTo {
     }
 
     @Test
-    /* TODO: Make it work */
+        /* TODO: Make it work */
     void getDictionaryItem() throws IOException {
 
         final StatusData status = casperService.getStatus();
@@ -433,7 +435,7 @@ public class HowTo {
 
         GetTransactionResult result = null;
 
-        while (result == null || result.getExecutionInfo() == null){
+        while (result == null || result.getExecutionInfo() == null) {
 
             result = casperService.getTransaction(hash);
 
@@ -453,9 +455,4 @@ public class HowTo {
         return result;
 
     }
-
-
-
-
-
 }

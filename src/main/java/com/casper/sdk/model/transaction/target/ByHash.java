@@ -2,42 +2,44 @@ package com.casper.sdk.model.transaction.target;
 
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.serde.Target;
+import com.casper.sdk.model.common.Digest;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
- * The execution target is a stored entity or package.
+ * The address identifying the invocable entity.
  *
  * @author ian@meywood.com
  */
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
 @Setter
-@Builder
-@JsonTypeName("Stored")
-public class Stored implements TransactionTarget {
-    /** The identifier of the stored execution target. */
-    private TransactionInvocationTarget id;
+@Getter
+public class ByHash implements TransactionInvocationTarget {
+    @JsonValue
+    private Digest hashAddress;
 
-    /** The execution runtime to use. */
-    @JsonProperty("runtime")
-    private TransactionRuntime runtime;
+    @JsonCreator
+    public ByHash(String hashAddress) {
+        this.hashAddress = new Digest(hashAddress);
+    }
 
     @Override
     public void serialize(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {
         ser.writeU8(getByteTag());
-        id.serialize(ser, target);
-        ser.writeU8(runtime.getByteTag());
+        ser.writeByteArray(hashAddress.getDigest());
     }
 
-    @Override
     @JsonIgnore
+    @Override
     public byte getByteTag() {
-        return 1;
+        return 0;
     }
 }
