@@ -1,8 +1,10 @@
 package com.casper.sdk.jackson.deserializer;
 
+import com.casper.sdk.exception.CasperClientException;
 import com.casper.sdk.exception.DeserializationException;
 import com.casper.sdk.exception.NoSuchKeyTagException;
 import com.casper.sdk.model.key.AbstractSerializedKeyTaggedHex;
+import com.casper.sdk.model.key.Key;
 import com.casper.sdk.model.key.Tag;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
@@ -31,7 +33,18 @@ public abstract class AbstractSerializedKeyTaggedHexDeserializer<T extends Abstr
     public T deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
         JsonNode node = p.getCodec().readTree(p);
 
-        if (NULL_PUBLIC_KEY.equals(node.textValue())) {
+        String strKey = node.textValue();
+
+        if (strKey.contains("-")) {
+            try {
+                //noinspection unchecked
+                return (T) Key.fromKeyString(strKey);
+            } catch (NoSuchKeyTagException e) {
+                throw new CasperClientException("No such key: " + strKey, e);
+            }
+        }
+
+        if (NULL_PUBLIC_KEY.equals(strKey)) {
             return null;
         }
 
