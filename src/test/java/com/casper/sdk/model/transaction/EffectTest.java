@@ -6,16 +6,16 @@ import com.casper.sdk.model.bid.Bridge;
 import com.casper.sdk.model.bid.Delegator;
 import com.casper.sdk.model.bid.ValidatorCredit;
 import com.casper.sdk.model.clvalue.AbstractCLValue;
-import com.casper.sdk.model.deploy.transform.AddUInt512;
 import com.casper.sdk.model.deploy.transform.Transform;
+import com.casper.sdk.model.entity.Entity;
+import com.casper.sdk.model.entity.SmartContract;
 import com.casper.sdk.model.key.PublicKey;
 import com.casper.sdk.model.transaction.execution.Effect;
-import com.casper.sdk.model.transaction.kind.IdentityKind;
-import com.casper.sdk.model.transaction.kind.PruneKind;
-import com.casper.sdk.model.transaction.kind.WriteKind;
+import com.casper.sdk.model.transaction.kind.*;
 import com.casper.sdk.model.uref.URef;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.syntifi.crypto.key.encdec.Hex;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -223,4 +223,89 @@ class EffectTest {
 
     }
 
+    @Test
+    void writeKindByteCode() throws JsonProcessingException {
+
+        final String json = "{\n" +
+                "  \"key\": \"byte-code-v1-wasm-aaa0345086a4f80601ec93d78053c13f5599afeb752d3d9b88fe5878b611675\",\n" +
+                "  \"kind\": {\n" +
+                "    \"Write\": {\n" +
+                "      \"ByteCode\": {\n" +
+                "         \"kind\": \"V1CasperWasm\",\n" +
+                "         \"bytes\": \"0061736d01000000017f106002\"\n" +
+                "      }\n" +
+                "    }\n" +
+                "  }\n" +
+                "}";
+
+        final Effect writeEffect = new ObjectMapper().readValue(json, Effect.class);
+
+        assertThat(writeEffect.getKey(), is("byte-code-v1-wasm-aaa0345086a4f80601ec93d78053c13f5599afeb752d3d9b88fe5878b611675"));
+        WriteKind<?> kind = writeEffect.getKind();
+
+        assertThat(kind.getWrite(), is(instanceOf(ByteCode.class)));
+        assertThat(kind.getWrite().getValue(), is(instanceOf(ByteCodeKind.class)));
+
+        ByteCodeKind byteCodeKind = (ByteCodeKind) kind.getWrite().getValue();
+
+        assertThat(byteCodeKind.getBytes(), is("0061736d01000000017f106002"));
+        assertThat(byteCodeKind.getKind().name(), is(ByteCodeKind.ByteCodes.V1CasperWasm.name()));
+
+    }
+
+    @Test
+    void writeKindAddressableEntity() throws JsonProcessingException {
+
+        final String json = "{\n" +
+                "  \"key\": \"entity-contract-3b6b4d8a3d815372508faa92f3a05dcb50c9c98de05d9a7668cb94b04f1ef9af\",\n" +
+                "  \"kind\": {\n" +
+                "    \"Write\": {\n" +
+                "      \"AddressableEntity\": {\n" +
+                "         \"protocol_version\": \"2.0.0\",\n" +
+                "         \"entity_kind\":  {\n" +
+                "           \"SmartContract\": \"VmCasperV1\" \n" +
+                "         },\n" +
+                "         \"package_hash\": \"package-ef39f3794dfde8641acc43a8f63d4c0a72a4b33bbb2e4eed29421ee6cfd0d87e\", \n" +
+                "         \"byte_code_hash\": \"byte-code-376c7a7483df3ed53e8fb112c256bb0a99782d4f0260e5608858740a36681ac3\", \n" +
+                "         \"main_purse\": \"uref-faa9c882c9721274290109abba23f1baa8d7603debc11bf26dfc6250a6f56cc2-007\", \n" +
+                "         \"associated_keys\":  [\n" +
+                "              {\n" +
+                "                   \"account_hash\": \"account-hash-aab0da01340446cee477f28410f8af5d6e0f3a88fb26c0cafb8d1625f5cc9c10\",\n" +
+                "                   \"weight\": 1 \n" +
+                "               }\n" +
+                "            ],\n" +
+                "         \"action_thresholds\":  {\n" +
+                "           \"deployment\": 1, \n" +
+                "           \"upgrade_management\": 1, \n" +
+                "           \"key_management\": 1 \n" +
+                "         },\n" +
+                "         \"message_topics\": []\n" +
+                "      }\n" +
+                "    }\n" +
+                "  }\n" +
+                "}";
+
+        final Effect writeEffect = new ObjectMapper().readValue(json, Effect.class);
+        assertThat(writeEffect.getKey(), is("entity-contract-3b6b4d8a3d815372508faa92f3a05dcb50c9c98de05d9a7668cb94b04f1ef9af"));
+
+        WriteKind<?> kind = writeEffect.getKind();
+
+        assertThat(kind.getWrite(), is(instanceOf(AddressableEntityKind.class)));
+        assertThat(kind.getWrite().getValue(), is(instanceOf(Entity.class)));
+
+        Entity entity = (Entity) kind.getWrite().getValue();
+
+        assertThat(entity.getProtocolVersion(), is("2.0.0"));
+        assertThat(((SmartContract) entity.getEntityAddressKind()).getSmartContract().name(), is(SmartContract.TransactionRuntime.VMCASPERV1.name()));
+        assertThat(entity.getPackageHash(), is("package-ef39f3794dfde8641acc43a8f63d4c0a72a4b33bbb2e4eed29421ee6cfd0d87e"));
+        assertThat(entity.getByteCodeHash(), is("byte-code-376c7a7483df3ed53e8fb112c256bb0a99782d4f0260e5608858740a36681ac3"));
+        assertThat(Hex.encode(entity.getMainPurse().getAddress()), is("faa9c882c9721274290109abba23f1baa8d7603debc11bf26dfc6250a6f56cc2"));
+        assertThat(entity.getAssociatedKeys().get(0).getAccountHash(), is("account-hash-aab0da01340446cee477f28410f8af5d6e0f3a88fb26c0cafb8d1625f5cc9c10"));
+        assertThat(entity.getAssociatedKeys().get(0).getWeight(), is(1));
+        assertThat(entity.getActionThresholds().getDeployment(), is(1));
+        assertThat(entity.getActionThresholds().getUpgradeManagement(), is(1));
+        assertThat(entity.getActionThresholds().getUpgradeManagement(), is(1));
+        assertThat(entity.getMessageTopics().size(), is(0));
+
+    }
 }

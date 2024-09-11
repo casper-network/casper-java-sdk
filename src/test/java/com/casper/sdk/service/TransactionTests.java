@@ -10,6 +10,7 @@ import com.casper.sdk.model.key.PublicKey;
 import com.casper.sdk.model.transaction.*;
 import com.casper.sdk.model.transaction.entrypoint.CallEntryPoint;
 import com.casper.sdk.model.transaction.entrypoint.TransferEntryPoint;
+import com.casper.sdk.model.transaction.execution.ExecutionResultV2;
 import com.casper.sdk.model.transaction.pricing.FixedPricingMode;
 import com.casper.sdk.model.transaction.scheduling.Standard;
 import com.casper.sdk.model.transaction.target.Native;
@@ -22,7 +23,6 @@ import com.syntifi.crypto.key.AbstractPublicKey;
 import com.syntifi.crypto.key.Ed25519PrivateKey;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
 import org.apache.cxf.helpers.IOUtils;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -39,13 +39,14 @@ import java.util.concurrent.TimeoutException;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
+import static org.hamcrest.core.IsNull.nullValue;
 
 /**
  * Integration tests for the Transactions against a cctl node
  *
  * @author ian@meywood.com
  */
-@Disabled
+//@Disabled
 public class TransactionTests {
 
     @Test
@@ -110,9 +111,10 @@ public class TransactionTests {
         assertThat(result, is(notNullValue()));
         assertThat(result.getTransactionHash(), is(transaction.get().getHash()));
 
-        final GetTransactionResult getTransactionResult = waitForTransaction(result.getTransactionHash(), casperService);
-        assertThat(getTransactionResult, is(notNullValue()));
+        final GetTransactionResult transactionResult = waitForTransaction(result.getTransactionHash(), casperService);
 
+        assertThat(transactionResult, is(notNullValue()));
+        assertThat(((ExecutionResultV2) transactionResult.getExecutionInfo().getExecutionResult()).getErrorMessage(), is(nullValue()));
 
     }
 
@@ -141,6 +143,7 @@ public class TransactionTests {
                 new NamedArg<>("decimals", new CLValueU8((byte) 11)),
                 new NamedArg<>("name", new CLValueString("Acme Token")),
                 new NamedArg<>("symbol", new CLValueString("ACME")),
+                new NamedArg<>("total_supply", new CLValueU256(BigInteger.valueOf(500000))),
                 new NamedArg<>("events_mode", new CLValueU8((byte) 0)),
                 new NamedArg<>("id", new CLValueOption(Optional.of(new CLValueU64(BigInteger.valueOf(System.currentTimeMillis())))))
         );
@@ -166,8 +169,10 @@ public class TransactionTests {
         assert result != null;
         assert result.getTransactionHash() != null;
 
-        final GetTransactionResult getTransactionResult = waitForTransaction(result.getTransactionHash(), casperService);
-        assertThat(getTransactionResult, is(notNullValue()));
+        final GetTransactionResult transactionResult = waitForTransaction(result.getTransactionHash(), casperService);
+
+        assertThat(transactionResult, is(notNullValue()));
+        assertThat(((ExecutionResultV2) transactionResult.getExecutionInfo().getExecutionResult()).getErrorMessage(), is(nullValue()));
 
 
         //TODO Wait for era end, query the block and get the contract details through get_state_entity
