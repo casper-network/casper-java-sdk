@@ -51,11 +51,13 @@ import com.casper.sdk.model.storedvalue.StoredValueData;
 import com.casper.sdk.model.storedvalue.StoredValueDeployInfo;
 import com.casper.sdk.model.transaction.*;
 import com.casper.sdk.model.transaction.entrypoint.TransferEntryPoint;
+import com.casper.sdk.model.transaction.execution.ExecutionInfo;
 import com.casper.sdk.model.transaction.execution.ExecutionResultV1;
 import com.casper.sdk.model.transaction.execution.ExecutionResultV2;
 import com.casper.sdk.model.transaction.pricing.FixedPricingMode;
 import com.casper.sdk.model.transaction.scheduling.Standard;
 import com.casper.sdk.model.transaction.target.Native;
+import com.casper.sdk.model.transaction.target.Session;
 import com.casper.sdk.model.transaction.target.Transaction;
 import com.casper.sdk.model.transfer.TransferData;
 import com.casper.sdk.model.transfer.TransferV1;
@@ -644,6 +646,48 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
         assertThat(transfer.getAmount(), is(new BigInteger("2500000000")));
         assertThat(transfer.getGas(), is(1));
         assertThat(transfer.getId(), is(BigInteger.valueOf(12345L)));
+    }
+
+
+    @Test
+    void infoGetContractTransactionByHash() throws NoSuchAlgorithmException, IOException, DynamicInstanceException {
+
+        mockNode.withRcpResponseDispatcher().withMethod("info_get_transaction").withBody("$.params.transaction_hash.Deploy", "9a35bd593202c587ec21fabb1caa44e5e40284a5228c50d35f78585b3e90279b").thenDispatch(getClass().getResource("/transaction-samples/info_get_contract_transaction.json"));
+
+        final GetTransactionResult result = casperServiceMock.getTransaction(new TransactionHashDeploy("9a35bd593202c587ec21fabb1caa44e5e40284a5228c50d35f78585b3e90279b"));
+        assertNotNull(result);
+        assertThat(result.getTransaction().get(), is(instanceOf(TransactionV1.class)));
+        assertThat(result.getTransaction().get().getHash(), is(new Digest("9a35bd593202c587ec21fabb1caa44e5e40284a5228c50d35f78585b3e90279b")));
+
+        final TransactionV1 transaction = result.getTransaction().getVersion1();
+
+        assertThat(transaction.getHeader().getBodyHash(), is(new Digest("9bcc99c4d493764463c278cf17b3e1ff5b1357d1f5d0676b3fbeaafb260bcb76")));
+        assertThat(transaction.getHeader().getPricingMode(), is(instanceOf(FixedPricingMode.class)));
+        assertThat(((FixedPricingMode)transaction.getHeader().getPricingMode()).getGasPriceTolerance(), is(8));
+        assertThat(transaction.getHeader().getInitiatorAddr(), is(instanceOf(InitiatorPublicKey.class)));
+        assertThat(transaction.getHeader().getInitiatorAddr().getAddress(), is(PublicKey.fromTaggedHexString("0138329930033bca4773a6623574ad7870ee39c554f153f15609e200e50049a7de")));
+
+        final ExecutionInfo executionInfo = result.getExecutionInfo();
+
+        assertThat(executionInfo.getBlockHash(), is(new Digest("48f9d5be37c9adcc67130c57eb52fd7a02dbcc5c65ce37efaef97d8ba1bd14bf")));
+        assertThat(executionInfo.getBlockHeight(), is(new BigInteger("8")));
+        assertThat(result.getExecutionInfo().getExecutionResult(), is(instanceOf(ExecutionResultV2.class)));
+
+        final ExecutionResultV2 executionResult = executionInfo.getExecutionResult();
+
+
+        assertThat(executionResult.getInitiator().getAddress(), is(instanceOf(PublicKey.class)));
+        assertThat(executionResult.getInitiator().getAddress(), is(PublicKey.fromTaggedHexString("0138329930033bca4773a6623574ad7870ee39c554f153f15609e200e50049a7de")));
+        assertThat(executionResult.getLimit(), is(new BigInteger("1000000000000")));
+        assertThat(executionResult.getCost(), is(new BigInteger("1000000000000")));
+        assertThat(executionResult.getConsumed(), is(new BigInteger("225932824299")));
+        assertThat(executionResult.getSizeEstimate(), is(325997L));
+
+        assertThat(((Session)transaction.getBody().getTarget()).getModuleBytes().length, is(325614) );
+
+        assertThat(executionResult.getEffects().size(), is(66));
+        //Effects are tested in EffectTest
+
     }
 
     @Test

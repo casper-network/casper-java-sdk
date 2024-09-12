@@ -13,6 +13,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ByteCodeKind {
+
     @JsonProperty("kind")
     private ByteCodes kind;
 
