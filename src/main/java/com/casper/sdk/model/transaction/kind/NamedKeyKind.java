@@ -6,6 +6,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 /**
+ * A NamedKeyKind
+ * See {@link NamedKey}
+ *
  * @author carl@stormeye.co.uk
  */
 @Getter

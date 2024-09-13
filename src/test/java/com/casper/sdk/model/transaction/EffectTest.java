@@ -11,9 +11,9 @@ import com.casper.sdk.model.contract.EntryPointValue;
 import com.casper.sdk.model.deploy.transform.Transform;
 import com.casper.sdk.model.entity.Entity;
 import com.casper.sdk.model.entity.SmartContract;
+import com.casper.sdk.model.entity.contract.ByteCode;
 import com.casper.sdk.model.entity.contract.NamedKey;
 import com.casper.sdk.model.entity.contract.Package;
-import com.casper.sdk.model.entity.contract.PackageStatus;
 import com.casper.sdk.model.key.PublicKey;
 import com.casper.sdk.model.transaction.execution.Effect;
 import com.casper.sdk.model.transaction.kind.*;
@@ -248,13 +248,13 @@ class EffectTest {
         assertThat(writeEffect.getKey(), is("byte-code-v1-wasm-aaa0345086a4f80601ec93d78053c13f5599afeb752d3d9b88fe5878b611675"));
         WriteKind<?> kind = writeEffect.getKind();
 
-        assertThat(kind.getWrite(), is(instanceOf(ByteCode.class)));
-        assertThat(kind.getWrite().getValue(), is(instanceOf(ByteCodeKind.class)));
+        assertThat(kind.getWrite(), is(instanceOf(ByteCodeKind.class)));
+        assertThat(kind.getWrite().getValue(), is(instanceOf(ByteCode.class)));
 
-        ByteCodeKind byteCodeKind = (ByteCodeKind) kind.getWrite().getValue();
+        ByteCode byteCodeKind = (ByteCode) kind.getWrite().getValue();
 
         assertThat(byteCodeKind.getBytes(), is("0061736d01000000017f106002"));
-        assertThat(byteCodeKind.getKind(), is(ByteCodeKind.ByteCodes.V1CasperWasm));
+        assertThat(byteCodeKind.getKind(), is(ByteCode.ByteCodes.V1CasperWasm));
 
     }
     @Test
@@ -419,7 +419,7 @@ class EffectTest {
         assertThat(contractPackage.getGroups().size(), is(3));
         assertThat(contractPackage.getGroups().get(1), is("group_B"));
 
-        assertThat(contractPackage.getLockStatus(), is(PackageStatus.Unlocked));
+        assertThat(contractPackage.getLockStatus(), is(Package.PackageStatus.Unlocked));
 
     }
 

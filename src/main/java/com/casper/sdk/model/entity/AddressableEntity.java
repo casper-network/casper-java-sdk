@@ -9,6 +9,7 @@ import java.util.List;
 
 /**
  * An addressable entity.
+ * Methods and type signatures supported by a contract.
  *
  * @author carl@stormeye.co.uk
  */

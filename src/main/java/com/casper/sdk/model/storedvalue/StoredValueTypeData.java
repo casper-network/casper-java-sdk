@@ -28,7 +28,7 @@ public enum StoredValueTypeData {
     STORED_VALUE_BID("Bid", StoredValueBid.class),
     STORED_VALUE_BID_KIND("BidKind", StoredValueBidKind.class),
     STORED_VALUE_WITHDRAW("Withdraw", StoredValueWithdraw.class),
-    STORED_VALUE_BYTECODE("ByteCode", ByteCode.class),
+    STORED_VALUE_BYTECODE("ByteCode", ByteCodeKind.class),
     STORED_VALUE_ADDRESSABLE_ENTITY("AddressableEntity", AddressableEntityKind.class),
     STORED_VALUE_PACKAGE("Package", PackageKind.class),
     STORED_VALUE_NAMED_KEY("NamedKey", NamedKeyKind.class),

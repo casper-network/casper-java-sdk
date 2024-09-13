@@ -1,10 +1,14 @@
 package com.casper.sdk.model.transaction.kind;
 
-import com.casper.sdk.model.key.Tag;
+import com.casper.sdk.model.entity.contract.ByteCode;
+import com.casper.sdk.model.storedvalue.StoredValue;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 /**
+ * A ByteCode kind
+ * See {@link ByteCode}
+ *
  * @author carl@stormeye.co.uk
  */
 @Getter
@@ -12,28 +16,9 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ByteCodeKind {
+public class ByteCodeKind implements StoredValue<ByteCode> {
 
-    @JsonProperty("kind")
-    private ByteCodes kind;
-
-    @JsonProperty("bytes")
-    private String bytes;
-
-    public enum ByteCodes implements Tag {
-        Empty(0),
-        V1CasperWasm(1);
-        private final byte tag;
-        ByteCodes(final int tag) {
-            this.tag = (byte) tag;
-        }
-        @Override
-        public byte getByteTag() {
-            return tag;
-        }
-
-    }
+    @JsonProperty("ByteCode")
+    private ByteCode value;
 
 }
-
-

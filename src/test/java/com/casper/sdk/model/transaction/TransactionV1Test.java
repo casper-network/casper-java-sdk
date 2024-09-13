@@ -9,15 +9,20 @@ import com.casper.sdk.model.key.PublicKey;
 import com.casper.sdk.model.transaction.entrypoint.TransferEntryPoint;
 import com.casper.sdk.model.transaction.pricing.FixedPricingMode;
 import com.casper.sdk.model.transaction.scheduling.FutureTimestamp;
+import com.casper.sdk.model.transaction.scheduling.Standard;
 import com.casper.sdk.model.transaction.target.Native;
+import com.casper.sdk.model.transaction.target.Session;
 import com.casper.sdk.model.transaction.target.Transaction;
+import com.casper.sdk.model.transaction.target.TransactionRuntime;
 import com.casper.sdk.model.uref.URef;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.IOUtils;
 import org.joda.time.DateTime;
+import org.json.JSONException;
 import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 
+import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
@@ -88,5 +93,28 @@ class TransactionV1Test {
 
         final String writtenJson = new ObjectMapper().writeValueAsString(transaction);
         JSONAssert.assertEquals(json, writtenJson, false);
+    }
+
+    @Test
+    void transactionV1StoredContractRoundTrip() throws IOException, JSONException {
+
+        final String json = IOUtils.toString(getClass().getResource("/transaction-samples/transaction-v1-stored-contract.json").openStream(), StandardCharsets.UTF_8);
+        final Transaction transaction = new ObjectMapper().readValue(json, Transaction.class);
+
+        assertThat(transaction, is(notNullValue()));
+        assertThat(transaction.get(), is(notNullValue(TransactionV1.class)));
+
+        final TransactionV1 transactionV1 = transaction.getVersion1();
+
+        assertThat(transactionV1.getHash(), is(new Digest("2b49844436a02422b60b22dbfcbc5be3d3d86491fb556cc405f48b8e48342457")));
+        assertThat(transactionV1.getBody().getTransactionCategory(), is(TransactionCategory.INSTALL_UPGRADE));
+        assertThat(transactionV1.getBody().getScheduling(), is(instanceOf(Standard.class)));
+        assertThat(transactionV1.getBody().getArgs().size(), is(6));
+        assertThat(((Session)transactionV1.getBody().getTarget()).getRuntime(), is(TransactionRuntime.VM_CASPER_V2));
+        assertThat(transactionV1.getBody().getEntryPoint().getName(), is("Call"));
+
+        final String writtenJson = new ObjectMapper().writeValueAsString(transaction);
+        JSONAssert.assertEquals(json, writtenJson, false);
+
     }
 }

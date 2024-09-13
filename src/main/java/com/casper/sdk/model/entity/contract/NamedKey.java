@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 /**
+ * A key with a name
+ *
  * @author carl@stormeye.co.uk
  */
 @Getter

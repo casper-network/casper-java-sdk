@@ -927,6 +927,43 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
         assertThat(entity.getEntity().getActionThresholds().getKeyManagement(), is(1));
         assertThat(entity.getEntity().getActionThresholds().getUpgradeManagement(), is(1));
     }
+    @Test
+    void stateGetEntityContractActualCCTLReturnedData() {
+
+        mockNode.withRcpResponseDispatcher().withMethod("state_get_entity").withBody("$.params.entity_identifier.EntityAddr", "entity-contract-77a0481b28572054cbdd19c944a7176ce9670be616d6de0e2ec3f89ca378dd79").thenDispatch(getClass().getResource("/entity/getstateentity-cctl-returned-contract-entity.json"));
+
+        final StateEntityResult stateEntityResult = casperServiceMock.getStateEntity(new EntityAddrIdentifier("entity-contract-77a0481b28572054cbdd19c944a7176ce9670be616d6de0e2ec3f89ca378dd79"),null);
+
+        assertThat(stateEntityResult.getApiVersion(), is("2.0.0"));
+
+        assertInstanceOf(AddressableEntity.class, stateEntityResult.getEntity());
+
+        AddressableEntity entity = (AddressableEntity) stateEntityResult.getEntity();
+
+        assertInstanceOf(SmartContract.class, entity.getEntity().getEntityAddressKind());
+
+        assertThat(entity.getEntity().getByteCodeHash(), is("byte-code-10fcbe236e5a946b16a86db1584c6c1690ef6dfa9da2ffae68c256f9738e1e66"));
+        assertThat(entity.getEntity().getPackageHash(), is("package-69131083f5ea0b6d8e3df0b80b03e6e20788d594ad9c7d4de79700010f767448"));
+        assertThat(entity.getEntity().getMainPurse().getJsonURef(), is("uref-0249b6da571bad31cfed8269767ba77ce1b2f99446d395d80865457a440c9cb3-007"));
+
+        final SmartContract contract = (SmartContract) entity.getEntity().getEntityAddressKind();
+        assertThat(contract.getSmartContract(), is(SmartContract.TransactionRuntime.VMCASPERV1));
+
+        assertThat(entity.getEntryPoints().size(), is(15));
+        assertThat(entity.getNamedKeys().size(), is(11));
+
+
+        assertThat(entity.getNamedKeys().get(0).getKey() , is("uref-a18b3997bc0bafe8612973531e6782be4f1251f90f0513c0b34fea69df1a95ff-007"));
+        assertThat(entity.getNamedKeys().get(0).getName() , is("allowances"));
+
+        assertThat(entity.getEntryPoints().get(14).getV1().getAccess(), is(EntryPoint.EntryPointAccessEnum.PUBLIC));
+        assertThat(entity.getEntryPoints().get(14).getV1().getArgs().get(0).getName(), is("address"));
+        assertThat(entity.getEntryPoints().get(14).getV1().getArgs().get(0).getClType().getTypeName(), is("Key"));
+        assertThat(entity.getEntryPoints().get(14).getV1().getType(), is(EntryPoint.EntryPointType.CALLED));
+        assertThat(entity.getEntryPoints().get(14).getV1().getPayment(), is(EntryPoint.EntryPointPayment.CALLER));
+        assertThat(entity.getEntryPoints().get(14).getV1().getRet().getTypeName(), is("U256"));
+
+    }
 
     @Test
     void infoGetReward() throws NoSuchAlgorithmException {

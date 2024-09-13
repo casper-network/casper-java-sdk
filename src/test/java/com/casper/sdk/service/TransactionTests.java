@@ -23,6 +23,7 @@ import com.syntifi.crypto.key.AbstractPublicKey;
 import com.syntifi.crypto.key.Ed25519PrivateKey;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
 import org.apache.cxf.helpers.IOUtils;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -46,7 +47,7 @@ import static org.hamcrest.core.IsNull.nullValue;
  *
  * @author ian@meywood.com
  */
-//@Disabled
+@Disabled
 public class TransactionTests {
 
     @Test
@@ -54,9 +55,9 @@ public class TransactionTests {
 
         final CasperService casperService = CasperService.usingPeer(new URL("http://localhost:21101/rpc"), null);
 
-        final String faucetSecretKeyPath = "/Users/carl/Documents/Workspace/Casper/casper-network/casper-java-sdk/assets/net-1/faucet/secret_key.pem";
-        final Ed25519PrivateKey faucetPrivateKey = new Ed25519PrivateKey();
-        faucetPrivateKey.readPrivateKey(faucetSecretKeyPath);
+        final AbstractPrivateKey faucetPrivateKey = new Ed25519PrivateKey();
+        final URL faucetUrl = Objects.requireNonNull(TransactionTests.class.getResource("/net-1/faucet/secret_key.pem"), "missing resource ");
+        faucetPrivateKey.readPrivateKey(faucetUrl.getFile());
 
         AbstractPublicKey faucetDerivedPublicKey = faucetPrivateKey.derivePublicKey();
         assertThat(faucetDerivedPublicKey, is(notNullValue()));
@@ -65,9 +66,10 @@ public class TransactionTests {
         assertThat(stateEntity, is(notNullValue()));
         final URef faucetPurse = ((AddressableEntity) stateEntity.getEntity()).getEntity().getMainPurse();
 
-        final String userOneSecretKeyPath = "/Users/carl/Documents/Workspace/Casper/casper-network/casper-java-sdk/assets/net-1/user-1/secret_key.pem";
-        final Ed25519PrivateKey userOnePrivateKey = new Ed25519PrivateKey();
-        userOnePrivateKey.readPrivateKey(userOneSecretKeyPath);
+        final AbstractPrivateKey userOnePrivateKey = new Ed25519PrivateKey();
+        final URL user1Url = Objects.requireNonNull(TransactionTests.class.getResource("/net-1/user-1/secret_key.pem"), "missing resource ");
+        userOnePrivateKey.readPrivateKey(user1Url.getFile());
+
         final AbstractPublicKey userOnePublicKey = userOnePrivateKey.derivePublicKey();
         assertThat(userOnePublicKey, is(notNullValue()));
         stateEntity = casperService.getStateEntity(new PublicKeyIdentifier(PublicKey.fromAbstractPublicKey(userOnePublicKey)), null);
@@ -101,8 +103,6 @@ public class TransactionTests {
                 .header(header)
                 .body(body)
                 .build();
-
-
 
         final Transaction transaction = new Transaction(transactionV1.sign(faucetPrivateKey));
 
@@ -174,8 +174,7 @@ public class TransactionTests {
         assertThat(transactionResult, is(notNullValue()));
         assertThat(((ExecutionResultV2) transactionResult.getExecutionInfo().getExecutionResult()).getErrorMessage(), is(nullValue()));
 
-
-        //TODO Wait for era end, query the block and get the contract details through get_state_entity
+        //Tests for the returned getTransaction Entities/Kinds/Entries are in EffectsTest and CasperServiceTests
 
     }
 

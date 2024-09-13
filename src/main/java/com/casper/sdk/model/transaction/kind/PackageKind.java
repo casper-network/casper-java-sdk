@@ -6,6 +6,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 /**
+ * A PackageKind
+ * See {@link Package}
+ *
  * @author carl@stormeye.co.uk
  */
 @Getter
