@@ -10,6 +10,7 @@ import com.casper.sdk.model.key.PublicKey;
 import com.casper.sdk.model.transaction.*;
 import com.casper.sdk.model.transaction.entrypoint.CallEntryPoint;
 import com.casper.sdk.model.transaction.entrypoint.TransferEntryPoint;
+import com.casper.sdk.model.transaction.execution.ExecutionResultV2;
 import com.casper.sdk.model.transaction.pricing.FixedPricingMode;
 import com.casper.sdk.model.transaction.scheduling.Standard;
 import com.casper.sdk.model.transaction.target.Native;
@@ -39,6 +40,7 @@ import java.util.concurrent.TimeoutException;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
+import static org.hamcrest.core.IsNull.nullValue;
 
 /**
  * Integration tests for the Transactions against a cctl node
@@ -53,9 +55,9 @@ public class TransactionTests {
 
         final CasperService casperService = CasperService.usingPeer(new URL("http://localhost:21101/rpc"), null);
 
-        final String faucetSecretKeyPath = "/Users/carl/Documents/Workspace/Casper/casper-network/casper-java-sdk/assets/net-1/faucet/secret_key.pem";
-        final Ed25519PrivateKey faucetPrivateKey = new Ed25519PrivateKey();
-        faucetPrivateKey.readPrivateKey(faucetSecretKeyPath);
+        final AbstractPrivateKey faucetPrivateKey = new Ed25519PrivateKey();
+        final URL faucetUrl = Objects.requireNonNull(TransactionTests.class.getResource("/net-1/faucet/secret_key.pem"), "missing resource ");
+        faucetPrivateKey.readPrivateKey(faucetUrl.getFile());
 
         AbstractPublicKey faucetDerivedPublicKey = faucetPrivateKey.derivePublicKey();
         assertThat(faucetDerivedPublicKey, is(notNullValue()));
@@ -64,9 +66,10 @@ public class TransactionTests {
         assertThat(stateEntity, is(notNullValue()));
         final URef faucetPurse = ((AddressableEntity) stateEntity.getEntity()).getEntity().getMainPurse();
 
-        final String userOneSecretKeyPath = "/Users/carl/Documents/Workspace/Casper/casper-network/casper-java-sdk/assets/net-1/user-1/secret_key.pem";
-        final Ed25519PrivateKey userOnePrivateKey = new Ed25519PrivateKey();
-        userOnePrivateKey.readPrivateKey(userOneSecretKeyPath);
+        final AbstractPrivateKey userOnePrivateKey = new Ed25519PrivateKey();
+        final URL user1Url = Objects.requireNonNull(TransactionTests.class.getResource("/net-1/user-1/secret_key.pem"), "missing resource ");
+        userOnePrivateKey.readPrivateKey(user1Url.getFile());
+
         final AbstractPublicKey userOnePublicKey = userOnePrivateKey.derivePublicKey();
         assertThat(userOnePublicKey, is(notNullValue()));
         stateEntity = casperService.getStateEntity(new PublicKeyIdentifier(PublicKey.fromAbstractPublicKey(userOnePublicKey)), null);
@@ -101,8 +104,6 @@ public class TransactionTests {
                 .body(body)
                 .build();
 
-
-
         final Transaction transaction = new Transaction(transactionV1.sign(faucetPrivateKey));
 
         final PutTransactionResult result = casperService.putTransaction(transaction);
@@ -110,9 +111,10 @@ public class TransactionTests {
         assertThat(result, is(notNullValue()));
         assertThat(result.getTransactionHash(), is(transaction.get().getHash()));
 
-        final GetTransactionResult getTransactionResult = waitForTransaction(result.getTransactionHash(), casperService);
-        assertThat(getTransactionResult, is(notNullValue()));
+        final GetTransactionResult transactionResult = waitForTransaction(result.getTransactionHash(), casperService);
 
+        assertThat(transactionResult, is(notNullValue()));
+        assertThat(((ExecutionResultV2) transactionResult.getExecutionInfo().getExecutionResult()).getErrorMessage(), is(nullValue()));
 
     }
 
@@ -141,6 +143,7 @@ public class TransactionTests {
                 new NamedArg<>("decimals", new CLValueU8((byte) 11)),
                 new NamedArg<>("name", new CLValueString("Acme Token")),
                 new NamedArg<>("symbol", new CLValueString("ACME")),
+                new NamedArg<>("total_supply", new CLValueU256(BigInteger.valueOf(500000))),
                 new NamedArg<>("events_mode", new CLValueU8((byte) 0)),
                 new NamedArg<>("id", new CLValueOption(Optional.of(new CLValueU64(BigInteger.valueOf(System.currentTimeMillis())))))
         );
@@ -166,11 +169,12 @@ public class TransactionTests {
         assert result != null;
         assert result.getTransactionHash() != null;
 
-        final GetTransactionResult getTransactionResult = waitForTransaction(result.getTransactionHash(), casperService);
-        assertThat(getTransactionResult, is(notNullValue()));
+        final GetTransactionResult transactionResult = waitForTransaction(result.getTransactionHash(), casperService);
 
+        assertThat(transactionResult, is(notNullValue()));
+        assertThat(((ExecutionResultV2) transactionResult.getExecutionInfo().getExecutionResult()).getErrorMessage(), is(nullValue()));
 
-        //TODO Wait for era end, query the block and get the contract details through get_state_entity
+        //Tests for the returned getTransaction Entities/Kinds/Entries are in EffectsTest and CasperServiceTests
 
     }
 

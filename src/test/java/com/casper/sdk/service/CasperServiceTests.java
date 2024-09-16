@@ -51,11 +51,13 @@ import com.casper.sdk.model.storedvalue.StoredValueData;
 import com.casper.sdk.model.storedvalue.StoredValueDeployInfo;
 import com.casper.sdk.model.transaction.*;
 import com.casper.sdk.model.transaction.entrypoint.TransferEntryPoint;
+import com.casper.sdk.model.transaction.execution.ExecutionInfo;
 import com.casper.sdk.model.transaction.execution.ExecutionResultV1;
 import com.casper.sdk.model.transaction.execution.ExecutionResultV2;
 import com.casper.sdk.model.transaction.pricing.FixedPricingMode;
 import com.casper.sdk.model.transaction.scheduling.Standard;
 import com.casper.sdk.model.transaction.target.Native;
+import com.casper.sdk.model.transaction.target.Session;
 import com.casper.sdk.model.transaction.target.Transaction;
 import com.casper.sdk.model.transfer.TransferData;
 import com.casper.sdk.model.transfer.TransferV1;
@@ -646,6 +648,48 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
         assertThat(transfer.getId(), is(BigInteger.valueOf(12345L)));
     }
 
+
+    @Test
+    void infoGetContractTransactionByHash() throws NoSuchAlgorithmException, IOException, DynamicInstanceException {
+
+        mockNode.withRcpResponseDispatcher().withMethod("info_get_transaction").withBody("$.params.transaction_hash.Deploy", "9a35bd593202c587ec21fabb1caa44e5e40284a5228c50d35f78585b3e90279b").thenDispatch(getClass().getResource("/transaction-samples/info_get_contract_transaction.json"));
+
+        final GetTransactionResult result = casperServiceMock.getTransaction(new TransactionHashDeploy("9a35bd593202c587ec21fabb1caa44e5e40284a5228c50d35f78585b3e90279b"));
+        assertNotNull(result);
+        assertThat(result.getTransaction().get(), is(instanceOf(TransactionV1.class)));
+        assertThat(result.getTransaction().get().getHash(), is(new Digest("9a35bd593202c587ec21fabb1caa44e5e40284a5228c50d35f78585b3e90279b")));
+
+        final TransactionV1 transaction = result.getTransaction().getVersion1();
+
+        assertThat(transaction.getHeader().getBodyHash(), is(new Digest("9bcc99c4d493764463c278cf17b3e1ff5b1357d1f5d0676b3fbeaafb260bcb76")));
+        assertThat(transaction.getHeader().getPricingMode(), is(instanceOf(FixedPricingMode.class)));
+        assertThat(((FixedPricingMode)transaction.getHeader().getPricingMode()).getGasPriceTolerance(), is(8));
+        assertThat(transaction.getHeader().getInitiatorAddr(), is(instanceOf(InitiatorPublicKey.class)));
+        assertThat(transaction.getHeader().getInitiatorAddr().getAddress(), is(PublicKey.fromTaggedHexString("0138329930033bca4773a6623574ad7870ee39c554f153f15609e200e50049a7de")));
+
+        final ExecutionInfo executionInfo = result.getExecutionInfo();
+
+        assertThat(executionInfo.getBlockHash(), is(new Digest("48f9d5be37c9adcc67130c57eb52fd7a02dbcc5c65ce37efaef97d8ba1bd14bf")));
+        assertThat(executionInfo.getBlockHeight(), is(new BigInteger("8")));
+        assertThat(result.getExecutionInfo().getExecutionResult(), is(instanceOf(ExecutionResultV2.class)));
+
+        final ExecutionResultV2 executionResult = executionInfo.getExecutionResult();
+
+
+        assertThat(executionResult.getInitiator().getAddress(), is(instanceOf(PublicKey.class)));
+        assertThat(executionResult.getInitiator().getAddress(), is(PublicKey.fromTaggedHexString("0138329930033bca4773a6623574ad7870ee39c554f153f15609e200e50049a7de")));
+        assertThat(executionResult.getLimit(), is(new BigInteger("1000000000000")));
+        assertThat(executionResult.getCost(), is(new BigInteger("1000000000000")));
+        assertThat(executionResult.getConsumed(), is(new BigInteger("225932824299")));
+        assertThat(executionResult.getSizeEstimate(), is(325997L));
+
+        assertThat(((Session)transaction.getBody().getTarget()).getModuleBytes().length, is(325614) );
+
+        assertThat(executionResult.getEffects().size(), is(66));
+        //Effects are tested in EffectTest
+
+    }
+
     @Test
     void accountPutTransferV1() throws Exception {
 
@@ -882,6 +926,43 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
         assertThat(entity.getEntity().getActionThresholds().getDeployment(), is(1));
         assertThat(entity.getEntity().getActionThresholds().getKeyManagement(), is(1));
         assertThat(entity.getEntity().getActionThresholds().getUpgradeManagement(), is(1));
+    }
+    @Test
+    void stateGetEntityContractActualCCTLReturnedData() {
+
+        mockNode.withRcpResponseDispatcher().withMethod("state_get_entity").withBody("$.params.entity_identifier.EntityAddr", "entity-contract-77a0481b28572054cbdd19c944a7176ce9670be616d6de0e2ec3f89ca378dd79").thenDispatch(getClass().getResource("/entity/getstateentity-cctl-returned-contract-entity.json"));
+
+        final StateEntityResult stateEntityResult = casperServiceMock.getStateEntity(new EntityAddrIdentifier("entity-contract-77a0481b28572054cbdd19c944a7176ce9670be616d6de0e2ec3f89ca378dd79"),null);
+
+        assertThat(stateEntityResult.getApiVersion(), is("2.0.0"));
+
+        assertInstanceOf(AddressableEntity.class, stateEntityResult.getEntity());
+
+        AddressableEntity entity = (AddressableEntity) stateEntityResult.getEntity();
+
+        assertInstanceOf(SmartContract.class, entity.getEntity().getEntityAddressKind());
+
+        assertThat(entity.getEntity().getByteCodeHash(), is("byte-code-10fcbe236e5a946b16a86db1584c6c1690ef6dfa9da2ffae68c256f9738e1e66"));
+        assertThat(entity.getEntity().getPackageHash(), is("package-69131083f5ea0b6d8e3df0b80b03e6e20788d594ad9c7d4de79700010f767448"));
+        assertThat(entity.getEntity().getMainPurse().getJsonURef(), is("uref-0249b6da571bad31cfed8269767ba77ce1b2f99446d395d80865457a440c9cb3-007"));
+
+        final SmartContract contract = (SmartContract) entity.getEntity().getEntityAddressKind();
+        assertThat(contract.getSmartContract(), is(SmartContract.TransactionRuntime.VMCASPERV1));
+
+        assertThat(entity.getEntryPoints().size(), is(15));
+        assertThat(entity.getNamedKeys().size(), is(11));
+
+
+        assertThat(entity.getNamedKeys().get(0).getKey() , is("uref-a18b3997bc0bafe8612973531e6782be4f1251f90f0513c0b34fea69df1a95ff-007"));
+        assertThat(entity.getNamedKeys().get(0).getName() , is("allowances"));
+
+        assertThat(entity.getEntryPoints().get(14).getV1().getAccess(), is(EntryPoint.EntryPointAccessEnum.PUBLIC));
+        assertThat(entity.getEntryPoints().get(14).getV1().getArgs().get(0).getName(), is("address"));
+        assertThat(entity.getEntryPoints().get(14).getV1().getArgs().get(0).getClType().getTypeName(), is("Key"));
+        assertThat(entity.getEntryPoints().get(14).getV1().getType(), is(EntryPoint.EntryPointType.CALLED));
+        assertThat(entity.getEntryPoints().get(14).getV1().getPayment(), is(EntryPoint.EntryPointPayment.CALLER));
+        assertThat(entity.getEntryPoints().get(14).getV1().getRet().getTypeName(), is("U256"));
+
     }
 
     @Test
