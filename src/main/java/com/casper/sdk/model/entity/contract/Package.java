@@ -17,7 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 public class Package {
 
-    /** All versions (enabled & disabled) */
+    /** All versions (enabled and disabled) */
     @JsonProperty("versions")
     private List<Versions> versions;
 
