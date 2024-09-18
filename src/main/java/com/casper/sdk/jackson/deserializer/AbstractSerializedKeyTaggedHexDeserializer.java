@@ -38,7 +38,7 @@ public abstract class AbstractSerializedKeyTaggedHexDeserializer<T extends Abstr
         if (strKey.contains("-")) {
             try {
                 //noinspection unchecked
-                return (T) Key.fromKeyString(strKey);
+                return (T) Key.create(strKey);
             } catch (NoSuchKeyTagException e) {
                 throw new CasperClientException("No such key: " + strKey, e);
             }

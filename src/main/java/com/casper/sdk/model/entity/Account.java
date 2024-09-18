@@ -1,6 +1,9 @@
 package com.casper.sdk.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.casper.sdk.exception.NoSuchKeyTagException;
+import com.casper.sdk.model.key.Key;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.*;
 
 /**
@@ -13,9 +16,13 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonTypeName("Account")
 public class Account implements EntityAddressKind {
 
-    @JsonProperty("Account")
-    private String account;
+    @JsonValue
+    private Key account;
 
+    public Account(final String accountSt) throws NoSuchKeyTagException {
+        this.account = Key.create(accountSt);
+    }
 }

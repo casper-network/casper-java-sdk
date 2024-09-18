@@ -26,6 +26,7 @@ import java.nio.charset.StandardCharsets;
 @EqualsAndHashCode(callSuper = true)
 public class Key extends AbstractSerializedKeyTaggedHex<KeyTag> {
 
+
     public static Key deserialize(final DeserializerBuffer deser) throws NoSuchKeyTagException {
         try {
             final KeyTag keyTag = KeyTag.getByTag(deser.readU8());
@@ -40,7 +41,8 @@ public class Key extends AbstractSerializedKeyTaggedHex<KeyTag> {
         }
     }
 
-    public static Key fromKeyString(final String strKey) throws NoSuchKeyTagException {
+    @JsonCreator
+    public static Key create(final String strKey) throws NoSuchKeyTagException {
         final KeyTag keyTag = KeyTag.getByKeyName(strKey);
         try {
             final Key key = keyTag.getKeyClass().getDeclaredConstructor().newInstance();
@@ -67,13 +69,6 @@ public class Key extends AbstractSerializedKeyTaggedHex<KeyTag> {
         return (includePrefix ? "account-hash-" : "") + ByteUtils.encodeHexString(Blake2b.digest(byteArrayOutputStream.toByteArray(), 32));
     }
 
-    @JsonCreator
-    public void createKey(final String key) throws NoSuchKeyTagException {
-        Key obj = Key.fromTaggedHexString(key);
-        this.setTag(obj.getTag());
-        this.setKey(obj.getKey());
-    }
-
     @Override
     public String toString() {
         return getTag().getKeyName() + ByteUtils.encodeHexString(this.getKey());
@@ -87,5 +82,4 @@ public class Key extends AbstractSerializedKeyTaggedHex<KeyTag> {
         final String[] split = strKey.split("-");
         this.setKey(ByteUtils.parseHexString(split[split.length - 1]));
     }
-
 }
