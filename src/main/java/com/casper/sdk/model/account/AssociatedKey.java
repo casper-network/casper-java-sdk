@@ -1,5 +1,6 @@
 package com.casper.sdk.model.account;
 
+import com.casper.sdk.model.key.AccountHashKey;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,7 +26,7 @@ public class AssociatedKey {
      * account_hash(String) Hex-encoded account hash.
      */
     @JsonProperty("account_hash")
-    private String accountHash;
+    private AccountHashKey accountHash;
 
     /**
      * weight(Integer)

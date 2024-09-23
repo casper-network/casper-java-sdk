@@ -14,6 +14,7 @@ import com.casper.sdk.model.entity.SmartContract;
 import com.casper.sdk.model.entity.contract.ByteCode;
 import com.casper.sdk.model.entity.contract.NamedKey;
 import com.casper.sdk.model.entity.contract.Package;
+import com.casper.sdk.model.key.AccountHashKey;
 import com.casper.sdk.model.key.PublicKey;
 import com.casper.sdk.model.transaction.execution.Effect;
 import com.casper.sdk.model.transaction.kind.*;
@@ -470,7 +471,8 @@ class EffectTest {
         assertThat(entity.getPackageHash(), is("package-ef39f3794dfde8641acc43a8f63d4c0a72a4b33bbb2e4eed29421ee6cfd0d87e"));
         assertThat(entity.getByteCodeHash(), is("byte-code-376c7a7483df3ed53e8fb112c256bb0a99782d4f0260e5608858740a36681ac3"));
         assertThat(Hex.encode(entity.getMainPurse().getAddress()), is("faa9c882c9721274290109abba23f1baa8d7603debc11bf26dfc6250a6f56cc2"));
-        assertThat(entity.getAssociatedKeys().get(0).getAccountHash(), is("account-hash-aab0da01340446cee477f28410f8af5d6e0f3a88fb26c0cafb8d1625f5cc9c10"));
+        assertThat(entity.getAssociatedKeys().get(0).getAccountHash(), is(instanceOf(AccountHashKey.class)));
+        assertThat(entity.getAssociatedKeys().get(0).getAccountHash().toString(), is("account-hash-aab0da01340446cee477f28410f8af5d6e0f3a88fb26c0cafb8d1625f5cc9c10"));
         assertThat(entity.getAssociatedKeys().get(0).getWeight(), is(1));
         assertThat(entity.getActionThresholds().getDeployment(), is(1));
         assertThat(entity.getActionThresholds().getUpgradeManagement(), is(1));

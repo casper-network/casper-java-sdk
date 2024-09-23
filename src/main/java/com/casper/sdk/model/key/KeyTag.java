@@ -17,7 +17,7 @@ import static java.util.Arrays.asList;
  */
 @Getter
 public enum KeyTag implements Tag {
-    ACCOUNT((byte) 0x00, Key.class, "account-hash-"),
+    ACCOUNT((byte) 0x00, AccountHashKey.class, "account-hash-"),
     HASH((byte) 0x01, Key.class, "hash-", "contract-"),
     UREF((byte) 0x02, URefKey.class, "uref-"),
     TRANSFER((byte) 0x03, Key.class, "transfer-"),
