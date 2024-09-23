@@ -2,8 +2,10 @@ package com.casper.sdk.model.key;
 
 import com.casper.sdk.exception.NoSuchKeyTagException;
 import com.casper.sdk.jackson.deserializer.KeyDeserializer;
+import com.casper.sdk.jackson.serializer.KeySerializer;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.syntifi.crypto.key.hash.Blake2b;
 import dev.oak3.sbs4j.DeserializerBuffer;
 import dev.oak3.sbs4j.util.ByteUtils;
@@ -22,10 +24,10 @@ import java.nio.charset.StandardCharsets;
  * @since 0.0.1
  */
 @JsonDeserialize(using = KeyDeserializer.class)
+@JsonSerialize(using = KeySerializer.class)
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class Key extends AbstractSerializedKeyTaggedHex<KeyTag> {
-
 
     public static Key deserialize(final DeserializerBuffer deser) throws NoSuchKeyTagException {
         try {
