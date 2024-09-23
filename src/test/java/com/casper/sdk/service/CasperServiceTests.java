@@ -400,7 +400,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
 
         assertNotNull(account);
         assertNotNull(account.getAccount());
-        assertEquals("account-hash-5079fc7bdd40f9226931d5863cb73f263c7944d6c8a8f3570213e9eb3e9464fe", account.getAccount().getHash());
+        assertEquals("account-hash-5079fc7bdd40f9226931d5863cb73f263c7944d6c8a8f3570213e9eb3e9464fe", account.getAccount().getHash().toString());
     }
 
     @Test
@@ -416,7 +416,8 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
 
         assertNotNull(account);
         assertNotNull(account.getAccount());
-        assertEquals("account-hash-5079fc7bdd40f9226931d5863cb73f263c7944d6c8a8f3570213e9eb3e9464fe", account.getAccount().getHash());
+        assertThat(account.getAccount().getHash(), is(instanceOf(AccountHashKey.class)));
+        assertEquals("account-hash-5079fc7bdd40f9226931d5863cb73f263c7944d6c8a8f3570213e9eb3e9464fe", account.getAccount().getHash().toString());
     }
 
     @Test
@@ -898,7 +899,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
 
         LegacyAccount account = (LegacyAccount) stateEntityResult.getEntity();
 
-        assertThat(account.getHash(), is("account-hash-f1075fce3b8cd4eab748b8705ca02444a5e35c0248662649013d8a5cb2b1a87c"));
+        assertThat(account.getHash().toString(), is("account-hash-f1075fce3b8cd4eab748b8705ca02444a5e35c0248662649013d8a5cb2b1a87c"));
         assertThat(account.getMainPurse(), is("uref-b22bc80d357df47447074e243b4d888de67c1cc7565fa82d0bb2b9b023146748-007"));
         assertThat(account.getAssociatedKeys().get(0).getAccountHash(), is(instanceOf(AccountHashKey.class)));
         assertThat(account.getAssociatedKeys().get(0).getAccountHash().toString(), is("account-hash-f1075fce3b8cd4eab748b8705ca02444a5e35c0248662649013d8a5cb2b1a87c"));
