@@ -1,6 +1,7 @@
 package com.casper.sdk.model.transfer;
 
 import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
+import com.casper.sdk.model.key.AccountHashKey;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
@@ -25,11 +26,11 @@ public class TransferV1 {
 
     /** Hex-encoded account hash. */
     @JsonProperty("to")
-    private String to;
+    private AccountHashKey to;
 
     /** Hex-encoded account hash. */
     @JsonProperty("from")
-    private String from;
+    private AccountHashKey from;
 
     /** Amount transferred */
     @JsonIgnore

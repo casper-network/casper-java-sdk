@@ -21,6 +21,7 @@ import com.casper.sdk.model.dictionary.DictionaryData;
 import com.casper.sdk.model.entity.AddressableEntity;
 import com.casper.sdk.model.entity.StateEntityResult;
 import com.casper.sdk.model.era.EraInfoData;
+import com.casper.sdk.model.key.Key;
 import com.casper.sdk.model.key.PublicKey;
 import com.casper.sdk.model.reward.GetRewardResult;
 import com.casper.sdk.model.stateroothash.StateRootHashData;
@@ -288,8 +289,8 @@ public class HowTo {
         assert stateEntityPublicKey.getEntity() != null;
 
         //By contract identifier
-        final String contractKey = ((AddressableEntity) stateEntityPublicKey.getEntity()).getNamedKeys().get(0).getKey();
-        final StateEntityResult stateEntityContract = casperService.getStateEntity(new EntityAddrIdentifier(contractKey), null);
+        final Key contractKey = ((AddressableEntity) stateEntityPublicKey.getEntity()).getNamedKeys().get(0).getKey();
+        final StateEntityResult stateEntityContract = casperService.getStateEntity(new EntityAddrIdentifier(contractKey.toString()), null);
         assert stateEntityContract.getEntity() != null;
 
     }

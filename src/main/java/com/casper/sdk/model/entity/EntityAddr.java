@@ -1,7 +1,6 @@
 package com.casper.sdk.model.entity;
 
 import com.casper.sdk.exception.NoSuchKeyTagException;
-import com.casper.sdk.model.key.KeyTag;
 import com.casper.sdk.model.key.Tag;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -34,10 +33,10 @@ public enum EntityAddr implements Tag {
 
     public static EntityAddr getByKeyName(final String keyName) throws NoSuchKeyTagException {
         // Search in reverse order to get the most specific key eg 'bid-addr-' and 'bid-'
-        for (final EntityAddr entityAddr: values()) {
-           if (entityAddr.getKeyName().equals(keyName)) {
-               return entityAddr;
-           }
+        for (final EntityAddr entityAddr : values()) {
+            if (entityAddr.getKeyName().equals(keyName)) {
+                return entityAddr;
+            }
         }
         throw new NoSuchKeyTagException("No such key name: " + keyName);
     }

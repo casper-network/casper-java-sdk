@@ -1,5 +1,6 @@
 package com.casper.sdk.model.deploy;
 
+import com.casper.sdk.model.key.Key;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,7 +24,7 @@ public class Operation {
     /**
      * The formatted string of the `Key`
      */
-    private String key;
+    private Key key;
 
     /**
      * @see OpKind

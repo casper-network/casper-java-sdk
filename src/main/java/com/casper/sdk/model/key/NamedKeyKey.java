@@ -32,7 +32,7 @@ public class NamedKeyKey extends Key {
         final String[] split = strKey.split("-");
         try {
             final String baseAddrStr = split[2] + "-" + split[3] + "-" + split[4];
-            baseAddr = (AddressableEntityKey) Key.fromKeyString(baseAddrStr);
+            baseAddr = (AddressableEntityKey) Key.create(baseAddrStr);
             stringBytes = Hex.decode(split[5]);
             refreshKey();
         } catch (NoSuchKeyTagException e) {

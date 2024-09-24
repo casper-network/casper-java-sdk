@@ -33,7 +33,8 @@ public class ByteCodeKey extends Key {
         final byte[] key = new byte[33];
         final String[] split = strKey.split("-");
         key[0] = byteCodeAddr.getByteTag();
-        System.arraycopy(Hex.decode(split[split.length - 1]), 0, key, 1, 32);
+        final byte[] decode = Hex.decode(split[split.length - 1]);
+        System.arraycopy(decode, 0, key, 1, decode.length);
         setKey(key);
     }
 
