@@ -1,6 +1,7 @@
 package com.casper.sdk.model.entity;
 
 import com.casper.sdk.exception.NoSuchKeyTagException;
+import com.casper.sdk.model.key.AccountHashKey;
 import com.casper.sdk.model.key.Key;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -20,9 +21,9 @@ import lombok.*;
 public class Account implements EntityAddressKind {
 
     @JsonValue
-    private Key account;
+    private AccountHashKey account;
 
     public Account(final String accountSt) throws NoSuchKeyTagException {
-        this.account = Key.create(accountSt);
+        this.account = (AccountHashKey) Key.create(accountSt);
     }
 }

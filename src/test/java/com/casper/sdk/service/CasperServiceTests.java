@@ -41,10 +41,7 @@ import com.casper.sdk.model.entity.*;
 import com.casper.sdk.model.era.EraEndV2;
 import com.casper.sdk.model.era.EraInfoData;
 import com.casper.sdk.model.globalstate.GlobalStateData;
-import com.casper.sdk.model.key.AccountHashKey;
-import com.casper.sdk.model.key.AlgorithmTag;
-import com.casper.sdk.model.key.Key;
-import com.casper.sdk.model.key.PublicKey;
+import com.casper.sdk.model.key.*;
 import com.casper.sdk.model.peer.PeerData;
 import com.casper.sdk.model.reward.GetRewardResult;
 import com.casper.sdk.model.stateroothash.StateRootHashData;
@@ -235,7 +232,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
     }
 
     @Test
-    void getTransferByHeight() {
+    void getTransferByHeight() throws NoSuchKeyTagException {
 
         mockNode.withRcpResponseDispatcher()
                 .withMethod("chain_get_block_transfers")
@@ -248,13 +245,13 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
 
         final TransferV1 transaction = transferData.getTransfers().get(0).getTransferV1();
         assertEquals("c709e727b7eaadb3b7f76450aa5d3ac3dd28b0271b7471a6dcc828cfd29f745a", transaction.getDeployHash());
-        assertEquals("account-hash-496d542527e1a29f576ab7c3f4c947bfcdc9b4145f75f6ec40e36089432d7351", transaction.getFrom());
-        assertEquals("account-hash-8a35e688eac33089b13f91a78c94221b669a0b13a6ed199228b1da018ecfa9df", transaction.getTo());
+        assertEquals(Key.create("account-hash-496d542527e1a29f576ab7c3f4c947bfcdc9b4145f75f6ec40e36089432d7351"), transaction.getFrom());
+        assertEquals(Key.create("account-hash-8a35e688eac33089b13f91a78c94221b669a0b13a6ed199228b1da018ecfa9df"), transaction.getTo());
         assertEquals(BigInteger.valueOf(445989400000L), transaction.getAmount());
     }
 
     @Test
-    void getTransferByHash() {
+    void getTransferByHash() throws NoSuchKeyTagException {
 
         mockNode.withRcpResponseDispatcher()
                 .withMethod("chain_get_block_transfers")
@@ -267,8 +264,8 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
 
         final TransferV1 transaction = transferData.getTransfers().get(0).getTransferV1();
         assertEquals("c709e727b7eaadb3b7f76450aa5d3ac3dd28b0271b7471a6dcc828cfd29f745a", transaction.getDeployHash());
-        assertEquals("account-hash-496d542527e1a29f576ab7c3f4c947bfcdc9b4145f75f6ec40e36089432d7351", transaction.getFrom());
-        assertEquals("account-hash-8a35e688eac33089b13f91a78c94221b669a0b13a6ed199228b1da018ecfa9df", transaction.getTo());
+        assertEquals(Key.create("account-hash-496d542527e1a29f576ab7c3f4c947bfcdc9b4145f75f6ec40e36089432d7351"), transaction.getFrom());
+        assertEquals(Key.create("account-hash-8a35e688eac33089b13f91a78c94221b669a0b13a6ed199228b1da018ecfa9df"), transaction.getTo());
         assertEquals(BigInteger.valueOf(445989400000L), transaction.getAmount());
     }
 
@@ -384,7 +381,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
         assertInstanceOf(StoredValueContract.class, storedValueData.getStoredValue());
         assertEquals("contract-package-d63c44078a1931b5dc4b80a7a0ec586164fd0470ce9f8b23f6d93b9e86c5944d", ((StoredValueContract) storedValueData.getStoredValue()).getValue().getPackageHash());
         assertEquals("contract-wasm-08d9634a72c58df5d837740174c6e88e52b0370ce8c74960d600e54966a0a4cf", ((StoredValueContract) storedValueData.getStoredValue()).getValue().getWasmHash());
-        assertEquals("uref-fe327f9815a1d016e1143db85e25a86341883949fd75ac1c1e7408a26c5b62ef-007", ((StoredValueContract) storedValueData.getStoredValue()).getValue().getNamedKeys().get(0).getKey());
+        assertEquals("uref-fe327f9815a1d016e1143db85e25a86341883949fd75ac1c1e7408a26c5b62ef-007", ((StoredValueContract) storedValueData.getStoredValue()).getValue().getNamedKeys().get(0).getKey().toString());
     }
 
     @Test
@@ -963,8 +960,8 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
         assertThat(entity.getEntryPoints().size(), is(15));
         assertThat(entity.getNamedKeys().size(), is(11));
 
-
-        assertThat(entity.getNamedKeys().get(0).getKey(), is("uref-a18b3997bc0bafe8612973531e6782be4f1251f90f0513c0b34fea69df1a95ff-007"));
+        assertThat(entity.getNamedKeys().get(0).getKey(), is(instanceOf(URefKey.class)));
+        assertThat(entity.getNamedKeys().get(0).getKey().toString(), is("uref-a18b3997bc0bafe8612973531e6782be4f1251f90f0513c0b34fea69df1a95ff-007"));
         assertThat(entity.getNamedKeys().get(0).getName(), is("allowances"));
 
         assertThat(entity.getEntryPoints().get(14).getV1().getAccess(), is(EntryPoint.EntryPointAccessEnum.PUBLIC));

@@ -1,5 +1,6 @@
 package com.casper.sdk.model.transaction.execution;
 
+import com.casper.sdk.model.key.Key;
 import com.casper.sdk.model.transaction.kind.Kind;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
@@ -16,9 +17,8 @@ import lombok.*;
 @Builder
 public class Effect {
 
-    // TODO convert EntityAddr
     @JsonProperty("key")
-    private String key;
+    private Key key;
     @JsonProperty("kind")
     private Kind kind;
 

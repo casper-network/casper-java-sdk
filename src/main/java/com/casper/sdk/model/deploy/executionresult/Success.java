@@ -1,6 +1,7 @@
 package com.casper.sdk.model.deploy.executionresult;
 
 import com.casper.sdk.model.deploy.ExecutionEffect;
+import com.casper.sdk.model.key.Key;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
@@ -30,7 +31,7 @@ public class Success {
     private ExecutionEffect effect;
 
     /** List of Hex-encoded transfer address. */
-    private List<String> transfers;
+    private List<Key> transfers;
 
     /** The cost of executing the deploy. */
     @JsonSerialize(using = ToStringSerializer.class)

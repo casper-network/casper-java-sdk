@@ -14,8 +14,7 @@ import com.casper.sdk.model.entity.SmartContract;
 import com.casper.sdk.model.entity.contract.ByteCode;
 import com.casper.sdk.model.entity.contract.NamedKey;
 import com.casper.sdk.model.entity.contract.Package;
-import com.casper.sdk.model.key.AccountHashKey;
-import com.casper.sdk.model.key.PublicKey;
+import com.casper.sdk.model.key.*;
 import com.casper.sdk.model.transaction.execution.Effect;
 import com.casper.sdk.model.transaction.kind.*;
 import com.casper.sdk.model.uref.URef;
@@ -51,7 +50,8 @@ class EffectTest {
                 "}";
 
         final Effect pruneEffect = new ObjectMapper().readValue(json, Effect.class);
-        assertThat(pruneEffect.getKey(), is("balance-hold-01fe139a5aa36aa69c04a6b630c9993bc03d868ffde46d3f60c3fbe6e6e762016f78bec10c90010000"));
+        assertThat(pruneEffect.getKey(), is(instanceOf(BalanceHoldKey.class)));
+        assertThat(pruneEffect.getKey().toString(), is("balance-hold-01fe139a5aa36aa69c04a6b630c9993bc03d868ffde46d3f60c3fbe6e6e762016f78bec10c90010000"));
         assertThat(pruneEffect, is(notNullValue()));
         assertThat(pruneEffect.getKind(), is(instanceOf(PruneKind.class)));
         assertThat(((PruneKind) pruneEffect.getKind()).getPrune(), is("balance-hold-01fe139a5aa36aa69c04a6b630c9993bc03d868ffde46d3f60c3fbe6e6e762016f78bec10c90010000"));
@@ -104,11 +104,11 @@ class EffectTest {
         final Effect writeEffect = new ObjectMapper().readValue(json, Effect.class);
         assertThat(writeEffect, is(notNullValue()));
         assertThat(writeEffect.getKind(), is(instanceOf(WriteKind.class)));
-        WriteKind<?> kind = writeEffect.getKind();
+        final WriteKind<?> kind = writeEffect.getKind();
         assertThat(kind.getWrite().getValue(), is(instanceOf(BidKind.class)));
         assertThat(kind.getWrite().getValue(), is(instanceOf(BidKind.class)));
         assertThat(kind.getWrite().getValue(), is(instanceOf(ValidatorCredit.class)));
-        ValidatorCredit value = (ValidatorCredit) kind.getWrite().getValue();
+        final ValidatorCredit value = (ValidatorCredit) kind.getWrite().getValue();
         assertThat(value.getValidatorPublicKey(), is(PublicKey.fromTaggedHexString("01284a8cd097808afdea9876ccb91f28702143c04266dea057cc19b8fc382cc258")));
         assertThat(value.getEraId(), is(377L));
         assertThat(value.getAmount(), is(new BigInteger("10000")));
@@ -134,11 +134,11 @@ class EffectTest {
         final Effect writeEffect = new ObjectMapper().readValue(json, Effect.class);
         assertThat(writeEffect, is(notNullValue()));
         assertThat(writeEffect.getKind(), is(instanceOf(WriteKind.class)));
-        WriteKind<?> kind = writeEffect.getKind();
+        final WriteKind<?> kind = writeEffect.getKind();
         assertThat(kind.getWrite().getValue(), is(instanceOf(BidKind.class)));
         assertThat(kind.getWrite().getValue(), is(instanceOf(BidKind.class)));
         assertThat(kind.getWrite().getValue(), is(instanceOf(Bridge.class)));
-        Bridge value = (Bridge) kind.getWrite().getValue();
+        final Bridge value = (Bridge) kind.getWrite().getValue();
         assertThat(value.getOldValidatorPublicKey(), is(PublicKey.fromTaggedHexString("01284a8cd097808afdea9876ccb91f28702143c04266dea057cc19b8fc382cc258")));
         assertThat(value.getNewValidatorPublicKey(), is(PublicKey.fromTaggedHexString("01026ca707c348ed8012ac6a1f28db031fadd6eb67203501a353b867a08c8b9a80")));
         assertThat(value.getEraId(), is(378L));
@@ -207,7 +207,8 @@ class EffectTest {
                 "}";
 
         final Effect identityEffect = new ObjectMapper().readValue(json, Effect.class);
-        assertThat(identityEffect.getKey(), is("entity-system-86c4525a60cb6532342f5f598666711219f3bdcc6a8936152ec1c670c510c75f"));
+        assertThat(identityEffect.getKey(), is(instanceOf(AddressableEntityKey.class)));
+        assertThat(identityEffect.getKey().toString(), is("entity-system-86c4525a60cb6532342f5f598666711219f3bdcc6a8936152ec1c670c510c75f"));
         assertThat(identityEffect, is(notNullValue()));
         assertThat(identityEffect.getKind(), is(instanceOf(IdentityKind.class)));
     }
@@ -218,22 +219,22 @@ class EffectTest {
         final String json = "{\n" +
                 "  \"key\": \"balance-1c29560834540520e147468c3bf86f09e5bd60cda2cb8380d94ee1c348a4281d\",\n" +
                 "  \"kind\": {\n" +
-                     "  \"AddUInt512\" : 2500000000\n" +
-                    "}\n" +
+                "  \"AddUInt512\" : 2500000000\n" +
+                "}\n" +
                 "}";
 
         final Effect identityEffect = new ObjectMapper().readValue(json, Effect.class);
-        assertThat(identityEffect.getKey(), is("balance-1c29560834540520e147468c3bf86f09e5bd60cda2cb8380d94ee1c348a4281d"));
+        assertThat(identityEffect.getKey(), is(instanceOf(Key.class)));
+        assertThat(identityEffect.getKey().toString(), is("balance-1c29560834540520e147468c3bf86f09e5bd60cda2cb8380d94ee1c348a4281d"));
         assertThat(identityEffect, is(notNullValue()));
         assertThat(identityEffect.getKind(), is(instanceOf(Transform.class)));
-
     }
 
     @Test
     void writeKindByteCode() throws JsonProcessingException {
 
         final String json = "{\n" +
-                "  \"key\": \"byte-code-v1-wasm-aaa0345086a4f80601ec93d78053c13f5599afeb752d3d9b88fe5878b611675\",\n" +
+                "  \"key\": \"byte-code-v1-wasm-3beb396c91ff7ae62d08857cc8a787146cd4f0771b8a21d385b3f4ac6077854a\",\n" +
                 "  \"kind\": {\n" +
                 "    \"Write\": {\n" +
                 "      \"ByteCode\": {\n" +
@@ -245,19 +246,17 @@ class EffectTest {
                 "}";
 
         final Effect writeEffect = new ObjectMapper().readValue(json, Effect.class);
+        assertThat(writeEffect.getKey().toString(), is("byte-code-v1-wasm-3beb396c91ff7ae62d08857cc8a787146cd4f0771b8a21d385b3f4ac6077854a"));
 
-        assertThat(writeEffect.getKey(), is("byte-code-v1-wasm-aaa0345086a4f80601ec93d78053c13f5599afeb752d3d9b88fe5878b611675"));
-        WriteKind<?> kind = writeEffect.getKind();
-
+        final WriteKind<?> kind = writeEffect.getKind();
         assertThat(kind.getWrite(), is(instanceOf(ByteCodeKind.class)));
         assertThat(kind.getWrite().getValue(), is(instanceOf(ByteCode.class)));
 
-        ByteCode byteCodeKind = (ByteCode) kind.getWrite().getValue();
-
+        final ByteCode byteCodeKind = (ByteCode) kind.getWrite().getValue();
         assertThat(byteCodeKind.getBytes(), is("0061736d01000000017f106002"));
         assertThat(byteCodeKind.getKind(), is(ByteCode.ByteCodes.V1CasperWasm));
-
     }
+
     @Test
     void writeKindNamedKey() throws JsonProcessingException {
 
@@ -285,25 +284,25 @@ class EffectTest {
 
         final Effect writeEffect = new ObjectMapper().readValue(json, Effect.class);
 
-        assertThat(writeEffect.getKey(), is("named-key-entity-account-a897e2e1c25b1149e96b774bdfd758d4a44ec392bd914a19ff780d3905ff45c0-e8265cd5ef8e0275971c6d4ff28263ef787412f034631a11bbc508761ffd7119"));
-        WriteKind<?> kind = writeEffect.getKind();
+        assertThat(writeEffect.getKey(), is(instanceOf(NamedKeyKey.class)));
+        assertThat(writeEffect.getKey().toString(), is("named-key-entity-account-a897e2e1c25b1149e96b774bdfd758d4a44ec392bd914a19ff780d3905ff45c0-e8265cd5ef8e0275971c6d4ff28263ef787412f034631a11bbc508761ffd7119"));
 
+        final WriteKind<?> kind = writeEffect.getKind();
         assertThat(kind.getWrite(), is(instanceOf(NamedKeyKind.class)));
         assertThat(kind.getWrite().getValue(), is(instanceOf(NamedKey.class)));
 
-        NamedKey namedKeyKind = (NamedKey) kind.getWrite().getValue();
-
-        AbstractCLValue<?,?> namedKey = namedKeyKind.getNamedKey();
+        final NamedKey namedKeyKind = (NamedKey) kind.getWrite().getValue();
+        final AbstractCLValue<?, ?> namedKey = namedKeyKind.getNamedKey();
         assertThat(namedKey.getBytes(), is("028c5da3dd186f82c27dd4689dca3f838ac17f93ef10a5159fa40a30ca78f9e93207"));
         assertThat(namedKey.getParsed(), is("uref-8c5da3dd186f82c27dd4689dca3f838ac17f93ef10a5159fa40a30ca78f9e932-007"));
         assertThat(namedKey.getClType().getTypeName(), is("Key"));
 
-        AbstractCLValue<?,?> name = namedKeyKind.getName();
+        final AbstractCLValue<?, ?> name = namedKeyKind.getName();
         assertThat(name.getBytes(), is("2800000063657031385f636f6e74726163745f7061636b6167655f6163636573735f41636d6520546f6b656e"));
         assertThat(name.getParsed(), is("cep18_contract_package_access_Acme Token"));
         assertThat(name.getClType().getTypeName(), is("String"));
-
     }
+
     @Test
     void writeKindEntryPoint() throws JsonProcessingException {
 
@@ -336,16 +335,15 @@ class EffectTest {
 
 
         final Effect writeEffect = new ObjectMapper().readValue(json, Effect.class);
+        assertThat(writeEffect.getKey(), is(instanceOf(EntryPointKey.class)));
+        assertThat(writeEffect.getKey().toString(), is("entry-point-v1-entity-contract-3b6b4d8a3d815372508faa92f3a05dcb50c9c98de05d9a7668cb94b04f1ef9af-768c370eb010604bd19029a409dca8b5fbf9af9bc14a36c2b294a2a7a922161e"));
 
-        assertThat(writeEffect.getKey(), is("entry-point-v1-entity-contract-3b6b4d8a3d815372508faa92f3a05dcb50c9c98de05d9a7668cb94b04f1ef9af-768c370eb010604bd19029a409dca8b5fbf9af9bc14a36c2b294a2a7a922161e"));
-        WriteKind<?> kind = writeEffect.getKind();
-
+        final WriteKind<?> kind = writeEffect.getKind();
         assertThat(kind.getWrite(), is(instanceOf(EntryPointKind.class)));
         assertThat(kind.getWrite().getValue(), is(instanceOf(EntryPointValue.class)));
 
-        EntryPointValue entryPointValue = (EntryPointValue) kind.getWrite().getValue();
-        EntryPoint entryPoint = entryPointValue.getV1();
-
+        final EntryPointValue entryPointValue = (EntryPointValue) kind.getWrite().getValue();
+        final EntryPoint entryPoint = entryPointValue.getV1();
         assertThat(entryPoint.getName(), is("burn"));
         assertThat(entryPoint.getArgs().size(), is(2));
         assertThat(entryPoint.getArgs().get(0).getName(), is("owner"));
@@ -354,8 +352,8 @@ class EffectTest {
         assertThat(entryPoint.getAccess().getValue(), is(EntryPoint.EntryPointAccessEnum.PUBLIC));
         assertThat(entryPoint.getType(), is(EntryPoint.EntryPointType.CALLED));
         assertThat(entryPoint.getPayment(), is(EntryPoint.EntryPointPayment.CALLER));
-
     }
+
     @Test
     void writeKindPackage() throws JsonProcessingException {
 
@@ -400,28 +398,24 @@ class EffectTest {
 
         final Effect writeEffect = new ObjectMapper().readValue(json, Effect.class);
 
-        assertThat(writeEffect.getKey(), is("package-ef39f3794dfde8641acc43a8f63d4c0a72a4b33bbb2e4eed29421ee6cfd0d87e"));
-        WriteKind<?> kind = writeEffect.getKind();
+        assertThat(writeEffect.getKey(), is(instanceOf(Key.class)));
+        assertThat(writeEffect.getKey().toString(), is("package-ef39f3794dfde8641acc43a8f63d4c0a72a4b33bbb2e4eed29421ee6cfd0d87e"));
 
+        final WriteKind<?> kind = writeEffect.getKind();
         assertThat(kind.getWrite(), is(instanceOf(PackageKind.class)));
         assertThat(kind.getWrite().getValue(), is(instanceOf(Package.class)));
 
-        Package contractPackage = (Package) kind.getWrite().getValue();
-
+        final Package contractPackage = (Package) kind.getWrite().getValue();
         assertThat(contractPackage.getVersions().get(0).getAddressableEntityHash(), is("addressable-entity-3b6b4d8a3d815372508faa92f3a05dcb50c9c98de05d9a7668cb94b04f1ef9af"));
         assertThat(contractPackage.getVersions().get(0).getEntityVersionKey().getEntityVersion(), is(3));
         assertThat(contractPackage.getVersions().get(0).getEntityVersionKey().getProtocolVersionMajor(), is(2));
-
         assertThat(contractPackage.getDisabledVersions().size(), is(2));
         assertThat(contractPackage.getDisabledVersions().get(1).getAddressableEntityHash(), is("addressable-entity-aab0da01340446cee477f28410f8af5d6e0f3a88fb26c0cafb8d1625f5cc9c10"));
         assertThat(contractPackage.getDisabledVersions().get(1).getEntityVersionKey().getEntityVersion(), is(2));
         assertThat(contractPackage.getDisabledVersions().get(1).getEntityVersionKey().getProtocolVersionMajor(), is(2));
-
         assertThat(contractPackage.getGroups().size(), is(3));
         assertThat(contractPackage.getGroups().get(1), is("group_B"));
-
         assertThat(contractPackage.getLockStatus(), is(Package.PackageStatus.Unlocked));
-
     }
 
     @Test
@@ -457,15 +451,14 @@ class EffectTest {
                 "}";
 
         final Effect writeEffect = new ObjectMapper().readValue(json, Effect.class);
-        assertThat(writeEffect.getKey(), is("entity-contract-3b6b4d8a3d815372508faa92f3a05dcb50c9c98de05d9a7668cb94b04f1ef9af"));
+        assertThat(writeEffect.getKey(), is(instanceOf(AddressableEntityKey.class)));
+        assertThat(writeEffect.getKey().toString(), is("entity-contract-3b6b4d8a3d815372508faa92f3a05dcb50c9c98de05d9a7668cb94b04f1ef9af"));
 
-        WriteKind<?> kind = writeEffect.getKind();
-
+        final WriteKind<?> kind = writeEffect.getKind();
         assertThat(kind.getWrite(), is(instanceOf(AddressableEntityKind.class)));
         assertThat(kind.getWrite().getValue(), is(instanceOf(Entity.class)));
 
-        Entity entity = (Entity) kind.getWrite().getValue();
-
+        final Entity entity = (Entity) kind.getWrite().getValue();
         assertThat(entity.getProtocolVersion(), is("2.0.0"));
         assertThat(((SmartContract) entity.getEntityAddressKind()).getSmartContract().name(), is(SmartContract.TransactionRuntime.VMCASPERV1.name()));
         assertThat(entity.getPackageHash(), is("package-ef39f3794dfde8641acc43a8f63d4c0a72a4b33bbb2e4eed29421ee6cfd0d87e"));
@@ -478,6 +471,5 @@ class EffectTest {
         assertThat(entity.getActionThresholds().getUpgradeManagement(), is(1));
         assertThat(entity.getActionThresholds().getUpgradeManagement(), is(1));
         assertThat(entity.getMessageTopics().size(), is(0));
-
     }
 }

@@ -1,5 +1,6 @@
 package com.casper.sdk.model.contract;
 
+import com.casper.sdk.model.key.Key;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,7 +26,7 @@ public class NamedKey {
      * key(String) The value of the entry: a casper `Key` type.
      */
     @JsonProperty("key")
-    private String key;
+    private Key key;
 
     /**
      * name(String) The name of the entry.
