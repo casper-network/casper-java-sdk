@@ -1,0 +1,308 @@
+{
+  "api_version": "2.0.0",
+  "entity": {
+    "AddressableEntity": {
+      "entity": {
+        "protocol_version": "2.0.0",
+        "entity_kind": {
+          "SmartContract": "VmCasperV1"
+        },
+        "package_hash": "package-adec05d3f25f13373129b4dc8de4ebfd9828bddc0d92a19f39c14765b07a8c99",
+        "byte_code_hash": "byte-code-1ca17bc3b3d63557270d6154d489ac970d6d7bee809059d9a7c6acb9055b3107",
+        "main_purse": "uref-3c4bf80070d2667eaacc51506ba49ba0f26452649622d7cb9815c9f81ea92bd7-007",
+        "associated_keys": [
+          {
+            "account_hash": "account-hash-aab0da01340446cee477f28410f8af5d6e0f3a88fb26c0cafb8d1625f5cc9c10",
+            "weight": 1
+          }
+        ],
+        "action_thresholds": {
+          "deployment": 1,
+          "upgrade_management": 1,
+          "key_management": 1
+        },
+        "message_topics": []
+      },
+      "named_keys": [
+        {
+          "name": "allowances",
+          "key": "uref-5e1239586b122bfe8ec9e3285f375d060ffbf90599fade7e807027fd228275cf-007"
+        },
+        {
+          "name": "balances",
+          "key": "uref-eb75c6f8931dadb41bdcb269e6b4d70e7e1870f374089fb8c5cc5d1509b81bf8-007"
+        },
+        {
+          "name": "contract_hash",
+          "key": "entity-contract-3644153577c6833b01a15819eafc5b56a0f77b31c7795681bc6df140e3a58329"
+        },
+        {
+          "name": "decimals",
+          "key": "uref-f78d6b407c480e4bc5914fadc2223b8e54c21632ad2883eb5bf3677230d9d1c6-007"
+        },
+        {
+          "name": "enable_mint_burn",
+          "key": "uref-153c08b3a53075f1575b640de83bb5f6a969cbe9a2b88432c450e8b1750a8c82-007"
+        },
+        {
+          "name": "events_mode",
+          "key": "uref-08eff9406dd6a495438d51e73b9c9762884d874c2af4c7ed55a1af42a1f7f1c9-007"
+        },
+        {
+          "name": "name",
+          "key": "uref-45f7af3e18ab79a0dcf5c0134d368c86b21474915cf3efa2f20e00806abd9714-007"
+        },
+        {
+          "name": "package_hash",
+          "key": "package-adec05d3f25f13373129b4dc8de4ebfd9828bddc0d92a19f39c14765b07a8c99"
+        },
+        {
+          "name": "security_badges",
+          "key": "uref-91c2318e441c6ad89569025b923c5d0425fb204fc6f5257aa518f5e8876b67b9-007"
+        },
+        {
+          "name": "symbol",
+          "key": "uref-c58a45d1a1cd6cb8e3f208f1e2da2bc0a97b3e2d61c017f13d710cf09ba7d5a4-007"
+        },
+        {
+          "name": "total_supply",
+          "key": "uref-eae0f618b487a5cabc3ca663095e07dedac12b09ad989e739ff12ef98f2ff31b-007"
+        }
+      ],
+      "entry_points": [
+        {
+          "V1CasperVm": {
+            "name": "allowance",
+            "args": [
+              {
+                "name": "owner",
+                "cl_type": "Key"
+              },
+              {
+                "name": "spender",
+                "cl_type": "Key"
+              }
+            ],
+            "ret": "U256",
+            "access": "Public",
+            "entry_point_type": "Called",
+            "entry_point_payment": "Caller"
+          }
+        },
+        {
+          "V1CasperVm": {
+            "name": "mint",
+            "args": [
+              {
+                "name": "owner",
+                "cl_type": "Key"
+              },
+              {
+                "name": "amount",
+                "cl_type": "U256"
+              }
+            ],
+            "ret": "Unit",
+            "access": "Public",
+            "entry_point_type": "Called",
+            "entry_point_payment": "Caller"
+          }
+        },
+        {
+          "V1CasperVm": {
+            "name": "transfer",
+            "args": [
+              {
+                "name": "recipient",
+                "cl_type": "Key"
+              },
+              {
+                "name": "amount",
+                "cl_type": "U256"
+              }
+            ],
+            "ret": "Unit",
+            "access": "Public",
+            "entry_point_type": "Called",
+            "entry_point_payment": "Caller"
+          }
+        },
+        {
+          "V1CasperVm": {
+            "name": "transfer_from",
+            "args": [
+              {
+                "name": "owner",
+                "cl_type": "Key"
+              },
+              {
+                "name": "recipient",
+                "cl_type": "Key"
+              },
+              {
+                "name": "amount",
+                "cl_type": "U256"
+              }
+            ],
+            "ret": "Unit",
+            "access": "Public",
+            "entry_point_type": "Called",
+            "entry_point_payment": "Caller"
+          }
+        },
+        {
+          "V1CasperVm": {
+            "name": "approve",
+            "args": [
+              {
+                "name": "spender",
+                "cl_type": "Key"
+              },
+              {
+                "name": "amount",
+                "cl_type": "U256"
+              }
+            ],
+            "ret": "Unit",
+            "access": "Public",
+            "entry_point_type": "Called",
+            "entry_point_payment": "Caller"
+          }
+        },
+        {
+          "V1CasperVm": {
+            "name": "init",
+            "args": [],
+            "ret": "Unit",
+            "access": "Public",
+            "entry_point_type": "Called",
+            "entry_point_payment": "Caller"
+          }
+        },
+        {
+          "V1CasperVm": {
+            "name": "name",
+            "args": [],
+            "ret": "String",
+            "access": "Public",
+            "entry_point_type": "Called",
+            "entry_point_payment": "Caller"
+          }
+        },
+        {
+          "V1CasperVm": {
+            "name": "burn",
+            "args": [
+              {
+                "name": "owner",
+                "cl_type": "Key"
+              },
+              {
+                "name": "amount",
+                "cl_type": "U256"
+              }
+            ],
+            "ret": "Unit",
+            "access": "Public",
+            "entry_point_type": "Called",
+            "entry_point_payment": "Caller"
+          }
+        },
+        {
+          "V1CasperVm": {
+            "name": "change_security",
+            "args": [],
+            "ret": "Unit",
+            "access": "Public",
+            "entry_point_type": "Called",
+            "entry_point_payment": "Caller"
+          }
+        },
+        {
+          "V1CasperVm": {
+            "name": "increase_allowance",
+            "args": [
+              {
+                "name": "spender",
+                "cl_type": "Key"
+              },
+              {
+                "name": "amount",
+                "cl_type": "U256"
+              }
+            ],
+            "ret": "Unit",
+            "access": "Public",
+            "entry_point_type": "Called",
+            "entry_point_payment": "Caller"
+          }
+        },
+        {
+          "V1CasperVm": {
+            "name": "decrease_allowance",
+            "args": [
+              {
+                "name": "spender",
+                "cl_type": "Key"
+              },
+              {
+                "name": "amount",
+                "cl_type": "U256"
+              }
+            ],
+            "ret": "Unit",
+            "access": "Public",
+            "entry_point_type": "Called",
+            "entry_point_payment": "Caller"
+          }
+        },
+        {
+          "V1CasperVm": {
+            "name": "decimals",
+            "args": [],
+            "ret": "U8",
+            "access": "Public",
+            "entry_point_type": "Called",
+            "entry_point_payment": "Caller"
+          }
+        },
+        {
+          "V1CasperVm": {
+            "name": "symbol",
+            "args": [],
+            "ret": "String",
+            "access": "Public",
+            "entry_point_type": "Called",
+            "entry_point_payment": "Caller"
+          }
+        },
+        {
+          "V1CasperVm": {
+            "name": "total_supply",
+            "args": [],
+            "ret": "U256",
+            "access": "Public",
+            "entry_point_type": "Called",
+            "entry_point_payment": "Caller"
+          }
+        },
+        {
+          "V1CasperVm": {
+            "name": "balance_of",
+            "args": [
+              {
+                "name": "address",
+                "cl_type": "Key"
+              }
+            ],
+            "ret": "U256",
+            "access": "Public",
+            "entry_point_type": "Called",
+            "entry_point_payment": "Caller"
+          }
+        }
+      ]
+    }
+  },
+  "merkle_proof": "0100000011023644153577c6833b01a15819eafc5b56a0f77b31c7795681bc6df140e3a583290dadec05d3f25f13373129b4dc8de4ebfd9828bddc0d92a19f39c14765b07a8c991ca17bc3b3d63557270d6154d489ac970d6d7bee809059d9a7c6acb9055b31070200000000000000000000003c4bf80070d2667eaacc51506ba49ba0f26452649622d7cb9815c9f81ea92bd70701000000aab0da01340446cee477f28410f8af5d6e0f3a88fb26c0cafb8d1625f5cc9c100101010100000000020002000000000202000000000163804ebf3311398a6c2cac768d6bc6887fac66332322cf6e9b359dcc790632c8010131cc2b42a49cab0028a658511c449d703066363d47e1d773d4fdaba8d31bbb5e00110f00000000010ab63a74bbd59a8d6130165b89c3521ad8af245f90be700ac6251b27f4c82c090201f3a16106009508317fa13f792a1b78967287aef39343db9fdd03f3cc5a69d9f20601e3792ed198624ba64255c9dc8caade31c94bee6787385364aa2ac435c392e5830901a57dc7571c626a1fc35ad098a7630ff81d0c7f1f4e778d649e77e5f2f9b550f50a0087430e572aee5a8c634adea622ae38091653d6d30b42cc994ab615ae16d655a40b0082788747ba6bea2f8c76a72f1191cb9456d4d1c68549f665a16ff8d94c0b48fc0d00c8cbd06c74dc688c735c3491972fcf05c5d40392c9cd4ca76998ba46f5684e740e0043d39741a6e7b395eace3b1fbbbd5bbf288f7a788e80745a2e2bb0f2173a8b4f0f0159041ee43163dac6b4d0b1b533c862d929736755d66a8574b58fa6ddb74f2e2a10012ec0467e40b6f526016dbeb39312c8b53c3ead0ae57cbf0f592bb5c0e96322661201eceae2b9b6b7d5ad13e3cfe2716651294f7165ba29511b3b62162f0c0410edb91401f7d792c0cc77978db629482dce3c5ad1d61553f31c35d841aa4ee899d0a27e411500dc712932c0408798b5bf7811d3602489a4d76d84ac49df76e89fbfb0b85c582216014dd4718286f8edd8598948ad073a9a6b39eaedb80985bb81b7c1937e3ff9ab6a1701588c95e05051f792bf6ae3bad1085eb75f0b13b3dba94405700b4793caf8bc6f"
+}

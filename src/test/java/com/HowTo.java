@@ -2,7 +2,6 @@ package com;
 
 import com.casper.sdk.identifier.block.HashBlockIdentifier;
 import com.casper.sdk.identifier.block.HeightBlockIdentifier;
-import com.casper.sdk.identifier.dictionary.StringDictionaryIdentifier;
 import com.casper.sdk.identifier.entity.EntityAddrIdentifier;
 import com.casper.sdk.identifier.era.IdEraIdentifier;
 import com.casper.sdk.identifier.global.StateRootHashIdentifier;
@@ -17,7 +16,6 @@ import com.casper.sdk.model.clvalue.*;
 import com.casper.sdk.model.common.Ttl;
 import com.casper.sdk.model.deploy.Delegator;
 import com.casper.sdk.model.deploy.NamedArg;
-import com.casper.sdk.model.dictionary.DictionaryData;
 import com.casper.sdk.model.entity.AddressableEntity;
 import com.casper.sdk.model.entity.StateEntityResult;
 import com.casper.sdk.model.era.EraInfoData;
@@ -30,6 +28,7 @@ import com.casper.sdk.model.status.StatusData;
 import com.casper.sdk.model.transaction.*;
 import com.casper.sdk.model.transaction.entrypoint.CallEntryPoint;
 import com.casper.sdk.model.transaction.entrypoint.TransferEntryPoint;
+import com.casper.sdk.model.transaction.execution.ExecutionResultV2;
 import com.casper.sdk.model.transaction.pricing.FixedPricingMode;
 import com.casper.sdk.model.transaction.scheduling.Standard;
 import com.casper.sdk.model.transaction.target.Native;
@@ -63,6 +62,7 @@ import java.util.concurrent.TimeoutException;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
+import static org.hamcrest.core.IsNull.nullValue;
 
 /**
  * @author carl@stormeye.co.uk
@@ -256,24 +256,11 @@ public class HowTo {
     }
 
     @Test
-        /* TODO: Make it work */
+    /* TODO */
     void getDictionaryItem() throws IOException {
-
-        final StatusData status = casperService.getStatus();
-        final EraInfoData eraSummaryBlockHash = casperService.getEraSummary(new HashBlockIdentifier(status.getLastSwitchBlockHash().toString()));
-        final PublicKey delegator = ((Delegator) eraSummaryBlockHash.getEraSummary().getStoredValue().getValue().getSeigniorageAllocations().get(0)).getDelegatorPublicKey();
-
-        String accountHash = delegator.generateAccountHash(true);
-
-        final StringDictionaryIdentifier key = StringDictionaryIdentifier.builder().dictionary(accountHash).build();
-
-        final DictionaryData stateDictionaryItem = casperService.getStateDictionaryItem(
-                casperService.getStateRootHash().getStateRootHash(),
-                key
-        );
-
-        assert stateDictionaryItem.getDictionaryKey() != null;
-
+        // Now linked to issue #368
+        // Need to first install a Contract with a built in Dictionary
+        // Then query it with state_get_dictionary_item
     }
 
 
@@ -399,6 +386,7 @@ public class HowTo {
                 new NamedArg<>("decimals", new CLValueU8((byte) 11)),
                 new NamedArg<>("name", new CLValueString("Acme Token")),
                 new NamedArg<>("symbol", new CLValueString("ACME")),
+                new NamedArg<>("total_supply", new CLValueU256(BigInteger.valueOf(500000))),
                 new NamedArg<>("events_mode", new CLValueU8((byte) 0)),
                 new NamedArg<>("id", new CLValueOption(Optional.of(new CLValueU64(BigInteger.valueOf(System.currentTimeMillis())))))
         );
@@ -425,7 +413,9 @@ public class HowTo {
         assert result.getTransactionHash() != null;
 
         final GetTransactionResult transactionResult = waitForTransaction(result.getTransactionHash());
+
         assertThat(transactionResult, is(notNullValue()));
+        assertThat(((ExecutionResultV2) transactionResult.getExecutionInfo().getExecutionResult()).getErrorMessage(), is(nullValue()));
 
     }
 

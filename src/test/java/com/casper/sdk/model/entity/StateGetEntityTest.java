@@ -72,4 +72,25 @@ public class StateGetEntityTest extends AbstractJsonTests {
         final StateEntityResult entity = OBJECT_MAPPER.readValue(inputJson, StateEntityResult.class);
         assertInstanceOf(com.casper.sdk.model.account.Account.class, entity.getEntity());
     }
+
+    @Test
+    void validateGetStateEntityActualSmartContractCctlReturnedResult() throws IOException {
+
+        final String inputJson = getPrettyJson(loadJsonFromFile("entity/getstateentity-smartcontract-actual-from-cctl.json"));
+
+        final StateEntityResult entity = OBJECT_MAPPER.readValue(inputJson, StateEntityResult.class);
+        assertInstanceOf(AddressableEntity.class, entity.getEntity());
+        assertInstanceOf(SmartContract.class, ((AddressableEntity) entity.getEntity()).getEntity().getEntityAddressKind());
+
+        final AddressableEntity contract =  (AddressableEntity) entity.getEntity();
+
+        assertThat(contract.getNamedKeys().size(), is(11));
+        assertThat(contract.getEntryPoints().size(), is(15));
+
+        assertThat(contract.getNamedKeys().get(0).getName(), is("allowances"));
+        assertThat(contract.getNamedKeys().get(0).getKey(), is("uref-5e1239586b122bfe8ec9e3285f375d060ffbf90599fade7e807027fd228275cf-007"));
+
+        assertThat(contract.getEntryPoints().get(14).getV1().getName(), is("balance_of"));
+
+    }
 }
