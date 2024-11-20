@@ -36,12 +36,18 @@ public class CalltableSerializationEnvelopeBuilder implements CasperSerializable
     /** The total size of all field values when serialized */
     private long size = 0;
 
+    /**
+     * Add a field to the envelope.
+     *
+     * @param index the zero based index
+     * @param value the value to be serialized to value bytes of the field
+     */
     public <T> void addField(final int index, final T value) throws ValueSerializationException {
         this.addField(new Field(index, this.offset, value));
     }
 
     /**
-     * Add a field to the envelope
+     * Add a field to the envelope.
      *
      * @param index the zero based index
      * @param value the bytes of the value to add
@@ -51,6 +57,11 @@ public class CalltableSerializationEnvelopeBuilder implements CasperSerializable
         this.addField(new Field((short) index, offset, value));
     }
 
+    /**
+     * Adds a field to the envelope.
+     *
+     * @param field the field to add
+     */
     public void addField(final Field field) {
         if (this.currentFieldIndex >= field.getIndex()) {
             throw new IllegalArgumentException("Field index must be greater than the previous field index");
@@ -66,12 +77,26 @@ public class CalltableSerializationEnvelopeBuilder implements CasperSerializable
         this.offset += field.getValue().length;
     }
 
-
+    /**
+     * Obtains the fields and converts its byte value to the specified type.
+     *
+     * @param index the index of the field
+     * @param clazz the tye to convert the field value to
+     * @param <T>   the type to convert the field value to
+     * @return the field value as the specified type
+     * @throws ValueDeserializationException if the field value cannot be converted to the specified type
+     */
     public <T> T getFieldValue(final int index, final Class<T> clazz) throws ValueDeserializationException {
         final Field field = this.fields.get(index);
         return field.getValue(clazz);
     }
 
+    /**
+     * Obtains the field's value bytes.
+     *
+     * @param index the index of the field
+     * @return the fields value bytes
+     */
     public byte[] getFieldBytes(final int index) {
         return fields.get(index).getValue();
     }

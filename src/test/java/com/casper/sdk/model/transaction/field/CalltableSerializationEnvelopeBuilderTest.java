@@ -11,6 +11,8 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
+ * Unit tests for the {@link CalltableSerializationEnvelopeBuilder}
+ *
  * @author ian@meywood.com
  */
 class CalltableSerializationEnvelopeBuilderTest {

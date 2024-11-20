@@ -32,6 +32,14 @@ public class Field implements CasperSerializableObject, DeserializableObject {
     /** The field value as bytes */
     private byte[] value;
 
+    /**
+     * Constructs a field with the specified index, offset and value.
+     *
+     * @param index  the index of the field
+     * @param offset the offset of the fields bytes within a CalltableSerializationEnvelope
+     * @param value  the value of the field
+     * @throws ValueSerializationException if the value cannot be serialized
+     */
     public Field(final int index, final long offset, final Object value) throws ValueSerializationException {
         final SerializerBuffer serializerBuffer = new SerializerBuffer();
 
@@ -75,6 +83,14 @@ public class Field implements CasperSerializableObject, DeserializableObject {
         this.offset = deser.readU32();
     }
 
+    /**
+     * Obtains the fields value converted to the specified type.
+     *
+     * @param clazz the type to convert the value's bytes to
+     * @param <T>   the expected type
+     * @return the bytes converted  to value of type clazz
+     * @throws ValueDeserializationException if the value cannot be converted to the specified type
+     */
     @SuppressWarnings("unchecked")
     public <T> T getValue(final Class<T> clazz) throws ValueDeserializationException {
         final DeserializerBuffer deserializerBuffer = new DeserializerBuffer(this.value);
