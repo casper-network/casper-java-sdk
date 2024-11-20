@@ -175,9 +175,7 @@ public class TransactionTests {
         assertThat(((ExecutionResultV2) transactionResult.getExecutionInfo().getExecutionResult()).getErrorMessage(), is(nullValue()));
 
         //Tests for the returned getTransaction Entities/Kinds/Entries are in EffectsTest and CasperServiceTests
-
     }
-
 
     private GetTransactionResult waitForTransaction(final TransactionHash hash, final CasperService casperService) throws TimeoutException {
 
@@ -202,11 +200,6 @@ public class TransactionTests {
             }
 
         }
-
         return result;
-
     }
-
-
-
 }

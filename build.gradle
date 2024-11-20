@@ -14,7 +14,7 @@ apply plugin: 'java'
 
 group = 'network.casper'
 // Version number update for release
-version='2.7.0-BETA.2'
+version='2.7.0-BETA.3'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
@@ -24,7 +24,6 @@ repositories {
 }
 
 dependencies {
-    implementation "dev.oak3:sbs4j:${sbs4jVersion}"
     implementation "io.github.oak:jsonrpc4j:${jsonrpc4jVersion}"
     implementation "org.bouncycastle:bcpkix-jdk15on:${bouncyCastleVersion}"
     implementation "org.web3j:core:${web3jVersion}"
