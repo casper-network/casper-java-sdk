@@ -88,9 +88,8 @@ public class StateGetEntityTest extends AbstractJsonTests {
         assertThat(contract.getEntryPoints().size(), is(15));
 
         assertThat(contract.getNamedKeys().get(0).getName(), is("allowances"));
-        assertThat(contract.getNamedKeys().get(0).getKey(), is("uref-5e1239586b122bfe8ec9e3285f375d060ffbf90599fade7e807027fd228275cf-007"));
+        assertThat(contract.getNamedKeys().get(0).getKey().toString(), is("uref-5e1239586b122bfe8ec9e3285f375d060ffbf90599fade7e807027fd228275cf-007"));
 
         assertThat(contract.getEntryPoints().get(14).getV1().getName(), is("balance_of"));
-
     }
 }
