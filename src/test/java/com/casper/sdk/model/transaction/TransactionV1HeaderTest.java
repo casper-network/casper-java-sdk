@@ -55,11 +55,10 @@ class TransactionV1HeaderTest {
                 (byte) 0x93, 0x3b
         };
 
-        final TransactionV1Header header = TransactionV1Header.builder()
+        final TransactionV1Payload header = TransactionV1Payload.builder()
                 .chainName("\uD92F\uDC24\uD9A1\uDDF6\uD8AC\uDD8A\uD885\uDFC8\uDB3D\uDD62")
                 .timestamp(new Date(1596763536340L))
                 .ttl(Ttl.builder().ttl("30m").build())
-                .bodyHash(new Digest(hexHash))
                 .pricingMode(new FixedPricingMode(5))
                 .initiatorAddr(new InitiatorPublicKey(PublicKey.fromBytes(initiatorAddr)))
                 .build();

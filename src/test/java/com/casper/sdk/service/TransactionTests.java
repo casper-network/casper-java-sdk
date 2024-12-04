@@ -76,14 +76,6 @@ public class TransactionTests {
         assertThat(stateEntity, is(notNullValue()));
         final URef userOnePurse = ((AddressableEntity) stateEntity.getEntity()).getEntity().getMainPurse();
 
-        final TransactionV1Header header = TransactionV1Header.builder()
-                .chainName("cspr-dev-cctl")
-                .ttl(Ttl.builder().ttl("30m").build())
-                .pricingMode(new FixedPricingMode(1))
-                .initiatorAddr(new InitiatorPublicKey(faucetPublicKey))
-                .build();
-
-
         final List<NamedArg<?>> args = Arrays.asList(
                 new NamedArg<>("source", new CLValueOption(Optional.of(new CLValueURef(faucetPurse)))),
                 new NamedArg<>("target", new CLValueURef(userOnePurse)),
@@ -91,17 +83,20 @@ public class TransactionTests {
                 new NamedArg<>("id", new CLValueOption(Optional.of(new CLValueU64(BigInteger.valueOf(System.currentTimeMillis())))))
         );
 
-        final TransactionV1Body body = TransactionV1Body.builder()
+        final TransactionV1Payload payload = TransactionV1Payload.builder()
+                .chainName("cspr-dev-cctl")
+                .ttl(Ttl.builder().ttl("30m").build())
+                .pricingMode(new FixedPricingMode(1))
+                .initiatorAddr(new InitiatorPublicKey(faucetPublicKey))
                 .args(args)
                 .target(new Native())
                 .entryPoint(new TransferEntryPoint())
                 .scheduling(new Standard())
-                .transactionCategory(TransactionCategory.MINT)
+                //  .transactionCategory(TransactionCategory.MINT)
                 .build();
 
         final TransactionV1 transactionV1 = TransactionV1.builder()
-                .header(header)
-                .body(body)
+                .payload(payload)
                 .build();
 
         final Transaction transaction = new Transaction(transactionV1.sign(faucetPrivateKey));
@@ -131,14 +126,6 @@ public class TransactionTests {
         final URL wasmUrl = new URL("file://" + wasmPath);
         final byte[] wasmBytes = IOUtils.readBytesFromStream(wasmUrl.openStream());
 
-        final TransactionV1Header header = TransactionV1Header.builder()
-                .chainName("cspr-dev-cctl")
-                .ttl(Ttl.builder().ttl("30m").build())
-                .pricingMode(new FixedPricingMode(8))
-                .initiatorAddr(new InitiatorPublicKey(PublicKey.fromAbstractPublicKey(senderPrivKey.derivePublicKey())))
-                .build();
-
-
         final List<NamedArg<?>> args = Arrays.asList(
                 new NamedArg<>("decimals", new CLValueU8((byte) 11)),
                 new NamedArg<>("name", new CLValueString("Acme Token")),
@@ -148,17 +135,20 @@ public class TransactionTests {
                 new NamedArg<>("id", new CLValueOption(Optional.of(new CLValueU64(BigInteger.valueOf(System.currentTimeMillis())))))
         );
 
-        final TransactionV1Body body = TransactionV1Body.builder()
+        final TransactionV1Payload payload = TransactionV1Payload.builder()
+                .chainName("cspr-dev-cctl")
+                .ttl(Ttl.builder().ttl("30m").build())
+                .pricingMode(new FixedPricingMode(8))
+                .initiatorAddr(new InitiatorPublicKey(PublicKey.fromAbstractPublicKey(senderPrivKey.derivePublicKey())))
                 .args(args)
                 .target(new Session(wasmBytes, TransactionRuntime.VM_CASPER_V2))
                 .entryPoint(new CallEntryPoint())
                 .scheduling(new Standard())
-                .transactionCategory(TransactionCategory.INSTALL_UPGRADE)
+                //    .transactionCategory(TransactionCategory.INSTALL_UPGRADE)
                 .build();
 
         final TransactionV1 transactionV1 = TransactionV1.builder()
-                .header(header)
-                .body(body)
+                .payload(payload)
                 .build();
 
 
@@ -184,7 +174,7 @@ public class TransactionTests {
 
         GetTransactionResult result = null;
 
-        while (result == null || result.getExecutionInfo() == null){
+        while (result == null || result.getExecutionInfo() == null) {
 
             result = casperService.getTransaction(hash);
 

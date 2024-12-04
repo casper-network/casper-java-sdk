@@ -61,16 +61,16 @@ class TransactionV1BodyTest {
 
         );
 
-        final TransactionV1Body transactionV1Body = TransactionV1Body.builder()
+        final TransactionV1Payload  payload = TransactionV1Payload.builder()
                 .args(args)
                 .target(new Native())
                 .entryPoint(new DelegateEntryPoint())
-                .transactionCategory(TransactionCategory.AUCTION)
+              //  .transactionCategory(TransactionCategory.AUCTION)
                 .scheduling(new Standard())
                 .build();
 
         final SerializerBuffer buf = new SerializerBuffer();
-        transactionV1Body.serialize(buf, Target.BYTE);
+        payload.serialize(buf, Target.BYTE);
         final byte[] actual = buf.toByteArray();
 
         String hexActual = Hex.encode(actual);

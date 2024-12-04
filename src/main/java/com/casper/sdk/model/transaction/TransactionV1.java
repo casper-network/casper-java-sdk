@@ -24,29 +24,24 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
-@JsonPropertyOrder({"hash", "header", "body", "approvals"})
+@JsonPropertyOrder({"hash", "payload", "approvals"})
 public class TransactionV1 extends AbstractTransaction implements CasperSerializableObject {
 
-    @JsonProperty("header")
-    private TransactionV1Header header;
-    @JsonProperty("body")
-    private TransactionV1Body body;
+    @JsonProperty("payload")
+    private TransactionV1Payload payload;
 
     @Builder
     public TransactionV1(final Digest hash,
-                         final TransactionV1Header header,
-                         final TransactionV1Body body,
+                         final TransactionV1Payload header,
                          final List<Approval> approvals) {
         super(hash, approvals);
-        this.header = header;
-        this.body = body;
+        this.payload = header;
     }
 
     @Override
     public void serialize(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {
         getHash().serialize(ser, target);
-        header.serialize(ser, target);
-        body.serialize(ser, target);
+        payload.serialize(ser, target);
         serializeApprovals(ser, target);
     }
 
@@ -55,8 +50,7 @@ public class TransactionV1 extends AbstractTransaction implements CasperSerializ
      */
     public void calculateHash() {
         try {
-            header.setBodyHash(body.buildHash());
-            setHash(header.buildHash());
+            setHash(payload.buildHash());
         } catch (Exception e) {
             throw new CasperClientException("Error calculating hash", e);
         }

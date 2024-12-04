@@ -67,6 +67,7 @@ import static org.hamcrest.core.IsNull.nullValue;
 /**
  * @author carl@stormeye.co.uk
  */
+@SuppressWarnings("NewClassNamingConvention")
 @Disabled
 public class HowTo {
 
@@ -256,8 +257,8 @@ public class HowTo {
     }
 
     @Test
-    /* TODO */
-    void getDictionaryItem() throws IOException {
+        /* TODO */
+    void getDictionaryItem() {
         // Now linked to issue #368
         // Need to first install a Contract with a built in Dictionary
         // Then query it with state_get_dictionary_item
@@ -315,14 +316,6 @@ public class HowTo {
         final URef receiverPurse = ((AddressableEntity) stateEntity.getEntity()).getEntity().getMainPurse();
         assertThat(receiverPurse, is(notNullValue()));
 
-        //Build the transaction header
-        final TransactionV1Header header = TransactionV1Header.builder()
-                .chainName(status.getChainSpecName())
-                .ttl(Ttl.builder().ttl("30m").build())
-                .pricingMode(new FixedPricingMode(1))
-                .initiatorAddr(new InitiatorPublicKey(senderPublicKey))
-                .build();
-
         //Add the required arguments
         final List<NamedArg<?>> args = Arrays.asList(
                 new NamedArg<>("source", new CLValueOption(Optional.of(new CLValueURef(senderPurse)))),
@@ -330,20 +323,22 @@ public class HowTo {
                 new NamedArg<>("amount", new CLValueU512(new BigInteger("2500000000"))),
                 new NamedArg<>("id", new CLValueOption(Optional.of(new CLValueU64(BigInteger.valueOf(System.currentTimeMillis())))))
         );
-
-        //Build the transaction body
-        final TransactionV1Body body = TransactionV1Body.builder()
+        //Build the transaction header
+        final TransactionV1Payload payload = TransactionV1Payload.builder()
+                .chainName(status.getChainSpecName())
+                .ttl(Ttl.builder().ttl("30m").build())
+                .pricingMode(new FixedPricingMode(1))
+                //     .transactionCategory(TransactionCategory.MINT)
+                .initiatorAddr(new InitiatorPublicKey(senderPublicKey))
                 .args(args)
                 .target(new Native())
                 .entryPoint(new TransferEntryPoint())
                 .scheduling(new Standard())
-                .transactionCategory(TransactionCategory.MINT)
                 .build();
 
         //Build the transaction
         final TransactionV1 transactionV1 = TransactionV1.builder()
-                .header(header)
-                .body(body)
+                .payload(payload)
                 .build();
 
         //Sign the transaction
@@ -374,14 +369,6 @@ public class HowTo {
         final byte[] wasmBytes = IOUtils.readBytesFromStream(wasmUrl.openStream());
 
 
-        final TransactionV1Header header = TransactionV1Header.builder()
-                .chainName(casperService.getStatus().getChainSpecName())
-                .ttl(Ttl.builder().ttl("30m").build())
-                .pricingMode(new FixedPricingMode(8))
-                .initiatorAddr(new InitiatorPublicKey(PublicKey.fromAbstractPublicKey(senderPrivateKey.derivePublicKey())))
-                .build();
-
-
         final List<NamedArg<?>> args = Arrays.asList(
                 new NamedArg<>("decimals", new CLValueU8((byte) 11)),
                 new NamedArg<>("name", new CLValueString("Acme Token")),
@@ -390,18 +377,20 @@ public class HowTo {
                 new NamedArg<>("events_mode", new CLValueU8((byte) 0)),
                 new NamedArg<>("id", new CLValueOption(Optional.of(new CLValueU64(BigInteger.valueOf(System.currentTimeMillis())))))
         );
-
-        final TransactionV1Body body = TransactionV1Body.builder()
+        final TransactionV1Payload payload = TransactionV1Payload.builder()
+                .chainName(casperService.getStatus().getChainSpecName())
+                .ttl(Ttl.builder().ttl("30m").build())
+                .pricingMode(new FixedPricingMode(8))
+                .initiatorAddr(new InitiatorPublicKey(PublicKey.fromAbstractPublicKey(senderPrivateKey.derivePublicKey())))
                 .args(args)
                 .target(new Session(wasmBytes, TransactionRuntime.VM_CASPER_V2))
                 .entryPoint(new CallEntryPoint())
                 .scheduling(new Standard())
-                .transactionCategory(TransactionCategory.INSTALL_UPGRADE)
+                //.transactionCategory(TransactionCategory.INSTALL_UPGRADE)
                 .build();
 
         final TransactionV1 transactionV1 = TransactionV1.builder()
-                .header(header)
-                .body(body)
+                .payload(payload)
                 .build();
 
 
@@ -444,6 +433,5 @@ public class HowTo {
         }
 
         return result;
-
     }
 }

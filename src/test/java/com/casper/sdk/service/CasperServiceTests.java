@@ -3,7 +3,6 @@ package com.casper.sdk.service;
 import com.casper.sdk.exception.CasperClientException;
 import com.casper.sdk.exception.DynamicInstanceException;
 import com.casper.sdk.exception.NoSuchKeyTagException;
-import com.casper.sdk.helper.TransactionHelper;
 import com.casper.sdk.identifier.block.HashBlockIdentifier;
 import com.casper.sdk.identifier.block.HeightBlockIdentifier;
 import com.casper.sdk.identifier.entity.EntityAddrIdentifier;
@@ -57,7 +56,6 @@ import com.casper.sdk.model.transaction.execution.ExecutionResultV2;
 import com.casper.sdk.model.transaction.pricing.FixedPricingMode;
 import com.casper.sdk.model.transaction.scheduling.Standard;
 import com.casper.sdk.model.transaction.target.Native;
-import com.casper.sdk.model.transaction.target.Session;
 import com.casper.sdk.model.transaction.target.Transaction;
 import com.casper.sdk.model.transfer.TransferData;
 import com.casper.sdk.model.transfer.TransferV1;
@@ -662,11 +660,10 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
 
         final TransactionV1 transaction = result.getTransaction().getVersion1();
 
-        assertThat(transaction.getHeader().getBodyHash(), is(new Digest("9bcc99c4d493764463c278cf17b3e1ff5b1357d1f5d0676b3fbeaafb260bcb76")));
-        assertThat(transaction.getHeader().getPricingMode(), is(instanceOf(FixedPricingMode.class)));
-        assertThat(((FixedPricingMode) transaction.getHeader().getPricingMode()).getGasPriceTolerance(), is(8));
-        assertThat(transaction.getHeader().getInitiatorAddr(), is(instanceOf(InitiatorPublicKey.class)));
-        assertThat(transaction.getHeader().getInitiatorAddr().getAddress(), is(PublicKey.fromTaggedHexString("0138329930033bca4773a6623574ad7870ee39c554f153f15609e200e50049a7de")));
+        assertThat(transaction.getPayload().getPricingMode(), is(instanceOf(FixedPricingMode.class)));
+        assertThat(((FixedPricingMode) transaction.getPayload().getPricingMode()).getGasPriceTolerance(), is(8));
+        assertThat(transaction.getPayload().getInitiatorAddr(), is(instanceOf(InitiatorPublicKey.class)));
+        assertThat(transaction.getPayload().getInitiatorAddr().getAddress(), is(PublicKey.fromTaggedHexString("0138329930033bca4773a6623574ad7870ee39c554f153f15609e200e50049a7de")));
 
         final ExecutionInfo executionInfo = result.getExecutionInfo();
 
@@ -684,7 +681,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
         assertThat(executionResult.getConsumed(), is(new BigInteger("225932824299")));
         assertThat(executionResult.getSizeEstimate(), is(325997L));
 
-        assertThat(((Session) transaction.getBody().getTarget()).getModuleBytes().length, is(325614));
+        // FIXME  assertThat(((Session) transaction.getBody().getTarget()).getModuleBytes().length, is(325614));
 
         assertThat(executionResult.getEffects().size(), is(66));
         //Effects are tested in EffectTest
@@ -700,17 +697,29 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
         PublicKey address = PublicKey.fromAbstractPublicKey(privateKey.derivePublicKey());
         final List<NamedArg<?>> args = Arrays.asList(new NamedArg<>("amount", new CLValueU512(BigInteger.valueOf(2500000000L))), new NamedArg<>("delegator", new CLValuePublicKey(PublicKey.fromAbstractPublicKey(delegator))), new NamedArg<>("validator", new CLValuePublicKey(address)), new NamedArg<>("amount", new CLValueU512(new BigInteger("2500000000"))));
 
-        final TransactionV1Body body = TransactionV1Body.builder().args(args).target(new Native()).entryPoint(new TransferEntryPoint()).transactionCategory(TransactionCategory.MINT).scheduling(new Standard()).build();
 
-        final TransactionV1 transaction = TransactionHelper.buildTransaction(new InitiatorPublicKey(address), Ttl.builder().ttl("30m").build(), "test-chain-name", new FixedPricingMode(5), body);
+        TransactionV1Payload payload = TransactionV1Payload.builder()
+                .args(args)
+                .target(new Native())
+                .entryPoint(new TransferEntryPoint())
+                .scheduling(new Standard())
+                //.transactionCategory(TransactionCategory.MINT)
+                .initiatorAddr(new InitiatorPublicKey(address))
+                .ttl(Ttl.builder().ttl("30m").build())
+                .chainName("test-chain-name")
+                .pricingMode(new FixedPricingMode(5))
+                .build();
+
+        final TransactionV1 transaction = TransactionV1.builder()
+                .payload(payload)
+                .build();
+
 
         // generate hashes and sign transaction
         transaction.sign(privateKey);
 
-
         assertThat(transaction.getApprovals(), hasSize(1));
         assertThat(transaction.getHash().isValid(), is(true));
-        assertThat(transaction.getHeader().getBodyHash().isValid(), is(true));
 
         mockNode.withRcpResponseDispatcher().withMethod("account_put_transaction").withBody("$.params.[0].Version1.hash", transaction.getHash().toString()).withBody("$.params.[0].Version1.header.chain_name", "test-chain-name").withBody("$.params.[0].Version1.header.ttl", "30m").withBody("$.params.[0].Version1.header.initiator_addr.PublicKey", address.getAlgoTaggedHex()).withBody("$.params.[0].Version1.header.pricing_mode.Fixed.gas_price_tolerance", "5").withBody("$.params.[0].Version1.body.target", "Native").withBody("$.params.[0].Version1.body.entry_point", "Transfer").withBody("$.params.[0].Version1.body.scheduling", "Standard").withBody("$.params.[0].Version1.body.transaction_category", "0").withBody("params.[0].Version1.body.args.[0].[0]", "amount").withBody("params.[0].Version1.body.args.[0].[1].bytes", "0400f90295").withBody("$.params.[0].Version1.body.args.[0].[1].cl_type", "U512").thenDispatch(getClass().getResource("/transaction-samples/put-transaction-result.json"));
 

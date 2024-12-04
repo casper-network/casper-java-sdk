@@ -42,8 +42,12 @@ public class CalltableSerializationEnvelopeBuilder implements CasperSerializable
      * @param index the zero based index
      * @param value the value to be serialized to value bytes of the field
      */
-    public <T> void addField(final int index, final T value) throws ValueSerializationException {
-        this.addField(new Field(index, this.offset, value));
+    public <T> CalltableSerializationEnvelopeBuilder addField(final int index, final T value) throws ValueSerializationException {
+        if (value != null) {
+            return this.addField(new Field(index, this.offset, value));
+        } else {
+            return this;
+        }
     }
 
     /**
@@ -52,9 +56,12 @@ public class CalltableSerializationEnvelopeBuilder implements CasperSerializable
      * @param index the zero based index
      * @param value the bytes of the value to add
      */
-    public void addFieldBytes(final int index, final byte[] value) {
-
-        this.addField(new Field((short) index, offset, value));
+    public CalltableSerializationEnvelopeBuilder addFieldBytes(final int index, final byte[] value) {
+        if (value != null) {
+            return this.addField(new Field((short) index, offset, value));
+        } else {
+            return this;
+        }
     }
 
     /**
@@ -62,7 +69,7 @@ public class CalltableSerializationEnvelopeBuilder implements CasperSerializable
      *
      * @param field the field to add
      */
-    public void addField(final Field field) {
+    public CalltableSerializationEnvelopeBuilder addField(final Field field) {
         if (this.currentFieldIndex >= field.getIndex()) {
             throw new IllegalArgumentException("Field index must be greater than the previous field index");
         }
@@ -75,6 +82,8 @@ public class CalltableSerializationEnvelopeBuilder implements CasperSerializable
         this.currentFieldIndex = field.getIndex();
         this.size += field.getValue().length;
         this.offset += field.getValue().length;
+
+        return this;
     }
 
     /**
