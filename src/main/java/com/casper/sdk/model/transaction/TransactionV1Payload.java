@@ -86,15 +86,15 @@ public class TransactionV1Payload implements CasperSerializableObject, Tag {
         return 1;
     }
 
-    public void setTarget(TransactionTarget target) {
+    public void setTarget(final TransactionTarget target) {
         this.getFields().setTarget(target);
     }
 
-    public void setEntryPoint(TransactionEntryPoint entryPoint) {
+    public void setEntryPoint(final TransactionEntryPoint entryPoint) {
         this.getFields().setEntryPoint(entryPoint);
     }
 
-    public void setScheduling(TransactionScheduling scheduling) {
+    public void setScheduling(final TransactionScheduling scheduling) {
         this.getFields().setScheduling(scheduling);
     }
 

@@ -43,6 +43,7 @@ public class TransactionTargetSerializer extends JsonSerializer<TransactionTarge
             gen.writeFieldName(RUNTIME);
             gen.writeString(value.getRuntime().getJsonName());
         }
+        gen.writeNumberField(TRANSFERRED_VALUE, value.getTransferredValue());
         gen.writeEndObject();
         gen.writeEndObject();
     }

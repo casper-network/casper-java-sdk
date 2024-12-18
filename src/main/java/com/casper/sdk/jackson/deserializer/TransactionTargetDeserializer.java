@@ -48,7 +48,9 @@ public class TransactionTargetDeserializer extends JsonDeserializer<TransactionT
         try {
             return new Stored(
                     createInvocationTarget(node, ctx),
-                    TransactionRuntime.fromJson(node.get(RUNTIME).asText()));
+                    TransactionRuntime.fromJson(node.get(RUNTIME).asText()),
+                    node.has(TRANSFERRED_VALUE) ? node.get(TRANSFERRED_VALUE).asLong() : 0
+            );
         } catch (NoSuchTypeException e) {
             throw new DeserializationException("Unable to find 'runtime'", e);
         }
@@ -70,7 +72,7 @@ public class TransactionTargetDeserializer extends JsonDeserializer<TransactionT
                     TransactionRuntime.fromJson(node.get(RUNTIME).asText()),
                     Hex.decode(node.get(MODULE_BYTES).asText()),
                     node.has(TRANSFERRED_VALUE) ? node.get(TRANSFERRED_VALUE).asLong() : 0,
-                    node.has(SEED) && !node.get(SEED).isNull() && !"null".equals(node.get(SEED).asText())? new Digest(node.get(SEED).asText()) : null
+                    node.has(SEED) && !node.get(SEED).isNull() && !"null".equals(node.get(SEED).asText()) ? new Digest(node.get(SEED).asText()) : null
             );
         } catch (NoSuchTypeException e) {
             throw new DeserializationException("Unable to find required fields", e);
