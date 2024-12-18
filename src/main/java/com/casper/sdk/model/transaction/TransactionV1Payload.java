@@ -86,6 +86,18 @@ public class TransactionV1Payload implements CasperSerializableObject, Tag {
         return 1;
     }
 
+    public void setTarget(TransactionTarget target) {
+        this.getFields().setTarget(target);
+    }
+
+    public void setEntryPoint(TransactionEntryPoint entryPoint) {
+        this.getFields().setEntryPoint(entryPoint);
+    }
+
+    public void setScheduling(TransactionScheduling scheduling) {
+        this.getFields().setScheduling(scheduling);
+    }
+
     public Digest buildHash() throws NoSuchTypeException, ValueSerializationException {
         SerializerBuffer serializerBuffer = new SerializerBuffer();
         this.serialize(serializerBuffer, Target.BYTE);

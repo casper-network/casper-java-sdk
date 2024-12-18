@@ -6,9 +6,11 @@ import com.casper.sdk.model.clvalue.CLValueU8;
 import com.casper.sdk.model.common.Ttl;
 import com.casper.sdk.model.key.PublicKey;
 import com.casper.sdk.model.transaction.entrypoint.CallEntryPoint;
+import com.casper.sdk.model.transaction.entrypoint.TransactionEntryPoint;
 import com.casper.sdk.model.transaction.field.Fields;
 import com.casper.sdk.model.transaction.pricing.FixedPricingMode;
 import com.casper.sdk.model.transaction.scheduling.Standard;
+import com.casper.sdk.model.transaction.target.Native;
 import com.casper.sdk.model.transaction.target.Session;
 import com.casper.sdk.model.transaction.target.TransactionRuntime;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -36,7 +38,7 @@ class TransactionV1PayloadTest extends AbstractJsonTests {
     @Test
     void payloadWithSessionJsonRoundTrip() throws Exception {
         final String json = IOUtils.toString(
-                Objects.requireNonNull(getClass().getResource("/transaction-samples/payload.json")).openStream(),
+                Objects.requireNonNull(getClass().getResource("/transaction-samples/payload-session.json")).openStream(),
                 StandardCharsets.UTF_8
         );
 
@@ -49,7 +51,7 @@ class TransactionV1PayloadTest extends AbstractJsonTests {
         assertThat(((FixedPricingMode) fromJson.getPricingMode()).getAdditionalComputationFactor(), is(0));
         assertThat(((FixedPricingMode) fromJson.getPricingMode()).getGasPriceTolerance(), is(1));
 
-        Fields fields = fromJson.getFields();
+        final Fields fields = fromJson.getFields();
         assertThat(fields, is(notNullValue()));
 
         assertThat(fields.getArgs(), is(notNullValue()));
@@ -64,11 +66,31 @@ class TransactionV1PayloadTest extends AbstractJsonTests {
         assertThat(fields.getScheduling(), is(instanceOf(Standard.class)));
         assertThat(fields.getTarget(), is(instanceOf(Session.class)));
 
-        Session session = (Session) fields.getTarget();
+        final Session session = (Session) fields.getTarget();
         assertThat(session.isInstallUpgrade(), is(true));
         assertThat(session.getRuntime(), is(TransactionRuntime.VM_CASPER_V1));
         assertThat(session.getTransferredValue(), is(0L));
         assertThat(session.getSeed(), is(nullValue()));
+
+        final String writtenJson = getPrettyJson(fromJson);
+        JSONAssert.assertEquals(json, writtenJson, false);
+    }
+
+    @Test
+    void payloadWithNativeJsonRoundTrip() throws Exception {
+        final String json = IOUtils.toString(
+                Objects.requireNonNull(getClass().getResource("/transaction-samples/payload-native.json")).openStream(),
+                StandardCharsets.UTF_8
+        );
+
+        final TransactionV1Payload fromJson = new ObjectMapper().readValue(json, TransactionV1Payload.class);
+        assertThat(fromJson, is(notNullValue()));
+
+        final Fields fields = fromJson.getFields();
+        assertThat(fields, is(notNullValue()));
+        assertThat(fields.getEntryPoint(), is(instanceOf(TransactionEntryPoint.class)));
+        assertThat(fields.getScheduling(), is(instanceOf(Standard.class)));
+        assertThat(fields.getTarget(), is(instanceOf(Native.class)));
 
         final String writtenJson = getPrettyJson(fromJson);
         JSONAssert.assertEquals(json, writtenJson, false);

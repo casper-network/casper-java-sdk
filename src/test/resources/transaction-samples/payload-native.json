@@ -1,0 +1,39 @@
+{
+  "initiator_addr": {
+    "PublicKey": "0184f6d260f4ee6869ddb36affe15456de6ae045278fa2f467bb677561ce0dad55"
+  },
+  "timestamp": "2024-11-27T14:14:15.323Z",
+  "ttl": "30m",
+  "chain_name": "casper-net-1",
+  "pricing_mode": {
+    "Fixed": {
+      "additional_computation_factor": 0,
+      "gas_price_tolerance": 1
+    }
+  },
+  "fields": {
+    "args": {
+      "Named": [
+        [
+          "target",
+          {
+            "cl_type": "PublicKey",
+            "bytes": "0106ed45915392c02b37136618372ac8dde8e0e3b8ee6190b2ca6db539b354ede4",
+            "parsed": "0106ed45915392c02b37136618372ac8dde8e0e3b8ee6190b2ca6db539b354ede4"
+          }
+        ],
+        [
+          "amount",
+          {
+            "cl_type": "U512",
+            "bytes": "0400f90295",
+            "parsed": "2500000000"
+          }
+        ]
+      ]
+    },
+    "entry_point": "Transfer",
+    "scheduling": "Standard",
+    "target": "Native"
+  }
+}
