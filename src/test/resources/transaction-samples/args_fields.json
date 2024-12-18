@@ -1,0 +1,21 @@
+{
+  "args": {
+    "Named": [
+      [
+        "target",
+        {
+          "cl_type": "PublicKey",
+          "bytes": "0106ed45915392c02b37136618372ac8dde8e0e3b8ee6190b2ca6db539b354ede4"
+        }
+      ],
+      [
+        "amount",
+        {
+          "cl_type": "U512",
+          "bytes": "0400f90295",
+          "parsed": "2500000000"
+        }
+      ]
+    ]
+  }
+}

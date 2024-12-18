@@ -9,6 +9,7 @@ import com.casper.sdk.model.deploy.NamedArg;
 import com.casper.sdk.model.key.Tag;
 import com.casper.sdk.model.transaction.entrypoint.TransactionEntryPoint;
 import com.casper.sdk.model.transaction.field.CalltableSerializationEnvelopeBuilder;
+import com.casper.sdk.model.transaction.field.Fields;
 import com.casper.sdk.model.transaction.pricing.PricingMode;
 import com.casper.sdk.model.transaction.scheduling.TransactionScheduling;
 import com.casper.sdk.model.transaction.target.TransactionTarget;
@@ -19,7 +20,9 @@ import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
 import lombok.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * The payload of a TransactionV1.
@@ -40,12 +43,7 @@ public class TransactionV1Payload implements CasperSerializableObject, Tag {
     private static final int PRICING_MODE_FIELD_INDEX = 4;
     private static final int FIELDS_FIELD_INDEX = 5;
 
-    private static final int ARGS_MAP_KEY = 0;
-    private static final int TARGET_MAP_KEY = 1;
-    private static final int ENTRY_POINT_MAP_KEY = 2;
-    private static final int SCHEDULING_MAP_KEY = 3;
-
-    @JsonProperty("args")
+    @JsonIgnore
     @Builder.Default
     private List<NamedArg<?>> args = new ArrayList<>();
     @SuppressWarnings("rawtypes")
@@ -60,10 +58,9 @@ public class TransactionV1Payload implements CasperSerializableObject, Tag {
     private String chainName;
     @JsonProperty("pricing_mode")
     private PricingMode pricingMode;
-
-    @JsonIgnore
+    @JsonProperty("fields")
     @Builder.Default
-    private Map<Integer, CasperSerializableObject> fields = new TreeMap<>();
+    private Fields fields = new Fields();
     @JsonIgnore
     private TransactionTarget target;
     @JsonIgnore
@@ -79,7 +76,7 @@ public class TransactionV1Payload implements CasperSerializableObject, Tag {
                 .addField(TTL_FIELD_INDEX, ttl)
                 .addField(CHAIN_NAME_FIELD_INDEX, this.chainName)
                 .addField(PRICING_MODE_FIELD_INDEX, this.pricingMode)
-                .addFieldBytes(FIELDS_FIELD_INDEX, serializeFields(target))
+                .addField(FIELDS_FIELD_INDEX, this.fields)
                 .serialize(ser, target);
     }
 
@@ -95,21 +92,5 @@ public class TransactionV1Payload implements CasperSerializableObject, Tag {
         return Digest.blake2bDigestFromBytes(serializerBuffer.toByteArray());
     }
 
-    private byte[] serializeFields(final Target target) throws ValueSerializationException, NoSuchTypeException {
-
-        final SerializerBuffer serializerBuffer = new SerializerBuffer();
-
-        this.fields.put(ARGS_MAP_KEY, new NamedArgs(this.args));
-        this.fields.put(TARGET_MAP_KEY, this.target);
-        this.fields.put(ENTRY_POINT_MAP_KEY, this.entryPoint);
-        this.fields.put(SCHEDULING_MAP_KEY, this.scheduling);
-
-        for (final Map.Entry<Integer, CasperSerializableObject> entry : fields.entrySet()) {
-            serializerBuffer.writeU16(entry.getKey().shortValue());
-            entry.getValue().serialize(serializerBuffer, target);
-        }
-
-        return serializerBuffer.toByteArray();
-    }
 }
 

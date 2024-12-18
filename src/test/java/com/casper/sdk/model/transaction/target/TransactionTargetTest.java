@@ -35,13 +35,14 @@ public class TransactionTargetTest {
     @Test
     void transactionSession() throws Exception {
 
-        final String json = "{\"Session\":{\"module_bytes\":\"aab0da01340446cee477f28410f8af5d6e0f3a88fb26c0cafb8d1625f5cc9c10\",\"runtime\":\"VmCasperV2\"}}";
+        final String json = "{\"Session\":{\"is_install_upgrade\":true,\"runtime\":\"VmCasperV2\",\"module_bytes\":\"aab0da01340446cee477f28410f8af5d6e0f3a88fb26c0cafb8d1625f5cc9c10\",\"transferred_value\":0,\"seed\":null}}";
         final Session session = readJson(json, Session.class);
 
         assertThat(session.getRuntime().name(), is(TransactionRuntime.VM_CASPER_V2.name()));
         assertThat(session.getModuleBytes(), is(Hex.decode("aab0da01340446cee477f28410f8af5d6e0f3a88fb26c0cafb8d1625f5cc9c10")));
         assertJson(session, json);
-        assertBytes(session, "0220000000aab0da01340446cee477f28410f8af5d6e0f3a88fb26c0cafb8d1625f5cc9c1001");
+        //assertBytes(session, "0220000000aab0da01340446cee477f28410f8af5d6e0f3a88fb26c0cafb8d1625f5cc9c1001");
+        assertBytes(session, "0600000000000000000001000100000002000200000003000300000004002300000005002b0000002c000000020101aab0da01340446cee477f28410f8af5d6e0f3a88fb26c0cafb8d1625f5cc9c10000000000000000000");
     }
 
     @Test

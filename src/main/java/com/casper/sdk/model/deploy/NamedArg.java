@@ -6,6 +6,7 @@ import com.casper.sdk.model.clvalue.cltype.AbstractCLType;
 import com.casper.sdk.model.clvalue.serde.CasperSerializableObject;
 import com.casper.sdk.model.clvalue.serde.Target;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonKey;
 import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
 import lombok.*;
@@ -28,6 +29,7 @@ public class NamedArg<P extends AbstractCLType> implements CasperSerializableObj
     /**
      * The first value in the array is the type of the arg
      */
+    @JsonKey
     private String type;
 
     /**

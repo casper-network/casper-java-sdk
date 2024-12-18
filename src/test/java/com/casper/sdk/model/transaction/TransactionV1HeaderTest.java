@@ -2,7 +2,6 @@ package com.casper.sdk.model.transaction;
 
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.serde.Target;
-import com.casper.sdk.model.common.Digest;
 import com.casper.sdk.model.common.Ttl;
 import com.casper.sdk.model.key.PublicKey;
 import com.casper.sdk.model.transaction.pricing.FixedPricingMode;
@@ -59,7 +58,7 @@ class TransactionV1HeaderTest {
                 .chainName("\uD92F\uDC24\uD9A1\uDDF6\uD8AC\uDD8A\uD885\uDFC8\uDB3D\uDD62")
                 .timestamp(new Date(1596763536340L))
                 .ttl(Ttl.builder().ttl("30m").build())
-                .pricingMode(new FixedPricingMode(5))
+                .pricingMode(new FixedPricingMode(0, 5))
                 .initiatorAddr(new InitiatorPublicKey(PublicKey.fromBytes(initiatorAddr)))
                 .build();
 

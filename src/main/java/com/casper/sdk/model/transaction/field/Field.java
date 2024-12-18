@@ -9,7 +9,6 @@ import dev.oak3.sbs4j.exception.ValueDeserializationException;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
 import dev.oak3.sbs4j.interfaces.DeserializableObject;
 import dev.oak3.sbs4j.interfaces.SerializableObject;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,11 +18,11 @@ import lombok.Setter;
  *
  * @author ian@meywood.com
  */
-@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 public class Field implements CasperSerializableObject, DeserializableObject {
+
 
     /** The field index */
     private short index;
@@ -31,6 +30,14 @@ public class Field implements CasperSerializableObject, DeserializableObject {
     private long offset;
     /** The field value as bytes */
     private byte[] value;
+    /** Indicates if the field is written as an optional field */
+    private boolean optional;
+
+    public Field(int index, long offset, byte[] value) {
+        this.index = (short) index;
+        this.offset = offset;
+        this.value = value;
+    }
 
     /**
      * Constructs a field with the specified index, offset and value.
@@ -40,29 +47,39 @@ public class Field implements CasperSerializableObject, DeserializableObject {
      * @param value  the value of the field
      * @throws ValueSerializationException if the value cannot be serialized
      */
-    public Field(final int index, final long offset, final Object value) throws ValueSerializationException {
+    public Field(final int index, final long offset, final boolean optional, final Object value) throws ValueSerializationException {
         final SerializerBuffer serializerBuffer = new SerializerBuffer();
 
-        if (value instanceof SerializableObject) {
-            ((SerializableObject) value).serialize(serializerBuffer);
-        } else if (value instanceof byte[]) {
-            serializerBuffer.writeByteArray((byte[]) value);
-        } else if (value.getClass().equals(Byte.class)) {
-            serializerBuffer.writeU8((Byte) value);
-        } else if (value.getClass().equals(Long.class)) {
-            serializerBuffer.writeI64((Long) value);
-        } else if (value.getClass().equals(Integer.class)) {
-            serializerBuffer.writeI32((Integer) value);
-        } else if (value.getClass().equals(Short.class)) {
-            serializerBuffer.writeU16((Short) value);
-        } else if (value.getClass().equals(String.class)) {
-            serializerBuffer.writeString((String) value);
-        } else {
-            throw new ValueSerializationException("Unsupported type " + value.getClass().getName());
+        // If optional indicate in 1sy byte
+        if (optional) {
+            serializerBuffer.writeBool(value != null);
+        }
+
+        if (value != null) {
+            if (value instanceof SerializableObject) {
+                ((SerializableObject) value).serialize(serializerBuffer);
+            } else if (value instanceof Boolean) {
+                serializerBuffer.writeBool((Boolean) value);
+            } else if (value instanceof byte[]) {
+                serializerBuffer.writeByteArray((byte[]) value);
+            } else if (value.getClass().equals(Byte.class)) {
+                serializerBuffer.writeU8((Byte) value);
+            } else if (value.getClass().equals(Long.class)) {
+                serializerBuffer.writeI64((Long) value);
+            } else if (value.getClass().equals(Integer.class)) {
+                serializerBuffer.writeI32((Integer) value);
+            } else if (value.getClass().equals(Short.class)) {
+                serializerBuffer.writeU16((Short) value);
+            } else if (value.getClass().equals(String.class)) {
+                serializerBuffer.writeString((String) value);
+            } else {
+                throw new ValueSerializationException("Unsupported type " + value.getClass().getName());
+            }
         }
 
         this.index = (short) index;
         this.offset = offset;
+        this.optional = optional;
         this.value = serializerBuffer.toByteArray();
     }
 
@@ -103,6 +120,8 @@ public class Field implements CasperSerializableObject, DeserializableObject {
             } catch (Exception e) {
                 throw new ValueDeserializationException("Unsupported type " + clazz.getName(), e);
             }
+        } else if (clazz == Boolean.class) {
+            return (T) deserializerBuffer.readBool();
         } else if (clazz == byte[].class) {
             return (T) deserializerBuffer.readByteArray(this.value.length);
         } else if (clazz == Byte.class) {

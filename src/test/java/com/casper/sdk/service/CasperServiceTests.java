@@ -116,7 +116,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
      */
     @Test
     void testIfBlockReturnedMatchesRequestedByHash() {
-        LOGGER.debug(String.format("Testing with block height %d", 2346915));
+        LOGGER.debug("Testing with block height {}", 2346915);
 
         final RcpResponseDispatcher when = mockNode.withRcpResponseDispatcher()
                 .withMethod("chain_get_block")
@@ -707,7 +707,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
                 .initiatorAddr(new InitiatorPublicKey(address))
                 .ttl(Ttl.builder().ttl("30m").build())
                 .chainName("test-chain-name")
-                .pricingMode(new FixedPricingMode(5))
+                .pricingMode(new FixedPricingMode(0,5))
                 .build();
 
         final TransactionV1 transaction = TransactionV1.builder()
@@ -945,9 +945,12 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
     }
 
     @Test
-    void stateGetEntityCiontractActualCCTLReturnedData() {
+    void stateGetEntityContractActualCCTLReturnedData() {
 
-        mockNode.withRcpResponseDispatcher().withMethod("state_get_entity").withBody("$.params.entity_identifier.EntityAddr", "entity-contract-77a0481b28572054cbdd19c944a7176ce9670be616d6de0e2ec3f89ca378dd79").thenDispatch(getClass().getResource("/entity/getstateentity-cctl-returned-contract-entity.json"));
+        mockNode.withRcpResponseDispatcher()
+                .withMethod("state_get_entity")
+                .withBody("$.params.entity_identifier.EntityAddr", "entity-contract-77a0481b28572054cbdd19c944a7176ce9670be616d6de0e2ec3f89ca378dd79")
+                .thenDispatch(getClass().getResource("/entity/getstateentity-cctl-returned-contract-entity.json"));
 
         final StateEntityResult stateEntityResult = casperServiceMock.getStateEntity(new EntityAddrIdentifier("entity-contract-77a0481b28572054cbdd19c944a7176ce9670be616d6de0e2ec3f89ca378dd79"), null);
 

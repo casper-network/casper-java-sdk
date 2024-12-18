@@ -19,6 +19,18 @@ import lombok.*;
 @Setter
 @Builder
 public class FixedPricingMode implements PricingMode {
+
+    /**
+     * User-specified additional computation factor (minimum 0). If "0" is provided,
+     * no additional logic is applied to the computation limit. Each value above "0"
+     * tells the node that it needs to treat the transaction as if it uses more gas
+     * than it's serialized size indicates. Each "1" will increase the "wasm lane"
+     * size bucket for this transaction by 1. So if the size of the transaction
+     * indicates bucket "0" and "additional_computation_factor = 2", the transaction
+     * will be treated as a "2".
+     */
+    @JsonProperty("additional_computation_factor")
+    private int additionalComputationFactor;
     /**
      * User-specified gas_price tolerance (minimum 1).
      * This is interpreted to mean "do not include this transaction in a block
@@ -29,6 +41,7 @@ public class FixedPricingMode implements PricingMode {
 
     @Override
     public void serialize(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {
+        // TODO use CalltableSerializationEnvelopeBuilder
         ser.writeU8(getByteTag());
         ser.writeU8((byte) gasPriceTolerance);
     }
