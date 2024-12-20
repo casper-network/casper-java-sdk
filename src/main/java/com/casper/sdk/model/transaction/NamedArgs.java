@@ -53,19 +53,23 @@ public class NamedArgs implements Iterable<NamedArg<?>>, CasperSerializableObjec
     }
 
 
-   public NamedArg<?> get(final String name) {
+    public NamedArg<?> get(final String name) {
         for (NamedArg<?> arg : args) {
             if (name.equals(arg.getType())) {
                 return arg;
             }
         }
         return null;
-   }
+    }
 
     @NotNull
     @Override
     public Iterator<NamedArg<?>> iterator() {
         return args.iterator();
+    }
+
+    public NamedArg<?> get(final int index) {
+        return args.get(index);
     }
 
     @Override

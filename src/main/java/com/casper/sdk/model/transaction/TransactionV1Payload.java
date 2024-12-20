@@ -61,12 +61,6 @@ public class TransactionV1Payload implements CasperSerializableObject, Tag {
     @JsonProperty("fields")
     @Builder.Default
     private Fields fields = new Fields();
-    @JsonIgnore
-    private TransactionTarget target;
-    @JsonIgnore
-    private TransactionEntryPoint entryPoint;
-    @JsonIgnore
-    private TransactionScheduling scheduling;
 
     @Override
     public void serialize(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {
@@ -98,11 +92,11 @@ public class TransactionV1Payload implements CasperSerializableObject, Tag {
         this.getFields().setScheduling(scheduling);
     }
 
+
     public Digest buildHash() throws NoSuchTypeException, ValueSerializationException {
         SerializerBuffer serializerBuffer = new SerializerBuffer();
         this.serialize(serializerBuffer, Target.BYTE);
         return Digest.blake2bDigestFromBytes(serializerBuffer.toByteArray());
     }
-
 }
 

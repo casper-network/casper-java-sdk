@@ -53,6 +53,7 @@ import com.casper.sdk.model.transaction.entrypoint.TransferEntryPoint;
 import com.casper.sdk.model.transaction.execution.ExecutionInfo;
 import com.casper.sdk.model.transaction.execution.ExecutionResultV1;
 import com.casper.sdk.model.transaction.execution.ExecutionResultV2;
+import com.casper.sdk.model.transaction.field.Fields;
 import com.casper.sdk.model.transaction.pricing.FixedPricingMode;
 import com.casper.sdk.model.transaction.scheduling.Standard;
 import com.casper.sdk.model.transaction.target.Native;
@@ -698,16 +699,17 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
         final List<NamedArg<?>> args = Arrays.asList(new NamedArg<>("amount", new CLValueU512(BigInteger.valueOf(2500000000L))), new NamedArg<>("delegator", new CLValuePublicKey(PublicKey.fromAbstractPublicKey(delegator))), new NamedArg<>("validator", new CLValuePublicKey(address)), new NamedArg<>("amount", new CLValueU512(new BigInteger("2500000000"))));
 
 
-        TransactionV1Payload payload = TransactionV1Payload.builder()
+        final TransactionV1Payload payload = TransactionV1Payload.builder()
                 .args(args)
-                .target(new Native())
-                .entryPoint(new TransferEntryPoint())
-                .scheduling(new Standard())
-                //.transactionCategory(TransactionCategory.MINT)
+                .fields(Fields.builder()
+                        .target(new Native())
+                        .entryPoint(new TransferEntryPoint())
+                        .scheduling(new Standard())
+                        .build())
                 .initiatorAddr(new InitiatorPublicKey(address))
                 .ttl(Ttl.builder().ttl("30m").build())
                 .chainName("test-chain-name")
-                .pricingMode(new FixedPricingMode(0,5))
+                .pricingMode(new FixedPricingMode(0, 5))
                 .build();
 
         final TransactionV1 transaction = TransactionV1.builder()

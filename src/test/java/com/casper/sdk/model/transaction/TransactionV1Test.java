@@ -2,23 +2,20 @@ package com.casper.sdk.model.transaction;
 
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.CLValueList;
-import com.casper.sdk.model.clvalue.CLValueOption;
-import com.casper.sdk.model.clvalue.CLValueU512;
-import com.casper.sdk.model.clvalue.CLValueURef;
+import com.casper.sdk.model.clvalue.CLValueString;
+import com.casper.sdk.model.clvalue.CLValueU256;
+import com.casper.sdk.model.clvalue.CLValueU8;
 import com.casper.sdk.model.clvalue.serde.Target;
 import com.casper.sdk.model.common.Digest;
 import com.casper.sdk.model.common.Ttl;
 import com.casper.sdk.model.deploy.NamedArg;
 import com.casper.sdk.model.key.PublicKey;
-import com.casper.sdk.model.transaction.entrypoint.TransferEntryPoint;
+import com.casper.sdk.model.transaction.entrypoint.CallEntryPoint;
 import com.casper.sdk.model.transaction.pricing.FixedPricingMode;
-import com.casper.sdk.model.transaction.scheduling.FutureTimestamp;
 import com.casper.sdk.model.transaction.scheduling.Standard;
-import com.casper.sdk.model.transaction.target.Native;
 import com.casper.sdk.model.transaction.target.Session;
 import com.casper.sdk.model.transaction.target.Transaction;
 import com.casper.sdk.model.transaction.target.TransactionRuntime;
-import com.casper.sdk.model.uref.URef;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.oak3.sbs4j.DeserializerBuffer;
 import dev.oak3.sbs4j.exception.ValueDeserializationException;
@@ -34,7 +31,6 @@ import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
@@ -117,45 +113,45 @@ class TransactionV1Test {
 
         final TransactionV1 transactionV1 = transaction.getVersion1();
 
-        assertThat(transactionV1.getHash(), is(new Digest("b7188ee3a749e6504d11708e23e41d16d98bdb2359d413a3bb84b48b5cc215d4")));
+        assertThat(transactionV1.getHash(), is(new Digest("7ef4be88714ed23ae4d4a3f095612d638255c780a24f1fc4c6f57f7e6251f8bf")));
 
-        assertThat(transactionV1.getPayload().getChainName(), is("󶻒󕁊򩢰🾎𝁦򃎍󕑒򄆤"));
-        assertThat(transactionV1.getPayload().getTtl(), is(Ttl.builder().ttl("10h 14s 452ms").build()));
-        assertThat(transactionV1.getPayload().getTimestamp(), is(new DateTime("2020-08-07T01:24:55.700Z").toDate()));
+        assertThat(transactionV1.getPayload().getChainName(), is("casper-net-1"));
+        assertThat(transactionV1.getPayload().getTtl(), is(Ttl.builder().ttl("30m").build()));
+        assertThat(transactionV1.getPayload().getTimestamp(), is(new DateTime("2024-11-27T17:07:36.905Z").toDate()));
         assertThat(transactionV1.getPayload().getPricingMode(), is(instanceOf(FixedPricingMode.class)));
-        assertThat(((FixedPricingMode) transactionV1.getPayload().getPricingMode()).getGasPriceTolerance(), is(5));
+        assertThat(((FixedPricingMode) transactionV1.getPayload().getPricingMode()).getGasPriceTolerance(), is(1));
+        assertThat(((FixedPricingMode) transactionV1.getPayload().getPricingMode()).getAdditionalComputationFactor(), is(0));
 
-        // FIXME WHERE HAS TransactionCategory GONE?
-        // assertThat(transactionV1.getPayload().getTransactionCategory(), is(TransactionCategory.MINT));
-        assertThat(transactionV1.getPayload().getEntryPoint(), is(new TransferEntryPoint()));
-        assertThat(transactionV1.getPayload().getTarget(), is(new Native()));
-        assertThat(transactionV1.getPayload().getScheduling(), is(instanceOf(FutureTimestamp.class)));
-        assertThat(((FutureTimestamp) transactionV1.getPayload().getScheduling()).asDate(), is(new DateTime("2020-08-07T01:20:22.207Z").toDate()));
+        assertThat(transactionV1.getPayload().getFields().getEntryPoint(), is(new CallEntryPoint()));
+        assertThat(transactionV1.getPayload().getFields().getScheduling(), is(instanceOf(Standard.class)));
+        assertThat(transactionV1.getPayload().getFields().getTarget(), is(instanceOf(Session.class)));
+        assertThat(((Session) transactionV1.getPayload().getFields().getTarget()).isInstallUpgrade(), is(true));
+        assertThat(((Session) transactionV1.getPayload().getFields().getTarget()).getRuntime(), is(TransactionRuntime.VM_CASPER_V1));
+        assertThat(((Session) transactionV1.getPayload().getFields().getTarget()).getModuleBytes().length, is(348211));
 
-        assertThat(transactionV1.getPayload().getArgs(), hasSize(3));
+        assertThat(transactionV1.getPayload().getFields().getArgs().getArgs(), hasSize(6));
 
-        assertThat(transactionV1.getPayload().getArgs().get(0).getType(), is("source"));
-        assertThat(transactionV1.getPayload().getArgs().get(0).getClValue().getClType().getTypeName(), is("Option"));
-        assertThat(transactionV1.getPayload().getArgs().get(0).getClValue(), is(instanceOf(CLValueOption.class)));
-        assertThat(((Optional) transactionV1.getPayload().getArgs().get(0).getClValue().getValue()).get(), is(instanceOf(CLValueURef.class)));
-        assertThat(((CLValueURef) ((Optional) transactionV1.getPayload().getArgs().get(0).getClValue().getValue()).get()).getValue(), is(URef.fromString("uref-7e52a4cb1d0288a84e19ea6d3d277cd78f3e8c438b36c65045860d56d96eee1b-001")));
-        assertThat(transactionV1.getPayload().getArgs().get(0).getClValue().getBytes(), is("017e52a4cb1d0288a84e19ea6d3d277cd78f3e8c438b36c65045860d56d96eee1b01"));
+        assertThat(transactionV1.getPayload().getFields().getArgs().get(0).getType(), is("name"));
+        assertThat(transactionV1.getPayload().getFields().getArgs().get(0).getClValue().getClType().getTypeName(), is("String"));
+        assertThat(transactionV1.getPayload().getFields().getArgs().get(0).getClValue(), is(instanceOf(CLValueString.class)));
+        assertThat(transactionV1.getPayload().getFields().getArgs().get(0).getClValue().getValue(), is("Test"));
+        assertThat(transactionV1.getPayload().getFields().getArgs().get(0).getClValue().getBytes(), is("0400000054657374"));
 
-        assertThat(transactionV1.getPayload().getArgs().get(1).getType(), is("target"));
-        assertThat(transactionV1.getPayload().getArgs().get(1).getClValue().getClType().getTypeName(), is("URef"));
-        assertThat(transactionV1.getPayload().getArgs().get(1).getClValue(), is(instanceOf(CLValueURef.class)));
-        assertThat(transactionV1.getPayload().getArgs().get(1).getClValue().getValue(), is(URef.fromString("uref-8a99d6bcfe1563f0ec85b9ca24386ddbd0975601d3bba64c2110b1a0ac9799d2-005")));
-        assertThat(transactionV1.getPayload().getArgs().get(1).getClValue().getBytes(), is("8a99d6bcfe1563f0ec85b9ca24386ddbd0975601d3bba64c2110b1a0ac9799d205"));
+        assertThat(transactionV1.getPayload().getFields().getArgs().get(3).getType(), is("total_supply"));
+        assertThat(transactionV1.getPayload().getFields().getArgs().get(3).getClValue().getClType().getTypeName(), is("U256"));
+        assertThat(transactionV1.getPayload().getFields().getArgs().get(3).getClValue(), is(instanceOf(CLValueU256.class)));
+        assertThat(transactionV1.getPayload().getFields().getArgs().get(3).getClValue().getValue(), is(new BigInteger("1000000000000000")));
+        assertThat(transactionV1.getPayload().getFields().getArgs().get(3).getClValue().getBytes(), is("070080c6a47e8d03"));
 
-        assertThat(transactionV1.getPayload().getArgs().get(2).getType(), is("amount"));
-        assertThat(transactionV1.getPayload().getArgs().get(2).getClValue().getClType().getTypeName(), is("U512"));
-        assertThat(transactionV1.getPayload().getArgs().get(2).getClValue(), is(instanceOf(CLValueU512.class)));
-        assertThat(transactionV1.getPayload().getArgs().get(2).getClValue().getValue(), is(new BigInteger("11501403317070719246")));
-        assertThat(transactionV1.getPayload().getArgs().get(2).getClValue().getBytes(), is("080ee97f3c61319d9f"));
+        assertThat(transactionV1.getPayload().getFields().getArgs().get(5).getType(), is("enable_mint_burn"));
+        assertThat(transactionV1.getPayload().getFields().getArgs().get(5).getClValue().getClType().getTypeName(), is("U8"));
+        assertThat(transactionV1.getPayload().getFields().getArgs().get(5).getClValue(), is(instanceOf(CLValueU8.class)));
+        assertThat(transactionV1.getPayload().getFields().getArgs().get(5).getClValue().getValue(), is((byte) 1));
+        assertThat(transactionV1.getPayload().getFields().getArgs().get(5).getClValue().getBytes(), is("01"));
 
         assertThat(transactionV1.getApprovals(), hasSize(1));
-        assertThat(transactionV1.getApprovals().get(0).getSignature().getAlgoTaggedHex(), is("0299741626a3360a315ef0dc7b8ce91183928bc3267ac6a87688458948bc95bb92569f777d9335234ee2a9e657f81cdf1ca8c4df41a3b292a81d5b2b9e64277417"));
-        assertThat(transactionV1.getApprovals().get(0).getSigner(), is(PublicKey.fromTaggedHexString("02023f63b32437c2f964e1d1951060ad63e7d26c0ab921e359d9900743db940a9298")));
+        assertThat(transactionV1.getApprovals().get(0).getSignature().getAlgoTaggedHex(), is("01a96e46ae1efbcf43e853c198568e25435ac8510bbe02c3cb22f25ce384db0d3fe9a1ce21ca30cc5abf40f03305db15d10fe5defbba332dd4a0ae7bbb07447c0c"));
+        assertThat(transactionV1.getApprovals().get(0).getSigner(), is(PublicKey.fromTaggedHexString("0184f6d260f4ee6869ddb36affe15456de6ae045278fa2f467bb677561ce0dad55")));
 
         final String writtenJson = new ObjectMapper().writeValueAsString(transaction);
         JSONAssert.assertEquals(json, writtenJson, false);
@@ -174,10 +170,10 @@ class TransactionV1Test {
 
         assertThat(transactionV1.getHash(), is(new Digest("2b49844436a02422b60b22dbfcbc5be3d3d86491fb556cc405f48b8e48342457")));
         // assertThat(transactionV1.getPayload().getTransactiot is(TransactionCategory.INSTALL_UPGRADE));
-        assertThat(transactionV1.getPayload().getScheduling(), is(instanceOf(Standard.class)));
+        assertThat(transactionV1.getPayload().getFields().getScheduling(), is(instanceOf(Standard.class)));
         assertThat(transactionV1.getPayload().getArgs().size(), is(6));
-        assertThat(((Session) transactionV1.getPayload().getTarget()).getRuntime(), is(TransactionRuntime.VM_CASPER_V2));
-        assertThat(transactionV1.getPayload().getEntryPoint().getName(), is("Call"));
+        assertThat(((Session) transactionV1.getPayload().getFields().getTarget()).getRuntime(), is(TransactionRuntime.VM_CASPER_V2));
+        assertThat(transactionV1.getPayload().getFields().getEntryPoint().getName(), is("Call"));
 
         final String writtenJson = new ObjectMapper().writeValueAsString(transaction);
         JSONAssert.assertEquals(json, writtenJson, false);

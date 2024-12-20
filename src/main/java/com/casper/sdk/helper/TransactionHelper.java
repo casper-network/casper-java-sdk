@@ -10,6 +10,7 @@ import com.casper.sdk.model.transaction.TransactionCategory;
 import com.casper.sdk.model.transaction.TransactionV1;
 import com.casper.sdk.model.transaction.TransactionV1Payload;
 import com.casper.sdk.model.transaction.entrypoint.TransactionEntryPoint;
+import com.casper.sdk.model.transaction.field.Fields;
 import com.casper.sdk.model.transaction.pricing.PricingMode;
 import com.casper.sdk.model.transaction.scheduling.TransactionScheduling;
 import com.casper.sdk.model.transaction.target.TransactionTarget;
@@ -87,9 +88,11 @@ public class TransactionHelper {
                                                                 final TransactionScheduling scheduling) {
         return TransactionV1Payload.builder()
                 .args(args)
-                .target(target)
-                .entryPoint(entryPoint)
-                .scheduling(scheduling)
+                .fields(Fields.builder()
+                        .entryPoint(entryPoint)
+                        .scheduling(scheduling)
+                        .target(target)
+                        .build())
                 .build();
     }
 

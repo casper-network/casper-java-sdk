@@ -11,6 +11,7 @@ import com.casper.sdk.model.transaction.*;
 import com.casper.sdk.model.transaction.entrypoint.CallEntryPoint;
 import com.casper.sdk.model.transaction.entrypoint.TransferEntryPoint;
 import com.casper.sdk.model.transaction.execution.ExecutionResultV2;
+import com.casper.sdk.model.transaction.field.Fields;
 import com.casper.sdk.model.transaction.pricing.FixedPricingMode;
 import com.casper.sdk.model.transaction.scheduling.Standard;
 import com.casper.sdk.model.transaction.target.Native;
@@ -88,10 +89,12 @@ public class TransactionTests {
                 .ttl(Ttl.builder().ttl("30m").build())
                 .pricingMode(new FixedPricingMode(0, 1))
                 .initiatorAddr(new InitiatorPublicKey(faucetPublicKey))
-                .args(args)
-                .target(new Native())
-                .entryPoint(new TransferEntryPoint())
-                .scheduling(new Standard())
+                .fields(Fields.builder()
+                        .args(new NamedArgs(args))
+                        .scheduling(new Standard())
+                        .target(new Native())
+                        .entryPoint(new TransferEntryPoint()).build()
+                )
                 //  .transactionCategory(TransactionCategory.MINT)
                 .build();
 
@@ -140,10 +143,11 @@ public class TransactionTests {
                 .ttl(Ttl.builder().ttl("30m").build())
                 .pricingMode(new FixedPricingMode(0, 8))
                 .initiatorAddr(new InitiatorPublicKey(PublicKey.fromAbstractPublicKey(senderPrivKey.derivePublicKey())))
-                .args(args)
-                .target(new Session(false, TransactionRuntime.VM_CASPER_V2, wasmBytes, 0L, null))
-                .entryPoint(new CallEntryPoint())
-                .scheduling(new Standard())
+                .fields(Fields.builder().args(new NamedArgs(args))
+                        .target(new Session(false, TransactionRuntime.VM_CASPER_V2, wasmBytes, 0L, null))
+                        .entryPoint(new CallEntryPoint())
+                        .scheduling(new Standard()).build()
+                )
                 //    .transactionCategory(TransactionCategory.INSTALL_UPGRADE)
                 .build();
 

@@ -61,13 +61,13 @@ class TransactionV1BodyTest {
 
         );
 
-        final TransactionV1Payload  payload = TransactionV1Payload.builder()
+        final TransactionV1Payload payload = TransactionV1Payload.builder()
                 .args(args)
-                .target(new Native())
-                .entryPoint(new DelegateEntryPoint())
-              //  .transactionCategory(TransactionCategory.AUCTION)
-                .scheduling(new Standard())
                 .build();
+
+        payload.getFields().setTarget(new Native());
+        payload.getFields().setEntryPoint(new DelegateEntryPoint());
+        payload.getFields().setScheduling(new Standard());
 
         final SerializerBuffer buf = new SerializerBuffer();
         payload.serialize(buf, Target.BYTE);

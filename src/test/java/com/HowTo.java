@@ -29,6 +29,7 @@ import com.casper.sdk.model.transaction.*;
 import com.casper.sdk.model.transaction.entrypoint.CallEntryPoint;
 import com.casper.sdk.model.transaction.entrypoint.TransferEntryPoint;
 import com.casper.sdk.model.transaction.execution.ExecutionResultV2;
+import com.casper.sdk.model.transaction.field.Fields;
 import com.casper.sdk.model.transaction.pricing.FixedPricingMode;
 import com.casper.sdk.model.transaction.scheduling.Standard;
 import com.casper.sdk.model.transaction.target.Native;
@@ -327,13 +328,16 @@ public class HowTo {
         final TransactionV1Payload payload = TransactionV1Payload.builder()
                 .chainName(status.getChainSpecName())
                 .ttl(Ttl.builder().ttl("30m").build())
-                .pricingMode(new FixedPricingMode(0,1))
+                .pricingMode(new FixedPricingMode(0, 1))
                 //     .transactionCategory(TransactionCategory.MINT)
                 .initiatorAddr(new InitiatorPublicKey(senderPublicKey))
-                .args(args)
-                .target(new Native())
-                .entryPoint(new TransferEntryPoint())
-                .scheduling(new Standard())
+                .fields(Fields.builder()
+                        .args(new NamedArgs(args))
+                        .target(new Native())
+                        .entryPoint(new TransferEntryPoint())
+                        .scheduling(new Standard())
+                        .build()
+                )
                 .build();
 
         //Build the transaction
@@ -380,12 +384,14 @@ public class HowTo {
         final TransactionV1Payload payload = TransactionV1Payload.builder()
                 .chainName(casperService.getStatus().getChainSpecName())
                 .ttl(Ttl.builder().ttl("30m").build())
-                .pricingMode(new FixedPricingMode(0,8))
+                .pricingMode(new FixedPricingMode(0, 8))
                 .initiatorAddr(new InitiatorPublicKey(PublicKey.fromAbstractPublicKey(senderPrivateKey.derivePublicKey())))
-                .args(args)
-                .target(new Session(false, TransactionRuntime.VM_CASPER_V2, wasmBytes, 0L, null))
-                .entryPoint(new CallEntryPoint())
-                .scheduling(new Standard())
+                .fields(Fields.builder()
+                        .args(new NamedArgs(args))
+                        .scheduling(new Standard())
+                        .target(new Session(false, TransactionRuntime.VM_CASPER_V2, wasmBytes, 0L, null))
+                        .entryPoint(new CallEntryPoint()).build()
+                )
                 //.transactionCategory(TransactionCategory.INSTALL_UPGRADE)
                 .build();
 
