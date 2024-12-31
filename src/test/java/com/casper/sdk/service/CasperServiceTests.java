@@ -463,6 +463,22 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
 
 
     @Test
+    void getEraInfoBySwitchBlockByHeightCondor() {
+
+        mockNode.withRcpResponseDispatcher()
+                .withMethod("chain_get_era_info_by_switch_block")
+                .withBody("$.params.block_identifier.Height", "423571")
+                .thenDispatch(getClass().getResource("/era-info-samples/era-info-by-switch-block-condor.json"));
+
+        final EraInfoData eraInfoData = casperServiceMock.getEraInfoBySwitchBlock(new HeightBlockIdentifier(423571));
+
+        assertNotNull(eraInfoData);
+        assertNotNull(eraInfoData.getEraSummary());
+        assertEquals("ddd2c62a342e0cbc8f979d0fb783f9764af937ac514cd78bfba08d886bfcd758", eraInfoData.getEraSummary().getStateRootHash());
+    }
+
+
+    @Test
     void getEraInfoBySwitchBlockByHash() {
 
         mockNode.withRcpResponseDispatcher()
