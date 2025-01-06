@@ -27,7 +27,8 @@ public class PublicKeyIdentifier implements AccountIdentifier {
 
     public PublicKeyIdentifier(final String hexKey) {
         try {
-            this.publicKey = PublicKey.fromTaggedHexString(hexKey);
+            this.publicKey = (hexKey == null) ? null :
+                    PublicKey.fromTaggedHexString(hexKey);
         } catch (NoSuchAlgorithmException e) {
             throw new CasperClientException("Invalid public key bytes", e);
         }
