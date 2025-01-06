@@ -84,10 +84,6 @@ public class CalltableSerializationEnvelopeBuilder implements CasperSerializable
             throw new IllegalArgumentException("Field index must be greater than the previous field index");
         }
 
-        if (this.currentFieldIndex + 1 != field.getIndex()) {
-            throw new IllegalArgumentException("Field index must be sequential");
-        }
-
         this.fields.add(field);
         this.currentFieldIndex = field.getIndex();
         this.size += field.getValue().length;
