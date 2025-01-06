@@ -44,6 +44,10 @@ public class Fields implements CasperSerializableObject {
 
         final Map<Integer, CasperSerializableObject> fields = new LinkedHashMap<>();
 
+        if (this.args == null) {
+            this.args = new NamedArgs();
+        }
+
         fields.put(ARGS_MAP_KEY, this.args);
         fields.put(TARGET_MAP_KEY, this.target);
         fields.put(ENTRY_POINT_MAP_KEY, this.entryPoint);

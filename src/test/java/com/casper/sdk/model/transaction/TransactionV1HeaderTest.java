@@ -21,6 +21,7 @@ import static org.hamcrest.core.Is.is;
  */
 class TransactionV1HeaderTest {
 
+    @Deprecated // Header has been replaced by TransactionV1Payload
     @Test
     void transactionV1HeaderByteSerialization() throws NoSuchAlgorithmException, NoSuchTypeException, ValueSerializationException {
 
