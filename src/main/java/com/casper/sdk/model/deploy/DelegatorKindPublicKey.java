@@ -2,6 +2,7 @@ package com.casper.sdk.model.deploy;
 
 import com.casper.sdk.exception.CasperClientException;
 import com.casper.sdk.model.key.PublicKey;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,6 +25,7 @@ public class DelegatorKindPublicKey implements DelegatorKind {
     @JsonProperty("PublicKey")
     private PublicKey publicKey;
 
+    @JsonCreator
     public DelegatorKindPublicKey(final String publicKey) {
         try {
             this.publicKey = (publicKey == null) ? null :

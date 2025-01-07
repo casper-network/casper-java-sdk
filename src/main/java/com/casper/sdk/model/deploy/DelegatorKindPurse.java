@@ -3,6 +3,7 @@ package com.casper.sdk.model.deploy;
 import com.casper.sdk.exception.CasperClientException;
 import com.casper.sdk.exception.DynamicInstanceException;
 import com.casper.sdk.model.uref.URef;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,6 +26,7 @@ public class DelegatorKindPurse implements DelegatorKind {
     @JsonProperty("Purse")
     private URef purse;
 
+    @JsonCreator
     public DelegatorKindPurse(final String purse) {
         try {
             this.purse = (purse == null) ? null :
