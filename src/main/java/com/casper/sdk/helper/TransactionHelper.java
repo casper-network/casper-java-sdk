@@ -5,13 +5,13 @@ import com.casper.sdk.model.common.Digest;
 import com.casper.sdk.model.common.Ttl;
 import com.casper.sdk.model.deploy.NamedArg;
 import com.casper.sdk.model.key.PublicKey;
-import com.casper.sdk.model.transaction.InitiatorAddr;
-import com.casper.sdk.model.transaction.TransactionCategory;
-import com.casper.sdk.model.transaction.TransactionV1;
-import com.casper.sdk.model.transaction.TransactionV1Payload;
+import com.casper.sdk.model.transaction.*;
 import com.casper.sdk.model.transaction.entrypoint.TransactionEntryPoint;
+import com.casper.sdk.model.transaction.entrypoint.TransferEntryPoint;
 import com.casper.sdk.model.transaction.field.Fields;
+import com.casper.sdk.model.transaction.pricing.FixedPricingMode;
 import com.casper.sdk.model.transaction.pricing.PricingMode;
+import com.casper.sdk.model.transaction.scheduling.Standard;
 import com.casper.sdk.model.transaction.scheduling.TransactionScheduling;
 import com.casper.sdk.model.transaction.target.TransactionTarget;
 import com.casper.sdk.model.uref.URef;
@@ -19,7 +19,6 @@ import dev.oak3.sbs4j.exception.ValueSerializationException;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,9 +29,9 @@ import java.util.Optional;
  */
 public class TransactionHelper {
 
-
     @SuppressWarnings({"unchecked", "rawtypes", "OptionalOfNullableMisuse"})
-    public static <TransferTarget> TransactionV1 newTransfer(final BigInteger amount,
+    public static <TransferTarget> TransactionV1 newTransfer(final String chainName,
+                                                             final BigInteger amount,
                                                              final URef maybeSource,
                                                              final TransferTarget target,
                                                              final Long maybeId) throws ValueSerializationException {
@@ -66,10 +65,21 @@ public class TransactionHelper {
         }
 
         return TransactionV1.builder()
-                //          .payload(buildTransactionPayload(initiatorAddr, new Date(), ttl, chainName, pricingMode))
+                .payload(TransactionV1Payload.builder()
+                        .args(namedArgs)
+                        .chainName(chainName)
+                        .fields(Fields.builder()
+                                .args(new NamedArgs(namedArgs))
+                                .scheduling(new Standard())
+                                .target((TransactionTarget) target)
+                                .entryPoint(new TransferEntryPoint())
+                                .build()
+                        )
+                        .pricingMode(new FixedPricingMode(0, 1))
+                        .build()
+                )
                 .build();
     }
-
 
     public static TransactionV1 buildTransaction(final InitiatorAddr<?> initiatorAddr,
                                                  final Ttl ttl,
@@ -77,7 +87,12 @@ public class TransactionHelper {
                                                  final PricingMode pricingMode) {
 
         return TransactionV1.builder()
-                .payload(buildTransactionPayload(initiatorAddr, new Date(), ttl, chainName, pricingMode))
+                .payload(TransactionV1Payload.builder()
+                        .initiatorAddr(initiatorAddr)
+                        .ttl(ttl)
+                        .chainName(chainName)
+                        .pricingMode(pricingMode)
+                        .build())
                 .build();
     }
 
@@ -95,19 +110,4 @@ public class TransactionHelper {
                         .build())
                 .build();
     }
-
-    private static TransactionV1Payload buildTransactionPayload(@SuppressWarnings("rawtypes") final InitiatorAddr initiatorAddr,
-                                                                final Date timestamp,
-                                                                final Ttl ttl,
-                                                                final String chainName,
-                                                                final PricingMode pricingMode) {
-        return TransactionV1Payload.builder()
-                .initiatorAddr(initiatorAddr)
-                .timestamp(timestamp)
-                .ttl(ttl)
-                .chainName(chainName)
-                .pricingMode(pricingMode)
-                .build();
-    }
-
 }
