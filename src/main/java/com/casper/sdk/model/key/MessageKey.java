@@ -69,11 +69,14 @@ public class MessageKey extends Key {
             builder.append(TOPIC).append('-');
         }
 
-        builder.append("entity")
-                .append('-')
-                .append(entityAddr.getKeyName())
-                .append('-')
-                .append(entityAddrHash)
+        if (entityAddr != null) {
+            builder.append("entity")
+                    .append('-')
+                    .append(entityAddr.getKeyName())
+                    .append('-');
+        }
+
+        builder.append(entityAddrHash)
                 .append('-')
                 .append(topicHash);
 
@@ -90,17 +93,15 @@ public class MessageKey extends Key {
         final String[] split = strKey.split("-");
 
         if (TOPIC.equals(split[1])) {
-            if (split.length != 6) {
-                throw new IllegalArgumentException("Invalid message key: " + strKey);
+            if (split.length > 4) {
+                try {
+                    entityAddr = EntityAddr.getByKeyName(split[3]);
+                } catch (NoSuchKeyTagException e) {
+                    throw new IllegalArgumentException(e);
+                }
             }
-
-            try {
-                entityAddr = EntityAddr.getByKeyName(split[3]);
-            } catch (NoSuchKeyTagException e) {
-                throw new IllegalArgumentException(e);
-            }
-            entityAddrHash = new Digest(split[4]);
-            topicHash = new Digest(split[5]);
+            entityAddrHash = new Digest(split[split.length - 2]);
+            topicHash = new Digest(split[split.length - 1]);
         } else {
             try {
                 entityAddr = EntityAddr.getByKeyName(split[2]);
@@ -119,7 +120,13 @@ public class MessageKey extends Key {
 
     private void refreshKey() {
         final SerializerBuffer serializerBuffer = new SerializerBuffer();
-        serializerBuffer.writeU8(entityAddr.getByteTag());
+
+        if (entityAddr != null) {
+            serializerBuffer.writeU8(entityAddr.getByteTag());
+        } else {
+            // FIXME this cannot be correct fix in issues/377
+            serializerBuffer.writeU8((byte) 0);
+        }
         serializerBuffer.writeByteArray(entityAddrHash.getDigest());
         serializerBuffer.writeByteArray(topicHash.getDigest());
         if (messageIndex != null) {

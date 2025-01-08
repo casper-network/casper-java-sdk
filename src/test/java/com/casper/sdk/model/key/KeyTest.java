@@ -387,6 +387,20 @@ class KeyTest {
         assertThat(((MessageKey) key).getMessageIndex().isPresent(), is(false));
     }
 
+
+    @Test
+    void basicMessageTopicKeyFromKeyString() throws Exception {
+
+        final String strKey ="message-topic-94b21891ae273b17eeb6a1899a52ab952bcc4da2e19626563f88d6cf7ab6a2bd-e0846cb0e9995ea903dd1b6a275f9c7d9f23e2f83b6918a8a01ba857ff7efdad";
+        final Key key = fromJson(strKey);
+        assertThat(key, is(instanceOf(MessageKey.class)));
+        assertThat(key.getTag(), is(KeyTag.MESSAGE));
+        assertThat(toJson(key), is(strKey));
+        assertThat(((MessageKey) key).getEntityAddrHash(), is(new Digest("94b21891ae273b17eeb6a1899a52ab952bcc4da2e19626563f88d6cf7ab6a2bd")));
+        assertThat(((MessageKey) key).getTopicHash(), is(new Digest("e0846cb0e9995ea903dd1b6a275f9c7d9f23e2f83b6918a8a01ba857ff7efdad")));
+        assertThat(((MessageKey) key).getMessageIndex().isPresent(), is(false));
+    }
+
     @Test
     void messageIndexKeyFromKeyString() throws Exception {
 
