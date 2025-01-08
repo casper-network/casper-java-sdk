@@ -66,7 +66,6 @@ public class TransactionHelper {
 
         return TransactionV1.builder()
                 .payload(TransactionV1Payload.builder()
-                        .args(namedArgs)
                         .chainName(chainName)
                         .fields(Fields.builder()
                                 .args(new NamedArgs(namedArgs))
@@ -102,8 +101,8 @@ public class TransactionHelper {
                                                                 final TransactionCategory category,
                                                                 final TransactionScheduling scheduling) {
         return TransactionV1Payload.builder()
-                .args(args)
                 .fields(Fields.builder()
+                        .args(new NamedArgs(args))
                         .entryPoint(entryPoint)
                         .scheduling(scheduling)
                         .target(target)

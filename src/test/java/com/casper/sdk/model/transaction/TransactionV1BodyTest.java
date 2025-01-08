@@ -6,6 +6,7 @@ import com.casper.sdk.model.clvalue.serde.Target;
 import com.casper.sdk.model.deploy.NamedArg;
 import com.casper.sdk.model.key.PublicKey;
 import com.casper.sdk.model.transaction.entrypoint.DelegateEntryPoint;
+import com.casper.sdk.model.transaction.field.Fields;
 import com.casper.sdk.model.transaction.scheduling.Standard;
 import com.casper.sdk.model.transaction.target.Native;
 import com.syntifi.crypto.key.encdec.Hex;
@@ -62,7 +63,9 @@ class TransactionV1BodyTest {
         );
 
         final TransactionV1Payload payload = TransactionV1Payload.builder()
-                .args(args)
+                .fields(Fields.builder()
+                        .args(new NamedArgs(args))
+                        .build())
                 .build();
 
         payload.getFields().setTarget(new Native());

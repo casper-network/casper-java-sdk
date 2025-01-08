@@ -171,7 +171,7 @@ class TransactionV1Test {
         assertThat(transactionV1.getHash(), is(new Digest("2b49844436a02422b60b22dbfcbc5be3d3d86491fb556cc405f48b8e48342457")));
         // assertThat(transactionV1.getPayload().getTransactiot is(TransactionCategory.INSTALL_UPGRADE));
         assertThat(transactionV1.getPayload().getFields().getScheduling(), is(instanceOf(Standard.class)));
-        assertThat(transactionV1.getPayload().getArgs().size(), is(6));
+        assertThat(transactionV1.getPayload().getFields().getArgs().size(), is(6));
         assertThat(((Session) transactionV1.getPayload().getFields().getTarget()).getRuntime(), is(TransactionRuntime.VM_CASPER_V2));
         assertThat(transactionV1.getPayload().getFields().getEntryPoint().getName(), is("Call"));
 

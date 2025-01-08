@@ -52,6 +52,9 @@ public class NamedArgs implements Iterable<NamedArg<?>>, CasperSerializableObjec
 
     }
 
+    public int size() {
+        return args.size();
+    }
 
     public NamedArg<?> get(final String name) {
         for (NamedArg<?> arg : args) {
