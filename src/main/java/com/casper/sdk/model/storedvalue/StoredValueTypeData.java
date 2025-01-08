@@ -33,7 +33,8 @@ public enum StoredValueTypeData {
     STORED_VALUE_PACKAGE("Package", PackageKind.class),
     STORED_VALUE_NAMED_KEY("NamedKey", NamedKeyKind.class),
     STORED_VALUE_ENTRY_POINT("EntryPoint", EntryPointKind.class),
-    STORED_VALUE_MESSAGE_TOPIC("MessageTopic", MessageTopicKind.class);
+    STORED_VALUE_MESSAGE_TOPIC("MessageTopic", MessageTopicKind.class),
+    STORED_VALUE_CONTRACT_WASM("ContractWasm", ContractWasmKind.class);
 
     private final String name;
     private final Class<?> clazz;
