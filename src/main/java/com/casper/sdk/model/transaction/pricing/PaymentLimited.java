@@ -22,7 +22,7 @@ import java.math.BigInteger;
 @Getter
 @Setter
 @Builder
-public class ClassicPricingMode implements PricingMode {
+public class PaymentLimited implements PricingMode {
     /** User-specified payment amount. */
     @JsonProperty("payment_amount")
     @JsonSerialize(using = ToStringSerializer.class)
@@ -48,6 +48,6 @@ public class ClassicPricingMode implements PricingMode {
     @Override
     @JsonIgnore
     public byte getByteTag() {
-        return CLASSIC_TAG;
+        return PAYMENT_LIMITED_TAG;
     }
 }

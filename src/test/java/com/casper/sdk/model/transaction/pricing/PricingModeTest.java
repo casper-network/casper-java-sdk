@@ -28,12 +28,12 @@ class PricingModeTest {
         final String json = "{\"Classic\":{\"payment_amount\": \"12345\", \"gas_price_tolerance\": 5, \"standard_payment\": true}}";
 
         final PricingMode pricingMode = new ObjectMapper().readValue(json, PricingMode.class);
-        assertThat(pricingMode, is(instanceOf(ClassicPricingMode.class)));
+        assertThat(pricingMode, is(instanceOf(PaymentLimited.class)));
 
-        final ClassicPricingMode classicPricingMode = (ClassicPricingMode) pricingMode;
-        assertThat(classicPricingMode.getPaymentAmount(), is(new BigInteger("12345")));
-        assertThat(classicPricingMode.getGasPriceTolerance(), is(5));
-        assertThat(classicPricingMode.isStandardPayment(), is(true));
+        final PaymentLimited paymentLimited = (PaymentLimited) pricingMode;
+        assertThat(paymentLimited.getPaymentAmount(), is(new BigInteger("12345")));
+        assertThat(paymentLimited.getGasPriceTolerance(), is(5));
+        assertThat(paymentLimited.isStandardPayment(), is(true));
 
         final String writtenJson = new ObjectMapper().writeValueAsString(pricingMode);
         JSONAssert.assertEquals(json, writtenJson, false);
@@ -42,7 +42,7 @@ class PricingModeTest {
     @Test
     void classicModeByteSerialization() throws NoSuchTypeException, ValueSerializationException {
 
-        final ClassicPricingMode classic = ClassicPricingMode.builder()
+        final PaymentLimited classic = PaymentLimited.builder()
                 .paymentAmount(new BigInteger("9054610395016823311"))
                 .gasPriceTolerance(1)
                 .standardPayment(true)

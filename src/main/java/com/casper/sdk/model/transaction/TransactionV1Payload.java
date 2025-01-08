@@ -5,7 +5,6 @@ import com.casper.sdk.model.clvalue.serde.CasperSerializableObject;
 import com.casper.sdk.model.clvalue.serde.Target;
 import com.casper.sdk.model.common.Digest;
 import com.casper.sdk.model.common.Ttl;
-import com.casper.sdk.model.deploy.NamedArg;
 import com.casper.sdk.model.key.Tag;
 import com.casper.sdk.model.transaction.entrypoint.TransactionEntryPoint;
 import com.casper.sdk.model.transaction.field.CalltableSerializationEnvelopeBuilder;
@@ -20,9 +19,7 @@ import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
 import lombok.*;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 /**
  * The payload of a TransactionV1.
@@ -43,9 +40,6 @@ public class TransactionV1Payload implements CasperSerializableObject, Tag {
     private static final int PRICING_MODE_FIELD_INDEX = 4;
     private static final int FIELDS_FIELD_INDEX = 5;
 
-    @JsonIgnore
-    @Builder.Default
-    private List<NamedArg<?>> args = new ArrayList<>();
     @SuppressWarnings("rawtypes")
     @JsonProperty("initiator_addr")
     private InitiatorAddr initiatorAddr;
