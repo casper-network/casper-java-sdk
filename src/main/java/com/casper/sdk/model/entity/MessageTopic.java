@@ -1,10 +1,7 @@
 package com.casper.sdk.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 /**
  * Collection of named message topics.
@@ -15,6 +12,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder
 public class MessageTopic {
 
     /** The name of the topic on which the message was emitted on. */

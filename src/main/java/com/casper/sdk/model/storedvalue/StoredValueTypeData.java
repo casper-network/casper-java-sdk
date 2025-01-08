@@ -32,7 +32,8 @@ public enum StoredValueTypeData {
     STORED_VALUE_ADDRESSABLE_ENTITY("AddressableEntity", AddressableEntityKind.class),
     STORED_VALUE_PACKAGE("Package", PackageKind.class),
     STORED_VALUE_NAMED_KEY("NamedKey", NamedKeyKind.class),
-    STORED_VALUE_ENTRY_POINT("EntryPoint",EntryPointKind .class);
+    STORED_VALUE_ENTRY_POINT("EntryPoint", EntryPointKind.class),
+    STORED_VALUE_MESSAGE_TOPIC("MessageTopic", MessageTopicKind.class);
 
     private final String name;
     private final Class<?> clazz;
@@ -50,6 +51,6 @@ public enum StoredValueTypeData {
                 return t.getClazz();
             }
         }
-        throw new NoSuchTypeException();
+        throw new NoSuchTypeException("Unknown StoredValueTypeData: " + name);
     }
 }
