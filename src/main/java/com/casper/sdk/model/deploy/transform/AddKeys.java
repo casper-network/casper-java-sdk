@@ -1,6 +1,7 @@
 package com.casper.sdk.model.deploy.transform;
 
 import com.casper.sdk.model.contract.NamedKey;
+import com.casper.sdk.model.transaction.kind.Kind;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.AllArgsConstructor;
@@ -25,7 +26,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonTypeName("AddKeys")
-public class AddKeys implements Transform {
+public class AddKeys implements Transform, Kind {
 
     /**
      * @see NamedKey

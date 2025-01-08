@@ -40,6 +40,7 @@ public class CLTypeTuple2 extends AbstractCLTypeWithChildren {
         return super.getChildTypeObjects();
     }
 
+
     @Override
     public void serializeChildTypes(final SerializerBuffer ser) throws NoSuchTypeException {
 
