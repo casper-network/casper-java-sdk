@@ -25,6 +25,10 @@ import com.casper.sdk.model.clvalue.cltype.CLTypePublicKey;
 import com.casper.sdk.model.clvalue.cltype.CLTypeUnit;
 import com.casper.sdk.model.common.Digest;
 import com.casper.sdk.model.common.Ttl;
+import com.casper.sdk.model.contract.*;
+import com.casper.sdk.model.deploy.Deploy;
+import com.casper.sdk.model.deploy.DeployData;
+import com.casper.sdk.model.deploy.NamedArg;
 import com.casper.sdk.model.contract.EntryPoint;
 import com.casper.sdk.model.contract.EntryPointV2;
 import com.casper.sdk.model.contract.EntryPointValue;
@@ -48,10 +52,12 @@ import com.casper.sdk.model.storedvalue.StoredValueData;
 import com.casper.sdk.model.storedvalue.StoredValueDeployInfo;
 import com.casper.sdk.model.transaction.*;
 import com.casper.sdk.model.transaction.entrypoint.TransferEntryPoint;
+import com.casper.sdk.model.transaction.execution.Effect;
 import com.casper.sdk.model.transaction.execution.ExecutionInfo;
 import com.casper.sdk.model.transaction.execution.ExecutionResultV1;
 import com.casper.sdk.model.transaction.execution.ExecutionResultV2;
 import com.casper.sdk.model.transaction.field.Fields;
+import com.casper.sdk.model.transaction.kind.WriteKind;
 import com.casper.sdk.model.transaction.pricing.FixedPricingMode;
 import com.casper.sdk.model.transaction.pricing.PaymentLimited;
 import com.casper.sdk.model.transaction.scheduling.Standard;
@@ -76,10 +82,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import static com.jayway.jsonassert.impl.matcher.IsCollectionWithSize.hasSize;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -135,7 +138,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
         assertEquals(resultByHash.getBlockWithSignatures().getBlock().getHash().toString(), hash);
     }
 
-/**
+    /**
      * Test get public key serialization is correct.
      */
     @Test
@@ -675,7 +678,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
     }
 
     @Test
-    void infoGetContractTransactionByHash() throws Exception {
+    void infoGetInstalledContractTransactionByHash() throws Exception {
 
         mockNode.withRcpResponseDispatcher()
                 .withMethod("info_get_transaction")
@@ -710,7 +713,33 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
         assertThat(executionResult.getSizeEstimate(), is(241198L));
 
         assertThat(executionResult.getEffects().size(), is(61));
-        // TODO Ensute effects are tested in EffectTest
+
+        final Optional<Effect> maybeEffect = executionResult.getEffectByKey("hash-94b21891ae273b17eeb6a1899a52ab952bcc4da2e19626563f88d6cf7ab6a2bd");
+        assertThat(maybeEffect.isPresent(), is(true));
+        assertThat(maybeEffect.get().getKind(), is(instanceOf(WriteKind.class)));
+        assertThat(((WriteKind<?>) maybeEffect.get().getKind()).getWrite().getValue(), is(instanceOf(Contract.class)));
+
+        //noinspection unchecked
+        final Contract value = ((WriteKind<Contract>) maybeEffect.get().getKind()).getWrite().getValue();
+        assertThat(value.getPackageHash(), is("contract-package-b71675d8cf701d9bc584cb5152706873110e5158b004fb966ed28be49c66b39a"));
+        assertThat(value.getWasmHash(), is("contract-wasm-a9fb7ec293465829432a8e543a2c2d5bba6d622c512af7e0cf204f6f536a1cbf"));
+        assertThat(value.getProtocolVersion(), is("2.0.0"));
+        assertThat(value.getEntryPoints(), hasSize(25));
+
+        EntryPointV1 entryPoint = value.getEntryPoints().get(2);
+        assertThat(entryPoint.getAccess(), is("Public"));
+        assertThat(entryPoint.getEntryPointType(), is(EntryPointType.CALLED));
+        assertThat(entryPoint.getRet().getTypeName(), is("Unit"));
+        assertThat(entryPoint.getName(), is("approve"));
+        assertThat(entryPoint.getArgs(), hasSize(2));
+        assertThat(entryPoint.getArgs().get(0).getName(), is("spender"));
+        assertThat(entryPoint.getArgs().get(0).getClType().getTypeName(), is("Key"));
+        assertThat(entryPoint.getArgs().get(1).getName(), is("amount"));
+        assertThat(entryPoint.getArgs().get(1).getClType().getTypeName(), is("U256"));
+
+        assertThat(value.getNamedKeys(), hasSize(5));
+        assertThat(value.getNamedKeys().get(4).getName(), is("state"));
+        assertThat(value.getNamedKeys().get(4).getKey().toString(), is("uref-c5ae802a50fb72194d3c543805bab1a612186bdf2cc5d62758595694a1928fff-007"));
     }
 
     @Test
@@ -755,7 +784,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
                 .withBody("$.params.[0].Version1.payload.fields.target", "Native")
                 .withBody("$.params.[0].Version1.payload.fields.entry_point", "Transfer")
                 .withBody("$.params.[0].Version1.payload.fields.scheduling", "Standard")
-           //     .withBody("$.params.[0].Version1.body.transaction_category", "0")
+                //     .withBody("$.params.[0].Version1.body.transaction_category", "0")
                 .withBody("params.[0].Version1.payload.fields.args.Named.[0].[0]", "amount")
                 .withBody("params.[0].Version1.payload.fields.args.Named.[0].[1].bytes", "0400f90295")
                 .withBody("$.params.[0].Version1.payload.fields.args.Named.[0].[1].cl_type", "U512")
