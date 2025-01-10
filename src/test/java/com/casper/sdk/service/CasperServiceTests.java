@@ -671,29 +671,27 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
         final TransactionV1 transaction = result.getTransaction().getVersion1();
 
         assertThat(transaction.getPayload().getPricingMode(), is(instanceOf(PaymentLimited.class)));
-        assertThat(((FixedPricingMode) transaction.getPayload().getPricingMode()).getGasPriceTolerance(), is(8));
+        assertThat(((PaymentLimited) transaction.getPayload().getPricingMode()).getGasPriceTolerance(), is(1));
         assertThat(transaction.getPayload().getInitiatorAddr(), is(instanceOf(InitiatorPublicKey.class)));
-        assertThat(transaction.getPayload().getInitiatorAddr().getAddress(), is(PublicKey.fromTaggedHexString("0138329930033bca4773a6623574ad7870ee39c554f153f15609e200e50049a7de")));
+        assertThat(transaction.getPayload().getInitiatorAddr().getAddress(), is(PublicKey.fromTaggedHexString("0184f6d260f4ee6869ddb36affe15456de6ae045278fa2f467bb677561ce0dad55")));
 
         final ExecutionInfo executionInfo = result.getExecutionInfo();
 
-        assertThat(executionInfo.getBlockHash(), is(new Digest("48f9d5be37c9adcc67130c57eb52fd7a02dbcc5c65ce37efaef97d8ba1bd14bf")));
-        assertThat(executionInfo.getBlockHeight(), is(new BigInteger("8")));
+        assertThat(executionInfo.getBlockHash(), is(new Digest("b60c3d043d75678ac2422bbbef9f6e32eee023016fea78830414d9bd6e0cf0ef")));
+        assertThat(executionInfo.getBlockHeight(), is(new BigInteger("6")));
         assertThat(result.getExecutionInfo().getExecutionResult(), is(instanceOf(ExecutionResultV2.class)));
 
         final ExecutionResultV2 executionResult = executionInfo.getExecutionResult();
 
         assertThat(executionResult.getInitiator().getAddress(), is(instanceOf(PublicKey.class)));
-        assertThat(executionResult.getInitiator().getAddress(), is(PublicKey.fromTaggedHexString("0138329930033bca4773a6623574ad7870ee39c554f153f15609e200e50049a7de")));
-        assertThat(executionResult.getLimit(), is(new BigInteger("1000000000000")));
-        assertThat(executionResult.getCost(), is(new BigInteger("1000000000000")));
-        assertThat(executionResult.getConsumed(), is(new BigInteger("225932824299")));
-        assertThat(executionResult.getSizeEstimate(), is(325997L));
+        assertThat(executionResult.getInitiator().getAddress(), is(PublicKey.fromTaggedHexString("0184f6d260f4ee6869ddb36affe15456de6ae045278fa2f467bb677561ce0dad55")));
+        assertThat(executionResult.getLimit(), is(new BigInteger("500000000000")));
+        assertThat(executionResult.getCost(), is(new BigInteger("500000000000")));
+        assertThat(executionResult.getConsumed(), is(new BigInteger("311158169340")));
+        assertThat(executionResult.getSizeEstimate(), is(241198L));
 
-        // FIXME  assertThat(((Session) transaction.getBody().getTarget()).getModuleBytes().length, is(325614));
-
-        assertThat(executionResult.getEffects().size(), is(66));
-        //Effects are tested in EffectTest
+        assertThat(executionResult.getEffects().size(), is(61));
+        // TODO Ensute effects are tested in EffectTest
     }
 
     @Test
