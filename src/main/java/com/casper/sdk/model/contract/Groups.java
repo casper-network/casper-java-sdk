@@ -26,12 +26,12 @@ public class Groups {
     /**
      * group(string)
      */
-    @JsonProperty("group")
+    @JsonProperty("group_name")
     private String name;
 
     /**
      * keys(Array/string) Hex-encoded, formatted URef.
      */
-    @JsonProperty("keys")
+    @JsonProperty("group_users")
     private List<String> keys;
 }
