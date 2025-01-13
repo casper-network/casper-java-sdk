@@ -461,6 +461,32 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
 
 
     @Test
+    void getEraInfoBySwitchBlockByHeightCondor() {
+
+        mockNode.withRcpResponseDispatcher()
+                .withMethod("chain_get_era_info_by_switch_block")
+                .withBody("$.params.block_identifier.Height", "423571")
+                .thenDispatch(getClass().getResource("/era-info-samples/era-info-by-switch-block-condor.json"));
+
+        final EraInfoData eraInfoData = casperServiceMock.getEraInfoBySwitchBlock(new HeightBlockIdentifier(423571));
+
+        assertNotNull(eraInfoData);
+
+        assertThat(((Delegator) eraInfoData.getEraSummary().getStoredValue().getValue().getSeigniorageAllocations().get(0)).getDelegatorKind(), is(instanceOf(DelegatorKindPublicKey.class)));
+        assertThat(((Delegator) eraInfoData.getEraSummary().getStoredValue().getValue().getSeigniorageAllocations().get(2)).getDelegatorKind(), is(instanceOf(DelegatorKindPurse.class)));
+
+        assertThat(((DelegatorKindPublicKey) ((Delegator) eraInfoData.getEraSummary().getStoredValue().getValue().getSeigniorageAllocations().get(0)).getDelegatorKind()).getPublicKey().toString(),
+                is("01af79f28bde4522b27edb8dc9df146c9d3a65f944bbdcf153ea107b291bae232d"));
+
+        assertThat(((DelegatorKindPurse) ((Delegator) eraInfoData.getEraSummary().getStoredValue().getValue().getSeigniorageAllocations().get(2)).getDelegatorKind()).getPurse().getJsonURef(),
+                is("uref-3c4bf80070d2667eaacc51506ba49ba0f26452649622d7cb9815c9f81ea92bd7-007"));
+
+        assertNotNull(eraInfoData.getEraSummary());
+        assertEquals("ddd2c62a342e0cbc8f979d0fb783f9764af937ac514cd78bfba08d886bfcd758", eraInfoData.getEraSummary().getStateRootHash());
+    }
+
+
+    @Test
     void getEraInfoBySwitchBlockByHash() {
 
         mockNode.withRcpResponseDispatcher()

@@ -15,4 +15,7 @@ public abstract class RpcResult {
 
     @JsonProperty("api_version")
     private String apiVersion;
+
+    @JsonProperty("protocol_version")
+    private String protocolVersion;
 }

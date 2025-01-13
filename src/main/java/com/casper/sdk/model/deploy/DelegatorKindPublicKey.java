@@ -1,4 +1,4 @@
-package com.casper.sdk.model.account;
+package com.casper.sdk.model.deploy;
 
 import com.casper.sdk.exception.CasperClientException;
 import com.casper.sdk.model.key.PublicKey;
@@ -12,7 +12,7 @@ import lombok.Setter;
 import java.security.NoSuchAlgorithmException;
 
 /**
- * The public key of an account.
+ * Delegation from public key
  *
  * @author carl@stormeye.co.uk
  */
@@ -20,16 +20,15 @@ import java.security.NoSuchAlgorithmException;
 @Setter
 @Builder
 @AllArgsConstructor
-public class PublicKeyIdentifier implements AccountIdentifier {
+public class DelegatorKindPublicKey implements DelegatorKind {
 
-    /** Public key hash */
     @JsonProperty("PublicKey")
     private PublicKey publicKey;
 
     @JsonCreator
-    public PublicKeyIdentifier(final String hexKey) {
+    public DelegatorKindPublicKey(final String publicKey) {
         try {
-            this.publicKey = PublicKey.fromTaggedHexString(hexKey);
+            this.publicKey = PublicKey.fromTaggedHexString(publicKey);
         } catch (NoSuchAlgorithmException e) {
             throw new CasperClientException("Invalid public key bytes", e);
         }

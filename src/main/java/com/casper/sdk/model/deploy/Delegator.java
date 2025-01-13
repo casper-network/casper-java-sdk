@@ -3,11 +3,7 @@ package com.casper.sdk.model.deploy;
 import com.casper.sdk.model.key.PublicKey;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
@@ -18,12 +14,10 @@ import lombok.Setter;
 public class Delegator extends SeigniorageAllocation {
 
     /**
-     * Delegator's public key
-     *
-     * @see PublicKey
+     * Delegator's kind
      */
-    @JsonProperty("delegator_public_key")
-    private PublicKey delegatorPublicKey;
+    @JsonProperty("delegator_kind")
+    private DelegatorKind delegatorKind;
 
     /**
      * Validator's public key
