@@ -1,4 +1,4 @@
-package com.casper.sdk.model.contract;
+package com.casper.sdk.model.contract.entrypoint;
 
 import com.casper.sdk.model.clvalue.cltype.AbstractCLType;
 import com.fasterxml.jackson.annotation.JsonProperty;

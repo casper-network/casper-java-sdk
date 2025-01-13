@@ -25,7 +25,10 @@ import com.casper.sdk.model.clvalue.cltype.CLTypePublicKey;
 import com.casper.sdk.model.clvalue.cltype.CLTypeUnit;
 import com.casper.sdk.model.common.Digest;
 import com.casper.sdk.model.common.Ttl;
-import com.casper.sdk.model.contract.*;
+import com.casper.sdk.model.contract.Contract;
+import com.casper.sdk.model.contract.ContractPackage;
+import com.casper.sdk.model.contract.NamedKey;
+import com.casper.sdk.model.contract.entrypoint.*;
 import com.casper.sdk.model.deploy.Deploy;
 import com.casper.sdk.model.deploy.DeployData;
 import com.casper.sdk.model.deploy.NamedArg;
@@ -701,7 +704,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
         assertThat(value.getEntryPoints(), hasSize(25));
 
         EntryPointV1 entryPoint = value.getEntryPoints().get(2);
-        assertThat(entryPoint.getAccess(), is("Public"));
+        assertThat(entryPoint.getAccess(), is(instanceOf(PublicAccess.class)));
         assertThat(entryPoint.getEntryPointType(), is(EntryPointType.CALLED));
         assertThat(entryPoint.getRet().getTypeName(), is("Unit"));
         assertThat(entryPoint.getName(), is("approve"));
@@ -736,6 +739,13 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
 
         Optional<EntryPointV1> maybeEntryPoint = value.getEntryPoint("init");
         assertThat(maybeEntryPoint.isPresent(), is(true));
+
+        entryPoint = maybeEntryPoint.get();
+        assertThat(entryPoint.getName(), is("init"));
+        assertThat(entryPoint.getEntryPointType(), is(EntryPointType.CALLED));
+        assertThat(entryPoint.getAccess(), is(instanceOf(GroupsAccess.class)));
+        assertThat(((GroupsAccess) entryPoint.getAccess()).getGroups(), is(hasSize(1)));
+        assertThat(((GroupsAccess) entryPoint.getAccess()).getGroups().get(0), is("constructor_group"));
     }
 
     @Test

@@ -1,5 +1,6 @@
 package com.casper.sdk.model.contract;
 
+import com.casper.sdk.model.contract.entrypoint.EntryPointV1;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
