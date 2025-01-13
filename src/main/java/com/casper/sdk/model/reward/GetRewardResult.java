@@ -1,5 +1,6 @@
 package com.casper.sdk.model.reward;
 
+import com.casper.sdk.identifier.global.BlockHashIdentifier;
 import com.casper.sdk.model.common.RpcResult;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -17,10 +18,21 @@ import java.math.BigInteger;
 @NoArgsConstructor
 @Getter
 public class GetRewardResult extends RpcResult {
+
     /** The total reward amount in the requested era. */
     @JsonProperty("reward_amount")
     private BigInteger rewardAmount;
+
     /** The era for which the reward was calculated. */
     @JsonProperty("era_id")
     private long eraId;
+
+    /** The delegation rate of the validator. */
+    @JsonProperty("delegation_rate")
+    private long delegation_rate;
+
+    /** The switch block hash at which the reward was distributed. */
+    @JsonProperty("switch_block_hash")
+    private BlockHashIdentifier switch_block_hash;
+
 }
