@@ -29,8 +29,7 @@ public class DelegatorKindPurse implements DelegatorKind {
     @JsonCreator
     public DelegatorKindPurse(final String purse) {
         try {
-            this.purse = (purse == null) ? null :
-                    URef.fromString(purse);
+            URef.fromString(purse);
         } catch (IOException | DynamicInstanceException e) {
             throw new CasperClientException("Invalid purse bytes", e);
         }

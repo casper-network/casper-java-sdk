@@ -2,6 +2,7 @@ package com.casper.sdk.model.account;
 
 import com.casper.sdk.exception.CasperClientException;
 import com.casper.sdk.model.key.PublicKey;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,12 +26,13 @@ public class PublicKeyIdentifier implements AccountIdentifier {
     @JsonProperty("PublicKey")
     private PublicKey publicKey;
 
+    @JsonCreator
     public PublicKeyIdentifier(final String hexKey) {
         try {
-            this.publicKey = (hexKey == null) ? null :
-                    PublicKey.fromTaggedHexString(hexKey);
+            PublicKey.fromTaggedHexString(hexKey);
         } catch (NoSuchAlgorithmException e) {
             throw new CasperClientException("Invalid public key bytes", e);
         }
     }
+
 }
