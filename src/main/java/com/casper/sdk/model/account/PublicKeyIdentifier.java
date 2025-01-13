@@ -29,7 +29,7 @@ public class PublicKeyIdentifier implements AccountIdentifier {
     @JsonCreator
     public PublicKeyIdentifier(final String hexKey) {
         try {
-            PublicKey.fromTaggedHexString(hexKey);
+            this.publicKey = PublicKey.fromTaggedHexString(hexKey);
         } catch (NoSuchAlgorithmException e) {
             throw new CasperClientException("Invalid public key bytes", e);
         }

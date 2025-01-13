@@ -28,7 +28,7 @@ public class DelegatorKindPublicKey implements DelegatorKind {
     @JsonCreator
     public DelegatorKindPublicKey(final String publicKey) {
         try {
-            PublicKey.fromTaggedHexString(publicKey);
+            this.publicKey = PublicKey.fromTaggedHexString(publicKey);
         } catch (NoSuchAlgorithmException e) {
             throw new CasperClientException("Invalid public key bytes", e);
         }
