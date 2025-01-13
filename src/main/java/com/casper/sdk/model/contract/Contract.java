@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Methods and type signatures supported by a contract.
@@ -38,4 +39,8 @@ public class Contract {
     /** protocol_version(String) - ? */
     @JsonProperty("protocol_version")
     private String protocolVersion;
+
+    public Optional<EntryPointV1> getEntryPoint(String name) {
+        return entryPoints.stream().filter(entryPoint -> entryPoint.getName().equals(name)).findFirst();
+    }
 }

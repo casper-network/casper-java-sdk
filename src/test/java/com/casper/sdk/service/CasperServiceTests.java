@@ -714,6 +714,28 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
         assertThat(value.getNamedKeys(), hasSize(5));
         assertThat(value.getNamedKeys().get(4).getName(), is("state"));
         assertThat(value.getNamedKeys().get(4).getKey().toString(), is("uref-c5ae802a50fb72194d3c543805bab1a612186bdf2cc5d62758595694a1928fff-007"));
+
+        Optional<Effect> maybeEffectWithGroup = executionResult.getEffectByKey("hash-b71675d8cf701d9bc584cb5152706873110e5158b004fb966ed28be49c66b39a");
+        assertThat(maybeEffectWithGroup.isPresent(), is(true));
+
+        Effect effectWithGroup = executionResult.getEffects().get(29);
+        assertThat(effectWithGroup.getKey().toString(), is("hash-b71675d8cf701d9bc584cb5152706873110e5158b004fb966ed28be49c66b39a"));
+        assertThat(effectWithGroup.getKind(), is(instanceOf(WriteKind.class)));
+        assertThat(((WriteKind<?>) effectWithGroup.getKind()).getWrite().getValue(), is(instanceOf(ContractPackage.class)));
+        ContractPackage contractPackage = (ContractPackage) ((WriteKind<?>) effectWithGroup.getKind()).getWrite().getValue();
+        assertThat(contractPackage.getAccessKey(), is("uref-5268245ec93d03335ed91c860ac48885fa6ee15156871458a84daa93b2d04f06-007"));
+
+        assertThat(contractPackage.getVersions(), hasSize(1));
+        assertThat(contractPackage.getVersions().get(0).getHash(), is("contract-94b21891ae273b17eeb6a1899a52ab952bcc4da2e19626563f88d6cf7ab6a2bd"));
+        assertThat(contractPackage.getVersions().get(0).getVersion(), is(1));
+        assertThat(contractPackage.getVersions().get(0).getProtocolVersionMajor(), is(2));
+
+        assertThat(contractPackage.getGroups(), hasSize(1));
+        assertThat(contractPackage.getGroups().get(0).getName(), is("constructor_group"));
+        assertThat(contractPackage.getGroups().get(0).getKeys().get(0), is("uref-248a7b93a71529a51bf94824b76b047d9da6cd504532951ce8abff937355781a-007"));
+
+        Optional<EntryPointV1> maybeEntryPoint = value.getEntryPoint("init");
+        assertThat(maybeEntryPoint.isPresent(), is(true));
     }
 
     @Test

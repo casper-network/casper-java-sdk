@@ -2,9 +2,10 @@ package com.casper.sdk.model.contract;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
-
 /**
  * The entry point for the V2 Casper VM.
+ *
+ * TODO Delete this class there is no corresponding class in the Casper node
  *
  * @author carl@stormeye.co.uk
  */
