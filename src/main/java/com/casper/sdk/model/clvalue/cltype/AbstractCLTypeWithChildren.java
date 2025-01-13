@@ -68,7 +68,14 @@ public abstract class AbstractCLTypeWithChildren extends AbstractCLType {
 
     @Override
     public boolean isDeserializable() {
-        return getChildTypes().stream().allMatch(AbstractCLType::isDeserializable);
+        for (AbstractCLType childType : getChildTypes()) {
+            if (childType instanceof CLTypeAny) {
+                return false;
+            } else if (!childType.isDeserializable()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     protected void loadCLTypes(final List<Object> childTypeObjects)

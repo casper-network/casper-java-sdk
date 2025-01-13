@@ -24,6 +24,6 @@ public class ContractWasm {
     /**
      * ContractWasm(object/string) A contract's Wasm.
      */
-    @JsonProperty("ContractWasm")
+    @JsonProperty("bytes")
     private String wasm;
 }

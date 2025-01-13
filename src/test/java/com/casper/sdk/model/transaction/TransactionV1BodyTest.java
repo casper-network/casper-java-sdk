@@ -6,6 +6,7 @@ import com.casper.sdk.model.clvalue.serde.Target;
 import com.casper.sdk.model.deploy.NamedArg;
 import com.casper.sdk.model.key.PublicKey;
 import com.casper.sdk.model.transaction.entrypoint.DelegateEntryPoint;
+import com.casper.sdk.model.transaction.field.Fields;
 import com.casper.sdk.model.transaction.scheduling.Standard;
 import com.casper.sdk.model.transaction.target.Native;
 import com.syntifi.crypto.key.encdec.Hex;
@@ -25,7 +26,7 @@ import static org.hamcrest.core.Is.is;
 class TransactionV1BodyTest {
 
     @Test
-    void transactionV1BodyToBytes() throws Exception {
+    void transactionV1PayloadToBytes() throws Exception {
 
         byte[] expectedBytes = {
                 0x3, 0x0, 0x0, 0x0, 0x9, 0x0, 0x0, 0x0, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x22, 0x0,
@@ -61,16 +62,18 @@ class TransactionV1BodyTest {
 
         );
 
-        final TransactionV1Body transactionV1Body = TransactionV1Body.builder()
-                .args(args)
-                .target(new Native())
-                .entryPoint(new DelegateEntryPoint())
-                .transactionCategory(TransactionCategory.AUCTION)
-                .scheduling(new Standard())
+        final TransactionV1Payload payload = TransactionV1Payload.builder()
+                .fields(Fields.builder()
+                        .args(new NamedArgs(args))
+                        .build())
                 .build();
 
+        payload.getFields().setTarget(new Native());
+        payload.getFields().setEntryPoint(new DelegateEntryPoint());
+        payload.getFields().setScheduling(new Standard());
+
         final SerializerBuffer buf = new SerializerBuffer();
-        transactionV1Body.serialize(buf, Target.BYTE);
+        payload.serialize(buf, Target.BYTE);
         final byte[] actual = buf.toByteArray();
 
         String hexActual = Hex.encode(actual);

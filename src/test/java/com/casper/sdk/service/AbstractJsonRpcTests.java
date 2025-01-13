@@ -25,7 +25,7 @@ public abstract class AbstractJsonRpcTests extends AbstractJsonTests {
         TEST_NET("85.114.132.133", 7777),
         NCTL("127.0.0.1", 11101),
         NCTL_SPECULATIVE("127.0.0.1", 25101),
-        MOCK("localhost", 7777);
+        MOCK("localhost", 7878);
 
         private final String ip;
         private final int port;

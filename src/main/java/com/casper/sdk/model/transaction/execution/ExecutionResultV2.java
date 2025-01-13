@@ -11,6 +11,7 @@ import lombok.Setter;
 
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * The result of executing a single transaction V2.
@@ -47,5 +48,13 @@ public class ExecutionResultV2 extends ExecutionResult {
     public <T> InitiatorAddr<T> getInitiator() {
         //noinspection unchecked
         return initiator;
+    }
+
+    public Optional<Effect> getEffectByKey(final String key) {
+        if (effects != null) {
+            return effects.stream().filter(effect -> key.equals(effect.getKey().toString())).findFirst();
+        } else {
+            return Optional.empty();
+        }
     }
 }

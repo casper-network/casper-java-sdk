@@ -29,7 +29,7 @@ public class Contract {
 
     /** entry_points(Array) - A list of entry points. */
     @JsonProperty("entry_points")
-    private List<EntryPoint> entryPoints;
+    private List<EntryPointV1> entryPoints;
 
     /** named_keys(Array) - A list of named keys. */
     @JsonProperty("named_keys")

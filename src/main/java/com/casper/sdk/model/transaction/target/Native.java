@@ -44,6 +44,7 @@ public class Native implements TransactionTarget {
 
     @Override
     public void serialize(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {
+        // TODO use CalltableSerializationEnvelopeBuilder
         ser.writeU8(getByteTag());
     }
 

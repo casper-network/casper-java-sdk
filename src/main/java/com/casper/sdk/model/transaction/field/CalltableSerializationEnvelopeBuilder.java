@@ -37,13 +37,27 @@ public class CalltableSerializationEnvelopeBuilder implements CasperSerializable
     private long size = 0;
 
     /**
-     * Add a field to the envelope.
+     * Add a mandatory field to the envelope.
      *
      * @param index the zero based index
      * @param value the value to be serialized to value bytes of the field
      */
-    public <T> void addField(final int index, final T value) throws ValueSerializationException {
-        this.addField(new Field(index, this.offset, value));
+    public <T> CalltableSerializationEnvelopeBuilder addField(final int index, final T value) throws ValueSerializationException {
+        if (value != null) {
+            return this.addField(new Field(index, this.offset, false, value));
+        } else {
+            return this;
+        }
+    }
+
+    /**
+     * Add an optional field to the envelope.
+     *
+     * @param index the zero based index
+     * @param value the value to be serialized to value bytes of the field
+     */
+    public <T> CasperSerializableObject addOptionField(int index, T value) throws ValueSerializationException {
+        return this.addField(new Field(index, this.offset, true, value));
     }
 
     /**
@@ -52,9 +66,12 @@ public class CalltableSerializationEnvelopeBuilder implements CasperSerializable
      * @param index the zero based index
      * @param value the bytes of the value to add
      */
-    public void addFieldBytes(final int index, final byte[] value) {
-
-        this.addField(new Field((short) index, offset, value));
+    public CalltableSerializationEnvelopeBuilder addFieldBytes(final int index, final byte[] value) {
+        if (value != null) {
+            return this.addField(new Field(index, offset, value));
+        } else {
+            return this;
+        }
     }
 
     /**
@@ -62,19 +79,17 @@ public class CalltableSerializationEnvelopeBuilder implements CasperSerializable
      *
      * @param field the field to add
      */
-    public void addField(final Field field) {
+    public CalltableSerializationEnvelopeBuilder addField(final Field field) {
         if (this.currentFieldIndex >= field.getIndex()) {
             throw new IllegalArgumentException("Field index must be greater than the previous field index");
-        }
-
-        if (this.currentFieldIndex + 1 != field.getIndex()) {
-            throw new IllegalArgumentException("Field index must be sequential");
         }
 
         this.fields.add(field);
         this.currentFieldIndex = field.getIndex();
         this.size += field.getValue().length;
         this.offset += field.getValue().length;
+
+        return this;
     }
 
     /**
@@ -104,9 +119,9 @@ public class CalltableSerializationEnvelopeBuilder implements CasperSerializable
     @Override
     public void serialize(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {
 
-        if (this.fields.size() != this.expectedFields) {
+       /* if (this.fields.size() != this.expectedFields) {
             throw new IllegalArgumentException("Field index must be expected length " + this.expectedFields);
-        }
+        }*/
 
         // Write the number of fields
         ser.writeI32(this.fields.size());
@@ -140,6 +155,7 @@ public class CalltableSerializationEnvelopeBuilder implements CasperSerializable
         }
     }
 
+
     private long getFieldLength(final Field field) {
         if (field.getIndex() == this.fields.size() - 1) {
             return size - field.getOffset();
@@ -147,4 +163,6 @@ public class CalltableSerializationEnvelopeBuilder implements CasperSerializable
             return this.fields.get(field.getIndex() + 1).getOffset() - field.getOffset();
         }
     }
+
+
 }

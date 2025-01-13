@@ -41,6 +41,7 @@ class CalltableSerializationEnvelopeBuilderTest {
         builder.addFieldBytes(1, fieldOneVal);
         builder.addFieldBytes(2, fieldTwoVal);
 
+        ser = new SerializerBuffer();
         builder.serialize(ser);
         byte[] bytes = ser.toByteArray();
 

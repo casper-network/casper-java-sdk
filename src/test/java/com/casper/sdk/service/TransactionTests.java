@@ -11,6 +11,7 @@ import com.casper.sdk.model.transaction.*;
 import com.casper.sdk.model.transaction.entrypoint.CallEntryPoint;
 import com.casper.sdk.model.transaction.entrypoint.TransferEntryPoint;
 import com.casper.sdk.model.transaction.execution.ExecutionResultV2;
+import com.casper.sdk.model.transaction.field.Fields;
 import com.casper.sdk.model.transaction.pricing.FixedPricingMode;
 import com.casper.sdk.model.transaction.scheduling.Standard;
 import com.casper.sdk.model.transaction.target.Native;
@@ -76,14 +77,6 @@ public class TransactionTests {
         assertThat(stateEntity, is(notNullValue()));
         final URef userOnePurse = ((AddressableEntity) stateEntity.getEntity()).getEntity().getMainPurse();
 
-        final TransactionV1Header header = TransactionV1Header.builder()
-                .chainName("cspr-dev-cctl")
-                .ttl(Ttl.builder().ttl("30m").build())
-                .pricingMode(new FixedPricingMode(1))
-                .initiatorAddr(new InitiatorPublicKey(faucetPublicKey))
-                .build();
-
-
         final List<NamedArg<?>> args = Arrays.asList(
                 new NamedArg<>("source", new CLValueOption(Optional.of(new CLValueURef(faucetPurse)))),
                 new NamedArg<>("target", new CLValueURef(userOnePurse)),
@@ -91,17 +84,22 @@ public class TransactionTests {
                 new NamedArg<>("id", new CLValueOption(Optional.of(new CLValueU64(BigInteger.valueOf(System.currentTimeMillis())))))
         );
 
-        final TransactionV1Body body = TransactionV1Body.builder()
-                .args(args)
-                .target(new Native())
-                .entryPoint(new TransferEntryPoint())
-                .scheduling(new Standard())
-                .transactionCategory(TransactionCategory.MINT)
+        final TransactionV1Payload payload = TransactionV1Payload.builder()
+                .chainName("cspr-dev-cctl")
+                .ttl(Ttl.builder().ttl("30m").build())
+                .pricingMode(new FixedPricingMode(0, 1))
+                .initiatorAddr(new InitiatorPublicKey(faucetPublicKey))
+                .fields(Fields.builder()
+                        .args(new NamedArgs(args))
+                        .scheduling(new Standard())
+                        .target(new Native())
+                        .entryPoint(new TransferEntryPoint()).build()
+                )
+                //  .transactionCategory(TransactionCategory.MINT)
                 .build();
 
         final TransactionV1 transactionV1 = TransactionV1.builder()
-                .header(header)
-                .body(body)
+                .payload(payload)
                 .build();
 
         final Transaction transaction = new Transaction(transactionV1.sign(faucetPrivateKey));
@@ -131,14 +129,6 @@ public class TransactionTests {
         final URL wasmUrl = new URL("file://" + wasmPath);
         final byte[] wasmBytes = IOUtils.readBytesFromStream(wasmUrl.openStream());
 
-        final TransactionV1Header header = TransactionV1Header.builder()
-                .chainName("cspr-dev-cctl")
-                .ttl(Ttl.builder().ttl("30m").build())
-                .pricingMode(new FixedPricingMode(8))
-                .initiatorAddr(new InitiatorPublicKey(PublicKey.fromAbstractPublicKey(senderPrivKey.derivePublicKey())))
-                .build();
-
-
         final List<NamedArg<?>> args = Arrays.asList(
                 new NamedArg<>("decimals", new CLValueU8((byte) 11)),
                 new NamedArg<>("name", new CLValueString("Acme Token")),
@@ -148,17 +138,21 @@ public class TransactionTests {
                 new NamedArg<>("id", new CLValueOption(Optional.of(new CLValueU64(BigInteger.valueOf(System.currentTimeMillis())))))
         );
 
-        final TransactionV1Body body = TransactionV1Body.builder()
-                .args(args)
-                .target(new Session(wasmBytes, TransactionRuntime.VM_CASPER_V2))
-                .entryPoint(new CallEntryPoint())
-                .scheduling(new Standard())
-                .transactionCategory(TransactionCategory.INSTALL_UPGRADE)
+        final TransactionV1Payload payload = TransactionV1Payload.builder()
+                .chainName("cspr-dev-cctl")
+                .ttl(Ttl.builder().ttl("30m").build())
+                .pricingMode(new FixedPricingMode(0, 8))
+                .initiatorAddr(new InitiatorPublicKey(PublicKey.fromAbstractPublicKey(senderPrivKey.derivePublicKey())))
+                .fields(Fields.builder().args(new NamedArgs(args))
+                        .target(new Session(false, TransactionRuntime.VM_CASPER_V2, wasmBytes, 0L, null))
+                        .entryPoint(new CallEntryPoint())
+                        .scheduling(new Standard()).build()
+                )
+                //    .transactionCategory(TransactionCategory.INSTALL_UPGRADE)
                 .build();
 
         final TransactionV1 transactionV1 = TransactionV1.builder()
-                .header(header)
-                .body(body)
+                .payload(payload)
                 .build();
 
 
@@ -184,7 +178,7 @@ public class TransactionTests {
 
         GetTransactionResult result = null;
 
-        while (result == null || result.getExecutionInfo() == null){
+        while (result == null || result.getExecutionInfo() == null) {
 
             result = casperService.getTransaction(hash);
 

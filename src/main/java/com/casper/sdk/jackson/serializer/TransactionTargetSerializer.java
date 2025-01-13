@@ -17,6 +17,8 @@ import static com.casper.sdk.model.transaction.target.TargetConstants.*;
  */
 public class TransactionTargetSerializer extends JsonSerializer<TransactionTarget> {
 
+
+
     @Override
     public void serialize(final TransactionTarget value, final JsonGenerator gen, final SerializerProvider serializers) throws IOException {
 
@@ -41,6 +43,7 @@ public class TransactionTargetSerializer extends JsonSerializer<TransactionTarge
             gen.writeFieldName(RUNTIME);
             gen.writeString(value.getRuntime().getJsonName());
         }
+        gen.writeNumberField(TRANSFERRED_VALUE, value.getTransferredValue());
         gen.writeEndObject();
         gen.writeEndObject();
     }
@@ -49,9 +52,13 @@ public class TransactionTargetSerializer extends JsonSerializer<TransactionTarge
         gen.writeStartObject();
         gen.writeFieldName(SESSION);
         gen.writeStartObject();
-        gen.writeStringField(MODULE_BYTES, Hex.encode(value.getModuleBytes()));
+        gen.writeBooleanField(IS_INSTALL_UPGRADE, value.isInstallUpgrade());
         gen.writeStringField(RUNTIME, TransactionRuntime.toJson(value.getRuntime()));
+        gen.writeStringField(MODULE_BYTES, Hex.encode(value.getModuleBytes()));
+        gen.writeNumberField(TRANSFERRED_VALUE, value.getTransferredValue());
+        gen.writeObjectField(SEED, value.getSeed());
         gen.writeEndObject();
+
         gen.writeEndObject();
     }
 }

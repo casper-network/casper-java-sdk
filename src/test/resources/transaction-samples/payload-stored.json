@@ -1,0 +1,57 @@
+{
+  "initiator_addr": {
+    "PublicKey": "015adadaecbd299c594821a548d755f51a5e2124fb17983f9afae019add32beb21"
+  },
+  "timestamp": "2024-12-04T14:54:15.400Z",
+  "ttl": "30m",
+  "chain_name": "casper-net-1",
+  "pricing_mode": {
+    "Fixed": {
+      "additional_computation_factor": 1,
+      "gas_price_tolerance": 1
+    }
+  },
+  "fields": {
+    "args": {
+      "Named": [
+        [
+          "delegator_purse",
+          {
+            "cl_type": "URef",
+            "bytes": "de0ef381c12dc842e0872453d35aa4b49fa488c0427e68b7dd5ac63e151eae9807",
+            "parsed": "uref-de0ef381c12dc842e0872453d35aa4b49fa488c0427e68b7dd5ac63e151eae98-007"
+          }
+        ],
+        [
+          "amount",
+          {
+            "cl_type": "U512",
+            "bytes": "0500282e8cd1",
+            "parsed": "900000000000"
+          }
+        ],
+        [
+          "validator",
+          {
+            "cl_type": "PublicKey",
+            "bytes": "01fed662dc7f1f7af43ad785ba07a8cc05b7a96f9ee69613cfde43bc56bec1140b",
+            "parsed": "01fed662dc7f1f7af43ad785ba07a8cc05b7a96f9ee69613cfde43bc56bec1140b"
+          }
+        ]
+      ]
+    },
+    "entry_point": {
+      "Custom": "delegate"
+    },
+    "scheduling": "Standard",
+    "target": {
+      "Stored": {
+        "id": {
+          "ByHash": "d39b360530484c6b3ed32e84a1198b368fe2bae3d5c9e8af6b0ae4d3eba73caa"
+        },
+        "runtime": "VmCasperV1",
+        "transferred_value": 0
+      }
+    }
+  }
+}

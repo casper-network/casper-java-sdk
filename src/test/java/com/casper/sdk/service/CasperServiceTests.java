@@ -3,7 +3,6 @@ package com.casper.sdk.service;
 import com.casper.sdk.exception.CasperClientException;
 import com.casper.sdk.exception.DynamicInstanceException;
 import com.casper.sdk.exception.NoSuchKeyTagException;
-import com.casper.sdk.helper.TransactionHelper;
 import com.casper.sdk.identifier.block.HashBlockIdentifier;
 import com.casper.sdk.identifier.block.HeightBlockIdentifier;
 import com.casper.sdk.identifier.entity.EntityAddrIdentifier;
@@ -26,10 +25,7 @@ import com.casper.sdk.model.clvalue.cltype.CLTypePublicKey;
 import com.casper.sdk.model.clvalue.cltype.CLTypeUnit;
 import com.casper.sdk.model.common.Digest;
 import com.casper.sdk.model.common.Ttl;
-import com.casper.sdk.model.contract.EntryPoint;
-import com.casper.sdk.model.contract.EntryPointV2;
-import com.casper.sdk.model.contract.EntryPointValue;
-import com.casper.sdk.model.contract.NamedKey;
+import com.casper.sdk.model.contract.*;
 import com.casper.sdk.model.deploy.Deploy;
 import com.casper.sdk.model.deploy.DeployData;
 import com.casper.sdk.model.deploy.NamedArg;
@@ -51,13 +47,16 @@ import com.casper.sdk.model.storedvalue.StoredValueData;
 import com.casper.sdk.model.storedvalue.StoredValueDeployInfo;
 import com.casper.sdk.model.transaction.*;
 import com.casper.sdk.model.transaction.entrypoint.TransferEntryPoint;
+import com.casper.sdk.model.transaction.execution.Effect;
 import com.casper.sdk.model.transaction.execution.ExecutionInfo;
 import com.casper.sdk.model.transaction.execution.ExecutionResultV1;
 import com.casper.sdk.model.transaction.execution.ExecutionResultV2;
+import com.casper.sdk.model.transaction.field.Fields;
+import com.casper.sdk.model.transaction.kind.WriteKind;
 import com.casper.sdk.model.transaction.pricing.FixedPricingMode;
+import com.casper.sdk.model.transaction.pricing.PaymentLimited;
 import com.casper.sdk.model.transaction.scheduling.Standard;
 import com.casper.sdk.model.transaction.target.Native;
-import com.casper.sdk.model.transaction.target.Session;
 import com.casper.sdk.model.transaction.target.Transaction;
 import com.casper.sdk.model.transfer.TransferData;
 import com.casper.sdk.model.transfer.TransferV1;
@@ -78,10 +77,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import static com.jayway.jsonassert.impl.matcher.IsCollectionWithSize.hasSize;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -118,7 +114,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
      */
     @Test
     void testIfBlockReturnedMatchesRequestedByHash() {
-        LOGGER.debug(String.format("Testing with block height %d", 2346915));
+        LOGGER.debug("Testing with block height {}", 2346915);
 
         final RcpResponseDispatcher when = mockNode.withRcpResponseDispatcher()
                 .withMethod("chain_get_block")
@@ -316,7 +312,8 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
                 .withMethod("state_get_item")
                 .withBody("$.params.state_root_hash", "c0eb76e0c3c7a928a0cb43e82eb4fad683d9ad626bcd3b7835a466c0587b0fff")
                 .withBody("$.params.key", "account-hash-a9efd010c7cee2245b5bad77e70d9beb73c8776cbe4698b2d8fdf6c8433d5ba0")
-                .withBody("$.params.path[0]", "special_value").thenDispatch(getClass().getResource("/status-samples/state_get_item.json"));
+                .withBody("$.params.path[0]", "special_value")
+                .thenDispatch(getClass().getResource("/status-samples/state_get_item.json"));
 
         final String stateRootHash = "c0eb76e0c3c7a928a0cb43e82eb4fad683d9ad626bcd3b7835a466c0587b0fff";
         final String key = "account-hash-a9efd010c7cee2245b5bad77e70d9beb73c8776cbe4698b2d8fdf6c8433d5ba0";
@@ -547,7 +544,8 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
 
     @Test
     void chainGetBlockV2() {
-        mockNode.withRcpResponseDispatcher().withMethod("chain_get_block")
+        mockNode.withRcpResponseDispatcher()
+                .withMethod("chain_get_block")
                 //.withBody("$.params.deploy_hash", "abc")
                 .thenDispatch(getClass().getResource("/block-samples/chain_get_block_v2.json"));
 
@@ -587,7 +585,8 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
     @Test
     void chainGetBlockEraEndV2() throws NoSuchAlgorithmException {
 
-        mockNode.withRcpResponseDispatcher().withMethod("chain_get_block")
+        mockNode.withRcpResponseDispatcher()
+                .withMethod("chain_get_block")
                 //.withBody("$.params.deploy_hash", "abc")
                 .thenDispatch(getClass().getResource("/block-samples/chain_get_block_era_end_v2.json"));
 
@@ -614,7 +613,10 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
     @Test
     void infoGetTransactionByDeployHash() throws NoSuchAlgorithmException, IOException, DynamicInstanceException {
 
-        mockNode.withRcpResponseDispatcher().withMethod("info_get_transaction").withBody("$.params.transaction_hash.Deploy", "cb04018ad3a09fc15fda0e5c18def392a135652c73c864c25968be9b2376c139").thenDispatch(getClass().getResource("/transaction-samples/info_get_transaction.json"));
+        mockNode.withRcpResponseDispatcher()
+                .withMethod("info_get_transaction")
+                .withBody("$.params.transaction_hash.Deploy", "cb04018ad3a09fc15fda0e5c18def392a135652c73c864c25968be9b2376c139")
+                .thenDispatch(getClass().getResource("/transaction-samples/info_get_transaction.json"));
 
         final GetTransactionResult result = casperServiceMock.getTransaction(new TransactionHashDeploy("cb04018ad3a09fc15fda0e5c18def392a135652c73c864c25968be9b2376c139"));
         assertNotNull(result);
@@ -649,46 +651,69 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
         assertThat(transfer.getId(), is(BigInteger.valueOf(12345L)));
     }
 
-
     @Test
-    void infoGetContractTransactionByHash() throws NoSuchAlgorithmException {
+    void infoGetInstalledContractTransactionByHash() throws Exception {
 
-        mockNode.withRcpResponseDispatcher().withMethod("info_get_transaction").withBody("$.params.transaction_hash.Deploy", "9a35bd593202c587ec21fabb1caa44e5e40284a5228c50d35f78585b3e90279b").thenDispatch(getClass().getResource("/transaction-samples/info_get_contract_transaction.json"));
+        mockNode.withRcpResponseDispatcher()
+                .withMethod("info_get_transaction")
+                .withBody("$.params.transaction_hash.Deploy", "9a35bd593202c587ec21fabb1caa44e5e40284a5228c50d35f78585b3e90279b")
+                .thenDispatch(getClass().getResource("/transaction-samples/get_transaction_install_contract.json"));
 
         final GetTransactionResult result = casperServiceMock.getTransaction(new TransactionHashDeploy("9a35bd593202c587ec21fabb1caa44e5e40284a5228c50d35f78585b3e90279b"));
         assertNotNull(result);
         assertThat(result.getTransaction().get(), is(instanceOf(TransactionV1.class)));
-        assertThat(result.getTransaction().get().getHash(), is(new Digest("9a35bd593202c587ec21fabb1caa44e5e40284a5228c50d35f78585b3e90279b")));
+        assertThat(result.getTransaction().get().getHash(), is(new Digest("37eea39f298565a1a7fb136927c2956d896f3e9c41e0c87b06ec03ce33482584")));
 
         final TransactionV1 transaction = result.getTransaction().getVersion1();
 
-        assertThat(transaction.getHeader().getBodyHash(), is(new Digest("9bcc99c4d493764463c278cf17b3e1ff5b1357d1f5d0676b3fbeaafb260bcb76")));
-        assertThat(transaction.getHeader().getPricingMode(), is(instanceOf(FixedPricingMode.class)));
-        assertThat(((FixedPricingMode) transaction.getHeader().getPricingMode()).getGasPriceTolerance(), is(8));
-        assertThat(transaction.getHeader().getInitiatorAddr(), is(instanceOf(InitiatorPublicKey.class)));
-        assertThat(transaction.getHeader().getInitiatorAddr().getAddress(), is(PublicKey.fromTaggedHexString("0138329930033bca4773a6623574ad7870ee39c554f153f15609e200e50049a7de")));
+        assertThat(transaction.getPayload().getPricingMode(), is(instanceOf(PaymentLimited.class)));
+        assertThat(((PaymentLimited) transaction.getPayload().getPricingMode()).getGasPriceTolerance(), is(1));
+        assertThat(transaction.getPayload().getInitiatorAddr(), is(instanceOf(InitiatorPublicKey.class)));
+        assertThat(transaction.getPayload().getInitiatorAddr().getAddress(), is(PublicKey.fromTaggedHexString("0184f6d260f4ee6869ddb36affe15456de6ae045278fa2f467bb677561ce0dad55")));
 
         final ExecutionInfo executionInfo = result.getExecutionInfo();
 
-        assertThat(executionInfo.getBlockHash(), is(new Digest("48f9d5be37c9adcc67130c57eb52fd7a02dbcc5c65ce37efaef97d8ba1bd14bf")));
-        assertThat(executionInfo.getBlockHeight(), is(new BigInteger("8")));
+        assertThat(executionInfo.getBlockHash(), is(new Digest("b60c3d043d75678ac2422bbbef9f6e32eee023016fea78830414d9bd6e0cf0ef")));
+        assertThat(executionInfo.getBlockHeight(), is(new BigInteger("6")));
         assertThat(result.getExecutionInfo().getExecutionResult(), is(instanceOf(ExecutionResultV2.class)));
 
         final ExecutionResultV2 executionResult = executionInfo.getExecutionResult();
 
-
         assertThat(executionResult.getInitiator().getAddress(), is(instanceOf(PublicKey.class)));
-        assertThat(executionResult.getInitiator().getAddress(), is(PublicKey.fromTaggedHexString("0138329930033bca4773a6623574ad7870ee39c554f153f15609e200e50049a7de")));
-        assertThat(executionResult.getLimit(), is(new BigInteger("1000000000000")));
-        assertThat(executionResult.getCost(), is(new BigInteger("1000000000000")));
-        assertThat(executionResult.getConsumed(), is(new BigInteger("225932824299")));
-        assertThat(executionResult.getSizeEstimate(), is(325997L));
+        assertThat(executionResult.getInitiator().getAddress(), is(PublicKey.fromTaggedHexString("0184f6d260f4ee6869ddb36affe15456de6ae045278fa2f467bb677561ce0dad55")));
+        assertThat(executionResult.getLimit(), is(new BigInteger("500000000000")));
+        assertThat(executionResult.getCost(), is(new BigInteger("500000000000")));
+        assertThat(executionResult.getConsumed(), is(new BigInteger("311158169340")));
+        assertThat(executionResult.getSizeEstimate(), is(241198L));
 
-        assertThat(((Session) transaction.getBody().getTarget()).getModuleBytes().length, is(325614));
+        assertThat(executionResult.getEffects().size(), is(61));
 
-        assertThat(executionResult.getEffects().size(), is(66));
-        //Effects are tested in EffectTest
+        final Optional<Effect> maybeEffect = executionResult.getEffectByKey("hash-94b21891ae273b17eeb6a1899a52ab952bcc4da2e19626563f88d6cf7ab6a2bd");
+        assertThat(maybeEffect.isPresent(), is(true));
+        assertThat(maybeEffect.get().getKind(), is(instanceOf(WriteKind.class)));
+        assertThat(((WriteKind<?>) maybeEffect.get().getKind()).getWrite().getValue(), is(instanceOf(Contract.class)));
 
+        //noinspection unchecked
+        final Contract value = ((WriteKind<Contract>) maybeEffect.get().getKind()).getWrite().getValue();
+        assertThat(value.getPackageHash(), is("contract-package-b71675d8cf701d9bc584cb5152706873110e5158b004fb966ed28be49c66b39a"));
+        assertThat(value.getWasmHash(), is("contract-wasm-a9fb7ec293465829432a8e543a2c2d5bba6d622c512af7e0cf204f6f536a1cbf"));
+        assertThat(value.getProtocolVersion(), is("2.0.0"));
+        assertThat(value.getEntryPoints(), hasSize(25));
+
+        EntryPointV1 entryPoint = value.getEntryPoints().get(2);
+        assertThat(entryPoint.getAccess(), is("Public"));
+        assertThat(entryPoint.getEntryPointType(), is(EntryPointType.CALLED));
+        assertThat(entryPoint.getRet().getTypeName(), is("Unit"));
+        assertThat(entryPoint.getName(), is("approve"));
+        assertThat(entryPoint.getArgs(), hasSize(2));
+        assertThat(entryPoint.getArgs().get(0).getName(), is("spender"));
+        assertThat(entryPoint.getArgs().get(0).getClType().getTypeName(), is("Key"));
+        assertThat(entryPoint.getArgs().get(1).getName(), is("amount"));
+        assertThat(entryPoint.getArgs().get(1).getClType().getTypeName(), is("U256"));
+
+        assertThat(value.getNamedKeys(), hasSize(5));
+        assertThat(value.getNamedKeys().get(4).getName(), is("state"));
+        assertThat(value.getNamedKeys().get(4).getKey().toString(), is("uref-c5ae802a50fb72194d3c543805bab1a612186bdf2cc5d62758595694a1928fff-007"));
     }
 
     @Test
@@ -700,19 +725,44 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
         PublicKey address = PublicKey.fromAbstractPublicKey(privateKey.derivePublicKey());
         final List<NamedArg<?>> args = Arrays.asList(new NamedArg<>("amount", new CLValueU512(BigInteger.valueOf(2500000000L))), new NamedArg<>("delegator", new CLValuePublicKey(PublicKey.fromAbstractPublicKey(delegator))), new NamedArg<>("validator", new CLValuePublicKey(address)), new NamedArg<>("amount", new CLValueU512(new BigInteger("2500000000"))));
 
-        final TransactionV1Body body = TransactionV1Body.builder().args(args).target(new Native()).entryPoint(new TransferEntryPoint()).transactionCategory(TransactionCategory.MINT).scheduling(new Standard()).build();
+        final TransactionV1Payload payload = TransactionV1Payload.builder()
+                .fields(Fields.builder()
+                        .args(new NamedArgs(args))
+                        .target(new Native())
+                        .entryPoint(new TransferEntryPoint())
+                        .scheduling(new Standard())
+                        .build())
+                .initiatorAddr(new InitiatorPublicKey(address))
+                .ttl(Ttl.builder().ttl("30m").build())
+                .chainName("test-chain-name")
+                .pricingMode(new FixedPricingMode(0, 5))
+                .build();
 
-        final TransactionV1 transaction = TransactionHelper.buildTransaction(new InitiatorPublicKey(address), Ttl.builder().ttl("30m").build(), "test-chain-name", new FixedPricingMode(5), body);
+        final TransactionV1 transaction = TransactionV1.builder()
+                .payload(payload)
+                .build();
 
         // generate hashes and sign transaction
         transaction.sign(privateKey);
 
-
         assertThat(transaction.getApprovals(), hasSize(1));
         assertThat(transaction.getHash().isValid(), is(true));
-        assertThat(transaction.getHeader().getBodyHash().isValid(), is(true));
 
-        mockNode.withRcpResponseDispatcher().withMethod("account_put_transaction").withBody("$.params.[0].Version1.hash", transaction.getHash().toString()).withBody("$.params.[0].Version1.header.chain_name", "test-chain-name").withBody("$.params.[0].Version1.header.ttl", "30m").withBody("$.params.[0].Version1.header.initiator_addr.PublicKey", address.getAlgoTaggedHex()).withBody("$.params.[0].Version1.header.pricing_mode.Fixed.gas_price_tolerance", "5").withBody("$.params.[0].Version1.body.target", "Native").withBody("$.params.[0].Version1.body.entry_point", "Transfer").withBody("$.params.[0].Version1.body.scheduling", "Standard").withBody("$.params.[0].Version1.body.transaction_category", "0").withBody("params.[0].Version1.body.args.[0].[0]", "amount").withBody("params.[0].Version1.body.args.[0].[1].bytes", "0400f90295").withBody("$.params.[0].Version1.body.args.[0].[1].cl_type", "U512").thenDispatch(getClass().getResource("/transaction-samples/put-transaction-result.json"));
+        mockNode.withRcpResponseDispatcher()
+                .withMethod("account_put_transaction")
+                .withBody("$.params.[0].Version1.hash", transaction.getHash().toString())
+                .withBody("$.params.[0].Version1.payload.chain_name", "test-chain-name")
+                .withBody("$.params.[0].Version1.payload.ttl", "30m")
+                .withBody("$.params.[0].Version1.payload.initiator_addr.PublicKey", address.getAlgoTaggedHex())
+                .withBody("$.params.[0].Version1.payload.pricing_mode.Fixed.gas_price_tolerance", "5")
+                .withBody("$.params.[0].Version1.payload.fields.target", "Native")
+                .withBody("$.params.[0].Version1.payload.fields.entry_point", "Transfer")
+                .withBody("$.params.[0].Version1.payload.fields.scheduling", "Standard")
+                //     .withBody("$.params.[0].Version1.body.transaction_category", "0")
+                .withBody("params.[0].Version1.payload.fields.args.Named.[0].[0]", "amount")
+                .withBody("params.[0].Version1.payload.fields.args.Named.[0].[1].bytes", "0400f90295")
+                .withBody("$.params.[0].Version1.payload.fields.args.Named.[0].[1].cl_type", "U512")
+                .thenDispatch(getClass().getResource("/transaction-samples/put-transaction-result.json"));
 
         final PutTransactionResult result = casperServiceMock.putTransaction(new Transaction(transaction));
         assertThat(result.getApiVersion(), is("2.0.0"));
@@ -722,7 +772,11 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
     @Test
     void queryBalanceDetails() throws IOException, DynamicInstanceException {
 
-        mockNode.withRcpResponseDispatcher().withMethod("query_balance_details").withBody("$.params.purse_identifier.purse_uref", "uref-328c317bc7f9fd7d2b5fa9cf3b4c09fc5a8fb59b012b367f096d2426b768179a-007").withBody("$.params.state_identifier.StateRootHash", "a47d8d8bf5226707cc34c4d869e89b6e02096a6dc50b247f34f0b7260050714f").thenDispatch(getClass().getResource("/balance/query_balance_details_result.json"));
+        mockNode.withRcpResponseDispatcher()
+                .withMethod("query_balance_details")
+                .withBody("$.params.purse_identifier.purse_uref", "uref-328c317bc7f9fd7d2b5fa9cf3b4c09fc5a8fb59b012b367f096d2426b768179a-007")
+                .withBody("$.params.state_identifier.StateRootHash", "a47d8d8bf5226707cc34c4d869e89b6e02096a6dc50b247f34f0b7260050714f")
+                .thenDispatch(getClass().getResource("/balance/query_balance_details_result.json"));
 
         final QueryBalanceDetailsResult result = casperServiceMock.queryBalanceDetails(new PurseUref(URef.fromString("uref-328c317bc7f9fd7d2b5fa9cf3b4c09fc5a8fb59b012b367f096d2426b768179a-007")), new StateRootHashIdentifier("a47d8d8bf5226707cc34c4d869e89b6e02096a6dc50b247f34f0b7260050714f"));
 
@@ -739,7 +793,8 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
     @Test
     void stateGetEntityAccount() throws NoSuchAlgorithmException, NoSuchKeyTagException {
 
-        mockNode.withRcpResponseDispatcher().withMethod("state_get_entity")
+        mockNode.withRcpResponseDispatcher()
+                .withMethod("state_get_entity")
                 .withBody("$.params.entity_identifier.PublicKey", "0138329930033bca4773a6623574ad7870ee39c554f153f15609e200e50049a7de")
                 .thenDispatch(getClass().getResource("/entity/getstateentity-account-result.json"));
 
@@ -767,13 +822,15 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
         assertThat(entity.getEntity().getActionThresholds().getDeployment(), is(1));
         assertThat(entity.getEntity().getActionThresholds().getKeyManagement(), is(1));
         assertThat(entity.getEntity().getActionThresholds().getUpgradeManagement(), is(1));
-
     }
 
     @Test
     void stateGetEntitySmartContract() {
 
-        mockNode.withRcpResponseDispatcher().withMethod("state_get_entity").withBody("$.params.entity_identifier.EntityAddr", "entity-system-8edaacea88a5bd982c0c1d8cb54ac89564ffb116c1c2fb4475170755a88a6f5").thenDispatch(getClass().getResource("/entity/getstateentity-smartcontract-result.json"));
+        mockNode.withRcpResponseDispatcher()
+                .withMethod("state_get_entity")
+                .withBody("$.params.entity_identifier.EntityAddr", "entity-system-8edaacea88a5bd982c0c1d8cb54ac89564ffb116c1c2fb4475170755a88a6f5")
+                .thenDispatch(getClass().getResource("/entity/getstateentity-smartcontract-result.json"));
 
         final StateEntityResult stateEntityResult = casperServiceMock.getStateEntity(new EntityAddrIdentifier("entity-system-8edaacea88a5bd982c0c1d8cb54ac89564ffb116c1c2fb4475170755a88a6f5"), null);
 
@@ -797,13 +854,15 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
         assertThat(entity.getEntity().getActionThresholds().getDeployment(), is(1));
         assertThat(entity.getEntity().getActionThresholds().getKeyManagement(), is(1));
         assertThat(entity.getEntity().getActionThresholds().getUpgradeManagement(), is(1));
-
     }
 
     @Test
     void stateGetEntitySystemEntryPointV1() {
 
-        mockNode.withRcpResponseDispatcher().withMethod("state_get_entity").withBody("$.params.entity_identifier.EntityAddr", "entity-system-8edaacea88a5bd982c0c1d8cb54ac89564ffb116c1c2fb4475170755a88a6f5").thenDispatch(getClass().getResource("/entity/getstateentity-system-entry-point-v1-result.json"));
+        mockNode.withRcpResponseDispatcher()
+                .withMethod("state_get_entity")
+                .withBody("$.params.entity_identifier.EntityAddr", "entity-system-8edaacea88a5bd982c0c1d8cb54ac89564ffb116c1c2fb4475170755a88a6f5")
+                .thenDispatch(getClass().getResource("/entity/getstateentity-system-entry-point-v1-result.json"));
 
         final StateEntityResult stateEntityResult = casperServiceMock.getStateEntity(new EntityAddrIdentifier("entity-system-8edaacea88a5bd982c0c1d8cb54ac89564ffb116c1c2fb4475170755a88a6f5"), null);
 
@@ -848,7 +907,10 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
     @Test
     void stateGetEntitySystemEntryPointV2() {
 
-        mockNode.withRcpResponseDispatcher().withMethod("state_get_entity").withBody("$.params.entity_identifier.EntityAddr", "entity-system-8edaacea88a5bd982c0c1d8cb54ac89564ffb116c1c2fb4475170755a88a6f5").thenDispatch(getClass().getResource("/entity/getstateentity-system-entry-point-v2-result.json"));
+        mockNode.withRcpResponseDispatcher()
+                .withMethod("state_get_entity")
+                .withBody("$.params.entity_identifier.EntityAddr", "entity-system-8edaacea88a5bd982c0c1d8cb54ac89564ffb116c1c2fb4475170755a88a6f5")
+                .thenDispatch(getClass().getResource("/entity/getstateentity-system-entry-point-v2-result.json"));
 
         final StateEntityResult stateEntityResult = casperServiceMock.getStateEntity(new EntityAddrIdentifier("entity-system-8edaacea88a5bd982c0c1d8cb54ac89564ffb116c1c2fb4475170755a88a6f5"), null);
 
@@ -870,7 +932,6 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
         assertThat(entity.getEntity().getActionThresholds().getKeyManagement(), is(1));
         assertThat(entity.getEntity().getActionThresholds().getUpgradeManagement(), is(1));
 
-
         assertThat(entity.getEntryPoints().size(), is(4));
         assertInstanceOf(EntryPointValue.class, entity.getEntryPoints().get(0));
         EntryPointV2 entryPointV2 = entity.getEntryPoints().get(0).getV2();
@@ -880,13 +941,15 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
 
         assertThat(entity.getNamedKeys().size(), is(7));
         assertInstanceOf(NamedKey.class, entity.getNamedKeys().get(0));
-
     }
 
     @Test
     void stateGetEntityLegacyAccount() {
 
-        mockNode.withRcpResponseDispatcher().withMethod("state_get_entity").withBody("$.params.entity_identifier.AccountHash", "account-hash-f1075fce3b8cd4eab748b8705ca02444a5e35c0248662649013d8a5cb2b1a87c").thenDispatch(getClass().getResource("/entity/getstateentity-legacy-account-result.json"));
+        mockNode.withRcpResponseDispatcher()
+                .withMethod("state_get_entity")
+                .withBody("$.params.entity_identifier.AccountHash", "account-hash-f1075fce3b8cd4eab748b8705ca02444a5e35c0248662649013d8a5cb2b1a87c")
+                .thenDispatch(getClass().getResource("/entity/getstateentity-legacy-account-result.json"));
 
         final StateEntityResult stateEntityResult = casperServiceMock.getStateEntity(new AccountHashIdentifier("account-hash-f1075fce3b8cd4eab748b8705ca02444a5e35c0248662649013d8a5cb2b1a87c"), null);
 
@@ -901,13 +964,16 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
         assertThat(account.getAssociatedKeys().get(0).getAccountHash(), is(instanceOf(AccountHashKey.class)));
         assertThat(account.getAssociatedKeys().get(0).getAccountHash().toString(), is("account-hash-f1075fce3b8cd4eab748b8705ca02444a5e35c0248662649013d8a5cb2b1a87c"));
         assertThat(account.getAssociatedKeys().get(0).getWeight(), is(1));
-
     }
 
     @Test
     void stateGetEntityAccountWithHashBlockIdentifier() throws NoSuchKeyTagException {
 
-        mockNode.withRcpResponseDispatcher().withMethod("state_get_entity").withBody("$.params.entity_identifier.AccountHash", "account-hash-f1075fce3b8cd4eab748b8705ca02444a5e35c0248662649013d8a5cb2b1a87c").withBody("$.params.block_identifier.Hash", "b0b28b6e89522a2c9476d477208f603cb9911dae77dad61da66346d56764ee8b").thenDispatch(getClass().getResource("/entity/getstateentity-account-result.json"));
+        mockNode.withRcpResponseDispatcher()
+                .withMethod("state_get_entity")
+                .withBody("$.params.entity_identifier.AccountHash", "account-hash-f1075fce3b8cd4eab748b8705ca02444a5e35c0248662649013d8a5cb2b1a87c")
+                .withBody("$.params.block_identifier.Hash", "b0b28b6e89522a2c9476d477208f603cb9911dae77dad61da66346d56764ee8b")
+                .thenDispatch(getClass().getResource("/entity/getstateentity-account-result.json"));
 
         final StateEntityResult stateEntityResult = casperServiceMock.getStateEntity(new AccountHashIdentifier("account-hash-f1075fce3b8cd4eab748b8705ca02444a5e35c0248662649013d8a5cb2b1a87c"), new HashBlockIdentifier("b0b28b6e89522a2c9476d477208f603cb9911dae77dad61da66346d56764ee8b") {
         });
@@ -936,9 +1002,12 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
     }
 
     @Test
-    void stateGetEntityCiontractActualCCTLReturnedData() {
+    void stateGetEntityContractActualCCTLReturnedData() {
 
-        mockNode.withRcpResponseDispatcher().withMethod("state_get_entity").withBody("$.params.entity_identifier.EntityAddr", "entity-contract-77a0481b28572054cbdd19c944a7176ce9670be616d6de0e2ec3f89ca378dd79").thenDispatch(getClass().getResource("/entity/getstateentity-cctl-returned-contract-entity.json"));
+        mockNode.withRcpResponseDispatcher()
+                .withMethod("state_get_entity")
+                .withBody("$.params.entity_identifier.EntityAddr", "entity-contract-77a0481b28572054cbdd19c944a7176ce9670be616d6de0e2ec3f89ca378dd79")
+                .thenDispatch(getClass().getResource("/entity/getstateentity-cctl-returned-contract-entity.json"));
 
         final StateEntityResult stateEntityResult = casperServiceMock.getStateEntity(new EntityAddrIdentifier("entity-contract-77a0481b28572054cbdd19c944a7176ce9670be616d6de0e2ec3f89ca378dd79"), null);
 
@@ -970,13 +1039,16 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
         assertThat(entity.getEntryPoints().get(14).getV1().getType(), is(EntryPoint.EntryPointType.CALLED));
         assertThat(entity.getEntryPoints().get(14).getV1().getPayment(), is(EntryPoint.EntryPointPayment.CALLER));
         assertThat(entity.getEntryPoints().get(14).getV1().getRet().getTypeName(), is("U256"));
-
     }
 
     @Test
     void infoGetReward() throws NoSuchAlgorithmException {
 
-        mockNode.withRcpResponseDispatcher().withMethod("info_get_reward").withBody("$.params.validator", "010b277da84a12c8814d5723eeb57123ff287f22466fd13faca1bb1fae57d2679b").withBody("$.params.delegator", "01098d1758f1ca75350dfec8a1c4c1984a88d1ea5eab5590fbc9e856d67cde31eb").withBody("$.params.era_identifier.Block.Hash", "709a31cbaff23da43995e78d2209e7f5980905cf70ef850f6744b8d3cec9af13").thenDispatch(getClass().getResource("/reward/info_get_reward_result.json"));
+        mockNode.withRcpResponseDispatcher()
+                .withMethod("info_get_reward")
+                .withBody("$.params.validator", "010b277da84a12c8814d5723eeb57123ff287f22466fd13faca1bb1fae57d2679b").withBody("$.params.delegator", "01098d1758f1ca75350dfec8a1c4c1984a88d1ea5eab5590fbc9e856d67cde31eb")
+                .withBody("$.params.era_identifier.Block.Hash", "709a31cbaff23da43995e78d2209e7f5980905cf70ef850f6744b8d3cec9af13")
+                .thenDispatch(getClass().getResource("/reward/info_get_reward_result.json"));
 
         final GetRewardResult rewardInfo = casperServiceMock.getReward(BlockEraIdentifier.builder().blockIdentifier(HashBlockIdentifier.builder().hash("709a31cbaff23da43995e78d2209e7f5980905cf70ef850f6744b8d3cec9af13").build()).build(), PublicKey.fromTaggedHexString("010b277da84a12c8814d5723eeb57123ff287f22466fd13faca1bb1fae57d2679b"), PublicKey.fromTaggedHexString("01098d1758f1ca75350dfec8a1c4c1984a88d1ea5eab5590fbc9e856d67cde31eb"));
 
