@@ -16,7 +16,7 @@ import java.util.List;
  *
  * @author ian@meywood.com
  */
-@JsonTypeName("Group")
+@JsonTypeName("Groups")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
