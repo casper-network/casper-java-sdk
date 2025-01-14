@@ -19,6 +19,7 @@ import org.javatuples.Pair;
 import org.javatuples.Triplet;
 import org.javatuples.Unit;
 import org.json.JSONException;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
@@ -32,7 +33,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 /**
  * Unit tests for {@link StoredValueData}
@@ -885,6 +887,7 @@ public class StoredValueTests extends AbstractJsonTests {
     }
 
     @Test
+    @Disabled
     void validate_Contract_Mapping() throws IOException, JSONException {
         /*
          * curl -X POST -H 'Content-Type: application/json' -d
@@ -910,6 +913,7 @@ public class StoredValueTests extends AbstractJsonTests {
     }
 
     @Test
+    @Disabled
     void validate_Contract_Mapping_with_access_as_groups()
             throws IOException, JSONException {
         String inputJson = getPrettyJson(

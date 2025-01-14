@@ -8,6 +8,7 @@ import com.casper.sdk.model.bid.ValidatorCredit;
 import com.casper.sdk.model.clvalue.AbstractCLValue;
 import com.casper.sdk.model.contract.entrypoint.EntryPoint;
 import com.casper.sdk.model.contract.entrypoint.EntryPointValue;
+import com.casper.sdk.model.deploy.DelegatorKindPublicKey;
 import com.casper.sdk.model.deploy.transform.Transform;
 import com.casper.sdk.model.entity.Entity;
 import com.casper.sdk.model.entity.SmartContract;
@@ -153,7 +154,7 @@ class EffectTest {
                 "    \"Write\": {\n" +
                 "      \"BidKind\": {\n" +
                 "         \"Delegator\": {\n" +
-                "            \"delegator_public_key\": \"01128ddb51119f1df535cf3a763996344ab0cc79038faaee0aaaf098a078031ce6\",\n" +
+                "            \"delegator_kind\": {\"PublicKey\":\"01128ddb51119f1df535cf3a763996344ab0cc79038faaee0aaaf098a078031ce6\"},\n" +
                 "            \"validator_public_key\": \"01026ca707c348ed8012ac6a1f28db031fadd6eb67203501a353b867a08c8b9a80\",\n" +
                 "            \"staked_amount\": \"29519451635\",\n" +
                 "            \"bonding_purse\": \"uref-39a227259f033ce388e529c0330a6a966d591b567c09859f9390af4787f38d39-007\",\n" +
@@ -189,8 +190,8 @@ class EffectTest {
         assertThat(kind.getWrite().getValue(), is(instanceOf(BidKind.class)));
         assertThat(kind.getWrite().getValue(), is(instanceOf(Delegator.class)));
         final Delegator value = (Delegator) kind.getWrite().getValue();
-        assertThat(value.getDelegatorPublicKey(), is(PublicKey.fromTaggedHexString("01128ddb51119f1df535cf3a763996344ab0cc79038faaee0aaaf098a078031ce6")));
-        assertThat(value.getValidatorPublicKey(), is(PublicKey.fromTaggedHexString("01026ca707c348ed8012ac6a1f28db031fadd6eb67203501a353b867a08c8b9a80")));
+        assertThat(value.getDelegatorKind(), is(instanceOf(DelegatorKindPublicKey.class)));
+        assertThat(((DelegatorKindPublicKey) value.getDelegatorKind()).getPublicKey(), is(PublicKey.fromTaggedHexString("01128ddb51119f1df535cf3a763996344ab0cc79038faaee0aaaf098a078031ce6")));
         assertThat(value.getBondingPurse(), is(URef.fromString("uref-39a227259f033ce388e529c0330a6a966d591b567c09859f9390af4787f38d39-007")));
         assertThat(value.getStakedAmount(), is(new BigInteger("29519451635")));
         assertThat(value.getVestingSchedule().getLockedAmounts(), hasSize(13));

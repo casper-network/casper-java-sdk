@@ -1,15 +1,12 @@
 package com.casper.sdk.model.bid;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
+import com.casper.sdk.model.deploy.DelegatorKind;
 import com.casper.sdk.model.key.PublicKey;
 import com.casper.sdk.model.uref.URef;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
 
 import java.math.BigInteger;
 
@@ -26,11 +23,15 @@ import java.math.BigInteger;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Delegator {
+
     /**
      * @see PublicKey
      */
     @JsonProperty("validator_public_key")
     private PublicKey validatorPublicKey;
+
+    @JsonProperty("delegator_kind")
+    private DelegatorKind delegatorKind;
 
     /**
      * @see VestingSchedule
@@ -43,12 +44,6 @@ public class Delegator {
      */
     @JsonProperty("bonding_purse")
     private URef bondingPurse;
-
-    /**
-     * @see PublicKey
-     */
-    @JsonProperty("delegator_public_key")
-    private PublicKey delegatorPublicKey;
 
     /**
      * staked amount
