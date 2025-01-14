@@ -1,5 +1,6 @@
 package com.casper.sdk.model.common;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,5 +18,6 @@ public abstract class RpcResult {
     private String apiVersion;
 
     @JsonProperty("protocol_version")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String protocolVersion;
 }

@@ -25,7 +25,7 @@ class PricingModeTest {
     @Test
     void classicPricingMode() throws Exception {
 
-        final String json = "{\"Classic\":{\"payment_amount\": \"12345\", \"gas_price_tolerance\": 5, \"standard_payment\": true}}";
+        final String json = "{\"PaymentLimited\":{\"payment_amount\": \"12345\", \"gas_price_tolerance\": 5, \"standard_payment\": true}}";
 
         final PricingMode pricingMode = new ObjectMapper().readValue(json, PricingMode.class);
         assertThat(pricingMode, is(instanceOf(PaymentLimited.class)));

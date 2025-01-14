@@ -3,12 +3,8 @@ package com.casper.sdk.model.deploy;
 import com.casper.sdk.exception.CasperClientException;
 import com.casper.sdk.exception.DynamicInstanceException;
 import com.casper.sdk.model.uref.URef;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.*;
+import lombok.*;
 
 import java.io.IOException;
 
@@ -21,15 +17,21 @@ import java.io.IOException;
 @Setter
 @Builder
 @AllArgsConstructor
+@JsonTypeName("Purse")
 public class DelegatorKindPurse implements DelegatorKind {
 
-    @JsonProperty("Purse")
+    @JsonValue
+    @Getter(AccessLevel.NONE)
+    private String purseStr;
+    @JsonIgnore
     private URef purse;
 
     @JsonCreator
     public DelegatorKindPurse(final String purse) {
         try {
-            this.purse = URef.fromString(purse);
+            // Condor changes provides a UREF without prefix or access we therefore have to manually provide these
+            this.purseStr = purse;
+            this.purse = URef.fromString(purse.startsWith("uref-") ? purse : "uref-" + purse + "-000");
         } catch (IOException | DynamicInstanceException e) {
             throw new CasperClientException("Invalid purse bytes", e);
         }
