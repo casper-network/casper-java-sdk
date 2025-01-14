@@ -53,8 +53,6 @@
           ],
           [
             "amount",
-            "amount",
-            "amount",
             {
               "cl_type": "U512",
               "bytes": "0700441eaae9d402",
