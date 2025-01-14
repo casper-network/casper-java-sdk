@@ -254,7 +254,6 @@
                           ]
                         },
                         "bonding_purse": "uref-e731465041b974e099779d05f28c508b15152b8e150ab07d44a4521f148b608a-007",
-                        "delegator_public_key": "01c4dcd4f6676ea296c013c9d2ce82e78b6eff0617f061d50626748a1d9196dcfb",
                         "delegator_kind": {
                           "PublicKey": "01c4dcd4f6676ea296c013c9d2ce82e78b6eff0617f061d50626748a1d9196dcfb"
                         },
