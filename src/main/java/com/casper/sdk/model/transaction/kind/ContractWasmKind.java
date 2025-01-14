@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
+ * A StoredValue containing a ContractWasm.
+ *
  * @author ian@meywood.com
  */
 @AllArgsConstructor

@@ -1,9 +1,10 @@
 package com.casper.sdk.jackson.deserializer;
 
 import com.casper.sdk.model.clvalue.cltype.AbstractCLType;
-import com.casper.sdk.model.contract.EntryPointArg;
-import com.casper.sdk.model.contract.EntryPointType;
-import com.casper.sdk.model.contract.EntryPointV1;
+import com.casper.sdk.model.contract.entrypoint.EntryPointAccess;
+import com.casper.sdk.model.contract.entrypoint.EntryPointArg;
+import com.casper.sdk.model.contract.entrypoint.EntryPointType;
+import com.casper.sdk.model.contract.entrypoint.EntryPointV1;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationContext;
@@ -27,7 +28,7 @@ public class EntryPointV1Deserializer extends JsonDeserializer<EntryPointV1> {
 
         return EntryPointV1.builder()
                 .name(mapNode.get("name").asText())
-                .access(entryPointNode.get("access").asText())
+                .access(getNestedObject(entryPointNode, ctxt, "access", EntryPointAccess.class))
                 .ret(getNestedObject(entryPointNode, ctxt, "ret", AbstractCLType.class))
                 .entryPointType(getNestedObject(entryPointNode, ctxt, "entry_point_type", EntryPointType.class))
                 .args(getNestedObject(entryPointNode, ctxt, "args", new TypeReference<List<EntryPointArg>>() {

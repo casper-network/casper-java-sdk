@@ -1,8 +1,9 @@
-package com.casper.sdk.model.contract;
+package com.casper.sdk.model.contract.entrypoint;
 
 import com.casper.sdk.annotation.ExcludeFromJacocoGeneratedReport;
 import com.casper.sdk.model.clvalue.cltype.AbstractCLType;
 import com.casper.sdk.model.clvalue.cltype.AbstractCLTypeBasic;
+import com.casper.sdk.model.contract.Parameter;
 import com.fasterxml.jackson.annotation.*;
 import lombok.*;
 

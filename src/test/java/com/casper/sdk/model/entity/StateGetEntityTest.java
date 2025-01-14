@@ -1,9 +1,9 @@
 package com.casper.sdk.model.entity;
 
 import com.casper.sdk.model.AbstractJsonTests;
-import com.casper.sdk.model.contract.EntryPoint;
-import com.casper.sdk.model.contract.EntryPointV2;
-import com.casper.sdk.model.contract.EntryPointValue;
+import com.casper.sdk.model.contract.entrypoint.EntryPoint;
+import com.casper.sdk.model.contract.entrypoint.EntryPointV2;
+import com.casper.sdk.model.contract.entrypoint.EntryPointValue;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;

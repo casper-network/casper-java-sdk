@@ -47,6 +47,4 @@ public class Transfer extends ExecutableDeployItem {
         ser.writeU8(getOrder());
         serializeNamedArgs(ser, target);
     }
-
-
 }

@@ -16,6 +16,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
+ * The fields of a transaction.
+ *
  * @author ian@meywood.com
  */
 @Builder

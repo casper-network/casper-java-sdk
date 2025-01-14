@@ -1,4 +1,4 @@
-package com.casper.sdk.model.contract;
+package com.casper.sdk.model.contract.entrypoint;
 
 import com.casper.sdk.jackson.deserializer.EntryPointV1Deserializer;
 import com.casper.sdk.model.clvalue.cltype.AbstractCLType;
@@ -24,7 +24,7 @@ import java.util.List;
 public class EntryPointV1 {
 
     private String name;
-    private String access;
+    private EntryPointAccess access;
     private AbstractCLType ret;
     @JsonProperty("entry_point_type")
     private EntryPointType entryPointType;

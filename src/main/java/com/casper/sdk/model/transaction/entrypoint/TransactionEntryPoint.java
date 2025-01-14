@@ -39,7 +39,6 @@ public abstract class TransactionEntryPoint implements CasperSerializableObject,
     protected static final int CHANGE_BID_PUBLIC_KEY_TAG = 8;
     protected static final int CALL_TAG = 9;
 
-
     private final byte tag;
     private final String name;
 

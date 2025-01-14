@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
+ * The summary for a message topic in a message topic kind.
+ *
  * @author ian@meywood.com
  */
 @AllArgsConstructor
