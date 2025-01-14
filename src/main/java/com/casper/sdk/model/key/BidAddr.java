@@ -17,9 +17,14 @@ public enum BidAddr {
     /// Validator BidAddr.
     VALIDATOR((byte) 1),
     /// Delegator BidAddr.
-    DELEGATOR((byte) 2),
+    DELEGATOR_ACCOUNT((byte) 2),
+    DELEGATOR_PURSE((byte) 3),
     /// Validator credit BidAddr.
-    CREDIT((byte) 4);
+    CREDIT((byte) 4),
+    RESERVED_DELEGATION_ACCOUNT((byte) 5),
+    RESERVED_DELEGATION_PURSE((byte) 6),
+    UNBOND_ACCOUNT((byte) 7),
+    UNBOND_PURSE((byte) 8);
 
     private final byte byteTag;
 

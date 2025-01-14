@@ -124,6 +124,18 @@ class KeyTest {
     }
 
     @Test
+    void longBidKeyFromKeyString() throws Exception {
+
+        final String strKey = "bid-addr-032f3fb80d362ad0a922f446915a259c9aaec9ba99292b3e50ff2359c458007309de0ef381c12dc842e0872453d35aa4b49fa488c0427e68b7dd5ac63e151eae98";
+        final Key key = fromJson(strKey);
+        assertThat(key, is(notNullValue(Key.class)));
+        assertThat(key.getTag(), is(KeyTag.BID_ADDR));
+        assertThat(key.getKey(), is(Hex.decode("032f3fb80d362ad0a922f446915a259c9aaec9ba99292b3e50ff2359c458007309de0ef381c12dc842e0872453d35aa4b49fa488c0427e68b7dd5ac63e151eae98")));
+        assertThat(toJson(key), is(strKey));
+        assertThat(key.getAlgoTaggedHex(), is("0f032f3fb80d362ad0a922f446915a259c9aaec9ba99292b3e50ff2359c458007309de0ef381c12dc842e0872453d35aa4b49fa488c0427e68b7dd5ac63e151eae98"));
+    }
+
+    @Test
     void withdrawKeyFromKeyString() throws Exception {
 
         final String strKey = "withdraw-0909090909090909090909090909090909090909090909090909090909090909";
@@ -279,7 +291,7 @@ class KeyTest {
         assertThat(key.getKey(), is(Hex.decode("022f3fb80d362ad0a922f446915a259c9aaec9ba99292b3e50ff2359c4580073099fa1fc0808d3a5b9ea9f3af4ca7c8c3655568fdf378d8afdf8a7e56e58abbfd4")));
         assertThat(toJson(key), is(strKey));
         assertThat(key.getAlgoTaggedHex(), is("0f022f3fb80d362ad0a922f446915a259c9aaec9ba99292b3e50ff2359c4580073099fa1fc0808d3a5b9ea9f3af4ca7c8c3655568fdf378d8afdf8a7e56e58abbfd4"));
-        assertThat(((BidAddrKey) key).getBidAddr(), is(BidAddr.DELEGATOR));
+        assertThat(((BidAddrKey) key).getBidAddr(), is(BidAddr.DELEGATOR_ACCOUNT));
     }
 
     @Test
@@ -391,7 +403,7 @@ class KeyTest {
     @Test
     void basicMessageTopicKeyFromKeyString() throws Exception {
 
-        final String strKey ="message-topic-94b21891ae273b17eeb6a1899a52ab952bcc4da2e19626563f88d6cf7ab6a2bd-e0846cb0e9995ea903dd1b6a275f9c7d9f23e2f83b6918a8a01ba857ff7efdad";
+        final String strKey = "message-topic-94b21891ae273b17eeb6a1899a52ab952bcc4da2e19626563f88d6cf7ab6a2bd-e0846cb0e9995ea903dd1b6a275f9c7d9f23e2f83b6918a8a01ba857ff7efdad";
         final Key key = fromJson(strKey);
         assertThat(key, is(instanceOf(MessageKey.class)));
         assertThat(key.getTag(), is(KeyTag.MESSAGE));
@@ -492,7 +504,6 @@ class KeyTest {
     }
 
     private Key fromJson(final String strKey) throws JsonProcessingException {
-        //noinspection VulnerableCodeUsages
         return new ObjectMapper().readValue(strKey != null ? "\"" + strKey + "\"" : "null", Key.class);
     }
 

@@ -140,7 +140,7 @@ class CLValueKeyTest {
         assertThat(clValueKey.getParsed(), is("bid-addr-022f3fb80d362ad0a922f446915a259c9aaec9ba99292b3e50ff2359c4580073099fa1fc0808d3a5b9ea9f3af4ca7c8c3655568fdf378d8afdf8a7e56e58abbfd4"));
         assertThat(clValueKey.getBytes(), is("0f02022f3fb80d362ad0a922f446915a259c9aaec9ba99292b3e50ff2359c4580073099fa1fc0808d3a5b9ea9f3af4ca7c8c3655568fdf378d8afdf8a7e56e58abbfd4"));
         final BidAddrKey key = (BidAddrKey) clValueKey.getValue();
-        assertThat(key.getBidAddr(), is(BidAddr.DELEGATOR));
+        assertThat(key.getBidAddr(), is(BidAddr.DELEGATOR_ACCOUNT));
 
         final String written = new ObjectMapper().writeValueAsString(clValueKey);
         JSONAssert.assertEquals(json, written, true);

@@ -35,7 +35,7 @@ public class BidAddrKey extends Key {
         this.bidAddr = BidAddr.getByTag(deser.readU8());
 
         final int len;
-        if (BidAddr.DELEGATOR == bidAddr) {
+        if (BidAddr.DELEGATOR_ACCOUNT == bidAddr) {
             len = 65;
         } else if (BidAddr.CREDIT == bidAddr) {
             len = 41;
