@@ -27,7 +27,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public abstract class InitiatorAddr<T> implements CasperSerializableObject, Tag {
+public abstract class  InitiatorAddr<T> implements CasperSerializableObject, Tag {
 
     protected static final int PUBLIC_KEY_TAG = 0;
     protected static final int ACCOUNT_HASH_TAG = 1;

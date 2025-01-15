@@ -43,7 +43,7 @@ public class TransferV2 {
     private BigInteger amount;
     /** Gas. */
     @JsonProperty("gas")
-    private int gas;
+    private BigInteger gas;
     /** User-defined ID. */
     @JsonProperty("id")
     private BigInteger id;

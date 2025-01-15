@@ -1,7 +1,9 @@
 package com.casper.sdk.model.transaction;
 
+import com.casper.sdk.exception.NoSuchKeyTagException;
 import com.casper.sdk.exception.NoSuchTypeException;
-import com.casper.sdk.model.common.Digest;
+import com.casper.sdk.model.clvalue.serde.Target;
+import com.casper.sdk.model.key.AccountHashKey;
 import com.casper.sdk.model.key.PublicKey;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -34,14 +36,14 @@ class InitiatorAddressTest {
         final String written = new ObjectMapper().writeValueAsString(initiatorAddress);
         assertThat(written, is(json));
 
-        assertThat(initiatorAddress.getByteTag(), is((byte)0));
+        assertThat(initiatorAddress.getByteTag(), is((byte) 0));
     }
 
     @Test
     void initiatorPublicKeyToBytes() throws NoSuchAlgorithmException, NoSuchTypeException, ValueSerializationException {
 
         byte[] expected = {
-                (byte)  0x0, (byte) 0x1, (byte) 0x9b, (byte) 0x12, (byte) 0xd4, (byte) 0x99, (byte) 0xef, (byte) 0x8,
+                (byte) 0x0, (byte) 0x1, (byte) 0x9b, (byte) 0x12, (byte) 0xd4, (byte) 0x99, (byte) 0xef, (byte) 0x8,
                 (byte) 0xc1, (byte) 0xcf, (byte) 0x10, (byte) 0x10, (byte) 0x69, (byte) 0xf9, (byte) 0x2b, (byte) 0xbe,
                 (byte) 0xb3, (byte) 0xf6, (byte) 0x72, (byte) 0xe1, (byte) 0x1, (byte) 0xe2, (byte) 0xbb, (byte) 0xf4,
                 (byte) 0xcd, (byte) 0x4d, (byte) 0x19, (byte) 0x5f, (byte) 0x98, (byte) 0x8e, (byte) 0xcf, (byte) 0x9b,
@@ -59,24 +61,24 @@ class InitiatorAddressTest {
         final InitiatorPublicKey initiatorPublicKey = new InitiatorPublicKey(PublicKey.fromBytes(publicKeyBytes));
 
         final SerializerBuffer ser = new SerializerBuffer();
-        initiatorPublicKey.serialize(ser, null);
+        initiatorPublicKey.serialize(ser, Target.JSON);
         byte[] actual = ser.toByteArray();
 
         assertThat(actual, is(expected));
     }
 
     @Test
-    void initiatorAccountHashJson() throws JsonProcessingException {
+    void initiatorAccountHashJson() throws JsonProcessingException, NoSuchKeyTagException {
 
-        final String json = "{\"AccountHash\":\"0b42b381f087e65a1b6d4c9538027502307ebeff02044c9507f30ddffdb02ebd\"}";
+        final String json = "{\"AccountHash\":\"account-hash-0b42b381f087e65a1b6d4c9538027502307ebeff02044c9507f30ddffdb02ebd\"}";
         final InitiatorAddr initiatorAddress = new ObjectMapper().readValue(json, InitiatorAddr.class);
         assertThat(initiatorAddress, is(instanceOf(InitiatorAccountHash.class)));
-        assertThat(initiatorAddress.getAddress(), is(new Digest("0b42b381f087e65a1b6d4c9538027502307ebeff02044c9507f30ddffdb02ebd")));
+        assertThat(initiatorAddress.getAddress(), is(AccountHashKey.create("account-hash-0b42b381f087e65a1b6d4c9538027502307ebeff02044c9507f30ddffdb02ebd")));
 
         final String written = new ObjectMapper().writeValueAsString(initiatorAddress);
         assertThat(written, is(json));
 
-        assertThat(initiatorAddress.getByteTag(), is((byte)1));
+        assertThat(initiatorAddress.getByteTag(), is((byte) 1));
 
     }
 
@@ -84,23 +86,22 @@ class InitiatorAddressTest {
     void initiatorAccountHashBytes() throws NoSuchTypeException, ValueSerializationException {
         byte[] expected = {
                 0x1,
-                0x49,  (byte) 0xdf, 0x7b,  (byte)0xa7, 0x5e,  (byte)0xf0, 0xc, 0x0,  (byte)0xf5,  (byte)0xf5,
-                (byte) 0x9f, 0x56,  (byte)0xe9, 0x49, 0x5, 0x0,  (byte)0xde,  (byte)0x98, 0x1, 0x53, (byte) 0xf0,
+                0x49, (byte) 0xdf, 0x7b, (byte) 0xa7, 0x5e, (byte) 0xf0, 0xc, 0x0, (byte) 0xf5, (byte) 0xf5,
+                (byte) 0x9f, 0x56, (byte) 0xe9, 0x49, 0x5, 0x0, (byte) 0xde, (byte) 0x98, 0x1, 0x53, (byte) 0xf0,
                 (byte) 0x92, 0x0, 0x0, 0x5f, 0x3, 0x44, 0x27, 0x7b, 0x3c, 0x0, 0x0
         };
 
         final byte[] digestBytes = {
-                0x49,  (byte) 0xdf, 0x7b,  (byte)0xa7, 0x5e,  (byte)0xf0, 0xc, 0x0,  (byte)0xf5,  (byte)0xf5,
-                (byte) 0x9f, 0x56,  (byte)0xe9, 0x49, 0x5, 0x0,  (byte)0xde,  (byte)0x98, 0x1, 0x53, (byte) 0xf0,
+                0x49, (byte) 0xdf, 0x7b, (byte) 0xa7, 0x5e, (byte) 0xf0, 0xc, 0x0, (byte) 0xf5, (byte) 0xf5,
+                (byte) 0x9f, 0x56, (byte) 0xe9, 0x49, 0x5, 0x0, (byte) 0xde, (byte) 0x98, 0x1, 0x53, (byte) 0xf0,
                 (byte) 0x92, 0x0, 0x0, 0x5f, 0x3, 0x44, 0x27, 0x7b, 0x3c, 0x0, 0x0
         };
 
-        final InitiatorAccountHash initiatorPublicKey = new InitiatorAccountHash(new Digest(Hex.encode(digestBytes)));
+        final InitiatorAccountHash initiatorPublicKey = new InitiatorAccountHash(new AccountHashKey("account-hash-" + Hex.encode(digestBytes)));
 
         final SerializerBuffer ser = new SerializerBuffer();
         initiatorPublicKey.serialize(ser, null);
-        byte[] actual = ser.toByteArray();
-
+        final byte[] actual = ser.toByteArray();
         assertThat(actual, is(expected));
 
     }

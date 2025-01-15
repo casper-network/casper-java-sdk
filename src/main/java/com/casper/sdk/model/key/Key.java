@@ -71,6 +71,7 @@ public class Key extends AbstractSerializedKeyTaggedHex<KeyTag> {
         return (includePrefix ? "account-hash-" : "") + ByteUtils.encodeHexString(Blake2b.digest(byteArrayOutputStream.toByteArray(), 32));
     }
 
+    @JsonDeserialize
     @Override
     public String toString() {
         return getTag().getKeyName() + ByteUtils.encodeHexString(this.getKey());

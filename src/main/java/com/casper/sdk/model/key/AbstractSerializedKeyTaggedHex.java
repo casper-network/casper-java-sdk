@@ -45,7 +45,9 @@ public abstract class AbstractSerializedKeyTaggedHex<T extends Tag> implements C
      */
     @Override
     public void serialize(final SerializerBuffer ser, final Target target) {
-        ser.writeU8(getTag().getByteTag());
+        if (target == Target.BYTE) {
+            ser.writeU8(getTag().getByteTag());
+        }
         ser.writeByteArray(getKey());
     }
 
