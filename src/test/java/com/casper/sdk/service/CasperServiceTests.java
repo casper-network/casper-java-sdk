@@ -17,6 +17,8 @@ import com.casper.sdk.model.account.PublicKeyIdentifier;
 import com.casper.sdk.model.auction.AuctionData;
 import com.casper.sdk.model.balance.GetBalanceData;
 import com.casper.sdk.model.balance.QueryBalanceDetailsResult;
+import com.casper.sdk.model.bid.BidKind;
+import com.casper.sdk.model.bid.ValidatorCredit;
 import com.casper.sdk.model.block.*;
 import com.casper.sdk.model.clvalue.CLValuePublicKey;
 import com.casper.sdk.model.clvalue.CLValueString;
@@ -48,11 +50,9 @@ import com.casper.sdk.model.storedvalue.StoredValueData;
 import com.casper.sdk.model.storedvalue.StoredValueDeployInfo;
 import com.casper.sdk.model.transaction.*;
 import com.casper.sdk.model.transaction.entrypoint.TransferEntryPoint;
-import com.casper.sdk.model.transaction.execution.Effect;
-import com.casper.sdk.model.transaction.execution.ExecutionInfo;
-import com.casper.sdk.model.transaction.execution.ExecutionResultV1;
-import com.casper.sdk.model.transaction.execution.ExecutionResultV2;
+import com.casper.sdk.model.transaction.execution.*;
 import com.casper.sdk.model.transaction.field.Fields;
+import com.casper.sdk.model.transaction.kind.PruneKind;
 import com.casper.sdk.model.transaction.kind.WriteKind;
 import com.casper.sdk.model.transaction.pricing.FixedPricingMode;
 import com.casper.sdk.model.transaction.pricing.PaymentLimited;
@@ -774,7 +774,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
 
 
     @Test
-    void infoGetTransactionWithDelegatorKind() throws Exception {
+    void infoGetTransactionWithDelegatorKind() {
 
         mockNode.withRcpResponseDispatcher()
                 .withMethod("info_get_transaction")
@@ -787,7 +787,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
         assertThat(result.getTransaction().get().getHash(), is(new Digest("67594388afce12d027d2098f0bee6742702738647fb8d422d85f1b2c8b72192c")));
     }
 
-        @Test
+    @Test
     void accountPutTransferV1() throws Exception {
 
         final Secp256k1PublicKey delegator = (Secp256k1PublicKey) Secp256k1PrivateKey.deriveRandomKey().derivePublicKey();
@@ -839,6 +839,56 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
         assertThat(result.getApiVersion(), is("2.0.0"));
         assertThat(result.getTransactionHash().toString(), is("52a75f3651e450cc2c3ed534bf130bae2515950707d70bb60067aada30b97ca8"));
     }
+
+    @Test
+    void infoGetNativeTargetTransactionByHash() throws Exception {
+
+        mockNode.withRcpResponseDispatcher()
+                .withMethod("info_get_transaction")
+                .withBody("$.params.transaction_hash.Version1", "9f0bad6b425d30e716cf5418de52ec2bcc6d67a79853a363be8f8843ca195adb")
+                .thenDispatch(getClass().getResource("/transaction-samples/get_transaction_native_target.json"));
+
+        final GetTransactionResult txResult = casperServiceMock.getTransaction(new TransactionHashV1("9f0bad6b425d30e716cf5418de52ec2bcc6d67a79853a363be8f8843ca195adb"));
+        assertNotNull(txResult);
+        assertThat(txResult.getTransaction().get(), is(instanceOf(TransactionV1.class)));
+        assertThat(txResult.getTransaction().get().getHash(), is(new Digest("9f0bad6b425d30e716cf5418de52ec2bcc6d67a79853a363be8f8843ca195adb")));
+
+        final ExecutionResult executionResult = txResult.getExecutionInfo().getExecutionResult();
+        assertThat(executionResult, is(notNullValue()));
+        assertThat(executionResult, is(instanceOf(ExecutionResultV2.class)));
+
+        ExecutionResultV2 resultV2 = (ExecutionResultV2) executionResult;
+        assertThat(resultV2.getTransfers(), hasSize(1));
+        assertThat(resultV2.getCost(), is(BigInteger.valueOf(100000000L)));
+        assertThat(resultV2.getConsumed(), is(BigInteger.valueOf(100000000L)));
+        assertThat(resultV2.getLimit(), is(BigInteger.valueOf(100000000L)));
+        assertThat(resultV2.getSizeEstimate(), is(465L));
+        assertThat(resultV2.getEffects(), hasSize(15));
+
+        final Effect pruneEffect = resultV2.getEffects().get(11);
+        assertThat(pruneEffect.getKind(), is(instanceOf(com.casper.sdk.model.transaction.kind.PruneKind.class)));
+        assertThat(((PruneKind) pruneEffect.getKind()).getPrune(), is("balance-hold-01254bd59bbd36b5aa106170c96076b24f8e498bfdafd203fe19775e6a3df1d450b52ef96d93010000"));
+        assertThat(pruneEffect.getKey(), is(Key.create("balance-hold-01254bd59bbd36b5aa106170c96076b24f8e498bfdafd203fe19775e6a3df1d450b52ef96d93010000")));
+
+        final Effect validatorCreditEffect = resultV2.getEffects().get(14);
+        assertThat(validatorCreditEffect.getKind(), is(instanceOf(WriteKind.class)));
+        final BidKind value = (BidKind) ((WriteKind) validatorCreditEffect.getKind()).getWrite().getValue();
+        assertThat(value, is(instanceOf(ValidatorCredit.class)));
+        assertThat(((ValidatorCredit) value).getAmount(), is(BigInteger.valueOf(100000000L)));
+        assertThat(((ValidatorCredit) value).getEraId(), is(497L));
+        assertThat(((ValidatorCredit) value).getValidatorPublicKey(), is(PublicKey.fromTaggedHexString("01509254f22690fbe7fb6134be574c4fbdb060dfa699964653b99753485e518ea6")));
+
+        final TransferV2 transfer = resultV2.getTransfers().get(0).getTransferV2();
+        final AccountHashKey address = (AccountHashKey) transfer.getFrom().getAddress();
+        assertThat(address, is(Key.create("account-hash-56befc13a6fd62e18f361700a5e08f966901c34df8041b36ec97d54d605c23de")));
+        assertThat(transfer.getTransactionHash(), is(new Digest("9f0bad6b425d30e716cf5418de52ec2bcc6d67a79853a363be8f8843ca195adb")));
+        assertThat(transfer.getSource(), is(URef.fromString("uref-254bd59bbd36b5aa106170c96076b24f8e498bfdafd203fe19775e6a3df1d450-007")));
+        assertThat(transfer.getTarget(), is(URef.fromString("uref-35c0cdd72775794e15ea73670f9ed6bbc96747229bbdb29f6ea798e4ff0b9f6a-004")));
+        assertThat(transfer.getAmount(), is(new BigInteger("2500000000")));
+        assertThat(transfer.getGas(), is(new BigInteger("100000000")));
+
+    }
+
 
     @Test
     void queryBalanceDetails() throws IOException, DynamicInstanceException {
