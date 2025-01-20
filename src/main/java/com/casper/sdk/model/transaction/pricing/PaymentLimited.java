@@ -2,6 +2,7 @@ package com.casper.sdk.model.transaction.pricing;
 
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.serde.Target;
+import com.casper.sdk.model.transaction.field.CalltableSerializationEnvelopeBuilder;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -23,6 +24,11 @@ import java.math.BigInteger;
 @Setter
 @Builder
 public class PaymentLimited implements PricingMode {
+
+    private static final int PAYMENT_LIMITED_PAYMENT_AMOUNT_INDEX = 1;
+    private static final int PAYMENT_LIMITED_GAS_PRICE_TOLERANCE_INDEX = 2;
+    private static final int PAYMENT_LIMITED_STANDARD_PAYMENT_INDEX = 3;
+
     /** User-specified payment amount. */
     @JsonProperty("payment_amount")
     @JsonSerialize(using = ToStringSerializer.class)
@@ -39,10 +45,12 @@ public class PaymentLimited implements PricingMode {
 
     @Override
     public void serialize(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {
-        ser.writeU8(getByteTag());
-        ser.writeU64(paymentAmount);
-        ser.writeU8((byte) gasPriceTolerance);
-        ser.writeBool(standardPayment);
+        new CalltableSerializationEnvelopeBuilder()
+                .addField(TAG_FIELD_INDEX,  /* U8 */  getByteTag())
+                .addField(PAYMENT_LIMITED_PAYMENT_AMOUNT_INDEX, /* U64 */paymentAmount.longValue())
+                .addField(PAYMENT_LIMITED_GAS_PRICE_TOLERANCE_INDEX, /* U8 */ (byte) gasPriceTolerance)
+                .addField(PAYMENT_LIMITED_STANDARD_PAYMENT_INDEX, /* bool */ standardPayment)
+                .serialize(ser, target);
     }
 
     @Override

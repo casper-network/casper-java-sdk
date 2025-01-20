@@ -4,6 +4,7 @@ import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.serde.CasperSerializableObject;
 import com.casper.sdk.model.clvalue.serde.Target;
 import com.casper.sdk.model.key.Tag;
+import com.casper.sdk.model.transaction.field.CalltableSerializationEnvelopeBuilder;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -27,17 +28,21 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public abstract class  InitiatorAddr<T> implements CasperSerializableObject, Tag {
+public abstract class InitiatorAddr<T> implements CasperSerializableObject, Tag {
 
     protected static final int PUBLIC_KEY_TAG = 0;
     protected static final int ACCOUNT_HASH_TAG = 1;
+    private static final int TAG_FIELD_INDEX = 0;
+    private static final int ADDR_KEY_FIELD_INDEX = 1;
 
     @JsonValue
     private T address;
 
     @Override
     public void serialize(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {
-        ser.writeU8(getByteTag());
-        ((CasperSerializableObject) getAddress()).serialize(ser, target);
+        new CalltableSerializationEnvelopeBuilder()
+                .addField(TAG_FIELD_INDEX,  /* U8 */  getByteTag())
+                .addField(ADDR_KEY_FIELD_INDEX, ((CasperSerializableObject) getAddress()))
+                .serialize(ser, target);
     }
 }

@@ -40,6 +40,7 @@ public class TransactionV1Payload implements CasperSerializableObject, Tag {
     private static final int PRICING_MODE_FIELD_INDEX = 4;
     private static final int FIELDS_FIELD_INDEX = 5;
 
+
     @SuppressWarnings("rawtypes")
     @JsonProperty("initiator_addr")
     private InitiatorAddr initiatorAddr;

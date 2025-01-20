@@ -16,7 +16,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * The fields of a transaction.
+ * The fields of a transaction written as a short indices and byte values.
  *
  * @author ian@meywood.com
  */
