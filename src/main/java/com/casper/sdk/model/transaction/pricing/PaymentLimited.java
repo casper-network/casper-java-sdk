@@ -5,8 +5,6 @@ import com.casper.sdk.model.clvalue.serde.Target;
 import com.casper.sdk.model.transaction.field.CalltableSerializationEnvelopeBuilder;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
 import lombok.*;
@@ -31,7 +29,6 @@ public class PaymentLimited implements PricingMode {
 
     /** User-specified payment amount. */
     @JsonProperty("payment_amount")
-    @JsonSerialize(using = ToStringSerializer.class)
     private BigInteger paymentAmount;
     /**
      * User-specified gas_price tolerance (minimum 1). This is interpreted to mean "do not include this transaction in

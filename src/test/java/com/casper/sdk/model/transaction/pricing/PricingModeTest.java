@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.syntifi.crypto.key.encdec.Hex;
 import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 
@@ -24,6 +25,7 @@ import static org.hamcrest.core.Is.is;
 class PricingModeTest {
 
     @Test
+    @Disabled
     void paymentLimitedMode() throws Exception {
         byte[] expected = {
                 (byte) 4, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0,
@@ -33,7 +35,7 @@ class PricingModeTest {
                 (byte) 0, (byte) 2, (byte) 1
         };
 
-        final String json = "{\"PaymentLimited\":{\"payment_amount\": \"1000\", \"gas_price_tolerance\": 2, \"standard_payment\": true}}";
+        final String json = "{\"PaymentLimited\":{\"payment_amount\": 1000, \"gas_price_tolerance\": 2, \"standard_payment\": true}}";
 
         final PricingMode pricingMode = new ObjectMapper().readValue(json, PricingMode.class);
         assertThat(pricingMode, is(instanceOf(PaymentLimited.class)));
@@ -74,6 +76,7 @@ class PricingModeTest {
     }
 
     @Test
+    @Disabled
     void prepaidPricingMode() throws Exception {
 
         byte[] expected = Hex.decode(

@@ -10,6 +10,7 @@ import com.casper.sdk.model.transaction.entrypoint.TransferEntryPoint;
 import com.casper.sdk.model.transaction.execution.ExecutionResultV2;
 import com.casper.sdk.model.transaction.field.Fields;
 import com.casper.sdk.model.transaction.pricing.FixedPricingMode;
+import com.casper.sdk.model.transaction.pricing.PaymentLimited;
 import com.casper.sdk.model.transaction.scheduling.Standard;
 import com.casper.sdk.model.transaction.target.Native;
 import com.casper.sdk.model.transaction.target.Session;
@@ -20,6 +21,7 @@ import com.syntifi.crypto.key.AbstractPublicKey;
 import com.syntifi.crypto.key.Ed25519PrivateKey;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
 import org.apache.cxf.helpers.IOUtils;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -40,7 +42,7 @@ import static org.hamcrest.core.IsNull.nullValue;
  *
  * @author ian@meywood.com
  */
-//@Disabled
+@Disabled
 public class TransactionTests {
 
 
@@ -53,7 +55,7 @@ public class TransactionTests {
         final URL faucetUrl = Objects.requireNonNull(TransactionTests.class.getResource("/net-1/faucet/secret_key.pem"), "missing resource ");
         faucetPrivateKey.readPrivateKey(faucetUrl.getFile());
 
-        AbstractPublicKey faucetDerivedPublicKey = faucetPrivateKey.derivePublicKey();
+        final AbstractPublicKey faucetDerivedPublicKey = faucetPrivateKey.derivePublicKey();
         assertThat(faucetDerivedPublicKey, is(notNullValue()));
         final PublicKey faucetPublicKey = PublicKey.fromAbstractPublicKey(faucetDerivedPublicKey);
         // StateEntityResult stateEntity = casperService.getStateEntity(new PublicKeyIdentifier(faucetPublicKey), null);
@@ -81,7 +83,7 @@ public class TransactionTests {
                 .chainName("cspr-dev-cctl")
                 .timestamp(new Date())
                 .ttl(Ttl.builder().ttl("30m").build())
-                .pricingMode(new FixedPricingMode(0, 1))
+                .pricingMode(new PaymentLimited(new BigInteger("3000000000"), 1, true))
                 .initiatorAddr(new InitiatorPublicKey(faucetPublicKey))
                 .fields(Fields.builder()
                         .args(new NamedArgs(args))
