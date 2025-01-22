@@ -1,11 +1,8 @@
 package com.casper.sdk.service;
 
-import com.casper.sdk.model.account.PublicKeyIdentifier;
 import com.casper.sdk.model.clvalue.*;
 import com.casper.sdk.model.common.Ttl;
 import com.casper.sdk.model.deploy.NamedArg;
-import com.casper.sdk.model.entity.AddressableEntity;
-import com.casper.sdk.model.entity.StateEntityResult;
 import com.casper.sdk.model.key.PublicKey;
 import com.casper.sdk.model.transaction.*;
 import com.casper.sdk.model.transaction.entrypoint.CallEntryPoint;
@@ -13,12 +10,12 @@ import com.casper.sdk.model.transaction.entrypoint.TransferEntryPoint;
 import com.casper.sdk.model.transaction.execution.ExecutionResultV2;
 import com.casper.sdk.model.transaction.field.Fields;
 import com.casper.sdk.model.transaction.pricing.FixedPricingMode;
+import com.casper.sdk.model.transaction.pricing.PaymentLimited;
 import com.casper.sdk.model.transaction.scheduling.Standard;
 import com.casper.sdk.model.transaction.target.Native;
 import com.casper.sdk.model.transaction.target.Session;
 import com.casper.sdk.model.transaction.target.Transaction;
 import com.casper.sdk.model.transaction.target.TransactionRuntime;
-import com.casper.sdk.model.uref.URef;
 import com.syntifi.crypto.key.AbstractPrivateKey;
 import com.syntifi.crypto.key.AbstractPublicKey;
 import com.syntifi.crypto.key.Ed25519PrivateKey;
@@ -32,10 +29,7 @@ import java.math.BigInteger;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.TimeoutException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -51,6 +45,7 @@ import static org.hamcrest.core.IsNull.nullValue;
 @Disabled
 public class TransactionTests {
 
+
     @Test
     void chainPutTransactionNativeTransfer() throws IOException, ValueSerializationException, TimeoutException {
 
@@ -60,34 +55,35 @@ public class TransactionTests {
         final URL faucetUrl = Objects.requireNonNull(TransactionTests.class.getResource("/net-1/faucet/secret_key.pem"), "missing resource ");
         faucetPrivateKey.readPrivateKey(faucetUrl.getFile());
 
-        AbstractPublicKey faucetDerivedPublicKey = faucetPrivateKey.derivePublicKey();
+        final AbstractPublicKey faucetDerivedPublicKey = faucetPrivateKey.derivePublicKey();
         assertThat(faucetDerivedPublicKey, is(notNullValue()));
         final PublicKey faucetPublicKey = PublicKey.fromAbstractPublicKey(faucetDerivedPublicKey);
-        StateEntityResult stateEntity = casperService.getStateEntity(new PublicKeyIdentifier(faucetPublicKey), null);
-        assertThat(stateEntity, is(notNullValue()));
-        final URef faucetPurse = ((AddressableEntity) stateEntity.getEntity()).getEntity().getMainPurse();
+        // StateEntityResult stateEntity = casperService.getStateEntity(new PublicKeyIdentifier(faucetPublicKey), null);
+        // assertThat(stateEntity, is(notNullValue()));
+        //  final URef faucetPurse = ((AddressableEntity) stateEntity.getEntity()).getEntity().getMainPurse();
 
         final AbstractPrivateKey userOnePrivateKey = new Ed25519PrivateKey();
         final URL user1Url = Objects.requireNonNull(TransactionTests.class.getResource("/net-1/user-1/secret_key.pem"), "missing resource ");
         userOnePrivateKey.readPrivateKey(user1Url.getFile());
 
-        final AbstractPublicKey userOnePublicKey = userOnePrivateKey.derivePublicKey();
+        final PublicKey userOnePublicKey = PublicKey.fromAbstractPublicKey(userOnePrivateKey.derivePublicKey());
         assertThat(userOnePublicKey, is(notNullValue()));
-        stateEntity = casperService.getStateEntity(new PublicKeyIdentifier(PublicKey.fromAbstractPublicKey(userOnePublicKey)), null);
-        assertThat(stateEntity, is(notNullValue()));
-        final URef userOnePurse = ((AddressableEntity) stateEntity.getEntity()).getEntity().getMainPurse();
+        //  stateEntity = casperService.getStateEntity(new PublicKeyIdentifier(PublicKey.fromAbstractPublicKey(userOnePublicKey)), null);
+        //  assertThat(stateEntity, is(notNullValue()));
+        //   final URef userOnePurse = ((AddressableEntity) stateEntity.getEntity()).getEntity().getMainPurse();
 
         final List<NamedArg<?>> args = Arrays.asList(
-                new NamedArg<>("source", new CLValueOption(Optional.of(new CLValueURef(faucetPurse)))),
-                new NamedArg<>("target", new CLValueURef(userOnePurse)),
+                //  new NamedArg<>("source", new CLValueOption(Optional.of(new CLValueURef(faucetPurse)))),
+                new NamedArg<>("target", new CLValuePublicKey(userOnePublicKey)),
                 new NamedArg<>("amount", new CLValueU512(new BigInteger("2500000000"))),
                 new NamedArg<>("id", new CLValueOption(Optional.of(new CLValueU64(BigInteger.valueOf(System.currentTimeMillis())))))
         );
 
         final TransactionV1Payload payload = TransactionV1Payload.builder()
                 .chainName("cspr-dev-cctl")
+                .timestamp(new Date())
                 .ttl(Ttl.builder().ttl("30m").build())
-                .pricingMode(new FixedPricingMode(0, 1))
+                .pricingMode(new PaymentLimited(new BigInteger("3000000000"), 1, true))
                 .initiatorAddr(new InitiatorPublicKey(faucetPublicKey))
                 .fields(Fields.builder()
                         .args(new NamedArgs(args))

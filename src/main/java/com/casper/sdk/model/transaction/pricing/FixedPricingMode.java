@@ -2,6 +2,7 @@ package com.casper.sdk.model.transaction.pricing;
 
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.serde.Target;
+import com.casper.sdk.model.transaction.field.CalltableSerializationEnvelopeBuilder;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dev.oak3.sbs4j.SerializerBuffer;
@@ -19,6 +20,9 @@ import lombok.*;
 @Setter
 @Builder
 public class FixedPricingMode implements PricingMode {
+
+    private static final int FIXED_GAS_PRICE_TOLERANCE_INDEX = 1;
+    private static final int FIXED_ADDITIONAL_COMPUTATION_FACTOR_INDEX = 2;
 
     /**
      * User-specified additional computation factor (minimum 0). If "0" is provided,
@@ -41,9 +45,11 @@ public class FixedPricingMode implements PricingMode {
 
     @Override
     public void serialize(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {
-        // TODO use CalltableSerializationEnvelopeBuilder
-        ser.writeU8(getByteTag());
-        ser.writeU8((byte) gasPriceTolerance);
+        new CalltableSerializationEnvelopeBuilder()
+                .addField(TAG_FIELD_INDEX,  /* U8 */  getByteTag())
+                .addField(FIXED_GAS_PRICE_TOLERANCE_INDEX, /* U8 */ (byte) gasPriceTolerance)
+                .addField(FIXED_ADDITIONAL_COMPUTATION_FACTOR_INDEX, /* U8 */ (byte) additionalComputationFactor)
+                .serialize(ser, target);
     }
 
     @JsonIgnore

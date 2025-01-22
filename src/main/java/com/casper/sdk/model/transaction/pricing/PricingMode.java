@@ -14,10 +14,11 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 @JsonSubTypes({
         @JsonSubTypes.Type(value = PaymentLimited.class, name = "PaymentLimited"),
         @JsonSubTypes.Type(value = FixedPricingMode.class, name = "Fixed"),
-        @JsonSubTypes.Type(value = ReservedPricingMode.class, name = "Reserved"),})
+        @JsonSubTypes.Type(value = PrepaidPricingMode.class, name = "Prepaid"),})
 public interface PricingMode extends CasperSerializableObject, Tag {
 
     int PAYMENT_LIMITED_TAG = 0;
     int FIXED_TAG = 1;
-    int RESERVED_TAG = 2;
+    int PREPAID_TAG = 2;
+    int TAG_FIELD_INDEX = 0;
 }

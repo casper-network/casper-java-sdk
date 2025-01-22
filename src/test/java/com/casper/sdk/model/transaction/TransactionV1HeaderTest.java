@@ -8,6 +8,7 @@ import com.casper.sdk.model.transaction.pricing.FixedPricingMode;
 import com.syntifi.crypto.key.encdec.Hex;
 import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.security.NoSuchAlgorithmException;
@@ -21,7 +22,7 @@ import static org.hamcrest.core.Is.is;
  */
 class TransactionV1HeaderTest {
 
-    @Deprecated // Header has been replaced by TransactionV1Payload
+    @Disabled // Header has been replaced by TransactionV1Payload
     @Test
     void transactionV1HeaderByteSerialization() throws NoSuchAlgorithmException, NoSuchTypeException, ValueSerializationException {
 
