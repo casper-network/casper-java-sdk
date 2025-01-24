@@ -1,6 +1,7 @@
 package com.casper.sdk.model.transaction.pricing;
 
 import com.casper.sdk.exception.NoSuchTypeException;
+import com.casper.sdk.model.clvalue.CLValueU8;
 import com.casper.sdk.model.clvalue.serde.Target;
 import com.casper.sdk.model.transaction.field.CalltableSerializationEnvelopeBuilder;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -46,9 +47,9 @@ public class FixedPricingMode implements PricingMode {
     @Override
     public void serialize(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {
         new CalltableSerializationEnvelopeBuilder()
-                .addField(TAG_FIELD_INDEX,  /* U8 */  getByteTag())
-                .addField(FIXED_GAS_PRICE_TOLERANCE_INDEX, /* U8 */ (byte) gasPriceTolerance)
-                .addField(FIXED_ADDITIONAL_COMPUTATION_FACTOR_INDEX, /* U8 */ (byte) additionalComputationFactor)
+                .addField(TAG_FIELD_INDEX,  /* U8 */ new CLValueU8(getByteTag()))
+                .addField(FIXED_GAS_PRICE_TOLERANCE_INDEX, /* U8 */ new CLValueU8((byte) gasPriceTolerance))
+                .addField(FIXED_ADDITIONAL_COMPUTATION_FACTOR_INDEX, /* U8 */ new CLValueU8((byte) additionalComputationFactor))
                 .serialize(ser, target);
     }
 

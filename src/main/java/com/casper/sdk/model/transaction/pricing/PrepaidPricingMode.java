@@ -1,6 +1,7 @@
 package com.casper.sdk.model.transaction.pricing;
 
 import com.casper.sdk.exception.NoSuchTypeException;
+import com.casper.sdk.model.clvalue.CLValueU8;
 import com.casper.sdk.model.clvalue.serde.Target;
 import com.casper.sdk.model.common.Digest;
 import com.casper.sdk.model.transaction.field.CalltableSerializationEnvelopeBuilder;
@@ -31,7 +32,7 @@ public class PrepaidPricingMode implements PricingMode {
     @Override
     public void serialize(SerializerBuffer ser, Target target) throws ValueSerializationException, NoSuchTypeException {
         new CalltableSerializationEnvelopeBuilder()
-                .addField(TAG_FIELD_INDEX,  /* U8 */  getByteTag())
+                .addField(TAG_FIELD_INDEX,  /* U8 */ new  CLValueU8(getByteTag()))
                 .addField(RESERVED_RECEIPT_INDEX, receipt)
                 .serialize(ser, target);
     }
