@@ -51,6 +51,7 @@ public class Fields implements CasperSerializableObject {
         }
 
         fields.put(ARGS_MAP_KEY, this.args);
+        // FIXME NEED TO WRITE LENGTH OF FIELDS
         fields.put(TARGET_MAP_KEY, this.target);
         fields.put(ENTRY_POINT_MAP_KEY, this.entryPoint);
         fields.put(SCHEDULING_MAP_KEY, this.scheduling);

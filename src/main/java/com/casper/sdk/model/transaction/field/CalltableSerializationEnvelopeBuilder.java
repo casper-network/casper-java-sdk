@@ -11,6 +11,8 @@ import dev.oak3.sbs4j.interfaces.DeserializableObject;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +26,8 @@ import java.util.List;
 @NoArgsConstructor
 @Setter
 public class CalltableSerializationEnvelopeBuilder implements CasperSerializableObject, DeserializableObject {
+
+    private final Logger logger = LoggerFactory.getLogger(CalltableSerializationEnvelopeBuilder.class);
 
     /** The fields to  serialize */
     private List<Field> fields = new ArrayList<>();
@@ -124,13 +128,16 @@ public class CalltableSerializationEnvelopeBuilder implements CasperSerializable
         }*/
 
         // Write the number of fields
-        ser.writeI32(this.fields.size());
+
+
+        ser.writeU32((long)this.fields.size());
 
         for (final Field field : this.fields) {
             field.serialize(ser, target);
         }
 
         // Write total bytes of all field values
+        logger.debug("Payload bytes {} {} ", this.size, String.format("0x%04X", this.size));
         ser.writeU32(this.size);
         for (final Field field : this.fields) {
             ser.writeByteArray(field.getValue());
@@ -163,6 +170,4 @@ public class CalltableSerializationEnvelopeBuilder implements CasperSerializable
             return this.fields.get(field.getIndex() + 1).getOffset() - field.getOffset();
         }
     }
-
-
 }

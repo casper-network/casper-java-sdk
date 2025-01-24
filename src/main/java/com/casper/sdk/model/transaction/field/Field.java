@@ -3,6 +3,7 @@ package com.casper.sdk.model.transaction.field;
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.serde.CasperSerializableObject;
 import com.casper.sdk.model.clvalue.serde.Target;
+import com.syntifi.crypto.key.encdec.Hex;
 import dev.oak3.sbs4j.DeserializerBuffer;
 import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueDeserializationException;
@@ -12,6 +13,8 @@ import dev.oak3.sbs4j.interfaces.SerializableObject;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * An indexed field with an offset and value.
@@ -22,6 +25,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Field implements CasperSerializableObject, DeserializableObject {
+
+    private final Logger logger = LoggerFactory.getLogger(Field.class);
 
 
     /** The field index */
@@ -90,6 +95,7 @@ public class Field implements CasperSerializableObject, DeserializableObject {
 
     @Override
     public void serialize(final SerializerBuffer ser) throws ValueSerializationException {
+        logger.debug("Serializing field index: {}, offset: {} {}, len: {}, value: {}", index, offset, String.format("0x%02X", offset) , value.length, Hex.encode(value));
         ser.writeU16(index);
         ser.writeU32(offset);
     }

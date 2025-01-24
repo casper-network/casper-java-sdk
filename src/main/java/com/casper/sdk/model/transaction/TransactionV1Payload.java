@@ -1,6 +1,8 @@
 package com.casper.sdk.model.transaction;
 
 import com.casper.sdk.exception.NoSuchTypeException;
+import com.casper.sdk.model.clvalue.CLValueString;
+import com.casper.sdk.model.clvalue.CLValueU64;
 import com.casper.sdk.model.clvalue.serde.CasperSerializableObject;
 import com.casper.sdk.model.clvalue.serde.Target;
 import com.casper.sdk.model.common.Digest;
@@ -18,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
 import lombok.*;
+import org.bouncycastle.util.encoders.Hex;
 
 import java.util.Date;
 
@@ -61,9 +64,9 @@ public class TransactionV1Payload implements CasperSerializableObject, Tag {
     public void serialize(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {
         new CalltableSerializationEnvelopeBuilder()
                 .addField(INITIATOR_ADDR_FIELD_INDEX, this.initiatorAddr)
-                .addField(TIMESTAMP_FIELD_INDEX, timestamp != null ? timestamp.getTime() : new Date().getTime())
-                .addField(TTL_FIELD_INDEX, ttl)
-                .addField(CHAIN_NAME_FIELD_INDEX, this.chainName)
+                .addField(TIMESTAMP_FIELD_INDEX, new CLValueU64(timestamp != null ? timestamp.getTime() : new Date().getTime()))
+                .addField(TTL_FIELD_INDEX, new CLValueU64(ttl.getTtl()))
+                .addField(CHAIN_NAME_FIELD_INDEX, new CLValueString(this.chainName))
                 .addField(PRICING_MODE_FIELD_INDEX, this.pricingMode)
                 .addField(FIELDS_FIELD_INDEX, this.fields)
                 .serialize(ser, target);
@@ -87,11 +90,12 @@ public class TransactionV1Payload implements CasperSerializableObject, Tag {
         this.getFields().setScheduling(scheduling);
     }
 
-
     public Digest buildHash() throws NoSuchTypeException, ValueSerializationException {
-        SerializerBuffer serializerBuffer = new SerializerBuffer();
+        final SerializerBuffer serializerBuffer = new SerializerBuffer();
         this.serialize(serializerBuffer, Target.BYTE);
-        return Digest.blake2bDigestFromBytes(serializerBuffer.toByteArray());
+        final byte[] bytes = serializerBuffer.toByteArray();
+        final String hexBytes = Hex.toHexString(bytes);
+        return Digest.blake2bDigestFromBytes(bytes);
     }
 }
 
