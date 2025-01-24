@@ -1,10 +1,12 @@
 package com.casper.sdk.model.transaction.entrypoint;
 
+import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.jackson.deserializer.TransactionEntryPointDeserializer;
 import com.casper.sdk.jackson.serializer.TransactionEntryPointSerializer;
 import com.casper.sdk.model.clvalue.serde.CasperSerializableObject;
 import com.casper.sdk.model.clvalue.serde.Target;
 import com.casper.sdk.model.key.Tag;
+import com.casper.sdk.model.transaction.field.CalltableSerializationEnvelopeBuilder;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import dev.oak3.sbs4j.SerializerBuffer;
@@ -28,6 +30,8 @@ import lombok.NoArgsConstructor;
 @Getter
 public abstract class TransactionEntryPoint implements CasperSerializableObject, Tag {
 
+    protected static final int TAG_FIELD_INDEX = 0;
+    protected static final int CUSTOM_CUSTOM_INDEX = 1;
     protected static final int CUSTOM_TAG = 0;
     protected static final int TRANSFER_TAG = 1;
     protected static final int ADD_BID_TAG = 2;
@@ -38,6 +42,8 @@ public abstract class TransactionEntryPoint implements CasperSerializableObject,
     protected static final int ACTIVATE_BID_TAG = 7;
     protected static final int CHANGE_BID_PUBLIC_KEY_TAG = 8;
     protected static final int CALL_TAG = 9;
+    protected static final int ADD_RESERVATIONS_TAG = 9;
+    protected static final int CANCEL_RESERVATIONS_TAG = 9;
 
     private final byte tag;
     private final String name;
@@ -48,8 +54,11 @@ public abstract class TransactionEntryPoint implements CasperSerializableObject,
     }
 
     @Override
-    public void serialize(final SerializerBuffer ser, final Target target) throws ValueSerializationException {
-        ser.writeU8(getByteTag());
+    public void serialize(SerializerBuffer ser, Target target) throws ValueSerializationException, NoSuchTypeException {
+
+        new CalltableSerializationEnvelopeBuilder()
+                .addField(TAG_FIELD_INDEX, getTag())
+                .serialize(ser, target);
     }
 
     @Override
