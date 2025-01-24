@@ -1,14 +1,21 @@
 package com.casper.sdk.model.transaction.scheduling;
 
 import com.casper.sdk.exception.NoSuchTypeException;
+import com.casper.sdk.model.clvalue.CLValueU64;
 import com.casper.sdk.model.clvalue.serde.Target;
-import com.fasterxml.jackson.annotation.*;
+import com.casper.sdk.model.transaction.field.CalltableSerializationEnvelopeBuilder;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
 import lombok.*;
 import org.joda.time.DateTime;
 
 import java.util.Date;
+
+import static com.casper.sdk.model.transaction.pricing.PricingMode.TAG_FIELD_INDEX;
 
 /**
  * Execution should be scheduled for the specified timestamp or later.
@@ -23,6 +30,8 @@ import java.util.Date;
 @JsonTypeName("FutureTimestamp")
 public class FutureTimestamp implements TransactionScheduling {
 
+    private static final int FUTURE_TIMESTAMP_TIMESTAMP_INDEX = 1;
+
     @JsonValue
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     private String futureTimestamp;
@@ -34,8 +43,10 @@ public class FutureTimestamp implements TransactionScheduling {
 
     @Override
     public void serialize(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {
-        ser.writeU8(getByteTag());
-        ser.writeI64(asDate().getTime());
+        new CalltableSerializationEnvelopeBuilder()
+                .addField(TAG_FIELD_INDEX, getByteTag())
+                .addField(FUTURE_TIMESTAMP_TIMESTAMP_INDEX, new CLValueU64(asDate().getTime()))
+                .serialize(ser, target);
     }
 
     @Override

@@ -55,7 +55,6 @@ public abstract class TransactionEntryPoint implements CasperSerializableObject,
 
     @Override
     public void serialize(SerializerBuffer ser, Target target) throws ValueSerializationException, NoSuchTypeException {
-
         new CalltableSerializationEnvelopeBuilder()
                 .addField(TAG_FIELD_INDEX, getTag())
                 .serialize(ser, target);
