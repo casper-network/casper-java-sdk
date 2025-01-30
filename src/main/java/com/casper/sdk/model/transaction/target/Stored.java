@@ -10,8 +10,6 @@ import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
 import lombok.*;
 
-import static com.casper.sdk.model.transaction.pricing.PricingMode.TAG_FIELD_INDEX;
-
 /**
  * The execution target is a stored entity or package.
  *
@@ -39,7 +37,7 @@ public class Stored implements TransactionTarget {
     @Override
     public void serialize(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {
         new CalltableSerializationEnvelopeBuilder()
-                  .addField(TAG_FIELD_INDEX, getByteTag())
+                .addField(TAG_FIELD_INDEX, getByteTag())
                 .addField(STORED_ID_INDEX, id)
                 .addField(STORED_RUNTIME_INDEX, runtime)
                 .serialize(ser, target);

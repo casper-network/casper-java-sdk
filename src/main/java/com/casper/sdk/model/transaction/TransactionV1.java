@@ -38,10 +38,10 @@ public class TransactionV1 extends AbstractTransaction implements CasperSerializ
 
     @Builder
     public TransactionV1(final Digest hash,
-                         final TransactionV1Payload header,
+                         final TransactionV1Payload payload,
                          final List<Approval> approvals) {
         super(hash, approvals);
-        this.payload = header;
+        this.payload = payload;
     }
 
     @Override

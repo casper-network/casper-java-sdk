@@ -1,13 +1,13 @@
 package com.casper.sdk.model.transaction.entrypoint;
 
 import com.casper.sdk.exception.NoSuchTypeException;
-import com.casper.sdk.model.clvalue.CLValueString;
 import com.casper.sdk.model.clvalue.serde.Target;
 import com.casper.sdk.model.transaction.field.CalltableSerializationEnvelopeBuilder;
 import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
@@ -23,12 +23,12 @@ public class CustomEntryPoint extends TransactionEntryPoint {
     private String custom;
 
     public CustomEntryPoint(final String custom) {
-        super((byte) CUSTOM_TAG, "Custom");
+        this();
         this.custom = custom;
     }
 
     public CustomEntryPoint() {
-        this(null);
+        super((byte) CUSTOM_TAG, "Custom");
     }
 
     @Override
@@ -36,7 +36,7 @@ public class CustomEntryPoint extends TransactionEntryPoint {
 
         new CalltableSerializationEnvelopeBuilder()
                 .addField(TAG_FIELD_INDEX, getTag())
-                .addField(CUSTOM_CUSTOM_INDEX, new CLValueString(this.custom))
+                .addField(CUSTOM_CUSTOM_INDEX, this.custom)
                 .serialize(ser, target);
     }
 

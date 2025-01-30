@@ -51,7 +51,6 @@ public class Fields implements CasperSerializableObject {
         }
 
         fields.put(ARGS_MAP_KEY, this.args);
-        // FIXME NEED TO WRITE LENGTH OF FIELDS
         fields.put(TARGET_MAP_KEY, this.target);
         fields.put(ENTRY_POINT_MAP_KEY, this.entryPoint);
         fields.put(SCHEDULING_MAP_KEY, this.scheduling);
@@ -60,7 +59,11 @@ public class Fields implements CasperSerializableObject {
 
         for (final Map.Entry<Integer, CasperSerializableObject> entry : fields.entrySet()) {
             ser.writeU16(entry.getKey().shortValue());
-            entry.getValue().serialize(ser, target);
+            final SerializerBuffer valueBuf = new SerializerBuffer();
+            entry.getValue().serialize(valueBuf, target);
+            final byte[] valueBytes = valueBuf.toByteArray();
+            ser.writeI32(valueBytes.length);
+            ser.writeByteArray(valueBytes);
         }
     }
 }

@@ -4,6 +4,7 @@ import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.serde.CasperSerializableObject;
 import com.casper.sdk.model.clvalue.serde.Target;
 import com.casper.sdk.model.key.Tag;
+import com.casper.sdk.model.transaction.field.CalltableSerializationEnvelopeBuilder;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dev.oak3.sbs4j.SerializerBuffer;
@@ -17,6 +18,7 @@ import lombok.Getter;
  */
 @Getter
 public enum TransactionRuntime implements CasperSerializableObject, Tag {
+
     /** The Casper Version 1 Virtual Machine. */
     @JsonProperty("VmCasperV1")
     VM_CASPER_V1(0, "VmCasperV1"),
@@ -53,6 +55,8 @@ public enum TransactionRuntime implements CasperSerializableObject, Tag {
 
     @Override
     public void serialize(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {
-        ser.writeU8(getByteTag());
+        new CalltableSerializationEnvelopeBuilder()
+                .addField(TAG_FIELD_INDEX, getByteTag())
+                .serialize(ser, target);
     }
 }

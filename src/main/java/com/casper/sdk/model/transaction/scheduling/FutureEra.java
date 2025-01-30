@@ -1,7 +1,6 @@
 package com.casper.sdk.model.transaction.scheduling;
 
 import com.casper.sdk.exception.NoSuchTypeException;
-import com.casper.sdk.model.clvalue.CLValueU64;
 import com.casper.sdk.model.clvalue.serde.Target;
 import com.casper.sdk.model.transaction.field.CalltableSerializationEnvelopeBuilder;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -17,8 +16,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigInteger;
-
-import static com.casper.sdk.model.transaction.pricing.PricingMode.TAG_FIELD_INDEX;
 
 /**
  * Execution should be scheduled for the specified era.
@@ -47,7 +44,7 @@ public class FutureEra implements TransactionScheduling {
     public void serialize(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {
         new CalltableSerializationEnvelopeBuilder()
                 .addField(TAG_FIELD_INDEX, getByteTag())
-                .addField(FUTURE_ERA_ID_INDEX, new CLValueU64(eraId))
+                .addField(FUTURE_ERA_ID_INDEX, eraId)
                 .serialize(ser, target);
     }
 

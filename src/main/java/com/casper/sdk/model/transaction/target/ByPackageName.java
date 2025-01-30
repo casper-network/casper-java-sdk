@@ -2,6 +2,7 @@ package com.casper.sdk.model.transaction.target;
 
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.serde.Target;
+import com.casper.sdk.model.transaction.field.CalltableSerializationEnvelopeBuilder;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dev.oak3.sbs4j.SerializerBuffer;
@@ -20,12 +21,18 @@ import java.util.Optional;
 @Setter
 @Getter
 public class ByPackageName implements TransactionInvocationTarget {
+
+    private static final int TAG_FIELD_INDEX = 0;
+    private static final int BY_PACKAGE_NAME_NAME_INDEX = 1;
+    private final static int BY_PACKAGE_NAME_VERSION_INDEX = 2;
+
     /** the package name */
     private String name;
     /** If `None`, the latest enabled version is implied. */
     @Getter(AccessLevel.NONE)
     @JsonProperty("version")
     private Long version;
+
 
     @JsonIgnore
     public Optional<Long> getVersion() {
@@ -34,14 +41,11 @@ public class ByPackageName implements TransactionInvocationTarget {
 
     @Override
     public void serialize(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {
-        ser.writeU8(getByteTag());
-        ser.writeString(name);
-        if (getVersion().isPresent()) {
-            ser.writeBool(true);
-            ser.writeU32(version);
-        } else {
-            ser.writeBool(false);
-        }
+        new CalltableSerializationEnvelopeBuilder()
+                .addField(TAG_FIELD_INDEX, getByteTag())
+                .addField(BY_PACKAGE_NAME_NAME_INDEX, name)
+                .addOptionField(BY_PACKAGE_NAME_VERSION_INDEX, version)
+                .serialize(ser, target);
     }
 
     @JsonIgnore

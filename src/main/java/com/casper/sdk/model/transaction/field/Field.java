@@ -3,13 +3,13 @@ package com.casper.sdk.model.transaction.field;
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.serde.CasperSerializableObject;
 import com.casper.sdk.model.clvalue.serde.Target;
+import com.casper.sdk.model.transaction.NamedArgs;
 import com.syntifi.crypto.key.encdec.Hex;
 import dev.oak3.sbs4j.DeserializerBuffer;
 import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueDeserializationException;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
 import dev.oak3.sbs4j.interfaces.DeserializableObject;
-import dev.oak3.sbs4j.interfaces.SerializableObject;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -52,7 +52,7 @@ public class Field implements CasperSerializableObject, DeserializableObject {
      * @param value  the value of the field
      * @throws ValueSerializationException if the value cannot be serialized
      */
-    public Field(final int index, final long offset, final boolean optional, final Object value) throws ValueSerializationException {
+    public Field(final int index, final long offset, final boolean optional, final Object value) throws ValueSerializationException, NoSuchTypeException {
         final SerializerBuffer serializerBuffer = new SerializerBuffer();
 
         // If optional indicate in 1sy byte
@@ -61,8 +61,11 @@ public class Field implements CasperSerializableObject, DeserializableObject {
         }
 
         if (value != null) {
-            if (value instanceof SerializableObject) {
-                ((SerializableObject) value).serialize(serializerBuffer);
+            if (value instanceof NamedArgs) {
+                // Named args in the enveloper builder are always byte target
+                ((CasperSerializableObject) value).serialize(serializerBuffer, Target.BYTE);
+            } else if (value instanceof CasperSerializableObject) {
+                ((CasperSerializableObject) value).serialize(serializerBuffer);
             } else if (value instanceof Boolean) {
                 serializerBuffer.writeBool((Boolean) value);
             } else if (value instanceof byte[]) {
@@ -89,13 +92,13 @@ public class Field implements CasperSerializableObject, DeserializableObject {
     }
 
     @Override
-    public void serialize(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {
+    public void serialize(final SerializerBuffer ser, final Target target) throws ValueSerializationException  {
         this.serialize(ser);
     }
 
     @Override
     public void serialize(final SerializerBuffer ser) throws ValueSerializationException {
-        logger.debug("Serializing field index: {}, offset: {} {}, len: {}, value: {}", index, offset, String.format("0x%02X", offset) , value.length, Hex.encode(value));
+        logger.debug("Serializing field index: {}, offset: {} {}, len: {}, value: {}", index, offset, String.format("0x%02X", offset), value.length, Hex.encode(value));
         ser.writeU16(index);
         ser.writeU32(offset);
     }

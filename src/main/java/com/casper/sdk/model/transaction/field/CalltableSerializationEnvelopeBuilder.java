@@ -3,6 +3,7 @@ package com.casper.sdk.model.transaction.field;
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.serde.CasperSerializableObject;
 import com.casper.sdk.model.clvalue.serde.Target;
+import com.syntifi.crypto.key.encdec.Hex;
 import dev.oak3.sbs4j.DeserializerBuffer;
 import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueDeserializationException;
@@ -18,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The call table serialization envelope builder used to serialize and deserialize transaction fields/
+ * The call table serialization envelope builder used to serialize and deserialize transaction fields
  *
  * @author ian@meywood.com
  */
@@ -33,8 +34,6 @@ public class CalltableSerializationEnvelopeBuilder implements CasperSerializable
     private List<Field> fields = new ArrayList<>();
     /** The current field index */
     private long currentFieldIndex = -1;
-    /** The expected number of fields */
-    private long expectedFields;
     /** The offset of the current field om the serialized bytes */
     private long offset = 0;
     /** The total size of all field values when serialized */
@@ -46,7 +45,7 @@ public class CalltableSerializationEnvelopeBuilder implements CasperSerializable
      * @param index the zero based index
      * @param value the value to be serialized to value bytes of the field
      */
-    public <T> CalltableSerializationEnvelopeBuilder addField(final int index, final T value) throws ValueSerializationException {
+    public <T> CalltableSerializationEnvelopeBuilder addField(final int index, final T value) throws ValueSerializationException, NoSuchTypeException {
         if (value != null) {
             return this.addField(new Field(index, this.offset, false, value));
         } else {
@@ -60,7 +59,7 @@ public class CalltableSerializationEnvelopeBuilder implements CasperSerializable
      * @param index the zero based index
      * @param value the value to be serialized to value bytes of the field
      */
-    public <T> CasperSerializableObject addOptionField(int index, T value) throws ValueSerializationException {
+    public <T> CasperSerializableObject addOptionField(int index, T value) throws ValueSerializationException, NoSuchTypeException {
         return this.addField(new Field(index, this.offset, true, value));
     }
 
@@ -121,27 +120,31 @@ public class CalltableSerializationEnvelopeBuilder implements CasperSerializable
     }
 
     @Override
-    public void serialize(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {
+    public void serialize(final SerializerBuffer ser, final Target target) throws ValueSerializationException {
 
-       /* if (this.fields.size() != this.expectedFields) {
-            throw new IllegalArgumentException("Field index must be expected length " + this.expectedFields);
-        }*/
+        final SerializerBuffer fieldsSer = new SerializerBuffer();
 
         // Write the number of fields
-
-
-        ser.writeU32((long)this.fields.size());
+        fieldsSer.writeU32((long) this.fields.size());
 
         for (final Field field : this.fields) {
-            field.serialize(ser, target);
+            field.serialize(fieldsSer, target);
         }
 
         // Write total bytes of all field values
-        logger.debug("Payload bytes {} {} ", this.size, String.format("0x%04X", this.size));
-        ser.writeU32(this.size);
+        fieldsSer.writeU32(this.size);
+
         for (final Field field : this.fields) {
-            ser.writeByteArray(field.getValue());
+            fieldsSer.writeByteArray(field.getValue());
         }
+
+        final byte[] byteArray = fieldsSer.toByteArray();
+
+        if (logger.isDebugEnabled()) {
+            logger.debug("CalltableSerializationEnvelopeBuilder bytes {} {} {}", this.size, String.format("0x%04X", this.size), Hex.encode(byteArray));
+        }
+
+        ser.writeByteArray(byteArray);
     }
 
     @Override

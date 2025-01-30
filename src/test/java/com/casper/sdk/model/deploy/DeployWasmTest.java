@@ -8,7 +8,6 @@ import com.casper.sdk.model.clvalue.CLValueU8;
 import com.casper.sdk.model.common.Ttl;
 import com.casper.sdk.model.deploy.executabledeploy.ModuleBytes;
 import com.casper.sdk.service.CasperService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.syntifi.crypto.key.Ed25519PrivateKey;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Assertions;
@@ -81,11 +80,7 @@ public class DeployWasmTest {
                 new ArrayList<>()
         );
 
-
         final CasperService casperService = CasperService.usingPeer("localhost", 11101);
-
-        String json = new ObjectMapper().writeValueAsString(deploy);
-        System.out.println(json);
 
         final DeployResult deployResult = casperService.putDeploy(deploy);
         assertThat(deployResult, is(notNullValue()));

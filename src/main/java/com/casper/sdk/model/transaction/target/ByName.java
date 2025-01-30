@@ -2,6 +2,7 @@ package com.casper.sdk.model.transaction.target;
 
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.serde.Target;
+import com.casper.sdk.model.transaction.field.CalltableSerializationEnvelopeBuilder;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonValue;
 import dev.oak3.sbs4j.SerializerBuffer;
@@ -21,13 +22,17 @@ import lombok.Setter;
 @Setter
 @Getter
 public class ByName implements TransactionInvocationTarget {
+
+    private final static int NAME_INDEX = 1;
     @JsonValue
     private String name;
 
     @Override
     public void serialize(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {
-        ser.writeU8(getByteTag());
-        ser.writeString(name);
+        new CalltableSerializationEnvelopeBuilder()
+                .addField(TAG_FIELD_INDEX, getByteTag())
+                .addField(NAME_INDEX, name)
+                .serialize(ser, target);
     }
 
     @JsonIgnore

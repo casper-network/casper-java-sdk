@@ -3,6 +3,7 @@ package com.casper.sdk.model.transaction.target;
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.serde.Target;
 import com.casper.sdk.model.common.Digest;
+import com.casper.sdk.model.transaction.field.CalltableSerializationEnvelopeBuilder;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -23,6 +24,9 @@ import lombok.Setter;
 @Setter
 @Getter
 public class ByHash implements TransactionInvocationTarget {
+
+    private static final int HASH_INDEX = 1;
+
     @JsonValue
     private Digest hashAddress;
 
@@ -33,8 +37,10 @@ public class ByHash implements TransactionInvocationTarget {
 
     @Override
     public void serialize(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {
-        ser.writeU8(getByteTag());
-        ser.writeByteArray(hashAddress.getDigest());
+        new CalltableSerializationEnvelopeBuilder()
+                .addField(0, getByteTag())
+                .addField(HASH_INDEX, hashAddress)
+                .serialize(ser, target);
     }
 
     @JsonIgnore
