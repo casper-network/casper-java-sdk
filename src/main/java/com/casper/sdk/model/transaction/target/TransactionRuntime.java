@@ -26,6 +26,8 @@ public enum TransactionRuntime implements CasperSerializableObject, Tag {
     @JsonProperty("VmCasperV2")
     VM_CASPER_V2(1, "VmCasperV2");
 
+    private static final int TAG_FIELD_INDEX = 0;
+
     private final byte tag;
     private final String jsonName;
 

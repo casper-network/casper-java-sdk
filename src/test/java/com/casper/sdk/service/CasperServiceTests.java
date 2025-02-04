@@ -33,8 +33,7 @@ import com.casper.sdk.model.contract.NamedKey;
 import com.casper.sdk.model.contract.entrypoint.*;
 import com.casper.sdk.model.deploy.*;
 import com.casper.sdk.model.deploy.executabledeploy.ModuleBytes;
-import com.casper.sdk.model.deploy.executabledeploy.StoredContractByHash;
-import com.casper.sdk.model.deploy.executionresult.Success;
+import com.casper.sdk.model.deploy.executabledeploy.Transfer;
 import com.casper.sdk.model.entity.System;
 import com.casper.sdk.model.entity.*;
 import com.casper.sdk.model.era.EraEndV2;
@@ -44,13 +43,13 @@ import com.casper.sdk.model.key.*;
 import com.casper.sdk.model.peer.PeerData;
 import com.casper.sdk.model.reward.GetRewardResult;
 import com.casper.sdk.model.stateroothash.StateRootHashData;
-import com.casper.sdk.model.storedvalue.StoredValueAccount;
-import com.casper.sdk.model.storedvalue.StoredValueContract;
-import com.casper.sdk.model.storedvalue.StoredValueData;
-import com.casper.sdk.model.storedvalue.StoredValueDeployInfo;
+import com.casper.sdk.model.storedvalue.*;
 import com.casper.sdk.model.transaction.*;
 import com.casper.sdk.model.transaction.entrypoint.TransferEntryPoint;
-import com.casper.sdk.model.transaction.execution.*;
+import com.casper.sdk.model.transaction.execution.Effect;
+import com.casper.sdk.model.transaction.execution.ExecutionInfo;
+import com.casper.sdk.model.transaction.execution.ExecutionResult;
+import com.casper.sdk.model.transaction.execution.ExecutionResultV2;
 import com.casper.sdk.model.transaction.field.Fields;
 import com.casper.sdk.model.transaction.kind.PruneKind;
 import com.casper.sdk.model.transaction.kind.WriteKind;
@@ -329,25 +328,24 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
     }
 
     @Test
-    void getDeploy() {
+    void getDeploy() throws NoSuchKeyTagException {
 
         mockNode.withRcpResponseDispatcher()
                 .withMethod("info_get_deploy")
-                .withBody("$.params.deploy_hash", "4f3e856179e7868787fb696c22b24e08d54a226b24693d807177142c1a84d672")
-                .thenDispatch(getClass().getResource("/deploy-samples/info_get_deploy.json"));
+                .withBody("$.params.deploy_hash", "cb04018ad3a09fc15fda0e5c18def392a135652c73c864c25968be9b2376c139")
+                .thenDispatch(getClass().getResource("/deploy-samples/info_get_deployV2.json"));
 
-        final DeployData deployData = casperServiceMock.getDeploy("4f3e856179e7868787fb696c22b24e08d54a226b24693d807177142c1a84d672");
+        final DeployData deployData = casperServiceMock.getDeploy("cb04018ad3a09fc15fda0e5c18def392a135652c73c864c25968be9b2376c139");
         assertNotNull(deployData);
         assertNotNull(deployData.getDeploy());
-        assertInstanceOf(StoredContractByHash.class, deployData.getDeploy().getSession());
-        assertInstanceOf(ExecutionResultV1.class, deployData.getExecutionInfo().getExecutionResult());
-        assertThat(((ExecutionResultV1) deployData.getExecutionInfo().getExecutionResult()).getSuccess(), is(notNullValue(Success.class)));
+        assertInstanceOf(Transfer.class, deployData.getDeploy().getSession());
+        assertInstanceOf(ExecutionResultV2.class, deployData.getExecutionInfo().getExecutionResult());
+        assertThat(((ExecutionResultV2) deployData.getExecutionInfo().getExecutionResult()).getErrorMessage(), is("unsupported mode for deploy-hash(cb04..c139) attempting transfer"));
+        assertThat(((ExecutionResultV2) deployData.getExecutionInfo().getExecutionResult()).getEffects().get(0).getKey(), is(Key.create("balance-hold-01fe139a5aa36aa69c04a6b630c9993bc03d868ffde46d3f60c3fbe6e6e762016f78bec10c90010000")));
+        assertThat(((ExecutionResultV2) deployData.getExecutionInfo().getExecutionResult()).getEffects().get(0).getKind(), is(instanceOf(WriteKind.class)));
+        assertThat(((WriteKind<?>) ((ExecutionResultV2) deployData.getExecutionInfo().getExecutionResult()).getEffects().get(0).getKind()).getWrite(), is(instanceOf(StoredValueCLValue.class)));
         assertInstanceOf(ModuleBytes.class, deployData.getDeploy().getPayment());
-
-        final String sessionHash = ((StoredContractByHash) deployData.getDeploy().getSession()).getHash();
-        assertEquals("ccb576d6ce6dec84a551e48f0d0b7af89ddba44c7390b690036257a04a3ae9ea", sessionHash);
     }
-
 
     @Test
     void getStateItem_account() {
@@ -639,7 +637,8 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
     }
 
     @Test
-    @Disabled // TODO Reinstate with new JSON file
+    @Disabled
+        // TODO Reinstate with new JSON file
     void infoGetTransactionByDeployHash() throws NoSuchAlgorithmException, IOException, DynamicInstanceException {
 
         mockNode.withRcpResponseDispatcher()
@@ -772,6 +771,10 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
         assertThat(entryPoint.getAccess(), is(instanceOf(GroupsAccess.class)));
         assertThat(((GroupsAccess) entryPoint.getAccess()).getGroups(), is(hasSize(1)));
         assertThat(((GroupsAccess) entryPoint.getAccess()).getGroups().get(0), is("constructor_group"));
+
+        // Assert the transaction hash can be correctly calculated
+        //   transaction.calculateHash();
+        //   assertThat(transaction.getHash(), is(new Digest("37eea39f298565a1a7fb136927c2956d896f3e9c41e0c87b06ec03ce33482584")));
     }
 
 

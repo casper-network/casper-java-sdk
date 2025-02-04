@@ -36,14 +36,17 @@ public class EntryPointV1Deserializer extends JsonDeserializer<EntryPointV1> {
                 .build();
     }
 
-
     private <T> T getNestedObject(final JsonNode node,
                                   final DeserializationContext ctx,
                                   final String name,
                                   final Class<T> type) throws IOException {
-        try (final JsonParser parser = node.get(name).traverse()) {
-            parser.setCodec(ctx.getParser().getCodec());
-            return parser.readValueAs(type);
+        if (node != null) {
+            try (final JsonParser parser = node.get(name).traverse()) {
+                parser.setCodec(ctx.getParser().getCodec());
+                return parser.readValueAs(type);
+            }
+        } else {
+            return null;
         }
     }
 
@@ -51,9 +54,13 @@ public class EntryPointV1Deserializer extends JsonDeserializer<EntryPointV1> {
                                   final DeserializationContext ctx,
                                   final String name,
                                   final TypeReference<T> type) throws IOException {
-        try (final JsonParser parser = node.get(name).traverse()) {
-            parser.setCodec(ctx.getParser().getCodec());
-            return parser.readValueAs(type);
+        if (node != null) {
+            try (final JsonParser parser = node.get(name).traverse()) {
+                parser.setCodec(ctx.getParser().getCodec());
+                return parser.readValueAs(type);
+            }
+        } else {
+            return null;
         }
     }
 

@@ -65,7 +65,6 @@ public class TransactionV1Payload implements CasperSerializableObject, Tag {
                 .addField(TTL_FIELD_INDEX, ttl.getTtl())
                 .addField(CHAIN_NAME_FIELD_INDEX, this.chainName)
                 .addField(PRICING_MODE_FIELD_INDEX, this.pricingMode)
-                // FIXME pass in the target
                 .addField(FIELDS_FIELD_INDEX, this.fields)
                 .serialize(ser, target);
     }

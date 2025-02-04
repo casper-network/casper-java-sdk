@@ -28,7 +28,6 @@ public class Field implements CasperSerializableObject, DeserializableObject {
 
     private final Logger logger = LoggerFactory.getLogger(Field.class);
 
-
     /** The field index */
     private short index;
     /** The offset of the field's value when written to bytes */

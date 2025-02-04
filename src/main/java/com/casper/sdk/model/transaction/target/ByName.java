@@ -23,6 +23,7 @@ import lombok.Setter;
 @Getter
 public class ByName implements TransactionInvocationTarget {
 
+    private static final int TAG_FIELD_INDEX = 0;
     private final static int NAME_INDEX = 1;
     @JsonValue
     private String name;

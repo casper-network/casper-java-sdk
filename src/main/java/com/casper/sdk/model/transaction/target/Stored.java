@@ -23,6 +23,7 @@ import lombok.*;
 @JsonTypeName("Stored")
 public class Stored implements TransactionTarget {
 
+    private static final int TAG_FIELD_INDEX = 0;
     private static final int STORED_ID_INDEX = 1;
     private static final int STORED_RUNTIME_INDEX = 2;
 

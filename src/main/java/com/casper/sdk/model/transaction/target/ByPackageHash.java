@@ -26,7 +26,6 @@ public class ByPackageHash implements TransactionInvocationTarget {
     private static final int BY_PACKAGE_NAME_NAME_INDEX = 1;
     private static final int BY_PACKAGE_NAME_VERSION_INDEX = 2;
 
-
     /** The package address. */
     private Digest addr;
     /** If `None`, the latest enabled version is implied. */

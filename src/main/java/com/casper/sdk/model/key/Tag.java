@@ -9,7 +9,5 @@ package com.casper.sdk.model.key;
  */
 public interface Tag {
 
-    int TAG_FIELD_INDEX = 0;
-
     byte getByteTag();
 }

@@ -27,6 +27,7 @@ import java.util.Date;
 @JsonTypeName("FutureTimestamp")
 public class FutureTimestamp implements TransactionScheduling {
 
+    private static final int TAG_FIELD_INDEX = 0;
     private static final int FUTURE_TIMESTAMP_TIMESTAMP_INDEX = 1;
 
     @JsonValue

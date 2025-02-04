@@ -29,6 +29,7 @@ import java.math.BigInteger;
 @JsonTypeName("FutureEra")
 public class FutureEra implements TransactionScheduling {
 
+    private static final int TAG_FIELD_INDEX = 0;
     private static final int FUTURE_ERA_ID_INDEX = 1;
 
     @JsonValue
