@@ -94,7 +94,6 @@ class TransactionV1Test {
         JSONAssert.assertEquals(json, writtenJson, false);
     }
 
-
     @Test
     @Disabled
     void transactionV1StoredContractRoundTrip() throws IOException, JSONException {
@@ -118,20 +117,8 @@ class TransactionV1Test {
         JSONAssert.assertEquals(json, writtenJson, false);
     }
 
-
     @Test
     void getTransactionStored() throws Exception {
-
-        // The expected payload bytes from which the hash is calculated
-        final String expectedHex = "0600000000000000000001003600000002003e0000000300460000000400560000000500810000008" +
-                "c01000002000000000000000000010001000000220000000001a5a5b7328118681638be3e06c8749609280dba4c9daf9aeb3" +
-                "d3464b8839b018a4ed301d99301000040771b00000000000c0000006361737065722d6e65742d31040000000000000000000" +
-                "1000100000002000900000003000a0000000b000000000010a5d4e8000000010104000000000098000000000600000004000" +
-                "0006e616d650f0000000b000000434c49434b5420546573740a0600000073796d626f6c0a00000006000000434c49434b540" +
-                "a08000000646563696d616c730100000009030c000000746f74616c5f737570706c7908000000070080c6a47e8d03070b000" +
-                "0006576656e74735f6d6f646501000000020310000000656e61626c655f6d696e745f6275726e01000000010301003900000" +
-                "0040000000000000000000100010000000200020000000300110000001900000002010100000000000000000001000000000" +
-                "40000000102030402000f00000001000000000000000000010000000003000f000000010000000000000000000100000000";
 
         final String json = IOUtils.toString(getClass().getResource("/transaction-samples/get-transaction-stored-v200.json").openStream(), StandardCharsets.UTF_8);
         final Transaction transaction = new ObjectMapper().readValue(json, Transaction.class);

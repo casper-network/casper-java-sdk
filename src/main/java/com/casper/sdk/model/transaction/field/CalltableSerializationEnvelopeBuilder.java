@@ -38,6 +38,11 @@ public class CalltableSerializationEnvelopeBuilder implements CasperSerializable
     private long offset = 0;
     /** The total size of all field values when serialized */
     private long size = 0;
+    private  Target target = Target.BYTE;
+
+    public CalltableSerializationEnvelopeBuilder(final Target target) {
+        this.target = target;
+    }
 
     /**
      * Add a mandatory field to the envelope.
@@ -47,7 +52,7 @@ public class CalltableSerializationEnvelopeBuilder implements CasperSerializable
      */
     public <T> CalltableSerializationEnvelopeBuilder addField(final int index, final T value) throws ValueSerializationException, NoSuchTypeException {
         if (value != null) {
-            return this.addField(new Field(index, this.offset, false, value));
+            return this.addField(new Field(index, this.offset, false, value, target));
         } else {
             return this;
         }
@@ -60,7 +65,7 @@ public class CalltableSerializationEnvelopeBuilder implements CasperSerializable
      * @param value the value to be serialized to value bytes of the field
      */
     public <T> CasperSerializableObject addOptionField(int index, T value) throws ValueSerializationException, NoSuchTypeException {
-        return this.addField(new Field(index, this.offset, true, value));
+        return this.addField(new Field(index, this.offset, true, value, target));
     }
 
     /**

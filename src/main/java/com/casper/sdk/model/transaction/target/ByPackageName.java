@@ -33,7 +33,6 @@ public class ByPackageName implements TransactionInvocationTarget {
     @JsonProperty("version")
     private Long version;
 
-
     @JsonIgnore
     public Optional<Long> getVersion() {
         return Optional.ofNullable(version);

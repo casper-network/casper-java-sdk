@@ -771,12 +771,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
         assertThat(entryPoint.getAccess(), is(instanceOf(GroupsAccess.class)));
         assertThat(((GroupsAccess) entryPoint.getAccess()).getGroups(), is(hasSize(1)));
         assertThat(((GroupsAccess) entryPoint.getAccess()).getGroups().get(0), is("constructor_group"));
-
-        // Assert the transaction hash can be correctly calculated
-        //   transaction.calculateHash();
-        //   assertThat(transaction.getHash(), is(new Digest("37eea39f298565a1a7fb136927c2956d896f3e9c41e0c87b06ec03ce33482584")));
     }
-
 
     @Test
     void infoGetTransactionWithDelegatorKind() {

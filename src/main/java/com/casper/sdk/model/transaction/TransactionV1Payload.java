@@ -59,7 +59,7 @@ public class TransactionV1Payload implements CasperSerializableObject, Tag {
 
     @Override
     public void serialize(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {
-        new CalltableSerializationEnvelopeBuilder()
+        new CalltableSerializationEnvelopeBuilder(target)
                 .addField(INITIATOR_ADDR_FIELD_INDEX, this.initiatorAddr)
                 .addField(TIMESTAMP_FIELD_INDEX, timestamp != null ? timestamp.getTime() : new Date().getTime())
                 .addField(TTL_FIELD_INDEX, ttl.getTtl())
