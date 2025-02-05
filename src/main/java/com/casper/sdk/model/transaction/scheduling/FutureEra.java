@@ -2,6 +2,7 @@ package com.casper.sdk.model.transaction.scheduling;
 
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.serde.Target;
+import com.casper.sdk.model.transaction.field.CalltableSerializationEnvelopeBuilder;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -27,6 +28,10 @@ import java.math.BigInteger;
 @Builder
 @JsonTypeName("FutureEra")
 public class FutureEra implements TransactionScheduling {
+
+    private static final int TAG_FIELD_INDEX = 0;
+    private static final int FUTURE_ERA_ID_INDEX = 1;
+
     @JsonValue
     @JsonSerialize(using = ToStringSerializer.class)
     private BigInteger eraId;
@@ -38,8 +43,10 @@ public class FutureEra implements TransactionScheduling {
 
     @Override
     public void serialize(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {
-        ser.writeU8(getByteTag());
-        ser.writeU64(eraId);
+        new CalltableSerializationEnvelopeBuilder()
+                .addField(TAG_FIELD_INDEX, getByteTag())
+                .addField(FUTURE_ERA_ID_INDEX, eraId)
+                .serialize(ser, target);
     }
 
     @Override

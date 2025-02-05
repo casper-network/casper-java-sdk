@@ -59,10 +59,10 @@ public class TransactionV1Payload implements CasperSerializableObject, Tag {
 
     @Override
     public void serialize(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {
-        new CalltableSerializationEnvelopeBuilder()
+        new CalltableSerializationEnvelopeBuilder(target)
                 .addField(INITIATOR_ADDR_FIELD_INDEX, this.initiatorAddr)
                 .addField(TIMESTAMP_FIELD_INDEX, timestamp != null ? timestamp.getTime() : new Date().getTime())
-                .addField(TTL_FIELD_INDEX, ttl)
+                .addField(TTL_FIELD_INDEX, ttl.getTtl())
                 .addField(CHAIN_NAME_FIELD_INDEX, this.chainName)
                 .addField(PRICING_MODE_FIELD_INDEX, this.pricingMode)
                 .addField(FIELDS_FIELD_INDEX, this.fields)
@@ -87,11 +87,11 @@ public class TransactionV1Payload implements CasperSerializableObject, Tag {
         this.getFields().setScheduling(scheduling);
     }
 
-
     public Digest buildHash() throws NoSuchTypeException, ValueSerializationException {
-        SerializerBuffer serializerBuffer = new SerializerBuffer();
+        final SerializerBuffer serializerBuffer = new SerializerBuffer();
         this.serialize(serializerBuffer, Target.BYTE);
-        return Digest.blake2bDigestFromBytes(serializerBuffer.toByteArray());
+        final byte[] bytes = serializerBuffer.toByteArray();
+        return Digest.blake2bDigestFromBytes(bytes);
     }
 }
 

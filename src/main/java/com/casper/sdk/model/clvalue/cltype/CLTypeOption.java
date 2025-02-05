@@ -65,7 +65,9 @@ public class CLTypeOption extends AbstractCLTypeWithChildren {
 
     @Override
     public void serializeChildTypes(final SerializerBuffer ser) throws NoSuchTypeException {
-        getOptionType().serialize(ser);
+        if (getOptionType() != null) {
+            getOptionType().serialize(ser);
+        }
     }
 
     @Override

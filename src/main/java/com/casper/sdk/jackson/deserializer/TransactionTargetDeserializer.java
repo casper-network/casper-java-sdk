@@ -65,8 +65,6 @@ public class TransactionTargetDeserializer extends JsonDeserializer<TransactionT
 
     private Session createSession(final JsonNode node) throws DeserializationException {
         try {
-
-            // FIXME use annotation processor for JSON serialization
             return new Session(
                     node.has(IS_INSTALL_UPGRADE) && node.get(IS_INSTALL_UPGRADE).asBoolean(),
                     TransactionRuntime.fromJson(node.get(RUNTIME).asText()),

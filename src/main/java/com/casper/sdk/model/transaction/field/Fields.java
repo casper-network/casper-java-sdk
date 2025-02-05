@@ -59,7 +59,11 @@ public class Fields implements CasperSerializableObject {
 
         for (final Map.Entry<Integer, CasperSerializableObject> entry : fields.entrySet()) {
             ser.writeU16(entry.getKey().shortValue());
-            entry.getValue().serialize(ser, target);
+            final SerializerBuffer valueBuf = new SerializerBuffer();
+            entry.getValue().serialize(valueBuf, target);
+            final byte[] valueBytes = valueBuf.toByteArray();
+            ser.writeI32(valueBytes.length);
+            ser.writeByteArray(valueBytes);
         }
     }
 }

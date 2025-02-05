@@ -36,7 +36,6 @@ class CalltableSerializationEnvelopeBuilderTest {
         final byte[] fieldTwoVal = ser.toByteArray();
 
         final CalltableSerializationEnvelopeBuilder builder = new CalltableSerializationEnvelopeBuilder();
-        builder.setExpectedFields(3);
         builder.addFieldBytes(0, fieldZeroVal);
         builder.addFieldBytes(1, fieldOneVal);
         builder.addFieldBytes(2, fieldTwoVal);
@@ -58,7 +57,7 @@ class CalltableSerializationEnvelopeBuilderTest {
     }
 
     @Test
-    void serializeValues() throws ValueSerializationException, ValueDeserializationException {
+    void serializeValues() throws Exception {
 
         final byte[] expected = {
                 0x3, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x1, 0x0, 0x1, 0x0, 0x0, 0x0, 0x2, 0x0, 0x5, 0x0, 0x0,
@@ -70,7 +69,6 @@ class CalltableSerializationEnvelopeBuilderTest {
         final short fieldTwoVal = 555;
 
         final CalltableSerializationEnvelopeBuilder builder = new CalltableSerializationEnvelopeBuilder();
-        builder.setExpectedFields(3);
         builder.addField(0, fieldZeroVal);
         builder.addField(1, (int) fieldOneVal);
         builder.addField(2, fieldTwoVal);

@@ -109,7 +109,6 @@ public class TransactionTests {
 
         assertThat(transactionResult, is(notNullValue()));
         assertThat(((ExecutionResultV2) transactionResult.getExecutionInfo().getExecutionResult()).getErrorMessage(), is(nullValue()));
-
     }
 
     @Test
@@ -144,7 +143,6 @@ public class TransactionTests {
                         .entryPoint(new CallEntryPoint())
                         .scheduling(new Standard()).build()
                 )
-                //    .transactionCategory(TransactionCategory.INSTALL_UPGRADE)
                 .build();
 
         final TransactionV1 transactionV1 = TransactionV1.builder()

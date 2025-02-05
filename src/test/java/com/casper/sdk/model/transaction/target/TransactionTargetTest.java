@@ -29,7 +29,7 @@ public class TransactionTargetTest {
 
         assertThat(nativeTransactionTarget.getTarget(), is("Native"));
         assertJson(nativeTransactionTarget, json);
-        assertBytes(nativeTransactionTarget, "00");
+        assertBytes(nativeTransactionTarget, "010000000000000000000100000000");
     }
 
     @Test
@@ -41,8 +41,7 @@ public class TransactionTargetTest {
         assertThat(session.getRuntime().name(), is(TransactionRuntime.VM_CASPER_V2.name()));
         assertThat(session.getModuleBytes(), is(Hex.decode("aab0da01340446cee477f28410f8af5d6e0f3a88fb26c0cafb8d1625f5cc9c10")));
         assertJson(session, json);
-        //assertBytes(session, "0220000000aab0da01340446cee477f28410f8af5d6e0f3a88fb26c0cafb8d1625f5cc9c1001");
-        assertBytes(session, "0600000000000000000001000100000002000200000003000300000004002300000005002b0000002c000000020101aab0da01340446cee477f28410f8af5d6e0f3a88fb26c0cafb8d1625f5cc9c10000000000000000000");
+        assertBytes(session, "060000000000000000000100010000000200020000000300110000000400310000000500390000003a0000000201010000000000000000000100000001aab0da01340446cee477f28410f8af5d6e0f3a88fb26c0cafb8d1625f5cc9c10000000000000000000");
     }
 
     @Test
@@ -55,8 +54,7 @@ public class TransactionTargetTest {
         assertThat(stored.getId(), is(instanceOf(ByHash.class)));
         assertThat(((ByHash) stored.getId()).getHashAddress(), is(new Digest("37c80db9d769cb23ab482f44c2e8d8a73d9e24a1801e81d423953b8ba04b275d")));
         assertJson(stored, json);
-        assertBytes(stored, "010037c80db9d769cb23ab482f44c2e8d8a73d9e24a1801e81d423953b8ba04b275d00");
-
+        assertBytes(stored, "03000000000000000000010001000000020036000000450000000102000000000000000000010001000000210000000037c80db9d769cb23ab482f44c2e8d8a73d9e24a1801e81d423953b8ba04b275d010000000000000000000100000000");
     }
 
     @Test
@@ -69,7 +67,7 @@ public class TransactionTargetTest {
         assertThat(stored.getId(), is(instanceOf(ByName.class)));
         assertThat(((ByName) stored.getId()).getName(), is("mint"));
         assertJson(stored, json);
-        assertBytes(stored, "0101040000006d696e7401");
+        assertBytes(stored, "0300000000000000000001000100000002001e0000002d00000001020000000000000000000100010000000900000001040000006d696e74010000000000000000000100000001");
     }
 
 
@@ -90,7 +88,7 @@ public class TransactionTargetTest {
 
         assertJson(stored, json);
 
-        assertBytes(stored, "01024b83ad1c5d842e5af75f5e77c56f11372217d8a5473a380fa9dfa96b8cd4c5e2010a00000001");
+        assertBytes(stored, "030000000000000000000100010000000200450000005400000001030000000000000000000100010000000200210000002a000000024b83ad1c5d842e5af75f5e77c56f11372217d8a5473a380fa9dfa96b8cd4c5e2010a00000000000000010000000000000000000100000001");
     }
 
     @Test
@@ -105,7 +103,7 @@ public class TransactionTargetTest {
         assertThat(((ByPackageName) stored.getId()).getVersion().isPresent(), is(true));
         assertThat(((ByPackageName) stored.getId()).getVersion().get(), is(61523598L));
         assertJson(stored, json);
-        assertBytes(stored, "01030a0000004d79205061636b616765018ec6aa0300");
+        assertBytes(stored, "0300000000000000000001000100000002003300000042000000010300000000000000000001000100000002000f00000018000000030a0000004d79205061636b616765018ec6aa0300000000010000000000000000000100000000");
     }
 
     private static <T extends TransactionTarget> T readJson(final String json, final Class<T> expectedClass) throws JsonProcessingException {

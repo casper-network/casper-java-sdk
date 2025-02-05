@@ -8,5 +8,6 @@ package com.casper.sdk.model.key;
  * @since 0.0.1
  */
 public interface Tag {
+
     byte getByteTag();
 }

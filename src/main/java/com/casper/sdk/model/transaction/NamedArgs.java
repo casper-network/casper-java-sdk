@@ -77,13 +77,15 @@ public class NamedArgs implements Iterable<NamedArg<?>>, CasperSerializableObjec
 
     @Override
     public void serialize(SerializerBuffer ser, Target target) throws ValueSerializationException, NoSuchTypeException {
+
+        ser.writeU8((byte) 0);
         ser.writeI32(args.size());
 
         for (NamedArg<?> namedArg : args) {
             if (ID.equals(namedArg.getType())) {
                 validateId(namedArg.getClValue());
             }
-            namedArg.serialize(ser, target);
+            namedArg.serialize(ser, Target.BYTE);
         }
     }
 
