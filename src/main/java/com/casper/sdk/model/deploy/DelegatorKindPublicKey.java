@@ -5,7 +5,6 @@ import com.casper.sdk.model.key.PublicKey;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,9 +17,8 @@ import java.security.NoSuchAlgorithmException;
  */
 @Getter
 @Setter
-@Builder
 @AllArgsConstructor
-public class DelegatorKindPublicKey implements DelegatorKind {
+public class DelegatorKindPublicKey extends DelegatorKind {
 
     @JsonProperty("PublicKey")
     private PublicKey publicKey;

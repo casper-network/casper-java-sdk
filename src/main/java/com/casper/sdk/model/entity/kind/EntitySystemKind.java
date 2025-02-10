@@ -1,4 +1,4 @@
-package com.casper.sdk.model.entity;
+package com.casper.sdk.model.entity.kind;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -14,11 +14,11 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class System implements EntityAddressKind {
+public class EntitySystemKind implements EntityAddressKind {
 
     @JsonCreator
-    public static System create(final SystemEntityType value) {
-        return new System(value);
+    public static EntitySystemKind create(final SystemEntityType value) {
+        return new EntitySystemKind(value);
     }
 
     /** System contract types. */

@@ -2,6 +2,7 @@ package com.casper.sdk.model.entity;
 
 import com.casper.sdk.model.account.ActionThresholds;
 import com.casper.sdk.model.account.AssociatedKey;
+import com.casper.sdk.model.entity.kind.EntityAddressKind;
 import com.casper.sdk.model.uref.URef;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;

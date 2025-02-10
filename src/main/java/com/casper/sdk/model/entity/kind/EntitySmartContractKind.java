@@ -1,6 +1,8 @@
-package com.casper.sdk.model.entity;
+package com.casper.sdk.model.entity.kind;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.*;
 
 /**
@@ -13,11 +15,11 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SmartContract implements EntityAddressKind {
+public class EntitySmartContractKind implements EntityAddressKind {
 
     @JsonCreator
-    public static SmartContract create(final TransactionRuntime value) {
-        return new SmartContract(value);
+    public static EntitySmartContractKind create(final TransactionRuntime value) {
+        return new EntitySmartContractKind(value);
     }
 
     /** The runtime used to execute a Transaction. */

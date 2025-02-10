@@ -26,14 +26,16 @@ import com.casper.sdk.model.clvalue.cltype.CLTypeUnit;
 import com.casper.sdk.model.common.Digest;
 import com.casper.sdk.model.common.Ttl;
 import com.casper.sdk.model.contract.*;
-import com.casper.sdk.model.deploy.Deploy;
-import com.casper.sdk.model.deploy.DeployData;
-import com.casper.sdk.model.deploy.NamedArg;
+import com.casper.sdk.model.deploy.*;
 import com.casper.sdk.model.deploy.executabledeploy.ModuleBytes;
 import com.casper.sdk.model.deploy.executabledeploy.StoredContractByHash;
 import com.casper.sdk.model.deploy.executionresult.Success;
-import com.casper.sdk.model.entity.System;
-import com.casper.sdk.model.entity.*;
+import com.casper.sdk.model.entity.AddressableEntity;
+import com.casper.sdk.model.entity.LegacyAccount;
+import com.casper.sdk.model.entity.StateEntityResult;
+import com.casper.sdk.model.entity.kind.EntityAccountKind;
+import com.casper.sdk.model.entity.kind.EntitySmartContractKind;
+import com.casper.sdk.model.entity.kind.EntitySystemKind;
 import com.casper.sdk.model.era.EraEndV2;
 import com.casper.sdk.model.era.EraInfoData;
 import com.casper.sdk.model.globalstate.GlobalStateData;
@@ -832,14 +834,14 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
 
         AddressableEntity entity = (AddressableEntity) stateEntityResult.getEntity();
 
-        assertInstanceOf(Account.class, entity.getEntity().getEntityAddressKind());
+        assertInstanceOf(EntityAccountKind.class, entity.getEntity().getEntityAddressKind());
 
         assertThat(entity.getEntity().getByteCodeHash(), is("byte-code-0000000000000000000000000000000000000000000000000000000000000000"));
         assertThat(entity.getEntity().getPackageHash(), is("package-22138fb22c624016fd73cd2abd3285ccd27cb80e20c29f3d94d34e95ee182030"));
 
-        Account account = (Account) entity.getEntity().getEntityAddressKind();
+        EntityAccountKind entityAccountKind = (EntityAccountKind) entity.getEntity().getEntityAddressKind();
 
-        assertThat(account.getAccount(), is(Key.create("account-hash-aab0da01340446cee477f28410f8af5d6e0f3a88fb26c0cafb8d1625f5cc9c10")));
+        assertThat(entityAccountKind.getAccount(), is(Key.create("account-hash-aab0da01340446cee477f28410f8af5d6e0f3a88fb26c0cafb8d1625f5cc9c10")));
 
         assertThat(entity.getEntity().getMainPurse().getJsonURef(), is("uref-3dfdbde34845bd2e731cf39fba450745eba645b75d5feb3dcf953fd06d69bf14-007"));
         assertThat(entity.getEntity().getAssociatedKeys().get(0).getAccountHash(), is(instanceOf(AccountHashKey.class)));
@@ -866,13 +868,13 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
 
         AddressableEntity entity = (AddressableEntity) stateEntityResult.getEntity();
 
-        assertInstanceOf(SmartContract.class, entity.getEntity().getEntityAddressKind());
+        assertInstanceOf(EntitySmartContractKind.class, entity.getEntity().getEntityAddressKind());
 
         assertThat(entity.getEntity().getByteCodeHash(), is("byte-code-0000000000000000000000000000000000000000000000000000000000000000"));
         assertThat(entity.getEntity().getPackageHash(), is("package-22138fb22c624016fd73cd2abd3285ccd27cb80e20c29f3d94d34e95ee182030"));
 
-        SmartContract smartContract = (SmartContract) entity.getEntity().getEntityAddressKind();
-        assertThat(smartContract.getSmartContract().name(), is((SmartContract.TransactionRuntime.VMCASPERV1.name())));
+        EntitySmartContractKind entitySmartContractKind = (EntitySmartContractKind) entity.getEntity().getEntityAddressKind();
+        assertThat(entitySmartContractKind.getSmartContract().name(), is((EntitySmartContractKind.TransactionRuntime.VMCASPERV1.name())));
 
         assertThat(entity.getEntity().getMainPurse().getJsonURef(), is("uref-3dfdbde34845bd2e731cf39fba450745eba645b75d5feb3dcf953fd06d69bf14-007"));
         assertThat(entity.getEntity().getAssociatedKeys().get(0).getAccountHash().toString(), is("account-hash-aab0da01340446cee477f28410f8af5d6e0f3a88fb26c0cafb8d1625f5cc9c10"));
@@ -898,13 +900,13 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
 
         AddressableEntity entity = (AddressableEntity) stateEntityResult.getEntity();
 
-        assertInstanceOf(System.class, entity.getEntity().getEntityAddressKind());
+        assertInstanceOf(EntitySystemKind.class, entity.getEntity().getEntityAddressKind());
 
         assertThat(entity.getEntity().getByteCodeHash(), is("byte-code-0000000000000000000000000000000000000000000000000000000000000000"));
         assertThat(entity.getEntity().getPackageHash(), is("package-a8935ee5e02c22cf74f3c6b2b323517897635efc38ea4c03d8aa70a2822f5ac1"));
 
-        System system = (System) entity.getEntity().getEntityAddressKind();
-        assertThat(system.getSystem().name(), is(System.SystemEntityType.AUCTION.name()));
+        EntitySystemKind entitySystemKind = (EntitySystemKind) entity.getEntity().getEntityAddressKind();
+        assertThat(entitySystemKind.getSystem().name(), is(EntitySystemKind.SystemEntityType.AUCTION.name()));
 
         assertThat(entity.getEntity().getActionThresholds().getDeployment(), is(1));
         assertThat(entity.getEntity().getActionThresholds().getKeyManagement(), is(1));
@@ -946,13 +948,13 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
 
         AddressableEntity entity = (AddressableEntity) stateEntityResult.getEntity();
 
-        assertInstanceOf(System.class, entity.getEntity().getEntityAddressKind());
+        assertInstanceOf(EntitySystemKind.class, entity.getEntity().getEntityAddressKind());
 
         assertThat(entity.getEntity().getByteCodeHash(), is("byte-code-0000000000000000000000000000000000000000000000000000000000000000"));
         assertThat(entity.getEntity().getPackageHash(), is("package-a8935ee5e02c22cf74f3c6b2b323517897635efc38ea4c03d8aa70a2822f5ac1"));
 
-        System system = (System) entity.getEntity().getEntityAddressKind();
-        assertThat(system.getSystem().name(), is(System.SystemEntityType.AUCTION.name()));
+        EntitySystemKind entitySystemKind = (EntitySystemKind) entity.getEntity().getEntityAddressKind();
+        assertThat(entitySystemKind.getSystem().name(), is(EntitySystemKind.SystemEntityType.AUCTION.name()));
 
         assertThat(entity.getEntity().getActionThresholds().getDeployment(), is(1));
         assertThat(entity.getEntity().getActionThresholds().getKeyManagement(), is(1));
@@ -1010,13 +1012,13 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
 
         AddressableEntity entity = (AddressableEntity) stateEntityResult.getEntity();
 
-        assertInstanceOf(Account.class, entity.getEntity().getEntityAddressKind());
+        assertInstanceOf(EntityAccountKind.class, entity.getEntity().getEntityAddressKind());
 
         assertThat(entity.getEntity().getByteCodeHash(), is("byte-code-0000000000000000000000000000000000000000000000000000000000000000"));
         assertThat(entity.getEntity().getPackageHash(), is("package-22138fb22c624016fd73cd2abd3285ccd27cb80e20c29f3d94d34e95ee182030"));
 
-        Account account = (Account) entity.getEntity().getEntityAddressKind();
-        assertThat(account.getAccount(), is(Key.create("account-hash-aab0da01340446cee477f28410f8af5d6e0f3a88fb26c0cafb8d1625f5cc9c10")));
+        EntityAccountKind entityAccountKind = (EntityAccountKind) entity.getEntity().getEntityAddressKind();
+        assertThat(entityAccountKind.getAccount(), is(Key.create("account-hash-aab0da01340446cee477f28410f8af5d6e0f3a88fb26c0cafb8d1625f5cc9c10")));
 
         assertThat(entity.getEntity().getMainPurse().getJsonURef(), is("uref-3dfdbde34845bd2e731cf39fba450745eba645b75d5feb3dcf953fd06d69bf14-007"));
         assertThat(entity.getEntity().getAssociatedKeys().get(0).getAccountHash(), is(instanceOf(AccountHashKey.class)));
@@ -1043,14 +1045,14 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
 
         AddressableEntity entity = (AddressableEntity) stateEntityResult.getEntity();
 
-        assertInstanceOf(SmartContract.class, entity.getEntity().getEntityAddressKind());
+        assertInstanceOf(EntitySmartContractKind.class, entity.getEntity().getEntityAddressKind());
 
         assertThat(entity.getEntity().getByteCodeHash(), is("byte-code-10fcbe236e5a946b16a86db1584c6c1690ef6dfa9da2ffae68c256f9738e1e66"));
         assertThat(entity.getEntity().getPackageHash(), is("package-69131083f5ea0b6d8e3df0b80b03e6e20788d594ad9c7d4de79700010f767448"));
         assertThat(entity.getEntity().getMainPurse().getJsonURef(), is("uref-0249b6da571bad31cfed8269767ba77ce1b2f99446d395d80865457a440c9cb3-007"));
 
-        final SmartContract contract = (SmartContract) entity.getEntity().getEntityAddressKind();
-        assertThat(contract.getSmartContract(), is(SmartContract.TransactionRuntime.VMCASPERV1));
+        final EntitySmartContractKind contract = (EntitySmartContractKind) entity.getEntity().getEntityAddressKind();
+        assertThat(contract.getSmartContract(), is(EntitySmartContractKind.TransactionRuntime.VMCASPERV1));
 
         assertThat(entity.getEntryPoints().size(), is(15));
         assertThat(entity.getNamedKeys().size(), is(11));

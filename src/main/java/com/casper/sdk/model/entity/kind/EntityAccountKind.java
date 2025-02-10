@@ -1,4 +1,4 @@
-package com.casper.sdk.model.entity;
+package com.casper.sdk.model.entity.kind;
 
 import com.casper.sdk.exception.NoSuchKeyTagException;
 import com.casper.sdk.model.key.AccountHashKey;
@@ -18,12 +18,12 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonTypeName("Account")
-public class Account implements EntityAddressKind {
+public class EntityAccountKind implements EntityAddressKind {
 
     @JsonValue
     private AccountHashKey account;
 
-    public Account(final String accountSt) throws NoSuchKeyTagException {
+    public EntityAccountKind(final String accountSt) throws NoSuchKeyTagException {
         this.account = (AccountHashKey) Key.create(accountSt);
     }
 }

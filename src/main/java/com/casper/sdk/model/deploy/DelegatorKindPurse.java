@@ -6,7 +6,6 @@ import com.casper.sdk.model.uref.URef;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,9 +18,8 @@ import java.io.IOException;
  */
 @Getter
 @Setter
-@Builder
 @AllArgsConstructor
-public class DelegatorKindPurse implements DelegatorKind {
+public class DelegatorKindPurse extends DelegatorKind {
 
     @JsonProperty("Purse")
     private URef purse;

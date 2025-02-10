@@ -19,9 +19,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  * @author Andre Bertolace
  * @since 0.0.1
  */
-public class AccountInfoTests extends AbstractJsonTests {
+public class EntityAccountKindInfoTests extends AbstractJsonTests {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(AccountInfoTests.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(EntityAccountKindInfoTests.class);
 
     @Test
     void validateAccountInfoMapping() throws IOException, JSONException {

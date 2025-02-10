@@ -30,4 +30,5 @@ public class AddressableEntity implements StateEntity {
     /** The entry points of the addressable entity. */
     @JsonProperty("entry_points")
     private List<EntryPointValue> entryPoints;
+
 }

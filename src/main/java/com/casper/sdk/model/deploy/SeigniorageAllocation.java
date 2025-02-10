@@ -5,11 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigInteger;
 
@@ -27,7 +23,8 @@ import java.math.BigInteger;
 @AllArgsConstructor
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.WRAPPER_OBJECT)
 @JsonSubTypes({@JsonSubTypes.Type(value = Validator.class, name = "Validator"),
-        @JsonSubTypes.Type(value = Delegator.class, name = "Delegator")})
+                @JsonSubTypes.Type(value = Delegator.class, name = "Delegator"),
+                @JsonSubTypes.Type(value = DelegatorKind.class, name = "DelegatorKind")})
 public class SeigniorageAllocation {
 
     /**

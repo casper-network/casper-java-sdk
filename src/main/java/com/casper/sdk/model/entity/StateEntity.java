@@ -11,6 +11,6 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.WRAPPER_OBJECT)
 @JsonSubTypes({
         @JsonSubTypes.Type(value = AddressableEntity.class, name = "AddressableEntity"),
+        @JsonSubTypes.Type(value = EntityAccount.class, name = "Account"),
         @JsonSubTypes.Type(value = LegacyAccount.class, name = "LegacyAccount")})
-public interface StateEntity {
-}
+public interface StateEntity {}

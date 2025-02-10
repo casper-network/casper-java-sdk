@@ -1,6 +1,4 @@
 #!/usr/bin/env bash
 CONTAINER_NAME="cspr-cctl"
-#CONTAINER_NAME="cspr-nctl-condor"
-IMAGE_VERSION="condor"
-# run the cspr-nctl container in docker
+IMAGE_VERSION="release-2.0.0-rc7"
 docker run --rm -it --name ${CONTAINER_NAME} -d -p 25101:25101 -p 11101:11101 -p 14101:14101 -p 18101:18101 -p 21101:21101 stormeye2000/${CONTAINER_NAME}:${IMAGE_VERSION}
