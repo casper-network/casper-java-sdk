@@ -32,7 +32,6 @@ public class TransactionV1 extends AbstractTransaction implements CasperSerializ
     private static final int PAYLOAD_FIELD_INDEX = 1;
     private static final int APPROVALS_FIELD_INDEX = 2;
 
-
     @JsonProperty("payload")
     private TransactionV1Payload payload;
 

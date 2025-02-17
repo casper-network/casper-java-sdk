@@ -1,7 +1,6 @@
 package com.casper.sdk.model.transaction;
 
 import com.casper.sdk.exception.NoSuchTypeException;
-import com.casper.sdk.model.clvalue.CLValuePublicKey;
 import com.casper.sdk.model.clvalue.serde.Target;
 import com.casper.sdk.model.key.PublicKey;
 import com.casper.sdk.model.transaction.field.CalltableSerializationEnvelopeBuilder;

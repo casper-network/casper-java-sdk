@@ -9,8 +9,6 @@ import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueDeserializationException;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
 import dev.oak3.sbs4j.interfaces.DeserializableObject;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +21,6 @@ import java.util.List;
  *
  * @author ian@meywood.com
  */
-@AllArgsConstructor
 @Setter
 public class CalltableSerializationEnvelopeBuilder implements CasperSerializableObject, DeserializableObject {
 
@@ -37,7 +34,7 @@ public class CalltableSerializationEnvelopeBuilder implements CasperSerializable
     private long offset = 0;
     /** The total size of all field values when serialized */
     private long size = 0;
-    private  Target target = Target.BYTE;
+    private Target target;
 
     public CalltableSerializationEnvelopeBuilder(final Target target) {
         this.target = target;

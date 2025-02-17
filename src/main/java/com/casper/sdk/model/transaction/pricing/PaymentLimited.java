@@ -1,7 +1,6 @@
 package com.casper.sdk.model.transaction.pricing;
 
 import com.casper.sdk.exception.NoSuchTypeException;
-import com.casper.sdk.model.clvalue.CLValueU8;
 import com.casper.sdk.model.clvalue.serde.Target;
 import com.casper.sdk.model.transaction.field.CalltableSerializationEnvelopeBuilder;
 import com.fasterxml.jackson.annotation.JsonIgnore;
