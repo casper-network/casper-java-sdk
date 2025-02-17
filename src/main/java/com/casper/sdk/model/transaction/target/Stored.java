@@ -37,7 +37,7 @@ public class Stored implements TransactionTarget {
 
     @Override
     public void serialize(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {
-        new CalltableSerializationEnvelopeBuilder()
+        new CalltableSerializationEnvelopeBuilder(target)
                 .addField(TAG_FIELD_INDEX, getByteTag())
                 .addField(STORED_ID_INDEX, id)
                 .addField(STORED_RUNTIME_INDEX, runtime)

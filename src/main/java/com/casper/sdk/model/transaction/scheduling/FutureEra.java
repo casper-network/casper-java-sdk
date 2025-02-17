@@ -43,7 +43,7 @@ public class FutureEra implements TransactionScheduling {
 
     @Override
     public void serialize(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {
-        new CalltableSerializationEnvelopeBuilder()
+        new CalltableSerializationEnvelopeBuilder(target)
                 .addField(TAG_FIELD_INDEX, getByteTag())
                 .addField(FUTURE_ERA_ID_INDEX, eraId)
                 .serialize(ser, target);

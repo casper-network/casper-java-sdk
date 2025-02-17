@@ -47,7 +47,7 @@ public class TransactionV1 extends AbstractTransaction implements CasperSerializ
     @Override
     public void serialize(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {
 
-        new CalltableSerializationEnvelopeBuilder()
+        new CalltableSerializationEnvelopeBuilder(target)
                 .addField(HASH_FIELD_INDEX, getHash())
                 .addField(PAYLOAD_FIELD_INDEX, payload)
                 .addField(APPROVALS_FIELD_INDEX, getApprovals())

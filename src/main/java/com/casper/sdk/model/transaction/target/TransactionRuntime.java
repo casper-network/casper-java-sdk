@@ -57,7 +57,7 @@ public enum TransactionRuntime implements CasperSerializableObject, Tag {
 
     @Override
     public void serialize(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {
-        new CalltableSerializationEnvelopeBuilder()
+        new CalltableSerializationEnvelopeBuilder(target)
                 .addField(TAG_FIELD_INDEX, getByteTag())
                 .serialize(ser, target);
     }

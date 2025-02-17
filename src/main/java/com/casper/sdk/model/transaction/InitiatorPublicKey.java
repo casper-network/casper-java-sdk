@@ -30,9 +30,9 @@ public class InitiatorPublicKey extends InitiatorAddr<PublicKey> {
 
     @Override
     public void serialize(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {
-        new CalltableSerializationEnvelopeBuilder()
+        new CalltableSerializationEnvelopeBuilder(target)
                 .addField(TAG_FIELD_INDEX,  /* U8 */  getByteTag())
-                .addField(ADDR_KEY_FIELD_INDEX, new CLValuePublicKey(getAddress()))
+                .addField(ADDR_KEY_FIELD_INDEX, getAddress())
                 .serialize(ser, target);
     }
 }

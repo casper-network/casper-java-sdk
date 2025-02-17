@@ -30,7 +30,7 @@ public class PrepaidPricingMode implements PricingMode {
 
     @Override
     public void serialize(SerializerBuffer ser, Target target) throws ValueSerializationException, NoSuchTypeException {
-        new CalltableSerializationEnvelopeBuilder()
+        new CalltableSerializationEnvelopeBuilder(target)
                 .addField(TAG_FIELD_INDEX,  /* U8 */getByteTag())
                 .addField(RESERVED_RECEIPT_INDEX, receipt)
                 .serialize(ser, target);

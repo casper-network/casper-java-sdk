@@ -24,7 +24,6 @@ import java.util.List;
  * @author ian@meywood.com
  */
 @AllArgsConstructor
-@NoArgsConstructor
 @Setter
 public class CalltableSerializationEnvelopeBuilder implements CasperSerializableObject, DeserializableObject {
 

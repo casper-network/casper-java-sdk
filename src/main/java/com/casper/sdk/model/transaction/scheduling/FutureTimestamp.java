@@ -41,7 +41,7 @@ public class FutureTimestamp implements TransactionScheduling {
 
     @Override
     public void serialize(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {
-        new CalltableSerializationEnvelopeBuilder()
+        new CalltableSerializationEnvelopeBuilder(target)
                 .addField(TAG_FIELD_INDEX, getByteTag())
                 .addField(FUTURE_TIMESTAMP_TIMESTAMP_INDEX, asDate().getTime())
                 .serialize(ser, target);

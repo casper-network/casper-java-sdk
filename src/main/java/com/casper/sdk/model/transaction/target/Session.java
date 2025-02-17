@@ -57,7 +57,7 @@ public class Session implements TransactionTarget {
     @Override
     public void serialize(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {
 
-        new CalltableSerializationEnvelopeBuilder()
+        new CalltableSerializationEnvelopeBuilder(target)
                 .addField(TAG_FIELD_INDEX, getByteTag())
                 .addField(SESSION_IS_INSTALL_INDEX, isInstallUpgrade())
                 .addField(SESSION_RUNTIME_INDEX, getRuntime())
