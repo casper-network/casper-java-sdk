@@ -37,7 +37,7 @@ public class ByHash implements TransactionInvocationTarget {
 
     @Override
     public void serialize(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {
-        new CalltableSerializationEnvelopeBuilder()
+        new CalltableSerializationEnvelopeBuilder(target)
                 .addField(0, getByteTag())
                 .addField(HASH_INDEX, hashAddress)
                 .serialize(ser, target);

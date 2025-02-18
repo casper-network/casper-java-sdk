@@ -7,7 +7,6 @@ import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
@@ -32,9 +31,8 @@ public class CustomEntryPoint extends TransactionEntryPoint {
     }
 
     @Override
-    public void serialize(SerializerBuffer ser, Target target) throws ValueSerializationException, NoSuchTypeException {
-
-        new CalltableSerializationEnvelopeBuilder()
+    public void serialize(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {
+        new CalltableSerializationEnvelopeBuilder(target)
                 .addField(TAG_FIELD_INDEX, getTag())
                 .addField(CUSTOM_CUSTOM_INDEX, this.custom)
                 .serialize(ser, target);

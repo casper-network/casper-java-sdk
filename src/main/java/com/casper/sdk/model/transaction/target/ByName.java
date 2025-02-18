@@ -30,7 +30,7 @@ public class ByName implements TransactionInvocationTarget {
 
     @Override
     public void serialize(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {
-        new CalltableSerializationEnvelopeBuilder()
+        new CalltableSerializationEnvelopeBuilder(target)
                 .addField(TAG_FIELD_INDEX, getByteTag())
                 .addField(NAME_INDEX, name)
                 .serialize(ser, target);

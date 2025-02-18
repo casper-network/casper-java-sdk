@@ -1,5 +1,6 @@
 package com.casper.sdk.model.transaction.field;
 
+import com.casper.sdk.model.clvalue.serde.Target;
 import dev.oak3.sbs4j.DeserializerBuffer;
 import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueDeserializationException;
@@ -35,7 +36,7 @@ class CalltableSerializationEnvelopeBuilderTest {
         ser.writeU16((short) 555);
         final byte[] fieldTwoVal = ser.toByteArray();
 
-        final CalltableSerializationEnvelopeBuilder builder = new CalltableSerializationEnvelopeBuilder();
+        final CalltableSerializationEnvelopeBuilder builder = new CalltableSerializationEnvelopeBuilder(Target.BYTE);
         builder.addFieldBytes(0, fieldZeroVal);
         builder.addFieldBytes(1, fieldOneVal);
         builder.addFieldBytes(2, fieldTwoVal);
@@ -48,7 +49,7 @@ class CalltableSerializationEnvelopeBuilderTest {
         assertThat(bytes.length, is(33));
         assertThat(bytes, is(expected));
 
-        final CalltableSerializationEnvelopeBuilder deserializedBuilder = new CalltableSerializationEnvelopeBuilder();
+        final CalltableSerializationEnvelopeBuilder deserializedBuilder = new CalltableSerializationEnvelopeBuilder(Target.BYTE);
         deserializedBuilder.deserialize(new DeserializerBuffer(bytes));
 
         assertThat(deserializedBuilder.getFieldBytes(0), is(fieldZeroVal));
@@ -68,7 +69,7 @@ class CalltableSerializationEnvelopeBuilderTest {
         final long fieldOneVal = 4294967295L;
         final short fieldTwoVal = 555;
 
-        final CalltableSerializationEnvelopeBuilder builder = new CalltableSerializationEnvelopeBuilder();
+        final CalltableSerializationEnvelopeBuilder builder = new CalltableSerializationEnvelopeBuilder(Target.BYTE);
         builder.addField(0, fieldZeroVal);
         builder.addField(1, (int) fieldOneVal);
         builder.addField(2, fieldTwoVal);
@@ -81,7 +82,7 @@ class CalltableSerializationEnvelopeBuilderTest {
         assertThat(bytes.length, is(33));
         assertThat(bytes, is(expected));
 
-        final CalltableSerializationEnvelopeBuilder deserializedBuilder = new CalltableSerializationEnvelopeBuilder();
+        final CalltableSerializationEnvelopeBuilder deserializedBuilder = new CalltableSerializationEnvelopeBuilder(Target.BYTE);
         deserializedBuilder.deserialize(new DeserializerBuffer(bytes));
 
         assertThat(deserializedBuilder.getFieldValue(0, Byte.class), is(fieldZeroVal));

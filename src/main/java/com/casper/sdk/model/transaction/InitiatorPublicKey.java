@@ -1,7 +1,6 @@
 package com.casper.sdk.model.transaction;
 
 import com.casper.sdk.exception.NoSuchTypeException;
-import com.casper.sdk.model.clvalue.CLValuePublicKey;
 import com.casper.sdk.model.clvalue.serde.Target;
 import com.casper.sdk.model.key.PublicKey;
 import com.casper.sdk.model.transaction.field.CalltableSerializationEnvelopeBuilder;
@@ -30,9 +29,9 @@ public class InitiatorPublicKey extends InitiatorAddr<PublicKey> {
 
     @Override
     public void serialize(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {
-        new CalltableSerializationEnvelopeBuilder()
+        new CalltableSerializationEnvelopeBuilder(target)
                 .addField(TAG_FIELD_INDEX,  /* U8 */  getByteTag())
-                .addField(ADDR_KEY_FIELD_INDEX, new CLValuePublicKey(getAddress()))
+                .addField(ADDR_KEY_FIELD_INDEX, getAddress())
                 .serialize(ser, target);
     }
 }

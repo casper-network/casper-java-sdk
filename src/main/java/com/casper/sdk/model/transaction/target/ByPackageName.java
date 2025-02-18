@@ -40,7 +40,7 @@ public class ByPackageName implements TransactionInvocationTarget {
 
     @Override
     public void serialize(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {
-        new CalltableSerializationEnvelopeBuilder()
+        new CalltableSerializationEnvelopeBuilder(target)
                 .addField(TAG_FIELD_INDEX, getByteTag())
                 .addField(BY_PACKAGE_NAME_NAME_INDEX, name)
                 .addOptionField(BY_PACKAGE_NAME_VERSION_INDEX, version)

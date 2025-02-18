@@ -45,7 +45,7 @@ public class FixedPricingMode implements PricingMode {
 
     @Override
     public void serialize(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {
-        new CalltableSerializationEnvelopeBuilder()
+        new CalltableSerializationEnvelopeBuilder(target)
                 .addField(TAG_FIELD_INDEX,  /* U8 */ getByteTag())
                 .addField(FIXED_GAS_PRICE_TOLERANCE_INDEX, /* U8 */  (byte) gasPriceTolerance)
                 .addField(FIXED_ADDITIONAL_COMPUTATION_FACTOR_INDEX, /* U8 */ (byte) additionalComputationFactor)
