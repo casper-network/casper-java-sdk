@@ -10,7 +10,7 @@
         "EraInfo": {
           "seigniorage_allocations": [
             {
-              "Delegator": {
+              "DelegatorKind": {
                 "delegator_kind": {
                   "PublicKey": "01af79f28bde4522b27edb8dc9df146c9d3a65f944bbdcf153ea107b291bae232d"
                 },
@@ -25,7 +25,7 @@
               }
             },
             {
-              "Delegator": {
+              "DelegatorKind": {
                 "delegator_kind": {
                   "Purse": "uref-3c4bf80070d2667eaacc51506ba49ba0f26452649622d7cb9815c9f81ea92bd7-007"
                 },
@@ -40,7 +40,7 @@
               }
             },
             {
-              "Delegator": {
+              "DelegatorKind": {
                 "delegator_kind": {
                   "PublicKey": "01e8e1e0b10972e4945d1e493d41be8f39f47bb1299f3248f297d22cbc02010f89"
                 },
@@ -55,7 +55,7 @@
               }
             },
             {
-              "Delegator": {
+              "DelegatorKind": {
                 "delegator_kind": {
                   "PublicKey": "01e8e1e0b10972e4945d1e493d41be8f39f47bb1299f3248f297d22cbc02010f89"
                 },
@@ -70,7 +70,7 @@
               }
             },
             {
-              "Delegator": {
+              "DelegatorKind": {
                 "delegator_kind": {
                   "PublicKey": "017cc2f24d86bd35d358ee2494d565abe857400c2ef4ea0dcf282b326771aad4eb"
                 },
@@ -85,7 +85,7 @@
               }
             },
             {
-              "Delegator": {
+              "DelegatorKind": {
                 "delegator_kind": {
                   "PublicKey": "017cc2f24d86bd35d358ee2494d565abe857400c2ef4ea0dcf282b326771aad4eb"
                 },
@@ -100,7 +100,7 @@
               }
             },
             {
-              "Delegator": {
+              "DelegatorKind": {
                 "delegator_kind": {
                   "PublicKey": "01ee40a116ab7840704edea519aa27d34919933490b14e81fdec4ff52daf432f87"
                 },
@@ -115,7 +115,7 @@
               }
             },
             {
-              "Delegator": {
+              "DelegatorKind": {
                 "delegator_kind": {
                   "PublicKey": "01ee40a116ab7840704edea519aa27d34919933490b14e81fdec4ff52daf432f87"
                 },
@@ -130,7 +130,7 @@
               }
             },
             {
-              "Delegator": {
+              "DelegatorKind": {
                 "delegator_kind": {
                   "PublicKey": "0104322706c07b18d8d39b0d4a97cd1c20d692fd81f17c4d4d02f9a774d1c31f05"
                 },
@@ -145,7 +145,7 @@
               }
             },
             {
-              "Delegator": {
+              "DelegatorKind": {
                 "delegator_kind": {
                   "PublicKey": "0104322706c07b18d8d39b0d4a97cd1c20d692fd81f17c4d4d02f9a774d1c31f05"
                 },

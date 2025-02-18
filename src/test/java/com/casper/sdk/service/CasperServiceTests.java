@@ -472,13 +472,13 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
 
         assertNotNull(eraInfoData);
 
-        assertThat(((Delegator) eraInfoData.getEraSummary().getStoredValue().getValue().getSeigniorageAllocations().get(0)).getDelegatorKind(), is(instanceOf(DelegatorKindPublicKey.class)));
-        assertThat(((Delegator) eraInfoData.getEraSummary().getStoredValue().getValue().getSeigniorageAllocations().get(2)).getDelegatorKind(), is(instanceOf(DelegatorKindPurse.class)));
+        assertThat(((DelegatorKindAllocation) eraInfoData.getEraSummary().getStoredValue().getValue().getSeigniorageAllocations().get(0)).getDelegatorKind(), is(instanceOf(DelegatorKindPublicKey.class)));
+        assertThat(((DelegatorKindAllocation) eraInfoData.getEraSummary().getStoredValue().getValue().getSeigniorageAllocations().get(2)).getDelegatorKind(), is(instanceOf(DelegatorKindPurse.class)));
 
-        assertThat(((DelegatorKindPublicKey) ((Delegator) eraInfoData.getEraSummary().getStoredValue().getValue().getSeigniorageAllocations().get(0)).getDelegatorKind()).getPublicKey().toString(),
+        assertThat(((DelegatorKindPublicKey) ((DelegatorKindAllocation) eraInfoData.getEraSummary().getStoredValue().getValue().getSeigniorageAllocations().get(0)).getDelegatorKind()).getPublicKey().toString(),
                 is("01af79f28bde4522b27edb8dc9df146c9d3a65f944bbdcf153ea107b291bae232d"));
 
-        assertThat(((DelegatorKindPurse) ((Delegator) eraInfoData.getEraSummary().getStoredValue().getValue().getSeigniorageAllocations().get(2)).getDelegatorKind()).getPurse().getJsonURef(),
+        assertThat(((DelegatorKindPurse) ((DelegatorKindAllocation) eraInfoData.getEraSummary().getStoredValue().getValue().getSeigniorageAllocations().get(2)).getDelegatorKind()).getPurse().getJsonURef(),
                 is("uref-3c4bf80070d2667eaacc51506ba49ba0f26452649622d7cb9815c9f81ea92bd7-007"));
 
         assertNotNull(eraInfoData.getEraSummary());
@@ -872,7 +872,8 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
 
         final Effect validatorCreditEffect = resultV2.getEffects().get(14);
         assertThat(validatorCreditEffect.getKind(), is(instanceOf(WriteKind.class)));
-        final BidKind value = (BidKind) ((WriteKind) validatorCreditEffect.getKind()).getWrite().getValue();
+        //noinspection unchecked
+        final BidKind value = ((WriteKind<BidKind>) validatorCreditEffect.getKind()).getWrite().getValue();
         assertThat(value, is(instanceOf(ValidatorCredit.class)));
         assertThat(((ValidatorCredit) value).getAmount(), is(BigInteger.valueOf(100000000L)));
         assertThat(((ValidatorCredit) value).getEraId(), is(497L));
