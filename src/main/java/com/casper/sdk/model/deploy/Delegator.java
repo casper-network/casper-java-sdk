@@ -16,8 +16,8 @@ public class Delegator extends SeigniorageAllocation {
     /**
      * Delegator's kind
      */
-    @JsonProperty("delegator_kind")
-    private DelegatorKind delegatorKind;
+    @JsonProperty("delegator_public_key")
+    private PublicKey delegatorPublicKey;
 
     /**
      * Validator's public key

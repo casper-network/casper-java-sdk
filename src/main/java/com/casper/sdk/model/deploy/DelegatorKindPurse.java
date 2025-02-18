@@ -19,7 +19,7 @@ import java.io.IOException;
 @Getter
 @Setter
 @AllArgsConstructor
-public class DelegatorKindPurse extends DelegatorKind {
+public class DelegatorKindPurse implements DelegatorKind {
 
     @JsonProperty("Purse")
     private URef purse;

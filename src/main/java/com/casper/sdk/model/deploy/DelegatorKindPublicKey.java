@@ -18,7 +18,7 @@ import java.security.NoSuchAlgorithmException;
 @Getter
 @Setter
 @AllArgsConstructor
-public class DelegatorKindPublicKey extends DelegatorKind {
+public class DelegatorKindPublicKey implements DelegatorKind {
 
     @JsonProperty("PublicKey")
     private PublicKey publicKey;

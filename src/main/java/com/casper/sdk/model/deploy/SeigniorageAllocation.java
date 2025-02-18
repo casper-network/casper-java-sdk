@@ -24,7 +24,7 @@ import java.math.BigInteger;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.WRAPPER_OBJECT)
 @JsonSubTypes({@JsonSubTypes.Type(value = Validator.class, name = "Validator"),
                 @JsonSubTypes.Type(value = Delegator.class, name = "Delegator"),
-                @JsonSubTypes.Type(value = DelegatorKind.class, name = "DelegatorKind")})
+                @JsonSubTypes.Type(value = DelegatorKindAllocation.class, name = "DelegatorKind")})
 public class SeigniorageAllocation {
 
     /**
@@ -32,6 +32,7 @@ public class SeigniorageAllocation {
      */
     @JsonIgnore
     private BigInteger amount;
+
 
     @JsonProperty("amount")
     @ExcludeFromJacocoGeneratedReport
