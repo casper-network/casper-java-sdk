@@ -14,6 +14,7 @@ import com.casper.sdk.model.block.ChainGetBlockResult;
 import com.casper.sdk.model.clvalue.*;
 import com.casper.sdk.model.common.Ttl;
 import com.casper.sdk.model.deploy.DelegatorKind;
+import com.casper.sdk.model.deploy.DelegatorKindAllocation;
 import com.casper.sdk.model.deploy.DelegatorKindPublicKey;
 import com.casper.sdk.model.deploy.NamedArg;
 import com.casper.sdk.model.entity.AddressableEntity;
@@ -167,8 +168,8 @@ public class HowTo {
         assert eraSummaryBlockHash.getEraSummary().getEraId() != null;
 
         //By validator, era identifier and delegator
-        final PublicKey delegator = ((DelegatorKindPublicKey) ((DelegatorKind) eraSummaryBlockHash.getEraSummary().getStoredValue().getValue().getSeigniorageAllocations().get(0)).getDelegatorKind()).getPublicKey();
-        final PublicKey validator = ((DelegatorKind) eraSummaryBlockHash.getEraSummary().getStoredValue().getValue().getSeigniorageAllocations().get(0)).getValidatorPublicKey();
+        final PublicKey delegator = ((DelegatorKindPublicKey) ((DelegatorKindAllocation) eraSummaryBlockHash.getEraSummary().getStoredValue().getValue().getSeigniorageAllocations().get(0)).getDelegatorKind()).getPublicKey();
+        final PublicKey validator = ((DelegatorKindAllocation) eraSummaryBlockHash.getEraSummary().getStoredValue().getValue().getSeigniorageAllocations().get(0)).getValidatorPublicKey();
 
         GetRewardResult reward = casperService.getReward(new IdEraIdentifier(eraSummaryBlockHash.getEraSummary().getEraId()),
                 validator,
@@ -202,7 +203,7 @@ public class HowTo {
     void queryBalance() {
         final StatusData status = casperService.getStatus();
         final EraInfoData eraSummaryBlockHash = casperService.getEraSummary(new HashBlockIdentifier(status.getLastSwitchBlockHash().toString()));
-        final PublicKey delegator = ((DelegatorKindPublicKey) ((DelegatorKind) eraSummaryBlockHash.getEraSummary().getStoredValue().getValue().getSeigniorageAllocations().get(0)).getDelegatorKind()).getPublicKey();
+        final PublicKey delegator = ((DelegatorKindPublicKey) ((DelegatorKindAllocation) eraSummaryBlockHash.getEraSummary().getStoredValue().getValue().getSeigniorageAllocations().get(0)).getDelegatorKind()).getPublicKey();
         final PurseIdentifier purseIdentifier = new MainPurseUnderPublickey(delegator);
         final StateRootHashIdentifier stateRootHashIdentifier = new StateRootHashIdentifier(casperService.getStateRootHash().getStateRootHash());
 
@@ -220,7 +221,7 @@ public class HowTo {
     void queryBalanceDetails() {
         final StatusData status = casperService.getStatus();
         final EraInfoData eraSummaryBlockHash = casperService.getEraSummary(new HashBlockIdentifier(status.getLastSwitchBlockHash().toString()));
-        final PublicKey delegator = ((DelegatorKindPublicKey) ((DelegatorKind) eraSummaryBlockHash.getEraSummary().getStoredValue().getValue().getSeigniorageAllocations().get(0)).getDelegatorKind()).getPublicKey();
+        final PublicKey delegator = ((DelegatorKindPublicKey) ((DelegatorKindAllocation) eraSummaryBlockHash.getEraSummary().getStoredValue().getValue().getSeigniorageAllocations().get(0)).getDelegatorKind()).getPublicKey();
         final PurseIdentifier purseIdentifier = new MainPurseUnderPublickey(delegator);
         final StateRootHashIdentifier stateRootHashIdentifier = new StateRootHashIdentifier(casperService.getStateRootHash().getStateRootHash());
 
@@ -245,7 +246,7 @@ public class HowTo {
 
         final StatusData status = casperService.getStatus();
         final EraInfoData eraSummaryBlockHash = casperService.getEraSummary(new HashBlockIdentifier(status.getLastSwitchBlockHash().toString()));
-        final PublicKey validator = ((DelegatorKind) eraSummaryBlockHash.getEraSummary().getStoredValue().getValue().getSeigniorageAllocations().get(0)).getValidatorPublicKey();
+        final PublicKey validator = ((DelegatorKindAllocation) eraSummaryBlockHash.getEraSummary().getStoredValue().getValue().getSeigniorageAllocations().get(0)).getValidatorPublicKey();
 
         //By public key and block hash
         final AccountData stateAccountInfoKeyAndHash = casperService.getStateAccountInfo(validator.toString(), new HashBlockIdentifier(status.getLastSwitchBlockHash().toString()));
@@ -270,7 +271,7 @@ public class HowTo {
     void getStateEntity() {
         final StatusData status = casperService.getStatus();
         final EraInfoData eraSummaryBlockHash = casperService.getEraSummary(new HashBlockIdentifier(status.getLastSwitchBlockHash().toString()));
-        final PublicKey delegator = ((DelegatorKindPublicKey) ((DelegatorKind) eraSummaryBlockHash.getEraSummary().getStoredValue().getValue().getSeigniorageAllocations().get(0)).getDelegatorKind()).getPublicKey();
+        final PublicKey delegator = ((DelegatorKindPublicKey) ((DelegatorKindAllocation) eraSummaryBlockHash.getEraSummary().getStoredValue().getValue().getSeigniorageAllocations().get(0)).getDelegatorKind()).getPublicKey();
         final PublicKeyIdentifier publicKeyEntityIdentifier = new PublicKeyIdentifier(delegator);
 
         //By public key
@@ -310,7 +311,7 @@ public class HowTo {
         //Get a receivers public key - random delegator from last block
         final StatusData status = casperService.getStatus();
         final EraInfoData eraSummaryBlockHash = casperService.getEraSummary(new HashBlockIdentifier(status.getLastSwitchBlockHash().toString()));
-        final PublicKey delegator = ((DelegatorKindPublicKey) ((DelegatorKind) eraSummaryBlockHash.getEraSummary().getStoredValue().getValue().getSeigniorageAllocations().get(0)).getDelegatorKind()).getPublicKey();
+        final PublicKey delegator = ((DelegatorKindPublicKey) ((DelegatorKindAllocation) eraSummaryBlockHash.getEraSummary().getStoredValue().getValue().getSeigniorageAllocations().get(0)).getDelegatorKind()).getPublicKey();
 
         final PublicKey receiverPublicKey = PublicKey.fromAbstractPublicKey(delegator.getPubKey());
 
