@@ -3,7 +3,6 @@ package com.casper.sdk.model.transaction.field;
 import com.casper.sdk.exception.NoSuchTypeException;
 import com.casper.sdk.model.clvalue.serde.CasperSerializableObject;
 import com.casper.sdk.model.clvalue.serde.Target;
-import com.casper.sdk.model.transaction.NamedArgs;
 import com.syntifi.crypto.key.encdec.Hex;
 import dev.oak3.sbs4j.DeserializerBuffer;
 import dev.oak3.sbs4j.SerializerBuffer;
@@ -60,9 +59,7 @@ public class Field implements CasperSerializableObject, DeserializableObject {
         }
 
         if (value != null) {
-            if (value instanceof NamedArgs) {
-                ((CasperSerializableObject) value).serialize(serializerBuffer, target);
-            } else if (value instanceof CasperSerializableObject) {
+            if (value instanceof CasperSerializableObject) {
                 ((CasperSerializableObject) value).serialize(serializerBuffer, target);
             } else if (value instanceof Boolean) {
                 serializerBuffer.writeBool((Boolean) value);

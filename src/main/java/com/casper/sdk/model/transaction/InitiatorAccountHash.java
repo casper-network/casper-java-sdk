@@ -32,7 +32,7 @@ public class InitiatorAccountHash extends InitiatorAddr<AccountHashKey> {
     public void serialize(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {
         new CalltableSerializationEnvelopeBuilder(target)
                 .addField(TAG_FIELD_INDEX,  /* U8 */  getByteTag())
-                .addField(ADDR_KEY_FIELD_INDEX, getAddress())
+                .addField(ADDR_KEY_FIELD_INDEX, getAddress().getKey())
                 .serialize(ser, target);
     }
 }

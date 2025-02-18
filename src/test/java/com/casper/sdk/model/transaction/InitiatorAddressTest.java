@@ -37,7 +37,7 @@ class InitiatorAddressTest {
         assertThat(initiatorAddress.getByteTag(), is((byte) 0));
 
         final SerializerBuffer ser = new SerializerBuffer();
-        initiatorAddress.serialize(ser, Target.JSON);
+        initiatorAddress.serialize(ser, Target.BYTE);
         final byte[] actual = ser.toByteArray();
         assertThat(actual, is(expected));
     }
@@ -58,7 +58,7 @@ class InitiatorAddressTest {
         assertThat(initiatorAddress.getByteTag(), is((byte) 1));
 
         final SerializerBuffer ser = new SerializerBuffer();
-        initiatorAddress.serialize(ser, Target.JSON);
+        initiatorAddress.serialize(ser, Target.BYTE);
         final byte[] actual = ser.toByteArray();
         assertThat(actual, is(expected));
     }
