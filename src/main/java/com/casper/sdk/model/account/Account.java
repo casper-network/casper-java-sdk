@@ -1,13 +1,11 @@
 package com.casper.sdk.model.account;
 
 import com.casper.sdk.model.contract.NamedKey;
+import com.casper.sdk.model.entity.EntityAddressKind;
+import com.casper.sdk.model.entity.StateEntity;
 import com.casper.sdk.model.key.AccountHashKey;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
@@ -23,7 +21,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Account {
+public class Account implements EntityAddressKind, StateEntity {
 
     /**
      * account_hash(String) Hex-encoded account hash.

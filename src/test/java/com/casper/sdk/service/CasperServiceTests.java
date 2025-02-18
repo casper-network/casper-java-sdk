@@ -11,6 +11,7 @@ import com.casper.sdk.identifier.global.BlockHashIdentifier;
 import com.casper.sdk.identifier.global.GlobalStateIdentifier;
 import com.casper.sdk.identifier.global.StateRootHashIdentifier;
 import com.casper.sdk.identifier.purse.PurseUref;
+import com.casper.sdk.model.account.Account;
 import com.casper.sdk.model.account.AccountData;
 import com.casper.sdk.model.account.AccountHashIdentifier;
 import com.casper.sdk.model.account.PublicKeyIdentifier;
@@ -935,7 +936,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
 
         Account account = (Account) entity.getEntity().getEntityAddressKind();
 
-        assertThat(account.getAccount(), is(Key.create("account-hash-aab0da01340446cee477f28410f8af5d6e0f3a88fb26c0cafb8d1625f5cc9c10")));
+        assertThat(account.getHash(), is(Key.create("account-hash-aab0da01340446cee477f28410f8af5d6e0f3a88fb26c0cafb8d1625f5cc9c10")));
 
         assertThat(entity.getEntity().getMainPurse().getJsonURef(), is("uref-3dfdbde34845bd2e731cf39fba450745eba645b75d5feb3dcf953fd06d69bf14-007"));
         assertThat(entity.getEntity().getAssociatedKeys().get(0).getAccountHash(), is(instanceOf(AccountHashKey.class)));
@@ -1091,6 +1092,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
     @Test
     void stateGetEntityAccountWithHashBlockIdentifier() throws NoSuchKeyTagException {
 
+        // FIXME test data probably in error
         mockNode.withRcpResponseDispatcher()
                 .withMethod("state_get_entity")
                 .withBody("$.params.entity_identifier.AccountHash", "account-hash-f1075fce3b8cd4eab748b8705ca02444a5e35c0248662649013d8a5cb2b1a87c")
@@ -1112,7 +1114,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
         assertThat(entity.getEntity().getPackageHash(), is("package-22138fb22c624016fd73cd2abd3285ccd27cb80e20c29f3d94d34e95ee182030"));
 
         Account account = (Account) entity.getEntity().getEntityAddressKind();
-        assertThat(account.getAccount(), is(Key.create("account-hash-aab0da01340446cee477f28410f8af5d6e0f3a88fb26c0cafb8d1625f5cc9c10")));
+        assertThat(account.getHash(), is(Key.create("account-hash-aab0da01340446cee477f28410f8af5d6e0f3a88fb26c0cafb8d1625f5cc9c10")));
 
         assertThat(entity.getEntity().getMainPurse().getJsonURef(), is("uref-3dfdbde34845bd2e731cf39fba450745eba645b75d5feb3dcf953fd06d69bf14-007"));
         assertThat(entity.getEntity().getAssociatedKeys().get(0).getAccountHash(), is(instanceOf(AccountHashKey.class)));
