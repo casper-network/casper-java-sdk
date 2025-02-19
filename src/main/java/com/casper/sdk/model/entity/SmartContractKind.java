@@ -13,11 +13,11 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SmartContract implements EntityAddressKind {
+public class SmartContractKind implements EntityAddressKind {
 
     @JsonCreator
-    public static SmartContract create(final TransactionRuntime value) {
-        return new SmartContract(value);
+    public static SmartContractKind create(final TransactionRuntime value) {
+        return new SmartContractKind(value);
     }
 
     /** The runtime used to execute a Transaction. */

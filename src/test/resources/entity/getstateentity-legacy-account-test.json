@@ -1,7 +1,7 @@
 {
   "api_version": "2.0.0",
   "entity": {
-    "LegacyAccount": {
+    "Account": {
       "account_hash" : "account-hash-f1075fce3b8cd4eab748b8705ca02444a5e35c0248662649013d8a5cb2b1a87c",
       "action_thresholds" : {
         "deployment" : 1,

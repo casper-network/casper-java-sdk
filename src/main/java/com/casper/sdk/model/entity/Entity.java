@@ -51,5 +51,4 @@ public class Entity {
     /** Collection of named message topics. */
     @JsonProperty("message_topics")
     private List<MessageTopic> messageTopics;
-
 }

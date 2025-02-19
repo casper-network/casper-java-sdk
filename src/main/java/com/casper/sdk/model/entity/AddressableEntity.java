@@ -1,8 +1,9 @@
 package com.casper.sdk.model.entity;
 
-import com.casper.sdk.model.contract.entrypoint.EntryPointValue;
 import com.casper.sdk.model.contract.NamedKey;
+import com.casper.sdk.model.contract.entrypoint.EntryPointValue;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.*;
 
 import java.util.List;
