@@ -1,6 +1,5 @@
 package com.casper.sdk.model.entity;
 
-import com.casper.sdk.model.account.Account;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 

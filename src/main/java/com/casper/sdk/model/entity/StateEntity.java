@@ -1,6 +1,5 @@
 package com.casper.sdk.model.entity;
 
-import com.casper.sdk.model.account.Account;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
@@ -12,8 +11,6 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.WRAPPER_OBJECT)
 @JsonSubTypes({
         @JsonSubTypes.Type(value = AddressableEntity.class, name = "AddressableEntity"),
-        @JsonSubTypes.Type(value = Account.class, name = "Account"),
-@JsonSubTypes.Type(value = LegacyAccount.class, name = "LegacyAccount")})
-
+        @JsonSubTypes.Type(value = LegacyAccount.class, name = "LegacyAccount")})
 public interface StateEntity {
 }
