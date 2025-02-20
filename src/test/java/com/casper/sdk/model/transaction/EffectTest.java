@@ -11,7 +11,7 @@ import com.casper.sdk.model.contract.entrypoint.EntryPointValue;
 import com.casper.sdk.model.deploy.DelegatorKindPublicKey;
 import com.casper.sdk.model.deploy.transform.Transform;
 import com.casper.sdk.model.entity.Entity;
-import com.casper.sdk.model.entity.SmartContract;
+import com.casper.sdk.model.entity.SmartContractKind;
 import com.casper.sdk.model.entity.contract.ByteCode;
 import com.casper.sdk.model.entity.contract.NamedKey;
 import com.casper.sdk.model.entity.contract.Package;
@@ -192,6 +192,7 @@ class EffectTest {
         final Delegator value = (Delegator) kind.getWrite().getValue();
         assertThat(value.getDelegatorKind(), is(instanceOf(DelegatorKindPublicKey.class)));
         assertThat(((DelegatorKindPublicKey) value.getDelegatorKind()).getPublicKey(), is(PublicKey.fromTaggedHexString("01128ddb51119f1df535cf3a763996344ab0cc79038faaee0aaaf098a078031ce6")));
+        assertThat(value.getValidatorPublicKey(), is(PublicKey.fromTaggedHexString("01026ca707c348ed8012ac6a1f28db031fadd6eb67203501a353b867a08c8b9a80")));
         assertThat(value.getBondingPurse(), is(URef.fromString("uref-39a227259f033ce388e529c0330a6a966d591b567c09859f9390af4787f38d39-007")));
         assertThat(value.getStakedAmount(), is(new BigInteger("29519451635")));
         assertThat(value.getVestingSchedule().getLockedAmounts(), hasSize(13));
@@ -461,7 +462,7 @@ class EffectTest {
 
         final Entity entity = (Entity) kind.getWrite().getValue();
         assertThat(entity.getProtocolVersion(), is("2.0.0"));
-        assertThat(((SmartContract) entity.getEntityAddressKind()).getSmartContract().name(), is(SmartContract.TransactionRuntime.VMCASPERV1.name()));
+        assertThat(((SmartContractKind) entity.getEntityAddressKind()).getSmartContract().name(), is(SmartContractKind.TransactionRuntime.VMCASPERV1.name()));
         assertThat(entity.getPackageHash(), is("package-ef39f3794dfde8641acc43a8f63d4c0a72a4b33bbb2e4eed29421ee6cfd0d87e"));
         assertThat(entity.getByteCodeHash(), is("byte-code-376c7a7483df3ed53e8fb112c256bb0a99782d4f0260e5608858740a36681ac3"));
         assertThat(Hex.encode(entity.getMainPurse().getAddress()), is("faa9c882c9721274290109abba23f1baa8d7603debc11bf26dfc6250a6f56cc2"));

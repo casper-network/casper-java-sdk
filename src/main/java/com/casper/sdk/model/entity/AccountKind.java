@@ -18,12 +18,12 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonTypeName("Account")
-public class Account implements EntityAddressKind {
+public class AccountKind implements EntityAddressKind {
 
     @JsonValue
     private AccountHashKey account;
 
-    public Account(final String accountSt) throws NoSuchKeyTagException {
+    public AccountKind(final String accountSt) throws NoSuchKeyTagException {
         this.account = (AccountHashKey) Key.create(accountSt);
     }
 }

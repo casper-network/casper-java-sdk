@@ -1,6 +1,7 @@
 package com.casper.sdk.model.entity;
 
 import com.casper.sdk.model.AbstractJsonTests;
+import com.casper.sdk.model.account.Account;
 import com.casper.sdk.model.contract.entrypoint.EntryPoint;
 import com.casper.sdk.model.contract.entrypoint.EntryPointV2;
 import com.casper.sdk.model.contract.entrypoint.EntryPointValue;
@@ -22,7 +23,7 @@ public class StateGetEntityTest extends AbstractJsonTests {
 
         final StateEntityResult addressableEntity = OBJECT_MAPPER.readValue(inputJson, StateEntityResult.class);
         assertThat(addressableEntity.getEntity(), is(instanceOf(AddressableEntity.class)));
-        assertThat(((AddressableEntity) addressableEntity.getEntity()).getEntity().getEntityAddressKind(), is(instanceOf(Account.class)));
+        assertThat(((AddressableEntity) addressableEntity.getEntity()).getEntity().getEntityAddressKind(), is(instanceOf(AccountKind.class)));
     }
 
     @Test
@@ -32,7 +33,7 @@ public class StateGetEntityTest extends AbstractJsonTests {
 
         final StateEntityResult addressableEntity = OBJECT_MAPPER.readValue(inputJson, StateEntityResult.class);
         assertThat(addressableEntity.getEntity(), is(instanceOf(AddressableEntity.class)));
-        assertThat(((AddressableEntity) addressableEntity.getEntity()).getEntity().getEntityAddressKind(), is(instanceOf(SmartContract.class)));
+        assertThat(((AddressableEntity) addressableEntity.getEntity()).getEntity().getEntityAddressKind(), is(instanceOf(SmartContractKind.class)));
     }
 
     @Test
@@ -42,7 +43,7 @@ public class StateGetEntityTest extends AbstractJsonTests {
 
         final StateEntityResult addressableEntity = OBJECT_MAPPER.readValue(inputJson, StateEntityResult.class);
         assertThat(addressableEntity.getEntity(), is(instanceOf(AddressableEntity.class)));
-        assertThat(((AddressableEntity) addressableEntity.getEntity()).getEntity().getEntityAddressKind(), is(instanceOf(System.class)));
+        assertThat(((AddressableEntity) addressableEntity.getEntity()).getEntity().getEntityAddressKind(), is(instanceOf(SystemKind.class)));
         assertThat(((AddressableEntity) addressableEntity.getEntity()).getEntryPoints().size(), is(greaterThan(0)));
 
         final AddressableEntity entity = (AddressableEntity) addressableEntity.getEntity();
@@ -80,7 +81,7 @@ public class StateGetEntityTest extends AbstractJsonTests {
 
         final StateEntityResult entity = OBJECT_MAPPER.readValue(inputJson, StateEntityResult.class);
         assertInstanceOf(AddressableEntity.class, entity.getEntity());
-        assertInstanceOf(SmartContract.class, ((AddressableEntity) entity.getEntity()).getEntity().getEntityAddressKind());
+        assertInstanceOf(SmartContractKind.class, ((AddressableEntity) entity.getEntity()).getEntity().getEntityAddressKind());
 
         final AddressableEntity contract =  (AddressableEntity) entity.getEntity();
 
@@ -92,4 +93,19 @@ public class StateGetEntityTest extends AbstractJsonTests {
 
         assertThat(contract.getEntryPoints().get(14).getV1().getName(), is("balance_of"));
     }
+
+    @Test
+    void validateGetStateEntityAccountCondor() throws IOException {
+
+        final String inputJson = getPrettyJson(loadJsonFromFile("entity/getstateentity-account-condor-test.json"));
+
+        final StateEntityResult addressableEntity = OBJECT_MAPPER.readValue(inputJson, StateEntityResult.class);
+        assertThat(addressableEntity.getEntity(), is(instanceOf(Account.class)));
+
+        final Account account = (Account) addressableEntity.getEntity();
+        assertThat(account.getNamedKeys().size(), is(0));
+        assertThat(account.getDeployment().getDeployment(), is(1));
+        assertThat(account.getHash().toString(), is("account-hash-5a9eb1f7da515d9fa2f0b74e18ec84cccf90f146269d538073416dff432a3c77"));
+    }
+
 }

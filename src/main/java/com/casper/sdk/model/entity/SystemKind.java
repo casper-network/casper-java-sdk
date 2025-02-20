@@ -14,11 +14,11 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class System implements EntityAddressKind {
+public class SystemKind implements EntityAddressKind {
 
     @JsonCreator
-    public static System create(final SystemEntityType value) {
-        return new System(value);
+    public static SystemKind create(final SystemEntityType value) {
+        return new SystemKind(value);
     }
 
     /** System contract types. */
