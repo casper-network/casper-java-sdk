@@ -51,8 +51,8 @@ public class Session implements TransactionTarget {
     private byte[] moduleBytes;
     @JsonProperty("transferred_value")
     private long transferredValue;
-    @JsonProperty("seed")
-    private Digest seed;
+  /*  @JsonProperty("seed")
+    private Digest seed;*/
 
     @Override
     public void serialize(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {
@@ -63,7 +63,7 @@ public class Session implements TransactionTarget {
                 .addField(SESSION_RUNTIME_INDEX, getRuntime())
                 .addField(SESSION_MODULE_BYTES_INDEX, getModuleBytes())
                 .addField(SESSION_TRANSFERRED_VALUE_INDEX, getTransferredValue())
-                .addOptionField(SESSION_SEED_INDEX,  getSeed())
+             //   .addOptionField(SESSION_SEED_INDEX,  getSeed())
                 .serialize(ser, target);
     }
 

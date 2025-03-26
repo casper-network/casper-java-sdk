@@ -56,7 +56,7 @@ public class TransactionTargetSerializer extends JsonSerializer<TransactionTarge
         gen.writeStringField(RUNTIME, TransactionRuntime.toJson(value.getRuntime()));
         gen.writeStringField(MODULE_BYTES, Hex.encode(value.getModuleBytes()));
         gen.writeNumberField(TRANSFERRED_VALUE, value.getTransferredValue());
-        gen.writeObjectField(SEED, value.getSeed());
+       // gen.writeObjectField(SEED, value.getSeed());
         gen.writeEndObject();
 
         gen.writeEndObject();

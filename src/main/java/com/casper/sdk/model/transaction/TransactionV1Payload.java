@@ -88,6 +88,11 @@ public class TransactionV1Payload implements CasperSerializableObject, Tag {
     }
 
     public Digest buildHash() throws NoSuchTypeException, ValueSerializationException {
+
+        if (this.timestamp == null) {
+            this.timestamp = new Date();
+        }
+
         final SerializerBuffer serializerBuffer = new SerializerBuffer();
         this.serialize(serializerBuffer, Target.BYTE);
         final byte[] bytes = serializerBuffer.toByteArray();

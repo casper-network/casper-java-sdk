@@ -392,7 +392,7 @@ public class HowTo {
                 .fields(Fields.builder()
                         .args(new NamedArgs(args))
                         .scheduling(new Standard())
-                        .target(new Session(false, TransactionRuntime.VM_CASPER_V2, wasmBytes, 0L, null))
+                        .target(new Session(false, TransactionRuntime.VM_CASPER_V2, wasmBytes, 0L))
                         .entryPoint(new CallEntryPoint()).build()
                 )
                 //.transactionCategory(TransactionCategory.INSTALL_UPGRADE)

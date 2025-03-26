@@ -42,7 +42,7 @@ import static org.hamcrest.core.IsNull.nullValue;
  *
  * @author ian@meywood.com
  */
-@Disabled
+//@Disabled
 public class TransactionTests {
 
 
@@ -136,10 +136,11 @@ public class TransactionTests {
         final TransactionV1Payload payload = TransactionV1Payload.builder()
                 .chainName("cspr-dev-cctl")
                 .ttl(Ttl.builder().ttl("30m").build())
-                .pricingMode(new FixedPricingMode(0, 8))
+                //.pricingMode(new FixedPricingMode(0, 8))
+                .pricingMode(new PaymentLimited(new BigInteger("3000000000"), 1, true))
                 .initiatorAddr(new InitiatorPublicKey(PublicKey.fromAbstractPublicKey(senderPrivKey.derivePublicKey())))
                 .fields(Fields.builder().args(new NamedArgs(args))
-                        .target(new Session(false, TransactionRuntime.VM_CASPER_V2, wasmBytes, 0L, null))
+                        .target(new Session(false, TransactionRuntime.VM_CASPER_V2, wasmBytes, 0L ))
                         .entryPoint(new CallEntryPoint())
                         .scheduling(new Standard()).build()
                 )
