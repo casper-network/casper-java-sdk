@@ -30,12 +30,16 @@ public class ExecutionResultV2 extends ExecutionResult {
     /** If error_message is null, the execution was successful */
     @JsonProperty("error_message")
     private String errorMessage;
+    @JsonProperty("current_price")
+    private byte currentPrice;
     @JsonProperty("limit")
     private BigInteger limit;
     @JsonProperty("consumed")
     private BigInteger consumed;
     @JsonProperty("cost")
     private BigInteger cost;
+    @JsonProperty("refund")
+    private BigInteger refund;
     @JsonProperty("size_estimate")
     private long sizeEstimate;
     @JsonProperty("payment")
