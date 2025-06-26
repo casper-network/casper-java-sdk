@@ -27,15 +27,15 @@ public class PaymentLimited implements PricingMode {
     private static final int PAYMENT_LIMITED_GAS_PRICE_TOLERANCE_INDEX = 2;
     private static final int PAYMENT_LIMITED_STANDARD_PAYMENT_INDEX = 3;
 
-    /** User-specified payment amount. */
-    @JsonProperty("payment_amount")
-    private BigInteger paymentAmount;
     /**
      * User-specified gas_price tolerance (minimum 1). This is interpreted to mean "do not include this transaction in
      * a block if the current gas price is greater than this number"
      */
     @JsonProperty("gas_price_tolerance")
     private int gasPriceTolerance;
+    /** User-specified payment amount. */
+    @JsonProperty("payment_amount")
+    private BigInteger paymentAmount;
     /** Standard payment. */
     @JsonProperty("standard_payment")
     private boolean standardPayment;

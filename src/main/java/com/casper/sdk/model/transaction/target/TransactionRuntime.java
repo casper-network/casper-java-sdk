@@ -14,6 +14,7 @@ import lombok.Getter;
 /**
  * The runtime used to execute a `Transaction`.
  *
+ * TODO refactor into classes as VmCasperV2 now has fields transferred_value and seed FFS
  * @author ian@meywood.com
  */
 @Getter
@@ -60,5 +61,8 @@ public enum TransactionRuntime implements CasperSerializableObject, Tag {
         new CalltableSerializationEnvelopeBuilder(target)
                 .addField(TAG_FIELD_INDEX, getByteTag())
                 .serialize(ser, target);
+
+        // TODO need to convert to object as VmCasperV2 now has fields transferred_value and seed
+
     }
 }

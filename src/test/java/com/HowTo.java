@@ -392,7 +392,7 @@ public class HowTo {
                 .fields(Fields.builder()
                         .args(new NamedArgs(args))
                         .scheduling(new Standard())
-                        .target(new Session(false, TransactionRuntime.VM_CASPER_V2, wasmBytes, 0L))
+                        .target(new Session(TransactionRuntime.VM_CASPER_V2, false, wasmBytes))
                         .entryPoint(new CallEntryPoint()).build()
                 )
                 //.transactionCategory(TransactionCategory.INSTALL_UPGRADE)
@@ -401,7 +401,6 @@ public class HowTo {
         final TransactionV1 transactionV1 = TransactionV1.builder()
                 .payload(payload)
                 .build();
-
 
         final Transaction transaction = new Transaction(transactionV1.sign(senderPrivateKey));
 

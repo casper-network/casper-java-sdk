@@ -66,10 +66,10 @@ public class TransactionTargetDeserializer extends JsonDeserializer<TransactionT
     private Session createSession(final JsonNode node) throws DeserializationException {
         try {
             return new Session(
-                    node.has(IS_INSTALL_UPGRADE) && node.get(IS_INSTALL_UPGRADE).asBoolean(),
                     TransactionRuntime.fromJson(node.get(RUNTIME).asText()),
-                    Hex.decode(node.get(MODULE_BYTES).asText()),
-                    node.has(TRANSFERRED_VALUE) ? node.get(TRANSFERRED_VALUE).asLong() : 0
+                    node.has(IS_INSTALL_UPGRADE) && node.get(IS_INSTALL_UPGRADE).asBoolean(),
+                    Hex.decode(node.get(MODULE_BYTES).asText())
+              /*      node.has(TRANSFERRED_VALUE) ? node.get(TRANSFERRED_VALUE).asLong() : 0*/
                  //   node.has(SEED) && !node.get(SEED).isNull() && !"null".equals(node.get(SEED).asText()) ? new Digest(node.get(SEED).asText()) : null
             );
         } catch (NoSuchTypeException e) {

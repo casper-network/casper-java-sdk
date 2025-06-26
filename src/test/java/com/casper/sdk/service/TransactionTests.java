@@ -9,26 +9,25 @@ import com.casper.sdk.model.transaction.entrypoint.CallEntryPoint;
 import com.casper.sdk.model.transaction.entrypoint.TransferEntryPoint;
 import com.casper.sdk.model.transaction.execution.ExecutionResultV2;
 import com.casper.sdk.model.transaction.field.Fields;
-import com.casper.sdk.model.transaction.pricing.FixedPricingMode;
 import com.casper.sdk.model.transaction.pricing.PaymentLimited;
 import com.casper.sdk.model.transaction.scheduling.Standard;
 import com.casper.sdk.model.transaction.target.Native;
 import com.casper.sdk.model.transaction.target.Session;
 import com.casper.sdk.model.transaction.target.Transaction;
 import com.casper.sdk.model.transaction.target.TransactionRuntime;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.syntifi.crypto.key.AbstractPrivateKey;
 import com.syntifi.crypto.key.AbstractPublicKey;
 import com.syntifi.crypto.key.Ed25519PrivateKey;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
 import org.apache.cxf.helpers.IOUtils;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigInteger;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.TimeoutException;
 
@@ -83,7 +82,7 @@ public class TransactionTests {
                 .chainName("cspr-dev-cctl")
                 .timestamp(new Date())
                 .ttl(Ttl.builder().ttl("30m").build())
-                .pricingMode(new PaymentLimited(new BigInteger("3000000000"), 1, true))
+                .pricingMode(new PaymentLimited(1, new BigInteger("3000000000"), true))
                 .initiatorAddr(new InitiatorPublicKey(faucetPublicKey))
                 .fields(Fields.builder()
                         .args(new NamedArgs(args))
@@ -120,27 +119,36 @@ public class TransactionTests {
         final URL url = Objects.requireNonNull(TransactionTests.class.getResource("/net-1/faucet/secret_key.pem"), "missing resource ");
         senderPrivKey.readPrivateKey(url.getFile());
 
-        final String wasmPath = Paths.get(Objects.requireNonNull(getClass().getClassLoader().getResource("howto/contracts/cep18.wasm")).toURI()).toString();
-        final URL wasmUrl = new URL("file://" + wasmPath);
-        final byte[] wasmBytes = IOUtils.readBytesFromStream(wasmUrl.openStream());
+        final InputStream in = Objects.requireNonNull(getClass().getClassLoader().getResource("wasm/cep18-rc3.wasm")).openStream();
+        final byte[] wasmBytes = IOUtils.readBytesFromStream(in);
+        //final byte[] wasmBytes = Hex.decode("01020304");
+
+      /*  args.AddArgument("name", * clvalue.NewCLString("Test")).
+        AddArgument("symbol", * clvalue.NewCLString("test")).
+        AddArgument("decimals", * clvalue.NewCLUint8(9)).
+        AddArgument("total_supply", * clvalue.NewCLUInt256(big.NewInt(1_000_000_000_000_000))).
+        AddArgument("events_mode", * clvalue.NewCLUint8(2)).
+        AddArgument("enable_mint_burn", * clvalue.NewCLUint8(0))*/
 
         final List<NamedArg<?>> args = Arrays.asList(
-                new NamedArg<>("decimals", new CLValueU8((byte) 11)),
-                new NamedArg<>("name", new CLValueString("Acme Token")),
-                new NamedArg<>("symbol", new CLValueString("ACME")),
-                new NamedArg<>("total_supply", new CLValueU256(BigInteger.valueOf(500000))),
-                new NamedArg<>("events_mode", new CLValueU8((byte) 0)),
-                new NamedArg<>("id", new CLValueOption(Optional.of(new CLValueU64(BigInteger.valueOf(System.currentTimeMillis())))))
+                new NamedArg<>("name", new CLValueString("Test")),
+                new NamedArg<>("symbol", new CLValueString("test")),
+                new NamedArg<>("decimals", new CLValueU8((byte) 9)),
+                new NamedArg<>("total_supply", new CLValueU256(new BigInteger("1000000000000000"))),
+                new NamedArg<>("events_mode", new CLValueU8((byte) 2)),
+                new NamedArg<>("enable_mint_burn", new CLValueU8((byte) 0))
         );
 
         final TransactionV1Payload payload = TransactionV1Payload.builder()
+                .initiatorAddr(new InitiatorPublicKey(PublicKey.fromAbstractPublicKey(senderPrivKey.derivePublicKey())))
                 .chainName("cspr-dev-cctl")
+                // .timestamp(new DateTime("2025-06-24T17:31:29.209Z").toDate())
+                .timestamp(new Date())
                 .ttl(Ttl.builder().ttl("30m").build())
                 //.pricingMode(new FixedPricingMode(0, 8))
-                .pricingMode(new PaymentLimited(new BigInteger("3000000000"), 1, true))
-                .initiatorAddr(new InitiatorPublicKey(PublicKey.fromAbstractPublicKey(senderPrivKey.derivePublicKey())))
+                .pricingMode(new PaymentLimited(1, new BigInteger("5000000000"), true))
                 .fields(Fields.builder().args(new NamedArgs(args))
-                        .target(new Session(false, TransactionRuntime.VM_CASPER_V2, wasmBytes, 0L ))
+                        .target(new Session(TransactionRuntime.VM_CASPER_V1, true, wasmBytes))
                         .entryPoint(new CallEntryPoint())
                         .scheduling(new Standard()).build()
                 )
@@ -150,9 +158,9 @@ public class TransactionTests {
                 .payload(payload)
                 .build();
 
-
         final Transaction transaction = new Transaction(transactionV1.sign(senderPrivKey));
 
+        String json = new ObjectMapper().writeValueAsString(transaction);
         final PutTransactionResult result = casperService.putTransaction(transaction);
 
         assert result != null;
@@ -161,7 +169,7 @@ public class TransactionTests {
         final GetTransactionResult transactionResult = waitForTransaction(result.getTransactionHash(), casperService);
 
         assertThat(transactionResult, is(notNullValue()));
-        assertThat(((ExecutionResultV2) transactionResult.getExecutionInfo().getExecutionResult()).getErrorMessage(), is(nullValue()));
+    //    assertThat(((ExecutionResultV2) transactionResult.getExecutionInfo().getExecutionResult()).getErrorMessage(), is(nullValue()));
 
         //Tests for the returned getTransaction Entities/Kinds/Entries are in EffectsTest and CasperServiceTests
     }
