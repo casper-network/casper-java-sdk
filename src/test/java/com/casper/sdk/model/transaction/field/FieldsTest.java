@@ -12,6 +12,7 @@ import com.casper.sdk.model.transaction.entrypoint.CallEntryPoint;
 import com.casper.sdk.model.transaction.scheduling.Standard;
 import com.casper.sdk.model.transaction.target.Session;
 import com.casper.sdk.model.transaction.target.TransactionRuntime;
+import com.casper.sdk.model.transaction.target.VmCasperV1;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.IOUtils;
 import org.hamcrest.Matchers;
@@ -89,7 +90,7 @@ public class FieldsTest extends AbstractJsonTests {
 
         final Session session = (Session) fromJson.getTarget();
         assertThat(session.isInstallUpgrade(), is(true));
-        assertThat(session.getRuntime(), is(TransactionRuntime.VM_CASPER_V1));
+        assertThat(session.getRuntime(), is(instanceOf(VmCasperV1.class)));
        // assertThat(session.getTransferredValue(), is(0L));
        // assertThat(session.getSeed(), is(nullValue()));
 

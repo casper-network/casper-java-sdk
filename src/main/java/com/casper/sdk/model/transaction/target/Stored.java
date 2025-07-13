@@ -32,8 +32,7 @@ public class Stored implements TransactionTarget {
     /** The execution runtime to use. */
     @JsonProperty("runtime")
     private TransactionRuntime runtime;
-    @JsonProperty("transferred_value")
-    private long transferredValue;
+
 
     @Override
     public void serialize(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {

@@ -2,7 +2,6 @@ package com.casper.sdk.jackson.deserializer;
 
 import com.casper.sdk.exception.DeserializationException;
 import com.casper.sdk.exception.NoSuchTypeException;
-import com.casper.sdk.model.common.Digest;
 import com.casper.sdk.model.transaction.target.*;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
@@ -48,8 +47,7 @@ public class TransactionTargetDeserializer extends JsonDeserializer<TransactionT
         try {
             return new Stored(
                     createInvocationTarget(node, ctx),
-                    TransactionRuntime.fromJson(node.get(RUNTIME).asText()),
-                    node.has(TRANSFERRED_VALUE) ? node.get(TRANSFERRED_VALUE).asLong() : 0
+                    TransactionRuntime.fromJson(node.get(RUNTIME))
             );
         } catch (NoSuchTypeException e) {
             throw new DeserializationException("Unable to find 'runtime'", e);
@@ -66,11 +64,9 @@ public class TransactionTargetDeserializer extends JsonDeserializer<TransactionT
     private Session createSession(final JsonNode node) throws DeserializationException {
         try {
             return new Session(
-                    TransactionRuntime.fromJson(node.get(RUNTIME).asText()),
                     node.has(IS_INSTALL_UPGRADE) && node.get(IS_INSTALL_UPGRADE).asBoolean(),
+                    TransactionRuntime.fromJson(node.get(RUNTIME)),
                     Hex.decode(node.get(MODULE_BYTES).asText())
-              /*      node.has(TRANSFERRED_VALUE) ? node.get(TRANSFERRED_VALUE).asLong() : 0*/
-                 //   node.has(SEED) && !node.get(SEED).isNull() && !"null".equals(node.get(SEED).asText()) ? new Digest(node.get(SEED).asText()) : null
             );
         } catch (NoSuchTypeException e) {
             throw new DeserializationException("Unable to find required fields", e);

@@ -28,7 +28,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsNull.nullValue;
 
 /**
  * Unit tests for the {@link TransactionV1Payload} class
@@ -70,9 +69,9 @@ class TransactionV1PayloadTest extends AbstractJsonTests {
 
         final Session session = (Session) fields.getTarget();
         assertThat(session.isInstallUpgrade(), is(true));
-        assertThat(session.getRuntime(), is(TransactionRuntime.VM_CASPER_V1));
-      //  assertThat(session.getTransferredValue(), is(0L));
-      //  assertThat(session.getSeed(), is(nullValue()));
+        assertThat(session.getRuntime(), is(instanceOf(VmCasperV1.class)));
+        //  assertThat(session.getTransferredValue(), is(0L));
+        //  assertThat(session.getSeed(), is(nullValue()));
 
         final String writtenJson = getPrettyJson(fromJson);
         JSONAssert.assertEquals(json, writtenJson, false);
@@ -118,8 +117,7 @@ class TransactionV1PayloadTest extends AbstractJsonTests {
         Stored stored = (Stored) fields.getTarget();
         assertThat(stored.getId(), is(instanceOf(ByHash.class)));
         assertThat(((ByHash) stored.getId()).getHashAddress(), is(new Digest("d39b360530484c6b3ed32e84a1198b368fe2bae3d5c9e8af6b0ae4d3eba73caa")));
-        assertThat(stored.getRuntime(), is(TransactionRuntime.VM_CASPER_V1));
-        assertThat(stored.getTransferredValue(), is(0L));
+        assertThat(stored.getRuntime(), is(instanceOf(VmCasperV1.class)));
 
         final String writtenJson = getPrettyJson(fromJson);
         JSONAssert.assertEquals(json, writtenJson, false);

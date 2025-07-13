@@ -14,7 +14,7 @@ import com.casper.sdk.model.transaction.scheduling.Standard;
 import com.casper.sdk.model.transaction.target.Native;
 import com.casper.sdk.model.transaction.target.Session;
 import com.casper.sdk.model.transaction.target.Transaction;
-import com.casper.sdk.model.transaction.target.TransactionRuntime;
+import com.casper.sdk.model.transaction.target.VmCasperV1;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.syntifi.crypto.key.AbstractPrivateKey;
 import com.syntifi.crypto.key.AbstractPublicKey;
@@ -148,7 +148,7 @@ public class TransactionTests {
                 //.pricingMode(new FixedPricingMode(0, 8))
                 .pricingMode(new PaymentLimited(1, new BigInteger("5000000000"), true))
                 .fields(Fields.builder().args(new NamedArgs(args))
-                        .target(new Session(TransactionRuntime.VM_CASPER_V1, true, wasmBytes))
+                        .target(new Session(true, new VmCasperV1(), wasmBytes))
                         .entryPoint(new CallEntryPoint())
                         .scheduling(new Standard()).build()
                 )
@@ -169,7 +169,7 @@ public class TransactionTests {
         final GetTransactionResult transactionResult = waitForTransaction(result.getTransactionHash(), casperService);
 
         assertThat(transactionResult, is(notNullValue()));
-    //    assertThat(((ExecutionResultV2) transactionResult.getExecutionInfo().getExecutionResult()).getErrorMessage(), is(nullValue()));
+        //    assertThat(((ExecutionResultV2) transactionResult.getExecutionInfo().getExecutionResult()).getErrorMessage(), is(nullValue()));
 
         //Tests for the returned getTransaction Entities/Kinds/Entries are in EffectsTest and CasperServiceTests
     }

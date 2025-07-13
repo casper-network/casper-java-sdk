@@ -36,12 +36,12 @@ public class Session implements TransactionTarget {
     private final int SESSION_RUNTIME_INDEX = 2;
     private final int SESSION_MODULE_BYTES_INDEX = 3;
 
-    /** The execution runtime to use. */
-    @JsonProperty("runtime")
-    private TransactionRuntime runtime;
     /** Flag determining if the Wasm is an install/upgrade. */
     @JsonProperty("is_install_upgrade")
     private boolean installUpgrade;
+    /** The execution runtime to use. */
+    @JsonProperty("runtime")
+    private TransactionRuntime runtime;
     /** The compiled Wasm. */
     @JsonProperty("module_bytes")
     private byte[] moduleBytes;

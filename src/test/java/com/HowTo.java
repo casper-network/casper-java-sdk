@@ -31,10 +31,7 @@ import com.casper.sdk.model.transaction.execution.ExecutionResultV2;
 import com.casper.sdk.model.transaction.field.Fields;
 import com.casper.sdk.model.transaction.pricing.FixedPricingMode;
 import com.casper.sdk.model.transaction.scheduling.Standard;
-import com.casper.sdk.model.transaction.target.Native;
-import com.casper.sdk.model.transaction.target.Session;
-import com.casper.sdk.model.transaction.target.Transaction;
-import com.casper.sdk.model.transaction.target.TransactionRuntime;
+import com.casper.sdk.model.transaction.target.*;
 import com.casper.sdk.model.transfer.TransferData;
 import com.casper.sdk.model.uref.URef;
 import com.casper.sdk.service.CasperService;
@@ -392,7 +389,7 @@ public class HowTo {
                 .fields(Fields.builder()
                         .args(new NamedArgs(args))
                         .scheduling(new Standard())
-                        .target(new Session(TransactionRuntime.VM_CASPER_V2, false, wasmBytes))
+                        .target(new Session(false, new VmCasperV2(),  wasmBytes))
                         .entryPoint(new CallEntryPoint()).build()
                 )
                 //.transactionCategory(TransactionCategory.INSTALL_UPGRADE)
