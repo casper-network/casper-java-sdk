@@ -14,18 +14,15 @@ import java.io.IOException;
 /**
  * The runtime used to execute a `Transaction`.
  * <p>
- * TODO refactor into classes as VmCasperV2 now has fields transferred_value and seed FFS
- *
  * @author ian@meywood.com
  */
 @Getter
 public abstract class TransactionRuntime implements CasperSerializableObject, Tag {
 
     protected static final int TAG_FIELD_INDEX = 0;
-
     private final byte tag;
 
-    TransactionRuntime(final int tag) {
+   protected TransactionRuntime(final int tag) {
         this.tag = (byte) tag;
     }
 
