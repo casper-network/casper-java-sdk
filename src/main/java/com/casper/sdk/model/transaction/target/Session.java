@@ -6,7 +6,6 @@ import com.casper.sdk.model.clvalue.serde.Target;
 import com.casper.sdk.model.transaction.field.CalltableSerializationEnvelopeBuilder;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
@@ -45,11 +44,6 @@ public class Session implements TransactionTarget {
     /** The compiled Wasm. */
     @JsonProperty("module_bytes")
     private byte[] moduleBytes;
-    // TODO MOVE TO V2
-  /*  @JsonProperty("transferred_value")
-    private long transferredValue;*/
-  /*  @JsonProperty("seed")
-    private Digest seed;*/
 
     @Override
     public void serialize(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {
