@@ -49,8 +49,7 @@
         "id": {
           "ByHash": "d39b360530484c6b3ed32e84a1198b368fe2bae3d5c9e8af6b0ae4d3eba73caa"
         },
-        "runtime": "VmCasperV1",
-        "transferred_value": 0
+        "runtime": "VmCasperV1"
       }
     }
   }
