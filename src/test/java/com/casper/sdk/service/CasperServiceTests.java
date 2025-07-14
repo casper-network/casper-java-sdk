@@ -360,7 +360,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
         StoredValueData storedValueData = casperServiceMock.getStateItem("c0eb76e0c3c7a928a0cb43e82eb4fad683d9ad626bcd3b7835a466c0587b0fff", "account-hash-a9efd010c7cee2245b5bad77e70d9beb73c8776cbe4698b2d8fdf6c8433d5ba0", new ArrayList<>());
 
         assertInstanceOf(StoredValueAccount.class, storedValueData.getStoredValue());
-        assertEquals("uref-e9e2dbc67809be522dcc953b601c29807d8e831751533509be373f0c72ed8bd5-007", ((StoredValueAccount) storedValueData.getStoredValue()).getValue().getMainPurse());
+        assertEquals("uref-e9e2dbc67809be522dcc953b601c29807d8e831751533509be373f0c72ed8bd5-007", ((StoredValueAccount) storedValueData.getStoredValue()).getValue().getMainPurse().getJsonURef());
     }
 
     @Test
@@ -1082,7 +1082,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
         AccountEntity account = (AccountEntity) stateEntityResult.getEntity();
 
         assertThat(account.getHash().toString(), is("account-hash-f1075fce3b8cd4eab748b8705ca02444a5e35c0248662649013d8a5cb2b1a87c"));
-        assertThat(account.getMainPurse(), is("uref-b22bc80d357df47447074e243b4d888de67c1cc7565fa82d0bb2b9b023146748-007"));
+        assertThat(account.getMainPurse().getJsonURef(), is("uref-b22bc80d357df47447074e243b4d888de67c1cc7565fa82d0bb2b9b023146748-007"));
         assertThat(account.getAssociatedKeys().get(0).getAccountHash(), is(instanceOf(AccountHashKey.class)));
         assertThat(account.getAssociatedKeys().get(0).getAccountHash().toString(), is("account-hash-f1075fce3b8cd4eab748b8705ca02444a5e35c0248662649013d8a5cb2b1a87c"));
         assertThat(account.getAssociatedKeys().get(0).getWeight(), is(1));
