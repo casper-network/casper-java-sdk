@@ -788,6 +788,20 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
     }
 
     @Test
+    void infoGetTransactionWithDisabledVersions() {
+
+        mockNode.withRcpResponseDispatcher()
+                .withMethod("info_get_transaction")
+                .withBody("$.params.transaction_hash.Deploy", "67594388afce12d027d2098f0bee6742702738647fb8d422d85f1b2c8b72192c")
+                .thenDispatch(getClass().getResource("/transaction-samples/get_transaction_disabled_versions.json"));
+
+        final GetTransactionResult result = casperServiceMock.getTransaction(new TransactionHashDeploy("67594388afce12d027d2098f0bee6742702738647fb8d422d85f1b2c8b72192c"));
+        assertNotNull(result);
+        assertThat(result.getTransaction().get(), is(instanceOf(TransactionV1.class)));
+        assertThat(result.getTransaction().get().getHash(), is(new Digest("67594388afce12d027d2098f0bee6742702738647fb8d422d85f1b2c8b72192c")));
+    }
+
+    @Test
     void accountPutTransferV1() throws Exception {
 
         final Secp256k1PublicKey delegator = (Secp256k1PublicKey) Secp256k1PrivateKey.deriveRandomKey().derivePublicKey();

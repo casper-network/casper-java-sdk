@@ -72,8 +72,8 @@ import static org.hamcrest.core.IsNull.nullValue;
 //@Disabled
 public class HowTo {
 
-    //Receiver public key
     final static String receiverAccountPublicKey = "02025d359802a8826fef41efd8a53fbc8226af6d9e98a658a7cce6b5aa0788322095";
+    final static String senderAccountPublicKey = "01e5df7f79ac345b279d526616b70d14964aae41c3e58370d001d59f87a32182b0";
 
     private CasperService casperService;
 
@@ -364,11 +364,62 @@ public class HowTo {
     }
 
     @Test
+    void putTransactionContractHelloWorld() throws IOException, URISyntaxException, ValueSerializationException, TimeoutException {
+
+        //Get the senders private key
+        //Add your own private key here
+//        final String secretKeyPath = Paths.get(Objects.requireNonNull(getClass().getClassLoader().getResource("howto/keys/secret_key-cctl-faucet.pem")).toURI()).toString();
+        final String secretKeyPath = Paths.get(Objects.requireNonNull(getClass().getClassLoader().getResource("howto/keys/secret_key-testnet.pem")).toURI()).toString();
+        final Ed25519PrivateKey senderPrivateKey = new Ed25519PrivateKey();
+        senderPrivateKey.readPrivateKey(secretKeyPath);
+
+        final String wasmPath = Paths.get(Objects.requireNonNull(getClass().getClassLoader().getResource("howto/contracts/contract-hello-world.wasm")).toURI()).toString();
+        final URL wasmUrl = new URL("file://" + wasmPath);
+        final byte[] wasmBytes = IOUtils.readBytesFromStream(wasmUrl.openStream());
+
+
+        final List<NamedArg<?>> args = Arrays.asList(
+                new NamedArg<>("message", new CLValueString("Hello from Stormeye")),
+                new NamedArg<>("key-name", new CLValueString("key-storm-001")),
+                new NamedArg<>("id", new CLValueOption(Optional.of(new CLValueU64(BigInteger.valueOf(System.currentTimeMillis())))))
+        );
+        final TransactionV1Payload payload = TransactionV1Payload.builder()
+                .chainName(casperService.getStatus().getChainSpecName())
+                .ttl(Ttl.builder().ttl("30m").build())
+                .pricingMode(new PaymentLimited(1, new BigInteger("5000000000"), true))
+                .initiatorAddr(new InitiatorPublicKey(PublicKey.fromAbstractPublicKey(senderPrivateKey.derivePublicKey())))
+                .fields(Fields.builder()
+                        .args(new NamedArgs(args))
+                        .scheduling(new Standard())
+                        .target(new Session(false, new VmCasperV1(),  wasmBytes))
+                        .entryPoint(new CallEntryPoint()).build()
+                )
+                .build();
+
+        final TransactionV1 transactionV1 = TransactionV1.builder()
+                .payload(payload)
+                .build();
+
+        final Transaction transaction = new Transaction(transactionV1.sign(senderPrivateKey));
+
+        final PutTransactionResult result = casperService.putTransaction(transaction);
+
+        assert result != null;
+        assert result.getTransactionHash() != null;
+
+        final GetTransactionResult transactionResult = waitForTransaction(result.getTransactionHash());
+
+        assertThat(transactionResult, is(notNullValue()));
+        assertThat(((ExecutionResultV2) transactionResult.getExecutionInfo().getExecutionResult()).getErrorMessage(), is(nullValue()));
+
+    }
+    @Test
     void putTransactionContractCep18() throws IOException, URISyntaxException, ValueSerializationException, TimeoutException {
 
         //Get the senders private key
         //Add your own private key here
-        final String secretKeyPath = Paths.get(Objects.requireNonNull(getClass().getClassLoader().getResource("howto/keys/secret_key.pem")).toURI()).toString();
+//        final String secretKeyPath = Paths.get(Objects.requireNonNull(getClass().getClassLoader().getResource("howto/keys/secret_key-cctl-faucet.pem")).toURI()).toString();
+        final String secretKeyPath = Paths.get(Objects.requireNonNull(getClass().getClassLoader().getResource("howto/keys/secret_key-testnet.pem")).toURI()).toString();
         final Ed25519PrivateKey senderPrivateKey = new Ed25519PrivateKey();
         senderPrivateKey.readPrivateKey(secretKeyPath);
 
@@ -381,22 +432,21 @@ public class HowTo {
                 new NamedArg<>("decimals", new CLValueU8((byte) 9)),
                 new NamedArg<>("name", new CLValueString("Stormeye Token")),
                 new NamedArg<>("symbol", new CLValueString("STRM")),
-                new NamedArg<>("total_supply", new CLValueU256(BigInteger.valueOf(10000000000L))),
+                new NamedArg<>("total_supply", new CLValueU256(BigInteger.valueOf(20000000000L))),
                 new NamedArg<>("events_mode", new CLValueU8((byte) 0)),
                 new NamedArg<>("id", new CLValueOption(Optional.of(new CLValueU64(BigInteger.valueOf(System.currentTimeMillis())))))
         );
         final TransactionV1Payload payload = TransactionV1Payload.builder()
                 .chainName(casperService.getStatus().getChainSpecName())
                 .ttl(Ttl.builder().ttl("30m").build())
-                .pricingMode(new PaymentLimited(1, new BigInteger("500000000"), true))
+                .pricingMode(new PaymentLimited(1, new BigInteger("350000000000"), true))
                 .initiatorAddr(new InitiatorPublicKey(PublicKey.fromAbstractPublicKey(senderPrivateKey.derivePublicKey())))
                 .fields(Fields.builder()
                         .args(new NamedArgs(args))
                         .scheduling(new Standard())
-                        .target(new Session(false, new VmCasperV2(),  wasmBytes))
+                        .target(new Session(true, new VmCasperV1(),  wasmBytes))
                         .entryPoint(new CallEntryPoint()).build()
                 )
-                //.transactionCategory(TransactionCategory.INSTALL_UPGRADE)
                 .build();
 
         final TransactionV1 transactionV1 = TransactionV1.builder()
