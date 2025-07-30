@@ -798,7 +798,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
         final GetTransactionResult result = casperServiceMock.getTransaction(new TransactionHashDeploy("67594388afce12d027d2098f0bee6742702738647fb8d422d85f1b2c8b72192c"));
         assertNotNull(result);
         assertThat(result.getTransaction().get(), is(instanceOf(TransactionV1.class)));
-        assertThat(result.getTransaction().get().getHash(), is(new Digest("67594388afce12d027d2098f0bee6742702738647fb8d422d85f1b2c8b72192c")));
+        assertThat(result.getTransaction().get().getHash(), is(new Digest("6355c137b2616eb17e9374d1ad9e37bcdddf7182cffa3049ce862194f6dacdbd")));
     }
 
     @Test

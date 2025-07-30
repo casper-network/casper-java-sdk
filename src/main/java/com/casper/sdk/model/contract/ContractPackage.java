@@ -25,7 +25,7 @@ public class ContractPackage {
 
     /** disabled_versions(Array/DisabledVersion) */
     @JsonProperty("disabled_versions")
-    private List<DisabledVersion> disabledVersions;
+    private List<List<Long>> disabledVersions;
 
     /** The lock status of the contract package */
     @JsonProperty("lock_status")
