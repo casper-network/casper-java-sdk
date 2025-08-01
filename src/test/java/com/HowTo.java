@@ -3,10 +3,13 @@ package com;
 import com.casper.sdk.exception.DynamicInstanceException;
 import com.casper.sdk.identifier.block.HashBlockIdentifier;
 import com.casper.sdk.identifier.block.HeightBlockIdentifier;
+import com.casper.sdk.identifier.entity.ContractHash;
+import com.casper.sdk.identifier.entity.EntityAddrIdentifier;
 import com.casper.sdk.identifier.era.IdEraIdentifier;
 import com.casper.sdk.identifier.global.StateRootHashIdentifier;
 import com.casper.sdk.identifier.purse.MainPurseUnderPublickey;
 import com.casper.sdk.identifier.purse.PurseIdentifier;
+import com.casper.sdk.model.account.Account;
 import com.casper.sdk.model.account.PublicKeyIdentifier;
 import com.casper.sdk.model.balance.QueryBalanceData;
 import com.casper.sdk.model.balance.QueryBalanceDetailsResult;
@@ -17,8 +20,10 @@ import com.casper.sdk.model.deploy.DelegatorKindAllocation;
 import com.casper.sdk.model.deploy.DelegatorKindPublicKey;
 import com.casper.sdk.model.deploy.NamedArg;
 import com.casper.sdk.model.entity.AccountEntity;
+import com.casper.sdk.model.entity.AddressableEntity;
 import com.casper.sdk.model.entity.StateEntityResult;
 import com.casper.sdk.model.era.EraInfoData;
+import com.casper.sdk.model.key.Key;
 import com.casper.sdk.model.key.PublicKey;
 import com.casper.sdk.model.reward.GetRewardResult;
 import com.casper.sdk.model.stateroothash.StateRootHashData;
@@ -278,21 +283,22 @@ public class HowTo {
 
     @Test
     void getStateEntity() {
-        final StatusData status = casperService.getStatus();
-        final EraInfoData eraSummaryBlockHash = casperService.getEraSummary(new HashBlockIdentifier(status.getLastSwitchBlockHash().toString()));
-        final PublicKey delegator = ((DelegatorKindPublicKey) ((DelegatorKindAllocation) eraSummaryBlockHash.getEraSummary().getStoredValue().getValue().getSeigniorageAllocations().get(0)).getDelegatorKind()).getPublicKey();
-        final PublicKeyIdentifier publicKeyEntityIdentifier = new PublicKeyIdentifier(delegator);
+
+        final PublicKeyIdentifier publicKeyEntityIdentifier = new PublicKeyIdentifier(senderAccountPublicKey);
 
         //By public key
         final StateEntityResult stateEntityPublicKey = casperService.getStateEntity(publicKeyEntityIdentifier, null);
         assert stateEntityPublicKey.getEntity() != null;
 
         //By contract identifier
-//        final Key contractKey = ((AddressableEntity) stateEntityPublicKey.getEntity()).getNamedKeys().get(0).getKey();
+        final Key contractKey = ((AccountEntity) stateEntityPublicKey.getEntity()).getNamedKeys().get(0).getKey();
 
 //        final StateEntityResult stateEntityContract = casperService.getStateEntity(new EntityAddrIdentifier(contractKey.toString()), null);
-//        final StateEntityResult stateEntityContract = casperService.getStateEntity(new EntityAddrIdentifier(((Account) stateEntityPublicKey.getEntity()).getHash().toString()), null);
+        final StateEntityResult stateEntityContract = casperService.getStateEntity(new ContractHash(contractKey.toString()), null);
+//        final StateEntityResult stateEntityAccount = casperService.getStateEntity(new EntityAddrIdentifier(((Account) stateEntityPublicKey.getEntity()).getHash().toString()), null);
+
 //        assert stateEntityContract.getEntity() != null;
+//        assert stateEntityAccount.getEntity() != null;
 
     }
 
@@ -418,8 +424,8 @@ public class HowTo {
 
         //Get the senders private key
         //Add your own private key here
-//        final String secretKeyPath = Paths.get(Objects.requireNonNull(getClass().getClassLoader().getResource("howto/keys/secret_key-cctl-faucet.pem")).toURI()).toString();
-        final String secretKeyPath = Paths.get(Objects.requireNonNull(getClass().getClassLoader().getResource("howto/keys/secret_key-testnet.pem")).toURI()).toString();
+        final String secretKeyPath = Paths.get(Objects.requireNonNull(getClass().getClassLoader().getResource("howto/keys/secret_key-cctl-faucet.pem")).toURI()).toString();
+//        final String secretKeyPath = Paths.get(Objects.requireNonNull(getClass().getClassLoader().getResource("howto/keys/secret_key-testnet.pem")).toURI()).toString();
         final Ed25519PrivateKey senderPrivateKey = new Ed25519PrivateKey();
         senderPrivateKey.readPrivateKey(secretKeyPath);
 

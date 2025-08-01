@@ -108,4 +108,16 @@ public class StateGetEntityTest extends AbstractJsonTests {
         assertThat(account.getHash().toString(), is("account-hash-5a9eb1f7da515d9fa2f0b74e18ec84cccf90f146269d538073416dff432a3c77"));
     }
 
+
+    @Test
+    void validateGetStateEntityContractCondorFromTestnet() throws IOException {
+
+        final String inputJson = getPrettyJson(loadJsonFromFile("entity/getstateentity-contract-testnet-actual.json"));
+
+        final StateEntityResult addressableEntity = OBJECT_MAPPER.readValue(inputJson, StateEntityResult.class);
+        assertThat(addressableEntity.getEntity(), is(instanceOf(ContractEntity.class)));
+
+
+    }
+
 }
