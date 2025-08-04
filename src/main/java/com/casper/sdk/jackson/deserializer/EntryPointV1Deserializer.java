@@ -23,8 +23,12 @@ public class EntryPointV1Deserializer extends JsonDeserializer<EntryPointV1> {
     @Override
     public EntryPointV1 deserialize(final JsonParser p, final DeserializationContext ctxt) throws IOException {
 
-        final JsonNode mapNode = p.getCodec().readTree(p);
-        final JsonNode entryPointNode = mapNode.get("entry_point");
+         JsonNode mapNode = p.getCodec().readTree(p);
+         JsonNode entryPointNode = mapNode.get("entry_point");
+
+        if (entryPointNode == null) {
+            entryPointNode = mapNode;
+        }
 
         return EntryPointV1.builder()
                 .name(mapNode.get("name").asText())

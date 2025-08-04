@@ -1,12 +1,11 @@
 package com.casper.sdk.model.entity;
 
 import com.casper.sdk.model.contract.Contract;
-import com.casper.sdk.model.contract.NamedKey;
-import com.casper.sdk.model.contract.entrypoint.EntryPointV1;
+import com.casper.sdk.model.entity.contract.Wasm;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
+import lombok.Setter;
 
 /**
  * Contract entity
@@ -15,13 +14,10 @@ import java.util.List;
  */
 @NoArgsConstructor
 @JsonTypeName("Contract")
-public class ContractEntity extends Contract implements StateEntity {
+@Getter
+@Setter
+public class ContractEntity implements StateEntity {
 
-    public ContractEntity(final String packageHash,
-                          final String wasmHash,
-                          final List<EntryPointV1> entryPoints,
-                          final List<NamedKey> namedKeys,
-                          final String protocolVersion) {
-        super(packageHash, wasmHash, entryPoints, namedKeys, protocolVersion);
-    }
+    private Contract contract;
+    private Wasm wasm;
 }

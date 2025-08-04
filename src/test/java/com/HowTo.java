@@ -4,12 +4,10 @@ import com.casper.sdk.exception.DynamicInstanceException;
 import com.casper.sdk.identifier.block.HashBlockIdentifier;
 import com.casper.sdk.identifier.block.HeightBlockIdentifier;
 import com.casper.sdk.identifier.entity.ContractHash;
-import com.casper.sdk.identifier.entity.EntityAddrIdentifier;
 import com.casper.sdk.identifier.era.IdEraIdentifier;
 import com.casper.sdk.identifier.global.StateRootHashIdentifier;
 import com.casper.sdk.identifier.purse.MainPurseUnderPublickey;
 import com.casper.sdk.identifier.purse.PurseIdentifier;
-import com.casper.sdk.model.account.Account;
 import com.casper.sdk.model.account.PublicKeyIdentifier;
 import com.casper.sdk.model.balance.QueryBalanceData;
 import com.casper.sdk.model.balance.QueryBalanceDetailsResult;
@@ -20,7 +18,6 @@ import com.casper.sdk.model.deploy.DelegatorKindAllocation;
 import com.casper.sdk.model.deploy.DelegatorKindPublicKey;
 import com.casper.sdk.model.deploy.NamedArg;
 import com.casper.sdk.model.entity.AccountEntity;
-import com.casper.sdk.model.entity.AddressableEntity;
 import com.casper.sdk.model.entity.StateEntityResult;
 import com.casper.sdk.model.era.EraInfoData;
 import com.casper.sdk.model.key.Key;
@@ -34,36 +31,34 @@ import com.casper.sdk.model.transaction.entrypoint.CallEntryPoint;
 import com.casper.sdk.model.transaction.entrypoint.TransferEntryPoint;
 import com.casper.sdk.model.transaction.execution.ExecutionResultV2;
 import com.casper.sdk.model.transaction.field.Fields;
-import com.casper.sdk.model.transaction.pricing.FixedPricingMode;
 import com.casper.sdk.model.transaction.pricing.PaymentLimited;
 import com.casper.sdk.model.transaction.scheduling.Standard;
-import com.casper.sdk.model.transaction.target.*;
+import com.casper.sdk.model.transaction.target.Native;
+import com.casper.sdk.model.transaction.target.Session;
+import com.casper.sdk.model.transaction.target.Transaction;
+import com.casper.sdk.model.transaction.target.VmCasperV1;
 import com.casper.sdk.model.transfer.TransferData;
 import com.casper.sdk.model.uref.URef;
 import com.casper.sdk.service.CasperService;
 import com.syntifi.crypto.key.AbstractPublicKey;
 import com.syntifi.crypto.key.Ed25519PrivateKey;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.util.HashMap;
-import java.util.stream.Collectors;
 import org.apache.cxf.helpers.IOUtils;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.math.BigInteger;
-import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.TimeoutException;
+import java.util.stream.Collectors;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -74,7 +69,7 @@ import static org.hamcrest.core.IsNull.nullValue;
  * @author carl@stormeye.co.uk
  */
 @SuppressWarnings("NewClassNamingConvention")
-//@Disabled
+@Disabled
 public class HowTo {
 
     final static String receiverAccountPublicKey = "02025d359802a8826fef41efd8a53fbc8226af6d9e98a658a7cce6b5aa0788322095";
@@ -90,10 +85,12 @@ public class HowTo {
 
         final String authTokenPath = Paths.get(Objects.requireNonNull(getClass().getClassLoader().getResource("howto/keys/auth.token")).toURI()).toString();
         final String authToken = Files.lines(Paths.get(authTokenPath), StandardCharsets.UTF_8)
-            .collect(Collectors.toList()).get(0);
+                .collect(Collectors.toList()).get(0);
 
         casperService = CasperService.usingPeer(new URL("https://node.testnet.cspr.cloud/rpc"),
-            new HashMap<String, String>(){{put("Authorization", authToken);}});
+                new HashMap<String, String>() {{
+                    put("Authorization", authToken);
+                }});
     }
 
     @Test
@@ -265,7 +262,7 @@ public class HowTo {
         final PublicKey validator = ((DelegatorKindAllocation) eraSummaryBlockHash.getEraSummary().getStoredValue().getValue().getSeigniorageAllocations().get(0)).getValidatorPublicKey();
 
         final StateEntityResult stateEntity = casperService.getStateEntity(new PublicKeyIdentifier(
-            receiverAccountPublicKey), null);
+                receiverAccountPublicKey), null);
 
         final URef mainPurse = ((AccountEntity) stateEntity.getEntity()).getMainPurse();
         assert mainPurse != null;
@@ -305,7 +302,7 @@ public class HowTo {
 
     @Test
     void putTransactionNative()
-        throws IOException, ValueSerializationException, TimeoutException, URISyntaxException, NoSuchAlgorithmException, DynamicInstanceException {
+            throws IOException, ValueSerializationException, TimeoutException, URISyntaxException, NoSuchAlgorithmException, DynamicInstanceException {
 
         //Get the senders private key
         //Add your own private key file here
@@ -397,7 +394,7 @@ public class HowTo {
                 .fields(Fields.builder()
                         .args(new NamedArgs(args))
                         .scheduling(new Standard())
-                        .target(new Session(false, new VmCasperV1(),  wasmBytes))
+                        .target(new Session(false, new VmCasperV1(), wasmBytes))
                         .entryPoint(new CallEntryPoint()).build()
                 )
                 .build();
@@ -419,6 +416,7 @@ public class HowTo {
         assertThat(((ExecutionResultV2) transactionResult.getExecutionInfo().getExecutionResult()).getErrorMessage(), is(nullValue()));
 
     }
+
     @Test
     void putTransactionContractCep18() throws IOException, URISyntaxException, ValueSerializationException, TimeoutException {
 
@@ -450,7 +448,7 @@ public class HowTo {
                 .fields(Fields.builder()
                         .args(new NamedArgs(args))
                         .scheduling(new Standard())
-                        .target(new Session(true, new VmCasperV1(),  wasmBytes))
+                        .target(new Session(true, new VmCasperV1(), wasmBytes))
                         .entryPoint(new CallEntryPoint()).build()
                 )
                 .build();
@@ -494,7 +492,6 @@ public class HowTo {
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-
         }
 
         return result;
