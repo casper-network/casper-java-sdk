@@ -69,7 +69,7 @@ import static org.hamcrest.core.IsNull.nullValue;
  * @author carl@stormeye.co.uk
  */
 @SuppressWarnings("NewClassNamingConvention")
-@Disabled
+//@Disabled
 public class HowTo {
 
     final static String receiverAccountPublicKey = "02025d359802a8826fef41efd8a53fbc8226af6d9e98a658a7cce6b5aa0788322095";
@@ -290,8 +290,7 @@ public class HowTo {
         //By contract identifier
         final Key contractKey = ((AccountEntity) stateEntityPublicKey.getEntity()).getNamedKeys().get(0).getKey();
 
-//        final StateEntityResult stateEntityContract = casperService.getStateEntity(new EntityAddrIdentifier(contractKey.toString()), null);
-        final StateEntityResult stateEntityContract = casperService.getStateEntity(new ContractHash(contractKey.toString()), null);
+        final StateEntityResult stateEntityContract = casperService.getStateEntity(new ContractHash(contractKey), null);
 //        final StateEntityResult stateEntityAccount = casperService.getStateEntity(new EntityAddrIdentifier(((Account) stateEntityPublicKey.getEntity()).getHash().toString()), null);
 
 //        assert stateEntityContract.getEntity() != null;
