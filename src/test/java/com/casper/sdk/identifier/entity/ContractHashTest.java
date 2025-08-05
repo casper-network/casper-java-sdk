@@ -13,7 +13,6 @@ import static org.hamcrest.core.Is.is;
  */
 class ContractHashTest {
 
-
     public static final String HASH = "010c6464a101d2aa0be83e83ea3daf3e4741e9b2bd1a98dbb8c8058a49c6846142";
 
     @Test
@@ -34,5 +33,8 @@ class ContractHashTest {
         assertThat(written, is("{\"ContractHash\":\"" + contractHash + "\"}"));
 
         assertThat(contractHash.getHash(), is(HASH));
+
+       final ContractHash read = objectMapper.readValue(written, ContractHash.class);
+        assertThat(read, is(contractHash));
     }
 }

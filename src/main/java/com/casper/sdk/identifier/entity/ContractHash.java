@@ -5,20 +5,22 @@ import com.casper.sdk.model.key.Key;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
 /**
  * The hash of an on-chain contract .
  *
  * @author carl@stormeye.co.uk
  */
-@Getter
-@Setter
+
 @Builder
 @EqualsAndHashCode
+@Getter
+@NoArgsConstructor
 public class ContractHash implements EntityIdentifier {
 
     private static final String PREFIX = "contract-";
@@ -28,22 +30,24 @@ public class ContractHash implements EntityIdentifier {
     private String hash;
 
 
-    @JsonCreator
     public ContractHash(final String hash) {
-        String[] split = hash.split("-");
-        this.hash = split[split.length - 1];
+        this.setHash(hash);
     }
 
     public ContractHash(final Digest hash) {
-        this.hash = hash.toString();
+        this(hash.toString());
     }
 
     public ContractHash(final Key contractKey) {
         this(contractKey.toString());
     }
 
+    @JsonSetter("ContractHash")
+    public void setHash(final String hash) {
+        String[] split = hash.split("-");
+        this.hash = split[split.length - 1];
+    }
 
-    @JsonProperty
     @Override
     @JsonGetter("ContractHash")
     public String toString() {
