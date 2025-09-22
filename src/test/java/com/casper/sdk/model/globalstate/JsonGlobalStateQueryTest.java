@@ -23,7 +23,7 @@ public class JsonGlobalStateQueryTest extends AbstractJsonTests {
     private static final Logger LOGGER = LoggerFactory.getLogger(JsonGlobalStateQueryTest.class);
 
     @Test
-    void validateJsonGlobalState() throws IOException, JSONException {
+    void validateJsonGlobalStateV1() throws IOException, JSONException {
         final String inputJson = getPrettyJson(loadJsonFromFile("globalstate-samples/globalstate.json"));
 
         LOGGER.debug("Original JSON: {}", inputJson);
@@ -36,4 +36,20 @@ public class JsonGlobalStateQueryTest extends AbstractJsonTests {
 
         JSONAssert.assertEquals(inputJson, expectedJson, JSONCompareMode.NON_EXTENSIBLE);
     }
+
+    @Test
+    void validateJsonGlobalStateV2() throws IOException, JSONException {
+        final String inputJson = getPrettyJson(loadJsonFromFile("globalstate-samples/global_state_v2.json"));
+
+        LOGGER.debug("Original JSON: {}", inputJson);
+
+        final GlobalStateData data = OBJECT_MAPPER.readValue(inputJson, GlobalStateData.class);
+
+        final String expectedJson = getPrettyJson(data);
+
+        LOGGER.debug("Serialized JSON: {}", expectedJson);
+
+         JSONAssert.assertEquals(inputJson, expectedJson, JSONCompareMode.LENIENT);
+    }
+
 }
