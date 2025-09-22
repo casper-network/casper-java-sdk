@@ -1,6 +1,6 @@
 package com.casper.sdk.model.globalstate;
 
-import com.casper.sdk.jackson.deserializer.JsonBlockHeaderDeserializer;
+import com.casper.sdk.jackson.deserializer.BlockHeaderDeserializer;
 import com.casper.sdk.jackson.serializer.BlockHeaderSerializer;
 import com.casper.sdk.model.block.BlockHeader;
 import com.casper.sdk.model.block.JsonBlockHeader;
@@ -34,7 +34,7 @@ public class GlobalStateData {
      * {@link JsonBlockHeader}
      */
     @JsonProperty("block_header")
-    @JsonDeserialize(using = JsonBlockHeaderDeserializer.class)
+    @JsonDeserialize(using = BlockHeaderDeserializer.class)
     @JsonSerialize(using = BlockHeaderSerializer.class)
     private BlockHeader header;
 

@@ -13,7 +13,7 @@ import java.io.IOException;
 /**
  * @author ian@meywood.com
  */
-public class JsonBlockHeaderDeserializer extends JsonDeserializer<BlockHeader> {
+public class BlockHeaderDeserializer extends JsonDeserializer<BlockHeader> {
     @Override
     public BlockHeader deserialize(final JsonParser p, final DeserializationContext ctx) throws IOException {
 
