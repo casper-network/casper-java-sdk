@@ -102,7 +102,7 @@ public class HowToInteractWithASmartContract extends HowToMethods {
                     .args(new NamedArgs(args))
                     .scheduling(new Standard())
                     .target(new Stored(new ByPackageHash(new Digest(getContractHash()), null), new VmCasperV1()))
-                    .entryPoint(new CustomEntryPoint("transfer"))
+                    .entryPoint(new CustomEntryPoint("Transfer"))
                     .build()
                 )
                 .build();
