@@ -124,7 +124,6 @@ public class MessageKey extends Key {
         if (entityAddr != null) {
             serializerBuffer.writeU8(entityAddr.getByteTag());
         } else {
-            // FIXME this cannot be correct fix in issues/377
             serializerBuffer.writeU8((byte) 0);
         }
         serializerBuffer.writeByteArray(entityAddrHash.getDigest());

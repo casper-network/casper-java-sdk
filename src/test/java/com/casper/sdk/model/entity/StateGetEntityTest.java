@@ -1,17 +1,20 @@
 package com.casper.sdk.model.entity;
 
+import com.casper.sdk.exception.NoSuchKeyTagException;
 import com.casper.sdk.model.AbstractJsonTests;
 import com.casper.sdk.model.account.Account;
-import com.casper.sdk.model.contract.entrypoint.EntryPoint;
-import com.casper.sdk.model.contract.entrypoint.EntryPointV2;
-import com.casper.sdk.model.contract.entrypoint.EntryPointValue;
+import com.casper.sdk.model.clvalue.cltype.CLTypeKey;
+import com.casper.sdk.model.clvalue.cltype.CLTypeU256;
+import com.casper.sdk.model.contract.Contract;
+import com.casper.sdk.model.contract.NamedKey;
+import com.casper.sdk.model.contract.entrypoint.*;
+import com.casper.sdk.model.key.Key;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
@@ -83,7 +86,7 @@ public class StateGetEntityTest extends AbstractJsonTests {
         assertInstanceOf(AddressableEntity.class, entity.getEntity());
         assertInstanceOf(SmartContractKind.class, ((AddressableEntity) entity.getEntity()).getEntity().getEntityAddressKind());
 
-        final AddressableEntity contract =  (AddressableEntity) entity.getEntity();
+        final AddressableEntity contract = (AddressableEntity) entity.getEntity();
 
         assertThat(contract.getNamedKeys().size(), is(11));
         assertThat(contract.getEntryPoints().size(), is(15));
@@ -108,4 +111,35 @@ public class StateGetEntityTest extends AbstractJsonTests {
         assertThat(account.getHash().toString(), is("account-hash-5a9eb1f7da515d9fa2f0b74e18ec84cccf90f146269d538073416dff432a3c77"));
     }
 
+
+    @Test
+    void validateGetStateEntityContractCondorFromTestnet() throws IOException, NoSuchKeyTagException {
+
+        final String inputJson = getPrettyJson(loadJsonFromFile("entity/getstateentity-contract-testnet-actual.json"));
+
+        final StateEntityResult addressableEntity = OBJECT_MAPPER.readValue(inputJson, StateEntityResult.class);
+        assertThat(addressableEntity.getEntity(), is(instanceOf(ContractEntity.class)));
+
+        ContractEntity contractEntity = (ContractEntity) addressableEntity.getEntity();
+        assertThat(contractEntity.getWasm().getWasm().getBytes().length(), is(589812));
+        assertThat(contractEntity.getWasm().getMerkleProof().length(), is(617628));
+
+        final Contract contract = contractEntity.getContract();
+        assertThat(contract.getPackageHash(), is("contract-package-c659b8ee610dde0e8f3f89b86028ac1c9343811e88c9b0a2f0547cab88df2267"));
+        assertThat(contract.getWasmHash(), is("contract-wasm-0e1f45d146a3148fc79f204238965cf6296b1cc1eb97f599d274df1bece896b5"));
+        assertThat(contract.getNamedKeys(), hasSize(12));
+
+        final NamedKey namedKey = contract.getNamedKeys().get(11);
+        assertThat(namedKey.getName(), is("total_supply"));
+        assertThat(namedKey.getKey(), is(Key.create("uref-033feb40c15ad15705f3670e58241841804aa13d7f4fd59ac6c0176a80ef25c6-007")));
+
+        assertThat(contract.getEntryPoint("allowance").isPresent(), is(true));
+        final EntryPointV1 allowance = contract.getEntryPoint("allowance").get();
+        assertThat(allowance.getEntryPointType(), is(EntryPointType.CALLED));
+        assertThat(allowance.getName(), is("allowance"));
+        assertThat(allowance.getRet(), is(instanceOf(CLTypeU256.class)));
+        assertThat(allowance.getArgs(), hasSize(2));
+        assertThat(allowance.getArgs().get(1).getName(), is("spender"));
+        assertThat(allowance.getArgs().get(1).getClType(), is(instanceOf(CLTypeKey.class)));
+    }
 }

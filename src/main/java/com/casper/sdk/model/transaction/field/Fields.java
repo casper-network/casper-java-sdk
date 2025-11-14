@@ -34,12 +34,12 @@ public class Fields implements CasperSerializableObject {
 
     @JsonProperty("args")
     private NamedArgs args;
+    @JsonProperty("target")
+    private TransactionTarget target;
     @JsonProperty("entry_point")
     private TransactionEntryPoint entryPoint;
     @JsonProperty("scheduling")
     private TransactionScheduling scheduling;
-    @JsonProperty("target")
-    private TransactionTarget target;
 
     @Override
     public void serialize(final SerializerBuffer ser, final Target target) throws ValueSerializationException, NoSuchTypeException {

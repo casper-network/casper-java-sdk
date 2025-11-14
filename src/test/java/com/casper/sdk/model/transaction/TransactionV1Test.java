@@ -10,12 +10,10 @@ import com.casper.sdk.model.transaction.entrypoint.CallEntryPoint;
 import com.casper.sdk.model.transaction.entrypoint.CustomEntryPoint;
 import com.casper.sdk.model.transaction.pricing.FixedPricingMode;
 import com.casper.sdk.model.transaction.scheduling.Standard;
-import com.casper.sdk.model.transaction.target.Session;
-import com.casper.sdk.model.transaction.target.Stored;
-import com.casper.sdk.model.transaction.target.Transaction;
-import com.casper.sdk.model.transaction.target.TransactionRuntime;
+import com.casper.sdk.model.transaction.target.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.IOUtils;
+import org.hamcrest.Matchers;
 import org.joda.time.DateTime;
 import org.json.JSONException;
 import org.junit.jupiter.api.Disabled;
@@ -63,7 +61,7 @@ class TransactionV1Test {
         assertThat(transactionV1.getPayload().getFields().getScheduling(), is(instanceOf(Standard.class)));
         assertThat(transactionV1.getPayload().getFields().getTarget(), is(instanceOf(Session.class)));
         assertThat(((Session) transactionV1.getPayload().getFields().getTarget()).isInstallUpgrade(), is(true));
-        assertThat(((Session) transactionV1.getPayload().getFields().getTarget()).getRuntime(), is(TransactionRuntime.VM_CASPER_V1));
+        assertThat(((Session) transactionV1.getPayload().getFields().getTarget()).getRuntime(), is(Matchers.instanceOf(VmCasperV1.class)));
         assertThat(((Session) transactionV1.getPayload().getFields().getTarget()).getModuleBytes().length, is(348211));
 
         assertThat(transactionV1.getPayload().getFields().getArgs().getArgs(), hasSize(6));
@@ -110,7 +108,7 @@ class TransactionV1Test {
         // assertThat(transactionV1.getPayload().getTransactiot is(TransactionCategory.INSTALL_UPGRADE));
         assertThat(transactionV1.getPayload().getFields().getScheduling(), is(instanceOf(Standard.class)));
         assertThat(transactionV1.getPayload().getFields().getArgs().size(), is(6));
-        assertThat(((Session) transactionV1.getPayload().getFields().getTarget()).getRuntime(), is(TransactionRuntime.VM_CASPER_V2));
+        assertThat(((Session) transactionV1.getPayload().getFields().getTarget()).getRuntime(), is(Matchers.instanceOf(VmCasperV2.class)));
         assertThat(transactionV1.getPayload().getFields().getEntryPoint().getName(), is("Call"));
 
         final String writtenJson = new ObjectMapper().writeValueAsString(transaction);
@@ -135,7 +133,7 @@ class TransactionV1Test {
         assertThat(transactionV1.getPayload().getInitiatorAddr().getAddress(), is(PublicKey.fromTaggedHexString("01a5a5b7328118681638be3e06c8749609280dba4c9daf9aeb3d3464b8839b018a")));
         assertThat(transactionV1.getPayload().getFields().getScheduling(), is(instanceOf(Standard.class)));
         assertThat(transactionV1.getPayload().getFields().getArgs().size(), is(2));
-        assertThat(((Stored) transactionV1.getPayload().getFields().getTarget()).getRuntime(), is(TransactionRuntime.VM_CASPER_V1));
+        assertThat(((Stored) transactionV1.getPayload().getFields().getTarget()).getRuntime(), is(Matchers.instanceOf(VmCasperV1.class)));
         assertThat(transactionV1.getPayload().getFields().getEntryPoint().getName(), is("Custom"));
         assertThat(((CustomEntryPoint) transactionV1.getPayload().getFields().getEntryPoint()).getCustom(), is("transfer"));
 

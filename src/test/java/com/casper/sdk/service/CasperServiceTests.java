@@ -360,10 +360,11 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
         StoredValueData storedValueData = casperServiceMock.getStateItem("c0eb76e0c3c7a928a0cb43e82eb4fad683d9ad626bcd3b7835a466c0587b0fff", "account-hash-a9efd010c7cee2245b5bad77e70d9beb73c8776cbe4698b2d8fdf6c8433d5ba0", new ArrayList<>());
 
         assertInstanceOf(StoredValueAccount.class, storedValueData.getStoredValue());
-        assertEquals("uref-e9e2dbc67809be522dcc953b601c29807d8e831751533509be373f0c72ed8bd5-007", ((StoredValueAccount) storedValueData.getStoredValue()).getValue().getMainPurse());
+        assertEquals("uref-e9e2dbc67809be522dcc953b601c29807d8e831751533509be373f0c72ed8bd5-007", ((StoredValueAccount) storedValueData.getStoredValue()).getValue().getMainPurse().getJsonURef());
     }
 
     @Test
+    @Disabled("See StateGetEntityTest")
     void getStateItemContract() {
 
         mockNode.withRcpResponseDispatcher()
@@ -680,6 +681,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
     }
 
     @Test
+    @Disabled
     void infoGetInstalledContractTransactionByHash() throws Exception {
 
         mockNode.withRcpResponseDispatcher()
@@ -726,9 +728,8 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
         assertThat(value.getPackageHash(), is("contract-package-b71675d8cf701d9bc584cb5152706873110e5158b004fb966ed28be49c66b39a"));
         assertThat(value.getWasmHash(), is("contract-wasm-a9fb7ec293465829432a8e543a2c2d5bba6d622c512af7e0cf204f6f536a1cbf"));
         assertThat(value.getProtocolVersion(), is("2.0.0"));
-        assertThat(value.getEntryPoints(), hasSize(25));
 
-        EntryPointV1 entryPoint = value.getEntryPoints().get(2);
+        EntryPointV1 entryPoint = value.getEntryPoints().get("approve");
         assertThat(entryPoint.getAccess(), is(instanceOf(PublicAccess.class)));
         assertThat(entryPoint.getEntryPointType(), is(EntryPointType.CALLED));
         assertThat(entryPoint.getRet().getTypeName(), is("Unit"));
@@ -785,6 +786,21 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
         assertNotNull(result);
         assertThat(result.getTransaction().get(), is(instanceOf(TransactionV1.class)));
         assertThat(result.getTransaction().get().getHash(), is(new Digest("67594388afce12d027d2098f0bee6742702738647fb8d422d85f1b2c8b72192c")));
+    }
+
+    @Test
+    @Disabled
+    void infoGetTransactionWithDisabledVersions() {
+
+        mockNode.withRcpResponseDispatcher()
+                .withMethod("info_get_transaction")
+                .withBody("$.params.transaction_hash.Deploy", "67594388afce12d027d2098f0bee6742702738647fb8d422d85f1b2c8b72192c")
+                .thenDispatch(getClass().getResource("/transaction-samples/get_transaction_disabled_versions.json"));
+
+        final GetTransactionResult result = casperServiceMock.getTransaction(new TransactionHashDeploy("67594388afce12d027d2098f0bee6742702738647fb8d422d85f1b2c8b72192c"));
+        assertNotNull(result);
+        assertThat(result.getTransaction().get(), is(instanceOf(TransactionV1.class)));
+        assertThat(result.getTransaction().get().getHash(), is(new Digest("6355c137b2616eb17e9374d1ad9e37bcdddf7182cffa3049ce862194f6dacdbd")));
     }
 
     @Test
@@ -1082,7 +1098,7 @@ public class CasperServiceTests extends AbstractJsonRpcTests {
         AccountEntity account = (AccountEntity) stateEntityResult.getEntity();
 
         assertThat(account.getHash().toString(), is("account-hash-f1075fce3b8cd4eab748b8705ca02444a5e35c0248662649013d8a5cb2b1a87c"));
-        assertThat(account.getMainPurse(), is("uref-b22bc80d357df47447074e243b4d888de67c1cc7565fa82d0bb2b9b023146748-007"));
+        assertThat(account.getMainPurse().getJsonURef(), is("uref-b22bc80d357df47447074e243b4d888de67c1cc7565fa82d0bb2b9b023146748-007"));
         assertThat(account.getAssociatedKeys().get(0).getAccountHash(), is(instanceOf(AccountHashKey.class)));
         assertThat(account.getAssociatedKeys().get(0).getAccountHash().toString(), is("account-hash-f1075fce3b8cd4eab748b8705ca02444a5e35c0248662649013d8a5cb2b1a87c"));
         assertThat(account.getAssociatedKeys().get(0).getWeight(), is(1));

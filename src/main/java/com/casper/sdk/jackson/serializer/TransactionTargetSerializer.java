@@ -1,6 +1,9 @@
 package com.casper.sdk.jackson.serializer;
 
-import com.casper.sdk.model.transaction.target.*;
+import com.casper.sdk.model.transaction.target.Native;
+import com.casper.sdk.model.transaction.target.Session;
+import com.casper.sdk.model.transaction.target.Stored;
+import com.casper.sdk.model.transaction.target.TransactionTarget;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
@@ -16,8 +19,6 @@ import static com.casper.sdk.model.transaction.target.TargetConstants.*;
  * @author carl@stormeye.co.uk
  */
 public class TransactionTargetSerializer extends JsonSerializer<TransactionTarget> {
-
-
 
     @Override
     public void serialize(final TransactionTarget value, final JsonGenerator gen, final SerializerProvider serializers) throws IOException {
@@ -41,9 +42,8 @@ public class TransactionTargetSerializer extends JsonSerializer<TransactionTarge
         gen.writeObject(value.getId());
         if (value.getRuntime() != null) {
             gen.writeFieldName(RUNTIME);
-            gen.writeString(value.getRuntime().getJsonName());
+            value.getRuntime().toJson(gen);
         }
-        gen.writeNumberField(TRANSFERRED_VALUE, value.getTransferredValue());
         gen.writeEndObject();
         gen.writeEndObject();
     }
@@ -53,12 +53,13 @@ public class TransactionTargetSerializer extends JsonSerializer<TransactionTarge
         gen.writeFieldName(SESSION);
         gen.writeStartObject();
         gen.writeBooleanField(IS_INSTALL_UPGRADE, value.isInstallUpgrade());
-        gen.writeStringField(RUNTIME, TransactionRuntime.toJson(value.getRuntime()));
+        if (value.getRuntime() != null) {
+            gen.writeFieldName(RUNTIME);
+            value.getRuntime().toJson(gen);
+        }
         gen.writeStringField(MODULE_BYTES, Hex.encode(value.getModuleBytes()));
-        gen.writeNumberField(TRANSFERRED_VALUE, value.getTransferredValue());
-        gen.writeObjectField(SEED, value.getSeed());
-        gen.writeEndObject();
 
+        gen.writeEndObject();
         gen.writeEndObject();
     }
 }

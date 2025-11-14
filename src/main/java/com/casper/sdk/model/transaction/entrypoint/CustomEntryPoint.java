@@ -22,12 +22,12 @@ public class CustomEntryPoint extends TransactionEntryPoint {
     private String custom;
 
     public CustomEntryPoint(final String custom) {
-        this();
-        this.custom = custom;
+        super((byte) CUSTOM_TAG, "Custom");
+        this.custom =  custom;
     }
 
     public CustomEntryPoint() {
-        super((byte) CUSTOM_TAG, "Custom");
+       this("Custom");
     }
 
     @Override

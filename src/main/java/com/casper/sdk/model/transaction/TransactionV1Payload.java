@@ -15,6 +15,7 @@ import com.casper.sdk.model.transaction.target.TransactionTarget;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.syntifi.crypto.key.encdec.Hex;
 import dev.oak3.sbs4j.SerializerBuffer;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
 import lombok.*;
@@ -88,9 +89,16 @@ public class TransactionV1Payload implements CasperSerializableObject, Tag {
     }
 
     public Digest buildHash() throws NoSuchTypeException, ValueSerializationException {
+
+        if (this.timestamp == null) {
+            this.timestamp = new Date();
+        }
+
         final SerializerBuffer serializerBuffer = new SerializerBuffer();
         this.serialize(serializerBuffer, Target.BYTE);
         final byte[] bytes = serializerBuffer.toByteArray();
+        String hex = Hex.encode(bytes);
+
         return Digest.blake2bDigestFromBytes(bytes);
     }
 }

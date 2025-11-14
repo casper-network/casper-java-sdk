@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -31,7 +32,7 @@ public class Contract {
 
     /** entry_points(Array) - A list of entry points. */
     @JsonProperty("entry_points")
-    private List<EntryPointV1> entryPoints;
+    private Map<String, EntryPointV1> entryPoints;
 
     /** named_keys(Array) - A list of named keys. */
     @JsonProperty("named_keys")
@@ -41,7 +42,7 @@ public class Contract {
     @JsonProperty("protocol_version")
     private String protocolVersion;
 
-    public Optional<EntryPointV1> getEntryPoint(String name) {
-        return entryPoints.stream().filter(entryPoint -> entryPoint.getName().equals(name)).findFirst();
+    public Optional<EntryPointV1> getEntryPoint(final String name) {
+        return Optional.ofNullable(entryPoints.get(name));
     }
 }

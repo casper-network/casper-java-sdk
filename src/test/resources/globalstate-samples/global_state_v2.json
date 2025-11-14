@@ -1,0 +1,57 @@
+{
+  "api_version": "2.0.0",
+  "block_header": {
+    "Version2": {
+      "parent_hash": "3796038fa25c1dd248cbe0f8bc109b6f18117efab746a694a9754dff1802fbd5",
+      "state_root_hash": "7c61b6580391cbd56ed70ae9e674439721f85235fe2f0e2d4385b65c5c0817d1",
+      "body_hash": "27f30d2ca5c3d605147020d47fbbcabfdf9119c61a6437b5e14fbfc66da71092",
+      "random_bit": false,
+      "accumulated_seed": "2bb5f1e7a5c2e0887a870ddfc185ed2f2e21fb5f6f1b41cb7f15929ea281140a",
+      "timestamp": "2025-08-03T14:30:50.974Z",
+      "era_id": 18877,
+      "height": 5413982,
+      "protocol_version": "2.0.1",
+      "proposer": "017d96b9a63abcb61c870a4f55187a0a7ac24096bdb5fc585c12a686a4d892009e",
+      "current_gas_price": 1,
+      "last_switch_block_hash": "8ecb6fff1ba48e5fdb90174e106222c333e778fca88d064526d5cbdb73164c64"
+    }
+  },
+  "stored_value": {
+    "Account": {
+      "account_hash": "account-hash-c9a88e7b36dd52dc9d6822691923e038d76cc0f7d2927851f4ee087207ac7716",
+      "named_keys": [
+        {
+          "name": "cep18_contract_hash_Stormeye Token",
+          "key": "hash-0c6464a101d2aa0be83e83ea3daf3e4741e9b2bd1a98dbb8c8058a49c6846142"
+        },
+        {
+          "name": "cep18_contract_package_Stormeye Token",
+          "key": "hash-c659b8ee610dde0e8f3f89b86028ac1c9343811e88c9b0a2f0547cab88df2267"
+        },
+        {
+          "name": "cep18_contract_package_access_Stormeye Token",
+          "key": "uref-c1d1e47c592da7d7f71015f65d49c645a23da68d6cb3d3991d225ee85495aa6f-007"
+        },
+        {
+          "name": "cep18_contract_version_Stormeye Token",
+          "key": "uref-b7b7a266b942e66167240168d84693fd995f4fcc81eb8ae568310c678c9c98b2-007"
+        },
+        {
+          "name": "my-key-name",
+          "key": "uref-9d8c16b26fe5a7e6325c283a765142f6eeff72045ed2ddc5b2c0dba5b752bb5d-007"
+        }
+      ],
+      "main_purse": "uref-a85cc0c2f460060b605eb79b0f83da9f16a92918a4cbb73c9a3af1d9321b23d6-007",
+      "associated_keys": [
+        {
+          "account_hash": "account-hash-c9a88e7b36dd52dc9d6822691923e038d76cc0f7d2927851f4ee087207ac7716",
+          "weight": 1
+        }
+      ],
+      "action_thresholds": {
+        "deployment": 1,
+        "key_management": 1
+      }
+    }
+  }
+}

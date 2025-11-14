@@ -35,22 +35,22 @@ public class TransactionTargetTest {
     @Test
     void transactionSession() throws Exception {
 
-        final String json = "{\"Session\":{\"is_install_upgrade\":true,\"runtime\":\"VmCasperV2\",\"module_bytes\":\"aab0da01340446cee477f28410f8af5d6e0f3a88fb26c0cafb8d1625f5cc9c10\",\"transferred_value\":0,\"seed\":null}}";
+        final String json = "{\"Session\":{\"is_install_upgrade\":true,\"runtime\":{\"VmCasperV2\":{\"transferred_value\":1000,\"seed\":null}},\"module_bytes\":\"aab0da01340446cee477f28410f8af5d6e0f3a88fb26c0cafb8d1625f5cc9c10\"}}";
         final Session session = readJson(json, Session.class);
-
-        assertThat(session.getRuntime().name(), is(TransactionRuntime.VM_CASPER_V2.name()));
+        assertThat(session.isInstallUpgrade(), is(true));
+        assertThat(session.getRuntime(), is(instanceOf(VmCasperV2.class)));
         assertThat(session.getModuleBytes(), is(Hex.decode("aab0da01340446cee477f28410f8af5d6e0f3a88fb26c0cafb8d1625f5cc9c10")));
         assertJson(session, json);
-        assertBytes(session, "060000000000000000000100010000000200020000000300110000000400310000000500390000003a0000000201010000000000000000000100000001aab0da01340446cee477f28410f8af5d6e0f3a88fb26c0cafb8d1625f5cc9c10000000000000000000");
+        assertBytes(session, "040000000000000000000100010000000200020000000300260000004a0000000201030000000000000000000100010000000200090000000a00000001e8030000000000000020000000aab0da01340446cee477f28410f8af5d6e0f3a88fb26c0cafb8d1625f5cc9c10");
     }
 
     @Test
     void transactionStoredByHash() throws Exception {
 
-        final String json = "{\"Stored\":{\"id\":{\"ByHash\":\"37c80db9d769cb23ab482f44c2e8d8a73d9e24a1801e81d423953b8ba04b275d\"},\"runtime\":\"VmCasperV1\",\"transferred_value\":0}}";
+        final String json = "{\"Stored\":{\"id\":{\"ByHash\":\"37c80db9d769cb23ab482f44c2e8d8a73d9e24a1801e81d423953b8ba04b275d\"},\"runtime\":\"VmCasperV1\"}}";
         final Stored stored = readJson(json, Stored.class);
 
-        assertThat(stored.getRuntime().name(), is(TransactionRuntime.VM_CASPER_V1.name()));
+        assertThat(stored.getRuntime(), is(instanceOf(VmCasperV1.class)));
         assertThat(stored.getId(), is(instanceOf(ByHash.class)));
         assertThat(((ByHash) stored.getId()).getHashAddress(), is(new Digest("37c80db9d769cb23ab482f44c2e8d8a73d9e24a1801e81d423953b8ba04b275d")));
         assertJson(stored, json);
@@ -60,24 +60,24 @@ public class TransactionTargetTest {
     @Test
     void transactionStoredByName() throws Exception {
 
-        final String json = "{\"Stored\":{\"id\":{\"ByName\":\"mint\"},\"runtime\":\"VmCasperV2\",\"transferred_value\":0}}";
+        final String json = "{\"Stored\":{\"id\":{\"ByName\":\"mint\"},\"runtime\":{\"VmCasperV2\":{\"transferred_value\":1000,\"seed\":null}}}}";
         final Stored stored = readJson(json, Stored.class);
 
-        assertThat(stored.getRuntime().name(), is(TransactionRuntime.VM_CASPER_V2.name()));
+        assertThat(stored.getRuntime(), is(instanceOf(VmCasperV2.class)));
         assertThat(stored.getId(), is(instanceOf(ByName.class)));
         assertThat(((ByName) stored.getId()).getName(), is("mint"));
         assertJson(stored, json);
-        assertBytes(stored, "0300000000000000000001000100000002001e0000002d00000001020000000000000000000100010000000900000001040000006d696e74010000000000000000000100000001");
+        assertBytes(stored, "0300000000000000000001000100000002001e0000004200000001020000000000000000000100010000000900000001040000006d696e74030000000000000000000100010000000200090000000a00000001e80300000000000000");
     }
 
 
     @Test
     void transactionStoredByPackageHash() throws Exception {
 
-        final String json = "{\"Stored\":{\"id\":{\"ByPackageHash\":{\"addr\":\"4b83ad1c5d842e5af75f5e77c56f11372217d8a5473a380fa9dfa96b8cd4c5e2\",\"version\":10}},\"runtime\":\"VmCasperV2\",\"transferred_value\":0}}";
+        final String json = "{\"Stored\":{\"id\":{\"ByPackageHash\":{\"addr\":\"4b83ad1c5d842e5af75f5e77c56f11372217d8a5473a380fa9dfa96b8cd4c5e2\",\"version\":10}},\"runtime\":{\"VmCasperV2\":{\"transferred_value\":0,\"seed\":null}}}}";
         final Stored stored = readJson(json, Stored.class);
 
-        assertThat(stored.getRuntime().name(), is(TransactionRuntime.VM_CASPER_V2.name()));
+        assertThat(stored.getRuntime(), is(instanceOf(VmCasperV2.class)));
         assertThat(stored.getId(), is(instanceOf(ByPackageHash.class)));
         assertThat(
                 ((ByPackageHash) stored.getId()).getAddr(),
@@ -88,16 +88,16 @@ public class TransactionTargetTest {
 
         assertJson(stored, json);
 
-        assertBytes(stored, "030000000000000000000100010000000200450000005400000001030000000000000000000100010000000200210000002a000000024b83ad1c5d842e5af75f5e77c56f11372217d8a5473a380fa9dfa96b8cd4c5e2010a00000000000000010000000000000000000100000001");
+        assertBytes(stored, "030000000000000000000100010000000200450000006900000001030000000000000000000100010000000200210000002a000000024b83ad1c5d842e5af75f5e77c56f11372217d8a5473a380fa9dfa96b8cd4c5e2010a00000000000000030000000000000000000100010000000200090000000a00000001000000000000000000");
     }
 
     @Test
     void transactionStoredByPackageName() throws Exception {
 
-        final String json = "{\"Stored\":{\"id\":{\"ByPackageName\":{\"name\":\"My Package\",\"version\":61523598}},\"runtime\":\"VmCasperV1\",\"transferred_value\":0}}";
+        final String json = "{\"Stored\":{\"id\":{\"ByPackageName\":{\"name\":\"My Package\",\"version\":61523598}},\"runtime\":\"VmCasperV1\"}}";
         final Stored stored = readJson(json, Stored.class);
 
-        assertThat(stored.getRuntime().name(), is(TransactionRuntime.VM_CASPER_V1.name()));
+        assertThat(stored.getRuntime(), is(instanceOf(VmCasperV1.class)));
         assertThat(stored.getId(), is(instanceOf(ByPackageName.class)));
         assertThat(((ByPackageName) stored.getId()).getName(), is("My Package"));
         assertThat(((ByPackageName) stored.getId()).getVersion().isPresent(), is(true));

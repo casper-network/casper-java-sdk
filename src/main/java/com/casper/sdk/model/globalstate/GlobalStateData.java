@@ -1,8 +1,13 @@
 package com.casper.sdk.model.globalstate;
 
+import com.casper.sdk.jackson.deserializer.BlockHeaderDeserializer;
+import com.casper.sdk.jackson.serializer.BlockHeaderSerializer;
+import com.casper.sdk.model.block.BlockHeader;
 import com.casper.sdk.model.block.JsonBlockHeader;
 import com.casper.sdk.model.storedvalue.StoredValue;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.*;
 
 /**
@@ -29,7 +34,9 @@ public class GlobalStateData {
      * {@link JsonBlockHeader}
      */
     @JsonProperty("block_header")
-    private JsonBlockHeader header;
+    @JsonDeserialize(using = BlockHeaderDeserializer.class)
+    @JsonSerialize(using = BlockHeaderSerializer.class)
+    private BlockHeader header;
 
     /**
      * Merkle proof

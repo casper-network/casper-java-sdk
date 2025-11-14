@@ -2,6 +2,7 @@ package com.casper.sdk.model.account;
 
 import com.casper.sdk.model.contract.NamedKey;
 import com.casper.sdk.model.key.AccountHashKey;
+import com.casper.sdk.model.uref.URef;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -48,7 +49,7 @@ public class Account {
      * main_purse(String) Hex-encoded, formatted URef.
      */
     @JsonProperty("main_purse")
-    private String mainPurse;
+    private URef mainPurse;
 
     /**
      * named_keys (@link NamedKey)
