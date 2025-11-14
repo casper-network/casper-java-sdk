@@ -1,26 +1,11 @@
 package com.howto;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsNull.notNullValue;
-import static org.hamcrest.core.IsNull.nullValue;
-
-import com.casper.sdk.model.clvalue.CLValueOption;
-import com.casper.sdk.model.clvalue.CLValueString;
-import com.casper.sdk.model.clvalue.CLValueU256;
-import com.casper.sdk.model.clvalue.CLValueU64;
-import com.casper.sdk.model.clvalue.CLValueU8;
+import com.casper.sdk.model.clvalue.*;
 import com.casper.sdk.model.common.Ttl;
 import com.casper.sdk.model.deploy.NamedArg;
 import com.casper.sdk.model.key.PublicKey;
-import com.casper.sdk.model.transaction.GetTransactionResult;
-import com.casper.sdk.model.transaction.InitiatorPublicKey;
-import com.casper.sdk.model.transaction.NamedArgs;
-import com.casper.sdk.model.transaction.PutTransactionResult;
-import com.casper.sdk.model.transaction.TransactionV1;
-import com.casper.sdk.model.transaction.TransactionV1Payload;
+import com.casper.sdk.model.transaction.*;
 import com.casper.sdk.model.transaction.entrypoint.CallEntryPoint;
-import com.casper.sdk.model.transaction.entrypoint.TransferEntryPoint;
 import com.casper.sdk.model.transaction.execution.ExecutionResultV2;
 import com.casper.sdk.model.transaction.field.Fields;
 import com.casper.sdk.model.transaction.pricing.PaymentLimited;
@@ -31,6 +16,10 @@ import com.casper.sdk.model.transaction.target.VmCasperV1;
 import com.casper.sdk.service.CasperService;
 import com.syntifi.crypto.key.Ed25519PrivateKey;
 import dev.oak3.sbs4j.exception.ValueSerializationException;
+import org.apache.cxf.helpers.IOUtils;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import java.io.IOException;
 import java.math.BigInteger;
 import java.net.URISyntaxException;
@@ -41,9 +30,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.TimeoutException;
-import org.apache.cxf.helpers.IOUtils;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsNull.notNullValue;
+import static org.hamcrest.core.IsNull.nullValue;
 
 public class HowToInstallASmartContract extends HowToMethods {
 
@@ -56,7 +47,7 @@ public class HowToInstallASmartContract extends HowToMethods {
 
     @Test
     void installSmartContract()
-        throws IOException, ValueSerializationException, TimeoutException, URISyntaxException {
+            throws IOException, ValueSerializationException, TimeoutException, URISyntaxException {
 
         //Get the senders private key
         //Add your own private key here
@@ -70,29 +61,29 @@ public class HowToInstallASmartContract extends HowToMethods {
         final byte[] wasmBytes = IOUtils.readBytesFromStream(wasmUrl.openStream());
 
         final List<NamedArg<?>> args = Arrays.asList(
-            new NamedArg<>("decimals", new CLValueU8((byte) 9)),
-            new NamedArg<>("name", new CLValueString("Stormeye Token")),
-            new NamedArg<>("symbol", new CLValueString("STRM")),
-            new NamedArg<>("total_supply", new CLValueU256(BigInteger.valueOf(20000000000L))),
-            new NamedArg<>("events_mode", new CLValueU8((byte) 0)),
-            new NamedArg<>("id", new CLValueOption(Optional.of(new CLValueU64(BigInteger.valueOf(System.currentTimeMillis())))))
+                new NamedArg<>("decimals", new CLValueU8((byte) 9)),
+                new NamedArg<>("name", new CLValueString("Stormeye Token")),
+                new NamedArg<>("symbol", new CLValueString("STRM")),
+                new NamedArg<>("total_supply", new CLValueU256(BigInteger.valueOf(20000000000L))),
+                new NamedArg<>("events_mode", new CLValueU8((byte) 0)),
+                new NamedArg<>("id", new CLValueOption(Optional.of(new CLValueU64(BigInteger.valueOf(System.currentTimeMillis())))))
         );
         final TransactionV1Payload payload = TransactionV1Payload.builder()
-            .chainName(casperService.getStatus().getChainSpecName())
-            .ttl(Ttl.builder().ttl("30m").build())
-            .pricingMode(new PaymentLimited(1, new BigInteger("350000000000"), true))
-            .initiatorAddr(new InitiatorPublicKey(PublicKey.fromAbstractPublicKey(senderPrivateKey.derivePublicKey())))
-            .fields(Fields.builder()
-                .args(new NamedArgs(args))
-                .scheduling(new Standard())
-                .target(new Session(true, new VmCasperV1(), wasmBytes))
-                .entryPoint(new TransferEntryPoint()).build()
-            )
-            .build();
+                .chainName(casperService.getStatus().getChainSpecName())
+                .ttl(Ttl.builder().ttl("30m").build())
+                .pricingMode(new PaymentLimited(1, new BigInteger("350000000000"), true))
+                .initiatorAddr(new InitiatorPublicKey(PublicKey.fromAbstractPublicKey(senderPrivateKey.derivePublicKey())))
+                .fields(Fields.builder()
+                        .args(new NamedArgs(args))
+                        .scheduling(new Standard())
+                        .target(new Session(true, new VmCasperV1(), wasmBytes))
+                        .entryPoint(new CallEntryPoint()).build()
+                )
+                .build();
 
         final TransactionV1 transactionV1 = TransactionV1.builder()
-            .payload(payload)
-            .build();
+                .payload(payload)
+                .build();
 
         final Transaction transaction = new Transaction(transactionV1.sign(senderPrivateKey));
 
@@ -105,7 +96,6 @@ public class HowToInstallASmartContract extends HowToMethods {
 
         assertThat(transactionResult, is(notNullValue()));
         assertThat(((ExecutionResultV2) transactionResult.getExecutionInfo().getExecutionResult()).getErrorMessage(), is(nullValue()));
-
 
 
     }
